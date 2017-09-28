@@ -20,7 +20,8 @@ export class MyPerformanceTableDataTransformerService {
         ctv: entity.performance.contributionToVolume,
         metadata: {
           positionId: entity.positionId
-        }
+        },
+        performanceError: entity.performance.error
       };
 
       if (entity.positionDescription && entity.name === 'Open') {

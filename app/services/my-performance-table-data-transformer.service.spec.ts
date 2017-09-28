@@ -54,7 +54,29 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId
-        }
+        },
+        performanceError: false
+      });
+    });
+
+    it('should return formatted ResponsibilityEntityPerformance data with performanceError value', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      responsibilityEntitiesPerformanceMock[0].performance.error = true;
+      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual({
+        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
+        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
+        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
+        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
+        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId
+        },
+        performanceError: true
       });
     });
 
@@ -74,7 +96,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         ctv: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.contributionToVolume,
         metadata: {
           positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId
-        }
+        },
+        performanceError: false
       });
     });
   });

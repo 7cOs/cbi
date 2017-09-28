@@ -17,6 +17,7 @@ export function getPerformanceMock(): Performance {
     total: chance.floating(),
     totalYearAgo: chance.floating(),
     totalYearAgoPercent: chance.floating(),
-    contributionToVolume: chance.floating()
+    contributionToVolume: chance.floating(),
+    error: false
   };
 }
