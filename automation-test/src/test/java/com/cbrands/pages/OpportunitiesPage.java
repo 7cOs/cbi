@@ -64,6 +64,14 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
+  public boolean isChainSearchTextCleared() {
+    return isTextboxCleared(filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH)));
+  }
+
+  private boolean isTextboxCleared(WebElement searchBox) {
+    return searchBox.getAttribute("value").isEmpty();
+  }
+
   public OpportunitiesPage clickSearchForRetailer() {
     final WebElement searchButton = filterContainer
       .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
@@ -121,6 +129,10 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   public boolean doesPremiseTypeChipMatch(PremiseType premiseType) {
     return isChipPresent(premiseType.name() + "-premise");
+  }
+
+  public boolean isQueryChipPresent(String chipTitle) {
+    return isChipPresent(chipTitle);
   }
 
   private boolean isChipPresent(String chipTitle) {
