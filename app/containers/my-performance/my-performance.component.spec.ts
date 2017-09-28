@@ -27,7 +27,6 @@ import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reduc
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
-import { MyPerformanceService } from '../../services/my-performance.service';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { RowType } from '../../enums/row-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
@@ -79,8 +78,7 @@ describe('MyPerformanceComponent', () => {
   let componentInstance: MyPerformanceComponent;
   let userServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
-  let filterStateMock: MyPerformanceFilterState;
-  let myPerformanceService: MyPerformanceService;
+  // let filterStateMock: MyPerformanceFilterState;
 
   function generateMockVersions(min: number, max: number) {
     return Array(chance.natural({min: min, max: max})).fill('').map(() => getMyPerformanceEntitiesDataMock());
@@ -123,13 +121,6 @@ describe('MyPerformanceComponent', () => {
       }
     };
 
-    filterStateMock = {
-      metricType: MetricTypeValue.volume,
-      dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
-      premiseType: PremiseTypeValue.All,
-      distributionType: DistributionTypeValue.simple
-    };
-
     TestBed.configureTestingModule({
       declarations: [
         MyPerformanceBreadcrumbComponentMock,
@@ -141,7 +132,6 @@ describe('MyPerformanceComponent', () => {
       ],
       providers: [
         MyPerformanceTableDataTransformerService,
-        MyPerformanceService,
         {
           provide: Store,
           useValue: storeMock
@@ -153,7 +143,6 @@ describe('MyPerformanceComponent', () => {
         UtilService
       ]
     });
-    spyOn(myPerformanceService, 'getUserDefaultFilterState').and.returnValue(filterStateMock);
     fixture = TestBed.createComponent(MyPerformanceComponent);
     componentInstance = fixture.componentInstance;
     fixture.detectChanges();
@@ -162,13 +151,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('MyPerformanceComponent various events', () => {
-    beforeEach(inject([ MyPerformanceService ],
-      (_myPerformanceService: MyPerformanceService) => {
-        myPerformanceService = _myPerformanceService;
-    }));
-
     it('should dispatch actions on init', inject([ 'userService' ], (userService: any) => {
-      spyOn(myPerformanceService, 'getUserDefaultFilterState').and.returnValue(filterStateMock);
       userService.model.currentUser.firstName = chance.string();
       userService.model.currentUser.lastName = chance.string();
       storeMock.dispatch.and.callThrough();
@@ -190,7 +173,6 @@ describe('MyPerformanceComponent', () => {
     }));
 
     it('should dispatch actions on init and handle empty positionId', inject([ 'userService' ], (userService: any) => {
-      spyOn(myPerformanceService, 'getUserDefaultFilterState').and.returnValue(filterStateMock);
       userService.model.currentUser.positionId = '';
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
@@ -206,7 +188,6 @@ describe('MyPerformanceComponent', () => {
     }));
 
     it('should dispatch actions on init and handle undefined positionId', inject([ 'userService' ], (userService: any) => {
-      spyOn(myPerformanceService, 'getUserDefaultFilterState').and.returnValue(filterStateMock);
       delete userService.model.currentUser.positionId;
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
@@ -222,7 +203,6 @@ describe('MyPerformanceComponent', () => {
     }));
 
     it('should trigger appropriate actions when the filter component emits an event', () => {
-      spyOn(myPerformanceService, 'getUserDefaultFilterState').and.returnValue(filterStateMock);
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
 
@@ -268,7 +248,6 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should call select with the right arguments', () => {
-      spyOn(myPerformanceService, 'getUserDefaultFilterState').and.returnValue(filterStateMock);
       storeMock.dispatch.calls.reset();
       storeMock.select.calls.reset();
       fixture = TestBed.createComponent(MyPerformanceComponent);

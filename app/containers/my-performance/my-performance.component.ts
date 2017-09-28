@@ -28,6 +28,7 @@ import { ResponsibilitiesState } from '../../state/reducers/responsibilities.red
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
+import { SetPremiseType } from '../../state/actions/my-performance-filter.action';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -88,11 +89,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.dateRanges$ = this.store.select(state => state.dateRanges);
     this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
-    this.filterStateSubscription = this.store
-      .select(state => state.myPerformanceFilter)
-      .subscribe(filterState => {
-      this.filterState = this.myPerformanceService.getUserDefaultFilterState(
-        filterState, this.userService.model.currentUser.srcTypeCd[0]);
+    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
+        this.filterState = filterState;
     });
 
     this.productMetricsSubscription = this.store
@@ -130,6 +128,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
+    const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+      this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
+
+    this.store.dispatch(new SetPremiseType( defaultUserPremiseType ));
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
     this.store.dispatch(new FetchProductMetricsAction({ positionId: currentUserId, filter: this.filterState }));
   }
