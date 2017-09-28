@@ -41,7 +41,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     opportunitiesPage
       .clickRetailerTypeDropdown()
       .selectChainRetailerType()
-      .enterChaiRetailerSearchText(accountName)
+      .enterChainRetailerSearchText(accountName)
       .clickSearchForRetailer()
       .clickFirstRetailerResultContaining(accountName);
 
@@ -59,11 +59,43 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     Assert.assertTrue(opportunitiesPage.isChainSearchTextCleared(), "Chain searchbox failed to clear after selection");
   }
 
+  @Test(description = "Filter Opportunities by Store Account", dataProvider = "storeRetailersData")
+  public void filterByStoreAccount(String accountName, String accountAddress, PremiseType premiseType) {
+    opportunitiesPage
+      .clickRetailerTypeDropdown()
+      .selectStoreRetailerType()
+      .enterStoreAccountSearchText(accountName)
+      .clickSearchForRetailer()
+      .clickFirstRetailerResultContaining(accountAddress);
+
+    Assert.assertTrue(
+      opportunitiesPage.isPremiseFilterSelectedAs(premiseType),
+      "Premise Type filter failed to match premise type of selected Store"
+    );
+    Assert.assertTrue(
+      opportunitiesPage.doesPremiseTypeChipMatch(premiseType),
+      "Premise Type chip failed to match premise type of selected Store"
+    );
+    Assert.assertTrue(
+      opportunitiesPage.isQueryChipPresent(accountAddress),
+      "Query chip failed to appear for selected Store"
+    );
+    Assert.assertTrue(opportunitiesPage.isStoreSearchTextCleared(), "Store searchbox failed to clear after selection");
+  }
+
   @DataProvider
   public static Object[][] chainRetailersData() {
     return new Object[][]{
       {"Buffalo Wild Wings", PremiseType.On},
       {"Walgreens", PremiseType.Off}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] storeRetailersData() {
+    return new Object[][]{
+      {"Walgreens", "2550 E 88th Ave", PremiseType.On},
+      {"Walgreens", "1350 Sportsman Way", PremiseType.Off}
     };
   }
 }
