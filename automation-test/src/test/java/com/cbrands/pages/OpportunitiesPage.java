@@ -11,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class OpportunitiesPage extends TestNGBasePage {
+  private static final String CHAIN_SEARCHBOX_XPATH = ".//input[@placeholder='Account or Subaccount Name']";
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = "//form[contains(@class, 'filters')]")
@@ -35,11 +36,10 @@ public class OpportunitiesPage extends TestNGBasePage {
     return filterContainer.isDisplayed();
   }
 
-  public OpportunitiesPage enterAccountSearchText(String searchText) {
-    final WebElement accountSearchField = filterContainer
-      .findElement(By.xpath(".//input[@placeholder='Account or Subaccount Name']"));
-    waitForElementToClickable(accountSearchField, true).click();
-    accountSearchField.sendKeys(searchText);
+  public OpportunitiesPage enterChainAccountSearchText(String searchText) {
+    final WebElement chainSearchField = filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH));
+    waitForElementToClickable(chainSearchField, true).click();
+    chainSearchField.sendKeys(searchText);
 
     return this;
   }
