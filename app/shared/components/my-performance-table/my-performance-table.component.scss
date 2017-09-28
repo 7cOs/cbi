@@ -155,7 +155,7 @@ span.link-out {
 }
 
 td, th {
-  font-family: WorkSans;
+  font-family: $work-sans;
   font-size: 12px;
   font-weight: $regular;
   cursor: pointer;
@@ -200,7 +200,7 @@ td, th {
 }
 
 .summary-header {
-  font-family: WorkSans;
+  font-family: $work-sans;
   font-size: 24px;
   font-weight: 300;
   text-align: left;
