@@ -11,7 +11,7 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { ProductMetricsAggregationType } from '../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
-import { ProductMetrics, FetchProductMetricsSuccessPayload } from '../../models/product-metrics.model';
+import { ProductMetrics } from '../../models/product-metrics.model';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 
 const chance = new Chance();
@@ -22,7 +22,7 @@ describe('ProductMetrics Effects', () => {
   let entityTypeCodeMock: string;
   let productMetricsMock: ProductMetrics;
   let performanceFilterStateMock: MyPerformanceFilterState;
-  let productMetricsSuccessPayloadMock: FetchProductMetricsSuccessPayload;
+  let productMetricsSuccessPayloadMock: ProductMetricsActions.FetchProductMetricsSuccessPayload;
   let err: Error;
   let myPerformanceApiServiceMock: any;
   let productMetricsTransformerServiceMock: any;
