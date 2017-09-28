@@ -76,11 +76,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
 
-  private myPerformanceService: MyPerformanceService;
-
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
+    private myPerformanceService: MyPerformanceService,
     @Inject('userService') private userService: any
   ) { }
 
@@ -127,9 +126,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.showLeftBackButton = versions.length > 0;
     });
 
-    const userType = this.userService.model.currentUser.srcTypeCd[0];
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
-    const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(this.filterState.metricType, userType);
+    const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+      this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
     this.store.dispatch(new SetPremiseType( defaultUserPremiseType ));
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
@@ -219,10 +218,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
     let actionType;
+    let isMetricChanged: boolean = false;
 
     switch (event.filterType) {
       case MyPerformanceFilterActionType.Metric:
         actionType = MyPerformanceFilterActions.SET_METRIC;
+        isMetricChanged = true;
         break;
       case MyPerformanceFilterActionType.TimePeriod:
         actionType = MyPerformanceFilterActions.SET_TIME_PERIOD;
@@ -238,6 +239,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch({type: actionType, payload: event.filterValue});
+
+    if (isMetricChanged) {
+      this.store.dispatch(new SetPremiseType(this.myPerformanceService.getUserDefaultPremiseType(
+        this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]) ));
+    }
   }
 
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {

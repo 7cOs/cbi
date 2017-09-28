@@ -7,6 +7,7 @@ import { MyPerformanceFilterComponent } from '../../shared/components/my-perform
 import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
+import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { ProductMetricsTransformerService } from  '../../services/product-metrics-transformer.service';
@@ -31,6 +32,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
   providers: [
     MyPerformanceApiService,
     MyPerformanceTableDataTransformerService,
+    MyPerformanceService,
     PerformanceTransformerService,
     ProductMetricsTransformerService,
     ResponsibilitiesService,

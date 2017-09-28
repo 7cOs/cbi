@@ -7,12 +7,6 @@ import { PremiseTypeValue } from '../enums/premise-type.enum';
 describe('Service: MyPerformanceService', () => {
   let myPerformanceService: MyPerformanceService;
   let userType: string = ''; // Corporate User
-  // const initialFilterStateMock: MyPerformanceFilterState = {
-  //   metricType: MetricTypeValue.velocity,
-  //   dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
-  //   premiseType: PremiseTypeValue.All,
-  //   distributionType: DistributionTypeValue.simple
-  // };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
