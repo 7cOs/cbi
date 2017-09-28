@@ -141,6 +141,7 @@ describe('MyPerformanceComponent', () => {
       ],
       providers: [
         MyPerformanceTableDataTransformerService,
+        MyPerformanceService,
         {
           provide: Store,
           useValue: storeMock
@@ -152,7 +153,7 @@ describe('MyPerformanceComponent', () => {
         UtilService
       ]
     });
-
+    spyOn(myPerformanceService, 'getUserDefaultFilterState').and.returnValue(filterStateMock);
     fixture = TestBed.createComponent(MyPerformanceComponent);
     componentInstance = fixture.componentInstance;
     fixture.detectChanges();
