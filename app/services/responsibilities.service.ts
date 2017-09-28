@@ -206,7 +206,6 @@ export class ResponsibilitiesService {
       });
   }
 
-
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getResponsibilitiesPerformances(responsibilitiesData.entityTypes,
       responsibilitiesData.filter,
