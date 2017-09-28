@@ -82,6 +82,10 @@ public class OpportunitiesPage extends TestNGBasePage {
     return isTextboxCleared(filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH)));
   }
 
+  public boolean isStoreSearchTextCleared() {
+    return isTextboxCleared(filterContainer.findElement(By.xpath(STORE_SEARCHBOX_XPATH)));
+  }
+
   private boolean isTextboxCleared(WebElement searchBox) {
     return searchBox.getAttribute("value").isEmpty();
   }
