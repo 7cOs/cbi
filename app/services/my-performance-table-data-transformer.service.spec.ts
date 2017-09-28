@@ -96,7 +96,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           ctv: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.contributionToVolume,
           metadata: {
             positionId: responsibilityEntitiesPerformanceOpenPositionMock[i].positionId
-          }
+          },
+          performanceError: false
         });
       }
     });
