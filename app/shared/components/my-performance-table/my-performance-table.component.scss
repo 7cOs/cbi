@@ -142,6 +142,11 @@ th {
       background-color: $very-light-red;
     }
 
+    /deep/span.positive,
+    /deep/span.negative {
+      color: inherit;
+    }
+
     &:hover {
 
       /deep/td {
