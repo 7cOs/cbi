@@ -1,5 +1,5 @@
-.archived-header.visible(ng-if="tld.targetListService.model.currentList.archived && tld.targetListAuthor === 'current user'") Archived - Only limited functionality will be available
-.archived-header.visible(ng-if="tld.targetListService.model.currentList.archived && tld.targetListAuthor !== 'current user'") Archived by Owner - Only limited functionality will be available
+.toast-header.visible(ng-if="tld.targetListService.model.currentList.archived && tld.targetListAuthor === 'current user'") Archived - Only limited functionality will be available
+.toast-header.visible(ng-if="tld.targetListService.model.currentList.archived && tld.targetListAuthor !== 'current user'") Archived by Owner - Only limited functionality will be available
 .hero(ng-class="{'archived-hero': tld.targetListService.model.currentList.archived}")
   div(row)
     div(column="2")
