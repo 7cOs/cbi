@@ -6,11 +6,11 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricsDTO } from '../../models/entity-product-metrics-dto.model';
-import { ProductMetricType } from '../../enums/product-metrics-type.enum';
+import { ProductMetricsAggregationType } from '../../enums/product-metrics-aggregation-type.enum';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 
 @Injectable()
 export class ProductMetricsEffects {
@@ -22,20 +22,31 @@ export class ProductMetricsEffects {
 
   @Effect()
   fetchProductMetrics$(): Observable<Action> {
-    let filter: MyPerformanceFilterState;
-    let positionId: string;
-
     return this.actions$
       .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_ACTION)
       .switchMap((action: Action) => {
-        positionId = action.payload.positionId;
-        filter = action.payload.filter;
+        const payload: ProductMetricsActions.FetchProductMetricsPayload = action.payload;
 
-        return this.myPerformanceApiService.getProductMetrics(positionId, filter, ProductMetricType.brand)
+        let dtos: Observable<ProductMetricsDTO>;
+        if (action.payload.selectedEntityType === SelectedEntityType.Position) {
+          dtos = this.myPerformanceApiService.getPositionProductMetrics(
+            payload.positionId, payload.filter, ProductMetricsAggregationType.brand
+          );
+        } else if (action.payload.selectedEntityType === SelectedEntityType.Account) {
+          dtos = this.myPerformanceApiService.getAccountProductMetrics(
+            payload.positionId, payload.contextPositionId, payload.filter, ProductMetricsAggregationType.brand
+          );
+        } else if (action.payload.selectedEntityType === SelectedEntityType.RoleGroup) {
+          dtos = this.myPerformanceApiService.getRoleGroupProductMetrics(
+            payload.positionId, payload.entityTypeCode, payload.filter, ProductMetricsAggregationType.brand
+          );
+        }
+
+        return dtos
           .map((response: ProductMetricsDTO) => {
             return new ProductMetricsActions.FetchProductMetricsSuccessAction({
-              positionId: positionId,
-              products: this.productMetricsTransformerService.transformProductMetrics(response, ProductMetricType.brand)
+              positionId: payload.positionId,
+              products: this.productMetricsTransformerService.transformProductMetrics(response, ProductMetricsAggregationType.brand)
             });
           })
           .catch((err: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailureAction(err)));

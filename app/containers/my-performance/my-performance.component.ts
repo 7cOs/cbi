@@ -23,8 +23,8 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
-import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { RowType } from '../../enums/row-type.enum';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -47,7 +47,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
   public leftTableViewType: ViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
-  public roleGroups: Observable<ResponsibilitiesState>;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -125,7 +124,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
-    this.store.dispatch(new FetchProductMetricsAction({ positionId: currentUserId, filter: this.filterState }));
+    this.store.dispatch(new FetchProductMetricsAction({
+      positionId: currentUserId,
+      filter: this.filterState,
+      selectedEntityType: SelectedEntityType.Position
+    }));
   }
 
   ngOnDestroy() {
@@ -164,12 +167,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
+              const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
               this.store.dispatch(new FetchEntityWithPerformance({
-                entityType: EntityPeopleType[parameters.row.descriptionRow0],
+                entityTypeGroupName: entityTypeGroupName,
+                entityTypeCode: parameters.row.metadata.entityTypeCode,
                 entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
                 filter: this.filterState,
                 selectedPositionId: parameters.row.metadata.positionId,
                 viewType: ViewType.people
+              }));
+              this.store.dispatch(new FetchProductMetricsAction({
+                positionId: parameters.row.metadata.positionId,
+                entityTypeCode: parameters.row.metadata.entityTypeCode,
+                filter: this.filterState,
+                selectedEntityType: SelectedEntityType.RoleGroup
               }));
               break;
             case ViewType.people:
@@ -179,16 +190,23 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               }));
               this.store.dispatch(new FetchProductMetricsAction({
                 positionId: parameters.row.metadata.positionId,
-                filter: this.filterState
+                filter: this.filterState,
+                selectedEntityType: SelectedEntityType.Position
               }));
               break;
             case ViewType.accounts:
               this.store.dispatch(new FetchSubAccountsAction({
                 positionId: parameters.row.metadata.positionId,
                 contextPositionId: this.currentState.responsibilities.positionId,
-                entityType: parameters.row.descriptionRow0,
+                entityTypeAccountName: parameters.row.descriptionRow0,
                 selectedPositionId: parameters.row.metadata.positionId,
                 filter: this.filterState
+              }));
+              this.store.dispatch(new FetchProductMetricsAction({
+                positionId: parameters.row.metadata.positionId,
+                contextPositionId: this.currentState.responsibilities.positionId,
+                filter: this.filterState,
+                selectedEntityType: SelectedEntityType.Account
               }));
               break;
             default:
@@ -237,7 +255,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       || state.viewType.leftTableViewType === ViewType.accounts) {
       this.store.dispatch(new FetchProductMetricsAction({
         positionId: state.responsibilities.positionId,
-        filter: this.filterState
+        filter: this.filterState,
+        selectedEntityType: SelectedEntityType.Position
+      }));
+    } else if (state.viewType.leftTableViewType === ViewType.people) {
+      this.store.dispatch(new FetchProductMetricsAction({
+        positionId: state.responsibilities.positionId,
+        entityTypeCode: state.responsibilities.entityTypeCode,
+        filter: this.filterState,
+        selectedEntityType: SelectedEntityType.RoleGroup
       }));
     }
   }

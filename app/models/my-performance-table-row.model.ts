@@ -1,6 +1,7 @@
 export interface MyPerformanceTableRowMetadata {
   positionId: string;
   contextPositionId?: string;
+  entityTypeCode?: string;
 }
 
 export interface MyPerformanceTableRow {
@@ -11,4 +12,5 @@ export interface MyPerformanceTableRow {
   metricColumn2: number;
   ctv: number;
   metadata?: MyPerformanceTableRowMetadata;
+  performanceError?: boolean;
 }
