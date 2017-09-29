@@ -45,6 +45,7 @@ describe('Responsibilities Effects', () => {
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const performanceMock: Performance = getPerformanceMock();
   const positionIdMock = chance.string();
+  const entityTypeCodeMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -82,9 +83,9 @@ describe('Responsibilities Effects', () => {
   };
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
-          filter: performanceFilterStateMock,
-          positionId: positionIdMock
-        };
+    filter: performanceFilterStateMock,
+    positionId: positionIdMock
+  };
 
   let runner: EffectsRunner;
   let responsibilitiesEffects: ResponsibilitiesEffects;
@@ -226,7 +227,8 @@ describe('Responsibilities Effects', () => {
 
   describe('when a FetchEntityWithPerformance is received', () => {
     const fetchEntityPerformancePayloadMock: FetchEntityWithPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: entityTypeCodeMock,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -261,8 +263,11 @@ describe('Responsibilities Effects', () => {
           if (dispatchedActions.length === 4) {
             expect(dispatchedActions).toEqual([
               new SetTotalPerformance(fetchEntityPerformancePayloadMock.selectedPositionId),
-              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
-              new FetchEntityWithPerformanceSuccess(entityWithPerformanceMock),
+              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityTypeGroupName),
+              new FetchEntityWithPerformanceSuccess({
+                entityWithPerformance: entityWithPerformanceMock,
+                entityTypeCode: entityTypeCodeMock
+              }),
               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
             ]);
 
@@ -346,7 +351,7 @@ describe('Responsibilities Effects', () => {
         fetchSubAccountsPayloadMock = {
           positionId: chance.string({pool: '0123456789'}),
           contextPositionId: chance.string({pool: '0123456789'}),
-          entityType: chance.string(),
+          entityTypeAccountName: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
           premiseType: PremiseTypeValue.All
         };

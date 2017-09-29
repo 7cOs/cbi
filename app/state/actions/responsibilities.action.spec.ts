@@ -3,14 +3,15 @@ const chance = new Chance();
 
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchEntityWithPerformancePayload,
+         FetchEntityWithPerformanceSuccessPayload,
          FetchSubAccountsActionPayload,
          FetchSubAccountsSuccessPayload } from './responsibilities.action';
-import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
-import { getPerformanceMock } from '../../models/performance.model.mock';
-import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getPerformanceMock } from '../../models/performance.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -117,7 +118,8 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchEntityWithPerformance', () => {
     const payloadMock: FetchEntityWithPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: chance.string(),
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -141,7 +143,10 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('FetchEntityWithPerformanceSuccess', () => {
-    const payloadMock: EntityWithPerformance[] = getEntitiesWithPerformancesMock();
+    const payloadMock: FetchEntityWithPerformanceSuccessPayload = {
+      entityWithPerformance: getEntitiesWithPerformancesMock(),
+      entityTypeCode: chance.string()
+    };
     let action: ResponsibilitiesActions.FetchEntityWithPerformanceSuccess;
 
     beforeEach(() => {
@@ -243,7 +248,7 @@ describe('Responsibilities Actions', () => {
     const payloadMock: FetchSubAccountsActionPayload = {
       positionId: chance.string({pool: '0123456789'}),
       contextPositionId: chance.string({pool: '0123456789'}),
-      entityType: chance.string(),
+      entityTypeAccountName: chance.string(),
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       premiseType: PremiseTypeValue.All
     };

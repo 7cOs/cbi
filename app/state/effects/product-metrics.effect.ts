@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { FetchProductMetricsPayload } from '../../models/product-metrics.model';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
@@ -26,7 +25,7 @@ export class ProductMetricsEffects {
     return this.actions$
       .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_ACTION)
       .switchMap((action: Action) => {
-        const payload: FetchProductMetricsPayload = action.payload;
+        const payload: ProductMetricsActions.FetchProductMetricsPayload = action.payload;
 
         let dtos: Observable<ProductMetricsDTO>;
         if (action.payload.selectedEntityType === SelectedEntityType.Position) {
@@ -36,6 +35,10 @@ export class ProductMetricsEffects {
         } else if (action.payload.selectedEntityType === SelectedEntityType.Account) {
           dtos = this.myPerformanceApiService.getAccountProductMetrics(
             payload.positionId, payload.contextPositionId, payload.filter, ProductMetricsAggregationType.brand
+          );
+        } else if (action.payload.selectedEntityType === SelectedEntityType.RoleGroup) {
+          dtos = this.myPerformanceApiService.getRoleGroupProductMetrics(
+            payload.positionId, payload.entityTypeCode, payload.filter, ProductMetricsAggregationType.brand
           );
         }
 

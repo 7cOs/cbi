@@ -1,6 +1,21 @@
 import { Action } from '@ngrx/store';
 
-import { FetchProductMetricsSuccessPayload, FetchProductMetricsPayload } from '../../models/product-metrics.model';
+import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { ProductMetrics } from '../../models/product-metrics.model';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
+
+export interface FetchProductMetricsPayload {
+  positionId: string;
+  contextPositionId?: string;
+  entityTypeCode?: string;
+  filter: MyPerformanceFilterState;
+  selectedEntityType: SelectedEntityType;
+}
+
+export interface FetchProductMetricsSuccessPayload {
+  positionId: string;
+  products: ProductMetrics;
+}
 
 export const FETCH_PRODUCT_METRICS_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_ACTION';
 export class FetchProductMetricsAction implements Action {

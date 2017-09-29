@@ -41,6 +41,7 @@ export class MyPerformanceApiService {
         id: positionId,
         name: entity.name,
         positionDescription: entity.positionDescription,
+        entityTypeCode: entity.type,
         performance: res.json()
       }))
       .catch(err => this.handleError(new Error(err)));
@@ -142,6 +143,26 @@ export class MyPerformanceApiService {
         aggregationLevel: aggregation,
         positionId: positionId
       }
+    );
+
+    return this.http.get(`${ url }`, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getRoleGroupProductMetrics(
+    positionId: string,
+    entityType: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/productMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      { aggregationLevel: aggregation }
     );
 
     return this.http.get(`${ url }`, {

@@ -153,6 +153,36 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
+  describe('getRoleGroupProductMetrics', () => {
+
+    it('should call the getRoleGroupProductMetrics endpoint and return all ProductMetrics', (done) => {
+      const filterMock = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+      const expectedPositionId = chance.string({pool: '0123456789'});
+      const expectedEntityType = chance.string({pool: '0123456789'});
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(productMetricsBrandDTOMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(`/v3/positions/${expectedPositionId}/responsibilities/${expectedEntityType}/productMetrics`
+          + `?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand`);
+      });
+
+      myPerformanceApiService
+        .getRoleGroupProductMetrics(expectedPositionId, expectedEntityType, filterMock, ProductMetricsAggregationType.brand)
+        .subscribe((res) => {
+          expect(res).toEqual(productMetricsBrandDTOMock);
+          done();
+        });
+    });
+  });
+
   describe('getPerformance', () => {
     it('should call the performance API and return performance data', (done) => {
       const filterMock = {
@@ -291,7 +321,8 @@ describe('Service: MyPerformanceApiService', () => {
             id: positionIdMock,
             name: entityMock.name,
             positionDescription: entityMock.positionDescription,
-            performance: performanceResponseMock
+            performance: performanceResponseMock,
+            entityTypeCode: entityMock.type
           });
           done();
       });

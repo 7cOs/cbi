@@ -24,6 +24,7 @@ export interface ResponsibilitiesData {
   entityTypes?: Array<{ type: string, name: string, positionDescription: string }>;
   entitiesURL?: string;
   positionId?: string;
+  entityTypeCode?: string;
   filter?: MyPerformanceFilterState;
   entityWithPerformance?: Array<EntityWithPerformance>;
 }
@@ -31,7 +32,7 @@ export interface ResponsibilitiesData {
 export interface SubAccountData {
   positionId: string;
   contextPositionId: string;
-  entityType: string;
+  entityTypeAccountName: string;
   premiseType: PremiseTypeValue;
   groupedEntities?: GroupedEntities;
   entityWithPerformance?: Array<EntityWithPerformance>;
@@ -193,7 +194,7 @@ export class ResponsibilitiesService {
     )
       .map((response: Array<EntitySubAccountDTO>) => {
         const groupedEntities: GroupedEntities =
-          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityType);
+          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityTypeAccountName);
 
         return Object.assign({}, subAccountData, {
           groupedEntities: groupedEntities
@@ -203,7 +204,7 @@ export class ResponsibilitiesService {
 
   public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
     // Mock SubAccount performance till next story
-    const entityWithPerformanceMock: Array<EntityWithPerformance> = subAccountData.groupedEntities[subAccountData.entityType]
+    const entityWithPerformanceMock: Array<EntityWithPerformance> = subAccountData.groupedEntities[subAccountData.entityTypeAccountName]
       .map((subAccount: HierarchyEntity) => {
         return {
           positionId: subAccount.positionId,

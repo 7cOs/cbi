@@ -3,11 +3,11 @@ import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance
 
 export function getResponsibilityEntitiesPerformanceDTOMock(): EntityWithPerformanceDTO[] {
   return [
-    { id: chance.string(), name: chance.string(), positionDescription: chance.string(),
+    { id: chance.string(), name: chance.string(), positionDescription: chance.string(), entityTypeCode: chance.string(),
       performance: getPerformanceDTOMock() },
-    { id: chance.string(), name: chance.string(), positionDescription: chance.string(),
+    { id: chance.string(), name: chance.string(), positionDescription: chance.string(), entityTypeCode: chance.string(),
       performance: getPerformanceDTOMock() },
-    { id: chance.string(), name: chance.string(), positionDescription: chance.string(),
+    { id: chance.string(), name: chance.string(), positionDescription: chance.string(), entityTypeCode: chance.string(),
       performance: getPerformanceDTOMock() }
   ];
 }
@@ -15,11 +15,11 @@ export function getResponsibilityEntitiesPerformanceDTOMock(): EntityWithPerform
 export function getEntitiesWithPerformancesMock(): EntityWithPerformance[] {
   return [
     { positionId: chance.string(), name: chance.string(), positionDescription: undefined,
-      performance: getPerformanceMock() },
+      contextPositionId: chance.string(), entityTypeCode: chance.string(), performance: getPerformanceMock() },
     { positionId: chance.string(), name: chance.string(), positionDescription: undefined,
-      performance: getPerformanceMock() },
+      contextPositionId: chance.string(), entityTypeCode: chance.string(), performance: getPerformanceMock() },
     { positionId: chance.string(), name: chance.string(), positionDescription: undefined,
-      performance: getPerformanceMock() }
+      contextPositionId: chance.string(), entityTypeCode: chance.string(), performance: getPerformanceMock() }
   ];
 }
 
