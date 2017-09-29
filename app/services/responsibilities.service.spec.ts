@@ -727,25 +727,24 @@ describe('Responsibilities Effects', () => {
     let subAccountDataMock: SubAccountData;
     let subAccounts: HierarchyEntity[];
     let numberOfEntities: number;
+    let entityTypeMock: string;
+
     beforeEach(() => {
       entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
-
+      entityTypeMock = chance.string();
+      numberOfEntities = chance.natural({min: 1, max: 99});
+      subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
+      groupedSubAccountsMock = {
+        [entityTypeMock]: subAccounts
+      };
       subAccountDataMock = {
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
-        entityType: chance.string(),
+        entityType: entityTypeMock,
         selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock
       };
-
-      numberOfEntities = chance.natural({min: 1, max: 99});
-
-      subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      groupedSubAccountsMock = {
-        [subAccountDataMock.entityType]: subAccounts
-      };
-
     });
 
     it('should call getSubAccountPerformance total with the proper id for each account', (done) => {
@@ -755,17 +754,11 @@ describe('Responsibilities Effects', () => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
 
-      const myPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
-        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-        premiseType: PremiseTypeValue.On
-      };
-
-      const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       responsibilitiesService.getSubAccountsPerformances(subAccountDataMock).subscribe(() => {
         expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
-          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId, myPerformanceFilterState, contextId);
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
+            contextPositionIdMock, performanceFilterStateMock);
         });
         done();
       });
