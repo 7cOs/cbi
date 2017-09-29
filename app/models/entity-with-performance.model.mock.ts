@@ -25,6 +25,9 @@ export function getEntitiesWithPerformancesMock(): EntityWithPerformance[] {
 
 export function getEntitiesWithPerformancesOpenPositionMock(): EntityWithPerformance[] {
   return [
-    { positionId: '1', name: 'Open', positionDescription: 'Best job on earth', performance: getPerformanceMock() }
+    { positionId: chance.string(), name: 'Open',
+      positionDescription: chance.string(), performance: getPerformanceMock() },
+    { positionId: chance.string(), name: 'Open',
+      positionDescription: chance.string(), performance: getPerformanceMock() }
   ];
 }

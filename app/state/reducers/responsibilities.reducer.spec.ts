@@ -194,7 +194,8 @@ describe('Responsibilities Reducer', () => {
           totalYearAgo: selectedRowMock.metricColumn1,
           totalYearAgoPercent: selectedRowMock.metricColumn2,
           contributionToVolume: selectedRowMock.ctv,
-          name: selectedRowMock.descriptionRow0
+          name: selectedRowMock.descriptionRow0,
+          error: false
         }
       }]
     });
@@ -209,7 +210,8 @@ describe('Responsibilities Reducer', () => {
         totalYearAgo: selectedRowMock.metricColumn1,
         totalYearAgoPercent: selectedRowMock.metricColumn2,
         contributionToVolume: selectedRowMock.ctv,
-        name: selectedRowMock.descriptionRow0
+        name: selectedRowMock.descriptionRow0,
+        error: false
       }
     };
     const actualState = responsibilitiesReducer(mockState, new ResponsibilitiesActions.SetTotalPerformance(payloadMock));

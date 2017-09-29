@@ -45,7 +45,8 @@ describe('My Performance Version Reducer', () => {
           total: 0,
           totalYearAgo: 0,
           totalYearAgoPercent: 0,
-          contributionToVolume: 0
+          contributionToVolume: 0,
+          error: false
         }
       }
     };
