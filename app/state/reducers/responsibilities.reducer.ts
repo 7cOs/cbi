@@ -22,7 +22,8 @@ export const initialState: ResponsibilitiesState = {
     total: 0,
     totalYearAgo: 0,
     totalYearAgoPercent: 0,
-    contributionToVolume: 0
+    contributionToVolume: 0,
+    error: false
   }
 };
 

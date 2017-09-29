@@ -12,4 +12,5 @@ export interface MyPerformanceTableRow {
   metricColumn2: number;
   ctv: number;
   metadata?: MyPerformanceTableRowMetadata;
+  performanceError?: boolean;
 }

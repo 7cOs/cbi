@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/catch';
 
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
@@ -44,7 +45,8 @@ export class ResponsibilitiesService {
   constructor(
     private myPerformanceApiService: MyPerformanceApiService,
     private performanceTransformerService: PerformanceTransformerService,
-    private responsibilitiesTransformerService: ResponsibilitiesTransformerService
+    private responsibilitiesTransformerService: ResponsibilitiesTransformerService,
+    @Inject('toastService') private toastService: any
   ) { }
 
   public getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -109,6 +111,10 @@ export class ResponsibilitiesService {
         return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
           .map((response: PerformanceDTO) => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, entity));
           });
       });
 
@@ -128,6 +134,10 @@ export class ResponsibilitiesService {
         return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId)
           .map(response => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, distributor);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, distributor));
           });
       });
 
@@ -140,6 +150,10 @@ export class ResponsibilitiesService {
         return this.myPerformanceApiService.getAccountPerformance(account.positionId, filter, contextPositionId)
           .map(response => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, account);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, account));
           });
       });
 
@@ -201,7 +215,8 @@ export class ResponsibilitiesService {
             totalYearAgo: 9001,
             totalYearAgoPercent: 404,
             contributionToVolume: 30,
-            name: subAccount.name
+            name: subAccount.name,
+            error: false
           }
         };
     });

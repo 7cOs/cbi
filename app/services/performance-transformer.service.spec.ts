@@ -44,7 +44,24 @@ describe('Service: PerformanceTransformerService', () => {
         totalYearAgoPercent: utilService.getYearAgoPercent(
           entitiesTotalPerformancesDTOMock.total, entitiesTotalPerformancesDTOMock.totalYearAgo
         ),
-        contributionToVolume: 0
+        contributionToVolume: 0,
+        error: false
+      });
+    });
+
+    it('should return error Performance data when given null input', () => {
+      spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callThrough();
+
+      const performance: Performance
+        = performanceTransformerService.transformPerformanceDTO(null);
+
+      expect(performance).toBeDefined();
+      expect(performance).toEqual({
+        total: 0,
+        totalYearAgo: 0,
+        totalYearAgoPercent: 0,
+        contributionToVolume: 0,
+        error: true
       });
     });
   });
@@ -76,7 +93,8 @@ describe('Service: PerformanceTransformerService', () => {
           total: parseInt((entityPerformanceMock.total).toFixed(), 10),
           totalYearAgo: utilService.getYearAgoDelta(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
           totalYearAgoPercent: utilService.getYearAgoPercent(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
-          contributionToVolume: 0
+          contributionToVolume: 0,
+          error: false
         }
       });
     });
