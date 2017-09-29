@@ -251,6 +251,10 @@ describe('MyPerformanceComponent', () => {
         payload: DistributionTypeValue.simple,
         type: '[My Performance Filter] SET_DISTRIBUTION_TYPE'
       }]);
+      expect(storeMock.dispatch.calls.argsFor(1)).toEqual([{
+        payload: PremiseTypeValue.Off,
+        type: '[My Performance Filter] SET_PREMISE_TYPE'
+      }]);
     });
 
     it('should call select with the right arguments', () => {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
@@ -12,33 +11,31 @@ export class MyPerformanceService {
 
     if (metric === MetricTypeValue.volume) {
       switch (userType) {
-        case '':
-        case 'SALES_HIER':
-          defaultPremiseType = PremiseTypeValue.All;
+        case 'ON_HIER':
+          defaultPremiseType = PremiseTypeValue.On;
           break;
         case 'OFF_HIER':
         case 'OFF_SPEC':
           defaultPremiseType = PremiseTypeValue.Off;
           break;
-        case 'ON_HIER':
-          defaultPremiseType = PremiseTypeValue.On;
-          break;
+        case '':
+        case 'SALES_HIER':
+        case undefined:
         default:
-          throw new Error(`User Type ${userType} does not exist!`);
+          defaultPremiseType = PremiseTypeValue.All;
       }
     } else {
       switch (userType) {
+        case 'ON_HIER':
+          defaultPremiseType = PremiseTypeValue.On;
+          break;
         case '':
         case 'SALES_HIER':
         case 'OFF_HIER':
         case 'OFF_SPEC':
-          defaultPremiseType = PremiseTypeValue.Off;
-          break;
-        case 'ON_HIER':
-          defaultPremiseType = PremiseTypeValue.On;
-          break;
+        case undefined:
         default:
-          throw new Error(`User Type ${userType} does not exist!`);
+          defaultPremiseType = PremiseTypeValue.Off;
       }
     }
 

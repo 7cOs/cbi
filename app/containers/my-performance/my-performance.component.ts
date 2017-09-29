@@ -89,7 +89,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-        this.filterState = filterState;
+      this.filterState = filterState;
     });
 
     this.productMetricsSubscription = this.store
