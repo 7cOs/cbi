@@ -13,7 +13,7 @@ import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { ProductMetricType } from '../enums/product-metrics-type.enum';
+import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
@@ -41,6 +41,7 @@ export class MyPerformanceApiService {
         id: positionId,
         name: entity.name,
         positionDescription: entity.positionDescription,
+        entityTypeCode: entity.type,
         performance: res.json()
       }))
       .catch(err => this.handleError(new Error(err)));
@@ -65,11 +66,11 @@ export class MyPerformanceApiService {
   }
 
   public getDistributorPerformance(
-    distributorID: string,
+    distributorId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string
     ): Observable<PerformanceDTO> {
-    const url = `/v3/distributors/${distributorID}/performanceTotal`;
+    const url = `/v3/distributors/${ distributorId }/performanceTotal`;
     const params = contextPositionId
       ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
       : this.getFilterStateParams(filter);
@@ -82,11 +83,11 @@ export class MyPerformanceApiService {
   }
 
   public getAccountPerformance(
-    accountID: string,
+    accountId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string
     ): Observable<PerformanceDTO> {
-    const url = `/v3/accounts/${accountID}/performanceTotal`;
+    const url = `/v3/accounts/${ accountId }/performanceTotal`;
     const params = contextPositionId
       ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
       : this.getFilterStateParams(filter);
@@ -98,8 +99,8 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getSubAccounts(positionId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
-    const url = `/v3/accounts/${ positionId }/subAccounts`;
+  public getSubAccounts(accountId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
+    const url = `/v3/accounts/${ accountId }/subAccounts`;
 
     return this.http.get(`${ url }`, {
       params: {
@@ -111,21 +112,61 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
-  public getProductMetrics(
-    positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricType
+  public getPositionProductMetrics(
+    positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
   ): Observable<ProductMetricsDTO> {
     const url = `/v3/positions/${ positionId }/productMetrics`;
 
-    const filterStateParams = this.getFilterStateParams(filter);
-
-    Object.assign(filterStateParams, {
-      aggregationLevel: aggregation
-    });
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {aggregationLevel: aggregation}
+    );
 
     return this.http.get(`${ url }`, {
-      params: Object.assign({}, this.getFilterStateParams(filter), {
-        aggregationLevel: aggregation
-      })
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getAccountProductMetrics(
+    accountId: string,
+    positionId: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/accounts/${ accountId }/productMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {
+        aggregationLevel: aggregation,
+        positionId: positionId
+      }
+    );
+
+    return this.http.get(`${ url }`, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getRoleGroupProductMetrics(
+    positionId: string,
+    entityType: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/productMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      { aggregationLevel: aggregation }
+    );
+
+    return this.http.get(`${ url }`, {
+      params: params
     })
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));

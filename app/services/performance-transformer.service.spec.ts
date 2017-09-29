@@ -86,6 +86,7 @@ describe('Service: PerformanceTransformerService', () => {
       expect(entityPerformance.length).toBeTruthy();
       expect(entityPerformance[0]).toEqual({
         positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
+        entityTypeCode: responsibilityEntitiesPerformanceDTOMock[0].entityTypeCode,
         name: responsibilityEntitiesPerformanceDTOMock[0].name,
         positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
         performance: {

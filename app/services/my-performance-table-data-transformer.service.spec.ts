@@ -53,7 +53,9 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
         ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
         metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode
         },
         performanceError: false
       });
@@ -74,7 +76,9 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
         ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
         metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode
         },
         performanceError: true
       });
@@ -85,11 +89,33 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
       const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
 
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
+      expect(tableData.length).toBe(responsibilityEntitiesPerformanceOpenPositionMock.length);
+      for (let i = 0; i < tableData.length; i++) {
+        expect(tableData[i]).toEqual({
+          descriptionRow0: 'Open Position',
+          descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[i].positionDescription,
+          metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.total,
+          metricColumn1: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.totalYearAgo,
+          metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.totalYearAgoPercent,
+          ctv: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.contributionToVolume,
+          metadata: {
+            positionId: responsibilityEntitiesPerformanceOpenPositionMock[i].positionId
+          },
+          performanceError: false
+        });
+      }
+    });
+
+    it('should return formatted ResponsibilityEntityPerformance data with Open Position when a positionDescription is undefined', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      delete responsibilityEntitiesPerformanceOpenPositionMock[0].positionDescription;
+      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
+
+      expect(tableData.length).toBe(responsibilityEntitiesPerformanceOpenPositionMock.length);
       expect(tableData[0]).toEqual({
         descriptionRow0: 'Open Position',
-        descriptionRow1: 'Best job on earth',
+        descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[0].positionDescription,
         metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgoPercent,
