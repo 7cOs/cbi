@@ -24,7 +24,7 @@ export class MyPerformanceTableDataTransformerService {
         performanceError: entity.performance.error
       };
 
-      if (entity.positionDescription && entity.name === 'Open') {
+      if (entity.name === 'Open') {
         transformedEntity.descriptionRow0 = 'Open Position';
         transformedEntity['descriptionRow1'] = entity.positionDescription;
       }
