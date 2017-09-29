@@ -12,7 +12,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilities, FetchEntityWithPerformance } from '../../state/actions/responsibilities.action';
+import { FetchResponsibilities, FetchEntityWithPerformance, FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
@@ -393,12 +393,13 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
-      /*expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchSubAccountsAction({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchSubAccountsAction({
         positionId: rowMock.metadata.positionId,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         entityTypeAccountName: rowMock.descriptionRow0,
-        selectedPositionId: rowMock.metadata.positionId
-      }));*/
+        filter: stateMock.myPerformanceFilter as any,
+        selectedPositionId: rowMock.metadata.positionId,
+      }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
         positionId: rowMock.metadata.positionId,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,

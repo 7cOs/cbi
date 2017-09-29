@@ -865,17 +865,18 @@ describe('Responsibilities Effects', () => {
     });
 
     it('should call getSubAccountPerformance total with the proper id for each account', (done) => {
-     // const transformerSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
-
+      const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
       const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
 
       responsibilitiesService.getSubAccountsPerformances(subAccountDataMock).subscribe(() => {
         expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
           expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
             contextPositionIdMock, performanceFilterStateMock);
+          expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
         });
         done();
       });
