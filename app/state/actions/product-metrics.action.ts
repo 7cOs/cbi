@@ -1,13 +1,12 @@
 import { Action } from '@ngrx/store';
 
-import { FetchProductMetricsSuccessPayload } from '../../models/product-metrics.model';
-import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { FetchProductMetricsSuccessPayload, FetchProductMetricsPayload } from '../../models/product-metrics.model';
 
 export const FETCH_PRODUCT_METRICS_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_ACTION';
 export class FetchProductMetricsAction implements Action {
   readonly type = FETCH_PRODUCT_METRICS_ACTION;
 
-  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: FetchProductMetricsPayload) { }
 }
 
 export const FETCH_PRODUCT_METRICS_SUCCESS_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_SUCCESS_ACTION';

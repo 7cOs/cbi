@@ -1,6 +1,4 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
@@ -8,23 +6,17 @@ import { FetchEntityWithPerformancePayload } from '../actions/responsibilities.a
 import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesState } from './responsibilities.reducer';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 const positionIdMock = chance.string();
-const performanceFilterStateMock: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.PointsOfDistribution,
-  dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-  premiseType: PremiseTypeValue.On,
-  distributionType: DistributionTypeValue.simple
-};
+const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
 describe('Responsibilities Reducer', () => {
   it('updates the status when a fetch is dispatched', () => {

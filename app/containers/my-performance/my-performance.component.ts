@@ -25,6 +25,7 @@ import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.r
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { RowType } from '../../enums/row-type.enum';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -125,7 +126,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
-    this.store.dispatch(new FetchProductMetricsAction({ positionId: currentUserId, filter: this.filterState }));
+    this.store.dispatch(new FetchProductMetricsAction({
+      positionId: currentUserId,
+      filter: this.filterState,
+      selectedEntityType: SelectedEntityType.Position
+    }));
   }
 
   ngOnDestroy() {
@@ -179,7 +184,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               }));
               this.store.dispatch(new FetchProductMetricsAction({
                 positionId: parameters.row.metadata.positionId,
-                filter: this.filterState
+                filter: this.filterState,
+                selectedEntityType: SelectedEntityType.Position
               }));
               break;
             case ViewType.accounts:
@@ -189,6 +195,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 entityType: parameters.row.descriptionRow0,
                 selectedPositionId: parameters.row.metadata.positionId,
                 premiseType: this.filterState.premiseType
+              }));
+              this.store.dispatch(new FetchProductMetricsAction({
+                positionId: parameters.row.metadata.positionId,
+                contextPositionId: this.currentState.responsibilities.positionId,
+                filter: this.filterState,
+                selectedEntityType: SelectedEntityType.Account
               }));
               break;
             default:
@@ -237,7 +249,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       || state.viewType.leftTableViewType === ViewType.accounts) {
       this.store.dispatch(new FetchProductMetricsAction({
         positionId: state.responsibilities.positionId,
-        filter: this.filterState
+        filter: this.filterState,
+        selectedEntityType: SelectedEntityType.Position
       }));
     }
   }
