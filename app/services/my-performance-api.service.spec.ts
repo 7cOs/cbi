@@ -171,7 +171,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getSubAccountsPerformance(subAccountIdMock, contextPositionIdMock, myPerformanceFilterState)
+      myPerformanceApiService.getSubAccountPerformance(subAccountIdMock, contextPositionIdMock, myPerformanceFilterState)
         .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceResponseMock);
         done();

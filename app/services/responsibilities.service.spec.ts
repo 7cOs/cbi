@@ -29,6 +29,7 @@ import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
 import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from './responsibilities.service';
 import { ViewType } from '../enums/view-type.enum';
+import { HierarchyEntity } from '../models/hierarchy-entity.model';
 
 const chance = new Chance();
 
@@ -107,6 +108,9 @@ describe('Responsibilities Effects', () => {
       return entityWithPerformanceMock;
     },
     transformEntityWithPerformanceDTO(...mockArgs: any[]): EntityWithPerformance {
+      return entityWithPerformanceMock[0];
+    },
+    transformEntityWithPerformance(...mockArgs: any[]): EntityWithPerformance {
       return entityWithPerformanceMock[0];
     }
   };
@@ -721,7 +725,8 @@ describe('Responsibilities Effects', () => {
   fdescribe('getSubAccountsPerformances', () => {
 
     let subAccountDataMock: SubAccountData;
-
+    let subAccounts: HierarchyEntity[];
+    let numberOfEntities: number;
     beforeEach(() => {
       entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
 
@@ -733,24 +738,17 @@ describe('Responsibilities Effects', () => {
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock
       };
+
+      numberOfEntities = chance.natural({min: 1, max: 99});
+
+      subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
       groupedSubAccountsMock = {
-        [subAccountDataMock.entityType]: [{
-          positionId: entitySubAccountDTOMock[0].id,
-          name: entitySubAccountDTOMock[0].name,
-          propertyType: EntityPropertyType.SubAccount,
-        }, {
-          positionId: entitySubAccountDTOMock[1].id,
-          name: entitySubAccountDTOMock[1].name,
-          propertyType: EntityPropertyType.SubAccount
-        }]
+        [subAccountDataMock.entityType]: subAccounts
       };
+
     });
 
     it('should call getSubAccountPerformance total with the proper id for each account', (done) => {
-      const expectedData: SubAccountData = Object.assign({}, subAccountDataMock, {
-        groupedEntities : groupedSubAccountsMock
-      });
-
      // const transformerSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
 
       const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
@@ -764,15 +762,14 @@ describe('Responsibilities Effects', () => {
       };
 
       const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
-      const numberOfEntities = chance.natural({min: 1, max: 99});
-      const subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getSubAccountsPerformances(expectedData).subscribe(() => {
+      responsibilitiesService.getSubAccountsPerformances(subAccountDataMock).subscribe(() => {
+        expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        subAccounts.map((subAccount) => {
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId, myPerformanceFilterState, contextId);
+        });
         done();
       });
-      expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
-      subAccounts.map((subAccount) => {
-        expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId, myPerformanceFilterState, contextId);
-      });
+
      // expect(transformerSpy.calls.count()).toBe(2);
     });
   });
