@@ -76,7 +76,7 @@ describe('Responsibilities Effects', () => {
     getAccountPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
-    getSubAccountsPerformance() {
+    getSubAccountPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
     getSubAccounts() {
@@ -747,13 +747,13 @@ describe('Responsibilities Effects', () => {
     });
 
     it('should call getSubAccountPerformance total with the proper id for each account', (done) => {
-      const xyz: SubAccountData = Object.assign({}, subAccountDataMock, {
+      const expectedData: SubAccountData = Object.assign({}, subAccountDataMock, {
         groupedEntities : groupedSubAccountsMock
       });
 
      // const transformerSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
 
-      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountsPerformance').and.callFake(() => {
+      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
 
@@ -766,7 +766,7 @@ describe('Responsibilities Effects', () => {
       const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 1, max: 99});
       const subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getSubAccountsPerformances(xyz).subscribe(() => {
+      responsibilitiesService.getSubAccountsPerformances(expectedData).subscribe(() => {
         done();
       });
       expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
