@@ -13,7 +13,6 @@ import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { ViewType } from '../enums/view-type.enum';
 
@@ -31,7 +30,6 @@ export interface SubAccountData {
   positionId: string;
   contextPositionId: string;
   entityType: string;
-  premiseType: PremiseTypeValue;
   groupedEntities?: GroupedEntities;
   entityWithPerformance?: Array<EntityWithPerformance>;
   selectedPositionId: string;
@@ -150,9 +148,9 @@ export class ResponsibilitiesService {
     const subAccounts = subAccountData.groupedEntities[subAccountData.entityType].map((subAccount: HierarchyEntity) => subAccount);
     const apiCalls: Observable<EntityWithPerformance | Error>[] =
       subAccounts.map((subAccount: HierarchyEntity) => {
-        return this.myPerformanceApiService.getSubAccountsPerformanceTotal(subAccount.positionId, subAccountData.contextPositionId,
+        return this.myPerformanceApiService.getSubAccountsPerformance(subAccount.positionId, subAccountData.contextPositionId,
           subAccountData.filter)
-          .map((response) => {
+          .map((response: PerformanceDTO) => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
           });
       });
@@ -160,7 +158,9 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls)
       .map((entityPerformances: EntityWithPerformance[]) => {
         subAccountData.entityWithPerformance = entityPerformances;
-        return subAccountData;
+        return Object.assign({}, subAccountData, {
+          entityWithPerformance: entityPerformances
+        });
       });
   }
 
@@ -194,7 +194,7 @@ export class ResponsibilitiesService {
 
   public getSubAccounts(subAccountData: SubAccountData): Observable<SubAccountData> {
     return this.myPerformanceApiService.getSubAccounts(
-      subAccountData.positionId, subAccountData.contextPositionId, subAccountData.premiseType
+      subAccountData.positionId, subAccountData.contextPositionId, subAccountData.filter.premiseType
     )
       .map((response: Array<EntitySubAccountDTO>) => {
         const groupedEntities: GroupedEntities =

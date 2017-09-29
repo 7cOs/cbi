@@ -147,13 +147,17 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
-  describe('getSubAccountsPerformanceTotal', () => {
-    it('should call the SubAccountsperformance Total API and return performance data', (done) => {
-      const filterMock = {
+  describe('getSubAccountsPerformance', () => {
+    it('should call the SubAccountsperformance  API and return performance data', (done) => {
+      const myPerformanceFilterState = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
+      const subAccountIdMock: string = chance.string();
+      const contextPositionIdMock: string = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
+      });
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -162,11 +166,13 @@ describe('Service: MyPerformanceApiService', () => {
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(
-          '/v3/subAccounts/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=1'
+          `/v3/subAccounts/${subAccountIdMock}/` +
+          `performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=${contextPositionIdMock}`
         );
       });
 
-      myPerformanceApiService.getSubAccountsPerformanceTotal('1', '1', filterMock).subscribe((response: PerformanceDTO) => {
+      myPerformanceApiService.getSubAccountsPerformance(subAccountIdMock, contextPositionIdMock, myPerformanceFilterState)
+        .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceResponseMock);
         done();
       });

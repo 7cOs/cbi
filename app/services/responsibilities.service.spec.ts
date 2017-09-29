@@ -76,6 +76,9 @@ describe('Responsibilities Effects', () => {
     getAccountPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
+    getSubAccountsPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    },
     getSubAccounts() {
       return Observable.of(entitySubAccountDTOMock);
     }
@@ -715,19 +718,20 @@ describe('Responsibilities Effects', () => {
     });
   });
 
-  describe('getSubAccountsPerformances', () => {
+  fdescribe('getSubAccountsPerformances', () => {
 
     let subAccountDataMock: SubAccountData;
 
     beforeEach(() => {
       entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
+
       subAccountDataMock = {
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
         entityType: chance.string(),
-        premiseType: PremiseTypeValue.All,
         selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        groupedEntities: groupedSubAccountsMock
       };
       groupedSubAccountsMock = {
         [subAccountDataMock.entityType]: [{
@@ -743,8 +747,17 @@ describe('Responsibilities Effects', () => {
     });
 
     it('should call getSubAccountPerformance total with the proper id for each account', (done) => {
-      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountsPerformanceTotal');
-      const mockFilter = {
+      const xyz: SubAccountData = Object.assign({}, subAccountDataMock, {
+        groupedEntities : groupedSubAccountsMock
+      });
+
+     // const transformerSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
+
+      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountsPerformance').and.callFake(() => {
+        return Observable.of(entitiesTotalPerformancesDTOMock);
+      });
+
+      const myPerformanceFilterState = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
@@ -753,13 +766,14 @@ describe('Responsibilities Effects', () => {
       const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 1, max: 99});
       const subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe(() => {
+      responsibilitiesService.getSubAccountsPerformances(xyz).subscribe(() => {
         done();
       });
       expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
       subAccounts.map((subAccount) => {
-        expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId, mockFilter, contextId);
+        expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId, myPerformanceFilterState, contextId);
       });
+     // expect(transformerSpy.calls.count()).toBe(2);
     });
   });
 
@@ -772,7 +786,6 @@ describe('Responsibilities Effects', () => {
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
         entityType: chance.string(),
-        premiseType: PremiseTypeValue.All,
         selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
         filter: performanceFilterStateMock
       };
@@ -791,7 +804,6 @@ describe('Responsibilities Effects', () => {
 
     it('calls getSubAccounts from the myPerformanceApiService with the right parameters', (done) => {
       const getSubAccountsSpy = spyOn(myPerformanceApiService, 'getSubAccounts').and.callThrough();
-
       responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe(() => {
         done();
       });
@@ -800,7 +812,7 @@ describe('Responsibilities Effects', () => {
       expect(getSubAccountsSpy.calls.argsFor(0)).toEqual([
         subAccountDataMock.positionId,
         subAccountDataMock.contextPositionId,
-        subAccountDataMock.premiseType
+        subAccountDataMock.filter.premiseType
       ]);
     });
 

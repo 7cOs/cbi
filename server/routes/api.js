@@ -45,8 +45,6 @@ module.exports = function(app) {
       let apiRequestStream = request(auth.signed, {json: true, headers: auth.headers}).auth(null, null, true, auth.jwtToken);
       req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
 
-      if (req.url.match(/\/v3\/(accounts|.+\/subAccounts)/)) console.log('subAccounts: ', auth.signed);
-
       apiRequestStream
         .on('error', logutil.handleAPIRequestError(req, res, 'GET', auth.signed))
         .on('response', logutil.handleAPIResponse(req, res, apiRequestStream));

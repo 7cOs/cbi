@@ -355,7 +355,6 @@ describe('Responsibilities Effects', () => {
           contextPositionId: chance.string({pool: '0123456789'}),
           entityType: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-          premiseType: PremiseTypeValue.All,
           filter: performanceFilterStateMock
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);

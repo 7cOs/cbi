@@ -110,13 +110,11 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
-  public getSubAccountsPerformanceTotal(
-    positionId: string, contextPositionId: string, filter: MyPerformanceFilterState)
+  public getSubAccountsPerformance(
+    subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState)
   : Observable<PerformanceDTO> {
-    const url = `/v3/subAccounts/${positionId}/performanceTotal`;
-    const params = contextPositionId
-      ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
-      : this.getFilterStateParams(filter);
+    const url = `/v3/subAccounts/${subAccountId}/performanceTotal`;
+    const params =  Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId });
 
     return this.http.get(url, {
       params: params
