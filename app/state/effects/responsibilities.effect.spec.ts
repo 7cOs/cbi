@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
@@ -27,12 +25,11 @@ import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-enti
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
@@ -47,6 +44,7 @@ describe('Responsibilities Effects', () => {
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const performanceMock: Performance = getPerformanceMock();
   const positionIdMock = chance.string();
+  const entityTypeCodeMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -61,6 +59,9 @@ describe('Responsibilities Effects', () => {
     getResponsibilitiesPerformances(args: any): Observable<(EntityWithPerformance | Error)[]> {
       return Observable.of(entityWithPerformanceMock);
     },
+    getPositionsPerformances(args: any): Observable<(EntityWithPerformance | Error)[]> {
+      return Observable.of(entityWithPerformanceMock);
+    },
     getPerformance(args: any): Observable<Performance> {
       return Observable.of(performanceMock);
     },
@@ -72,12 +73,7 @@ describe('Responsibilities Effects', () => {
     }
   };
 
-  const performanceFilterStateMock: MyPerformanceFilterState = {
-    metricType: MetricTypeValue.PointsOfDistribution,
-    dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-    premiseType: PremiseTypeValue.On,
-    distributionType: DistributionTypeValue.simple
-  };
+  const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
   const responsibilitiesSuccessPayloadMock = {
     positionId: positionIdMock,
@@ -86,9 +82,9 @@ describe('Responsibilities Effects', () => {
   };
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
-          filter: performanceFilterStateMock,
-          positionId: positionIdMock
-        };
+    filter: performanceFilterStateMock,
+    positionId: positionIdMock
+  };
 
   let runner: EffectsRunner;
   let responsibilitiesEffects: ResponsibilitiesEffects;
@@ -230,7 +226,8 @@ describe('Responsibilities Effects', () => {
 
   describe('when a FetchEntityWithPerformance is received', () => {
     const fetchEntityPerformancePayloadMock: FetchEntityWithPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: entityTypeCodeMock,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -241,8 +238,8 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchEntityWithPerformance(fetchEntityPerformancePayloadMock));
     });
 
-    it('should call getResponsibilitiesPerformances with the right arguments', (done) => {
-      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getResponsibilitiesPerformances').and.callThrough();
+    it('should call getPositionsPerformances with the right arguments', (done) => {
+      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getPositionsPerformances').and.callThrough();
 
       responsibilitiesEffects.FetchEntityWithPerformance$().subscribe(() => {
         done();
@@ -265,8 +262,11 @@ describe('Responsibilities Effects', () => {
           if (dispatchedActions.length === 4) {
             expect(dispatchedActions).toEqual([
               new SetTotalPerformance(fetchEntityPerformancePayloadMock.selectedPositionId),
-              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
-              new FetchEntityWithPerformanceSuccess(entityWithPerformanceMock),
+              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityTypeGroupName),
+              new FetchEntityWithPerformanceSuccess({
+                entityWithPerformance: entityWithPerformanceMock,
+                entityTypeCode: entityTypeCodeMock
+              }),
               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
             ]);
 
@@ -276,9 +276,9 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    describe('when getResponsibilitiesPerformances returns an error', () => {
-      it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
-        spyOn(responsibilitiesService, 'getResponsibilitiesPerformances').and.returnValue(Observable.throw(error));
+    describe('when getResponsibilitiesPerformanceTotals returns an error', () => {
+      it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
+        spyOn(responsibilitiesService, 'getPositionsPerformances').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.FetchEntityWithPerformance$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();
@@ -350,9 +350,9 @@ describe('Responsibilities Effects', () => {
         fetchSubAccountsPayloadMock = {
           positionId: chance.string({pool: '0123456789'}),
           contextPositionId: chance.string({pool: '0123456789'}),
-          entityType: chance.string(),
+          entityTypeAccountName: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-          premiseType: PremiseTypeValue.All
+          filter: performanceFilterStateMock
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 

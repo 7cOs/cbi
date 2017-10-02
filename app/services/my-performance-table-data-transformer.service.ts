@@ -21,15 +21,17 @@ export class MyPerformanceTableDataTransformerService {
         ctv: entity.performance.contributionToVolume,
         metadata: {
           positionId: entity.positionId
-        }
+        },
+        performanceError: entity.performance.error
       };
 
-      if (entity.positionDescription && entity.name === 'Open') {
+      if (entity.name === 'Open') {
         transformedEntity.descriptionRow0 = 'Open Position';
         transformedEntity.descriptionRow1 = entity.positionDescription;
       }
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
+      if (entity.entityTypeCode) transformedEntity.metadata.entityTypeCode = entity.entityTypeCode;
 
       if (entity.propertyType === EntityPropertyType.Distributor) {
         transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';

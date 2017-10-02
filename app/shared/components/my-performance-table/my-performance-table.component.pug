@@ -39,8 +39,9 @@ div.performance-table-wrapper
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")
 
     tbody
-      tr.entity-row.col-100-pct(my-performance-table-row,
-                                *ngFor="let rowData of sortedTableData, let i = index",
+      tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let i = index",
+                                [ngClass]="{'performance-error': rowData.performanceError}",
+                                my-performance-table-row,
                                 [rowData]="rowData",
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",

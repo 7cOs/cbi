@@ -44,14 +44,17 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
       .switchMap((action: Action) => {
-        const { entityType, entities, filter, selectedPositionId, viewType } = action.payload;
+        const { entityTypeGroupName, entityTypeCode, entities, filter, selectedPositionId, viewType } = action.payload;
 
-        return this.responsibilitiesService.getResponsibilitiesPerformances(entities, filter)
+        return this.responsibilitiesService.getPositionsPerformances(entities, filter)
           .switchMap((entityPerformances: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),
-              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
-              new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess(entityPerformances),
+              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityTypeGroupName),
+              new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess({
+                entityWithPerformance: entityPerformances,
+                entityTypeCode: entityTypeCode
+              }),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
             ]);
           })
@@ -62,7 +65,9 @@ export class ResponsibilitiesEffects {
   @Effect() fetchSubAccounts$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
-      .switchMap((action: Action) => Observable.of(action.payload))
+      .switchMap((action: Action): Observable<SubAccountData> => {
+        return Observable.of(action.payload);
+      })
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
