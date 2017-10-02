@@ -881,6 +881,25 @@ describe('Responsibilities Effects', () => {
         done();
       });
     });
+
+    it('should call show toast and transform null dto when getSubAccountPerformance returns an error', (done) => {
+      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+        return Observable.throw(new Error(chance.string()));
+      });
+      const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
+
+      responsibilitiesService.getSubAccountsPerformances(subAccountDataMock).subscribe(() => {
+        expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
+        expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        subAccounts.map((subAccount) => {
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
+            contextPositionIdMock, performanceFilterStateMock);
+          expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
+        });
+        done();
+      });
+    });
   });
 
   describe('when getSubAccounts is called', () => {
