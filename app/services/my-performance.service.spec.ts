@@ -113,6 +113,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is empty and Metric is volume', () => {
       it('should return PremiseTypeValue All when undefined or Corporate', () => {
         userType = undefined;
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.All);
       });
     });
