@@ -14,7 +14,6 @@ import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { ViewType } from '../../enums/view-type.enum';
@@ -250,7 +249,7 @@ describe('Responsibilities Actions', () => {
       contextPositionId: chance.string({pool: '0123456789'}),
       entityTypeAccountName: chance.string(),
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      premiseType: PremiseTypeValue.All
+      filter: performanceFilterStateMock
     };
     let action: ResponsibilitiesActions.FetchSubAccountsAction;
 

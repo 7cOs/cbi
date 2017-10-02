@@ -6,7 +6,6 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ViewType } from '../../enums/view-type.enum';
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -34,7 +33,7 @@ export interface FetchSubAccountsActionPayload {
   contextPositionId: string;
   entityTypeAccountName: string;
   selectedPositionId: string;
-  premiseType: PremiseTypeValue;
+  filter: MyPerformanceFilterState;
 }
 
 export interface FetchSubAccountsSuccessPayload {

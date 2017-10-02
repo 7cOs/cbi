@@ -112,6 +112,19 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
+  public getSubAccountPerformance(
+    subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState)
+  : Observable<PerformanceDTO> {
+    const url = `/v3/subAccounts/${subAccountId}/performanceTotal`;
+    const params =  Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId });
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
   public getPositionProductMetrics(
     positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
   ): Observable<ProductMetricsDTO> {

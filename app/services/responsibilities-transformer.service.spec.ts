@@ -83,15 +83,13 @@ describe('Service: ResponsibilitiesTransformerService', () => {
 
       expect(groupedSubAccounts).toBeDefined();
       expect(groupedSubAccounts[entityTypeMock][0]).toEqual({
-        positionId: entitySubAccountDTOMock[0].subaccountCode,
-        contextPositionId: entitySubAccountDTOMock[0].accountCode,
-        name: entitySubAccountDTOMock[0].subaccountDescription,
+        positionId: entitySubAccountDTOMock[0].id,
+        name: entitySubAccountDTOMock[0].name,
         propertyType: EntityPropertyType.SubAccount
       });
       expect(groupedSubAccounts[entityTypeMock][1]).toEqual({
-        positionId: entitySubAccountDTOMock[1].subaccountCode,
-        contextPositionId: entitySubAccountDTOMock[1].accountCode,
-        name: entitySubAccountDTOMock[1].subaccountDescription,
+        positionId: entitySubAccountDTOMock[1].id,
+        name: entitySubAccountDTOMock[1].name,
         propertyType: EntityPropertyType.SubAccount
       });
     });
