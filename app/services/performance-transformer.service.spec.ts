@@ -1,6 +1,5 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
 import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
 import { Performance, PerformanceDTO } from '../models/performance.model';

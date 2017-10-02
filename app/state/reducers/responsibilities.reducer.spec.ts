@@ -15,7 +15,6 @@ import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesState } from './responsibilities.reducer';
-import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 const positionIdMock = chance.string();
