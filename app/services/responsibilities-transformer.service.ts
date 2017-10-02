@@ -42,9 +42,8 @@ export class ResponsibilitiesTransformerService {
     return {
       [accountName]: subAccountsDTO.map((subAccount: EntitySubAccountDTO) => {
         return {
-          positionId: subAccount.subaccountCode,
-          contextPositionId: subAccount.accountCode,
-          name: subAccount.subaccountDescription,
+          positionId: subAccount.id,
+          name: subAccount.name,
           propertyType: EntityPropertyType.SubAccount,
           entityType: EntityType.SubAccount
         };

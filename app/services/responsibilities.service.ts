@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/catch';
 
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
@@ -15,7 +16,6 @@ import { MyPerformanceFilterState } from '../state/reducers/my-performance-filte
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { ViewType } from '../enums/view-type.enum';
 
@@ -26,6 +26,7 @@ export interface ResponsibilitiesData {
   entitiesURL?: string;
   alternateEntitiesURL?: string;
   positionId?: string;
+  entityTypeCode?: string;
   filter?: MyPerformanceFilterState;
   entityWithPerformance?: Array<EntityWithPerformance>;
   entities?: HierarchyEntityDTO[];
@@ -34,11 +35,11 @@ export interface ResponsibilitiesData {
 export interface SubAccountData {
   positionId: string;
   contextPositionId: string;
-  entityType: string;
-  premiseType: PremiseTypeValue;
+  entityTypeAccountName: string;
   groupedEntities?: GroupedEntities;
   entityWithPerformance?: Array<EntityWithPerformance>;
   selectedPositionId: string;
+  filter: MyPerformanceFilterState;
 }
 
 @Injectable()
@@ -47,7 +48,8 @@ export class ResponsibilitiesService {
   constructor(
     private myPerformanceApiService: MyPerformanceApiService,
     private performanceTransformerService: PerformanceTransformerService,
-    private responsibilitiesTransformerService: ResponsibilitiesTransformerService
+    private responsibilitiesTransformerService: ResponsibilitiesTransformerService,
+    @Inject('toastService') private toastService: any
   ) { }
 
   public getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -128,12 +130,17 @@ export class ResponsibilitiesService {
   }
 
   public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState) {
-    const apiCalls: Observable<EntityWithPerformance | Error>[] = entities.map((entity: HierarchyEntity) => {
-      return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
-        .map((response: PerformanceDTO) => {
-          return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
-        });
-    });
+    const apiCalls: Observable<EntityWithPerformance | Error>[] =
+      entities.map((entity: HierarchyEntity) => {
+        return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
+          .map((response: PerformanceDTO) => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, entity));
+          });
+      });
 
     return Observable.forkJoin(apiCalls);
   }
@@ -151,6 +158,10 @@ export class ResponsibilitiesService {
         return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId)
           .map(response => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, distributor);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, distributor));
           });
       });
 
@@ -163,10 +174,35 @@ export class ResponsibilitiesService {
         return this.myPerformanceApiService.getAccountPerformance(account.positionId, filter, contextPositionId)
           .map(response => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, account);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, account));
           });
       });
 
     return Observable.forkJoin(apiCalls);
+  }
+
+  public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
+    const subAccounts = subAccountData.groupedEntities[subAccountData.entityTypeAccountName]
+      .map((subAccount: HierarchyEntity) => subAccount);
+    const apiCalls: Observable<EntityWithPerformance | Error>[] =
+      subAccounts.map((subAccount: HierarchyEntity) => {
+        return this.myPerformanceApiService.getSubAccountPerformance(subAccount.positionId, subAccountData.contextPositionId,
+          subAccountData.filter)
+          .map((response: PerformanceDTO) => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
+          });
+      });
+
+    return Observable.forkJoin(apiCalls)
+      .map((entityPerformances: EntityWithPerformance[]) => {
+        subAccountData.entityWithPerformance = entityPerformances;
+        return Object.assign({}, subAccountData, {
+          entityWithPerformance: entityPerformances
+        });
+      });
   }
 
   public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -208,40 +244,16 @@ export class ResponsibilitiesService {
 
   public getSubAccounts(subAccountData: SubAccountData): Observable<SubAccountData> {
     return this.myPerformanceApiService.getSubAccounts(
-      subAccountData.positionId, subAccountData.contextPositionId, subAccountData.premiseType
+      subAccountData.positionId, subAccountData.contextPositionId, subAccountData.filter.premiseType
     )
       .map((response: Array<EntitySubAccountDTO>) => {
         const groupedEntities: GroupedEntities =
-          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityType);
+          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityTypeAccountName);
 
         return Object.assign({}, subAccountData, {
           groupedEntities: groupedEntities
         });
       });
-  }
-
-  public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
-    // Mock SubAccount performance till next story
-    const entityWithPerformanceMock: Array<EntityWithPerformance> = subAccountData.groupedEntities[subAccountData.entityType]
-      .map((subAccount: HierarchyEntity) => {
-        return {
-          positionId: subAccount.positionId,
-          contextPositionId: subAccount.contextPositionId,
-          name: subAccount.name,
-          entityType: EntityType.SubAccount,
-          performance: {
-            total: 1337,
-            totalYearAgo: 9001,
-            totalYearAgoPercent: 404,
-            contributionToVolume: 30,
-            name: subAccount.name
-          }
-        };
-    });
-
-    return Observable.of(Object.assign({}, subAccountData, {
-      entityWithPerformance: entityWithPerformanceMock
-    }));
   }
 
   public getAlternateHierarchy(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {

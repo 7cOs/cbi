@@ -1,10 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-// tslint:disable-next-line:no-unused-variable
-import { Performance } from '../../models/performance.model';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
-// tslint:disable-next-line:no-unused-variable
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
 import { MyPerformanceEntitiesData, MyPerformanceState } from './my-performance.reducer';
 import { ResponsibilitiesState } from './responsibilities.reducer';

@@ -9,8 +9,3 @@ export interface ProductMetricsBrandValue {
 export interface ProductMetrics {
   brand?: ProductMetricsBrandValue[];
 }
-
-export interface FetchProductMetricsSuccessPayload {
-  positionId: string;
-  products: ProductMetrics;
-}

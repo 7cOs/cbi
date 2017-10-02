@@ -9,18 +9,21 @@ export function getResponsibilityEntitiesPerformanceDTOMock(): EntityWithPerform
     id: chance.string(),
     name: chance.string(),
     entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
+    entityTypeCode: chance.string(),
     positionDescription: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
     performance: getPerformanceDTOMock()
   }, {
     id: chance.string(),
     name: chance.string(),
     entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
+    entityTypeCode: chance.string(),
     positionDescription: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
     performance: getPerformanceDTOMock()
   }, {
     id: chance.string(),
     name: chance.string(),
     entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
+    entityTypeCode: chance.string(),
     positionDescription: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
     performance: getPerformanceDTOMock()
   }];
@@ -29,19 +32,25 @@ export function getResponsibilityEntitiesPerformanceDTOMock(): EntityWithPerform
 export function getEntitiesWithPerformancesMock(): EntityWithPerformance[] {
   return [{
     positionId: chance.string(),
+    contextPositionId: chance.string(),
     name: chance.string(),
+    entityTypeCode: chance.string(),
     entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
     positionDescription: undefined,
     performance: getPerformanceMock()
   }, {
     positionId: chance.string(),
+    contextPositionId: chance.string(),
     name: chance.string(),
+    entityTypeCode: chance.string(),
     entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
     positionDescription: undefined,
     performance: getPerformanceMock()
   }, {
     positionId: chance.string(),
+    contextPositionId: chance.string(),
     name: chance.string(),
+    entityTypeCode: chance.string(),
     entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
     positionDescription: undefined,
     performance: getPerformanceMock()
@@ -50,10 +59,10 @@ export function getEntitiesWithPerformancesMock(): EntityWithPerformance[] {
 
 export function getEntitiesWithPerformancesOpenPositionMock(): EntityWithPerformance[] {
   return [{
-    positionId: '1',
+    positionId: chance.string(),
     name: 'Open',
     entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
-    positionDescription: 'Best job on earth',
+    positionDescription: chance.string(),
     performance: getPerformanceMock()
   }];
 }

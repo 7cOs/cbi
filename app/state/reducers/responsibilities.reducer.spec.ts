@@ -1,29 +1,21 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { EntityWithPerformance } from '../../models/entity-with-performance.model';
-import { Performance } from '../../models/performance.model';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchEntityWithPerformancePayload } from '../actions/responsibilities.action';
-import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
+import { FetchEntityWithPerformancePayload, FetchEntityWithPerformanceSuccessPayload } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
+import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { ResponsibilitiesState } from './responsibilities.reducer';
+import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
+import { ResponsibilitiesState } from './responsibilities.reducer';
 
 const positionIdMock = chance.string();
-const performanceFilterStateMock: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.PointsOfDistribution,
-  dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-  premiseType: PremiseTypeValue.On,
-  distributionType: DistributionTypeValue.simple
-};
+const entityTypeCodeMock = chance.string();
+const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
 describe('Responsibilities Reducer', () => {
   it('updates the status when a fetch is dispatched', () => {
@@ -123,7 +115,8 @@ describe('Responsibilities Reducer', () => {
 
   it('should update the status when a FetchEntityWithPerformance action is received', () => {
     const payloadMock: FetchEntityWithPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: entityTypeCodeMock,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -144,12 +137,16 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should update the state when a FetchEntityWithPerformanceSuccess action is received', () => {
-    const payloadMock: EntityWithPerformance[] = getEntitiesWithPerformancesMock();
+    const payloadMock: FetchEntityWithPerformanceSuccessPayload = {
+      entityWithPerformance: getEntitiesWithPerformancesMock(),
+      entityTypeCode: entityTypeCodeMock
+    };
     const expectedState = {
       status: ActionStatus.Fetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
-      entityWithPerformance: payloadMock,
+      entityWithPerformance: payloadMock.entityWithPerformance,
+      entityTypeCode: payloadMock.entityTypeCode,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
     const actualState = responsibilitiesReducer(
@@ -201,7 +198,8 @@ describe('Responsibilities Reducer', () => {
           totalYearAgo: selectedRowMock.metricColumn1,
           totalYearAgoPercent: selectedRowMock.metricColumn2,
           contributionToVolume: selectedRowMock.ctv,
-          name: selectedRowMock.descriptionRow0
+          name: selectedRowMock.descriptionRow0,
+          error: false
         }
       }]
     });
@@ -216,7 +214,8 @@ describe('Responsibilities Reducer', () => {
         totalYearAgo: selectedRowMock.metricColumn1,
         totalYearAgoPercent: selectedRowMock.metricColumn2,
         contributionToVolume: selectedRowMock.ctv,
-        name: selectedRowMock.descriptionRow0
+        name: selectedRowMock.descriptionRow0,
+        error: false
       }
     };
     const actualState = responsibilitiesReducer(mockState, new ResponsibilitiesActions.SetTotalPerformance(payloadMock));

@@ -9,5 +9,6 @@ export interface Performance {
   total: number;
   totalYearAgo: number;
   totalYearAgoPercent: number;
+  error: boolean;
   name?: string;
 }

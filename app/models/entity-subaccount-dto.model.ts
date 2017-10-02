@@ -1,6 +1,5 @@
 export interface EntitySubAccountDTO {
-  subaccountCode: string;
-  accountCode: string;
-  subaccountDescription: string;
-  premiseTypeCode: string;
+  id: string;
+  name: string;
+  premiseTypes: string[];
 }

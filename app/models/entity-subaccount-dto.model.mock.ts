@@ -5,9 +5,8 @@ import { EntitySubAccountDTO } from './entity-subaccount-dto.model';
 
 export function getEntitySubAccountDTOMock(): EntitySubAccountDTO {
   return {
-    subaccountCode: chance.string(),
-    accountCode: chance.string(),
-    subaccountDescription: chance.string(),
-    premiseTypeCode: chance.string()
+    id: chance.string(),
+    name: chance.string(),
+    premiseTypes: [chance.string()]
   };
 }

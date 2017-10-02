@@ -46,15 +46,18 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
       .switchMap((action: Action) => {
-        const { selectedPositionId, entityType, type } = action.payload;
+        const { selectedPositionId, type, entityTypeGroupName, entityTypeCode } = action.payload;
         const viewType: ViewType = this.responsibilitiesService.getEntityGroupViewType(type);
 
         return this.responsibilitiesService.getGroupsPerformanceEntities(action.payload)
           .switchMap((performanceEntities: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),
-              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
-              new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess(performanceEntities),
+              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityTypeGroupName),
+              new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess({
+                entityWithPerformance: performanceEntities,
+                entityTypeCode: entityTypeCode
+              }),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
             ]);
           })
@@ -65,7 +68,9 @@ export class ResponsibilitiesEffects {
   @Effect() fetchSubAccounts$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
-      .switchMap((action: Action) => Observable.of(action.payload))
+      .switchMap((action: Action): Observable<SubAccountData> => {
+        return Observable.of(action.payload);
+      })
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
