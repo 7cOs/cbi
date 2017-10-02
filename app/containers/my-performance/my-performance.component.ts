@@ -29,7 +29,7 @@ import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import { SetPremiseType } from '../../state/actions/my-performance-filter.action';
-import {PremiseTypeValue} from "../../enums/premise-type.enum";
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
