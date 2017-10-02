@@ -7,13 +7,13 @@ import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
+import { PerformanceDTO } from '../models/performance.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
-import { PerformanceDTO } from '../models/performance.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
@@ -30,21 +30,21 @@ describe('Service: MyPerformanceApiService', () => {
       name: 'Joel Cummins',
       description: 'MARKET DEVELOPMENT MANAGER',
       type: '10',
-      hierarchyType: 'SALES_HIER'
+      hierarchyType: 'SALES_HIER',
     }, {
       id: '456',
       employeeId: '4564561',
       name: 'Andy Farag',
       description: 'MARKET DEVELOPMENT MANAGER',
       type: '20',
-      hierarchyType: 'SALES_HIER'
+      hierarchyType: 'SALES_HIER',
     }, {
       id: '789',
       employeeId: '7897891',
       name: 'Ryan Stasik',
       description: 'Specialist',
       type: '30',
-      hierarchyType: 'SALES_HIER'
+      hierarchyType: 'SALES_HIER',
     }]
   };
   const entityDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
@@ -176,12 +176,11 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService
-        .getAccountProductMetrics(expectedAccountId, expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
+        .getRoleGroupProductMetrics(expectedPositionId, expectedEntityType, filterMock, ProductMetricsAggregationType.brand)
         .subscribe((res) => {
           expect(res).toEqual(productMetricsBrandDTOMock);
           done();
         });
-      });
     });
   });
 
@@ -333,7 +332,7 @@ describe('Service: MyPerformanceApiService', () => {
       const entityMock = {
         name: chance.string(),
         type: chance.string(),
-        entityType: EntityType.Person,
+        entityType: EntityType.RoleGroup,
         positionDescription: chance.string()
       };
       const positionIdMock = chance.string();

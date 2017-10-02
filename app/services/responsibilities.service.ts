@@ -193,13 +193,10 @@ export class ResponsibilitiesService {
           subAccountData.filter)
           .map((response: PerformanceDTO) => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
-<<<<<<< HEAD
-=======
           })
           .catch(() => {
             this.toastService.showPerformanceDataErrorToast();
             return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, subAccount));
->>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
           });
       });
 
@@ -212,12 +209,7 @@ export class ResponsibilitiesService {
       });
   }
 
-<<<<<<< HEAD
   public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-=======
-  public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
-  : Observable<ResponsibilitiesData> {
->>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
       return this.handleResponsibilitiesPerformances(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.distributors) {
@@ -268,7 +260,6 @@ export class ResponsibilitiesService {
       });
   }
 
-<<<<<<< HEAD
   public getAlternateHierarchy(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
     return this.myPerformanceApiService.getAlternateHierarchy(responsibilitiesData.positionId)
       .switchMap((response: PeopleResponsibilitiesDTO) => {
@@ -348,8 +339,6 @@ export class ResponsibilitiesService {
     }
   }
 
-=======
->>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getResponsibilitiesPerformances(responsibilitiesData.entityTypes,
       responsibilitiesData.filter,

@@ -886,8 +886,6 @@ describe('Responsibilities Effects', () => {
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
         });
         done();
-<<<<<<< HEAD
-=======
       });
     });
 
@@ -907,7 +905,6 @@ describe('Responsibilities Effects', () => {
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
         });
         done();
->>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
       });
     });
   });
@@ -929,19 +926,12 @@ describe('Responsibilities Effects', () => {
           positionId: entitySubAccountDTOMock[0].id,
           name: entitySubAccountDTOMock[0].name,
           propertyType: EntityPropertyType.SubAccount,
-<<<<<<< HEAD
           entityType: EntityType.SubAccount
         }, {
           positionId: entitySubAccountDTOMock[1].id,
           name: entitySubAccountDTOMock[1].name,
           propertyType: EntityPropertyType.SubAccount,
           entityType: EntityType.SubAccount
-=======
-        }, {
-          positionId: entitySubAccountDTOMock[1].id,
-          name: entitySubAccountDTOMock[1].name,
-          propertyType: EntityPropertyType.SubAccount
->>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
         }]
       };
     });

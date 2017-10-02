@@ -18,12 +18,8 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn2: entity.performance.totalYearAgoPercent,
         ctv: entity.performance.contributionToVolume,
         metadata: {
-<<<<<<< HEAD
           positionId: entity.positionId,
           entityType: entity.entityType
-=======
-          positionId: entity.positionId
->>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
         },
         performanceError: entity.performance.error
       };
