@@ -168,6 +168,10 @@ export class ResponsibilitiesService {
           subAccountData.filter)
           .map((response: PerformanceDTO) => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, subAccount));
           });
       });
 
