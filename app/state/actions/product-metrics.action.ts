@@ -1,13 +1,27 @@
 import { Action } from '@ngrx/store';
 
-import { FetchProductMetricsSuccessPayload } from '../../models/product-metrics.model';
-import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { ProductMetrics } from '../../models/product-metrics.model';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
+
+export interface FetchProductMetricsPayload {
+  positionId: string;
+  contextPositionId?: string;
+  entityTypeCode?: string;
+  filter: MyPerformanceFilterState;
+  selectedEntityType: SelectedEntityType;
+}
+
+export interface FetchProductMetricsSuccessPayload {
+  positionId: string;
+  products: ProductMetrics;
+}
 
 export const FETCH_PRODUCT_METRICS_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_ACTION';
 export class FetchProductMetricsAction implements Action {
   readonly type = FETCH_PRODUCT_METRICS_ACTION;
 
-  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: FetchProductMetricsPayload) { }
 }
 
 export const FETCH_PRODUCT_METRICS_SUCCESS_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_SUCCESS_ACTION';

@@ -1,8 +1,9 @@
-.archived-header.success(ng-class="{'visible': nb.archived}") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Archived!
-.archived-header.success(ng-class="{'visible': nb.deleted}") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Deleted!
-.archived-header.success(ng-class="{'visible': nb.added}") Opportunity Added!
-.archived-header.success(ng-class="{'visible': nb.copied}") <span>{{nb.multipleTargetListsSelected ? 'Opportunities' : 'Opportunity'}}</span> added to target list!
-.archived-header(ng-class="{'visible': nb.deleteError}") Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.
+.toast-header.success(ng-class="{'visible': nb.archived}") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Archived!
+.toast-header.success(ng-class="{'visible': nb.deleted}") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Deleted!
+.toast-header.success(ng-class="{'visible': nb.added}") Opportunity Added!
+.toast-header.success(ng-class="{'visible': nb.copied}") <span>{{nb.multipleTargetListsSelected ? 'Opportunities' : 'Opportunity'}}</span> added to target list!
+.toast-header(ng-class="{'visible': nb.deleteError}") Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.
+.toast-header(ng-class="{'visible': nb.performanceDataError}") An error occurred while loading performance data. Some data may be incomplete.
 
 div.outer-nav-wrapper
   div.inner-nav-wrapper(container)

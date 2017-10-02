@@ -1,32 +1,25 @@
 import * as Chance from 'chance';
 const chance = new Chance();
 
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchEntityWithPerformancePayload,
+         FetchEntityWithPerformanceSuccessPayload,
          FetchSubAccountsActionPayload,
          FetchSubAccountsSuccessPayload } from './responsibilities.action';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
-import { getPerformanceMock } from '../../models/performance.model.mock';
-import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getPerformanceMock } from '../../models/performance.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
-const performanceFilterStateMock: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.PointsOfDistribution,
-  dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-  premiseType: PremiseTypeValue.On,
-  distributionType: DistributionTypeValue.simple
-};
+const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
 describe('Responsibilities Actions', () => {
 
@@ -124,7 +117,8 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchEntityWithPerformance', () => {
     const payloadMock: FetchEntityWithPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: chance.string(),
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -148,7 +142,10 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('FetchEntityWithPerformanceSuccess', () => {
-    const payloadMock: EntityWithPerformance[] = getEntitiesWithPerformancesMock();
+    const payloadMock: FetchEntityWithPerformanceSuccessPayload = {
+      entityWithPerformance: getEntitiesWithPerformancesMock(),
+      entityTypeCode: chance.string()
+    };
     let action: ResponsibilitiesActions.FetchEntityWithPerformanceSuccess;
 
     beforeEach(() => {
@@ -250,9 +247,9 @@ describe('Responsibilities Actions', () => {
     const payloadMock: FetchSubAccountsActionPayload = {
       positionId: chance.string({pool: '0123456789'}),
       contextPositionId: chance.string({pool: '0123456789'}),
-      entityType: chance.string(),
+      entityTypeAccountName: chance.string(),
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      premiseType: PremiseTypeValue.All
+      filter: performanceFilterStateMock
     };
     let action: ResponsibilitiesActions.FetchSubAccountsAction;
 

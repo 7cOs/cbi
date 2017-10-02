@@ -1,20 +1,13 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 
 const positionIdMock = chance.string();
-const performanceFilterStateMock: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.PointsOfDistribution,
-  dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-  premiseType: PremiseTypeValue.On,
-  distributionType: DistributionTypeValue.simple
-};
+const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
 describe('ProductMetrics Reducer', () => {
 
@@ -27,7 +20,8 @@ describe('ProductMetrics Reducer', () => {
 
     const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetricsAction({
       positionId: positionIdMock,
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityType: SelectedEntityType.Position
     }));
 
     expect(actualState).toEqual(expectedState);

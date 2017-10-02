@@ -140,6 +140,25 @@ th {
       background-color: $light-blue-4;
     }
   }
+
+  &.performance-error {
+
+    /deep/td {
+      background-color: $very-light-red;
+    }
+
+    /deep/span.positive,
+    /deep/span.negative {
+      color: inherit;
+    }
+
+    &:hover {
+
+      /deep/td {
+        background-color: $light-blue-4;
+      }
+    }
+  }
 }
 
 span.positive {
@@ -155,7 +174,7 @@ span.link-out {
 }
 
 td, th {
-  font-family: WorkSans;
+  font-family: $work-sans;
   font-size: 12px;
   font-weight: $regular;
   cursor: pointer;
@@ -200,7 +219,7 @@ td, th {
 }
 
 .summary-header {
-  font-family: WorkSans;
+  font-family: $work-sans;
   font-size: 24px;
   font-weight: 300;
   text-align: left;

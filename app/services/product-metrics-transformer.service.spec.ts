@@ -2,7 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { ProductMetricType } from '../enums/product-metrics-type.enum';
+import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
 import { UtilService } from './util.service';
 
@@ -49,7 +49,7 @@ describe('Service: ProductMetricsTransformerService', () => {
         }]
       };
       const transformedProductMetrics =
-        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock, ProductMetricType.brand);
+        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock, ProductMetricsAggregationType.brand);
       expect(transformedProductMetrics).toEqual(expectedProductBrands);
     });
   });

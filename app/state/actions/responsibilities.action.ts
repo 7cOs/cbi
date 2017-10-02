@@ -6,7 +6,6 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ViewType } from '../../enums/view-type.enum';
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -16,19 +15,25 @@ export interface FetchResponsibilitiesSuccessPayload {
 }
 
 export interface FetchEntityWithPerformancePayload {
-  entityType: EntityPeopleType;
+  entityTypeGroupName: EntityPeopleType;
+  entityTypeCode: string;
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
   selectedPositionId: string;
   viewType: ViewType;
 }
 
+export interface FetchEntityWithPerformanceSuccessPayload {
+  entityWithPerformance: EntityWithPerformance[];
+  entityTypeCode: string;
+}
+
 export interface FetchSubAccountsActionPayload {
   positionId: string;
   contextPositionId: string;
-  entityType: string;
+  entityTypeAccountName: string;
   selectedPositionId: string;
-  premiseType: PremiseTypeValue;
+  filter: MyPerformanceFilterState;
 }
 
 export interface FetchSubAccountsSuccessPayload {
@@ -68,7 +73,7 @@ export const FETCH_ENTITIES_PERFORMANCES_SUCCESS = '[Responsibilities] FETCH_ENT
 export class FetchEntityWithPerformanceSuccess implements Action {
   readonly type = FETCH_ENTITIES_PERFORMANCES_SUCCESS;
 
-  constructor(public payload: EntityWithPerformance[]) { }
+  constructor(public payload: FetchEntityWithPerformanceSuccessPayload) { }
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
