@@ -9,6 +9,7 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
+import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
@@ -24,6 +25,7 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -137,8 +139,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
-    console.log('Going to accoutn dashboard');
-    this.$state.go('accounts', this.accountDashboardStateParameters(), {newtab: true});
+    const accountDashboardStateParams: AccountDashboardStateParameters = this.accountDashboardStateParameters(row);
+    const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
+    window.open(accountDashboardUrl, '_blank');
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
@@ -227,14 +230,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.store.dispatch({type: actionType, payload: event.filterValue});
   }
 
-  private accountDashboardStateParameters(): AccountDashboardStateParameters {
+   private accountDashboardStateParameters(row: MyPerformanceTableRow): AccountDashboardStateParameters {
     return {
-      accounts: 'string',
-      storeid: 'string',
       myaccountsonly: true,
-      timeperiodcode: 'string',
-      distributorid: 'string',
-      premisetype: 'string'
+      timeperiodcode: DateRangeTimePeriod[this.filterState.dateRangeCode],
+      distributorid: row.metadata.positionId,
+      premisetype: PremiseTypeValue[this.filterState.premiseType]
     };
   }
 

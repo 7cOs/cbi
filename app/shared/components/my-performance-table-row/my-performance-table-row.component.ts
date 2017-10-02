@@ -38,7 +38,8 @@ export class MyPerformanceTableRowComponent {
 
   public getSublineClass(): CssClasses {
     return {
-      ['link']: this.viewType === ViewType.distributors
+      ['link']: this.viewType === ViewType.distributors,
+      ['forward-arrow']: this.viewType === ViewType.distributors
     };
   }
 

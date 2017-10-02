@@ -21,7 +21,7 @@ my-performance-table.left(
   [viewType]="leftTableViewType",
   [showBackButton]="showLeftBackButton",
   [showOpportunities]="false",
-  (onSublineClicked)="handleSublineClicked({row: $event.row})",
+  (onSublineClicked)="handleSublineClicked($event)",
   (onSortingCriteriaChanged)="handleSortRows($event)",
   (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
 

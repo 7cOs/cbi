@@ -351,3 +351,11 @@ div.ctv {
     cursor: pointer;
   }
 }
+
+.forward-arrow {
+  background-image: url('../../../assets/img/icons/arrow-right-blue.svg');
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 24px;
+  box-sizing: border-box;
+}

@@ -117,6 +117,10 @@ describe('MyPerformanceComponent', () => {
           provide: 'userService',
           useValue: userServiceMock
         },
+        {
+          provide: '$state',
+          useValue: stateMock
+        },
         UtilService
       ]
     });
