@@ -170,7 +170,6 @@ export class ResponsibilitiesService {
   }
 
   public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    console.log('getPerformanceForGroupedEntities', responsibilitiesData);
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
       return this.handleResponsibilitiesPerformances(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.distributors) {
@@ -298,10 +297,6 @@ export class ResponsibilitiesService {
 
   public getGroupsPerformanceEntities(payload: FetchEntityWithPerformancePayload): Observable<(EntityWithPerformance | Error)[]> {
     switch (payload.type) {
-      case EntityType.ResponsibilitiesGroup:
-        // HANDLE GEOGRAPHY > ROLE GROUPS > PEOPLE
-        console.log('getGroupsPerformanceEntities', payload);
-        break;
       case EntityType.RoleGroup:
         return this.getPositionsPerformances(payload.entities, payload.filter);
       case EntityType.DistributorGroup:

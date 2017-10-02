@@ -201,8 +201,8 @@ describe('Responsibilities Effects', () => {
       });
 
       it('calls groupPeopleByGroupedEntities with the right parameters', (done) => {
-        const groupPeopleByGroupedEntitiesSpy = spyOn(
-                        responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService,
+          'groupPeopleByGroupedEntities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -228,10 +228,8 @@ describe('Responsibilities Effects', () => {
           entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
         };
 
-        responsibilitiesService.getResponsibilities(responsibilitiesDataMock)
-                                    .subscribe((responsibilitiesData: ResponsibilitiesData) => {
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
           expect(responsibilitiesData).toEqual(expectedResponsibilities);
-
           done();
         });
       });
@@ -248,8 +246,8 @@ describe('Responsibilities Effects', () => {
       });
 
       it('does not call groupPeopleByGroupedEntities', (done) => {
-        const groupPeopleByGroupedEntitiesSpy = spyOn
-                      (responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService,
+          'groupPeopleByGroupedEntities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -294,8 +292,8 @@ describe('Responsibilities Effects', () => {
       });
 
       it('does not call groupPeopleByGroupedEntities', (done) => {
-        const groupPeopleByGroupedEntitiesSpy =
-                        spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService,
+          'groupPeopleByGroupedEntities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();

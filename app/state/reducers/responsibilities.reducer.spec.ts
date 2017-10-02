@@ -93,8 +93,7 @@ describe('Responsibilities Reducer', () => {
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
 
-    const actualState =
-responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
+    const actualState = responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
 
     expect(actualState).toEqual(expectedState);
   });
