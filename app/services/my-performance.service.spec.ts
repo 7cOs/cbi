@@ -6,7 +6,7 @@ import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 describe('Service: MyPerformanceService', () => {
   let myPerformanceService: MyPerformanceService;
-  let userType: string = ''; // Corporate User
+  let userType: string;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

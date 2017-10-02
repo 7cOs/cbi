@@ -223,7 +223,7 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should trigger appropriate actions when the filter component emits an event', () => {
-      userService.model.currentUser.srcTypeCd = Array(3).fill('').map(() => chance.string());
+      userService.model.currentUser.srcTypeCd = Array(chance.natural({max: 2})).fill('').map(() => chance.string());
       myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
 
       const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock));
@@ -293,8 +293,8 @@ describe('MyPerformanceComponent', () => {
       const functionPassToSelectCall4 = storeMock.select.calls.argsFor(4)[0];
       expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current);
 
-      const functionPassToSelectCall7 = storeMock.select.calls.argsFor(5)[0];
-      expect(functionPassToSelectCall7(stateMock)).toBe(stateMock.myPerformance.versions);
+      const functionPassToSelectCall5 = storeMock.select.calls.argsFor(5)[0];
+      expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformance.versions);
 
       fixture.detectChanges();
       const myPerformanceFilterMock = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
