@@ -27,6 +27,11 @@ export interface FetchEntityWithPerformanceSuccessPayload {
   entityTypeCode: string;
 }
 
+export interface FetchEntityWithPerformanceSuccessPayload {
+  entityWithPerformance: EntityWithPerformance[];
+  entityTypeCode: string;
+}
+
 export interface FetchSubAccountsActionPayload {
   positionId: string;
   contextPositionId: string;

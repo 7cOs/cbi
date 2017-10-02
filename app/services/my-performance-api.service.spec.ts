@@ -176,11 +176,12 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService
-        .getRoleGroupProductMetrics(expectedPositionId, expectedEntityType, filterMock, ProductMetricsAggregationType.brand)
+        .getAccountProductMetrics(expectedAccountId, expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
         .subscribe((res) => {
           expect(res).toEqual(productMetricsBrandDTOMock);
           done();
         });
+      });
     });
   });
 

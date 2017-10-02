@@ -886,6 +886,28 @@ describe('Responsibilities Effects', () => {
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
         });
         done();
+<<<<<<< HEAD
+=======
+      });
+    });
+
+    it('should call show toast and transform null dto when getSubAccountPerformance returns an error', (done) => {
+      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+        return Observable.throw(new Error(chance.string()));
+      });
+      const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
+
+      responsibilitiesService.getSubAccountsPerformances(subAccountDataMock).subscribe(() => {
+        expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
+        expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        subAccounts.map((subAccount) => {
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
+            contextPositionIdMock, performanceFilterStateMock);
+          expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
+        });
+        done();
+>>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
       });
     });
   });
@@ -907,12 +929,19 @@ describe('Responsibilities Effects', () => {
           positionId: entitySubAccountDTOMock[0].id,
           name: entitySubAccountDTOMock[0].name,
           propertyType: EntityPropertyType.SubAccount,
+<<<<<<< HEAD
           entityType: EntityType.SubAccount
         }, {
           positionId: entitySubAccountDTOMock[1].id,
           name: entitySubAccountDTOMock[1].name,
           propertyType: EntityPropertyType.SubAccount,
           entityType: EntityType.SubAccount
+=======
+        }, {
+          positionId: entitySubAccountDTOMock[1].id,
+          name: entitySubAccountDTOMock[1].name,
+          propertyType: EntityPropertyType.SubAccount
+>>>>>>> fbe0409f521669b682eccb8241f0b8f5f5d324b8
         }]
       };
     });
