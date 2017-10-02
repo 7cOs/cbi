@@ -55,8 +55,16 @@ describe('Service: MyPerformanceService', () => {
     });
 
     describe('when userType is empty and Metric is velocity', () => {
-      it('should return PremiseTypeValue Off when Corporate', () => {
+      it('should return PremiseTypeValue Off when empty or Corporate', () => {
         userType = '';
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
+        expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
+      });
+    });
+
+    describe('when userType is empty and Metric is velocity', () => {
+      it('should return PremiseTypeValue Off when undefined or Corporate', () => {
+        userType = undefined;
         const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
@@ -95,9 +103,16 @@ describe('Service: MyPerformanceService', () => {
     });
 
     describe('when userType is empty and Metric is volume', () => {
-      it('should return PremiseTypeValue All when Corporate', () => {
+      it('should return PremiseTypeValue All when empty or Corporate', () => {
         userType = '';
         const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
+        expect(newPremiseValueState).toEqual(PremiseTypeValue.All);
+      });
+    });
+
+    describe('when userType is empty and Metric is volume', () => {
+      it('should return PremiseTypeValue All when undefined or Corporate', () => {
+        userType = undefined;
         expect(newPremiseValueState).toEqual(PremiseTypeValue.All);
       });
     });
