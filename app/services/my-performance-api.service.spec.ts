@@ -209,6 +209,38 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
+  describe('getSubAccountsPerformance', () => {
+    it('should call the SubAccountsperformance  API and return performance data', (done) => {
+      const myPerformanceFilterState = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+      const subAccountIdMock: string = chance.string();
+      const contextPositionIdMock: string = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
+      });
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(performanceResponseMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(
+          `/v3/subAccounts/${subAccountIdMock}/` +
+          `performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=${contextPositionIdMock}`
+        );
+      });
+
+      myPerformanceApiService.getSubAccountPerformance(subAccountIdMock, contextPositionIdMock, myPerformanceFilterState)
+        .subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(performanceResponseMock);
+        done();
+      });
+    });
+  });
+
   describe('getDistributorPerformance', () => {
     it('should call the distributors performance API and return performance data', (done) => {
       const mockFilter = {

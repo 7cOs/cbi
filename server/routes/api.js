@@ -14,7 +14,7 @@ module.exports = function(app) {
       // TODO: remove once api gateway is in place
       if (req.url.match(/\/v3\/(dateRangeCodes|.+\/productMetrics)/)) {
         v3BaseURLKey = 'productMetrics';
-      } else if (req.url.match(/\/v3\/accounts.+/)) {
+      } else if (req.url.match(/\/v3\/(accounts|subAccounts)/)) {
         v3BaseURLKey = 'accounts';
       } else if (req.url.match(/\/v3\/distributors.+/)) {
         v3BaseURLKey = 'distributors';

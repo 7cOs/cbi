@@ -30,7 +30,6 @@ import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
@@ -353,7 +352,7 @@ describe('Responsibilities Effects', () => {
           contextPositionId: chance.string({pool: '0123456789'}),
           entityTypeAccountName: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-          premiseType: PremiseTypeValue.All
+          filter: performanceFilterStateMock
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 

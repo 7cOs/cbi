@@ -397,8 +397,8 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         entityTypeAccountName: rowMock.descriptionRow0,
+        filter: stateMock.myPerformanceFilter as any,
         selectedPositionId: rowMock.metadata.positionId,
-        premiseType: stateMock.myPerformanceFilter.premiseType
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
         positionId: rowMock.metadata.positionId,
