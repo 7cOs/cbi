@@ -25,11 +25,7 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
-<<<<<<< HEAD
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
-=======
->>>>>>> develop
 import { RowType } from '../../enums/row-type.enum';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
