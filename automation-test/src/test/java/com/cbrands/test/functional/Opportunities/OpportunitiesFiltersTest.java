@@ -65,7 +65,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   }
 
   @Test(description = "Filter Opportunities by Store Retailer", dataProvider = "storeRetailersData")
-  public void filterByStoreAccount(String accountName, String accountAddress, PremiseType premiseType) {
+  public void filterByStoreRetailer(String accountName, String accountAddress, PremiseType premiseType) {
     opportunitiesPage
       .clickRetailerTypeDropdown()
       .selectStoreRetailerType()
