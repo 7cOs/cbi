@@ -83,8 +83,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
     @Inject('userService') private userService: any,
-    @Inject('$state') private $state: any
-    private myPerformanceService: MyPerformanceService,
+    @Inject('$state') private $state: any,
+    private myPerformanceService: MyPerformanceService
   ) { }
 
   ngOnInit() {
