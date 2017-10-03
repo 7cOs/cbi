@@ -69,7 +69,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     opportunitiesPage
       .clickRetailerTypeDropdown()
       .selectStoreRetailerType()
-      .enterStoreAccountSearchText(accountName)
+      .enterStoreRetailerSearchText(accountName)
       .clickSearchForRetailer()
       .clickFirstRetailerResultContaining(accountAddress);
 

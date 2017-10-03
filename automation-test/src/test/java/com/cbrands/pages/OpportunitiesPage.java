@@ -70,7 +70,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage enterStoreAccountSearchText(String searchText) {
+  public OpportunitiesPage enterStoreRetailerSearchText(String searchText) {
     final WebElement storeSearchField = filterContainer.findElement(By.xpath(STORE_SEARCHBOX_XPATH));
     waitForElementToClickable(storeSearchField, true).click();
     storeSearchField.sendKeys(searchText);
@@ -105,9 +105,9 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage clickFirstRetailerResultContaining(String accountName) {
+  public OpportunitiesPage clickFirstRetailerResultContaining(String retailerName) {
     final WebElement searchButton = filterContainer
-      .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li[contains(., '" + accountName + "')]"));
+      .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li[contains(., '" + retailerName + "')]"));
     waitForElementToClickable(searchButton, true).click();
 
     return this;
@@ -154,7 +154,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   private boolean isChipPresent(String chipTitle) {
-    return isElementPresent(By.xpath("//md-chip//div/div[contains(., '" + chipTitle + "')]"));
+    return isElementPresent(By.xpath("//md-chip[contains(., '" + chipTitle + "')]"));
   }
 
   public OpportunitiesPage removeChipContaining(String substring) {
