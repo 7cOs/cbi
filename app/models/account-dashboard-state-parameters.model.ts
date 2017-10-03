@@ -2,7 +2,8 @@ export interface AccountDashboardStateParameters {
   accounts?: string;
   storeid?: string;
   myaccountsonly?: boolean;
-  timeperiodcode?: string;
+  depletiontimeperiod?: string;
+  distributiontimeperiod?: string;
   distributorid?: string;
   premisetype?: string;
 }

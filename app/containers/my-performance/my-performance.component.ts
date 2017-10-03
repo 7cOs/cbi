@@ -17,6 +17,7 @@ import { FetchResponsibilities,
         FetchEntityWithPerformance,
         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -261,12 +262,26 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
    private accountDashboardStateParameters(row: MyPerformanceTableRow): AccountDashboardStateParameters {
-    return {
-      myaccountsonly: true,
-      timeperiodcode: DateRangeTimePeriod[this.filterState.dateRangeCode],
-      distributorid: row.metadata.positionId,
-      premisetype: PremiseTypeValue[this.filterState.premiseType]
-    };
+    switch (this.filterState.metricType) {
+      case MetricTypeValue.volume:
+        return {
+          myaccountsonly: true,
+          depletiontimeperiod: DateRangeTimePeriod[this.filterState.dateRangeCode],
+          distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
+          distributorid: row.metadata.positionId,
+          premisetype: PremiseTypeValue[this.filterState.premiseType]
+        };
+      case MetricTypeValue.PointsOfDistribution || MetricTypeValue.velocity:
+        return {
+          myaccountsonly: true,
+          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
+          distributiontimeperiod: DateRangeTimePeriod[this.filterState.dateRangeCode],
+          distributorid: row.metadata.positionId,
+          premisetype: PremiseTypeValue[this.filterState.premiseType]
+        };
+      default:
+        break;
+    }
   }
 
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {

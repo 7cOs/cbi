@@ -33,6 +33,7 @@ export class MyPerformanceTableDataTransformerService {
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
       if (entity.entityTypeCode) transformedEntity.metadata.entityTypeCode = entity.entityTypeCode;
 
+      console.log(entity.propertyType);
       if (entity.propertyType === EntityPropertyType.Distributor) {
         transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';
       }

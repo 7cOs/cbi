@@ -986,6 +986,7 @@ module.exports = /*  @ngInject */
 
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
+      const isNavigatedFromMyPerformance = $state.params.distributorid;
       const isSettingNotes = $state.params.openNotesOnLoad;
 
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
@@ -1001,6 +1002,10 @@ module.exports = /*  @ngInject */
 
       if (isSettingNotes) {
         setNotes();
+      }
+
+      if (isNavigatedFromMyPerformance) {
+        setDataForNavigationFromMyPerformance();
       }
 
       if (isNavigatedFromScorecard) {
@@ -1053,6 +1058,24 @@ module.exports = /*  @ngInject */
       vm.currentTopBottomFilters.stores = storeData;
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
+    }
+
+    function setDataForNavigationFromMyPerformance() {
+      setFilter({id: $state.params.distributorid}, 'distributor');
+      filterTopBottom();
+
+      if ($state.params.premisetype === 'on') {
+        vm.premiseTypeValue = 'on';
+        vm.filtersService.model.selected.premiseType = 'on';
+        vm.updateChip('On-Premise', 'premiseType');
+      } else if ($state.params.premisetype === 'off') {
+        vm.premiseTypeValue = 'off';
+        vm.filtersService.model.selected.premiseType = 'off';
+        vm.updateChip('Off-Premise', 'premiseType');
+      }
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
+      vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
     }
 
     function setNotes() {
