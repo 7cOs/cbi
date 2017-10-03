@@ -24,6 +24,7 @@ import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.mod
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -76,12 +77,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
+  private defaultUserPremiseType: PremiseTypeValue;
 
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any
+    private myPerformanceService: MyPerformanceService,
   ) { }
 
   ngOnInit() {
@@ -128,6 +131,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
+    this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+      this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
+
+    this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
     this.store.dispatch(new FetchProductMetricsAction({
       positionId: currentUserId,
@@ -239,26 +246,25 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
-    let actionType;
-
     switch (event.filterType) {
       case MyPerformanceFilterActionType.Metric:
-        actionType = MyPerformanceFilterActions.SET_METRIC;
+        this.store.dispatch(new MyPerformanceFilterActions.SetMetric(event.filterValue));
+        this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+          this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
+        this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType(this.defaultUserPremiseType));
         break;
       case MyPerformanceFilterActionType.TimePeriod:
-        actionType = MyPerformanceFilterActions.SET_TIME_PERIOD;
+        this.store.dispatch(new MyPerformanceFilterActions.SetTimePeriod(event.filterValue));
         break;
       case MyPerformanceFilterActionType.PremiseType:
-        actionType = MyPerformanceFilterActions.SET_PREMISE_TYPE;
+        this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType(event.filterValue));
         break;
       case MyPerformanceFilterActionType.DistributionType:
-        actionType = MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE;
+        this.store.dispatch(new MyPerformanceFilterActions.SetDistributionType(event.filterValue));
         break;
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);
     }
-
-    this.store.dispatch({type: actionType, payload: event.filterValue});
   }
 
    private accountDashboardStateParameters(row: MyPerformanceTableRow): AccountDashboardStateParameters {
