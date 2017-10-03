@@ -78,18 +78,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public boolean isChainSearchTextCleared() {
-    return isTextboxCleared(filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH)));
-  }
-
-  public boolean isStoreSearchTextCleared() {
-    return isTextboxCleared(filterContainer.findElement(By.xpath(STORE_SEARCHBOX_XPATH)));
-  }
-
-  private boolean isTextboxCleared(WebElement searchBox) {
-    return searchBox.getAttribute("value").isEmpty();
-  }
-
   public OpportunitiesPage clickSearchForRetailer() {
     final WebElement searchButton = filterContainer
       .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
@@ -130,6 +118,18 @@ public class OpportunitiesPage extends TestNGBasePage {
       By.xpath("//md-radio-button[contains(@aria-label, '" + premiseType.name() + "')]")
     );
     return "true".equalsIgnoreCase(checkbox.getAttribute("aria-checked"));
+  }
+
+  public boolean isChainSearchTextCleared() {
+    return isTextboxCleared(filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH)));
+  }
+
+  public boolean isStoreSearchTextCleared() {
+    return isTextboxCleared(filterContainer.findElement(By.xpath(STORE_SEARCHBOX_XPATH)));
+  }
+
+  private boolean isTextboxCleared(WebElement searchBox) {
+    return searchBox.getAttribute("value").isEmpty();
   }
 
   public boolean hasOpportunityResults() {
