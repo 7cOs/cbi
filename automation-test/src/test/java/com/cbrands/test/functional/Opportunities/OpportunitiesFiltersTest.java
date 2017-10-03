@@ -36,7 +36,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
-  @Test(description = "Filter Opportunities by Chain Account", dataProvider = "chainRetailersData")
+  @Test(description = "Filter Opportunities by Chain Retailer", dataProvider = "chainRetailersData")
   public void filterByChainRetailer(String accountName, PremiseType premiseType) {
     opportunitiesPage
       .clickRetailerTypeDropdown()
@@ -57,9 +57,14 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       "Query chip failed to appear for selected Chain"
     );
     Assert.assertTrue(opportunitiesPage.isChainSearchTextCleared(), "Chain searchbox failed to clear after selection");
+
+    opportunitiesPage.removeChipContaining(accountName);
+    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(accountName),
+      "Query chip failed to be removed for selected Chain"
+    );
   }
 
-  @Test(description = "Filter Opportunities by Store Account", dataProvider = "storeRetailersData")
+  @Test(description = "Filter Opportunities by Store Retailer", dataProvider = "storeRetailersData")
   public void filterByStoreAccount(String accountName, String accountAddress, PremiseType premiseType) {
     opportunitiesPage
       .clickRetailerTypeDropdown()
@@ -81,6 +86,11 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       "Query chip failed to appear for selected Store"
     );
     Assert.assertTrue(opportunitiesPage.isStoreSearchTextCleared(), "Store searchbox failed to clear after selection");
+
+    opportunitiesPage.removeChipContaining(accountAddress);
+    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(accountAddress),
+      "Query chip failed to be removed for selected Store"
+    );
   }
 
   @DataProvider
