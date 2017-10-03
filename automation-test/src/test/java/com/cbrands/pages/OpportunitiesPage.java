@@ -157,6 +157,15 @@ public class OpportunitiesPage extends TestNGBasePage {
     return isElementPresent(By.xpath("//md-chip//div/div[contains(., '" + chipTitle + "')]"));
   }
 
+  public OpportunitiesPage removeChipContaining(String substring) {
+    WebElement chipToBeRemoved = findElement(
+      By.xpath("//md-chip[contains(., '" + substring + "')]//div[contains(@md-chip-remove, 'md-chip-remove')]")
+    );
+    waitForElementToClickable(chipToBeRemoved, true).click();
+
+    return this;
+  }
+
   public enum PremiseType {
     On,
     Off
