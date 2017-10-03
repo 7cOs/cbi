@@ -1,7 +1,7 @@
 @import '../../../assets/styles/base/variables';
 
 .breadcrumb-container {
-  margin-top: 60px;
+  margin-top: 30px;
   padding-left: 30px;
   height: auto;
   text-align: left;
@@ -16,7 +16,7 @@
   font-weight: 600;
   letter-spacing: 1.3px;
   text-align: left;
-  color: $blue; 
+  color: $blue;
   cursor: pointer;
 
   &:hover {
