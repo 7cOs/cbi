@@ -18,6 +18,7 @@ import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
+import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -25,6 +26,7 @@ import { MyPerformanceFilterState } from '../../state/reducers/my-performance-fi
 import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { RowType } from '../../enums/row-type.enum';
@@ -78,6 +80,7 @@ describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
   let userServiceMock: any;
+  let myPerformanceServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
 
   function generateMockVersions(min: number, max: number): MyPerformanceEntitiesData[] {
@@ -116,9 +119,14 @@ describe('MyPerformanceComponent', () => {
     userServiceMock = {
       model: {
         currentUser: {
-          positionId: chance.integer().toString()
+          positionId: chance.integer().toString(),
+          srcTypeCd: [ 'SALES_HIER' ]
         }
       }
+    };
+
+    myPerformanceServiceMock = {
+      getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType')
     };
 
     TestBed.configureTestingModule({
@@ -133,6 +141,10 @@ describe('MyPerformanceComponent', () => {
       providers: [
         MyPerformanceTableDataTransformerService,
         {
+          provide: MyPerformanceService,
+          useValue: myPerformanceServiceMock
+        },
+        {
           provide: Store,
           useValue: storeMock
         },
@@ -143,7 +155,6 @@ describe('MyPerformanceComponent', () => {
         UtilService
       ]
     });
-
     fixture = TestBed.createComponent(MyPerformanceComponent);
     componentInstance = fixture.componentInstance;
     fixture.detectChanges();
@@ -151,101 +162,147 @@ describe('MyPerformanceComponent', () => {
     versionsSubject.next(initialVersionsMock);
   });
 
-  it('should dispatch actions on init', inject([ 'userService' ], (userService: any) => {
-    userService.model.currentUser.firstName = chance.string();
-    userService.model.currentUser.lastName = chance.string();
-    storeMock.dispatch.and.callThrough();
-    storeMock.dispatch.calls.reset();
+  describe('MyPerformanceComponent various events', () => {
+    let userService: any;
 
-    fixture = TestBed.createComponent(MyPerformanceComponent);
-    fixture.detectChanges();
+    beforeEach(inject([ 'userService' ], (_userService: any) => {
+      userService = _userService;
+      userService.model.currentUser.firstName = chance.string();
+      userService.model.currentUser.lastName = chance.string();
 
-    expect(storeMock.dispatch.calls.count()).toBe(2);
-    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilities({
-      positionId: userServiceMock.model.currentUser.positionId,
-      filter: stateMock.myPerformanceFilter as any
-    })]);
+      storeMock.dispatch.and.callThrough();
+      storeMock.dispatch.calls.reset();
+    }));
 
-    expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchProductMetricsAction({
-      positionId: userServiceMock.model.currentUser.positionId,
-      filter: stateMock.myPerformanceFilter as any,
-      selectedEntityType: SelectedEntityType.Position
-    })]);
-  }));
+    it('should dispatch actions on init', () => {
+      myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      fixture.detectChanges();
 
-  it('should dispatch actions on init and handle empty positionId', inject([ 'userService' ], (userService: any) => {
-    userService.model.currentUser.positionId = '';
-    storeMock.dispatch.and.callThrough();
-    storeMock.dispatch.calls.reset();
-
-    fixture = TestBed.createComponent(MyPerformanceComponent);
-    fixture.detectChanges();
-
-    expect(storeMock.dispatch.calls.count()).toBe(2);
-    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilities({
-      positionId: '0',
-      filter: stateMock.myPerformanceFilter as any
-    })]);
-  }));
-
-  it('should dispatch actions on init and handle undefined positionId', inject([ 'userService' ], (userService: any) => {
-    delete userService.model.currentUser.positionId;
-    storeMock.dispatch.and.callThrough();
-    storeMock.dispatch.calls.reset();
-
-    fixture = TestBed.createComponent(MyPerformanceComponent);
-    fixture.detectChanges();
-
-    expect(storeMock.dispatch.calls.count()).toBe(2);
-    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilities({
-      positionId: '0',
-      filter: stateMock.myPerformanceFilter as any
-    })]);
-  }));
-
-  it('should trigger appropriate actions when the filter component emits an event', () => {
-    storeMock.dispatch.and.callThrough();
-    storeMock.dispatch.calls.reset();
-
-    const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock));
-    const mockFilterElement = mockMyPerformanceFilter
-    .injector
-    .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
-
-    mockFilterElement.onFilterChange.emit({
-      filterType: MyPerformanceFilterActionType.Metric,
-      filterValue: MetricTypeValue.volume
-    });
-    mockFilterElement.onFilterChange.emit({
-      filterType: MyPerformanceFilterActionType.TimePeriod,
-      filterValue: DateRangeTimePeriodValue.L90BDL
-    });
-    mockFilterElement.onFilterChange.emit({
-      filterType: MyPerformanceFilterActionType.PremiseType,
-      filterValue: PremiseTypeValue.Off
-    });
-    mockFilterElement.onFilterChange.emit({
-      filterType: MyPerformanceFilterActionType.DistributionType,
-      filterValue: DistributionTypeValue.simple
+      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.On)
+      );
+      expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
+        stateMock.myPerformanceFilter.metricType,
+        userService.model.currentUser.srcTypeCd[0]
+      );
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchResponsibilities({
+        positionId: userServiceMock.model.currentUser.positionId,
+        filter: stateMock.myPerformanceFilter as any
+      }));
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetricsAction({
+        positionId: userServiceMock.model.currentUser.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: SelectedEntityType.Position
+      }));
     });
 
-    expect(storeMock.dispatch.calls.count()).toBe(4);
-    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([{
-      payload: MetricTypeValue.volume,
-      type: '[My Performance Filter] SET_METRIC'
-    }]);
-    expect(storeMock.dispatch.calls.argsFor(1)).toEqual([{
-      payload: DateRangeTimePeriodValue.L90BDL,
-      type: '[My Performance Filter] SET_TIME_PERIOD'
-    }]);
-    expect(storeMock.dispatch.calls.argsFor(2)).toEqual([{
-      payload: PremiseTypeValue.Off,
-      type: '[My Performance Filter] SET_PREMISE_TYPE'
-    }]);
-    expect(storeMock.dispatch.calls.argsFor(3)).toEqual([{
-      payload: DistributionTypeValue.simple,
-      type: '[My Performance Filter] SET_DISTRIBUTION_TYPE'
-    }]);
+    it('should dispatch actions on init and handle empty positionId', () => {
+      userService.model.currentUser.positionId = '';
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      fixture.detectChanges();
+
+      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchResponsibilities({
+        positionId: '0',
+        filter: stateMock.myPerformanceFilter as any
+      })]);
+    });
+
+    it('should dispatch actions on init and handle undefined positionId', () => {
+      delete userService.model.currentUser.positionId;
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      fixture.detectChanges();
+
+      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchResponsibilities({
+        positionId: '0',
+        filter: stateMock.myPerformanceFilter as any
+      })]);
+    });
+
+    it('should trigger appropriate actions when the filter component emits an event', () => {
+      userService.model.currentUser.srcTypeCd = Array(chance.natural({max: 2})).fill('').map(() => chance.string());
+      myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
+
+      const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock));
+      const mockFilterElement = mockMyPerformanceFilter
+        .injector
+        .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
+
+      mockFilterElement.onFilterChange.emit({
+        filterType: MyPerformanceFilterActionType.Metric,
+        filterValue: MetricTypeValue.volume
+      });
+      mockFilterElement.onFilterChange.emit({
+        filterType: MyPerformanceFilterActionType.TimePeriod,
+        filterValue: DateRangeTimePeriodValue.L90BDL
+      });
+      mockFilterElement.onFilterChange.emit({
+        filterType: MyPerformanceFilterActionType.PremiseType,
+        filterValue: PremiseTypeValue.Off
+      });
+      mockFilterElement.onFilterChange.emit({
+        filterType: MyPerformanceFilterActionType.DistributionType,
+        filterValue: DistributionTypeValue.simple
+      });
+
+      expect(storeMock.dispatch.calls.count()).toBe(5);
+
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new MyPerformanceFilterActions.SetMetric(MetricTypeValue.volume)
+      );
+      expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
+        stateMock.myPerformanceFilter.metricType,
+        userService.model.currentUser.srcTypeCd[0]
+      );
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.On)
+      );
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
+        new MyPerformanceFilterActions.SetTimePeriod(DateRangeTimePeriodValue.L90BDL)
+      );
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(
+        new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.Off)
+      );
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(
+        new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.simple)
+      );
+    });
+
+    it('should call select with the right arguments', () => {
+      storeMock.dispatch.calls.reset();
+      storeMock.select.calls.reset();
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      fixture.detectChanges();
+
+      expect(storeMock.select.calls.count()).toBe(6);
+      const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
+      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
+
+      const functionPassToSelectCall1 = storeMock.select.calls.argsFor(1)[0];
+      expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance.versions);
+
+      const functionPassToSelectCall2 = storeMock.select.calls.argsFor(2)[0];
+      expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
+
+      const functionPassToSelectCall3 = storeMock.select.calls.argsFor(3)[0];
+      expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformanceProductMetrics);
+
+      const functionPassToSelectCall4 = storeMock.select.calls.argsFor(4)[0];
+      expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current);
+
+      const functionPassToSelectCall5 = storeMock.select.calls.argsFor(5)[0];
+      expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformance.versions);
+
+      fixture.detectChanges();
+      const myPerformanceFilterMock = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
+        .injector
+        .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
+      expect(myPerformanceFilterMock.filterState).toEqual(stateMock.myPerformanceFilter as any);
+      expect(myPerformanceFilterMock.dateRanges).toBe(stateMock.dateRanges as any);
+    });
   });
 
   describe('when left side total row is clicked', () => {
@@ -434,39 +491,6 @@ describe('MyPerformanceComponent', () => {
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(0);
     });
-  });
-
-  it('should call select with the right arguments', () => {
-    storeMock.dispatch.calls.reset();
-    storeMock.select.calls.reset();
-    fixture = TestBed.createComponent(MyPerformanceComponent);
-    fixture.detectChanges();
-
-    expect(storeMock.select.calls.count()).toBe(6);
-    const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
-    expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
-
-    const functionPassToSelectCall1 = storeMock.select.calls.argsFor(1)[0];
-    expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance.versions);
-
-    const functionPassToSelectCall2 = storeMock.select.calls.argsFor(2)[0];
-    expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
-
-    const functionPassToSelectCall3 = storeMock.select.calls.argsFor(3)[0];
-    expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformanceProductMetrics);
-
-    const functionPassToSelectCall4 = storeMock.select.calls.argsFor(4)[0];
-    expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current);
-
-    const functionPassToSelectCall7 = storeMock.select.calls.argsFor(5)[0];
-    expect(functionPassToSelectCall7(stateMock)).toBe(stateMock.myPerformance.versions);
-
-    fixture.detectChanges();
-    const myPerformanceFilterMock = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
-    .injector
-    .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
-    expect(myPerformanceFilterMock.filterState).toEqual(stateMock.myPerformanceFilter as any);
-    expect(myPerformanceFilterMock.dateRanges).toBe(stateMock.dateRanges as any);
   });
 
   describe('handleBreadcrumbEntityClicked', () => {
