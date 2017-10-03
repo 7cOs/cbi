@@ -70,6 +70,18 @@ describe('Responsibilities Effects', () => {
     },
     getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
       return Observable.of(subAccountData);
+    },
+    getAlternateHierarchy(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+      return Observable.of(responsibilitiesData);
+    },
+    getAlternateAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+      return Observable.of(responsibilitiesData);
+    },
+    getEntityGroupViewType(entityType: EntityType): ViewType {
+      return ViewType.roleGroups;
+    },
+    getGroupsPerformanceEntities(args: any): Observable<EntityWithPerformance[]> {
+      return Observable.of(entityWithPerformanceMock);
     }
   };
 
@@ -226,33 +238,30 @@ describe('Responsibilities Effects', () => {
 
   describe('when a FetchEntityWithPerformance is received', () => {
     const fetchEntityPerformancePayloadMock: FetchEntityWithPerformancePayload = {
+      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: entityTypeCodeMock,
+      type: EntityType.RoleGroup,
       entities: [getEntityPeopleResponsibilitiesMock()],
-      filter: performanceFilterStateMock,
-      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      type: EntityType.RoleGroup
+      filter: performanceFilterStateMock
     };
 
     beforeEach(() => {
       runner.queue(new FetchEntityWithPerformance(fetchEntityPerformancePayloadMock));
     });
 
-    it('should call getPositionsPerformances with the right arguments', (done) => {
-      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getPositionsPerformances').and.callThrough();
+    it('should call getGroupsPerformanceEntities with the right arguments', (done) => {
+      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getGroupsPerformanceEntities').and.callThrough();
 
       responsibilitiesEffects.FetchEntityWithPerformance$().subscribe(() => {
         done();
       });
 
       expect(getResponsibilitiesSpy.calls.count()).toBe(1);
-      expect(getResponsibilitiesSpy.calls.argsFor(0)).toEqual([
-        fetchEntityPerformancePayloadMock.entities,
-        fetchEntityPerformancePayloadMock.filter
-      ]);
+      expect(getResponsibilitiesSpy.calls.argsFor(0)).toEqual([fetchEntityPerformancePayloadMock]);
     });
 
-    describe('when getResponsibilitiesPerformances returns successfully', () => {
+    describe('when getGroupsPerformanceEntities returns successfully', () => {
       it('should dispatch appropriate actions', (done) => {
         const dispatchedActions: Action[] = [];
 
@@ -267,7 +276,7 @@ describe('Responsibilities Effects', () => {
                 entityWithPerformance: entityWithPerformanceMock,
                 entityTypeCode: entityTypeCodeMock
               }),
-              new SetLeftMyPerformanceTableViewType(ViewType.people)
+              new SetLeftMyPerformanceTableViewType(ViewType.roleGroups)
             ]);
 
             done();
@@ -278,7 +287,7 @@ describe('Responsibilities Effects', () => {
 
     describe('when getResponsibilitiesPerformanceTotals returns an error', () => {
       it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
-        spyOn(responsibilitiesService, 'getPositionsPerformances').and.returnValue(Observable.throw(error));
+        spyOn(responsibilitiesService, 'getGroupsPerformanceEntities').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.FetchEntityWithPerformance$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();

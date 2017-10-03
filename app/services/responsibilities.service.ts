@@ -221,8 +221,7 @@ export class ResponsibilitiesService {
     }
   }
 
-  public getAccountsDistributors(responsibilitiesData: ResponsibilitiesData)
-    : Observable<ResponsibilitiesData> {
+  public getAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.distributors || responsibilitiesData.viewType === ViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {

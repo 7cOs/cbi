@@ -106,18 +106,43 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     it('should group a collection of HierarchyEntity objects under the given group name given a collection of EntitiesDTO objects', () => {
       const groupNameMock: string = chance.string();
       const entitiesDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
-      const transformedEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
 
-      expect(transformedEntities).toEqual({
+      entitiesDTOMock.forEach((entityDTO: EntityDTO) => {
+        entityDTO.type = EntityPropertyType.Account;
+      });
+
+      const transformedAccountEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
+
+      expect(transformedAccountEntities).toEqual({
         [groupNameMock]: [{
           name: entitiesDTOMock[0].name,
           positionId: entitiesDTOMock[0].id,
-          entityType: EntityType.SubAccount,
+          entityType: EntityType.Account,
           propertyType: entitiesDTOMock[0].type
         }, {
           name: entitiesDTOMock[1].name,
           positionId: entitiesDTOMock[1].id,
-          entityType: EntityType.SubAccount,
+          entityType: EntityType.Account,
+          propertyType: entitiesDTOMock[1].type
+        }]
+      });
+
+      entitiesDTOMock.forEach((entityDTO: EntityDTO) => {
+        entityDTO.type = EntityPropertyType.Distributor;
+      });
+
+      const transformedDistributorEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
+
+      expect(transformedDistributorEntities).toEqual({
+        [groupNameMock]: [{
+          name: entitiesDTOMock[0].name,
+          positionId: entitiesDTOMock[0].id,
+          entityType: EntityType.Distributor,
+          propertyType: entitiesDTOMock[0].type
+        }, {
+          name: entitiesDTOMock[1].name,
+          positionId: entitiesDTOMock[1].id,
+          entityType: EntityType.Distributor,
           propertyType: entitiesDTOMock[1].type
         }]
       });
