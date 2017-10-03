@@ -53,13 +53,15 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       opportunitiesPage.doesPremiseTypeChipMatch(premiseType),
       "Premise Type chip failed to match premise type of selected Chain"
     );
-    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(accountName),
+    Assert.assertTrue(
+      opportunitiesPage.isQueryChipPresent(accountName),
       "Query chip failed to appear for selected Chain"
     );
     Assert.assertTrue(opportunitiesPage.isChainSearchTextCleared(), "Chain searchbox failed to clear after selection");
 
     opportunitiesPage.removeChipContaining(accountName);
-    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(accountName),
+    Assert.assertFalse(
+      opportunitiesPage.isQueryChipPresent(accountName),
       "Query chip failed to be removed for selected Chain"
     );
   }
@@ -88,7 +90,8 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     Assert.assertTrue(opportunitiesPage.isStoreSearchTextCleared(), "Store searchbox failed to clear after selection");
 
     opportunitiesPage.removeChipContaining(accountAddress);
-    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(accountAddress),
+    Assert.assertFalse(
+      opportunitiesPage.isQueryChipPresent(accountAddress),
       "Query chip failed to be removed for selected Store"
     );
   }
