@@ -54,7 +54,8 @@ export class MyPerformanceService {
           depletiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
           distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
           distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[filter.premiseType]
+          distributorname: row.descriptionRow0,
+          premisetype: PremiseTypeValue[filter.premiseType],
         };
       case MetricTypeValue.PointsOfDistribution:
         return {
@@ -62,7 +63,8 @@ export class MyPerformanceService {
           depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
           distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
           distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[filter.premiseType]
+          distributorname: row.descriptionRow0,
+          premisetype: PremiseTypeValue[filter.premiseType],
         };
       case MetricTypeValue.velocity:
         return {
@@ -70,7 +72,8 @@ export class MyPerformanceService {
           depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
           distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
           distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[filter.premiseType]
+          distributorname: row.descriptionRow0,
+          premisetype: PremiseTypeValue[filter.premiseType],
         };
       default:
         return {};

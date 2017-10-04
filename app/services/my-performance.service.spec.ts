@@ -146,6 +146,7 @@ describe('Service: MyPerformanceService', () => {
       expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
       expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.L90]);
       expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
+      expect(accountDashboardParams.distributorname).toEqual(rowMock.descriptionRow0);
       expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
     });
 
@@ -156,6 +157,7 @@ describe('Service: MyPerformanceService', () => {
       expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.FYTD]);
       expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
       expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
+      expect(accountDashboardParams.distributorname).toEqual(rowMock.descriptionRow0);
       expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
     });
 
@@ -166,6 +168,7 @@ describe('Service: MyPerformanceService', () => {
       expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.FYTD]);
       expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
       expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
+      expect(accountDashboardParams.distributorname).toEqual(rowMock.descriptionRow0);
       expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
     });
   });

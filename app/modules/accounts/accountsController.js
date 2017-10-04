@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
+function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -1061,8 +1061,7 @@ module.exports = /*  @ngInject */
     }
 
     function setDataForNavigationFromMyPerformance() {
-      setFilter({id: $state.params.distributorid}, 'distributor');
-      filterTopBottom();
+      setFilter({id: $state.params.distributorid, name: $state.params.distributorname, type: 'distributor'}, 'distributor');
 
       if ($state.params.premisetype === 'on') {
         vm.premiseTypeValue = 'on';
@@ -1076,6 +1075,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
       vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
+      filterTopBottom();
     }
 
     function setNotes() {
@@ -1104,7 +1104,7 @@ module.exports = /*  @ngInject */
       vm.loadingUnsoldStore = true;
       promiseArr.push(userService.getPerformanceBrand(params));
 
-      const id = vm.currentTopBottomFilters.stores.id || vm.currentTopBottomFilters.distributors.id;
+      const id = vm.currentTopBottomFilters.stores.id;
       if (id) promiseArr.push(storesService.getStores(id));
 
       $q.all(promiseArr).then(function(data) {

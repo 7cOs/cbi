@@ -5,5 +5,6 @@ export interface AccountDashboardStateParameters {
   depletiontimeperiod?: string;
   distributiontimeperiod?: string;
   distributorid?: string;
+  distributorname?: string;
   premisetype?: string;
 }
