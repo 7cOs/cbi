@@ -129,12 +129,12 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getAlternateHierarchy(positionId: string): Observable<PeopleResponsibilitiesDTO> {
+  public getAlternateHierarchy(positionId: string, contextPositionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchy`;
 
-    return this.http.get(`${ url }`, {
+    return this.http.get(url, {
       params: {
-        contextPositionId: positionId
+        contextPositionId: contextPositionId
       }
     })
       .map(res => res.json())

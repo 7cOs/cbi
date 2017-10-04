@@ -6,13 +6,16 @@ import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
+import { ConstructRoleGroups,
+         FetchEntityWithPerformance,
+         FetchResponsibilities,
+         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilities, FetchEntityWithPerformance, FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
@@ -422,6 +425,7 @@ describe('MyPerformanceComponent', () => {
 
     it('should trigger appropriate actions when current ViewType is roleGroups', () => {
       componentInstance.leftTableViewType = ViewType.roleGroups;
+      rowMock.metadata.entityType = EntityType.RoleGroup;
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(4);
@@ -480,6 +484,44 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: SelectedEntityType.Position
+      }));
+    });
+
+    it('should dispatch ConstructRoleGroups when ViewType is roleGroups and the clicked entityType is ResponsibilitiesGroup', () => {
+      componentInstance.leftTableViewType = ViewType.roleGroups;
+      rowMock.metadata.entityType = EntityType.ResponsibilitiesGroup;
+
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+
+      componentInstance.handleElementClicked(params);
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ConstructRoleGroups({
+        positionId: rowMock.metadata.positionId,
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        filter: stateMock.myPerformanceFilter as any
+      }));
+    });
+
+    it('should dispatch FetchEntityWithPerformance when ViewType is roleGroups and ' +
+    'the clicked entityType is NOT a ResponsibilitiesGroup', () => {
+      componentInstance.leftTableViewType = ViewType.roleGroups;
+
+      const entityTypes: EntityType[] = Object.keys(EntityType)
+        .filter((key: EntityType) => {
+          return key !== EntityType.ResponsibilitiesGroup;
+        })
+        .map((key: EntityType) => EntityType[key]);
+
+      rowMock.metadata.entityType = entityTypes[chance.integer({ min: 0, max: entityTypes.length - 1 })];
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchEntityWithPerformance({
+        selectedPositionId: rowMock.metadata.positionId,
+        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeCode: rowMock.metadata.entityTypeCode,
+        type: rowMock.metadata.entityType,
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        filter: stateMock.myPerformanceFilter as any
       }));
     });
   });

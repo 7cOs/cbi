@@ -142,10 +142,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceStateAction());
-    if (this.filterStateSubscription) this.filterStateSubscription.unsubscribe();
-    if (this.myPerformanceCurrentSubscription) this.myPerformanceCurrentSubscription.unsubscribe();
-    if (this.myPerformanceVersionSubscription) this.myPerformanceVersionSubscription.unsubscribe();
-    if (this.productMetricsSubscription) this.productMetricsSubscription.unsubscribe();
+    this.filterStateSubscription.unsubscribe();
+    this.myPerformanceCurrentSubscription.unsubscribe();
+    this.myPerformanceVersionSubscription.unsubscribe();
+    this.productMetricsSubscription.unsubscribe();
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
@@ -176,20 +176,21 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
-              if (parameters.row.metadata.entityType !== EntityType.ResponsibilitiesGroup) {
-                const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
+              const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
+
+              if (parameters.row.metadata.entityType === EntityType.ResponsibilitiesGroup) {
+                this.store.dispatch(new ConstructRoleGroups({
+                  positionId: parameters.row.metadata.positionId,
+                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                  filter: this.filterState
+                }));
+              } else {
                 this.store.dispatch(new FetchEntityWithPerformance({
                   selectedPositionId: parameters.row.metadata.positionId,
                   entityTypeGroupName: entityTypeGroupName,
                   entityTypeCode: parameters.row.metadata.entityTypeCode,
                   type: parameters.row.metadata.entityType,
-                  entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
-                  filter: this.filterState
-                }));
-              } else {
-                this.store.dispatch(new ConstructRoleGroups({
-                  positionId: parameters.row.metadata.positionId,
-                  entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
+                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                   filter: this.filterState
                 }));
               }

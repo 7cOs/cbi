@@ -401,10 +401,13 @@ describe('Service: MyPerformanceApiService', () => {
       const positionIdMock: string = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
+      const contextPositionIdMock: string = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
+      });
       const responseMock: PeopleResponsibilitiesDTO = {
         entityURIs: [chance.string()]
       };
-      const expectedUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy?contextPositionId=${ positionIdMock }`;
+      const expectedUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy?contextPositionId=${ contextPositionIdMock }`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -417,7 +420,7 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toBe(expectedUrl);
       });
 
-      myPerformanceApiService.getAlternateHierarchy(positionIdMock)
+      myPerformanceApiService.getAlternateHierarchy(positionIdMock, contextPositionIdMock)
         .subscribe((response: PeopleResponsibilitiesDTO) => {
           expect(response).toEqual(responseMock);
           done();

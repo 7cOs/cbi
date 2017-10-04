@@ -25,6 +25,18 @@ export class ResponsibilitiesTransformerService {
     }, {});
   }
 
+  public groupPeopleEntitiesByRole(peopleEntities: HierarchyEntity[]): GroupedEntities {
+    return peopleEntities.reduce((groupedEntities: GroupedEntities, entity: HierarchyEntity) => {
+      if (Array.isArray(groupedEntities[entity.description])) {
+        groupedEntities[entity.description].push(entity);
+      } else {
+        groupedEntities[entity.description] = [ entity ];
+      }
+
+      return groupedEntities;
+    }, {});
+  }
+
   public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>, entityType: string): GroupedEntities {
     return accountsDistributors.reduce((groups: GroupedEntities, entity: EntityDTO) => {
       groups[entityType].push({
@@ -49,6 +61,12 @@ export class ResponsibilitiesTransformerService {
         };
       })
     };
+  }
+
+  public transformHierarchyEntityDTOCollection(entities: HierarchyEntityDTO[]): HierarchyEntity[] {
+    return entities.map((entityDTO: HierarchyEntityDTO) => {
+      return this.transformHierarchyEntityDTO(entityDTO);
+    });
   }
 
   private transformHierarchyEntityDTO(entity: HierarchyEntityDTO): HierarchyEntity {

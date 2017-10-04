@@ -4,9 +4,12 @@ import { EntityDTO } from '../models/entity-dto.model';
 import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
+import { getEntityPeopleResponsibilitiesMock,
+         getHierarchyEntityDTO,
+         mockHierarchyEntityDTOCollection } from '../models/hierarchy-entity.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
-import { mockHierarchyEntityDTOCollection } from '../models/hierarchy-entity.model.mock';
+import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 
 describe('Service: ResponsibilitiesTransformerService', () => {
@@ -71,6 +74,35 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       const transformedgroupedEntities =
         responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockHierarchyEntityDTOCollection);
       expect(transformedgroupedEntities).toEqual(expectedgroupedEntities);
+    });
+  });
+
+  describe('groupPeopleEntitiesByRole', () => {
+    it('should return GroupedEntities grouped by entity description given a HierarchyEntity collection', () => {
+      const group1Mock = chance.string();
+      const group2Mock = chance.string();
+      const group3Mock = chance.string();
+      const hierarchyEntitiesMock: HierarchyEntity[] = [
+        getEntityPeopleResponsibilitiesMock(),
+        getEntityPeopleResponsibilitiesMock(),
+        getEntityPeopleResponsibilitiesMock(),
+        getEntityPeopleResponsibilitiesMock()
+      ];
+
+      hierarchyEntitiesMock[0].description = group1Mock;
+      hierarchyEntitiesMock[1].description = group2Mock;
+      hierarchyEntitiesMock[2].description = group3Mock;
+      hierarchyEntitiesMock[3].description = group1Mock;
+
+      const expectedGroupedEntities: GroupedEntities = {
+        [group1Mock]: [ hierarchyEntitiesMock[0], hierarchyEntitiesMock[3] ],
+        [group2Mock]: [ hierarchyEntitiesMock[1] ],
+        [group3Mock]: [ hierarchyEntitiesMock[2] ]
+      };
+
+      const actualGroupedEntities: GroupedEntities = responsibilitiesTransformerService.groupPeopleEntitiesByRole(hierarchyEntitiesMock);
+
+      expect(actualGroupedEntities).toEqual(expectedGroupedEntities);
     });
   });
 
@@ -146,6 +178,39 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           propertyType: entitiesDTOMock[1].type
         }]
       });
+    });
+  });
+
+  describe('transformHierarchyEntityDTOCollection', () => {
+    it('should return a collection of hierarchy entities given a collection of hierarchy entity DTO\'s', () => {
+      const hierarchyEntitiesDTOMock: HierarchyEntityDTO[] = [ getHierarchyEntityDTO(), getHierarchyEntityDTO() ];
+
+      const expectedHierachyEntities: HierarchyEntity[] = [{
+        positionId: hierarchyEntitiesDTOMock[0].id,
+        employeeId: hierarchyEntitiesDTOMock[0].employeeId,
+        name: hierarchyEntitiesDTOMock[0].name,
+        positionDescription: '',
+        type: hierarchyEntitiesDTOMock[0].type,
+        hierarchyType: hierarchyEntitiesDTOMock[0].hierarchyType,
+        description: hierarchyEntitiesDTOMock[0].description,
+        entityType: EntityType.Person,
+        otherType: hierarchyEntitiesDTOMock[0].description
+      }, {
+        positionId: hierarchyEntitiesDTOMock[1].id,
+        employeeId: hierarchyEntitiesDTOMock[1].employeeId,
+        name: hierarchyEntitiesDTOMock[1].name,
+        positionDescription: '',
+        type: hierarchyEntitiesDTOMock[1].type,
+        hierarchyType: hierarchyEntitiesDTOMock[1].hierarchyType,
+        description: hierarchyEntitiesDTOMock[1].description,
+        entityType: EntityType.Person,
+        otherType: hierarchyEntitiesDTOMock[1].description
+      }];
+
+      const actualHierarchyEntities: HierarchyEntity[] =
+        responsibilitiesTransformerService.transformHierarchyEntityDTOCollection(hierarchyEntitiesDTOMock);
+
+      expect(actualHierarchyEntities).toEqual(expectedHierachyEntities);
     });
   });
 });

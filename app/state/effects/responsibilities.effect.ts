@@ -49,7 +49,7 @@ export class ResponsibilitiesEffects {
         const { selectedPositionId, type, entityTypeGroupName, entityTypeCode } = action.payload;
         const viewType: ViewType = this.responsibilitiesService.getEntityGroupViewType(type);
 
-        return this.responsibilitiesService.getGroupsPerformanceEntities(action.payload)
+        return this.responsibilitiesService.getEntitiesWithPerformanceForGroup(action.payload)
           .switchMap((performanceEntities: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),
@@ -81,7 +81,7 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.CONSTRUCT_ROLE_GROUPS)
       .switchMap((action: Action) => Observable.of(action.payload))
-      .switchMap((responsibilitiesData) => this.responsibilitiesService.groupResponsibilities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.groupPeopleResponsibilities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
