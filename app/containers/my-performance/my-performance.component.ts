@@ -9,7 +9,6 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
-import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
@@ -17,7 +16,6 @@ import { FetchResponsibilities,
         FetchEntityWithPerformance,
         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -152,40 +150,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
-    const accountDashboardStateParams: AccountDashboardStateParameters = this.accountDashboardStateParameters(this.filterState, row);
+    const accountDashboardStateParams: AccountDashboardStateParameters =
+      this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     window.open(accountDashboardUrl, '_blank');
-  }
-
-  public accountDashboardStateParameters(filter: MyPerformanceFilterState, row: MyPerformanceTableRow): AccountDashboardStateParameters {
-    switch (filter.metricType) {
-      case MetricTypeValue.volume:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
-          distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
-          distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[filter.premiseType]
-        };
-      case MetricTypeValue.PointsOfDistribution:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
-          distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
-          distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[filter.premiseType]
-        };
-      case MetricTypeValue.velocity:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
-          distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
-          distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[filter.premiseType]
-        };
-      default:
-        return {};
-    }
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
