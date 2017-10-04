@@ -102,6 +102,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
     viewTypes: chance.string(),
+    href: (page: any, params: any) => {}
   };
 
   const storeMock = {
