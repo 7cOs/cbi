@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -135,12 +135,25 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function footerToast(method) {
+    function footerToast(method, listID) {
       vm.showToast = true;
 
       if (method === 'delete') vm.deleting = true;
       else if (method === 'archive') vm.archiving = true;
       else if (method === 'leave') vm.leave = true;
+
+      if (method !== 'leave') {
+        let targetEvent = method;
+        targetEvent.capitalize = function() {
+          return this.charAt(0).toUpperCase() + this.slice(1);
+        };
+
+        analyticsService.trackEvent(
+          'Target List',
+          targetEvent + ' Target List',
+          listID
+        );
+      }
     }
 
     function listChanged() {
