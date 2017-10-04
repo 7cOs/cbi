@@ -856,4 +856,3 @@ describe('Unit: filter service', function() {
 
   });
 });
-

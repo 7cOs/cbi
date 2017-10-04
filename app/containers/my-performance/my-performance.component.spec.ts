@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
+import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
@@ -20,6 +21,7 @@ import { HandleElementClickedParameters, MyPerformanceComponent } from './my-per
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
+import { MyPerformanceFilter } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
@@ -99,7 +101,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetrics: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
-    viewTypes: chance.string()
+    viewTypes: chance.string(),
   };
 
   const storeMock = {
@@ -485,6 +487,58 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: SelectedEntityType.Position
       }));
+    });
+  });
+
+  // CTRLF
+  describe('when left side data row distributor link clicked', () => {
+    let rowMock: MyPerformanceTableRow;
+    let filterMock: MyPerformanceFilter;
+
+    beforeEach(() => {
+      rowMock = getMyPerformanceTableRowMock(1)[0];
+      filterMock = getMyPerformanceFilterMock();
+      spyOn(componentInstance, 'accountDashboardStateParameters').and.callThrough();
+    });
+
+    it('should call the correct functions', () => {
+      componentInstance.handleSublineClicked(rowMock);
+      expect(componentInstance.accountDashboardStateParameters).toHaveBeenCalled();
+    });
+
+    it('should return empty object when metrictype not one of other values', () => {
+      filterMock.metricType = null;
+      expect(componentInstance.accountDashboardStateParameters(filterMock, rowMock)).toEqual({});
+    });
+
+    it('should return the correct option when metric type is depletions', () => {
+      filterMock.metricType = MetricTypeValue.volume;
+      const accountDashboardParams = componentInstance.accountDashboardStateParameters(filterMock, rowMock);
+      expect(accountDashboardParams.myaccountsonly).toEqual(true);
+      expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
+      expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.L90]);
+      expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
+      expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
+    });
+
+    it('should return the correct option when metric type is distribution', () => {
+      filterMock.metricType = MetricTypeValue.PointsOfDistribution;
+      const accountDashboardParams = componentInstance.accountDashboardStateParameters(filterMock, rowMock);
+      expect(accountDashboardParams.myaccountsonly).toEqual(true);
+      expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.FYTD]);
+      expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
+      expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
+      expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
+    });
+
+    it('should return the correct option when metric type is velocity', () => {
+      filterMock.metricType = MetricTypeValue.velocity;
+      const accountDashboardParams = componentInstance.accountDashboardStateParameters(filterMock, rowMock);
+      expect(accountDashboardParams.myaccountsonly).toEqual(true);
+      expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.FYTD]);
+      expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
+      expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
+      expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
     });
   });
 

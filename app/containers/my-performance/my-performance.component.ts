@@ -17,6 +17,7 @@ import { FetchResponsibilities,
         FetchEntityWithPerformance,
         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -152,9 +153,40 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
-    const accountDashboardStateParams: AccountDashboardStateParameters = this.accountDashboardStateParameters(row);
+    const accountDashboardStateParams: AccountDashboardStateParameters = this.accountDashboardStateParameters(this.filterState, row);
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     window.open(accountDashboardUrl, '_blank');
+  }
+
+  public accountDashboardStateParameters(filter: MyPerformanceFilterState, row: MyPerformanceTableRow): AccountDashboardStateParameters {
+    switch (filter.metricType) {
+      case MetricTypeValue.volume:
+        return {
+          myaccountsonly: true,
+          depletiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
+          distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
+          distributorid: row.metadata.positionId,
+          premisetype: PremiseTypeValue[filter.premiseType]
+        };
+      case MetricTypeValue.PointsOfDistribution:
+        return {
+          myaccountsonly: true,
+          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
+          distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
+          distributorid: row.metadata.positionId,
+          premisetype: PremiseTypeValue[filter.premiseType]
+        };
+      case MetricTypeValue.velocity:
+        return {
+          myaccountsonly: true,
+          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
+          distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
+          distributorid: row.metadata.positionId,
+          premisetype: PremiseTypeValue[filter.premiseType]
+        };
+      default:
+        return {};
+    }
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
@@ -264,29 +296,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         break;
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);
-    }
-  }
-
-   private accountDashboardStateParameters(row: MyPerformanceTableRow): AccountDashboardStateParameters {
-    switch (this.filterState.metricType) {
-      case MetricTypeValue.volume:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[this.filterState.dateRangeCode],
-          distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
-          distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[this.filterState.premiseType]
-        };
-      case MetricTypeValue.PointsOfDistribution || MetricTypeValue.velocity:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
-          distributiontimeperiod: DateRangeTimePeriod[this.filterState.dateRangeCode],
-          distributorid: row.metadata.positionId,
-          premisetype: PremiseTypeValue[this.filterState.premiseType]
-        };
-      default:
-        break;
     }
   }
 
