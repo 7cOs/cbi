@@ -17,7 +17,6 @@ import { FetchResponsibilities,
         FetchEntityWithPerformance,
         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
-import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
