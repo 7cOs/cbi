@@ -42,7 +42,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       .clickRetailerTypeDropdown()
       .selectChainRetailerType()
       .enterChainRetailerSearchText(accountName)
-      .clickSearchForRetailer()
+      .clickSearchForChainRetailer()
       .clickFirstRetailerResultContaining(accountName);
 
     Assert.assertTrue(
@@ -72,7 +72,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       .clickRetailerTypeDropdown()
       .selectStoreRetailerType()
       .enterStoreRetailerSearchText(accountName)
-      .clickSearchForRetailer()
+      .clickSearchForStoreRetailer()
       .clickFirstRetailerResultContaining(accountAddress);
 
     Assert.assertTrue(

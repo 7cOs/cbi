@@ -13,6 +13,7 @@ import static com.cbrands.helper.SeleniumUtils.*;
 public class OpportunitiesPage extends TestNGBasePage {
   private static final String CHAIN_SEARCHBOX_XPATH = ".//input[@placeholder='Account or Subaccount Name']";
   private static final String STORE_SEARCHBOX_XPATH = ".//input[@placeholder='Name, Address, TDLinx']";
+  private static final String INLINE_SEARCH_BUTTON_XPATH = ".//input[contains(@class, 'submit-btn visible')]";
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = "//form[contains(@class, 'filters')]")
@@ -78,12 +79,23 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage clickSearchForRetailer() {
-    final WebElement searchButton = filterContainer
-      .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
-    waitForElementToClickable(searchButton, true).click();
-
+  public OpportunitiesPage clickSearchForChainRetailer() {
+    final WebElement chainRetailerFilter = filterContainer.findElement(By.xpath(".//inline-search[@type='chain']"));
+    clickSearchInFilter(chainRetailerFilter);
     return this;
+  }
+
+  public OpportunitiesPage clickSearchForStoreRetailer() {
+    final WebElement chainRetailerFilter = filterContainer.findElement(By.xpath(".//inline-search[@type='store']"));
+    clickSearchInFilter(chainRetailerFilter);
+    return this;
+  }
+
+  private void clickSearchInFilter(WebElement filter) {
+    waitForElementToClickable(
+      filter.findElement(By.xpath(INLINE_SEARCH_BUTTON_XPATH)),
+      true
+    ).click();
   }
 
   public OpportunitiesPage clickFirstRetailerResult() {
