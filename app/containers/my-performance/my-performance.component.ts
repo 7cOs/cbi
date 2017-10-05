@@ -30,6 +30,7 @@ import { RowType } from '../../enums/row-type.enum';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
+import { WindowService } from '../../services/window.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -82,7 +83,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any,
-    private myPerformanceService: MyPerformanceService
+    private myPerformanceService: MyPerformanceService,
+    private windowService: WindowService
   ) { }
 
   ngOnInit() {
@@ -153,7 +155,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const accountDashboardStateParams: AccountDashboardStateParameters =
       this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
-    window.open(accountDashboardUrl, '_blank');
+    const currentWindow = this.windowService.nativeWindow();
+    currentWindow.open(accountDashboardUrl, '_blank');
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
