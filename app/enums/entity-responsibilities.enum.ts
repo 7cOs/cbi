@@ -34,6 +34,5 @@ export enum EntityType {
   DistributorGroup = 'DistributorGroup',
   Account = 'Account',
   AccountGroup = 'AccountGroup',
-  SubAccount = 'SubAccount',
-  SubAccountGroup = 'SubAccountGroup'
+  SubAccount = 'SubAccount'
 }

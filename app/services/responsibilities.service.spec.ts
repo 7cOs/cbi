@@ -1230,7 +1230,7 @@ describe('Responsibilities Effects', () => {
         const expectedGeographyGroupName: string = EntityPeopleType.GEOGRAPHY;
         const expectedHierarchyGroups = [{
           name: expectedGeographyGroupName,
-          type: responsibilitiesDataMock.positionId,
+          type: 'Distributor',
           entityType: EntityType.DistributorGroup
         }].concat(responsibilitiesDataMock.hierarchyGroups);
         const expectedResponsibilities = Object.assign({}, responsibilitiesDataMock, {
@@ -1257,7 +1257,7 @@ describe('Responsibilities Effects', () => {
         entities: peopleResponsibilitiesMock,
         filter: performanceFilterStateMock,
         selectedPositionId: chance.string(),
-        type: EntityType.RoleGroup
+        entityType: EntityType.RoleGroup
       };
     });
 
@@ -1275,7 +1275,7 @@ describe('Responsibilities Effects', () => {
 
     describe('when the passed in entity has a type of DistributorGroup', () => {
       beforeEach(() => {
-        entityWithPerformancePayloadMock.type = EntityType.DistributorGroup;
+        entityWithPerformancePayloadMock.entityType = EntityType.DistributorGroup;
       });
 
       it('should call getDistributorsPerformances with the correct parameters', (done) => {
@@ -1293,7 +1293,7 @@ describe('Responsibilities Effects', () => {
 
     describe('when the passed in entity has a type of AccountGroup', () => {
       beforeEach(() => {
-        entityWithPerformancePayloadMock.type = EntityType.AccountGroup;
+        entityWithPerformancePayloadMock.entityType = EntityType.AccountGroup;
       });
 
       it('should call getAccountsPerformances with the correct parameters', (done) => {

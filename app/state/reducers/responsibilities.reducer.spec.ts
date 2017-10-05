@@ -120,7 +120,7 @@ describe('Responsibilities Reducer', () => {
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      type: EntityType.Person
+      entityType: EntityType.Person
     };
     const expectedState = {
       status: ActionStatus.Fetching,

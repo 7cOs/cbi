@@ -46,16 +46,16 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
       .switchMap((action: Action) => {
-        const { selectedPositionId, type, entityTypeGroupName, entityTypeCode } = action.payload;
-        const viewType: ViewType = this.responsibilitiesService.getEntityGroupViewType(type);
+        const { selectedPositionId, entityType, entityTypeGroupName, entityTypeCode } = action.payload;
+        const viewType: ViewType = this.responsibilitiesService.getEntityGroupViewType(entityType);
 
         return this.responsibilitiesService.getEntitiesWithPerformanceForGroup(action.payload)
-          .switchMap((performanceEntities: EntityWithPerformance[]) => {
+          .switchMap((entityWithPerformance: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityTypeGroupName),
               new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess({
-                entityWithPerformance: performanceEntities,
+                entityWithPerformance: entityWithPerformance,
                 entityTypeCode: entityTypeCode
               }),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)

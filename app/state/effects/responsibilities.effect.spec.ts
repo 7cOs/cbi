@@ -288,7 +288,7 @@ describe('Responsibilities Effects', () => {
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: entityTypeCodeMock,
-      type: EntityType.RoleGroup,
+      entityType: EntityType.RoleGroup,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock
     };

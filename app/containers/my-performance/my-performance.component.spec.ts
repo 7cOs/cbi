@@ -435,7 +435,7 @@ describe('MyPerformanceComponent', () => {
         selectedPositionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
-        type: rowMock.metadata.entityType,
+        entityType: rowMock.metadata.entityType,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any
       }));
@@ -519,7 +519,7 @@ describe('MyPerformanceComponent', () => {
         selectedPositionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
-        type: rowMock.metadata.entityType,
+        entityType: rowMock.metadata.entityType,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any
       }));

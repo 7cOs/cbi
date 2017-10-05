@@ -119,7 +119,7 @@ describe('Responsibilities Actions', () => {
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: chance.string(),
-      type: getMyPerformanceTableRowMock(1)[0].metadata.entityType,
+      entityType: getMyPerformanceTableRowMock(1)[0].metadata.entityType,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock
     };

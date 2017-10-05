@@ -189,7 +189,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                   selectedPositionId: parameters.row.metadata.positionId,
                   entityTypeGroupName: entityTypeGroupName,
                   entityTypeCode: parameters.row.metadata.entityTypeCode,
-                  type: parameters.row.metadata.entityType,
+                  entityType: parameters.row.metadata.entityType,
                   entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                   filter: this.filterState
                 }));

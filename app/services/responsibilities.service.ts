@@ -230,7 +230,7 @@ export class ResponsibilitiesService {
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
           const hierarchyGroups: Array<HierarchyGroup> = [{
             name: accountsOrDistributors[0].type.toUpperCase(),
-            type: responsibilitiesData.positionId,
+            type: accountsOrDistributors[0].type,
             entityType: accountsOrDistributors[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
           }];
           const groupedEntities: GroupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(
@@ -299,9 +299,10 @@ export class ResponsibilitiesService {
           const groupedEntities = Object.assign({}, responsibilitiesData.groupedEntities,
             this.responsibilitiesTransformerService.groupsAccountsDistributors(response, EntityPeopleType.GEOGRAPHY));
           const geographyEntityType: string = EntityPeopleType.GEOGRAPHY;
+          const entityTypeCode: string = response[0].type;
           const hierarchyGroups: Array<HierarchyGroup> = [{
             name: geographyEntityType,
-            type: responsibilitiesData.positionId,
+            type: entityTypeCode,
             entityType: response[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
           }].concat(responsibilitiesData.hierarchyGroups);
 
@@ -317,7 +318,7 @@ export class ResponsibilitiesService {
   }
 
   public getEntitiesWithPerformanceForGroup(payload: FetchEntityWithPerformancePayload): Observable<(EntityWithPerformance | Error)[]> {
-    switch (payload.type) {
+    switch (payload.entityType) {
       case EntityType.RoleGroup:
         return this.getPositionsPerformances(payload.entities, payload.filter);
       case EntityType.DistributorGroup:
@@ -325,7 +326,7 @@ export class ResponsibilitiesService {
       case EntityType.AccountGroup:
         return this.getAccountsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
       default:
-        throw new Error(`[getEntitiesWithPerformanceForGroup]: EntityType of ${ payload.type } is not supported.`);
+        throw new Error(`[getEntitiesWithPerformanceForGroup]: EntityType of ${ payload.entityType } is not supported.`);
     }
   }
 
