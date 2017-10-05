@@ -96,6 +96,37 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     );
   }
 
+  @Test(description = "Filter Opportunities by Distributor", dataProvider = "distributorsData")
+  public void filterByDistributor(String distributor) {
+      opportunitiesPage
+        .enterDistributorSearchText(distributor)
+        .clickSearchForDistributor()
+        .clickFirstDistributorResult();
+
+    Assert.assertTrue(
+      opportunitiesPage.isPremiseFilterSelectedAs(PremiseType.Off),
+      "Unexpected Premise Type filter default value"
+    );
+    Assert.assertTrue(
+      opportunitiesPage.doesPremiseTypeChipMatch(PremiseType.Off),
+      "Unexpected Premise Type chip default value"
+    );
+    Assert.assertTrue(
+      opportunitiesPage.isQueryChipPresent(distributor),
+      "Query chip failed to appear for selected Distributor"
+    );
+    Assert.assertTrue(
+      opportunitiesPage.isDistributorSearchTextCleared(),
+      "Distributor searchbox failed to clear after selection"
+    );
+
+    opportunitiesPage.removeChipContaining(distributor);
+    Assert.assertFalse(
+      opportunitiesPage.isQueryChipPresent(distributor),
+      "Query chip failed to be removed for selected Distributor"
+    );
+  }
+
   @DataProvider
   public static Object[][] chainRetailersData() {
     return new Object[][]{
@@ -109,6 +140,13 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     return new Object[][]{
       {"Walgreens", "2550 E 88th Ave", PremiseType.On},
       {"Walgreens", "1350 Sportsman Way", PremiseType.Off}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] distributorsData() {
+    return new Object[][]{
+      {"Chicago Bev"}
     };
   }
 }

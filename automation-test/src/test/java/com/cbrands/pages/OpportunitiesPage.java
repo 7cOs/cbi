@@ -17,7 +17,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH)
   private WebElement filterContainer;
 
-  @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//md-select[contains(@ng-model, 'retailer')]")
   private WebElement retailerTypeFilter;
 
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//inline-search[@type='chain']")
@@ -25,6 +25,9 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//inline-search[@type='store']")
   private WebElement storeRetailerFilter;
+
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//inline-search[@type='distributor']")
+  private WebElement distributorFilter;
 
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
@@ -84,6 +87,11 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
+  public OpportunitiesPage enterDistributorSearchText(String searchText) {
+    enterSearchTextFor(distributorFilter, searchText);
+    return this;
+  }
+
   private void enterSearchTextFor(WebElement searchFilter, String searchText) {
     final WebElement searchField = getSearchFilterTextBox(searchFilter);
     waitForElementToClickable(searchField, true).click();
@@ -97,6 +105,11 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   public OpportunitiesPage clickSearchForStoreRetailer() {
     clickSearchInFilter(storeRetailerFilter);
+    return this;
+  }
+
+  public OpportunitiesPage clickSearchForDistributor() {
+    clickSearchInFilter(distributorFilter);
     return this;
   }
 
@@ -115,8 +128,12 @@ public class OpportunitiesPage extends TestNGBasePage {
     return isSearchFilterCleared(storeRetailerFilter);
   }
 
-  private boolean isSearchFilterCleared(WebElement chainRetailerFilter) {
-    return getSearchFilterTextBox(chainRetailerFilter).getAttribute("value").isEmpty();
+  public boolean isDistributorSearchTextCleared() {
+    return isSearchFilterCleared(distributorFilter);
+  }
+
+  private boolean isSearchFilterCleared(WebElement searchFilter) {
+    return getSearchFilterTextBox(searchFilter).getAttribute("value").isEmpty();
   }
 
   private WebElement getSearchFilterTextBox(WebElement searchFilter) {
@@ -125,6 +142,11 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   public OpportunitiesPage clickFirstChainRetailerResult() {
     clickFirstSearchFilterResult(chainRetailerFilter);
+    return this;
+  }
+
+  public OpportunitiesPage clickFirstDistributorResult() {
+    clickFirstSearchFilterResult(distributorFilter);
     return this;
   }
 
@@ -151,7 +173,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   private WebElement getSearchFilterResults(WebElement searchFilter) {
-    return searchFilter.findElement(By.xpath(".//div[@class, 'results-container open']"));
+    return searchFilter.findElement(By.xpath(".//div[@class='results-container open']"));
   }
 
   public OpportunitiesPage clickApplyFiltersButton() {
