@@ -20,6 +20,7 @@ import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row
 import { getPeopleResponsibilitiesDTOMock } from '../models/people-responsibilities-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
+import { HierarchyGroup, ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from './responsibilities.service';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
@@ -28,7 +29,6 @@ import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from '../services/performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
-import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from './responsibilities.service';
 import { ViewType } from '../enums/view-type.enum';
 
 const chance = new Chance();
@@ -201,7 +201,7 @@ describe('Responsibilities Effects', () => {
           positionId: positionIdMock,
           groupedEntities: groupedEntitiesMock,
           viewType: ViewType.roleGroups,
-          entityTypes: [
+          hierarchyGroups: [
             {
               type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
               name: 'GENERAL MANAGER',
@@ -259,7 +259,7 @@ describe('Responsibilities Effects', () => {
           positionId: positionIdMock,
           groupedEntities: undefined as any,
           viewType: ViewType.accounts,
-          entityTypes: undefined as any,
+          hierarchyGroups: undefined as any,
           entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
         };
 
@@ -303,7 +303,7 @@ describe('Responsibilities Effects', () => {
           positionId: positionIdMock,
           groupedEntities: undefined as any,
           viewType: ViewType.distributors,
-          entityTypes: undefined as any,
+          hierarchyGroups: undefined as any,
           entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
         };
 
@@ -343,7 +343,7 @@ describe('Responsibilities Effects', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         positionId: positionIdMock,
         viewType: ViewType.roleGroups,
-        entityTypes: [{
+        hierarchyGroups: [{
           type: chance.string(),
           name: chance.string(),
           positionDescription: chance.string(),
@@ -361,7 +361,7 @@ describe('Responsibilities Effects', () => {
         const expectedPerformancesTotal = {
           positionId: responsibilitiesDataMock.positionId,
           viewType: ViewType.roleGroups,
-          entityTypes: responsibilitiesDataMock.entityTypes,
+          hierarchyGroups: responsibilitiesDataMock.hierarchyGroups,
           filter: responsibilitiesDataMock.filter,
           entityWithPerformance: entityWithPerformanceMock,
           groupedEntities: responsibilitiesDataMock.groupedEntities
@@ -384,7 +384,7 @@ describe('Responsibilities Effects', () => {
 
         expect(getResponsibilitiesPerformanceSpy.calls.count()).toBe(1);
         expect(getResponsibilitiesPerformanceSpy.calls.argsFor(0)).toEqual([
-          responsibilitiesDataMock.entityTypes,
+          responsibilitiesDataMock.hierarchyGroups,
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId
         ]);
@@ -395,7 +395,7 @@ describe('Responsibilities Effects', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         positionId: positionIdMock,
         viewType: ViewType.distributors,
-        entityTypes: [{
+        hierarchyGroups: [{
           type: chance.string(),
           name: chance.string(),
           positionDescription: chance.string(),
@@ -412,7 +412,7 @@ describe('Responsibilities Effects', () => {
         const expectedPerformancesTotal = {
           positionId: responsibilitiesDataMock.positionId,
           viewType: ViewType.distributors,
-          entityTypes: responsibilitiesDataMock.entityTypes,
+          hierarchyGroups: responsibilitiesDataMock.hierarchyGroups,
           filter: responsibilitiesDataMock.filter,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
           entityWithPerformance: entityWithPerformanceMock
@@ -447,7 +447,7 @@ describe('Responsibilities Effects', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         positionId: positionIdMock,
         viewType: ViewType.accounts,
-        entityTypes: [{
+        hierarchyGroups: [{
           type: chance.string(),
           name: chance.string(),
           positionDescription: chance.string(),
@@ -464,7 +464,7 @@ describe('Responsibilities Effects', () => {
         const expectedPerformancesTotal = {
           positionId: responsibilitiesDataMock.positionId,
           viewType: ViewType.accounts,
-          entityTypes: responsibilitiesDataMock.entityTypes,
+          hierarchyGroups: responsibilitiesDataMock.hierarchyGroups,
           filter: responsibilitiesDataMock.filter,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
           entityWithPerformance: entityWithPerformanceMock
@@ -500,7 +500,7 @@ describe('Responsibilities Effects', () => {
     describe('when called for distributors or accounts', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         viewType: ViewType.distributors,
-        entityTypes: [{
+        hierarchyGroups: [{
           type: 'Distributor',
           name: chance.string(),
           positionDescription: chance.string(),
@@ -568,19 +568,21 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('when getResponsibilitiesPerformances is called', () => {
-    let entities: Array<{ positionId?: string, type: string, name: string, positionDescription: string }>;
+    let entities: Array<HierarchyGroup>;
 
     beforeEach(() => {
       entities = [{
         positionId: chance.string(),
         type: chance.string(),
         name: chance.string(),
-        positionDescription: chance.string()
+        positionDescription: chance.string(),
+        entityType: EntityType.RoleGroup
       }, {
         positionId: chance.string(),
         type: chance.string(),
         name: chance.string(),
-        positionDescription: chance.string()
+        positionDescription: chance.string(),
+        entityType: EntityType.RoleGroup
       }];
     });
 
@@ -879,20 +881,20 @@ describe('Responsibilities Effects', () => {
     let subAccountDataMock: SubAccountData;
     let subAccounts: HierarchyEntity[];
     let numberOfEntities: number;
-    let entityTypeMock: string;
+    let entityTypeAccountNameMock: string;
 
     beforeEach(() => {
       entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
-      entityTypeMock = chance.string();
+      entityTypeAccountNameMock = chance.string();
       numberOfEntities = chance.natural({min: 1, max: 99});
       subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
       groupedSubAccountsMock = {
-        [entityTypeMock]: subAccounts
+        [entityTypeAccountNameMock]: subAccounts
       };
       subAccountDataMock = {
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
-        entityTypeAccountName: entityTypeMock,
+        entityTypeAccountName: entityTypeAccountNameMock,
         selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock
@@ -1021,10 +1023,10 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    it('should return responsibilities data with grouped entities, roleGroups view type, and entityTypes', (done) => {
+    it('should return responsibilities data with grouped entities, roleGroups view type, and hierarchyGroups', (done) => {
       spyOn(responsibilitiesTransformerService, 'groupPeopleEntitiesByRole').and.returnValue(groupedEntitiesMock);
 
-      const expectedEntityTypes = [{
+      const expectedHierarchyGroups = [{
         type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
         name: 'GENERAL MANAGER',
         entityType: EntityType.RoleGroup,
@@ -1038,7 +1040,7 @@ describe('Responsibilities Effects', () => {
 
       const expectedResponsibilitiesData: ResponsibilitiesData = Object.assign({}, responsibilitiesDataMock, {
         groupedEntities: groupedEntitiesMock,
-        entityTypes: expectedEntityTypes,
+        hierarchyGroups: expectedHierarchyGroups,
         viewType: ViewType.roleGroups
       });
 
@@ -1057,7 +1059,7 @@ describe('Responsibilities Effects', () => {
       responsibilitiesDataMock = {
         positionId: positionIdMock,
         groupedEntities: groupedEntitiesMock,
-        entityTypes: [{
+        hierarchyGroups: [{
           type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
           name: 'GENERAL MANAGER',
           positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription,
@@ -1105,14 +1107,14 @@ describe('Responsibilities Effects', () => {
           [EntityPeopleType.GEOGRAPHY]: peopleResponsibilitiesMock
         });
         const expectedGeographyGroupName: string = EntityPeopleType.GEOGRAPHY;
-        const expectedEntityTypes = [{
+        const expectedHierarchyGroups = [{
           name: expectedGeographyGroupName,
           type: responsibilitiesDataMock.positionId,
           entityType: EntityType.ResponsibilitiesGroup
-        }].concat(responsibilitiesDataMock.entityTypes);
+        }].concat(responsibilitiesDataMock.hierarchyGroups);
         const expectedResponsibilities = Object.assign({}, responsibilitiesDataMock, {
           groupedEntities: expectedGroupedEntities,
-          entityTypes: expectedEntityTypes
+          hierarchyGroups: expectedHierarchyGroups
         });
 
         responsibilitiesService.getAlternateHierarchy(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
@@ -1158,7 +1160,7 @@ describe('Responsibilities Effects', () => {
       responsibilitiesDataMock = {
         positionId: positionIdMock,
         groupedEntities: groupedEntitiesMock,
-        entityTypes: [{
+        hierarchyGroups: [{
           type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
           name: 'GENERAL MANAGER',
           positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription,
@@ -1226,14 +1228,14 @@ describe('Responsibilities Effects', () => {
           }]
         });
         const expectedGeographyGroupName: string = EntityPeopleType.GEOGRAPHY;
-        const expectedEntityTypes = [{
+        const expectedHierarchyGroups = [{
           name: expectedGeographyGroupName,
           type: responsibilitiesDataMock.positionId,
           entityType: EntityType.DistributorGroup
-        }].concat(responsibilitiesDataMock.entityTypes);
+        }].concat(responsibilitiesDataMock.hierarchyGroups);
         const expectedResponsibilities = Object.assign({}, responsibilitiesDataMock, {
           groupedEntities: expectedGroupedEntities,
-          entityTypes: expectedEntityTypes
+          hierarchyGroups: expectedHierarchyGroups
         });
 
         responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesDataMock)

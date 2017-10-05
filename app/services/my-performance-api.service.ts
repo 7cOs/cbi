@@ -7,8 +7,8 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
+import { HierarchyGroup } from './responsibilities.service';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../models/performance.model';
@@ -30,11 +30,8 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilityPerformance(
-    entity: { type: string, name: string, entityType: EntityType, positionDescription: string },
-    filter: MyPerformanceFilterState,
-    positionId: string
-  ): Observable<EntityWithPerformanceDTO|Error> {
+  public getResponsibilityPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string)
+  : Observable<EntityWithPerformanceDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(`${ url }`, {

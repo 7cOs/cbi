@@ -19,10 +19,18 @@ import { PerformanceTransformerService } from './performance-transformer.service
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { ViewType } from '../enums/view-type.enum';
 
+export interface HierarchyGroup {
+  name: string;
+  type: string;
+  entityType: EntityType;
+  positionId?: string;
+  positionDescription?: string;
+}
+
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
   viewType?: ViewType;
-  entityTypes?: Array<{ type: string, name: string, entityType: EntityType, positionDescription: string }>;
+  hierarchyGroups?: Array<HierarchyGroup>;
   entitiesURL?: string;
   alternateEntitiesURL?: string;
   positionId?: string;
@@ -57,14 +65,14 @@ export class ResponsibilitiesService {
       .map((response: PeopleResponsibilitiesDTO) => {
         let groupedEntities: GroupedEntities;
         let viewType: ViewType;
-        let entityTypes: Array<{ type: string, name: string, positionDescription?: string }>;
+        let hierarchyGroups: Array<HierarchyGroup>;
         let entitiesURL: string;
 
         if (response.positions) {
           viewType = ViewType.roleGroups;
 
           groupedEntities = this.responsibilitiesTransformerService.groupPeopleByGroupedEntities(response.positions);
-          entityTypes = Object.keys(groupedEntities).map((roleGroup: string) => {
+          hierarchyGroups = Object.keys(groupedEntities).map((roleGroup: string) => {
             return {
               type: groupedEntities[roleGroup][0].type,
               name: roleGroup,
@@ -83,19 +91,19 @@ export class ResponsibilitiesService {
         return Object.assign({}, responsibilitiesData, {
           groupedEntities: groupedEntities,
           viewType: viewType,
-          entityTypes: entityTypes,
+          hierarchyGroups: hierarchyGroups,
           entitiesURL: entitiesURL
         });
       });
   }
 
   public groupPeopleResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    let entityTypes: Array<{ type: string, name: string, entityType: EntityType, positionDescription: string }>;
+    let hierarchyGroups: Array<HierarchyGroup>;
 
     const groupedEntities: GroupedEntities =
       this.responsibilitiesTransformerService.groupPeopleEntitiesByRole(responsibilitiesData.entities);
 
-    entityTypes = Object.keys(groupedEntities).map((roleGroup: string) => {
+    hierarchyGroups = Object.keys(groupedEntities).map((roleGroup: string) => {
       return {
         type: groupedEntities[roleGroup][0].type,
         name: roleGroup,
@@ -105,21 +113,16 @@ export class ResponsibilitiesService {
     });
 
     return Observable.of(Object.assign({}, responsibilitiesData, {
-      entityTypes: entityTypes,
+      hierarchyGroups: hierarchyGroups,
       groupedEntities: groupedEntities,
       viewType: ViewType.roleGroups
     }));
   }
 
-  public getResponsibilitiesPerformances(
-    entities: Array<{ positionId?: string, type: string, name: string, positionDescription: string }>,
-    filter: MyPerformanceFilterState,
-    positionId?: string
-  ): Observable<(EntityWithPerformance | Error)[]> {
+  public getResponsibilitiesPerformances(entities: Array<HierarchyGroup>, filter: MyPerformanceFilterState, positionId?: string)
+  : Observable<(EntityWithPerformance | Error)[]> {
     const apiCalls: Observable<EntityWithPerformanceDTO | Error>[] = [];
-    entities.forEach((entity: {
-      positionId?: string, type: string, name: string, entityType: EntityType, positionDescription: string
-    }) => {
+    entities.forEach((entity: HierarchyGroup) => {
       apiCalls.push(this.myPerformanceApiService.getResponsibilityPerformance(entity, filter, entity.positionId || positionId));
     });
 
@@ -225,7 +228,7 @@ export class ResponsibilitiesService {
     if (responsibilitiesData.viewType === ViewType.distributors || responsibilitiesData.viewType === ViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
-          const entityTypes: Array<{ name: string, entityType: EntityType, type: string }> = [{
+          const hierarchyGroups: Array<HierarchyGroup> = [{
             name: accountsOrDistributors[0].type.toUpperCase(),
             type: responsibilitiesData.positionId,
             entityType: accountsOrDistributors[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
@@ -236,7 +239,7 @@ export class ResponsibilitiesService {
           );
 
           return Observable.of(Object.assign({}, responsibilitiesData, {
-            entityTypes: entityTypes,
+            hierarchyGroups: hierarchyGroups,
             groupedEntities: groupedEntities
           }));
       });
@@ -264,11 +267,11 @@ export class ResponsibilitiesService {
       .switchMap((response: PeopleResponsibilitiesDTO) => {
         if (response.positions) {
           const geographyEntityTypeName: string = EntityPeopleType.GEOGRAPHY;
-          const entityTypes: Array<{ name: string, entityType: EntityType, type: string }> = [{
+          const hierarchyGroups: Array<HierarchyGroup> = [{
             name: geographyEntityTypeName,
             type: responsibilitiesData.positionId,
             entityType: EntityType.ResponsibilitiesGroup
-          }].concat(responsibilitiesData.entityTypes);
+          }].concat(responsibilitiesData.hierarchyGroups);
           const transformedPositions: HierarchyEntity[] =
             this.responsibilitiesTransformerService.transformHierarchyEntityDTOCollection(response.positions);
           const groupedEntities: GroupedEntities = Object.assign({}, responsibilitiesData.groupedEntities, {
@@ -276,7 +279,7 @@ export class ResponsibilitiesService {
           });
 
           return Observable.of(Object.assign({}, responsibilitiesData, {
-            entityTypes: entityTypes,
+            hierarchyGroups: hierarchyGroups,
             groupedEntities: groupedEntities
           }));
         } else if (response.entityURIs && response.entityURIs.length) {
@@ -296,14 +299,14 @@ export class ResponsibilitiesService {
           const groupedEntities = Object.assign({}, responsibilitiesData.groupedEntities,
             this.responsibilitiesTransformerService.groupsAccountsDistributors(response, EntityPeopleType.GEOGRAPHY));
           const geographyEntityType: string = EntityPeopleType.GEOGRAPHY;
-          const entityTypes: Array<{ name: string, type: string, entityType: EntityType }> = [{
+          const hierarchyGroups: Array<HierarchyGroup> = [{
             name: geographyEntityType,
             type: responsibilitiesData.positionId,
             entityType: response[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
-          }].concat(responsibilitiesData.entityTypes);
+          }].concat(responsibilitiesData.hierarchyGroups);
 
           return Observable.of(Object.assign({}, responsibilitiesData, {
-            entityTypes: entityTypes,
+            hierarchyGroups: hierarchyGroups,
             groupedEntities: groupedEntities,
             viewType: ViewType.roleGroups
           }));
@@ -342,7 +345,7 @@ export class ResponsibilitiesService {
   }
 
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
-    return this.getResponsibilitiesPerformances(responsibilitiesData.entityTypes,
+    return this.getResponsibilitiesPerformances(responsibilitiesData.hierarchyGroups,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
         .map((entityPerformances: EntityWithPerformance[]) => {
