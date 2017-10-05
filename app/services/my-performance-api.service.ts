@@ -48,7 +48,19 @@ export class MyPerformanceApiService {
         entityTypeCode: entity.type,
         performance: res.json()
       }))
-      .catch(err => this.handleError(new Error(err)));
+      .catch((err) => {
+        return Observable.of({
+          id: positionId,
+          name: entity.name,
+          entityType: entity.entityType,
+          positionDescription: entity.positionDescription,
+          entityTypeCode: entity.type,
+          performance: {
+            total: 0,
+            totalYearAgo: 0
+          }
+        });
+      });
   }
 
   public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {
