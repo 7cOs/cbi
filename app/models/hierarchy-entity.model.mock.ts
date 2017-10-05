@@ -2,11 +2,12 @@ import * as Chance from 'chance';
 const chance = new Chance();
 
 import { HierarchyEntity } from './hierarchy-entity.model';
-import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
 import { HierarchyEntityDTO } from './hierarchy-entity.model';
 
 const entityPeopleTypeValues = Object.keys(EntityPeopleType).map(key => EntityPeopleType[key]);
 const entityPropertyTypeValues = Object.keys(EntityPropertyType).map(key => EntityPropertyType[key]);
+const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
 
 export function getEntityPeopleResponsibilitiesMock(): HierarchyEntity {
   return {
@@ -17,7 +18,8 @@ export function getEntityPeopleResponsibilitiesMock(): HierarchyEntity {
     positionDescription: chance.string(),
     type: chance.string(),
     hierarchyType: chance.string(),
-    description: chance.string()
+    description: chance.string(),
+    entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})]
   };
 }
 export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock(): HierarchyEntity {
@@ -28,7 +30,8 @@ export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock():
     name: chance.string(),
     type: chance.string(),
     hierarchyType: chance.string(),
-    description: chance.string()
+    description: chance.string(),
+    entityType: entityTypeValues[chance.integer({min: 0, max: entityTypeValues.length - 1})]
   };
 }
 export function getEntityPropertyResponsibilitiesMock(): HierarchyEntity {
@@ -40,7 +43,8 @@ export function getEntityPropertyResponsibilitiesMock(): HierarchyEntity {
     positionDescription: chance.string(),
     type: chance.string(),
     hierarchyType: chance.string(),
-    description: chance.string()
+    description: chance.string(),
+    entityType: entityTypeValues[chance.integer({min: 0, max: entityTypeValues.length - 1})]
   };
 }
 

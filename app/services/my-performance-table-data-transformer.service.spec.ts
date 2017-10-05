@@ -4,10 +4,8 @@ import { ActionStatus } from '../enums/action-status.enum';
 import { Performance } from '../models/performance.model';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getPerformanceMock } from '../models/performance.model.mock';
-import {
-  getEntitiesWithPerformancesMock,
-  getEntitiesWithPerformancesOpenPositionMock
-} from '../models/entity-with-performance.model.mock';
+import { getEntitiesWithPerformancesMock,
+         getEntitiesWithPerformancesOpenPositionMock } from '../models/entity-with-performance.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
@@ -55,7 +53,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode
+          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+          entityType: responsibilityEntitiesPerformanceMock[0].entityType
         },
         performanceError: false
       });
@@ -78,7 +77,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode
+          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+          entityType: responsibilityEntitiesPerformanceMock[0].entityType
         },
         performanceError: true
       });
@@ -99,7 +99,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.totalYearAgoPercent,
           ctv: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.contributionToVolume,
           metadata: {
-            positionId: responsibilityEntitiesPerformanceOpenPositionMock[i].positionId
+            positionId: responsibilityEntitiesPerformanceOpenPositionMock[i].positionId,
+            entityType: responsibilityEntitiesPerformanceOpenPositionMock[i].entityType
           },
           performanceError: false
         });
@@ -121,7 +122,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgoPercent,
         ctv: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.contributionToVolume,
         metadata: {
-          positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId
+          positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId,
+          entityType: responsibilityEntitiesPerformanceOpenPositionMock[0].entityType
         },
         performanceError: false
       });
