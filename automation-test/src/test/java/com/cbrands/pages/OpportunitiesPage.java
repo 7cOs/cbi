@@ -20,10 +20,10 @@ public class OpportunitiesPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
   private WebElement retailerTypeFilter;
 
-  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//input[@placeholder='Account or Subaccount Name']")
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//inline-search[@type='chain']")
   private WebElement chainRetailerFilter;
 
-  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//input[@placeholder='Name, Address, TDLinx']")
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//inline-search[@type='store']")
   private WebElement storeRetailerFilter;
 
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
@@ -75,28 +75,28 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage enterChainRetailerSearchText(String searchText) {
-    waitForElementToClickable(chainRetailerFilter, true).click();
-    chainRetailerFilter.sendKeys(searchText);
-
+    enterSearchTextFor(chainRetailerFilter, searchText);
     return this;
   }
 
   public OpportunitiesPage enterStoreRetailerSearchText(String searchText) {
-    waitForElementToClickable(storeRetailerFilter, true).click();
-    storeRetailerFilter.sendKeys(searchText);
-
+    enterSearchTextFor(storeRetailerFilter, searchText);
     return this;
   }
 
+  private void enterSearchTextFor(WebElement searchFilter, String searchText) {
+    final WebElement searchField = getSearchFilterTextBox(searchFilter);
+    waitForElementToClickable(searchField, true).click();
+    searchField.sendKeys(searchText);
+  }
+
   public OpportunitiesPage clickSearchForChainRetailer() {
-    final WebElement chainRetailerFilter = filterContainer.findElement(By.xpath(".//inline-search[@type='chain']"));
     clickSearchInFilter(chainRetailerFilter);
     return this;
   }
 
   public OpportunitiesPage clickSearchForStoreRetailer() {
-    final WebElement chainRetailerFilter = filterContainer.findElement(By.xpath(".//inline-search[@type='store']"));
-    clickSearchInFilter(chainRetailerFilter);
+    clickSearchInFilter(storeRetailerFilter);
     return this;
   }
 
@@ -108,15 +108,19 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public boolean isChainSearchTextCleared() {
-    return isTextboxCleared(chainRetailerFilter);
+    return isSearchFilterCleared(chainRetailerFilter);
   }
 
   public boolean isStoreSearchTextCleared() {
-    return isTextboxCleared(storeRetailerFilter);
+    return isSearchFilterCleared(storeRetailerFilter);
   }
 
-  private boolean isTextboxCleared(WebElement searchBox) {
-    return searchBox.getAttribute("value").isEmpty();
+  private boolean isSearchFilterCleared(WebElement chainRetailerFilter) {
+    return getSearchFilterTextBox(chainRetailerFilter).getAttribute("value").isEmpty();
+  }
+
+  private WebElement getSearchFilterTextBox(WebElement searchFilter) {
+    return searchFilter.findElement(By.xpath(".//input[@placeholder]"));
   }
 
   public OpportunitiesPage clickFirstRetailerResult() {
