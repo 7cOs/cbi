@@ -2,6 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { ActionStatus } from '../enums/action-status.enum';
 import { Performance } from '../models/performance.model';
+import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getPerformanceMock } from '../models/performance.model.mock';
 import {
@@ -125,6 +126,13 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         },
         performanceError: false
       });
+    });
+
+    it('should return the correct descriptionRow1 when the property type is entity distributors', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+      responsibilityEntitiesPerformanceOpenPositionMock[0].propertyType = EntityPropertyType.Distributor;
+      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
+      expect(tableData[0].descriptionRow1).toEqual('GO TO DASHBOARD');
     });
   });
 
