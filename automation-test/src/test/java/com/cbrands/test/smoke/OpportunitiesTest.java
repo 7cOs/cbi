@@ -40,9 +40,9 @@ public class OpportunitiesTest extends BaseTestCase {
   @Test(description = "Search Opportunities")
   public void searchOpportunities() {
     opportunitiesPage
-      .enterAccountSearchText("Walgreens")
-      .clickSearchForAccount()
-      .clickFirstAccountResult()
+      .enterChainRetailerSearchText("Walgreens")
+      .clickSearchForRetailer()
+      .clickFirstRetailerResult()
       .clickApplyFiltersButton()
       .waitForLoaderToDisappear();
 
