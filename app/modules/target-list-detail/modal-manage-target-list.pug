@@ -67,8 +67,8 @@ div.modal.target-list-modal
           label="{{tld.listID}}") Yes, Leave
       a.hide-row(ng-click="tld.removeFooterToast(); tld.leave = false")
   div.modal-footer.clearfix(ng-if="tld.editable" ng-class="{'toasted': tld.showToast}")
-    button.link.align-left(ng-click="tld.footerToast('archive', {{tld.listID}})") Archive List
-    button.link.align-right(ng-click="tld.footerToast('delete', {{tld.listID}})"
+    button.link.align-left(ng-click="tld.footerToast('archive')") Archive List
+    button.link.align-right(ng-click="tld.footerToast('delete')"
                             ng-disabled="tld.targetListService.model.currentList.collaborators.length > 1 || tld.pendingShares.length > 0") Delete List
     .toast(ng-hide="!tld.showToast")
       p Are you sure you want to <span ng-if="tld.deleting">delete</span><span ng-if="tld.archiving">archive</span> this target list?

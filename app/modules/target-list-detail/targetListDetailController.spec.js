@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state, analyticsService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,6 +7,13 @@ describe('Unit: targetListDetailController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.filters');
     angular.mock.module('cf.modules.targetListDetail');
+
+    angular.mock.module(($provide) => {
+      analyticsService = {
+        trackEvent: () => {}
+      };
+      $provide.value('analyticsService', analyticsService);
+    });
 
     inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_, _$state_) {
       scope = $rootScope.$new();
@@ -271,6 +278,8 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.updateList).not.toBeUndefined();
     expect(typeof (ctrl.updateList)).toEqual('function');
 
+    expect(ctrl.sendGoogleAnalytics).not.toBeUndefined();
+    expect(typeof (ctrl.sendGoogleAnalytics)).toEqual('function');
   });
 
   describe('Public Methods', function() {
@@ -837,6 +846,11 @@ describe('Unit: targetListDetailController', function() {
           spyOn(ctrl, 'closeModal').and.callFake(function() {
             return true;
           });
+
+          spyOn(ctrl, 'sendGoogleAnalytics').and.callFake(function() {
+            return true;
+          });
+
         });
 
         it('should call the update function in the service', function() {
@@ -889,6 +903,30 @@ describe('Unit: targetListDetailController', function() {
           scope.$digest();
           expect(ctrl.closeModal).toHaveBeenCalled();
           expect(ctrl.closeModal.calls.count()).toEqual(1);
+        });
+
+        it('check if targetlist archive is recorded', function() {
+          ctrl.updateList('archive');
+          deferred.resolve();
+          scope.$digest();
+          expect(ctrl.sendGoogleAnalytics).toHaveBeenCalled();
+        });
+      });
+
+      describe('should record targelist GA event', function() {
+        beforeEach(function () {
+          spyOn(analyticsService, 'trackEvent');
+        });
+
+        it('check if targetlist archive is recorded', function() {
+          ctrl.listID = '111';
+
+          ctrl.sendGoogleAnalytics('archive');
+          expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+            'Target List',
+            'Archive Target List',
+            '111'
+          );
         });
       });
 

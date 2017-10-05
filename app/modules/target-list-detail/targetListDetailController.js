@@ -57,6 +57,7 @@ module.exports = /*  @ngInject */
     vm.removeCollaboratorClick = removeCollaboratorClick;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
+    vm.sendGoogleAnalytics = sendGoogleAnalytics;
 
     init();
 
@@ -124,6 +125,7 @@ module.exports = /*  @ngInject */
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
         vm.confirmToast = true;
         removeFooterToast();
+        sendGoogleAnalytics('delete');
 
         $timeout(function() {
           vm.confirmToast = false;
@@ -135,25 +137,12 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function footerToast(method, listID) {
+    function footerToast(method) {
       vm.showToast = true;
 
       if (method === 'delete') vm.deleting = true;
       else if (method === 'archive') vm.archiving = true;
       else if (method === 'leave') vm.leave = true;
-
-      if (method !== 'leave') {
-        let targetEvent = method;
-        targetEvent.capitalize = function() {
-          return this.charAt(0).toUpperCase() + this.slice(1);
-        };
-
-        analyticsService.trackEvent(
-          'Target List',
-          targetEvent + ' Target List',
-          listID
-        );
-      }
     }
 
     function listChanged() {
@@ -268,6 +257,7 @@ module.exports = /*  @ngInject */
           }
 
           vm.removeFooterToast();
+          vm.sendGoogleAnalytics('archive');
           vm.closeModal();
         });
       } else {
@@ -277,23 +267,9 @@ module.exports = /*  @ngInject */
         }
 
         vm.removeFooterToast();
+        vm.sendGoogleAnalytics('archive');
         vm.closeModal();
       }
-    }
-
-    function handleListResponse(targetList) {
-      targetListService.model.currentList = targetList;
-
-      if (targetList.permissionLevel === 'author') {
-        vm.targetListAuthor = 'current user';
-      } else if (targetList.permissionLevel === null) {
-        vm.modalUnauthorizedAccess();
-      } else {
-        vm.targetListAuthor = findTargetListAuthor(targetList.collaborators);
-      }
-
-      // Binding to rootscope to use on the outer shell
-      $rootScope.isGrayedOut = targetList.archived;
     }
 
     function initTargetLists() {
@@ -328,6 +304,14 @@ module.exports = /*  @ngInject */
         $mdDialog.hide();
         vm.navigateToTL();
       }, 3500);
+    }
+
+    function sendGoogleAnalytics(event) {
+      analyticsService.trackEvent(
+        'Target List',
+        event.charAt(0).toUpperCase() + event.slice(1) + ' Target List',
+        vm.listID
+      );
     }
 
     // **************
@@ -371,6 +355,21 @@ module.exports = /*  @ngInject */
 
       // disable my accounts only for pass-through to accounts dashboard
       chipsService.removeFromFilterService({type: 'myAccountsOnly'});
+    }
+
+    function handleListResponse(targetList) {
+      targetListService.model.currentList = targetList;
+
+      if (targetList.permissionLevel === 'author') {
+        vm.targetListAuthor = 'current user';
+      } else if (targetList.permissionLevel === null) {
+        vm.modalUnauthorizedAccess();
+      } else {
+        vm.targetListAuthor = findTargetListAuthor(targetList.collaborators);
+      }
+
+      // Binding to rootscope to use on the outer shell
+      $rootScope.isGrayedOut = targetList.archived;
     }
 
     function addCollaborators() {
