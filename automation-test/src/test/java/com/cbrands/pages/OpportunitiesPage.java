@@ -45,6 +45,13 @@ public class OpportunitiesPage extends TestNGBasePage {
     return filterContainer.isDisplayed();
   }
 
+  public boolean isPremiseFilterSelectedAs(PremiseType premiseType) {
+    final WebElement checkbox = findElement(
+      By.xpath("//md-radio-button[contains(@aria-label, '" + premiseType.name() + "')]")
+    );
+    return "true".equalsIgnoreCase(checkbox.getAttribute("aria-checked"));
+  }
+
   public OpportunitiesPage clickRetailerTypeDropdown() {
     waitForElementToClickable(retailerTypeFilter, true).click();
     return this;
@@ -100,6 +107,18 @@ public class OpportunitiesPage extends TestNGBasePage {
     ).click();
   }
 
+  public boolean isChainSearchTextCleared() {
+    return isTextboxCleared(chainRetailerFilter);
+  }
+
+  public boolean isStoreSearchTextCleared() {
+    return isTextboxCleared(storeRetailerFilter);
+  }
+
+  private boolean isTextboxCleared(WebElement searchBox) {
+    return searchBox.getAttribute("value").isEmpty();
+  }
+
   public OpportunitiesPage clickFirstRetailerResult() {
     final WebElement searchButton = filterContainer
       .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li"));
@@ -125,25 +144,6 @@ public class OpportunitiesPage extends TestNGBasePage {
   public OpportunitiesPage waitForLoaderToDisappear() {
     waitForElementToDisappear(By.xpath("//div[contains(@class, 'loader-wrap')]"));
     return this;
-  }
-
-  public boolean isPremiseFilterSelectedAs(PremiseType premiseType) {
-    final WebElement checkbox = findElement(
-      By.xpath("//md-radio-button[contains(@aria-label, '" + premiseType.name() + "')]")
-    );
-    return "true".equalsIgnoreCase(checkbox.getAttribute("aria-checked"));
-  }
-
-  public boolean isChainSearchTextCleared() {
-    return isTextboxCleared(chainRetailerFilter);
-  }
-
-  public boolean isStoreSearchTextCleared() {
-    return isTextboxCleared(storeRetailerFilter);
-  }
-
-  private boolean isTextboxCleared(WebElement searchBox) {
-    return searchBox.getAttribute("value").isEmpty();
   }
 
   public boolean hasOpportunityResults() {
