@@ -11,16 +11,20 @@ import org.openqa.selenium.support.PageFactory;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class OpportunitiesPage extends TestNGBasePage {
-  private static final String CHAIN_SEARCHBOX_XPATH = ".//input[@placeholder='Account or Subaccount Name']";
-  private static final String STORE_SEARCHBOX_XPATH = ".//input[@placeholder='Name, Address, TDLinx']";
-  private static final String INLINE_SEARCH_BUTTON_XPATH = ".//input[contains(@class, 'submit-btn visible')]";
+  private static final String FILTER_FORM_XPATH = "//form[contains(@class, 'filters')]";
   private final WebDriver driver;
 
-  @FindBy(how = How.XPATH, using = "//form[contains(@class, 'filters')]")
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH)
   private WebElement filterContainer;
 
   @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
   private WebElement retailerTypeFilter;
+
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//input[@placeholder='Account or Subaccount Name']")
+  private WebElement chainRetailerFilter;
+
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//input[@placeholder='Name, Address, TDLinx']")
+  private WebElement storeRetailerFilter;
 
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
@@ -64,17 +68,15 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage enterChainRetailerSearchText(String searchText) {
-    final WebElement chainSearchField = filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH));
-    waitForElementToClickable(chainSearchField, true).click();
-    chainSearchField.sendKeys(searchText);
+    waitForElementToClickable(chainRetailerFilter, true).click();
+    chainRetailerFilter.sendKeys(searchText);
 
     return this;
   }
 
   public OpportunitiesPage enterStoreRetailerSearchText(String searchText) {
-    final WebElement storeSearchField = filterContainer.findElement(By.xpath(STORE_SEARCHBOX_XPATH));
-    waitForElementToClickable(storeSearchField, true).click();
-    storeSearchField.sendKeys(searchText);
+    waitForElementToClickable(storeRetailerFilter, true).click();
+    storeRetailerFilter.sendKeys(searchText);
 
     return this;
   }
@@ -93,7 +95,7 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private void clickSearchInFilter(WebElement filter) {
     waitForElementToClickable(
-      filter.findElement(By.xpath(INLINE_SEARCH_BUTTON_XPATH)),
+      filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]")),
       true
     ).click();
   }
@@ -133,11 +135,11 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public boolean isChainSearchTextCleared() {
-    return isTextboxCleared(filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH)));
+    return isTextboxCleared(chainRetailerFilter);
   }
 
   public boolean isStoreSearchTextCleared() {
-    return isTextboxCleared(filterContainer.findElement(By.xpath(STORE_SEARCHBOX_XPATH)));
+    return isTextboxCleared(storeRetailerFilter);
   }
 
   private boolean isTextboxCleared(WebElement searchBox) {
