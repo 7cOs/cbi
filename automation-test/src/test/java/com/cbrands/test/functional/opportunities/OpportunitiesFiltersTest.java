@@ -43,7 +43,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       .selectChainRetailerType()
       .enterChainRetailerSearchText(accountName)
       .clickSearchForChainRetailer()
-      .clickFirstRetailerResultContaining(accountName);
+      .clickFirstChainRetailerResultContaining(accountName);
 
     Assert.assertTrue(
       opportunitiesPage.isPremiseFilterSelectedAs(premiseType),
@@ -73,7 +73,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       .selectStoreRetailerType()
       .enterStoreRetailerSearchText(accountName)
       .clickSearchForStoreRetailer()
-      .clickFirstRetailerResultContaining(accountAddress);
+      .clickFirstStoreRetailerResultContaining(accountAddress);
 
     Assert.assertTrue(
       opportunitiesPage.isPremiseFilterSelectedAs(premiseType),

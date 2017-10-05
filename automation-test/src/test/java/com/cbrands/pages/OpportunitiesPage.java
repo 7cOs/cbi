@@ -128,18 +128,25 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage clickFirstRetailerResultContaining(String retailerName) {
-    final WebElement searchButton = filterContainer
-      .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li[contains(., '" + retailerName + "')]"));
-    waitForElementToClickable(searchButton, true).click();
-
+  public OpportunitiesPage clickFirstChainRetailerResultContaining(String name) {
+    clickFirstResultInFilterContaining(chainRetailerFilter, name);
     return this;
   }
 
+  public OpportunitiesPage clickFirstStoreRetailerResultContaining(String name) {
+    clickFirstResultInFilterContaining(storeRetailerFilter, name);
+    return this;
+  }
 
   private void clickFirstSearchFilterResult(WebElement searchFilter) {
     final WebElement result = getSearchFilterResults(searchFilter)
       .findElement(By.xpath(".//li"));
+    waitForElementToClickable(result, true).click();
+  }
+
+  private void clickFirstResultInFilterContaining(WebElement searchFilter, String name) {
+    final WebElement result = getSearchFilterResults(searchFilter)
+      .findElement(By.xpath(".//li[contains(., '" + name + "')]"));
     waitForElementToClickable(result, true).click();
   }
 
