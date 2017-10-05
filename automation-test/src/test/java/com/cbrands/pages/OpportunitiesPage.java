@@ -123,10 +123,8 @@ public class OpportunitiesPage extends TestNGBasePage {
     return searchFilter.findElement(By.xpath(".//input[@placeholder]"));
   }
 
-  public OpportunitiesPage clickFirstRetailerResult() {
-    final WebElement searchButton = filterContainer
-      .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li"));
-    waitForElementToClickable(searchButton, true).click();
+  public OpportunitiesPage clickFirstChainRetailerResult() {
+    clickFirstSearchFilterResult(chainRetailerFilter);
     return this;
   }
 
@@ -136,6 +134,17 @@ public class OpportunitiesPage extends TestNGBasePage {
     waitForElementToClickable(searchButton, true).click();
 
     return this;
+  }
+
+
+  private void clickFirstSearchFilterResult(WebElement searchFilter) {
+    final WebElement result = getSearchFilterResults(searchFilter)
+      .findElement(By.xpath(".//li"));
+    waitForElementToClickable(result, true).click();
+  }
+
+  private WebElement getSearchFilterResults(WebElement searchFilter) {
+    return searchFilter.findElement(By.xpath(".//div[@class, 'results-container open']"));
   }
 
   public OpportunitiesPage clickApplyFiltersButton() {
