@@ -15,6 +15,7 @@ import { ResponsibilitiesTransformerService } from  '../../services/responsibili
 import { ResponsibilitiesService } from  '../../services/responsibilities.service';
 import { SharedModule } from '../../shared/shared.module';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
+import { WindowService } from '../../services/window.service';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
     PerformanceTransformerService,
     ProductMetricsTransformerService,
     ResponsibilitiesService,
-    ResponsibilitiesTransformerService
+    ResponsibilitiesTransformerService,
+    WindowService
   ]
 })
 
