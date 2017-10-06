@@ -25,7 +25,10 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     logoutPage = new LogoutPage(driver);
 
     driver.get(webAppBaseUrl);
-    loginPage.loginAs(TestUser.ACTOR4);
+  }
+
+  private void loginToOpportunitiesPage(TestUser user) {
+    loginPage.loginAs(user);
 
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
@@ -37,7 +40,9 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   }
 
   @Test(description = "Filter Opportunities by Chain Retailer", dataProvider = "chainRetailersData")
-  public void filterByChainRetailer(String accountName, PremiseType premiseType) {
+  public void filterByChainRetailer(TestUser user, String accountName, PremiseType premiseType) {
+    loginToOpportunitiesPage(user);
+
     opportunitiesPage
       .clickRetailerTypeDropdown()
       .selectChainRetailerType()
@@ -67,7 +72,9 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   }
 
   @Test(description = "Filter Opportunities by Store Retailer", dataProvider = "storeRetailersData")
-  public void filterByStoreRetailer(String accountName, String accountAddress, PremiseType premiseType) {
+  public void filterByStoreRetailer(TestUser user, String accountName, String accountAddress, PremiseType premiseType) {
+    loginToOpportunitiesPage(user);
+
     opportunitiesPage
       .clickRetailerTypeDropdown()
       .selectStoreRetailerType()
@@ -97,11 +104,13 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   }
 
   @Test(description = "Filter Opportunities by Distributor", dataProvider = "distributorsData")
-  public void filterByDistributor(String distributor) {
-      opportunitiesPage
-        .enterDistributorSearchText(distributor)
-        .clickSearchForDistributor()
-        .clickFirstDistributorResult();
+  public void filterByDistributor(TestUser user, String distributor) {
+    loginToOpportunitiesPage(user);
+
+    opportunitiesPage
+      .enterDistributorSearchText(distributor)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult();
 
     Assert.assertTrue(
       opportunitiesPage.isPremiseFilterSelectedAs(PremiseType.Off),
@@ -130,23 +139,23 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   @DataProvider
   public static Object[][] chainRetailersData() {
     return new Object[][]{
-      {"Buffalo Wild Wings", PremiseType.On},
-      {"Walgreens", PremiseType.Off}
+      {TestUser.ACTOR4, "Buffalo Wild Wings", PremiseType.On},
+      {TestUser.ACTOR4, "Walgreens", PremiseType.Off}
     };
   }
 
   @DataProvider
   public static Object[][] storeRetailersData() {
     return new Object[][]{
-      {"Walgreens", "2550 E 88th Ave", PremiseType.On},
-      {"Walgreens", "1350 Sportsman Way", PremiseType.Off}
+      {TestUser.ACTOR4, "Walgreens", "2550 E 88th Ave", PremiseType.On},
+      {TestUser.ACTOR4, "Walgreens", "1350 Sportsman Way", PremiseType.Off}
     };
   }
 
   @DataProvider
   public static Object[][] distributorsData() {
     return new Object[][]{
-      {"Chicago Bev"}
+      {TestUser.ACTOR4, "Chicago Bev"}
     };
   }
 }
