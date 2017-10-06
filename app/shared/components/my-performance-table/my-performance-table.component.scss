@@ -23,7 +23,12 @@ thead {
 tbody {
   display: block;
   max-height: 500px;
-  overflow-y: auto;
+  overflow-y: overlay;
+
+  @media all and (-ms-high-contrast: none) {
+    overflow-y: auto;
+  }
+
   -ms-overflow-style: -ms-autohiding-scrollbar;
   float: left;
   width: 100%;
