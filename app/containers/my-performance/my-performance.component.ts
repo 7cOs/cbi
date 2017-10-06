@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
+import { AccountDashboardStateParameters } from '../../models/account-dashboard-state-parameters.model';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
@@ -30,6 +31,7 @@ import { RowType } from '../../enums/row-type.enum';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
+import { WindowService } from '../../services/window.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -80,8 +82,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
+    @Inject('userService') private userService: any,
+    @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
-    @Inject('userService') private userService: any
+    private windowService: WindowService
   ) { }
 
   ngOnInit() {
@@ -146,6 +150,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
     this.productMetricsSubscription.unsubscribe();
+  }
+
+  public handleSublineClicked(row: MyPerformanceTableRow): void {
+    const accountDashboardStateParams: AccountDashboardStateParameters =
+      this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+    const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
+    const currentWindow = this.windowService.nativeWindow();
+    currentWindow.open(accountDashboardUrl, '_blank');
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
