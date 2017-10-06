@@ -567,6 +567,8 @@ describe('Unit: filter service', function() {
       expect(filtersService.resetFilters).toBeDefined();
       expect(filtersService.resetSort).toBeDefined();
       expect(filtersService.resetPagination).toBeDefined();
+      expect(filtersService.depletionsTimePeriodFromName).toBeDefined();
+      expect(filtersService.distributionTimePeriodFromName).toBeDefined();
   });
 
   it('should have valid default model state', function() {
@@ -839,5 +841,18 @@ describe('Unit: filter service', function() {
       roundedStores: 50,
       shouldReloadData: true
     });
+  });
+
+  it('Gets the correct names for distribution and depletions time periods', function () {
+    const depletionTimePeriods = ['CMTH', 'MTD', 'NotDepletionTimePeriod'];
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[0])).toEqual(resetModelObject.depletionsTimePeriod.month[0]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[1])).toEqual(resetModelObject.depletionsTimePeriod.year[0]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[2])).toBe(null);
+
+    const distributionTimePeriods = ['L60', 'L03', 'NotDistributionTimePeriod'];
+    expect(filtersService.distributionTimePeriodFromName(distributionTimePeriods[0])).toEqual(resetModelObject.distributionTimePeriod.year[0]);
+    expect(filtersService.distributionTimePeriodFromName(distributionTimePeriods[1])).toEqual(resetModelObject.distributionTimePeriod.month[0]);
+    expect(filtersService.distributionTimePeriodFromName(distributionTimePeriods[2])).toBe(null);
+
   });
 });

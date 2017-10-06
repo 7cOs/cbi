@@ -17,6 +17,7 @@ import { ViewType } from '../../../enums/view-type.enum';
 export class MyPerformanceTableComponent {
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: MyPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
+  @Output() onSublineClicked = new EventEmitter<MyPerformanceTableRow>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {

@@ -1,7 +1,12 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
+import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
 import { MyPerformanceService } from './my-performance.service';
 import { MetricTypeValue } from '../enums/metric-type.enum';
+import { MyPerformanceFilter } from '../models/my-performance-filter.model';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 describe('Service: MyPerformanceService', () => {
@@ -118,4 +123,57 @@ describe('Service: MyPerformanceService', () => {
       });
     });
   });
+
+  describe('when left side data row distributor link clicked', () => {
+    let rowMock: MyPerformanceTableRow;
+    let filterMock: MyPerformanceFilter;
+
+    beforeEach(() => {
+      rowMock = getMyPerformanceTableRowMock(1)[0];
+      filterMock = getMyPerformanceFilterMock();
+      spyOn(myPerformanceService, 'accountDashboardStateParameters').and.callThrough();
+    });
+
+    it('should return empty object when metrictype not one of other values', () => {
+      filterMock.metricType = null;
+      expect(myPerformanceService.accountDashboardStateParameters(filterMock, rowMock)).toEqual({});
+    });
+
+    it('should return the correct option when metric type is depletions', () => {
+      filterMock.metricType = MetricTypeValue.volume;
+      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
+      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+        depletiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
+        distributorid: rowMock.metadata.positionId,
+        distributorname: rowMock.descriptionRow0,
+        premisetype: PremiseTypeValue[filterMock.premiseType]
+      });
+    });
+
+    it('should return the correct option when metric type is distribution', () => {
+      filterMock.metricType = MetricTypeValue.PointsOfDistribution;
+      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
+      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+        depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
+        distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributorid: rowMock.metadata.positionId,
+        distributorname: rowMock.descriptionRow0,
+        premisetype: PremiseTypeValue[filterMock.premiseType]
+      });
+    });
+
+    it('should return the correct option when metric type is velocity', () => {
+      filterMock.metricType = MetricTypeValue.velocity;
+      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
+      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+        depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
+        distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributorid: rowMock.metadata.positionId,
+        distributorname: rowMock.descriptionRow0,
+        premisetype: PremiseTypeValue[filterMock.premiseType]
+      });
+    });
+  });
+
 });
