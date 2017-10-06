@@ -5,7 +5,8 @@ package com.cbrands;
  */
 public enum TestUser {
   ACTOR4("chris.williams@cbrands.com", "Corona.2016", "Chris", "Williams", "Non-Corporate"),
-  NOTES_ACTOR("chelsea.hoff@cbrands.com", "Corona.2016", "Chelsea", "Hoff", "Non-Corporate");
+  NOTES_ACTOR("chelsea.hoff@cbrands.com", "Corona.2016", "Chelsea", "Hoff", "Non-Corporate"),
+  CORPORATE_ACTOR("colleen.mclaughlin@cbrands.com", "Corona.2016", "Colleen", "McLaughlin", "Corporate");
 
   private final String userName;
   private final String password;
