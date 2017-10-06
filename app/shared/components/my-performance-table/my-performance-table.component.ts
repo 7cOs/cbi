@@ -53,6 +53,10 @@ export class MyPerformanceTableComponent {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
   }
 
+  public getTableHeight(): string {
+    return this.totalRow ? 'left-table-height' : 'right-table-height';
+  }
+
   public columnWidth(): string {
     return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
   }
