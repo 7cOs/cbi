@@ -4,7 +4,7 @@ package com.cbrands;
  * Test users for automated testing. Only valid users currently used in the ATs should be in this enum.
  */
 public enum TestUser {
-  ACTOR4 ("chris.williams@cbrands.com", "Corona.2016", "Chris", "Williams"),
+  ACTOR4("chris.williams@cbrands.com", "Corona.2016", "Chris", "Williams"),
   NOTES_ACTOR("chelsea.hoff@cbrands.com", "Corona.2016", "Chelsea", "Hoff");
 
   private final String userName;
@@ -19,19 +19,19 @@ public enum TestUser {
     this.lastName = lastName;
   }
 
-  public String userName(){
+  public String userName() {
     return userName;
   }
 
-  public String password(){
+  public String password() {
     return password;
   }
 
-  public String firstName(){
+  public String firstName() {
     return firstName;
   }
 
-  public String lastName(){
+  public String lastName() {
     return lastName;
   }
 
