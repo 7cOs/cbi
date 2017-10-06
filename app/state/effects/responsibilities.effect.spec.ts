@@ -7,21 +7,22 @@ import * as Chance from 'chance';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
-import { FetchResponsibilities,
+import { ConstructRoleGroups,
+         FetchResponsibilities,
          FetchResponsibilitiesFailure,
          FetchResponsibilitiesSuccess,
          FetchEntityWithPerformance,
          FetchEntityWithPerformanceSuccess,
          FetchEntityWithPerformancePayload,
-         GetPeopleByRoleGroupAction,
-         SetTotalPerformance,
          FetchTotalPerformance,
          FetchTotalPerformanceSuccess,
          FetchTotalPerformanceFailure,
          FetchSubAccountsAction,
          FetchSubAccountsSuccessAction,
          FetchSubAccountsActionPayload,
-         ConstructRoleGroups } from '../actions/responsibilities.action';
+         GetPeopleByRoleGroupAction,
+         SetTotalPerformance,
+         SetTotalPerformanceForSelectedRoleGroup } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
@@ -317,7 +318,7 @@ describe('Responsibilities Effects', () => {
 
           if (dispatchedActions.length === 4) {
             expect(dispatchedActions).toEqual([
-              new SetTotalPerformance(fetchEntityPerformancePayloadMock.selectedPositionId),
+              new SetTotalPerformanceForSelectedRoleGroup(fetchEntityPerformancePayloadMock.entityTypeCode),
               new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityTypeGroupName),
               new FetchEntityWithPerformanceSuccess({
                 entityWithPerformance: entityWithPerformanceMock,

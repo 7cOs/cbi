@@ -224,7 +224,7 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('Set Table Row Performance Total Action', () => {
+  describe('Set Total Performance', () => {
     const selectedPositionIdMock: string = getMyPerformanceTableRowMock(1)[0].metadata.positionId;
     let action: ResponsibilitiesActions.SetTotalPerformance;
 
@@ -239,6 +239,24 @@ describe('Responsibilities Actions', () => {
 
     it('should contain the correct payload', () => {
       expect(action.payload).toEqual(selectedPositionIdMock);
+    });
+  });
+
+  describe('SetTotalPerformanceForSelectedRoleGroup', () => {
+    const selectedEntityId: string = getMyPerformanceTableRowMock(1)[0].metadata.entityTypeCode;
+    let action: ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup;
+
+    beforeEach(() => {
+      action = new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(selectedEntityId);
+    });
+
+    it('should be the correct type', () => {
+      expect(ResponsibilitiesActions.SET_TOTAL_PERFORMANCE).toBe('[Performance Total] SET_TOTAL_PERFORMANCE');
+      expect(action.type).toBe(ResponsibilitiesActions.SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(selectedEntityId);
     });
   });
 
