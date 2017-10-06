@@ -1,18 +1,17 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { Performance } from '../../models/performance.model';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchEntityWithPerformancePayload, FetchEntityWithPerformanceSuccessPayload } from '../actions/responsibilities.action';
-import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
+import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { ResponsibilitiesState } from './responsibilities.reducer';
-import { ViewType } from '../../enums/view-type.enum';
+import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
+import { ResponsibilitiesState } from './responsibilities.reducer';
 
 const positionIdMock = chance.string();
 const entityTypeCodeMock = chance.string();
@@ -121,7 +120,7 @@ describe('Responsibilities Reducer', () => {
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      viewType: ViewType.people
+      entityType: EntityType.Person
     };
     const expectedState = {
       status: ActionStatus.Fetching,
@@ -224,6 +223,46 @@ describe('Responsibilities Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
+  it('should update the performance data when SetTotalPerformanceForSelectedRoleGroup action is received', () => {
+    const selectedRowMock = getMyPerformanceTableRowMock(1)[0];
+    const payloadMock: string = selectedRowMock.metadata.entityTypeCode;
+    const mockState: ResponsibilitiesState = Object.assign({}, initialState, {
+      entityWithPerformance: [{
+        positionId: positionIdMock,
+        entityTypeCode: payloadMock,
+        name: selectedRowMock.descriptionRow0,
+        performance: {
+          total: selectedRowMock.metricColumn0,
+          totalYearAgo: selectedRowMock.metricColumn1,
+          totalYearAgoPercent: selectedRowMock.metricColumn2,
+          contributionToVolume: selectedRowMock.ctv,
+          name: selectedRowMock.descriptionRow0,
+          error: false
+        }
+      }]
+    });
+
+    const expectedState: ResponsibilitiesState = {
+      status: mockState.status,
+      positionId: mockState.positionId,
+      groupedEntities: mockState.groupedEntities,
+      entityWithPerformance: mockState.entityWithPerformance,
+      entitiesTotalPerformances: {
+        total: selectedRowMock.metricColumn0,
+        totalYearAgo: selectedRowMock.metricColumn1,
+        totalYearAgoPercent: selectedRowMock.metricColumn2,
+        contributionToVolume: selectedRowMock.ctv,
+        name: selectedRowMock.descriptionRow0,
+        error: false
+      }
+    };
+    const actualState = responsibilitiesReducer(
+      mockState,
+      new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(payloadMock)
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
   it('should update the state status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,

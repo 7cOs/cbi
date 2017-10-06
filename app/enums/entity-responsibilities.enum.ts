@@ -14,11 +14,25 @@ export enum EntityPeopleType {
   'SALES LEADERSHIP' = 'SALES LEADERSHIP',
   'TEAM LEAD' = 'TEAM LEAD',
   'OFF PREMISE SPECIALIST' = 'OFF PREMISE SPECIALIST',
-  'DRAFT' = 'DRAFT'
+  'DRAFT' = 'DRAFT',
+  'DISTRIBUTOR' = 'DISTRIBUTOR',
+  'ACCOUNT' = 'ACCOUNT',
+  'GEOGRAPHY' = 'GEOGRAPHY'
 }
 
 export enum EntityPropertyType {
   Distributor = 'Distributor',
   Account = 'Account',
+  SubAccount = 'SubAccount'
+}
+
+export enum EntityType {
+  Person = 'Person',
+  RoleGroup = 'RoleGroup',
+  ResponsibilitiesGroup = 'ResponsibilitiesGroup',
+  Distributor = 'Distributor',
+  DistributorGroup = 'DistributorGroup',
+  Account = 'Account',
+  AccountGroup = 'AccountGroup',
   SubAccount = 'SubAccount'
 }
