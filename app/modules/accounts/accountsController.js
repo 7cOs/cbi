@@ -1063,11 +1063,11 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     function setDataForNavigationFromMyPerformance() {
       setFilter({id: $state.params.distributorid, name: $state.params.distributorname, type: 'distributor'}, 'distributor');
 
-      if ($state.params.premisetype === 'on') {
+      if ($state.params.premisetype === 'On') {
         vm.premiseTypeValue = 'on';
         vm.filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');
-      } else if ($state.params.premisetype === 'off') {
+      } else if ($state.params.premisetype === 'Off') {
         vm.premiseTypeValue = 'off';
         vm.filtersService.model.selected.premiseType = 'off';
         vm.updateChip('Off-Premise', 'premiseType');
