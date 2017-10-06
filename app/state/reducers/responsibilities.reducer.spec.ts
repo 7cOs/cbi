@@ -223,6 +223,46 @@ describe('Responsibilities Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
+  it('should update the performance data when SetTotalPerformanceForSelectedRoleGroup action is received', () => {
+    const selectedRowMock = getMyPerformanceTableRowMock(1)[0];
+    const payloadMock: string = selectedRowMock.metadata.entityTypeCode;
+    const mockState: ResponsibilitiesState = Object.assign({}, initialState, {
+      entityWithPerformance: [{
+        positionId: positionIdMock,
+        entityTypeCode: payloadMock,
+        name: selectedRowMock.descriptionRow0,
+        performance: {
+          total: selectedRowMock.metricColumn0,
+          totalYearAgo: selectedRowMock.metricColumn1,
+          totalYearAgoPercent: selectedRowMock.metricColumn2,
+          contributionToVolume: selectedRowMock.ctv,
+          name: selectedRowMock.descriptionRow0,
+          error: false
+        }
+      }]
+    });
+
+    const expectedState: ResponsibilitiesState = {
+      status: mockState.status,
+      positionId: mockState.positionId,
+      groupedEntities: mockState.groupedEntities,
+      entityWithPerformance: mockState.entityWithPerformance,
+      entitiesTotalPerformances: {
+        total: selectedRowMock.metricColumn0,
+        totalYearAgo: selectedRowMock.metricColumn1,
+        totalYearAgoPercent: selectedRowMock.metricColumn2,
+        contributionToVolume: selectedRowMock.ctv,
+        name: selectedRowMock.descriptionRow0,
+        error: false
+      }
+    };
+    const actualState = responsibilitiesReducer(
+      mockState,
+      new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(payloadMock)
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
   it('should update the state status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
