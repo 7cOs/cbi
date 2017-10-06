@@ -1,6 +1,9 @@
+import { EntityType } from '../enums/entity-responsibilities.enum';
+
 export interface MyPerformanceTableRowMetadata {
   positionId: string;
   contextPositionId?: string;
+  entityType: EntityType;
   entityTypeCode?: string;
 }
 

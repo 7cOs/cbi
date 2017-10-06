@@ -93,6 +93,14 @@ export function responsibilitiesReducer(
         entitiesTotalPerformances: selectedEntity.performance
       });
 
+    case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP:
+      const selectedRoleGroup = state.entityWithPerformance.find(
+        (entity: EntityWithPerformance) => entity.entityTypeCode === action.payload);
+
+      return Object.assign({}, state, {
+        entitiesTotalPerformances: selectedRoleGroup.performance
+      });
+
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching
