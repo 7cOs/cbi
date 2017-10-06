@@ -142,34 +142,37 @@ describe('Service: MyPerformanceService', () => {
     it('should return the correct option when metric type is depletions', () => {
       filterMock.metricType = MetricTypeValue.volume;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
-      expect(accountDashboardParams.myaccountsonly).toEqual(true);
-      expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
-      expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.L90]);
-      expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
-      expect(accountDashboardParams.distributorname).toEqual(rowMock.descriptionRow0);
-      expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
+      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+        depletiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
+        distributorid: rowMock.metadata.positionId,
+        distributorname: rowMock.descriptionRow0,
+        premisetype: PremiseTypeValue[filterMock.premiseType]
+      });
     });
 
     it('should return the correct option when metric type is distribution', () => {
       filterMock.metricType = MetricTypeValue.PointsOfDistribution;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
-      expect(accountDashboardParams.myaccountsonly).toEqual(true);
-      expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.FYTD]);
-      expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
-      expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
-      expect(accountDashboardParams.distributorname).toEqual(rowMock.descriptionRow0);
-      expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
+      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+        depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
+        distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributorid: rowMock.metadata.positionId,
+        distributorname: rowMock.descriptionRow0,
+        premisetype: PremiseTypeValue[filterMock.premiseType]
+      });
     });
 
     it('should return the correct option when metric type is velocity', () => {
       filterMock.metricType = MetricTypeValue.velocity;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
-      expect(accountDashboardParams.myaccountsonly).toEqual(true);
-      expect(accountDashboardParams.depletiontimeperiod).toEqual(DateRangeTimePeriod[DateRangeTimePeriod.FYTD]);
-      expect(accountDashboardParams.distributiontimeperiod).toEqual(DateRangeTimePeriod[filterMock.dateRangeCode]);
-      expect(accountDashboardParams.distributorid).toEqual(rowMock.metadata.positionId);
-      expect(accountDashboardParams.distributorname).toEqual(rowMock.descriptionRow0);
-      expect(accountDashboardParams.premisetype).toEqual(PremiseTypeValue[filterMock.premiseType]);
+      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+        depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
+        distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributorid: rowMock.metadata.positionId,
+        distributorname: rowMock.descriptionRow0,
+        premisetype: PremiseTypeValue[filterMock.premiseType]
+      });
     });
   });
 

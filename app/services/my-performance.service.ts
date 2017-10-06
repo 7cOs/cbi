@@ -47,36 +47,28 @@ export class MyPerformanceService {
   }
 
   public accountDashboardStateParameters(filter: MyPerformanceFilterState, row: MyPerformanceTableRow): AccountDashboardStateParameters {
+    let accountDashboardStateParams: AccountDashboardStateParameters = {
+      myaccountsonly: true,
+      distributorid: row.metadata.positionId,
+      distributorname: row.descriptionRow0,
+      premisetype: PremiseTypeValue[filter.premiseType]};
+
     switch (filter.metricType) {
       case MetricTypeValue.volume:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
-          distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
-          distributorid: row.metadata.positionId,
-          distributorname: row.descriptionRow0,
-          premisetype: PremiseTypeValue[filter.premiseType],
-        };
+          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriod[filter.dateRangeCode];
+          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriod[DateRangeTimePeriod.L90];
+          break;
       case MetricTypeValue.PointsOfDistribution:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
-          distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
-          distributorid: row.metadata.positionId,
-          distributorname: row.descriptionRow0,
-          premisetype: PremiseTypeValue[filter.premiseType],
-        };
+          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriod[DateRangeTimePeriod.FYTD];
+          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriod[filter.dateRangeCode];
+          break;
       case MetricTypeValue.velocity:
-        return {
-          myaccountsonly: true,
-          depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
-          distributiontimeperiod: DateRangeTimePeriod[filter.dateRangeCode],
-          distributorid: row.metadata.positionId,
-          distributorname: row.descriptionRow0,
-          premisetype: PremiseTypeValue[filter.premiseType],
-        };
+          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriod[DateRangeTimePeriod.FYTD];
+          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriod[filter.dateRangeCode];
+          break;
       default:
         return {};
     }
+    return accountDashboardStateParams;
   }
 }

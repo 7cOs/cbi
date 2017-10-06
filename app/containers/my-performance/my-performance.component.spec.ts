@@ -103,8 +103,8 @@ describe('MyPerformanceComponent', () => {
   };
 
   const windowServiceMock = {
-    nativeWindow: jasmine.createSpy('nativeWindow').and.callFake( () => {return windowMock; }
-    )};
+    nativeWindow: jasmine.createSpy('nativeWindow').and.callFake( () => windowMock )
+  };
 
   const stateMock = {
     myPerformance: myPerformanceStateMock,
@@ -552,10 +552,12 @@ describe('MyPerformanceComponent', () => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
     });
 
-    it('should call the correct functions', () => {
+    it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
       componentInstance.handleSublineClicked(rowMock);
-      expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalled();
-      expect(stateMock.href).toHaveBeenCalled();
+      expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
+      expect(stateMock.href).toHaveBeenCalledWith(
+        'accounts',
+        myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
       expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
       expect(windowMock.open).toHaveBeenCalled();
     });
