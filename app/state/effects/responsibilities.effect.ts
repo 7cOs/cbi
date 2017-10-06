@@ -34,6 +34,8 @@ export class ResponsibilitiesEffects {
       })
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getResponsibilities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchy(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
@@ -44,15 +46,16 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
       .switchMap((action: Action) => {
-        const { entityTypeGroupName, entityTypeCode, entities, filter, selectedPositionId, viewType } = action.payload;
+        const { selectedPositionId, entityType, entityTypeGroupName, entityTypeCode } = action.payload;
+        const viewType: ViewType = this.responsibilitiesService.getEntityGroupViewType(entityType);
 
-        return this.responsibilitiesService.getPositionsPerformances(entities, filter)
-          .switchMap((entityPerformances: EntityWithPerformance[]) => {
+        return this.responsibilitiesService.getEntitiesWithPerformanceForGroup(action.payload)
+          .switchMap((entityWithPerformance: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityTypeGroupName),
               new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess({
-                entityWithPerformance: entityPerformances,
+                entityWithPerformance: entityWithPerformance,
                 entityTypeCode: entityTypeCode
               }),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
@@ -71,6 +74,16 @@ export class ResponsibilitiesEffects {
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
+      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
+  }
+
+  @Effect() constructRoleGroups$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.CONSTRUCT_ROLE_GROUPS)
+      .switchMap((action: Action) => Observable.of(action.payload))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.groupPeopleResponsibilities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
   }
 

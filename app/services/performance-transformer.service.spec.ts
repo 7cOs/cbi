@@ -88,6 +88,7 @@ describe('Service: PerformanceTransformerService', () => {
         positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
         entityTypeCode: responsibilityEntitiesPerformanceDTOMock[0].entityTypeCode,
         name: responsibilityEntitiesPerformanceDTOMock[0].name,
+        entityType: responsibilityEntitiesPerformanceDTOMock[0].entityType,
         positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
         performance: {
           total: parseInt((entityPerformanceMock.total).toFixed(), 10),
