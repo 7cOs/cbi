@@ -9,6 +9,7 @@ import { getEntitiesWithPerformancesMock,
          getEntitiesWithPerformancesOpenPositionMock } from '../models/entity-with-performance.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
@@ -41,11 +42,10 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return formatted ResponsibilityEntityPerformance data', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
-      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceMock);
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual({
+      const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
@@ -58,18 +58,25 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           entityType: responsibilityEntitiesPerformanceMock[0].entityType
         },
         performanceError: false
-      });
+      };
+
+      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor) {
+        expectedRow.descriptionRow1 = 'GO TO DASHBOARD';
+      }
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual(expectedRow);
     });
 
     it('should return formatted ResponsibilityEntityPerformance data with performanceError value', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       responsibilityEntitiesPerformanceMock[0].performance.error = true;
-      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceMock);
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual({
+      const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
@@ -82,19 +89,30 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           entityType: responsibilityEntitiesPerformanceMock[0].entityType
         },
         performanceError: true
-      });
+      };
+
+      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor) {
+        expectedRow.descriptionRow1 = 'GO TO DASHBOARD';
+      }
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual(expectedRow);
     });
 
     it('should return formatted ResponsibilityEntityPerformance data with Open Position', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
-      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
 
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceOpenPositionMock.length);
       for (let i = 0; i < tableData.length; i++) {
         expect(tableData[i]).toEqual({
           descriptionRow0: 'Open Position',
-          descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[i].positionDescription,
+          descriptionRow1: responsibilityEntitiesPerformanceMock[i].entityType === EntityType.Distributor
+            ? 'GO TO DASHBOARD'
+            : responsibilityEntitiesPerformanceOpenPositionMock[i].positionDescription,
           metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.total,
           metricColumn1: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.totalYearAgo,
           metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.totalYearAgoPercent,
@@ -112,12 +130,15 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       delete responsibilityEntitiesPerformanceOpenPositionMock[0].positionDescription;
-      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
 
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceOpenPositionMock.length);
       expect(tableData[0]).toEqual({
         descriptionRow0: 'Open Position',
-        descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[0].positionDescription,
+        descriptionRow1: responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor
+          ? 'GO TO DASHBOARD'
+          : responsibilityEntitiesPerformanceOpenPositionMock[0].positionDescription,
         metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgoPercent,
