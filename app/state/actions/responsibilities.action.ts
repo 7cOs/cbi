@@ -129,6 +129,13 @@ export class SetTotalPerformance implements Action {
   constructor(public payload: string) { }
 }
 
+export const SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP = '[Performance Total] SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP';
+export class SetTotalPerformanceForSelectedRoleGroup implements Action {
+  readonly type = SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP;
+
+  constructor(public payload: string) { }
+}
+
 export const CONSTRUCT_ROLE_GROUPS = '[Responsibilities] CONSTRUCT_ROLE_GROUPS';
 export class ConstructRoleGroups implements Action {
   readonly type = CONSTRUCT_ROLE_GROUPS;
@@ -153,4 +160,5 @@ export type Action
   | FetchTotalPerformanceSuccess
   | FetchTotalPerformanceFailure
   | SetTotalPerformance
+  | SetTotalPerformanceForSelectedRoleGroup
   | ConstructRoleGroups;
