@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
+import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { ViewType } from '../../../enums/view-type.enum';
@@ -11,6 +12,7 @@ import { ViewType } from '../../../enums/view-type.enum';
 })
 export class MyPerformanceTableRowComponent {
   @Output() onCellClicked = new EventEmitter<number>();
+  @Output() onSublineClicked = new EventEmitter<any>();
 
   @Input() rowData: MyPerformanceTableRow;
   @Input() showBackButton: boolean;
@@ -27,10 +29,23 @@ export class MyPerformanceTableRowComponent {
     return this.showOpportunities ? 'col-17-pct' : 'col-20-pct';
   }
 
-  public headerLeftClasses() {
+  public getHeaderLeftClasses(): CssClasses {
     return {
       [this.columnWidth()]: true,
       ['back-button']: this.showBackButton
     };
+  }
+
+  public getSublineClass(): CssClasses {
+    return {
+      ['link']: this.viewType === ViewType.distributors,
+      ['forward-arrow']: this.viewType === ViewType.distributors
+    };
+  }
+
+  public sublineClicked(): void {
+    if (this.viewType === ViewType.distributors) {
+      this.onSublineClicked.emit();
+    }
   }
 }

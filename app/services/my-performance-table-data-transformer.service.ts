@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
@@ -26,11 +27,15 @@ export class MyPerformanceTableDataTransformerService {
 
       if (entity.name === 'Open') {
         transformedEntity.descriptionRow0 = 'Open Position';
-        transformedEntity['descriptionRow1'] = entity.positionDescription;
+        transformedEntity.descriptionRow1 = entity.positionDescription;
       }
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
       if (entity.entityTypeCode) transformedEntity.metadata.entityTypeCode = entity.entityTypeCode;
+
+      if (entity.entityType === EntityType.Distributor) {
+        transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';
+      }
 
       return transformedEntity;
     });

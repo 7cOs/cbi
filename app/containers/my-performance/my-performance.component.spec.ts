@@ -33,12 +33,13 @@ import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { RowType } from '../../enums/row-type.enum';
+import { SaveMyPerformanceStateAction, SetMyPerformanceSelectedEntityAction } from '../../state/actions/my-performance-version.action';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
 import { ViewType } from '../../enums/view-type.enum';
-import { SaveMyPerformanceStateAction, SetMyPerformanceSelectedEntityAction } from '../../state/actions/my-performance-version.action';
+import { WindowService } from '../../services/window.service';
 
 const chance = new Chance();
 
@@ -97,12 +98,21 @@ describe('MyPerformanceComponent', () => {
 
   const versionsSubject: Subject<MyPerformanceEntitiesData[]> = new Subject<MyPerformanceEntitiesData[]>();
 
+  const windowMock = {
+    open: jasmine.createSpy('open')
+  };
+
+  const windowServiceMock = {
+    nativeWindow: jasmine.createSpy('nativeWindow').and.callFake( () => windowMock )
+  };
+
   const stateMock = {
     myPerformance: myPerformanceStateMock,
     myPerformanceProductMetrics: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
-    viewTypes: chance.string()
+    viewTypes: chance.string(),
+    href: jasmine.createSpy('href')
   };
 
   const storeMock = {
@@ -129,7 +139,8 @@ describe('MyPerformanceComponent', () => {
     };
 
     myPerformanceServiceMock = {
-      getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType')
+      getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType'),
+      accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
     };
 
     TestBed.configureTestingModule({
@@ -154,6 +165,14 @@ describe('MyPerformanceComponent', () => {
         {
           provide: 'userService',
           useValue: userServiceMock
+        },
+        {
+          provide: '$state',
+          useValue: stateMock
+        },
+        {
+          provide: WindowService,
+          useValue: windowServiceMock
         },
         UtilService
       ]
@@ -523,6 +542,24 @@ describe('MyPerformanceComponent', () => {
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any
       }));
+    });
+  });
+
+  describe('when left side data row distributor link clicked', () => {
+    let rowMock: MyPerformanceTableRow;
+
+    beforeEach(() => {
+      rowMock = getMyPerformanceTableRowMock(1)[0];
+    });
+
+    it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
+      componentInstance.handleSublineClicked(rowMock);
+      expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
+      expect(stateMock.href).toHaveBeenCalledWith(
+        'accounts',
+        myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
+      expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+      expect(windowMock.open).toHaveBeenCalled();
     });
   });
 

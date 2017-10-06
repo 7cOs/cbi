@@ -348,6 +348,16 @@ div.ctv {
 
         div.description-line-1 {
           padding-top: 5px;
+
+          &.link {
+            span {
+              color: $hyperlink;
+            }
+
+            &:hover span, &:active span {
+              color: $hyperlink-hover;
+            }
+          }
         }
 
         span.description-line-1 {
@@ -358,6 +368,10 @@ div.ctv {
           letter-spacing: 1px;
           outline: 0;
           color: $blue;
+        }
+
+        div.description-line-0 {
+          color: $black;
         }
       }
     }
@@ -370,4 +384,22 @@ div.ctv {
   background-position: left 13px center;
   padding-left: 32px;
   box-sizing: border-box;
+}
+
+.link {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.forward-arrow {
+  background-image: url('../../../assets/img/icons/arrow-right-blue.svg');
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 24px;
+  box-sizing: border-box;
+
+  &:hover, &:active {
+    background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
+  }
 }
