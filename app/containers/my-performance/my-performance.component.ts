@@ -8,13 +8,14 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
+import { ConstructRoleGroups,
+         FetchEntityWithPerformance,
+         FetchResponsibilities,
+         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilities,
-        FetchEntityWithPerformance,
-        FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -145,10 +146,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceStateAction());
-    if (this.filterStateSubscription) this.filterStateSubscription.unsubscribe();
-    if (this.myPerformanceCurrentSubscription) this.myPerformanceCurrentSubscription.unsubscribe();
-    if (this.myPerformanceVersionSubscription) this.myPerformanceVersionSubscription.unsubscribe();
-    if (this.productMetricsSubscription) this.productMetricsSubscription.unsubscribe();
+    this.filterStateSubscription.unsubscribe();
+    this.myPerformanceCurrentSubscription.unsubscribe();
+    this.myPerformanceVersionSubscription.unsubscribe();
+    this.productMetricsSubscription.unsubscribe();
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
@@ -188,14 +189,23 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
               const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
-              this.store.dispatch(new FetchEntityWithPerformance({
-                entityTypeGroupName: entityTypeGroupName,
-                entityTypeCode: parameters.row.metadata.entityTypeCode,
-                entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
-                filter: this.filterState,
-                selectedPositionId: parameters.row.metadata.positionId,
-                viewType: ViewType.people
-              }));
+
+              if (parameters.row.metadata.entityType === EntityType.ResponsibilitiesGroup) {
+                this.store.dispatch(new ConstructRoleGroups({
+                  positionId: parameters.row.metadata.positionId,
+                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                  filter: this.filterState
+                }));
+              } else {
+                this.store.dispatch(new FetchEntityWithPerformance({
+                  selectedPositionId: parameters.row.metadata.positionId,
+                  entityTypeGroupName: entityTypeGroupName,
+                  entityTypeCode: parameters.row.metadata.entityTypeCode,
+                  entityType: parameters.row.metadata.entityType,
+                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                  filter: this.filterState
+                }));
+              }
               this.store.dispatch(new FetchProductMetricsAction({
                 positionId: parameters.row.metadata.positionId,
                 entityTypeCode: parameters.row.metadata.entityTypeCode,

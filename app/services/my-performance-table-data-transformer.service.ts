@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
@@ -11,7 +11,6 @@ import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metr
 export class MyPerformanceTableDataTransformerService {
 
   public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
-
     return entities.map((entity: EntityWithPerformance) => {
       const transformedEntity: MyPerformanceTableRow = {
         descriptionRow0: entity.name,
@@ -20,7 +19,8 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn2: entity.performance.totalYearAgoPercent,
         ctv: entity.performance.contributionToVolume,
         metadata: {
-          positionId: entity.positionId
+          positionId: entity.positionId,
+          entityType: entity.entityType
         },
         performanceError: entity.performance.error
       };
@@ -33,7 +33,7 @@ export class MyPerformanceTableDataTransformerService {
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
       if (entity.entityTypeCode) transformedEntity.metadata.entityTypeCode = entity.entityTypeCode;
 
-      if (entity.propertyType === EntityPropertyType.Distributor) {
+      if (entity.entityType === EntityType.Distributor) {
         transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';
       }
 

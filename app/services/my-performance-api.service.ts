@@ -5,16 +5,17 @@ import 'rxjs/add/operator/map';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model'; // tslint:disable-line:no-unused-variable
-import { PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
+import { HierarchyGroup } from './responsibilities.service';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { PerformanceDTO } from '../models/performance.model';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
-import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -29,9 +30,8 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilityPerformance(
-    entity: { type: string, name: string, positionDescription: string }, filter: MyPerformanceFilterState, positionId: string
-  ): Observable<EntityWithPerformanceDTO|Error> {
+  public getResponsibilityPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string)
+  : Observable<EntityWithPerformanceDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
@@ -40,11 +40,24 @@ export class MyPerformanceApiService {
       .map(res => ({
         id: positionId,
         name: entity.name,
+        entityType: entity.entityType,
         positionDescription: entity.positionDescription,
         entityTypeCode: entity.type,
         performance: res.json()
       }))
-      .catch(err => this.handleError(new Error(err)));
+      .catch((err) => {
+        return Observable.of({
+          id: positionId,
+          name: entity.name,
+          entityType: entity.entityType,
+          positionDescription: entity.positionDescription,
+          entityTypeCode: entity.type,
+          performance: {
+            total: 0,
+            totalYearAgo: 0
+          }
+        });
+      });
   }
 
   public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {
@@ -115,11 +128,23 @@ export class MyPerformanceApiService {
   public getSubAccountPerformance(
     subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState)
   : Observable<PerformanceDTO> {
-    const url = `/v3/subAccounts/${subAccountId}/performanceTotal`;
-    const params =  Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId });
+    const url = `/v3/subAccounts/${ subAccountId }/performanceTotal`;
+    const params = Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId });
 
     return this.http.get(url, {
       params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getAlternateHierarchy(positionId: string, contextPositionId: string): Observable<PeopleResponsibilitiesDTO> {
+    const url = `/v3/positions/${ positionId }/alternateHierarchy`;
+
+    return this.http.get(url, {
+      params: {
+        contextPositionId: contextPositionId
+      }
     })
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
@@ -132,7 +157,7 @@ export class MyPerformanceApiService {
 
     const params = Object.assign({},
       this.getFilterStateParams(filter),
-      {aggregationLevel: aggregation}
+      { aggregationLevel: aggregation }
     );
 
     return this.http.get(`${ url }`, {

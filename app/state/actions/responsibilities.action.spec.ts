@@ -16,7 +16,6 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { Performance } from '../../models/performance.model';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
-import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
@@ -117,12 +116,12 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchEntityWithPerformance', () => {
     const payloadMock: FetchEntityWithPerformancePayload = {
+      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: chance.string(),
+      entityType: getMyPerformanceTableRowMock(1)[0].metadata.entityType,
       entities: [getEntityPeopleResponsibilitiesMock()],
-      filter: performanceFilterStateMock,
-      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      viewType: ViewType.people
+      filter: performanceFilterStateMock
     };
     let action: ResponsibilitiesActions.FetchEntityWithPerformance;
 

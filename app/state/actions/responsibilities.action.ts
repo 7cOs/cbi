@@ -2,11 +2,10 @@ import { Action } from '@ngrx/store';
 
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { ViewType } from '../../enums/view-type.enum';
 
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
@@ -20,7 +19,12 @@ export interface FetchEntityWithPerformancePayload {
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
   selectedPositionId: string;
-  viewType: ViewType;
+  entityType: EntityType;
+}
+
+export interface FetchEntityWithPerformanceSuccessPayload {
+  entityWithPerformance: EntityWithPerformance[];
+  entityTypeCode: string;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
@@ -125,6 +129,17 @@ export class SetTotalPerformance implements Action {
   constructor(public payload: string) { }
 }
 
+export const CONSTRUCT_ROLE_GROUPS = '[Responsibilities] CONSTRUCT_ROLE_GROUPS';
+export class ConstructRoleGroups implements Action {
+  readonly type = CONSTRUCT_ROLE_GROUPS;
+
+  constructor(public payload: {
+    positionId: string,
+    entities: HierarchyEntity[],
+    filter: MyPerformanceFilterState
+  }) { }
+}
+
 export type Action
   = FetchResponsibilities
   | FetchResponsibilitiesSuccess
@@ -137,4 +152,5 @@ export type Action
   | FetchTotalPerformance
   | FetchTotalPerformanceSuccess
   | FetchTotalPerformanceFailure
-  | SetTotalPerformance;
+  | SetTotalPerformance
+  | ConstructRoleGroups;
