@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
+function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -986,6 +986,7 @@ module.exports = /*  @ngInject */
 
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
+      const isNavigatedFromMyPerformance = $state.params.distributorid;
       const isSettingNotes = $state.params.openNotesOnLoad;
 
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
@@ -1001,6 +1002,10 @@ module.exports = /*  @ngInject */
 
       if (isSettingNotes) {
         setNotes();
+      }
+
+      if (isNavigatedFromMyPerformance) {
+        setDataForNavigationFromMyPerformance();
       }
 
       if (isNavigatedFromScorecard) {
@@ -1055,6 +1060,24 @@ module.exports = /*  @ngInject */
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
     }
 
+    function setDataForNavigationFromMyPerformance() {
+      setFilter({id: $state.params.distributorid, name: $state.params.distributorname, type: 'distributor'}, 'distributor');
+
+      if ($state.params.premisetype === 'On') {
+        vm.premiseTypeValue = 'on';
+        vm.filtersService.model.selected.premiseType = 'on';
+        vm.updateChip('On-Premise', 'premiseType');
+      } else if ($state.params.premisetype === 'Off') {
+        vm.premiseTypeValue = 'off';
+        vm.filtersService.model.selected.premiseType = 'off';
+        vm.updateChip('Off-Premise', 'premiseType');
+      }
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
+      vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
+      filterTopBottom();
+    }
+
     function setNotes() {
       $timeout(function() {
         $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
@@ -1081,7 +1104,7 @@ module.exports = /*  @ngInject */
       vm.loadingUnsoldStore = true;
       promiseArr.push(userService.getPerformanceBrand(params));
 
-      const id = vm.currentTopBottomFilters.stores.id || vm.currentTopBottomFilters.distributors.id;
+      const id = vm.currentTopBottomFilters.stores.id;
       if (id) promiseArr.push(storesService.getStores(id));
 
       $q.all(promiseArr).then(function(data) {
