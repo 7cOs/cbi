@@ -23,11 +23,6 @@ thead {
 tbody {
   display: block;
   max-height: 500px;
-  overflow-y: overlay;
-
-  @media all and (-ms-high-contrast: none) {
-    overflow-y: auto;
-  }
 
   -ms-overflow-style: -ms-autohiding-scrollbar;
   float: left;
@@ -68,16 +63,12 @@ th {
   width: 20%;
 }
 
-.col-18-pct {
-  width: 18%;
-}
-
 .col-17-pct {
   width: 17%;
 }
 
 .col-16-pct {
-  width: 16.6666%;
+  width: 16%;
 }
 
 .col-10-pct {
@@ -407,4 +398,12 @@ div.ctv {
   &:hover, &:active {
     background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
   }
+}
+
+.non-ie-overflow {
+  overflow-y: overlay;
+}
+
+.ie-overflow {
+  overflow-y: auto;
 }

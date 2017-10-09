@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Inject } from '@angular/core';
 
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
@@ -48,14 +49,20 @@ export class MyPerformanceTableComponent {
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
 
-  constructor (private utilService: UtilService) { }
+  constructor (private utilService: UtilService,
+               @Inject('ieHackService') private ieHackService: any
+  ) { }
 
   public centerColumnsWidth(): string {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
   }
 
   public columnWidth(): string {
-    return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
+    return this.showOpportunities ? 'col-17-pct' : 'col-20-pct';
+  }
+
+  public checkBrowser(): string {
+    return this.ieHackService.isIE ? 'ie-overflow' : 'non-ie-overflow';
   }
 
   public getSortStatus(columnType: ColumnType): SortStatus {
