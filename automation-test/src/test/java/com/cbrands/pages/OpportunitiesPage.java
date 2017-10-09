@@ -29,6 +29,9 @@ public class OpportunitiesPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//inline-search[@type='distributor']")
   private WebElement distributorFilter;
 
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//md-checkbox[contains(@ng-model,'myAccountsOnly')]")
+  private WebElement accountScopeFilter;
+
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
 
@@ -205,6 +208,10 @@ public class OpportunitiesPage extends TestNGBasePage {
     return isChipPresent(premiseType.name() + "-premise");
   }
 
+  public boolean isAccountScopeChipPresent() {
+      return isChipPresent("My Accounts Only");
+  }
+
   public boolean isQueryChipPresent(String chipTitle) {
     return isChipPresent(chipTitle);
   }
@@ -220,6 +227,10 @@ public class OpportunitiesPage extends TestNGBasePage {
     waitForElementToClickable(chipToBeRemoved, true).click();
 
     return this;
+  }
+
+  public boolean isMyAccountsOnlySelected() {
+    return "true".equalsIgnoreCase(accountScopeFilter.getAttribute("aria-checked"));
   }
 
   public enum PremiseType {

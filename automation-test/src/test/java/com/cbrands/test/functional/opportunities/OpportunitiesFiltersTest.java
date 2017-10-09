@@ -136,6 +136,23 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     );
   }
 
+  @Test(description = "Account Scope filter default value by user role", dataProvider = "accountScopeDefaultData")
+  public void defaultAccountScopeFilterValue(TestUser user, boolean shouldBeSelected) {
+    loginToOpportunitiesPage(user);
+
+    Assert.assertEquals(
+      opportunitiesPage.isMyAccountsOnlySelected(),
+      shouldBeSelected,
+      "Default value failed to match expected default for a user in a " + user.role() + " role."
+    );
+
+    Assert.assertEquals(
+      opportunitiesPage.isAccountScopeChipPresent(),
+      shouldBeSelected,
+      "Account Scope filter chip is not shown as expected."
+    );
+  }
+
   @DataProvider
   public static Object[][] chainRetailersData() {
     return new Object[][]{
@@ -156,6 +173,14 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   public static Object[][] distributorsData() {
     return new Object[][]{
       {TestUser.ACTOR4, "Chicago Bev"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] accountScopeDefaultData() {
+    return new Object[][]{
+      {TestUser.CORPORATE_ACTOR, false},
+      {TestUser.ACTOR4, true}
     };
   }
 }
