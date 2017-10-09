@@ -179,6 +179,11 @@ public class OpportunitiesPage extends TestNGBasePage {
     return searchFilter.findElement(By.xpath(".//div[@class='results-container open']"));
   }
 
+  public OpportunitiesPage clickAccountScopeCheckbox() {
+    waitForElementToClickable(accountScopeFilter, true).click();
+    return this;
+  }
+
   public OpportunitiesPage clickApplyFiltersButton() {
     waitForElementToClickable(applyFiltersButton, true);
     waitForVisibleFluentWait(applyFiltersButton).click();

@@ -153,6 +153,25 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     );
   }
 
+  @Test(description = "Account Scope filter", dataProvider = "accountScopeFilterData")
+  public void filterByAccountScope(TestUser user) {
+    loginToOpportunitiesPage(user);
+
+    opportunitiesPage.clickAccountScopeCheckbox();
+    Assert.assertFalse(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter did not deselect.");
+    Assert.assertFalse(
+      opportunitiesPage.isAccountScopeChipPresent(),
+      "Account Scope filter chip did not hide when filter was deselected."
+    );
+
+    opportunitiesPage.clickAccountScopeCheckbox();
+    Assert.assertTrue(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter did not select.");
+    Assert.assertTrue(
+      opportunitiesPage.isAccountScopeChipPresent(),
+      "Account Scope filter chip did not appear when filter was selected."
+    );
+  }
+
   @DataProvider
   public static Object[][] chainRetailersData() {
     return new Object[][]{
@@ -181,6 +200,13 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     return new Object[][]{
       {TestUser.CORPORATE_ACTOR, false},
       {TestUser.ACTOR4, true}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] accountScopeFilterData() {
+    return new Object[][]{
+      {TestUser.ACTOR4},
     };
   }
 }
