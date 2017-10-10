@@ -55,7 +55,7 @@ export class MyPerformanceTableComponent {
   }
 
   public getTableHeight(): string {
-    return this.totalRow ? 'left-table-height' : 'right-table-height';
+    return this.totalRow ? 'total-row-present' : 'total-row-absent';
   }
 
   public columnWidth(): string {
