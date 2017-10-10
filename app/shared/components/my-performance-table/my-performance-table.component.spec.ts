@@ -24,11 +24,16 @@ class MockMyPerformanceTableRowComponent {
 
 describe('MyPerformanceTableComponent', () => {
 
+  let ieHackServiceMock: any;
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
   let componentInstance: MyPerformanceTableComponent;
   let tableHeaderRow: Array<string> = ['column1', 'column2', 'column3'];
 
   beforeEach(() => {
+    ieHackServiceMock = {
+      IE: true,
+      EDGE: true,
+    };
     TestBed.configureTestingModule({
       declarations: [
         MyPerformanceTableComponent,
@@ -36,7 +41,11 @@ describe('MyPerformanceTableComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
-        UtilService
+        UtilService,
+        {
+          provide: 'ieHackService',
+          useValue: ieHackServiceMock
+        }
       ]
     });
 
