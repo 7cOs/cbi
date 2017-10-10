@@ -29,6 +29,30 @@ describe('My Performance Reducer', () => {
   });
 
   it('should call the responsibilities reducer when a responsibility action is received', () => {
+    const mockPositionId = chance.string();
+    const mockEntityTypeCode = chance.string();
+    const mockStateWithEntitiesWithPerformance = Object.assign({}, initialState, {
+      current: {
+        responsibilities: {
+          entityWithPerformance: [
+            {
+              entityTypeCode: mockEntityTypeCode,
+              positionId: chance.string()
+            },
+            {
+              entityTypeCode: chance.string(),
+              positionId: mockPositionId
+            },
+            {
+              entityTypeCode: chance.string(),
+              positionId: chance.string()
+            }
+          ]
+        }
+      },
+      versions: initialState.versions
+    });
+
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
       positionId: chance.string(),
       filter: null
@@ -38,10 +62,18 @@ describe('My Performance Reducer', () => {
       groupedEntities: {},
       entityWithPerformance: []
     }));
+    myPerformanceReducer(
+      mockStateWithEntitiesWithPerformance,
+      new ResponsibilitiesActions.SetTotalPerformance(mockPositionId)
+    );
+    myPerformanceReducer(
+      mockStateWithEntitiesWithPerformance,
+      new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(mockEntityTypeCode)
+    );
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailure(new Error()));
 
     expect(responsibilitiesReducerSpy).toHaveBeenCalled();
-    expect(responsibilitiesReducerSpy.calls.count()).toBe(3);
+    expect(responsibilitiesReducerSpy.calls.count()).toBe(5);
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
   });
 
