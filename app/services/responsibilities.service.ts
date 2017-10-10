@@ -269,8 +269,8 @@ export class ResponsibilitiesService {
           const geographyEntityTypeName: string = EntityPeopleType.GEOGRAPHY;
           const hierarchyGroups: Array<HierarchyGroup> = [{
             name: geographyEntityTypeName,
-            type: responsibilitiesData.positionId,
-            entityType: EntityType.ResponsibilitiesGroup
+            type: response.positions[0].type,
+            entityType: EntityType.RoleGroup
           }].concat(responsibilitiesData.hierarchyGroups);
           const transformedPositions: HierarchyEntity[] =
             this.responsibilitiesTransformerService.transformHierarchyEntityDTOCollection(response.positions);

@@ -1109,8 +1109,8 @@ describe('Responsibilities Effects', () => {
         const expectedGeographyGroupName: string = EntityPeopleType.GEOGRAPHY;
         const expectedHierarchyGroups = [{
           name: expectedGeographyGroupName,
-          type: responsibilitiesDataMock.positionId,
-          entityType: EntityType.ResponsibilitiesGroup
+          type: peopleResponsibilitiesDTOMock.positions[0].type,
+          entityType: EntityType.RoleGroup
         }].concat(responsibilitiesDataMock.hierarchyGroups);
         const expectedResponsibilities = Object.assign({}, responsibilitiesDataMock, {
           groupedEntities: expectedGroupedEntities,
