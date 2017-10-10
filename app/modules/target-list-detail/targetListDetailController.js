@@ -125,7 +125,7 @@ module.exports = /*  @ngInject */
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
         vm.confirmToast = true;
         removeFooterToast();
-        sendGoogleAnalytics('delete');
+        sendGoogleAnalytics('Delete');
 
         $timeout(function() {
           vm.confirmToast = false;
@@ -257,7 +257,7 @@ module.exports = /*  @ngInject */
           }
 
           vm.removeFooterToast();
-          vm.sendGoogleAnalytics('archive');
+          vm.sendGoogleAnalytics('Archive');
           vm.closeModal();
         });
       } else {
@@ -267,7 +267,7 @@ module.exports = /*  @ngInject */
         }
 
         vm.removeFooterToast();
-        vm.sendGoogleAnalytics('archive');
+        vm.sendGoogleAnalytics('Archive');
         vm.closeModal();
       }
     }
@@ -308,7 +308,7 @@ module.exports = /*  @ngInject */
 
     function sendGoogleAnalytics(event) {
       analyticsService.trackEvent(
-        'Target List',
+        'Target Lists - My Target Lists',
         event.charAt(0).toUpperCase() + event.slice(1) + ' Target List',
         vm.listID
       );

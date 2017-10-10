@@ -905,25 +905,25 @@ describe('Unit: targetListDetailController', function() {
           expect(ctrl.closeModal.calls.count()).toEqual(1);
         });
 
-        it('check if targetlist archive is recorded', function() {
-          ctrl.updateList('archive');
+        it('check if targetlist archive is recorded', () => {
+          ctrl.updateList('Archive');
           deferred.resolve();
           scope.$digest();
           expect(ctrl.sendGoogleAnalytics).toHaveBeenCalled();
         });
       });
 
-      describe('should record targelist GA event', function() {
+      describe('should record targelist GA event', () => {
         beforeEach(function () {
           spyOn(analyticsService, 'trackEvent');
         });
 
-        it('check if targetlist archive is recorded', function() {
+        it('check if targetlist archive is recorded', () => {
           ctrl.listID = '111';
 
-          ctrl.sendGoogleAnalytics('archive');
+          ctrl.sendGoogleAnalytics('Archive');
           expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-            'Target List',
+            'Target Lists - My Target Lists',
             'Archive Target List',
             '111'
           );
