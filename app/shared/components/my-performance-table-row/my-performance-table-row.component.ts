@@ -34,10 +34,6 @@ export class MyPerformanceTableRowComponent {
     return this.showOpportunities ? (this.ieHackService.isIE ? 'col-17-pct' : 'col-16-pct') : 'col-20-pct';
   }
 
-  public checkBrowser(): string {
-    return this.ieHackService.isIE ? 'ie-overflow' : 'non-ie-overflow';
-  }
-
   public getHeaderLeftClasses(): CssClasses {
     return {
       [this.columnWidth()]: true,

@@ -38,7 +38,7 @@ div.performance-table-wrapper
                               [showOpportunities]="showOpportunities",
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")
 
-    tbody([ngClass]="checkBrowser()")
+    tbody
       tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let i = index",
                                 [ngClass]="{'performance-error': rowData.performanceError}",
                                 my-performance-table-row,
