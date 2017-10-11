@@ -55,8 +55,8 @@ export class MyPerformanceService {
       accountDashboardStateParams.distributorid = row.metadata.positionId;
       accountDashboardStateParams.premisetype = PremiseTypeValue[filter.premiseType];
     } else if (row.metadata.entityType === EntityType.SubAccount) {
-      accountDashboardStateParams.accountid = row.metadata.contextPositionId;
       accountDashboardStateParams.subaccountid = row.metadata.positionId;
+      accountDashboardStateParams.subaccountname = row.descriptionRow0;
     }
 
     switch (filter.metricType) {

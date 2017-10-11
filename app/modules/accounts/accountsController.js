@@ -666,7 +666,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     }
 
     function setFilter(result, filterModelProperty) {
-      console.log(result, filterModelProperty);
       // click through result.type is undefined, but on search you need result.type
       var switchStr = filterModelProperty;
       if (result.type) switchStr = result.type;
@@ -1016,7 +1015,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
       if (isNavigatedFromScorecard) {
         setDataForNavigationFromScorecard();
-      } else {
+      } else if (!isNavigatedFromMyPerformanceSubaccountRow) {
         getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
@@ -1086,26 +1085,18 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     }
 
     function setDataForNavigationFromMyPerformanceSubaccountRow() {
-      setFilter({ids: [$state.params.subaccountid], name: 'Las Islas Marias', type: 'subAccounts', premiseType: 'ON PREMISE'}, 'account');
+      setFilter({ids: [$state.params.subaccountid], name: $state.params.subaccountname, type: 'subAccounts'}, 'account');
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      var subaccountData = {id: $state.params.subaccountid};
+      vm.currentTopBottomFilters.subAccounts = subaccountData;
 
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
       vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
-
-      // Filter top bottom
-      // Filter top bottom
-      // Filter top bottom
-      var previousTopBottomAcctType = vm.currentTopBottomAcctType;
-
-      // change tab index
-      if (vm.currentTopBottomFilters.subAccounts && vm.currentTopBottomFilters.subAccounts.id) {
-        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
-      }
-
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-      // update data
-      updateBrandSnapshot(true);
-      vm.getDataForTopBottomLevel(vm.currentTopBottomObj);
+      vm.showXChain = true;
+      filterTopBottom();
+      vm.selectedStore = $state.params.subaccountname;
     }
 
     function setNotes() {
