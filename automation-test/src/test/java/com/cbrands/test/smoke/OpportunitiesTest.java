@@ -41,8 +41,8 @@ public class OpportunitiesTest extends BaseTestCase {
   public void searchOpportunities() {
     opportunitiesPage
       .enterChainRetailerSearchText("Walgreens")
-      .clickSearchForRetailer()
-      .clickFirstRetailerResult()
+      .clickSearchForChainRetailer()
+      .clickFirstChainRetailerResult()
       .clickApplyFiltersButton()
       .waitForLoaderToDisappear();
 

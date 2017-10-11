@@ -1068,6 +1068,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     function setDataForNavigationFromMyPerformanceDistributorRow() {
       setFilter({id: $state.params.distributorid, name: $state.params.distributorname, type: 'distributor'}, 'distributor');
       filtersService.model.distributor = $state.params.distributorname;
+      vm.showXDistributor = true;
 
       if ($state.params.premisetype === 'On') {
         vm.premiseTypeValue = 'on';

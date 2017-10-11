@@ -29,7 +29,7 @@ module.exports = /*  @ngInject */
     vm.onKeypress = onKeypress;
     vm.userDataFormat = userDataFormat;
     vm.inputFocused = inputFocused;
-    vm.showX = false;
+    vm.showX = vm.showX || false;
 
     $scope.$watch(function() { return searchService.model.searchActive; }, function(newVal) {
       if (!newVal) {
