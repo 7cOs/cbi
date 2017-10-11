@@ -15,7 +15,7 @@ describe('My Performance Reducer', () => {
 
   beforeEach(() => {
     myPerformanceVersionReducerSpy = spyOn(myPerformanceVersion, 'myPerformanceVersionReducer').and.callThrough();
-    responsibilitiesReducerSpy = spyOn(responsibilities, 'responsibilitiesReducer').and.callThrough();
+    responsibilitiesReducerSpy = spyOn(responsibilities, 'responsibilitiesReducer').and.callFake(() => {});
   });
 
   it('should call the versioning reducer when a versioning action is received', () => {
@@ -29,30 +29,6 @@ describe('My Performance Reducer', () => {
   });
 
   it('should call the responsibilities reducer when a responsibility action is received', () => {
-    const mockPositionId = chance.string();
-    const mockEntityTypeCode = chance.string();
-    const mockStateWithEntitiesWithPerformance = Object.assign({}, initialState, {
-      current: {
-        responsibilities: {
-          entityWithPerformance: [
-            {
-              entityTypeCode: mockEntityTypeCode,
-              positionId: chance.string()
-            },
-            {
-              entityTypeCode: chance.string(),
-              positionId: mockPositionId
-            },
-            {
-              entityTypeCode: chance.string(),
-              positionId: chance.string()
-            }
-          ]
-        }
-      },
-      versions: initialState.versions
-    });
-
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
       positionId: chance.string(),
       filter: null
@@ -63,12 +39,12 @@ describe('My Performance Reducer', () => {
       entityWithPerformance: []
     }));
     myPerformanceReducer(
-      mockStateWithEntitiesWithPerformance,
-      new ResponsibilitiesActions.SetTotalPerformance(mockPositionId)
+      initialState,
+      new ResponsibilitiesActions.SetTotalPerformance(chance.string())
     );
     myPerformanceReducer(
-      mockStateWithEntitiesWithPerformance,
-      new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(mockEntityTypeCode)
+      initialState,
+      new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(chance.string())
     );
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailure(new Error()));
 
