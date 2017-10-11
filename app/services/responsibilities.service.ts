@@ -70,7 +70,6 @@ export class ResponsibilitiesService {
 
         if (response.positions) {
           viewType = ViewType.roleGroups;
-
           groupedEntities = this.responsibilitiesTransformerService.groupPeopleByGroupedEntities(response.positions);
           hierarchyGroups = Object.keys(groupedEntities).map((roleGroup: string) => {
             return {

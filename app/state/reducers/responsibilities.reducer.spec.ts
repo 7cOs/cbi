@@ -64,7 +64,7 @@ describe('Responsibilities Reducer', () => {
 
   it('should update responsibilities with the selected role group\'s positions', () => {
     const groupedEntitiesMock = getGroupedEntitiesMock();
-    const payload = getEntityPeopleResponsibilitiesMock().peopleType;
+    const payload = EntityPeopleType['Market Development Manager'];
 
     const stateWithGroupedEntities = {
       status: initialState.status,
