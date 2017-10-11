@@ -6,6 +6,7 @@ import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 
 @Injectable()
 export class MyPerformanceService {
@@ -47,11 +48,16 @@ export class MyPerformanceService {
   }
 
   public accountDashboardStateParameters(filter: MyPerformanceFilterState, row: MyPerformanceTableRow): AccountDashboardStateParameters {
-    let accountDashboardStateParams: AccountDashboardStateParameters = {
-      myaccountsonly: true,
-      distributorid: row.metadata.positionId,
-      distributorname: row.descriptionRow0,
-      premisetype: PremiseTypeValue[filter.premiseType]};
+    let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: true};
+
+    if (row.metadata.entityType === EntityType.Distributor) {
+      accountDashboardStateParams.distributorname = row.descriptionRow0;
+      accountDashboardStateParams.distributorid = row.metadata.positionId;
+      accountDashboardStateParams.premisetype = PremiseTypeValue[filter.premiseType];
+    } else if (row.metadata.entityType === EntityType.SubAccount) {
+      accountDashboardStateParams.accountid = row.metadata.contextPositionId;
+      accountDashboardStateParams.subaccountid = row.metadata.positionId;
+    }
 
     switch (filter.metricType) {
       case MetricTypeValue.volume:

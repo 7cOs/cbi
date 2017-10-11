@@ -666,6 +666,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     }
 
     function setFilter(result, filterModelProperty) {
+      console.log(result, filterModelProperty);
       // click through result.type is undefined, but on search you need result.type
       var switchStr = filterModelProperty;
       if (result.type) switchStr = result.type;
@@ -986,7 +987,8 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
-      const isNavigatedFromMyPerformance = $state.params.distributorid;
+      const isNavigatedFromMyPerformanceDistributorRow = $state.params.distributorid;
+      const isNavigatedFromMyPerformanceSubaccountRow = $state.params.subaccountid;
       const isSettingNotes = $state.params.openNotesOnLoad;
 
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
@@ -1004,8 +1006,12 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         setNotes();
       }
 
-      if (isNavigatedFromMyPerformance) {
-        setDataForNavigationFromMyPerformance();
+      if (isNavigatedFromMyPerformanceDistributorRow) {
+        setDataForNavigationFromMyPerformanceDistributorRow();
+      }
+
+      if (isNavigatedFromMyPerformanceSubaccountRow) {
+        setDataForNavigationFromMyPerformanceSubaccountRow();
       }
 
       if (isNavigatedFromScorecard) {
@@ -1060,8 +1066,9 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
     }
 
-    function setDataForNavigationFromMyPerformance() {
+    function setDataForNavigationFromMyPerformanceDistributorRow() {
       setFilter({id: $state.params.distributorid, name: $state.params.distributorname, type: 'distributor'}, 'distributor');
+      filtersService.model.distributor = $state.params.distributorname;
 
       if ($state.params.premisetype === 'On') {
         vm.premiseTypeValue = 'on';
@@ -1076,6 +1083,29 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
       vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
       filterTopBottom();
+    }
+
+    function setDataForNavigationFromMyPerformanceSubaccountRow() {
+      setFilter({ids: [$state.params.subaccountid], name: 'Las Islas Marias', type: 'subAccounts', premiseType: 'ON PREMISE'}, 'account');
+
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
+      vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
+
+      // Filter top bottom
+      // Filter top bottom
+      // Filter top bottom
+      var previousTopBottomAcctType = vm.currentTopBottomAcctType;
+
+      // change tab index
+      if (vm.currentTopBottomFilters.subAccounts && vm.currentTopBottomFilters.subAccounts.id) {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+      }
+
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      // update data
+      updateBrandSnapshot(true);
+      vm.getDataForTopBottomLevel(vm.currentTopBottomObj);
     }
 
     function setNotes() {
@@ -1691,7 +1721,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         setFilter(vm.currentTopBottomFilters.distributors, 'distributor');
       }
       if (vm.currentTopBottomFilters.stores) {
-        setFilter(vm.currentTopBottomFilters.stores, 'store');
+        // setFilter(vm.currentTopBottomFilters.stores, 'store');
       } else if (vm.currentTopBottomFilters.subAccounts) {
         setFilter(vm.currentTopBottomFilters.subAccounts, 'subaccount');
       } else if (vm.currentTopBottomFilters.accounts) {

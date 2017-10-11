@@ -1,6 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
 import { MyPerformanceService } from './my-performance.service';
@@ -141,6 +142,7 @@ describe('Service: MyPerformanceService', () => {
 
     it('should return the correct option when metric type is depletions', () => {
       filterMock.metricType = MetricTypeValue.volume;
+      rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
         depletiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
@@ -153,6 +155,7 @@ describe('Service: MyPerformanceService', () => {
 
     it('should return the correct option when metric type is distribution', () => {
       filterMock.metricType = MetricTypeValue.PointsOfDistribution;
+      rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
         depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
@@ -165,6 +168,7 @@ describe('Service: MyPerformanceService', () => {
 
     it('should return the correct option when metric type is velocity', () => {
       filterMock.metricType = MetricTypeValue.velocity;
+      rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
         depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],

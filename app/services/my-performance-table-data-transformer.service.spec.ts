@@ -60,7 +60,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         performanceError: false
       };
 
-      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor) {
+      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor ||
+        responsibilityEntitiesPerformanceMock[0].entityType === EntityType.SubAccount) {
         expectedRow.descriptionRow1 = 'GO TO DASHBOARD';
       }
 
@@ -91,7 +92,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         performanceError: true
       };
 
-      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor) {
+      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor ||
+        responsibilityEntitiesPerformanceMock[0].entityType === EntityType.SubAccount) {
         expectedRow.descriptionRow1 = 'GO TO DASHBOARD';
       }
 
@@ -110,7 +112,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       for (let i = 0; i < tableData.length; i++) {
         expect(tableData[i]).toEqual({
           descriptionRow0: 'Open Position',
-          descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.Distributor
+          descriptionRow1: ( responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.Distributor ||
+            responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.SubAccount )
             ? 'GO TO DASHBOARD'
             : responsibilityEntitiesPerformanceOpenPositionMock[i].positionDescription,
           metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.total,
