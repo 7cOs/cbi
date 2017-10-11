@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { MyPerformanceApiService } from '../../services/my-performance-api.service';
+import { ProductMetricsApiService } from '../../services/product-metrics-api.service';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricsDTO } from '../../models/entity-product-metrics-dto.model';
@@ -16,7 +16,7 @@ import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 export class ProductMetricsEffects {
 
   constructor(private actions$: Actions,
-              private myPerformanceApiService: MyPerformanceApiService,
+              private productMetricsApiService: ProductMetricsApiService,
               private productMetricsTransformerService: ProductMetricsTransformerService) {
   }
 
@@ -29,15 +29,15 @@ export class ProductMetricsEffects {
 
         let dtos: Observable<ProductMetricsDTO>;
         if (action.payload.selectedEntityType === SelectedEntityType.Position) {
-          dtos = this.myPerformanceApiService.getPositionProductMetrics(
+          dtos = this.productMetricsApiService.getPositionProductMetrics(
             payload.positionId, payload.filter, ProductMetricsAggregationType.brand
           );
         } else if (action.payload.selectedEntityType === SelectedEntityType.Account) {
-          dtos = this.myPerformanceApiService.getAccountProductMetrics(
+          dtos = this.productMetricsApiService.getAccountProductMetrics(
             payload.positionId, payload.contextPositionId, payload.filter, ProductMetricsAggregationType.brand
           );
         } else if (action.payload.selectedEntityType === SelectedEntityType.RoleGroup) {
-          dtos = this.myPerformanceApiService.getRoleGroupProductMetrics(
+          dtos = this.productMetricsApiService.getRoleGroupProductMetrics(
             payload.positionId, payload.entityTypeCode, payload.filter, ProductMetricsAggregationType.brand
           );
         }

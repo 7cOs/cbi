@@ -9,6 +9,7 @@ import { MyPerformanceTableRowComponent } from '../../shared/components/my-perfo
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
+import { ProductMetricsApiService } from '../../services/product-metrics-api.service';
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { ProductMetricsTransformerService } from  '../../services/product-metrics-transformer.service';
 import { ResponsibilitiesTransformerService } from  '../../services/responsibilities-transformer.service';
@@ -35,6 +36,7 @@ import { WindowService } from '../../services/window.service';
     MyPerformanceTableDataTransformerService,
     MyPerformanceService,
     PerformanceTransformerService,
+    ProductMetricsApiService,
     ProductMetricsTransformerService,
     ResponsibilitiesService,
     ResponsibilitiesTransformerService,
