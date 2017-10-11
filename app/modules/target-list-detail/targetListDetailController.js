@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -57,6 +57,7 @@ module.exports = /*  @ngInject */
     vm.removeCollaboratorClick = removeCollaboratorClick;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
+    vm.sendGoogleAnalytics = sendGoogleAnalytics;
 
     init();
 
@@ -124,6 +125,7 @@ module.exports = /*  @ngInject */
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
         vm.confirmToast = true;
         removeFooterToast();
+        sendGoogleAnalytics('Delete');
 
         $timeout(function() {
           vm.confirmToast = false;
@@ -255,6 +257,7 @@ module.exports = /*  @ngInject */
           }
 
           vm.removeFooterToast();
+          vm.sendGoogleAnalytics('Archive');
           vm.closeModal();
         });
       } else {
@@ -264,23 +267,9 @@ module.exports = /*  @ngInject */
         }
 
         vm.removeFooterToast();
+        vm.sendGoogleAnalytics('Archive');
         vm.closeModal();
       }
-    }
-
-    function handleListResponse(targetList) {
-      targetListService.model.currentList = targetList;
-
-      if (targetList.permissionLevel === 'author') {
-        vm.targetListAuthor = 'current user';
-      } else if (targetList.permissionLevel === null) {
-        vm.modalUnauthorizedAccess();
-      } else {
-        vm.targetListAuthor = findTargetListAuthor(targetList.collaborators);
-      }
-
-      // Binding to rootscope to use on the outer shell
-      $rootScope.isGrayedOut = targetList.archived;
     }
 
     function initTargetLists() {
@@ -315,6 +304,14 @@ module.exports = /*  @ngInject */
         $mdDialog.hide();
         vm.navigateToTL();
       }, 3500);
+    }
+
+    function sendGoogleAnalytics(event) {
+      analyticsService.trackEvent(
+        'Target Lists - My Target Lists',
+        event + ' Target List',
+        vm.listID
+      );
     }
 
     // **************
@@ -358,6 +355,21 @@ module.exports = /*  @ngInject */
 
       // disable my accounts only for pass-through to accounts dashboard
       chipsService.removeFromFilterService({type: 'myAccountsOnly'});
+    }
+
+    function handleListResponse(targetList) {
+      targetListService.model.currentList = targetList;
+
+      if (targetList.permissionLevel === 'author') {
+        vm.targetListAuthor = 'current user';
+      } else if (targetList.permissionLevel === null) {
+        vm.modalUnauthorizedAccess();
+      } else {
+        vm.targetListAuthor = findTargetListAuthor(targetList.collaborators);
+      }
+
+      // Binding to rootscope to use on the outer shell
+      $rootScope.isGrayedOut = targetList.archived;
     }
 
     function addCollaborators() {
