@@ -54,8 +54,8 @@ export class MyPerformanceTableComponent {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
   }
 
-  public getTableHeight(): string {
-    return this.totalRow ? 'total-row-present' : 'total-row-absent';
+  public getTableHeight(totalRow: MyPerformanceTableRow): string {
+    return totalRow ? 'total-row-present' : 'total-row-absent';
   }
 
   public columnWidth(): string {
