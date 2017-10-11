@@ -22,7 +22,7 @@ class MockMyPerformanceTableRowComponent {
   @Input() viewType: ViewType;
 }
 
-describe('MyPerformanceTableComponent', () => {
+fdescribe('MyPerformanceTableComponent', () => {
 
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
   let componentInstance: MyPerformanceTableComponent;
@@ -157,6 +157,23 @@ describe('MyPerformanceTableComponent', () => {
         || !firstSortingCriterion.ascending
           && rowComponent0.rowData[firstColumnType] > rowComponent1.rowData[firstColumnType];
       expect(sortingRespected).toBeTruthy();
+    });
+  });
+
+  describe('getTableHeight', () => {
+
+    it('should set the proper class to set the table height when total row is present', () => {
+      let totalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.totalRow = totalRowMock;
+      fixture.detectChanges();
+
+      const tableClass = componentInstance.getTableHeight();
+      expect(tableClass).toBe('total-row-present');
+    });
+
+    it('should set the proper class to set the table height when total row is absent', () => {
+      const tableClass = componentInstance.getTableHeight();
+      expect(tableClass).toBe('total-row-absent');
     });
   });
 });
