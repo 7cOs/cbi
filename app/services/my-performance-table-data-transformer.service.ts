@@ -42,7 +42,6 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
-    debugger;
     return (productMetrics.brand).map((item: ProductMetricsBrandValue) => {
       return {
         descriptionRow0: item.brandDescription,
