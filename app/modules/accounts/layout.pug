@@ -78,7 +78,7 @@ notes
         md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="a.updateChip(p.name, 'premiseType')" ng-disabled="a.premiseTypeDisabled") {{p.name}}
     div(column='2')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')" removable='true' on-remove="a.removeInlineSearch('selectedDistributor')" show-x='a.showXDistributor')
+      inline-search(type="distributor" placeholder="Name" cache-input="true" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')" removable='true' on-remove="a.removeInlineSearch('selectedDistributor')" show-x='a.showXDistributor')
     div(column='2')
       .tooltip-wrap
         label Store Type
