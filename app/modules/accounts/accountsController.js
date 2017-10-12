@@ -1713,7 +1713,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         setFilter(vm.currentTopBottomFilters.distributors, 'distributor');
       }
       if (vm.currentTopBottomFilters.stores) {
-        // setFilter(vm.currentTopBottomFilters.stores, 'store');
+        setFilter(vm.currentTopBottomFilters.stores, 'store');
       } else if (vm.currentTopBottomFilters.subAccounts) {
         setFilter(vm.currentTopBottomFilters.subAccounts, 'subaccount');
       } else if (vm.currentTopBottomFilters.accounts) {
