@@ -24,6 +24,7 @@ tbody {
   display: block;
   max-height: 600px;
   overflow-y: overlay;
+  text-overflow: ellipsis;
 
   -ms-overflow-style: -ms-autohiding-scrollbar;
   float: left;
@@ -73,7 +74,7 @@ th {
 }
 
 .col-16-pct {
-  width: 16%;
+  width: 16.66669%;
 }
 
 .col-10-pct {
