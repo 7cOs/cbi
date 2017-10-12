@@ -238,6 +238,13 @@ public class OpportunitiesPage extends TestNGBasePage {
     return "true".equalsIgnoreCase(accountScopeFilter.getAttribute("aria-checked"));
   }
 
+  public int getDisplayedOpportunitiesCount() {
+    final String displayText = findElement(By.xpath("//h4[contains(@class,'opportunities-count')]")).getText();
+    final String delimiter = " ";
+    final String displayedCount = displayText.replaceAll(",", "").replaceAll("[^0-9]+", delimiter).split(delimiter)[0];
+    return Integer.parseInt(displayedCount);
+  }
+
   public enum PremiseType {
     On,
     Off

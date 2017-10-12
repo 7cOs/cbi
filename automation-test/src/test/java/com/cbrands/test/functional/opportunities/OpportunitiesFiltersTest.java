@@ -161,9 +161,43 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     );
   }
 
-  @Test(description = "Account Scope filter", dataProvider = "accountScopeFilterData")
-  public void filterByAccountScope(TestUser user) {
+  @Test(description = "Filtering by Account Scope", dataProvider = "accountScopeFilterUserData")
+  public void filterByAccountScope(TestUser user, String distributor, boolean shouldFilter) {
+    loginToOpportunitiesPage(user);
 
+    Assert.assertTrue(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter is not selected by default.");
+
+    final int filteredCount =
+      opportunitiesPage
+        .enterDistributorSearchText(distributor)
+        .clickSearchForDistributor()
+        .clickFirstDistributorResult()
+        .clickApplyFiltersButton()
+        .waitForLoaderToDisappear()
+        .getDisplayedOpportunitiesCount();
+
+    final int unfilteredCount =
+      opportunitiesPage
+        .clickAccountScopeCheckbox()
+        .clickApplyFiltersButton()
+        .waitForLoaderToDisappear()
+        .getDisplayedOpportunitiesCount();
+
+    if (shouldFilter) {
+      Assert.assertTrue(
+        unfilteredCount > filteredCount,
+        "Number of filtered Opportunities not less than the count of unfiltered Opportunities." +
+          "\nFiltered count: " + filteredCount +
+          "\nUnfiltered count: " + unfilteredCount
+      );
+    } else {
+      Assert.assertTrue(
+        unfilteredCount == filteredCount,
+        "Number of filtered Opportunities not equal to the count of unfiltered Opportunities." +
+          "\nFiltered count: " + filteredCount +
+          "\nUnfiltered count: " + unfilteredCount
+      );
+    }
   }
 
   @DataProvider
@@ -194,6 +228,14 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     return new Object[][]{
       {TestUser.ACTOR4},
       {TestUser.CORPORATE_ACTOR}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] accountScopeFilterUserData() {
+    return new Object[][]{
+      {TestUser.ACTOR4, "Chicago Bev", true},
+      {TestUser.CORPORATE_ACTOR, "Chicago Bev", false}
     };
   }
 }
