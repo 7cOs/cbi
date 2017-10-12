@@ -1,35 +1,15 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
+import { Injectable } from '@angular/core';
 
 import { AccountDashboardStateParameters } from '../models/account-dashboard-state-parameters.model';
-import { AppState } from '../state/reducers/root.reducer';
 import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
-import { MyPerformanceEntitiesData } from '../state/reducers/my-performance.reducer';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
-// import { GroupedEntities } from '../models/grouped-entities.model';
 
 @Injectable()
-export class MyPerformanceService implements OnInit, OnDestroy {
-
-  private currentState: MyPerformanceEntitiesData;
-  private myPerformanceCurrentSubscription: Subscription;
-
-  constructor(
-    private store: Store<AppState>,
-  ) {}
-
-  ngOnInit() {
-    this.myPerformanceCurrentSubscription = this.store
-    .select(state => state.myPerformance.current)
-    .subscribe((current: MyPerformanceEntitiesData) => {
-      this.currentState = current;
-    });
-  }
+export class MyPerformanceService {
 
   public getUserDefaultPremiseType(metric: MetricTypeValue, userType: string): PremiseTypeValue {
     let  defaultPremiseType: PremiseTypeValue = PremiseTypeValue.Off;
@@ -67,7 +47,9 @@ export class MyPerformanceService implements OnInit, OnDestroy {
     return defaultPremiseType;
   }
 
-  public accountDashboardStateParameters(filter: MyPerformanceFilterState, row: MyPerformanceTableRow): AccountDashboardStateParameters {
+  public accountDashboardStateParameters(filter: MyPerformanceFilterState,
+                                        row: MyPerformanceTableRow,
+                                        premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
     let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: true};
     debugger;
     if (row.metadata.entityType === EntityType.Distributor) {
@@ -77,8 +59,7 @@ export class MyPerformanceService implements OnInit, OnDestroy {
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       accountDashboardStateParams.subaccountid = row.metadata.positionId;
       accountDashboardStateParams.subaccountname = row.descriptionRow0;
-      // let groupedEntities: GroupedEntities = this.currentState.responsibilities.groupedEntities;
-      // accountDashboardStateParams.premisetype = PremiseTypeValue[groupedE ];
+      accountDashboardStateParams.premisetype = PremiseTypeValue[premiseType];
     }
 
     switch (filter.metricType) {
@@ -98,9 +79,5 @@ export class MyPerformanceService implements OnInit, OnDestroy {
         return {};
     }
     return accountDashboardStateParams;
-  }
-
-  ngOnDestroy() {
-    this.myPerformanceCurrentSubscription.unsubscribe();
   }
 }
