@@ -153,6 +153,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
+    debugger;
     const accountDashboardStateParams: AccountDashboardStateParameters =
       this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);

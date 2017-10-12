@@ -7,6 +7,7 @@ import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entit
 import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { GroupedEntities } from '../models/grouped-entities.model';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 @Injectable()
 export class ResponsibilitiesTransformerService {
@@ -57,7 +58,8 @@ export class ResponsibilitiesTransformerService {
           positionId: subAccount.id,
           name: subAccount.name,
           propertyType: EntityPropertyType.SubAccount,
-          entityType: EntityType.SubAccount
+          entityType: EntityType.SubAccount,
+          premiseType: PremiseTypeValue[subAccount.premiseTypes[0]]
         };
       })
     };

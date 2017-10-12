@@ -1,4 +1,5 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { Store } from '@ngrx/store';
 
 import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
 import { EntityType } from '../enums/entity-responsibilities.enum';
@@ -11,13 +12,21 @@ import { MyPerformanceTableRow } from '../models/my-performance-table-row.model'
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 describe('Service: MyPerformanceService', () => {
+  const mockStore = {
+    select: jasmine.createSpy('select')
+  };
+
   let myPerformanceService: MyPerformanceService;
   let userType: string;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        MyPerformanceService
+        MyPerformanceService,
+        {
+          provide: Store,
+          useValue: mockStore
+        }
       ]
     });
   });
