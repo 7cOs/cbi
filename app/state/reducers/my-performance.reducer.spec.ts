@@ -15,7 +15,7 @@ describe('My Performance Reducer', () => {
 
   beforeEach(() => {
     myPerformanceVersionReducerSpy = spyOn(myPerformanceVersion, 'myPerformanceVersionReducer').and.callThrough();
-    responsibilitiesReducerSpy = spyOn(responsibilities, 'responsibilitiesReducer').and.callThrough();
+    responsibilitiesReducerSpy = spyOn(responsibilities, 'responsibilitiesReducer').and.callFake(() => {});
   });
 
   it('should call the versioning reducer when a versioning action is received', () => {
@@ -38,10 +38,18 @@ describe('My Performance Reducer', () => {
       groupedEntities: {},
       entityWithPerformance: []
     }));
+    myPerformanceReducer(
+      initialState,
+      new ResponsibilitiesActions.SetTotalPerformance(chance.string())
+    );
+    myPerformanceReducer(
+      initialState,
+      new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(chance.string())
+    );
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailure(new Error()));
 
     expect(responsibilitiesReducerSpy).toHaveBeenCalled();
-    expect(responsibilitiesReducerSpy.calls.count()).toBe(3);
+    expect(responsibilitiesReducerSpy.calls.count()).toBe(5);
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
   });
 
