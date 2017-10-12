@@ -41,7 +41,7 @@ describe('ProductMetrics Service', () => {
     entityTypeCodeMock = chance.string();
     productMetricsMock = getProductMetricMock();
     productMetricsDTOMock = {
-      brandValues: [getProductMetricsBrandDTOMock(), getProductMetricsBrandDTOMock()], // TODO: Update
+      brandValues: Array(chance.natural({min: 1, max: 9})).fill('').map(() => getProductMetricsBrandDTOMock()),
       type: chance.string()
     };
     performanceFilterStateMock = getMyPerformanceFilterMock();
