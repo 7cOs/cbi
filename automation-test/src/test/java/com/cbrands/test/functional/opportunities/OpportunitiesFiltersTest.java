@@ -136,9 +136,15 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     );
   }
 
-  @Test(description = "Account Scope filter", dataProvider = "accountScopeFilterData")
-  public void filterByAccountScope(TestUser user) {
+  @Test(description = "Account Scope filter chips", dataProvider = "accountScopeChipUserData")
+  public void accountScopeFilterChips(TestUser user) {
     loginToOpportunitiesPage(user);
+
+    Assert.assertTrue(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter is not selected by default.");
+    Assert.assertTrue(
+      opportunitiesPage.isAccountScopeChipPresent(),
+      "Account Scope filter chip is not present by default."
+    );
 
     opportunitiesPage.clickAccountScopeCheckbox();
     Assert.assertFalse(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter did not deselect.");
@@ -153,6 +159,11 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       opportunitiesPage.isAccountScopeChipPresent(),
       "Account Scope filter chip did not appear when filter was selected."
     );
+  }
+
+  @Test(description = "Account Scope filter", dataProvider = "accountScopeFilterData")
+  public void filterByAccountScope(TestUser user) {
+
   }
 
   @DataProvider
@@ -179,9 +190,10 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   }
 
   @DataProvider
-  public static Object[][] accountScopeFilterData() {
+  public static Object[][] accountScopeChipUserData() {
     return new Object[][]{
       {TestUser.ACTOR4},
+      {TestUser.CORPORATE_ACTOR}
     };
   }
 }
