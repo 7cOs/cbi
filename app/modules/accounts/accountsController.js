@@ -1070,15 +1070,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       filtersService.model.distributor = $state.params.distributorname;
       vm.showXDistributor = true;
 
-      if ($state.params.premisetype === 'On') {
-        vm.premiseTypeValue = 'on';
-        vm.filtersService.model.selected.premiseType = 'on';
-        vm.updateChip('On-Premise', 'premiseType');
-      } else if ($state.params.premisetype === 'Off') {
-        vm.premiseTypeValue = 'off';
-        vm.filtersService.model.selected.premiseType = 'off';
-        vm.updateChip('Off-Premise', 'premiseType');
-      }
+      setPremiseType($state.params.premisetype);
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
       vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
@@ -1092,22 +1084,25 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       var subaccountData = {id: $state.params.subaccountid};
       vm.currentTopBottomFilters.subAccounts = subaccountData;
 
-      if ($state.params.premisetype === 'On') {
-        vm.premiseTypeValue = 'on';
-        vm.filtersService.model.selected.premiseType = 'on';
-        vm.updateChip('On-Premise', 'premiseType');
-      } else if ($state.params.premisetype === 'Off') {
-        vm.premiseTypeValue = 'off';
-        vm.filtersService.model.selected.premiseType = 'off';
-        vm.updateChip('Off-Premise', 'premiseType');
-      }
-
+      setPremiseType($state.params.premisetype);
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
       vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
       vm.showXChain = true;
       filterTopBottom();
       vm.selectedStore = $state.params.subaccountname;
+    }
+
+    function setPremiseType(premiseType) {
+      if (premiseType === 'On') {
+        vm.premiseTypeValue = 'on';
+        vm.filtersService.model.selected.premiseType = 'on';
+        vm.updateChip('On-Premise', 'premiseType');
+      } else if (premiseType === 'Off') {
+        vm.premiseTypeValue = 'off';
+        vm.filtersService.model.selected.premiseType = 'off';
+        vm.updateChip('Off-Premise', 'premiseType');
+      }
     }
 
     function setNotes() {
