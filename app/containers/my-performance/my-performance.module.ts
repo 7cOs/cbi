@@ -10,6 +10,7 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { ProductMetricsApiService } from '../../services/product-metrics-api.service';
+import { ProductMetricsService } from '../../services/product-metrics.service';
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { ProductMetricsTransformerService } from  '../../services/product-metrics-transformer.service';
 import { ResponsibilitiesTransformerService } from  '../../services/responsibilities-transformer.service';
@@ -37,6 +38,7 @@ import { WindowService } from '../../services/window.service';
     MyPerformanceService,
     PerformanceTransformerService,
     ProductMetricsApiService,
+    ProductMetricsService,
     ProductMetricsTransformerService,
     ResponsibilitiesService,
     ResponsibilitiesTransformerService,
