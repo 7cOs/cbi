@@ -1,6 +1,7 @@
 package com.cbrands.test.functional.opportunities;
 
 import com.cbrands.TestUser;
+import com.cbrands.TestUser.UserRole;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.OpportunitiesPage;
@@ -162,7 +163,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   }
 
   @Test(description = "Filtering by Account Scope", dataProvider = "accountScopeFilterUserData")
-  public void filterByAccountScope(TestUser user, String distributor, boolean shouldFilter) {
+  public void filterByAccountScope(TestUser user, String distributor) {
     loginToOpportunitiesPage(user);
 
     Assert.assertTrue(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter is not selected by default.");
@@ -183,7 +184,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
         .waitForLoaderToDisappear()
         .getDisplayedOpportunitiesCount();
 
-    if (shouldFilter) {
+    if (user.role().equals(UserRole.NonCorporate)) {
       Assert.assertTrue(
         unfilteredCount > filteredCount,
         "Number of filtered Opportunities not less than the count of unfiltered Opportunities." +
@@ -234,8 +235,8 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   @DataProvider
   public static Object[][] accountScopeFilterUserData() {
     return new Object[][]{
-      {TestUser.ACTOR4, "Chicago Bev", true},
-      {TestUser.CORPORATE_ACTOR, "Chicago Bev", false}
+      {TestUser.ACTOR4, "Chicago Bev"},
+      {TestUser.CORPORATE_ACTOR, "Chicago Bev"}
     };
   }
 }
