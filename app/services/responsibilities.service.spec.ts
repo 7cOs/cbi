@@ -160,7 +160,7 @@ describe('Responsibilities Effects', () => {
       contextPositionIdMock = chance.string();
       groupedEntitiesMock = getGroupedEntitiesMock();
       accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
-        type: 'Distributor'
+        type: EntityType.Distributor
       })];
       accountsDistributorsMock = {
         [accountsDistributorsDTOMock[0].type]: [{
@@ -177,7 +177,7 @@ describe('Responsibilities Effects', () => {
       entitiesTotalPerformancesDTOMock = getPerformanceDTOMock();
       entityDTOMock = getEntityDTOMock();
       accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
-        type: 'Distributor'
+        type: EntityType.Distributor
       })];
       toastServiceMock.showPerformanceDataErrorToast.calls.reset();
     }));

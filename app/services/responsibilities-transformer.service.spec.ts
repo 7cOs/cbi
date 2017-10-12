@@ -134,7 +134,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       const entitiesDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
 
       entitiesDTOMock.forEach((entityDTO: EntityDTO) => {
-        entityDTO.type = 'Account';
+        entityDTO.type = EntityType.Account;
       });
 
       const transformedAccountEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
@@ -152,7 +152,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       });
 
       entitiesDTOMock.forEach((entityDTO: EntityDTO) => {
-        entityDTO.type = 'Distributor';
+        entityDTO.type = EntityType.Distributor;
       });
 
       const transformedDistributorEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
