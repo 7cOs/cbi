@@ -188,7 +188,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
-              const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
+              const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityDescription];
 
               if (parameters.row.metadata.entityType === EntityType.ResponsibilitiesGroup) {
                 this.store.dispatch(new ConstructRoleGroups({

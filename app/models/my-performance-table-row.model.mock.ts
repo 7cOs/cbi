@@ -21,7 +21,8 @@ export function getMyPerformanceTableRowMock(length: number) {
         positionId: chance.string(),
         contextPositionId: chance.string(),
         entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
-        entityTypeCode: chance.string()
+        entityTypeCode: chance.string(),
+        entityDescription: chance.string()
       }
     });
   }
