@@ -1,7 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntityPeopleResponsibilitiesMock,
@@ -36,7 +36,6 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           description: 'MARKET DEVELOPMENT MANAGER',
           type: '10',
           hierarchyType: 'SALES_HIER',
-          peopleType: EntityPeopleType['MARKET DEVELOPMENT MANAGER'],
           entityType: EntityType.Person
         }, {
           positionId: '456',
@@ -46,7 +45,6 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           description: 'MARKET DEVELOPMENT MANAGER',
           type: '20',
           hierarchyType: 'SALES_HIER',
-          peopleType: EntityPeopleType['MARKET DEVELOPMENT MANAGER'],
           entityType: EntityType.Person
         }],
         'GENERAL MANAGER': [{
@@ -57,7 +55,6 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           description: 'GENERAL MANAGER',
           type: '30',
           hierarchyType: 'SALES_HIER',
-          peopleType: EntityPeopleType['GENERAL MANAGER'],
           entityType: EntityType.Person
         }, {
           positionId: '987',
@@ -67,7 +64,6 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           description: 'GENERAL MANAGER',
           type: '14',
           hierarchyType: 'SALES_HIER',
-          peopleType: EntityPeopleType['GENERAL MANAGER'],
           entityType: EntityType.Person
         }]
       };
@@ -121,13 +117,11 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       expect(groupedSubAccounts[entityTypeMock][0]).toEqual({
         positionId: entitySubAccountDTOMock[0].id,
         name: entitySubAccountDTOMock[0].name,
-        propertyType: EntityPropertyType.SubAccount,
         entityType: EntityType.SubAccount
       });
       expect(groupedSubAccounts[entityTypeMock][1]).toEqual({
         positionId: entitySubAccountDTOMock[1].id,
         name: entitySubAccountDTOMock[1].name,
-        propertyType: EntityPropertyType.SubAccount,
         entityType: EntityType.SubAccount
       });
     });
@@ -140,7 +134,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       const entitiesDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
 
       entitiesDTOMock.forEach((entityDTO: EntityDTO) => {
-        entityDTO.type = EntityPropertyType.Account;
+        entityDTO.type = EntityType.Account;
       });
 
       const transformedAccountEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
@@ -149,18 +143,16 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         [groupNameMock]: [{
           name: entitiesDTOMock[0].name,
           positionId: entitiesDTOMock[0].id,
-          entityType: EntityType.Account,
-          propertyType: entitiesDTOMock[0].type
+          entityType: EntityType.Account
         }, {
           name: entitiesDTOMock[1].name,
           positionId: entitiesDTOMock[1].id,
-          entityType: EntityType.Account,
-          propertyType: entitiesDTOMock[1].type
+          entityType: EntityType.Account
         }]
       });
 
       entitiesDTOMock.forEach((entityDTO: EntityDTO) => {
-        entityDTO.type = EntityPropertyType.Distributor;
+        entityDTO.type = EntityType.Distributor;
       });
 
       const transformedDistributorEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
@@ -169,13 +161,11 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         [groupNameMock]: [{
           name: entitiesDTOMock[0].name,
           positionId: entitiesDTOMock[0].id,
-          entityType: EntityType.Distributor,
-          propertyType: entitiesDTOMock[0].type
+          entityType: EntityType.Distributor
         }, {
           name: entitiesDTOMock[1].name,
           positionId: entitiesDTOMock[1].id,
-          entityType: EntityType.Distributor,
-          propertyType: entitiesDTOMock[1].type
+          entityType: EntityType.Distributor
         }]
       });
     });
@@ -189,22 +179,20 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         positionId: hierarchyEntitiesDTOMock[0].id,
         employeeId: hierarchyEntitiesDTOMock[0].employeeId,
         name: hierarchyEntitiesDTOMock[0].name,
+        description: hierarchyEntitiesDTOMock[0].description,
         positionDescription: '',
         type: hierarchyEntitiesDTOMock[0].type,
         hierarchyType: hierarchyEntitiesDTOMock[0].hierarchyType,
-        description: hierarchyEntitiesDTOMock[0].description,
-        entityType: EntityType.Person,
-        otherType: hierarchyEntitiesDTOMock[0].description
+        entityType: EntityType.Person
       }, {
         positionId: hierarchyEntitiesDTOMock[1].id,
         employeeId: hierarchyEntitiesDTOMock[1].employeeId,
         name: hierarchyEntitiesDTOMock[1].name,
+        description: hierarchyEntitiesDTOMock[1].description,
         positionDescription: '',
         type: hierarchyEntitiesDTOMock[1].type,
         hierarchyType: hierarchyEntitiesDTOMock[1].hierarchyType,
-        description: hierarchyEntitiesDTOMock[1].description,
-        entityType: EntityType.Person,
-        otherType: hierarchyEntitiesDTOMock[1].description
+        entityType: EntityType.Person
       }];
 
       const actualHierarchyEntities: HierarchyEntity[] =

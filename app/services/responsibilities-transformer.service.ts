@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 
 import { EntityDTO } from '../models/entity-dto.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
-import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { GroupedEntities } from '../models/grouped-entities.model';
@@ -42,7 +42,6 @@ export class ResponsibilitiesTransformerService {
       groups[entityType].push({
         name: entity.name,
         positionId: entity.id,
-        propertyType: entity.type,
         entityType: EntityType[entity.type]
       });
 
@@ -56,7 +55,6 @@ export class ResponsibilitiesTransformerService {
         return {
           positionId: subAccount.id,
           name: subAccount.name,
-          propertyType: EntityPropertyType.SubAccount,
           entityType: EntityType.SubAccount
         };
       })
@@ -70,7 +68,7 @@ export class ResponsibilitiesTransformerService {
   }
 
   private transformHierarchyEntityDTO(entity: HierarchyEntityDTO): HierarchyEntity {
-    const transformedEntity: HierarchyEntity = {
+    return {
       positionId: entity.id,
       employeeId: entity.employeeId,
       name: entity.name,
@@ -80,15 +78,5 @@ export class ResponsibilitiesTransformerService {
       description: entity.description,
       entityType: EntityType.Person
     };
-
-    if (entity.description in EntityPeopleType) {
-      transformedEntity.peopleType = EntityPeopleType[entity.description];
-    } else if (entity.description in EntityPropertyType) {
-      transformedEntity.propertyType = EntityPropertyType[entity.description];
-    } else {
-      transformedEntity.otherType = entity.description;
-    }
-
-    return transformedEntity;
   }
 }
