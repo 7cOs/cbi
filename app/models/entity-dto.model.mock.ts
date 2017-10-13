@@ -1,15 +1,15 @@
 import * as Chance from 'chance';
 
-import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityDTO } from './entity-dto.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 
 const chance = new Chance();
-const entityPropertyTypeValues = Object.keys(EntityPropertyType).map(key => EntityPropertyType[key]);
+const entityTypeValues: Array<EntityType> = [EntityType.Distributor, EntityType.Account, EntityType.SubAccount];
 
 export function getEntityDTOMock(): EntityDTO {
   return {
-    type: entityPropertyTypeValues[chance.integer({min: 0, max: entityPropertyTypeValues.length - 1})],
     id: chance.string(),
-    name: chance.string()
+    name: chance.string(),
+    type: entityTypeValues[chance.integer({min: 0, max: entityTypeValues.length - 1})]
   };
 }
