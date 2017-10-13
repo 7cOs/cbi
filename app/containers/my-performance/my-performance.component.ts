@@ -32,6 +32,7 @@ import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import { WindowService } from '../../services/window.service';
+import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -110,6 +111,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
+        debugger;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
@@ -153,15 +155,21 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
+    debugger;
     let accountDashboardStateParams: AccountDashboardStateParameters;
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, undefined);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
-      const premiseType: PremiseTypeValue = this.currentState.responsibilities.groupedEntities[accountName]
-        .find(groupedEntity => groupedEntity.name === row.descriptionRow0).premiseType;
+      const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
+        .find(groupedEntity => groupedEntity.name === row.descriptionRow0);
+      let premiseType: PremiseTypeValue;
+      if (hierarchyEntity) {
+        premiseType = hierarchyEntity.premiseType;
+      }
       accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, premiseType);
     }
+
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     const currentWindow = this.windowService.nativeWindow();
     currentWindow.open(accountDashboardUrl, '_blank');
