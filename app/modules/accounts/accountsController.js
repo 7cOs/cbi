@@ -999,24 +999,19 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
       if (isNavigatedFromOpps) {
         setDataForNavigationFromOpps();
+      } else if (isNavigatedFromMyPerformanceDistributorRow) {
+        setDataForNavigationFromMyPerformanceDistributorRow();
+      } else if (isNavigatedFromMyPerformanceSubaccountRow) {
+        setDataForNavigationFromMyPerformanceSubaccountRow();
+      } else if (isNavigatedFromScorecard) {
+        setDataForNavigationFromScorecard();
+      }
+      if (!isNavigatedFromMyPerformanceSubaccountRow && !isNavigatedFromScorecard) {
+        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
       if (isSettingNotes) {
         setNotes();
-      }
-
-      if (isNavigatedFromMyPerformanceDistributorRow) {
-        setDataForNavigationFromMyPerformanceDistributorRow();
-      }
-
-      if (isNavigatedFromMyPerformanceSubaccountRow) {
-        setDataForNavigationFromMyPerformanceSubaccountRow();
-      }
-
-      if (isNavigatedFromScorecard) {
-        setDataForNavigationFromScorecard();
-      } else if (!isNavigatedFromMyPerformanceSubaccountRow) {
-        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
       resetStateParameters();
