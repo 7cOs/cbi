@@ -214,7 +214,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public boolean isAccountScopeChipPresent() {
-      return isChipPresent("My Accounts Only");
+    return isChipPresent("My Accounts Only");
   }
 
   public boolean isQueryChipPresent(String chipTitle) {
@@ -223,6 +223,11 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private boolean isChipPresent(String chipTitle) {
     return isElementPresent(By.xpath("//md-chip[contains(., '" + chipTitle + "')]"));
+  }
+
+  public OpportunitiesPage removeAccountScopeChip() {
+    removeChipContaining("My Accounts Only");
+    return this;
   }
 
   public OpportunitiesPage removeChipContaining(String substring) {

@@ -160,17 +160,25 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       opportunitiesPage.isAccountScopeChipPresent(),
       "Account Scope filter chip did not appear when filter was selected."
     );
+
+    opportunitiesPage.removeAccountScopeChip();
+    Assert.assertFalse(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter did not deselect.");
+    Assert.assertFalse(
+      opportunitiesPage.isAccountScopeChipPresent(),
+      "Account Scope filter chip was not removed after clicking on the X."
+    );
   }
 
-  @Test(description = "Filtering by Account Scope", dataProvider = "accountScopeFilterUserData")
-  public void filterByAccountScope(TestUser user, String distributor) {
+  @Test(description = "Filtering by Account Scope with Distributor not belonging to user", dataProvider =
+    "accountScopeCorporateUserData")
+  public void filterByAccountScopeForCorporateUser(TestUser user, String notMyDistributor) {
     loginToOpportunitiesPage(user);
 
     Assert.assertTrue(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter is not selected by default.");
 
     final int filteredCount =
       opportunitiesPage
-        .enterDistributorSearchText(distributor)
+        .enterDistributorSearchText(notMyDistributor)
         .clickSearchForDistributor()
         .clickFirstDistributorResult()
         .clickApplyFiltersButton()
@@ -184,21 +192,40 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
         .waitForLoaderToDisappear()
         .getDisplayedOpportunitiesCount();
 
-    if (user.role().equals(UserRole.NonCorporate)) {
-      Assert.assertTrue(
-        unfilteredCount > filteredCount,
-        "Number of filtered Opportunities not less than the count of unfiltered Opportunities." +
-          "\nFiltered count: " + filteredCount +
-          "\nUnfiltered count: " + unfilteredCount
-      );
-    } else {
-      Assert.assertTrue(
-        unfilteredCount == filteredCount,
-        "Number of filtered Opportunities not equal to the count of unfiltered Opportunities." +
-          "\nFiltered count: " + filteredCount +
-          "\nUnfiltered count: " + unfilteredCount
-      );
-    }
+    Assert.assertTrue(
+      unfilteredCount == filteredCount,
+      "Number of filtered Opportunities not equal to the count of unfiltered Opportunities. " +
+        "Corporate users should not be filtered regardless of selected Account Scope filter value." +
+        "\nFiltered count: " + filteredCount +
+        "\nUnfiltered count: " + unfilteredCount
+    );
+  }
+
+  @Test(description = "Filtering by Account Scope with Distributor", dataProvider = "accountScopeNonCorporateUserData")
+  public void filterByAccountScopeForNonCorporateUser(TestUser user, String myDistributor, String notMyDistributor) {
+    loginToOpportunitiesPage(user);
+
+    Assert.assertTrue(opportunitiesPage.isMyAccountsOnlySelected(), "Account Scope filter is not selected by default.");
+    final int countForMyDistributor = opportunitiesPage
+      .enterDistributorSearchText(myDistributor)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .getDisplayedOpportunitiesCount();
+
+    Assert.assertTrue(countForMyDistributor > 0, "No opportunities present for Distributor belonging to user.");
+
+    final int countForOtherDistributor = opportunitiesPage
+      .removeChipContaining(myDistributor)
+      .enterDistributorSearchText(notMyDistributor)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .getDisplayedOpportunitiesCount();
+
+    Assert.assertTrue(countForOtherDistributor == 0, "Opportunities present for Distributor not belonging to user.");
   }
 
   @DataProvider
@@ -220,7 +247,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   @DataProvider
   public static Object[][] distributorsData() {
     return new Object[][]{
-      {TestUser.ACTOR4, "Chicago Bev"}
+      {TestUser.ACTOR4, "Healy Wholesale"}
     };
   }
 
@@ -233,10 +260,16 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
   }
 
   @DataProvider
-  public static Object[][] accountScopeFilterUserData() {
+  public static Object[][] accountScopeCorporateUserData() {
     return new Object[][]{
-      {TestUser.ACTOR4, "Chicago Bev"},
       {TestUser.CORPORATE_ACTOR, "Chicago Bev"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] accountScopeNonCorporateUserData() {
+    return new Object[][]{
+      {TestUser.ACTOR4, "Healy Wholesale", "Chicago Bev"}
     };
   }
 }
