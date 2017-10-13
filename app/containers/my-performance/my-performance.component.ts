@@ -153,7 +153,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
-    debugger;
     let accountDashboardStateParams: AccountDashboardStateParameters;
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, undefined);
