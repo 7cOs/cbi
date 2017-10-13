@@ -242,6 +242,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             default:
               console.log('clicked on left row:', parameters.row);
         }
+      } else {
+        debugger;
       }
     }
   }

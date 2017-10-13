@@ -4,12 +4,12 @@ import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
-import { getProductMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
-import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
+import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
+import { getProductMetricMock } from '../models/product-metrics.model.mock';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../models/product-metrics.model';
-import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model';
+import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
@@ -156,8 +156,7 @@ describe('ProductMetrics Service', () => {
           ProductMetricsAggregationType.brand
         ]);
         expect(transformProductMetricsSpy.calls.argsFor(0)).toEqual([
-          productMetricsDTOMock,
-          ProductMetricsAggregationType.brand
+          productMetricsDTOMock
         ]);
       });
 
@@ -188,8 +187,7 @@ describe('ProductMetrics Service', () => {
           ProductMetricsAggregationType.brand
         ]);
         expect(transformProductMetricsSpy.calls.argsFor(0)).toEqual([
-          productMetricsDTOMock,
-          ProductMetricsAggregationType.brand
+          productMetricsDTOMock
         ]);
       });
 
@@ -220,8 +218,7 @@ describe('ProductMetrics Service', () => {
           ProductMetricsAggregationType.brand
         ]);
         expect(transformProductMetricsSpy.calls.argsFor(0)).toEqual([
-          productMetricsDTOMock,
-          ProductMetricsAggregationType.brand
+          productMetricsDTOMock
         ]);
       });
     });

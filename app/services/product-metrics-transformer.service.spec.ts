@@ -2,8 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
-import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
+import { productMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { UtilService } from './util.service';
 
 let utilService: UtilService;
@@ -26,7 +25,7 @@ describe('Service: ProductMetricsTransformerService', () => {
     it('should return a collection of formatted ProductMetrics from a collection of ProductMetricsDTOs', () => {
       spyOn(productMetricsTransformerService, 'transformProductMetrics').and.callThrough();
       const expectedProductBrands: ProductMetrics = {
-        brand: [{
+        brandValues: [{
           brandDescription: 'CORONA FAMILIAR',
           current: parseInt((productMetricsBrandDTOMock.brandValues[0].values[0].current).toFixed(), 10),
           yearAgo: utilService.getYearAgoDelta(
@@ -49,7 +48,7 @@ describe('Service: ProductMetricsTransformerService', () => {
         }]
       };
       const transformedProductMetrics =
-        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock, ProductMetricsAggregationType.brand);
+        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock);
       expect(transformedProductMetrics).toEqual(expectedProductBrands);
     });
   });

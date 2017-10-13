@@ -1,7 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
+import { getProductMetricMock } from '../../models/product-metrics.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';

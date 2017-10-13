@@ -9,7 +9,7 @@ import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { ProductMetricsData } from '../services/product-metrics.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
-import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model';
+import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { SelectedEntityType } from '../enums/selected-entity-type.enum';
 
@@ -49,7 +49,7 @@ export class ProductMetricsService {
 
     return dtos.map((productMetricsDTO: ProductMetricsDTO) => {
       return Object.assign({}, productMetricsData, {
-        products: this.productMetricsTransformerService.transformProductMetrics(productMetricsDTO, ProductMetricsAggregationType.brand)
+        products: this.productMetricsTransformerService.transformProductMetrics(productMetricsDTO)
       });
     })
     .catch(() => {

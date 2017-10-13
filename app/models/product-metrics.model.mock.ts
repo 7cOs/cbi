@@ -1,5 +1,4 @@
-import { ProductMetricsDTO, ProductMetricsBrandValueDTO } from './entity-product-metrics-dto.model';
-import { ProductMetrics, ProductMetricsBrandValue } from './product-metrics.model';
+import { ProductMetrics, ProductMetricsDTO, ProductMetricsBrandValue, ProductMetricsBrandValueDTO } from './product-metrics.model';
 
 const chance = new Chance();
 
@@ -81,6 +80,6 @@ export function getProductMetricDTOMock() {
 
 export function getProductMetricMock(): ProductMetrics {
   return {
-    brand: [ getProductMetricsBrandMock() ]
-    };
+    brandValues: [ getProductMetricsBrandMock() ]
+  };
 }

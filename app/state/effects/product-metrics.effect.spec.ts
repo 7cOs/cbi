@@ -4,7 +4,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
+import { getProductMetricMock } from '../../models/product-metrics.model.mock';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
