@@ -5,7 +5,7 @@ import * as Chance from 'chance';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
-import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock, getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
@@ -160,13 +160,12 @@ describe('Responsibilities Effects', () => {
       contextPositionIdMock = chance.string();
       groupedEntitiesMock = getGroupedEntitiesMock();
       accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
-        type: EntityPropertyType.Distributor
+        type: EntityType.Distributor
       })];
       accountsDistributorsMock = {
         [accountsDistributorsDTOMock[0].type]: [{
           name: accountsDistributorsDTOMock[0].name,
           positionId: accountsDistributorsDTOMock[0].id,
-          propertyType: accountsDistributorsDTOMock[0].type,
           entityType: EntityType[accountsDistributorsDTOMock[0].type]
         }]
       };
@@ -178,7 +177,7 @@ describe('Responsibilities Effects', () => {
       entitiesTotalPerformancesDTOMock = getPerformanceDTOMock();
       entityDTOMock = getEntityDTOMock();
       accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
-        type: EntityPropertyType.Distributor
+        type: EntityType.Distributor
       })];
       toastServiceMock.showPerformanceDataErrorToast.calls.reset();
     }));
@@ -531,7 +530,7 @@ describe('Responsibilities Effects', () => {
 
       it('calls groupsAccountsDistributors with the right parameters', (done) => {
         const accountEntityDTOResponseMock: EntityDTO[] = [Object.assign({}, getEntityDTOMock(), {
-          type: EntityPropertyType.Distributor
+          type: EntityType.Distributor
         })];
         const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
 
@@ -955,12 +954,10 @@ describe('Responsibilities Effects', () => {
         [subAccountDataMock.entityTypeAccountName]: [{
           positionId: entitySubAccountDTOMock[0].id,
           name: entitySubAccountDTOMock[0].name,
-          propertyType: EntityPropertyType.SubAccount,
           entityType: EntityType.SubAccount
         }, {
           positionId: entitySubAccountDTOMock[1].id,
           name: entitySubAccountDTOMock[1].name,
-          propertyType: EntityPropertyType.SubAccount,
           entityType: EntityType.SubAccount
         }]
       };
@@ -1109,8 +1106,8 @@ describe('Responsibilities Effects', () => {
         const expectedGeographyGroupName: string = EntityPeopleType.GEOGRAPHY;
         const expectedHierarchyGroups = [{
           name: expectedGeographyGroupName,
-          type: responsibilitiesDataMock.positionId,
-          entityType: EntityType.ResponsibilitiesGroup
+          type: peopleResponsibilitiesDTOMock.positions[0].type,
+          entityType: EntityType.RoleGroup
         }].concat(responsibilitiesDataMock.hierarchyGroups);
         const expectedResponsibilities = Object.assign({}, responsibilitiesDataMock, {
           groupedEntities: expectedGroupedEntities,
