@@ -119,3 +119,27 @@ export function getAccountNotificationMock(): any {
     status: 'SEEN'
   };
 }
+
+export function getDistributorNotificationMock(): any {
+  return {
+    dateCreated: moment(),
+    dateUpdated: moment(),
+    id: chance.string(),
+    objectType: 'DISTRIBUTOR',
+    objectId: chance.string(),
+    action: 'ADDED_NOTE',
+    salesforceUserNoteID: null,
+    creator: {
+      id: chance.string(),
+      firstName: chance.string(),
+      lastName: chance.string(),
+      email: chance.string()
+    },
+    shortenedObject: {
+      id: chance.string(),
+      name: chance.string(),
+      value: chance.bool()
+    },
+    status: 'SEEN'
+  };
+}
