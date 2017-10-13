@@ -530,7 +530,7 @@ describe('Responsibilities Effects', () => {
 
       it('calls groupsAccountsDistributors with the right parameters', (done) => {
         const accountEntityDTOResponseMock: EntityDTO[] = [Object.assign({}, getEntityDTOMock(), {
-          type: 'Distributor'
+          type: EntityType.Distributor
         })];
         const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
 
