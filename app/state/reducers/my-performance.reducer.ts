@@ -51,6 +51,7 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_SUCCESS:
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE:
     case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE:
+    case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP:
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION:
       return {
