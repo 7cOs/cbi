@@ -121,10 +121,10 @@ describe('Responsibilities Effects', () => {
 
   beforeEach(inject([ EffectsRunner, ResponsibilitiesEffects, ResponsibilitiesService ],
     (_runner: EffectsRunner,
-      _compassWebEffects: ResponsibilitiesEffects,
+      _responsibilitiesEffects: ResponsibilitiesEffects,
       _responsibilitiesService: ResponsibilitiesService) => {
       runner = _runner;
-      responsibilitiesEffects = _compassWebEffects;
+      responsibilitiesEffects = _responsibilitiesEffects;
       responsibilitiesService = _responsibilitiesService;
     }
   ));
