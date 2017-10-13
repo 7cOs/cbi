@@ -99,6 +99,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   const versionsSubject: Subject<MyPerformanceEntitiesData[]> = new Subject<MyPerformanceEntitiesData[]>();
+  const currentSubject: Subject<MyPerformanceEntitiesData> = new Subject<MyPerformanceEntitiesData>();
 
   const windowMock = {
     open: jasmine.createSpy('open')
@@ -123,6 +124,8 @@ describe('MyPerformanceComponent', () => {
 
       if (selectedValue === stateMock.myPerformance.versions) {
         return versionsSubject;
+      } else if (selectedValue === stateMock.myPerformance.current) {
+        return currentSubject;
       } else {
         return Observable.of(selectedValue);
       }
@@ -551,13 +554,13 @@ describe('MyPerformanceComponent', () => {
     let rowMock: MyPerformanceTableRow;
     let accountNameMock: string;
     let hierarchyEntity: HierarchyEntity;
-    let versionsMock: MyPerformanceEntitiesData[];
+    let currentMock: MyPerformanceEntitiesData;
 
     beforeEach(() => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
       accountNameMock = chance.string();
       hierarchyEntity = getEntityPropertyResponsibilitiesMock();
-      versionsMock = generateMockVersions(1, 1);
+      currentMock = getMyPerformanceEntitiesDataMock();
     });
     describe('when distributor subline link clicked', () => {
       it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
@@ -579,8 +582,8 @@ describe('MyPerformanceComponent', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
         hierarchyEntity.name = rowMock.descriptionRow0;
         debugger;
-        versionsMock[versionsMock.length - 1].responsibilities.groupedEntities = {accountNameMock: [hierarchyEntity]};
-        versionsSubject.next(versionsMock);
+        currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntity]};
+        currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
                                                                                               rowMock,
