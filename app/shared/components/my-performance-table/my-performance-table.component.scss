@@ -40,6 +40,10 @@ tbody {
   overflow-y: auto;
 }
 
+:host-context(.edge) tbody {
+  overflow-y: auto;
+}
+
 my-performance-table-row {
   width: 100%;
 }
