@@ -2,16 +2,13 @@ import * as Chance from 'chance';
 const chance = new Chance();
 
 import { HierarchyEntity } from './hierarchy-entity.model';
-import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { HierarchyEntityDTO } from './hierarchy-entity.model';
 
-const entityPeopleTypeValues = Object.keys(EntityPeopleType).map(key => EntityPeopleType[key]);
-const entityPropertyTypeValues = Object.keys(EntityPropertyType).map(key => EntityPropertyType[key]);
 const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
 
 export function getEntityPeopleResponsibilitiesMock(): HierarchyEntity {
   return {
-    peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
     positionId: chance.string(),
     employeeId: chance.string(),
     name: chance.string(),
@@ -24,7 +21,6 @@ export function getEntityPeopleResponsibilitiesMock(): HierarchyEntity {
 }
 export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock(): HierarchyEntity {
   return {
-    peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
     positionId: chance.string(),
     employeeId: chance.string(),
     name: chance.string(),
@@ -34,9 +30,9 @@ export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock():
     entityType: entityTypeValues[chance.integer({min: 0, max: entityTypeValues.length - 1})]
   };
 }
+
 export function getEntityPropertyResponsibilitiesMock(): HierarchyEntity {
   return {
-    propertyType: entityPropertyTypeValues[chance.integer({min: 0, max: entityPropertyTypeValues.length - 1})],
     positionId: chance.string(),
     employeeId: chance.string(),
     name: chance.string(),

@@ -8,13 +8,12 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import { ConstructRoleGroups,
-         FetchEntityWithPerformance,
+import { FetchEntityWithPerformance,
          FetchResponsibilities,
          FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
-import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -190,22 +189,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             case ViewType.roleGroups:
               const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
 
-              if (parameters.row.metadata.entityType === EntityType.ResponsibilitiesGroup) {
-                this.store.dispatch(new ConstructRoleGroups({
-                  positionId: parameters.row.metadata.positionId,
-                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-                  filter: this.filterState
-                }));
-              } else {
-                this.store.dispatch(new FetchEntityWithPerformance({
-                  selectedPositionId: parameters.row.metadata.positionId,
-                  entityTypeGroupName: entityTypeGroupName,
-                  entityTypeCode: parameters.row.metadata.entityTypeCode,
-                  entityType: parameters.row.metadata.entityType,
-                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-                  filter: this.filterState
-                }));
-              }
+              this.store.dispatch(new FetchEntityWithPerformance({
+                selectedPositionId: parameters.row.metadata.positionId,
+                entityTypeGroupName: entityTypeGroupName,
+                entityTypeCode: parameters.row.metadata.entityTypeCode,
+                entityType: parameters.row.metadata.entityType,
+                entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                filter: this.filterState
+              }));
               this.store.dispatch(new FetchProductMetricsAction({
                 positionId: parameters.row.metadata.positionId,
                 entityTypeCode: parameters.row.metadata.entityTypeCode,
