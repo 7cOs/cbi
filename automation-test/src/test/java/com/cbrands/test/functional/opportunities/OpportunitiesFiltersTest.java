@@ -169,7 +169,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     );
   }
 
-  @Test(description = "Filtering by Account Scope with Distributor not belonging to user", dataProvider =
+  @Test(description = "Filtering by Account Scope for a Corporate user", dataProvider =
     "accountScopeCorporateUserData")
   public void filterByAccountScopeForCorporateUser(TestUser user, String notMyDistributor) {
     loginToOpportunitiesPage(user);
@@ -201,7 +201,8 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     );
   }
 
-  @Test(description = "Filtering by Account Scope with Distributor", dataProvider = "accountScopeNonCorporateUserData")
+  @Test(description = "Filtering by Account Scope for a Non-Corporate user", dataProvider =
+    "accountScopeNonCorporateUserData")
   public void filterByAccountScopeForNonCorporateUser(TestUser user, String myDistributor, String notMyDistributor) {
     loginToOpportunitiesPage(user);
 
