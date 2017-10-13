@@ -40,10 +40,12 @@ export class MyPerformanceTableComponent {
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() viewType: ViewType;
+  @Input() contributionToVolume: boolean;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
   public rowType = RowType;
+  public ctv: boolean;
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;

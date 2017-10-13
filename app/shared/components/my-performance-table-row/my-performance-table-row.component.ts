@@ -17,6 +17,7 @@ export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
+  @Input() contributionToVolume: boolean;
   @Input() viewType: ViewType;
 
   public sortStatus = SortStatus;

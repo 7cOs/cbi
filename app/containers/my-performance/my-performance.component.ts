@@ -77,7 +77,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
+  private salesHierarchyTotalRight: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
+  private entityType: string;
+  private contributionToVolume: boolean;
 
   constructor(
     private store: Store<AppState>,
@@ -112,15 +115,32 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
+        if (current.responsibilities.entityWithPerformance.length) {
+          this.entityType = current.responsibilities.entityWithPerformance[0].entityType;
+          console.log(this.entityType + 'kk');
+          console.log(current.selectedEntity);
+        }
+
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
             current.responsibilities.entityWithPerformance
           );
         }
 
-        if (current.responsibilities.entityWithPerformance) {
+        if (current.responsibilities.entityWithPerformance && this.leftTotalRow()) {
+          this.contributionToVolume = true;
           this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
+        } else {
+          this.salesHierarchyTotal = null;
+        }
+
+        if (current.responsibilities.entityWithPerformance && this.rightTotalRow()) {
+          this.contributionToVolume = false;
+          this.salesHierarchyTotalRight = this.myPerformanceTableDataTransformerService
+            .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
+        } else {
+          this.salesHierarchyTotalRight = null;
         }
 
     });
@@ -162,6 +182,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleSortRows(criteria: SortingCriteria[]): void {
     this.sortingCriteria = criteria;
+  }
+
+  public leftTotalRow(): boolean {
+    return this.leftTableViewType !== 'roleGroups' || this.entityType === 'Person'
+    || this.entityType === 'Distributor' || this.entityType === 'Account' || this.entityType === 'SubAccount';
+  }
+
+  public rightTotalRow(): boolean {
+    return this.leftTableViewType === 'roleGroups' || this.entityType === 'RoleGroup'
+      || this.entityType === 'DistributorGroup';
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {

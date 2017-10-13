@@ -23,14 +23,17 @@ my-performance-table.left(
   [showOpportunities]="false",
   (onSublineClicked)="handleSublineClicked($event)",
   (onSortingCriteriaChanged)="handleSortRows($event)",
+  [contributionToVolume] = "contributionToVolume",
   (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
 
 my-performance-table.right(
   [tableData]="productPerformance",
   [tableHeaderRow]="tableHeaderRowRight",
+  [totalRow]="salesHierarchyTotalRight",
   [performanceMetric]="'Product Snapshot'",
   [sortingCriteria]="sortingCriteria",
   [showOpportunities]="showOpportunities",
   [viewType]="viewType.brands",
+  [contributionToVolume] = "true",
   (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
   (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})")
