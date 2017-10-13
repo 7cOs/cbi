@@ -113,7 +113,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(tableData[i]).toEqual({
           descriptionRow0: 'Open Position',
           descriptionRow1: ( responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.Distributor ||
-            responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.SubAccount )
+                          responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.SubAccount )
             ? 'GO TO DASHBOARD'
             : responsibilityEntitiesPerformanceOpenPositionMock[i].positionDescription,
           metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.total,
@@ -139,7 +139,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceOpenPositionMock.length);
       expect(tableData[0]).toEqual({
         descriptionRow0: 'Open Position',
-        descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[0].entityType === EntityType.Distributor
+        descriptionRow1: ( responsibilityEntitiesPerformanceOpenPositionMock[0].entityType === EntityType.Distributor ||
+                        responsibilityEntitiesPerformanceOpenPositionMock[0].entityType === EntityType.SubAccount )
           ? 'GO TO DASHBOARD'
           : responsibilityEntitiesPerformanceOpenPositionMock[0].positionDescription,
         metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.total,

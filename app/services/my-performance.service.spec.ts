@@ -11,14 +11,14 @@ import { MyPerformanceTableRow } from '../models/my-performance-table-row.model'
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 describe('Service: MyPerformanceService', () => {
-
   let myPerformanceService: MyPerformanceService;
   let userType: string;
+  const premiseTypeValues = Object.keys(PremiseTypeValue).map(key => PremiseTypeValue[key]);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        MyPerformanceService,
+        MyPerformanceService
       ]
     });
   });
@@ -138,13 +138,13 @@ describe('Service: MyPerformanceService', () => {
 
     it('should return empty object when metrictype not one of other values', () => {
       filterMock.metricType = null;
-      expect(myPerformanceService.accountDashboardStateParameters(filterMock, rowMock)).toEqual({});
+      expect(myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, undefined)).toEqual({});
     });
 
-    it('should return the correct option when metric type is depletions', () => {
+    it('should return the correct option when metric type is depletions and entityType is distributor', () => {
       filterMock.metricType = MetricTypeValue.volume;
       rowMock.metadata.entityType = EntityType.Distributor;
-      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
+      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, undefined);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
         depletiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
         distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
@@ -154,10 +154,10 @@ describe('Service: MyPerformanceService', () => {
       });
     });
 
-    it('should return the correct option when metric type is distribution', () => {
+    it('should return the correct option when metric type is distribution and entityType is distributor', () => {
       filterMock.metricType = MetricTypeValue.PointsOfDistribution;
       rowMock.metadata.entityType = EntityType.Distributor;
-      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
+      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, undefined);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
         depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
         distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
@@ -167,16 +167,31 @@ describe('Service: MyPerformanceService', () => {
       });
     });
 
-    it('should return the correct option when metric type is velocity', () => {
+    it('should return the correct option when metric type is velocity and entityType is distributor', () => {
       filterMock.metricType = MetricTypeValue.velocity;
       rowMock.metadata.entityType = EntityType.Distributor;
-      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock);
+      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, undefined);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
         depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
         distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
         distributorname: rowMock.descriptionRow0,
         premisetype: PremiseTypeValue[filterMock.premiseType]
+      });
+    });
+
+    it('should return the correct option when metric type is depletions and entityType is subAccount', () => {
+      filterMock.metricType = MetricTypeValue.volume;
+      rowMock.metadata.entityType = EntityType.SubAccount;
+      const premiseType = premiseTypeValues[chance.integer({min: 0, max: premiseTypeValues.length - 1})];
+      const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, premiseType);
+
+      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+        depletiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
+        subaccountid: rowMock.metadata.positionId,
+        subaccountname: rowMock.descriptionRow0,
+        premisetype: PremiseTypeValue[premiseType]
       });
     });
   });

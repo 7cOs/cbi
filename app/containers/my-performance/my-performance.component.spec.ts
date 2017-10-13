@@ -547,19 +547,35 @@ describe('MyPerformanceComponent', () => {
 
   describe('when left side data row distributor link clicked', () => {
     let rowMock: MyPerformanceTableRow;
+    let accountNameMock: string;
 
     beforeEach(() => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
+      accountNameMock = chance.string();
     });
 
     it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
+      rowMock.metadata.entityType = EntityType.Distributor;
+      componentInstance.handleSublineClicked(rowMock);
+      expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
+                                                                                          rowMock,
+                                                                                          undefined);
+      expect(stateMock.href).toHaveBeenCalledWith(
+        'accounts',
+        myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock, undefined));
+      expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+      expect(windowMock.open).toHaveBeenCalled();
+    });
+
+    it('should correctly call functions to go to account dashboard when subAccount clicked with correct params', () => {
+      /* rowMock.metadata.entityType = EntityType.SubAccount;
       componentInstance.handleSublineClicked(rowMock);
       expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
       expect(stateMock.href).toHaveBeenCalledWith(
         'accounts',
         myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
       expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
-      expect(windowMock.open).toHaveBeenCalled();
+      expect(windowMock.open).toHaveBeenCalled(); */
     });
   });
 

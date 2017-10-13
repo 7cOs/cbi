@@ -153,11 +153,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
+    debugger;
     let accountDashboardStateParams: AccountDashboardStateParameters;
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, undefined);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
-      const premiseType: PremiseTypeValue = this.currentState.responsibilities.groupedEntities[row.descriptionRow0][0].premiseType;
+      const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
+      const premiseType: PremiseTypeValue = this.currentState.responsibilities.groupedEntities[accountName]
+        .find(groupedEntity => groupedEntity.name === row.descriptionRow0).premiseType;
       accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, premiseType);
     }
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
