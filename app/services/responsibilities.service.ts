@@ -16,9 +16,9 @@ import { MyPerformanceFilterState } from '../state/reducers/my-performance-filte
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { ViewType } from '../enums/view-type.enum';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 export interface HierarchyGroup {
   name: string;

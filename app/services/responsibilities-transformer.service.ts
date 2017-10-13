@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { EntityDTO } from '../models/entity-dto.model';
-import { HierarchyEntity } from '../models/hierarchy-entity.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
-import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { GroupedEntities } from '../models/grouped-entities.model';
+import { HierarchyEntity } from '../models/hierarchy-entity.model';
+import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 @Injectable()

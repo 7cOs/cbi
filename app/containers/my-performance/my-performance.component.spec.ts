@@ -20,6 +20,7 @@ import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.m
 import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
+import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -40,7 +41,6 @@ import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
 import { ViewType } from '../../enums/view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 
 const chance = new Chance();
 
@@ -538,13 +538,13 @@ describe('MyPerformanceComponent', () => {
   describe('when left side data row link clicked', () => {
     let rowMock: MyPerformanceTableRow;
     let accountNameMock: string;
-    let hierarchyEntity: HierarchyEntity;
+    let hierarchyEntityMock: HierarchyEntity;
     let currentMock: MyPerformanceEntitiesData;
 
     beforeEach(() => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
       accountNameMock = chance.string();
-      hierarchyEntity = getEntityPropertyResponsibilitiesMock();
+      hierarchyEntityMock = getEntityPropertyResponsibilitiesMock();
       currentMock = getMyPerformanceEntitiesDataMock();
     });
     describe('when distributor subline link clicked', () => {
@@ -565,13 +565,13 @@ describe('MyPerformanceComponent', () => {
     describe('when subaccount subline link clicked', () => {
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy enity', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
-        hierarchyEntity.name = rowMock.descriptionRow0;
-        currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntity]};
+        hierarchyEntityMock.name = rowMock.descriptionRow0;
+        currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
                                                                                               rowMock,
-                                                                                              hierarchyEntity.premiseType);
+                                                                                              hierarchyEntityMock.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
           myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
@@ -581,8 +581,8 @@ describe('MyPerformanceComponent', () => {
 
       it('should correctly call functions for accountDashboard when subAccount clicked but no matching hierarchy entity', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
-        hierarchyEntity.name = rowMock.descriptionRow0 + chance.character();
-        myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntity];
+        hierarchyEntityMock.name = rowMock.descriptionRow0 + chance.character();
+        myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,

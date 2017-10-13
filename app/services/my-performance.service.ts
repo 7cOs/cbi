@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 
 import { AccountDashboardStateParameters } from '../models/account-dashboard-state-parameters.model';
 import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
 
 @Injectable()
 export class MyPerformanceService {

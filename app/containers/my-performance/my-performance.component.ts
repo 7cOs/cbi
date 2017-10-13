@@ -17,6 +17,7 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -32,7 +33,6 @@ import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
