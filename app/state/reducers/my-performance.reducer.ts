@@ -14,6 +14,7 @@ export interface MyPerformanceEntitiesData {
   responsibilities?: ResponsibilitiesState;
   viewType?: ViewTypeState;
   selectedEntity?: string;
+  selectedBrand?: string;
 }
 
 export interface MyPerformanceState {
@@ -35,16 +36,17 @@ export function myPerformanceReducer(
 ): MyPerformanceState {
   switch (action.type) {
 
-    case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE_ACTION:
-    case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION:
-    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
+    case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE:
+    case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES:
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS:
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE:
-    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
+    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP:
     case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES:
     case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES_SUCCESS:
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE:
@@ -52,8 +54,8 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE:
     case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE:
     case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP:
-    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
-    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS:
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),

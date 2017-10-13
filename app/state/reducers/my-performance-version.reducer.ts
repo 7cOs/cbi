@@ -9,7 +9,7 @@ export function myPerformanceVersionReducer(
 ): MyPerformanceState {
   switch (action.type) {
 
-    case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE_ACTION:
+    case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE:
       const versionsUpdated = [...state.versions];
       versionsUpdated.push(action.payload);
       return {
@@ -17,7 +17,7 @@ export function myPerformanceVersionReducer(
         versions: versionsUpdated
       };
 
-    case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
+    case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE:
       const updatedVersions = [...state.versions];
       const stepsBack: number = action.payload;
       const startIndex: number = updatedVersions.length - stepsBack;
@@ -29,17 +29,29 @@ export function myPerformanceVersionReducer(
           }
         : state;
 
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY:
       return {
         current: {
           responsibilities: state.current.responsibilities,
           viewType: state.current.viewType,
-          selectedEntity: action.payload
+          selectedEntity: action.payload,
+          selectedBrand: state.current.selectedBrand
         },
         versions: state.versions
       };
 
-    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
+      case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
+        return {
+          current: {
+            responsibilities: state.current.responsibilities,
+            viewType: state.current.viewType,
+            selectedEntity: state.current.selectedEntity,
+            selectedBrand: action.payload
+          },
+          versions: state.versions
+        };
+
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return initialState;
 
     default:

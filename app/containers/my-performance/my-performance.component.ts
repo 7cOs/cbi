@@ -51,6 +51,7 @@ export interface HandleElementClickedParameters {
 export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
   public leftTableViewType: ViewType;
+  public rightTableViewType: ViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
@@ -78,6 +79,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
+  private selectedBrand: string;
 
   constructor(
     private store: Store<AppState>,
@@ -111,6 +113,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
+        this.rightTableViewType = current.viewType.rightTableViewType;
+        this.selectedBrand = current.selectedBrand;
+        debugger;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
@@ -244,6 +249,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
       } else {
         debugger;
+        switch (this.leftTableViewType) {
+          case ViewType.brands:
+            this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(
+              parameters.row.metadata.brandCode
+            ));
+            break;
+          default:
+            console.log('clicked on right row:', parameters.row);
+        }
       }
     }
   }

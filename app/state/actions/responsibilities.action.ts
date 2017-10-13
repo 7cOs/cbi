@@ -80,23 +80,23 @@ export class FetchEntityWithPerformanceSuccess implements Action {
   constructor(public payload: FetchEntityWithPerformanceSuccessPayload) { }
 }
 
-export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
+export const GET_PEOPLE_BY_ROLE_GROUP = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP';
 export class GetPeopleByRoleGroupAction implements Action {
-  readonly type = GET_PEOPLE_BY_ROLE_GROUP_ACTION;
+  readonly type = GET_PEOPLE_BY_ROLE_GROUP;
 
   constructor(public payload: EntityPeopleType) { }
 }
 
-export const FETCH_SUBACCOUNTS_ACTION = '[Responsibilities] FETCH_SUBACCOUNTS_ACTION';
+export const FETCH_SUBACCOUNTS = '[Responsibilities] FETCH_SUBACCOUNTS';
 export class FetchSubAccountsAction implements Action {
-  readonly type = FETCH_SUBACCOUNTS_ACTION;
+  readonly type = FETCH_SUBACCOUNTS;
 
   constructor(public payload: FetchSubAccountsActionPayload) { }
 }
 
-export const FETCH_SUBACCOUNTS_SUCCESS_ACTION = '[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS_ACTION';
+export const FETCH_SUBACCOUNTS_SUCCESS = '[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS';
 export class FetchSubAccountsSuccessAction implements Action {
-  readonly type = FETCH_SUBACCOUNTS_SUCCESS_ACTION;
+  readonly type = FETCH_SUBACCOUNTS_SUCCESS;
 
   constructor(public payload: FetchSubAccountsSuccessPayload) { }
 }

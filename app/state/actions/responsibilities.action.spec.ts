@@ -105,8 +105,8 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION).toBe('[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION);
+      expect(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP).toBe('[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP');
+      expect(action.type).toBe(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP);
     });
 
     it('should contain the mock payload', () => {
@@ -275,8 +275,8 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION).toBe('[Responsibilities] FETCH_SUBACCOUNTS_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION);
+      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS).toBe('[Responsibilities] FETCH_SUBACCOUNTS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS);
     });
 
     it('should contain the correct payload', () => {
@@ -296,8 +296,8 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION).toBe('[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION);
+      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS).toBe('[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS);
     });
 
     it('should contain the correct payload', () => {

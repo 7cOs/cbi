@@ -51,7 +51,7 @@ export function responsibilitiesReducer(
         status: ActionStatus.Error
       });
 
-    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
+    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP:
       return Object.assign({}, state, {
         groupedEntities: {
           [action.payload]: state.groupedEntities[action.payload]
@@ -101,12 +101,12 @@ export function responsibilitiesReducer(
         entitiesTotalPerformances: selectedRoleGroup.performance
       });
 
-    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching
       });
 
-    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         groupedEntities: action.payload.groupedEntities,

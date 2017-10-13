@@ -23,7 +23,8 @@ export class ProductMetricsTransformerService {
       collectionMethod: productMetricsDTO.values[0].collectionMethod,
       current: Math.round(productMetricsDTO.values[0].current),
       yearAgo: this.utilService.getYearAgoDelta(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
-      yearAgoPercent: this.utilService.getYearAgoPercent(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo)
+      yearAgoPercent: this.utilService.getYearAgoPercent(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
+      brandCode: productMetricsDTO.brandCode
     };
   }
 }

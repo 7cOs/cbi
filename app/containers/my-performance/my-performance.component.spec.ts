@@ -704,7 +704,7 @@ describe('MyPerformanceComponent', () => {
   describe('onDestroy', () => {
     it('should dispatch ClearMyPerformanceStateAction as its final call dispatch', () => {
       componentInstance.ngOnDestroy();
-      expect(storeMock.dispatch.calls.mostRecent().args[0].type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION);
+      expect(storeMock.dispatch.calls.mostRecent().args[0].type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE);
     });
   });
 });

@@ -68,7 +68,8 @@ export function getProductMetricsBrandMock(): ProductMetricsBrandValue {
     current: chance.natural(),
     yearAgo: chance.natural(),
     collectionMethod: chance.string(),
-    yearAgoPercent: chance.natural()
+    yearAgoPercent: chance.natural(),
+    brandCode: chance.string()
   };
 }
 

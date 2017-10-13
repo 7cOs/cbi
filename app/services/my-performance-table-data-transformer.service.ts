@@ -48,7 +48,10 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn0: item.current,
         metricColumn1: item.yearAgo,
         metricColumn2: item.yearAgoPercent,
-        ctv: chance.natural({max: 100})
+        ctv: chance.natural({max: 100}),
+        metadata: {
+          brandCode: item.brandCode
+        }
       };
     });
   }

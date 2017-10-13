@@ -4,6 +4,7 @@ export interface ProductMetricsBrandValue {
   yearAgo: number;
   collectionMethod: string;
   yearAgoPercent: number;
+  brandCode: string;
 }
 
 export interface ProductMetrics {

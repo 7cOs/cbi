@@ -26,25 +26,27 @@ describe('Service: ProductMetricsTransformerService', () => {
       spyOn(productMetricsTransformerService, 'transformProductMetrics').and.callThrough();
       const expectedProductBrands: ProductMetrics = {
         brandValues: [{
-          brandDescription: 'CORONA FAMILIAR',
+          brandDescription: productMetricsBrandDTOMock.brandValues[0].brandDescription,
           current: parseInt((productMetricsBrandDTOMock.brandValues[0].values[0].current).toFixed(), 10),
           yearAgo: utilService.getYearAgoDelta(
             productMetricsBrandDTOMock.brandValues[0].values[0].current,
             productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
-          collectionMethod: 'RAD',
+          collectionMethod: productMetricsBrandDTOMock.brandValues[0].values[0].collectionMethod,
           yearAgoPercent: utilService.getYearAgoPercent(
             productMetricsBrandDTOMock.brandValues[0].values[0].current,
-            productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo)
+            productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
+          brandCode: productMetricsBrandDTOMock.brandValues[0].brandCode
         }, {
-          brandDescription: 'CERVEZAS CLASICAS',
+          brandDescription: productMetricsBrandDTOMock.brandValues[1].brandDescription,
           current: parseInt((productMetricsBrandDTOMock.brandValues[1].values[0].current).toFixed(), 10),
           yearAgo: utilService.getYearAgoDelta(
             productMetricsBrandDTOMock.brandValues[1].values[0].current,
             productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
-          collectionMethod: 'RAD',
+          collectionMethod: productMetricsBrandDTOMock.brandValues[1].values[0].collectionMethod,
           yearAgoPercent: utilService.getYearAgoPercent(
             productMetricsBrandDTOMock.brandValues[1].values[0].current,
-            productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo)
+            productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
+            brandCode: productMetricsBrandDTOMock.brandValues[1].brandCode
         }]
       };
       const transformedProductMetrics =
