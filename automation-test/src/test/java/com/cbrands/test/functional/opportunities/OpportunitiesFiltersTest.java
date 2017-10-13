@@ -217,7 +217,7 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
 
     Assert.assertTrue(countForMyDistributor > 0, "No opportunities present for Distributor belonging to user.");
 
-    final int countForOtherDistributor = opportunitiesPage
+    final int filteredCountForOtherDistributor = opportunitiesPage
       .removeChipContaining(myDistributor)
       .enterDistributorSearchText(notMyDistributor)
       .clickSearchForDistributor()
@@ -226,7 +226,21 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
       .waitForLoaderToDisappear()
       .getDisplayedOpportunitiesCount();
 
-    Assert.assertTrue(countForOtherDistributor == 0, "Opportunities present for Distributor not belonging to user.");
+    Assert.assertTrue(filteredCountForOtherDistributor == 0, "Opportunities present for Distributor not belonging to user.");
+
+    final int unfilteredCountForOtherDistributor =
+      opportunitiesPage
+        .clickAccountScopeCheckbox()
+        .clickApplyFiltersButton()
+        .waitForLoaderToDisappear()
+        .getDisplayedOpportunitiesCount();
+
+    Assert.assertTrue(
+      unfilteredCountForOtherDistributor > filteredCountForOtherDistributor,
+      "Number of unfiltered Opportunities is not greater than the count of filtered Opportunities." +
+        "\nFiltered count: " + filteredCountForOtherDistributor +
+        "\nUnfiltered count: " + unfilteredCountForOtherDistributor
+    );
   }
 
   @DataProvider
