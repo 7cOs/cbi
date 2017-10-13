@@ -186,6 +186,7 @@ describe('MyPerformanceComponent', () => {
     componentInstance = fixture.componentInstance;
     fixture.detectChanges();
 
+    currentSubject.next(myPerformanceStateMock.current);
     versionsSubject.next(initialVersionsMock);
   });
 
