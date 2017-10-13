@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
-import { PluralizeRoleGroupeType } from '../enums/pluralize-role-group.enum';
+import { PluralizedRoleGroup } from '../enums/pluralize-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
@@ -14,7 +14,7 @@ export class MyPerformanceTableDataTransformerService {
   public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
       const transformedEntity: MyPerformanceTableRow = {
-        descriptionRow0: entity.entityType === 'RoleGroup' ? PluralizeRoleGroupeType[entity.name] : entity.name,
+        descriptionRow0: entity.entityType === 'RoleGroup' ? PluralizedRoleGroup[entity.name] : entity.name,
         metricColumn0: entity.performance.total,
         metricColumn1: entity.performance.totalYearAgo,
         metricColumn2: entity.performance.totalYearAgoPercent,

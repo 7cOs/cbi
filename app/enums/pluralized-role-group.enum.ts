@@ -1,4 +1,4 @@
-export enum PluralizeRoleGroupeType {
+export enum PluralizedRoleGroup {
   'KEY ACCOUNT MANAGER' = 'KEY ACCOUNT MANAGERS',
   'NATIONAL ACCOUNT MANAGER' = 'NATIONAL ACCOUNT MANAGERS',
   'CHAIN DIRECTOR' = 'CHAIN DIRECTORS',
