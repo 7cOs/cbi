@@ -34,7 +34,8 @@ export class NotificationsComponent {
     'TARGET_LIST': 'Shared Target List',
     'OPPORTUNITY': 'Shared Opportunity',
     'ACCOUNT': 'Shared Note',
-    'STORE': ''
+    'STORE': 'Shared Note',
+    'DISTRIBUTOR': 'Shared Note'
   };
 
   constructor(
