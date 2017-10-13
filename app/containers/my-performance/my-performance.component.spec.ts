@@ -582,7 +582,6 @@ describe('MyPerformanceComponent', () => {
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy enity', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
         hierarchyEntity.name = rowMock.descriptionRow0;
-        debugger;
         currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntity]};
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
@@ -598,7 +597,9 @@ describe('MyPerformanceComponent', () => {
 
       it('should correctly call functions for accountDashboard when subAccount clicked but no matching hierarchy entity', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
+        hierarchyEntity.name = rowMock.descriptionRow0 + chance.character();
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntity];
+        currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
                                                                                               rowMock,

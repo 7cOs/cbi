@@ -111,7 +111,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
-        debugger;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {

@@ -1079,10 +1079,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
     function setDataForNavigationFromMyPerformanceSubaccountRow() {
       setFilter({ids: [$state.params.subaccountid], name: $state.params.subaccountname, type: 'subAccounts'}, 'account');
-      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-      var subaccountData = {id: $state.params.subaccountid};
-      vm.currentTopBottomFilters.subAccounts = subaccountData;
 
       setPremiseType($state.params.premisetype);
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
