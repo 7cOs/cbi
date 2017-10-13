@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
-import { PluralizedRoleGroup } from '../enums/pluralize-role-group.enum';
+import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
