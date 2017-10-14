@@ -49,7 +49,7 @@ export class MyPerformanceService {
 
   public accountDashboardStateParameters(filter: MyPerformanceFilterState,
                                         row: MyPerformanceTableRow,
-                                        premiseType: PremiseTypeValue): AccountDashboardStateParameters {
+                                        premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
 
     let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: true};
     if (row.metadata.entityType === EntityType.Distributor) {

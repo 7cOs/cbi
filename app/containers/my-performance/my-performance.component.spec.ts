@@ -575,7 +575,8 @@ describe('MyPerformanceComponent', () => {
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
           myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter,
-                                                                    rowMock));
+                                                                  rowMock,
+                                                                  hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
@@ -586,12 +587,10 @@ describe('MyPerformanceComponent', () => {
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
-                                                                                              rowMock,
-                                                                                              undefined);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock, undefined));
+          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });

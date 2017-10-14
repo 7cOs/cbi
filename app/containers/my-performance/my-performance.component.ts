@@ -162,8 +162,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
         .find(groupedEntity => groupedEntity.positionId === row.metadata.positionId);
       let premiseType: PremiseTypeValue;
-      if (hierarchyEntity) premiseType = hierarchyEntity.premiseType;
-      accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, premiseType);
+      if (hierarchyEntity) {
+        premiseType = hierarchyEntity.premiseType;
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, premiseType);
+      } else {
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+      }
+
     }
 
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
