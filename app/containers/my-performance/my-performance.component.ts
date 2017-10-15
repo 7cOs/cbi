@@ -127,20 +127,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           );
         }
 
-        if (current.responsibilities.entityWithPerformance && this.leftTotalRow()) {
-          this.contributionToVolume = true;
-          this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
+        if (current.responsibilities.entityWithPerformance) {
+          const data = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
-        } else {
-          this.salesHierarchyTotal = null;
-        }
-
-        if (current.responsibilities.entityWithPerformance && this.rightTotalRow()) {
-          this.contributionToVolume = false;
-          this.salesHierarchyTotalRight = this.myPerformanceTableDataTransformerService
-            .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
-        } else {
-          this.salesHierarchyTotalRight = null;
+          this.contributionToVolume = this.leftTotalRow();
+          this.salesHierarchyTotal =  this.leftTotalRow() && data;
+          this.salesHierarchyTotalRight = this.rightTotalRow() && data;
         }
 
     });
@@ -182,16 +174,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleSortRows(criteria: SortingCriteria[]): void {
     this.sortingCriteria = criteria;
-  }
-
-  public leftTotalRow(): boolean {
-    return this.leftTableViewType !== 'roleGroups' || this.entityType === 'Person'
-    || this.entityType === 'Distributor' || this.entityType === 'Account' || this.entityType === 'SubAccount';
-  }
-
-  public rightTotalRow(): boolean {
-    return this.leftTableViewType === 'roleGroups' || this.entityType === 'RoleGroup'
-      || this.entityType === 'DistributorGroup';
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
@@ -325,5 +307,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedEntityType: SelectedEntityType.RoleGroup
       }));
     }
+  }
+
+  private leftTotalRow(): boolean {
+    const entityTypes: Array<string> = [EntityType['Person'], EntityType['Distributor'], EntityType['Account'],
+      EntityType['SubAccount']];
+    return this.leftTableViewType !== 'roleGroups' || entityTypes.includes(this.entityType);
+  }
+
+  private rightTotalRow(): boolean {
+    const entityTypes: Array<string> = [EntityType['RoleGroup'], EntityType['DistributorGroup']];
+    return this.leftTableViewType === 'roleGroups' || entityTypes.includes(this.entityType);
   }
 }
