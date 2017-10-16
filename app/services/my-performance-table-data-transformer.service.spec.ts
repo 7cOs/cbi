@@ -39,8 +39,15 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         responsibilityEntitiesPerformanceOpenPositionMock = getEntitiesWithPerformancesOpenPositionMock();
     }));
 
-    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup', () => {
+    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
+
+      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.RoleGroup), 1);
+      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.Distributor), 1);
+
+      responsibilityEntitiesPerformanceMock[0].entityType = entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})];
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
         .getLeftTableData(responsibilityEntitiesPerformanceMock);
@@ -60,10 +67,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         },
         performanceError: false
       };
-
-      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor) {
-        expectedRow.descriptionRow1 = 'GO TO DASHBOARD';
-      }
 
       expect(tableData).toBeDefined();
       expect(tableData.length).toBeTruthy();
