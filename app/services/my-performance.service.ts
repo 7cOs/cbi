@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { AccountDashboardStateParameters } from '../models/account-dashboard-state-parameters.model';
 import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
@@ -46,12 +47,20 @@ export class MyPerformanceService {
     return defaultPremiseType;
   }
 
-  public accountDashboardStateParameters(filter: MyPerformanceFilterState, row: MyPerformanceTableRow): AccountDashboardStateParameters {
-    let accountDashboardStateParams: AccountDashboardStateParameters = {
-      myaccountsonly: true,
-      distributorid: row.metadata.positionId,
-      distributorname: row.descriptionRow0,
-      premisetype: PremiseTypeValue[filter.premiseType]};
+  public accountDashboardStateParameters(filter: MyPerformanceFilterState,
+                                        row: MyPerformanceTableRow,
+                                        premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
+
+    let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: true};
+    if (row.metadata.entityType === EntityType.Distributor) {
+      accountDashboardStateParams.distributorname = row.descriptionRow0;
+      accountDashboardStateParams.distributorid = row.metadata.positionId;
+      accountDashboardStateParams.premisetype = PremiseTypeValue[filter.premiseType];
+    } else if (row.metadata.entityType === EntityType.SubAccount) {
+      accountDashboardStateParams.subaccountid = row.metadata.positionId;
+      accountDashboardStateParams.subaccountname = row.descriptionRow0;
+      accountDashboardStateParams.premisetype = PremiseTypeValue[premiseType];
+    }
 
     switch (filter.metricType) {
       case MetricTypeValue.volume:
