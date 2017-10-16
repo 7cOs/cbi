@@ -73,7 +73,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       expect(tableData[0]).toEqual(expectedRow);
     });
 
-    it('should return formatted ResponsibilityEntityPerformance data for anything other than RoleGroup', () => {
+    it('should return formatted ResponsibilityEntityPerformance data for distributor', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
