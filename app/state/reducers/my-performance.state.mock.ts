@@ -2,11 +2,11 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
-import { getViewTypeMock } from '../../enums/view-type.enum.mock';
+import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
 import { MyPerformanceEntitiesData, MyPerformanceState } from './my-performance.reducer';
 import { ResponsibilitiesState } from './responsibilities.reducer';
-import { ViewType } from '../../enums/view-type.enum';
-import { ViewTypeState } from './view-types.reducer';
+import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
+import { SalesHierarchyViewTypeState } from './sales-hierarchy-view-type.reducer';
 
 export function getResponsibilitesStateMock(): ResponsibilitiesState {
   return {
@@ -18,17 +18,16 @@ export function getResponsibilitesStateMock(): ResponsibilitiesState {
   };
 }
 
-export function getViewTypeStateMock(): ViewTypeState {
+export function getViewTypeStateMock(): SalesHierarchyViewTypeState {
   return {
-    leftTableViewType: ViewType[getViewTypeMock()],
-    rightTableViewType: ViewType[getViewTypeMock()]
+    viewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()]
   };
 }
 
 export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
   return {
     responsibilities: getResponsibilitesStateMock(),
-    viewType: getViewTypeStateMock(),
+    salesHierarchyViewType: getViewTypeStateMock(),
     selectedEntity: chance.string()
   };
 }

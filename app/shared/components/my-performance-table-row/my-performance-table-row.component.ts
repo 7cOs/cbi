@@ -2,8 +2,9 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { ViewType } from '../../../enums/view-type.enum';
+import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -17,7 +18,7 @@ export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
-  @Input() viewType: ViewType;
+  @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 
   public sortStatus = SortStatus;
 
@@ -38,13 +39,13 @@ export class MyPerformanceTableRowComponent {
 
   public getSublineClass(): CssClasses {
     return {
-      ['link']: this.viewType === ViewType.distributors,
-      ['forward-arrow']: this.viewType === ViewType.distributors
+      ['link']: this.viewType === SalesHierarchyViewType.distributors, // TODO: Check if that would work if I pass in a PM VT
+      ['forward-arrow']: this.viewType === SalesHierarchyViewType.distributors
     };
   }
 
   public sublineClicked(): void {
-    if (this.viewType === ViewType.distributors) {
+    if (this.viewType === SalesHierarchyViewType.distributors) {
       this.onSublineClicked.emit();
     }
   }

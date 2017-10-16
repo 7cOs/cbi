@@ -3,13 +3,14 @@ import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { ColumnType } from '../../../enums/column-type.enum';
+import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
-import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
+import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
-import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { UtilService } from '../../../services/util.service';
-import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -19,7 +20,7 @@ class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
-  @Input() viewType: ViewType;
+  @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 }
 
 describe('MyPerformanceTableComponent', () => {

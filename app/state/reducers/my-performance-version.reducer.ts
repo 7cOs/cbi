@@ -33,7 +33,7 @@ export function myPerformanceVersionReducer(
       return {
         current: {
           responsibilities: state.current.responsibilities,
-          viewType: state.current.viewType,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: action.payload,
           selectedBrand: state.current.selectedBrand
         },
@@ -44,7 +44,7 @@ export function myPerformanceVersionReducer(
         return {
           current: {
             responsibilities: state.current.responsibilities,
-            viewType: state.current.viewType,
+            salesHierarchyViewType: state.current.salesHierarchyViewType,
             selectedEntity: state.current.selectedEntity,
             selectedBrand: action.payload
           },

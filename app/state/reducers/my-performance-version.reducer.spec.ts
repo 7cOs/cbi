@@ -63,8 +63,9 @@ describe('My Performance Version Reducer', () => {
     const expectedState = {
       current: {
         responsibilities: beforeState.current.responsibilities,
-        viewType: beforeState.current.viewType,
-        selectedEntity: entityNameMock
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntity: entityNameMock,
+        selectedBrand: beforeState.current.selectedBrand
       },
       versions: beforeState.versions
     };

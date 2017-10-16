@@ -17,7 +17,7 @@ import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
-import { ViewType } from '../enums/view-type.enum';
+import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
 export interface HierarchyGroup {
   name: string;
@@ -29,7 +29,7 @@ export interface HierarchyGroup {
 
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
-  viewType?: ViewType;
+  salesHierarchyViewType?: SalesHierarchyViewType;
   hierarchyGroups?: Array<HierarchyGroup>;
   entitiesURL?: string;
   alternateEntitiesURL?: string;
@@ -64,12 +64,12 @@ export class ResponsibilitiesService {
     return this.myPerformanceApiService.getResponsibilities(responsibilitiesData.positionId)
       .map((response: PeopleResponsibilitiesDTO) => {
         let groupedEntities: GroupedEntities;
-        let viewType: ViewType;
+        let salesHierarchyViewType: SalesHierarchyViewType;
         let hierarchyGroups: Array<HierarchyGroup>;
         let entitiesURL: string;
 
         if (response.positions) {
-          viewType = ViewType.roleGroups;
+          salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
 
           groupedEntities = this.responsibilitiesTransformerService.groupPeopleByGroupedEntities(response.positions);
           hierarchyGroups = Object.keys(groupedEntities).map((roleGroup: string) => {
@@ -81,16 +81,16 @@ export class ResponsibilitiesService {
             };
           });
         } else if (response.entityURIs) {
-          viewType = response.entityURIs[0].search('distributors') !== -1
-            ? ViewType.distributors
-            : ViewType.accounts;
+          salesHierarchyViewType = response.entityURIs[0].search('distributors') !== -1
+            ? SalesHierarchyViewType.distributors
+            : SalesHierarchyViewType.accounts;
 
           entitiesURL = response.entityURIs[0];
         }
 
         return Object.assign({}, responsibilitiesData, {
           groupedEntities: groupedEntities,
-          viewType: viewType,
+          salesHierarchyViewType: salesHierarchyViewType,
           hierarchyGroups: hierarchyGroups,
           entitiesURL: entitiesURL
         });
@@ -115,7 +115,7 @@ export class ResponsibilitiesService {
     return Observable.of(Object.assign({}, responsibilitiesData, {
       hierarchyGroups: hierarchyGroups,
       groupedEntities: groupedEntities,
-      viewType: ViewType.roleGroups
+      salesHierarchyViewType: SalesHierarchyViewType.roleGroups
     }));
   }
 
@@ -213,11 +213,11 @@ export class ResponsibilitiesService {
   }
 
   public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.roleGroups) {
+    if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups) {
       return this.handleResponsibilitiesPerformances(responsibilitiesData);
-    } else if (responsibilitiesData.viewType === ViewType.distributors) {
+    } else if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
       return this.handleDistributorsPerformances(responsibilitiesData);
-    } else if (responsibilitiesData.viewType === ViewType.accounts) {
+    } else if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.accounts) {
       return this.handleAccountsPerformances(responsibilitiesData);
     } else {
       return Observable.of(responsibilitiesData);
@@ -225,7 +225,8 @@ export class ResponsibilitiesService {
   }
 
   public getAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.distributors || responsibilitiesData.viewType === ViewType.accounts) {
+    if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.distributors
+      || responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
           const hierarchyGroups: Array<HierarchyGroup> = [{
@@ -309,7 +310,7 @@ export class ResponsibilitiesService {
           return Observable.of(Object.assign({}, responsibilitiesData, {
             hierarchyGroups: hierarchyGroups,
             groupedEntities: groupedEntities,
-            viewType: ViewType.roleGroups
+            salesHierarchyViewType: SalesHierarchyViewType.roleGroups
           }));
         });
     } else {
@@ -330,16 +331,16 @@ export class ResponsibilitiesService {
     }
   }
 
-  public getEntityGroupViewType(type: EntityType): ViewType {
+  public getEntityGroupViewType(type: EntityType): SalesHierarchyViewType {
     switch (type) {
       case EntityType.ResponsibilitiesGroup:
-        return ViewType.roleGroups;
+        return SalesHierarchyViewType.roleGroups;
       case EntityType.RoleGroup:
-        return ViewType.people;
+        return SalesHierarchyViewType.people;
       case EntityType.DistributorGroup:
-        return ViewType.distributors;
+        return SalesHierarchyViewType.distributors;
       case EntityType.AccountGroup:
-        return ViewType.accounts;
+        return SalesHierarchyViewType.accounts;
       default:
         throw new Error(`[getEntityGroupViewType]: EntityType of ${ type } is not supported.`);
     }

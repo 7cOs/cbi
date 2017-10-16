@@ -9,8 +9,8 @@ import { EntityWithPerformance } from '../../models/entity-with-performance.mode
 import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
-import { ViewType } from '../../enums/view-type.enum';
-import * as ViewTypeActions from '../../state/actions/view-types.action';
+import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
+import * as ViewTypeActions from '../../state/actions/sales-hierarchy-view-type.action';
 
 @Injectable()
 export class ResponsibilitiesEffects {
@@ -47,7 +47,7 @@ export class ResponsibilitiesEffects {
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
       .switchMap((action: Action) => {
         const { entityType, entityTypeGroupName, entityTypeCode } = action.payload;
-        const viewType: ViewType = this.responsibilitiesService.getEntityGroupViewType(entityType);
+        const salesHierarchyViewType: SalesHierarchyViewType = this.responsibilitiesService.getEntityGroupViewType(entityType);
 
         return this.responsibilitiesService.getEntitiesWithPerformanceForGroup(action.payload)
           .switchMap((entityWithPerformance: EntityWithPerformance[]) => {
@@ -58,7 +58,7 @@ export class ResponsibilitiesEffects {
                 entityWithPerformance: entityWithPerformance,
                 entityTypeCode: entityTypeCode
               }),
-              new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
+              new ViewTypeActions.SetSalesHierarchyViewType(salesHierarchyViewType)
             ]);
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
@@ -125,7 +125,7 @@ export class ResponsibilitiesEffects {
 
   private constructSuccessAction(responsibilitiesData: ResponsibilitiesData): Observable<Action> {
     return Observable.from([
-      new ViewTypeActions.SetLeftMyPerformanceTableViewType(responsibilitiesData.viewType),
+      new ViewTypeActions.SetSalesHierarchyViewType(responsibilitiesData.salesHierarchyViewType),
       new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
         positionId: responsibilitiesData.positionId,
         groupedEntities: responsibilitiesData.groupedEntities,
@@ -141,7 +141,7 @@ export class ResponsibilitiesEffects {
         groupedEntities: subAccountsData.groupedEntities,
         entityWithPerformance: subAccountsData.entityWithPerformance
       }),
-      new ViewTypeActions.SetLeftMyPerformanceTableViewType(ViewType.subAccounts)
+      new ViewTypeActions.SetSalesHierarchyViewType(SalesHierarchyViewType.subAccounts)
     ]);
   }
 }

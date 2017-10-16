@@ -7,6 +7,7 @@ import { dateRangesReducer } from './date-ranges.reducer';
 import { myPerformanceReducer } from './my-performance.reducer';
 import { myPerformanceFilterReducer } from './my-performance-filter.reducer';
 import { productMetricsReducer } from './product-metrics.reducer';
+import { productMetricsViewTypeReducer } from './product-metrics-view-type.reducer';
 
 const chance = new Chance();
 
@@ -40,6 +41,7 @@ describe('Root Reducer', () => {
       dateRanges: dateRangesReducer,
       myPerformance: myPerformanceReducer,
       myPerformanceProductMetrics: productMetricsReducer,
+      myPerformanceProductMetricsViewType: productMetricsViewTypeReducer,
       myPerformanceFilter: myPerformanceFilterReducer
     });
     expect(rootReducerMock).toHaveBeenCalledWith(inputStateMock, inputActionMock);

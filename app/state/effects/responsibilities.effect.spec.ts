@@ -29,15 +29,15 @@ import { getEntitiesWithPerformancesMock } from '../../models/entity-with-perfor
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-import { getViewTypeMock } from '../../enums/view-type.enum.mock';
+import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
-import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
-import { ViewType } from '../../enums/view-type.enum';
+import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
+import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 
 const chance = new Chance();
 
@@ -80,8 +80,8 @@ describe('Responsibilities Effects', () => {
     getAlternateAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
-    getEntityGroupViewType(entityType: EntityType): ViewType {
-      return ViewType.roleGroups;
+    getEntityGroupViewType(entityType: EntityType): SalesHierarchyViewType {
+      return SalesHierarchyViewType.roleGroups;
     },
     getEntitiesWithPerformanceForGroup(args: any): Observable<EntityWithPerformance[]> {
       return Observable.of(entityWithPerformanceMock);
@@ -141,11 +141,11 @@ describe('Responsibilities Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should return a FetchResponsibilitiesSuccess', (done) => {
-        const viewTypeMock = ViewType[getViewTypeMock()];
+        const viewTypeMock = SalesHierarchyViewType[getSalesHierarchyViewTypeMock()];
 
         spyOn(responsibilitiesService, 'getResponsibilities').and.callFake((responsibilitiesData: ResponsibilitiesData) => {
           responsibilitiesData.groupedEntities = groupedEntitiesMock;
-          responsibilitiesData.viewType = viewTypeMock;
+          responsibilitiesData.salesHierarchyViewType = viewTypeMock;
           return Observable.of(responsibilitiesData);
         });
 
@@ -156,7 +156,7 @@ describe('Responsibilities Effects', () => {
         });
 
         responsibilitiesEffects.fetchResponsibilities$().pairwise().subscribe(([result1, result2]) => {
-          expect(result1).toEqual(new SetLeftMyPerformanceTableViewType(viewTypeMock));
+          expect(result1).toEqual(new SetSalesHierarchyViewType(viewTypeMock));
           expect(result2).toEqual(new FetchResponsibilitiesSuccess(responsibilitiesSuccessPayloadMock));
           done();
         });
@@ -324,7 +324,7 @@ describe('Responsibilities Effects', () => {
                 entityWithPerformance: entityWithPerformanceMock,
                 entityTypeCode: entityTypeCodeMock
               }),
-              new SetLeftMyPerformanceTableViewType(ViewType.roleGroups)
+              new SetSalesHierarchyViewType(SalesHierarchyViewType.roleGroups)
             ]);
 
             done();
@@ -464,7 +464,7 @@ describe('Responsibilities Effects', () => {
                   groupedEntities: groupedEntitiesMock,
                   entityWithPerformance: entityWithPerformanceMock
                 }),
-                new SetLeftMyPerformanceTableViewType(ViewType.subAccounts)
+                new SetSalesHierarchyViewType(SalesHierarchyViewType.subAccounts)
               ]);
 
               done();
@@ -536,7 +536,7 @@ describe('Responsibilities Effects', () => {
           spyOn(responsibilitiesService, 'groupPeopleResponsibilities').and.callFake((responsibilitiesData: ResponsibilitiesData) => {
             return Observable.of(Object.assign({}, responsibilitiesData, {
               groupedEntities: groupedEntitiesMock,
-              viewType: ViewType.roleGroups
+              salesHierarchyViewType: SalesHierarchyViewType.roleGroups
             }));
           });
 
@@ -547,7 +547,7 @@ describe('Responsibilities Effects', () => {
           });
 
           responsibilitiesEffects.constructRoleGroups$().pairwise().subscribe(([action1, action2]) => {
-            expect(action1).toEqual(new SetLeftMyPerformanceTableViewType(ViewType.roleGroups));
+            expect(action1).toEqual(new SetSalesHierarchyViewType(SalesHierarchyViewType.roleGroups));
             expect(action2).toEqual(new FetchResponsibilitiesSuccess({
               positionId: constructRoleGroupsPayloadMock.positionId,
               groupedEntities: groupedEntitiesMock,

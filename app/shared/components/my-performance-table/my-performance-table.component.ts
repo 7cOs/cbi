@@ -3,11 +3,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../../enums/row-type.enum';
+import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { UtilService } from '../../../services/util.service';
-import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
   selector: 'my-performance-table',
@@ -39,7 +40,7 @@ export class MyPerformanceTableComponent {
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
-  @Input() viewType: ViewType;
+  @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;

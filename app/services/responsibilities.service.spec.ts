@@ -29,7 +29,7 @@ import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from '../services/performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
-import { ViewType } from '../enums/view-type.enum';
+import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
 const chance = new Chance();
 
@@ -200,7 +200,7 @@ describe('Responsibilities Effects', () => {
         const expectedResponsibilities = {
           positionId: positionIdMock,
           groupedEntities: groupedEntitiesMock,
-          viewType: ViewType.roleGroups,
+          salesHierarchyViewType: SalesHierarchyViewType.roleGroups,
           hierarchyGroups: [
             {
               type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
@@ -258,7 +258,7 @@ describe('Responsibilities Effects', () => {
         const expectedResponsibilities = {
           positionId: positionIdMock,
           groupedEntities: undefined as any,
-          viewType: ViewType.accounts,
+          salesHierarchyViewType: SalesHierarchyViewType.accounts,
           hierarchyGroups: undefined as any,
           entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
         };
@@ -302,7 +302,7 @@ describe('Responsibilities Effects', () => {
         const expectedResponsibilities = {
           positionId: positionIdMock,
           groupedEntities: undefined as any,
-          viewType: ViewType.distributors,
+          salesHierarchyViewType: SalesHierarchyViewType.distributors,
           hierarchyGroups: undefined as any,
           entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
         };
@@ -339,10 +339,10 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('when getPerformanceForGroupedEntities is called', () => {
-    describe('when called for viewType.roleGroups', () => {
+    describe('when called for salesHierarchyViewType.roleGroups', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         positionId: positionIdMock,
-        viewType: ViewType.roleGroups,
+        salesHierarchyViewType: SalesHierarchyViewType.roleGroups,
         hierarchyGroups: [{
           type: chance.string(),
           name: chance.string(),
@@ -360,7 +360,7 @@ describe('Responsibilities Effects', () => {
 
         const expectedPerformancesTotal = {
           positionId: responsibilitiesDataMock.positionId,
-          viewType: ViewType.roleGroups,
+          salesHierarchyViewType: SalesHierarchyViewType.roleGroups,
           hierarchyGroups: responsibilitiesDataMock.hierarchyGroups,
           filter: responsibilitiesDataMock.filter,
           entityWithPerformance: entityWithPerformanceMock,
@@ -391,10 +391,10 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    describe('when called for viewType.distributors', () => {
+    describe('when called for salesHierarchyViewType.distributors', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         positionId: positionIdMock,
-        viewType: ViewType.distributors,
+        salesHierarchyViewType: SalesHierarchyViewType.distributors,
         hierarchyGroups: [{
           type: chance.string(),
           name: chance.string(),
@@ -411,7 +411,7 @@ describe('Responsibilities Effects', () => {
         });
         const expectedPerformancesTotal = {
           positionId: responsibilitiesDataMock.positionId,
-          viewType: ViewType.distributors,
+          salesHierarchyViewType: SalesHierarchyViewType.distributors,
           hierarchyGroups: responsibilitiesDataMock.hierarchyGroups,
           filter: responsibilitiesDataMock.filter,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
@@ -443,10 +443,10 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    describe('when called for viewType.accounts', () => {
+    describe('when called for salesHierarchyViewType.accounts', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         positionId: positionIdMock,
-        viewType: ViewType.accounts,
+        salesHierarchyViewType: SalesHierarchyViewType.accounts,
         hierarchyGroups: [{
           type: chance.string(),
           name: chance.string(),
@@ -463,7 +463,7 @@ describe('Responsibilities Effects', () => {
         });
         const expectedPerformancesTotal = {
           positionId: responsibilitiesDataMock.positionId,
-          viewType: ViewType.accounts,
+          salesHierarchyViewType: SalesHierarchyViewType.accounts,
           hierarchyGroups: responsibilitiesDataMock.hierarchyGroups,
           filter: responsibilitiesDataMock.filter,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
@@ -499,7 +499,7 @@ describe('Responsibilities Effects', () => {
   describe('when getAccountsDistributors is called', () => {
     describe('when called for distributors or accounts', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
-        viewType: ViewType.distributors,
+        salesHierarchyViewType: SalesHierarchyViewType.distributors,
         hierarchyGroups: [{
           type: 'Distributor',
           name: chance.string(),
@@ -549,7 +549,7 @@ describe('Responsibilities Effects', () => {
       });
 
       it('gives back the original parameters if not call with accounts or distributors', (done) => {
-        responsibilitiesDataMock.viewType = ViewType.roleGroups;
+        responsibilitiesDataMock.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
 
         const getAccountsDistributorsSpy = spyOn(myPerformanceApiService, 'getAccountsDistributors').and.callThrough();
         const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
@@ -1041,7 +1041,7 @@ describe('Responsibilities Effects', () => {
       const expectedResponsibilitiesData: ResponsibilitiesData = Object.assign({}, responsibilitiesDataMock, {
         groupedEntities: groupedEntitiesMock,
         hierarchyGroups: expectedHierarchyGroups,
-        viewType: ViewType.roleGroups
+        salesHierarchyViewType: SalesHierarchyViewType.roleGroups
       });
 
       responsibilitiesService.groupPeopleResponsibilities(responsibilitiesDataMock)
@@ -1070,7 +1070,7 @@ describe('Responsibilities Effects', () => {
           positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
           entityType: EntityType.RoleGroup
         }],
-        viewType: ViewType.roleGroups
+        salesHierarchyViewType: SalesHierarchyViewType.roleGroups
       };
     });
 
@@ -1171,7 +1171,7 @@ describe('Responsibilities Effects', () => {
           positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
           entityType: EntityType.RoleGroup
         }],
-        viewType: ViewType.roleGroups,
+        salesHierarchyViewType: SalesHierarchyViewType.roleGroups,
         alternateEntitiesURL: chance.string()
       };
     });
@@ -1311,26 +1311,26 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('when getEntityGroupViewType is called', () => {
-    it('should return the correct ViewType when given a type of ResponsibilitiesGroup', () => {
-      const expectedViewType = ViewType.roleGroups;
+    it('should return the correct SalesHierarchyViewType when given a type of ResponsibilitiesGroup', () => {
+      const expectedViewType = SalesHierarchyViewType.roleGroups;
       const actualViewType = responsibilitiesService.getEntityGroupViewType(EntityType.ResponsibilitiesGroup);
       expect(actualViewType).toBe(expectedViewType);
     });
 
-    it('should return the correct ViewType when given a type of RoleGroup', () => {
-      const expectedViewType = ViewType.people;
+    it('should return the correct SalesHierarchyViewType when given a type of RoleGroup', () => {
+      const expectedViewType = SalesHierarchyViewType.people;
       const actualViewType = responsibilitiesService.getEntityGroupViewType(EntityType.RoleGroup);
       expect(actualViewType).toBe(expectedViewType);
     });
 
-    it('should return the correct ViewType when given a type of DistributorGroup', () => {
-      const expectedViewType = ViewType.distributors;
+    it('should return the correct SalesHierarchyViewType when given a type of DistributorGroup', () => {
+      const expectedViewType = SalesHierarchyViewType.distributors;
       const actualViewType = responsibilitiesService.getEntityGroupViewType(EntityType.DistributorGroup);
       expect(actualViewType).toBe(expectedViewType);
     });
 
-    it('should return the correct ViewType when given a type of AccountGroup', () => {
-      const expectedViewType = ViewType.accounts;
+    it('should return the correct SalesHierarchyViewType when given a type of AccountGroup', () => {
+      const expectedViewType = SalesHierarchyViewType.accounts;
       const actualViewType = responsibilitiesService.getEntityGroupViewType(EntityType.AccountGroup);
       expect(actualViewType).toBe(expectedViewType);
     });

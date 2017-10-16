@@ -1,6 +1,4 @@
-export enum ViewType {
-  brands = 'brands',
-  skus = 'skus',
+export enum SalesHierarchyViewType {
   roleGroups = 'roleGroups',
   people = 'people',
   distributors = 'distributors',

@@ -1,18 +1,18 @@
 import { Action } from '@ngrx/store';
 
 import { initialState as initialStateResponsibilities } from './responsibilities.reducer';
-import { initialState as initialStateViewTypes } from './view-types.reducer';
+import { initialState as initialStateSalesHierarchyViewType } from './sales-hierarchy-view-type.reducer';
 import { initialStateVersions } from './my-performance-version.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 import { responsibilitiesReducer, ResponsibilitiesState } from './responsibilities.reducer';
-import * as viewTypesActions from '../actions/view-types.action';
-import { viewTypesReducer, ViewTypeState } from './view-types.reducer';
+import * as SalesHierarchyViewTypeActions from '../actions/sales-hierarchy-view-type.action';
+import { salesHierarchyViewTypeReducer, SalesHierarchyViewTypeState } from './sales-hierarchy-view-type.reducer';
 
 export interface MyPerformanceEntitiesData {
   responsibilities?: ResponsibilitiesState;
-  viewType?: ViewTypeState;
+  salesHierarchyViewType?: SalesHierarchyViewTypeState;
   selectedEntity?: string;
   selectedBrand?: string;
 }
@@ -25,7 +25,7 @@ export interface MyPerformanceState {
 export const initialState: MyPerformanceState = {
   current: {
     responsibilities: initialStateResponsibilities,
-    viewType: initialStateViewTypes,
+    salesHierarchyViewType: initialStateSalesHierarchyViewType,
   },
   versions: initialStateVersions
 };
@@ -59,18 +59,20 @@ export function myPerformanceReducer(
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
-          viewType: state.current.viewType,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: state.current.selectedEntity
         },
         versions: state.versions
       };
 
-    case viewTypesActions.SET_LEFT_MY_PERFORMANCE_TABLE_VIEW_TYPE:
-    case viewTypesActions.SET_RIGHT_MY_PERFORMANCE_TABLE_VIEW_TYPE:
+    case SalesHierarchyViewTypeActions.SET_SALES_HIERARCHY_VIEW_TYPE:
       return {
         current: {
           responsibilities: state.current.responsibilities,
-          viewType: viewTypesReducer(state.current.viewType, action as viewTypesActions.Action),
+          salesHierarchyViewType: salesHierarchyViewTypeReducer(
+            state.current.salesHierarchyViewType,
+            action as SalesHierarchyViewTypeActions.Action
+          ),
           selectedEntity: state.current.selectedEntity
         },
         versions: state.versions

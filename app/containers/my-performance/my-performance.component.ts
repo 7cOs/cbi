@@ -27,10 +27,13 @@ import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
+import { ProductMetricsViewTypeState } from '../../state/reducers/product-metrics-view-type.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { ViewType } from '../../enums/view-type.enum';
+import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { WindowService } from '../../services/window.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
@@ -50,15 +53,14 @@ export interface HandleElementClickedParameters {
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
-  public leftTableViewType: ViewType;
-  public rightTableViewType: ViewType;
+  public salesHierarchyViewType: SalesHierarchyViewType;
+  public productMetricsViewType: ProductMetricsViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
     ascending: false
   }];
-  public viewType = ViewType;
 
   // mocks
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
@@ -75,6 +77,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
   private productMetricsSubscription: Subscription;
+  private productMetricsViewTypeSubscription: Subscription;
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
@@ -101,19 +104,26 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
-      .subscribe(productMetrics => {
+      .subscribe((productMetrics: ProductMetricsState) => {
         if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
           this.productPerformance = this.myPerformanceTableDataTransformerService
             .getRightTableData(productMetrics.products);
         }
     });
 
+    this.productMetricsViewTypeSubscription = this.store
+      .select(state => state.myPerformanceProductMetricsViewType)
+      .subscribe((productMetricsViewTypeState: ProductMetricsViewTypeState) => {
+        debugger;
+
+        this.productMetricsViewType = productMetricsViewTypeState.viewType;
+    });
+
     this.myPerformanceCurrentSubscription = this.store
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
-        this.leftTableViewType = current.viewType.leftTableViewType;
-        this.rightTableViewType = current.viewType.rightTableViewType;
+        this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
         this.selectedBrand = current.selectedBrand;
         debugger;
 
@@ -127,7 +137,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
-
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
@@ -155,6 +164,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
     this.productMetricsSubscription.unsubscribe();
+    this.productMetricsViewTypeSubscription.unsubscribe();
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
@@ -191,8 +201,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
 
-          switch (this.leftTableViewType) {
-            case ViewType.roleGroups:
+          switch (this.salesHierarchyViewType) {
+            case SalesHierarchyViewType.roleGroups:
               const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
 
               if (parameters.row.metadata.entityType === EntityType.ResponsibilitiesGroup) {
@@ -218,7 +228,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedEntityType: SelectedEntityType.RoleGroup
               }));
               break;
-            case ViewType.people:
+            case SalesHierarchyViewType.people:
               this.store.dispatch(new FetchResponsibilities({
                 positionId: parameters.row.metadata.positionId,
                 filter: this.filterState
@@ -229,7 +239,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedEntityType: SelectedEntityType.Position
               }));
               break;
-            case ViewType.accounts:
+            case SalesHierarchyViewType.accounts:
               this.store.dispatch(new FetchSubAccountsAction({
                 positionId: parameters.row.metadata.positionId,
                 contextPositionId: this.currentState.responsibilities.positionId,
@@ -249,8 +259,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
       } else {
         debugger;
-        switch (this.leftTableViewType) {
-          case ViewType.brands:
+        switch (this.productMetricsViewType) {
+          case ProductMetricsViewType.brands:
             this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(
               parameters.row.metadata.brandCode
             ));
@@ -296,14 +306,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
-    if (state.viewType.leftTableViewType === ViewType.roleGroups
-      || state.viewType.leftTableViewType === ViewType.accounts) {
+    if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.roleGroups
+      || state.salesHierarchyViewType.viewType === SalesHierarchyViewType.accounts) {
       this.store.dispatch(new FetchProductMetricsAction({
         positionId: state.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: SelectedEntityType.Position
       }));
-    } else if (state.viewType.leftTableViewType === ViewType.people) {
+    } else if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.people) {
       this.store.dispatch(new FetchProductMetricsAction({
         positionId: state.responsibilities.positionId,
         entityTypeCode: state.responsibilities.entityTypeCode,

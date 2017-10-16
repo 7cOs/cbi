@@ -7,6 +7,7 @@ import { dateRangesReducer, DateRangesState } from './date-ranges.reducer';
 import { Environment } from '../../environment';
 import { myPerformanceReducer, MyPerformanceState } from './my-performance.reducer';
 import { myPerformanceFilterReducer, MyPerformanceFilterState } from './my-performance-filter.reducer';
+import { productMetricsViewTypeReducer, ProductMetricsViewTypeState } from './product-metrics-view-type.reducer';
 import { productMetricsReducer, ProductMetricsState } from './product-metrics.reducer';
 
 export interface AppState {
@@ -14,6 +15,7 @@ export interface AppState {
   dateRanges: DateRangesState;
   myPerformance: MyPerformanceState;
   myPerformanceProductMetrics: ProductMetricsState;
+  myPerformanceProductMetricsViewType: ProductMetricsViewTypeState;
   myPerformanceFilter: MyPerformanceFilterState;
 }
 
@@ -22,6 +24,7 @@ const allReducers = {
   dateRanges: dateRangesReducer,
   myPerformance: myPerformanceReducer,
   myPerformanceProductMetrics: productMetricsReducer,
+  myPerformanceProductMetricsViewType: productMetricsViewTypeReducer,
   myPerformanceFilter: myPerformanceFilterReducer
 };
 
