@@ -551,12 +551,10 @@ describe('MyPerformanceComponent', () => {
       it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
-                                                                                            rowMock,
-                                                                                            undefined);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock, undefined));
+          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });

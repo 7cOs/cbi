@@ -156,7 +156,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public handleSublineClicked(row: MyPerformanceTableRow): void {
     let accountDashboardStateParams: AccountDashboardStateParameters;
     if (row.metadata.entityType === EntityType.Distributor) {
-      accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, undefined);
+      accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
