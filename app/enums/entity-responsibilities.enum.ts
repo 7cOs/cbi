@@ -20,12 +20,6 @@ export enum EntityPeopleType {
   'GEOGRAPHY' = 'GEOGRAPHY'
 }
 
-export enum EntityPropertyType {
-  Distributor = 'Distributor',
-  Account = 'Account',
-  SubAccount = 'SubAccount'
-}
-
 export enum EntityType {
   Person = 'Person',
   RoleGroup = 'RoleGroup',
