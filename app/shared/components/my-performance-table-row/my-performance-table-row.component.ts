@@ -44,13 +44,13 @@ export class MyPerformanceTableRowComponent {
 
   public getSublineClass(): CssClasses {
     return {
-      ['link']: this.viewType === ViewType.distributors,
-      ['forward-arrow']: this.viewType === ViewType.distributors
+      ['link']: this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts,
+      ['forward-arrow']: this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts
     };
   }
 
   public sublineClicked(): void {
-    if (this.viewType === ViewType.distributors) {
+    if (this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts) {
       this.onSublineClicked.emit();
     }
   }
