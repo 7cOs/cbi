@@ -20,17 +20,16 @@ public class NotesTest extends BaseTestCase {
 
   @BeforeMethod
   public void setUp() {
-    final TestUser testUser = TestUser.NOTES_ACTOR;
-    final String storeAccountName = "Taco Joint";
-
-    final Login loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
-
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
+
+    final TestUser testUser = TestUser.NOTES_ACTOR;
+    final Login loginPage = new Login(driver);
     final HomePage homePage = loginPage.loginAs(testUser);
     Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
 
+    final String storeAccountName = "Taco Joint";
     final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
     accountDashboardPage.goToPage();
 
