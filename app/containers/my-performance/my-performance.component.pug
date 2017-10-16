@@ -9,6 +9,7 @@ my-performance-filter(
 my-performance-breadcrumb(
   [currentUserFullName]="currentUserFullName",
   [performanceStateVersions]="performanceStateVersions$ | async",
+  [showBackButton]="showLeftBackButton",
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)")
 
 my-performance-table.left(

@@ -18,6 +18,7 @@ export class MyPerformanceBreadcrumbComponent {
     this.breadcrumbTrail = [ this.currentUserFullName ]
       .concat(versions.map((version: MyPerformanceEntitiesData) => version.selectedEntity));
   }
+  @Input() showBackButton: boolean;
 
   public breadcrumbTrail: string[];
 }
