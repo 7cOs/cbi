@@ -5,7 +5,7 @@ export interface MyPerformanceTableRowMetadata {
   contextPositionId?: string;
   entityType: EntityType;
   entityTypeCode?: string;
-  entityDescription: string;
+  entityName: string;
 }
 
 export interface MyPerformanceTableRow {

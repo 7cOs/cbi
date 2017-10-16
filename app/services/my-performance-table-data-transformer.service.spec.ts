@@ -63,7 +63,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityDescription: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name
         },
         performanceError: false
       };
@@ -93,7 +93,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityDescription: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name
         },
         performanceError: false
       };
@@ -123,7 +123,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityDescription: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name
         },
         performanceError: false
       };
@@ -154,7 +154,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityDescription: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name
         },
         performanceError: true
       };
@@ -184,7 +184,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           metadata: {
             positionId: responsibilityEntitiesPerformanceOpenPositionMock[i].positionId,
             entityType: responsibilityEntitiesPerformanceOpenPositionMock[i].entityType,
-            entityDescription: responsibilityEntitiesPerformanceOpenPositionMock[0].name
+            entityName: responsibilityEntitiesPerformanceOpenPositionMock[0].name
           },
           performanceError: false
         });
@@ -211,7 +211,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metadata: {
           positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId,
           entityType: responsibilityEntitiesPerformanceOpenPositionMock[0].entityType,
-          entityDescription: responsibilityEntitiesPerformanceOpenPositionMock[0].name
+          entityName: responsibilityEntitiesPerformanceOpenPositionMock[0].name
         },
         performanceError: false
       });

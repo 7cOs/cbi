@@ -22,7 +22,7 @@ export function getMyPerformanceTableRowMock(length: number) {
         contextPositionId: chance.string(),
         entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
         entityTypeCode: chance.string(),
-        entityDescription: chance.string()
+        entityName: chance.string()
       }
     });
   }

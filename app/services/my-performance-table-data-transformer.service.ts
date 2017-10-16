@@ -22,7 +22,7 @@ export class MyPerformanceTableDataTransformerService {
         metadata: {
           positionId: entity.positionId,
           entityType: entity.entityType,
-          entityDescription: entity.name
+          entityName: entity.name
         },
         performanceError: entity.performance.error
       };
