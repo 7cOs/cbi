@@ -24,10 +24,7 @@ public class NotesTest extends BaseTestCase {
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
 
-    final TestUser testUser = TestUser.NOTES_ACTOR;
-    final Login loginPage = new Login(driver);
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
+    login(TestUser.NOTES_ACTOR);
 
     final String storeAccountName = "Taco Joint";
     final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
@@ -82,6 +79,12 @@ public class NotesTest extends BaseTestCase {
   @DataProvider(name = "NoteData")
   public static Object[][] noteData() {
     return new Object[][]{{"Distribution", "Testing create notes: " + current_time_stamp}};
+  }
+
+  private void login(TestUser testUser) {
+    final Login loginPage = new Login(driver);
+    final HomePage homePage = loginPage.loginAs(testUser);
+    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
   }
 
 }
