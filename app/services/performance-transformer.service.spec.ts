@@ -119,6 +119,7 @@ describe('Service: PerformanceTransformerService', () => {
 
       expect(actual.positionId).toBe(entity.positionId);
       expect(actual.name).toBe(entity.name);
+      expect(actual.entityType).toEqual(entity.entityType);
       expect(actual.performance).toBeDefined();
       expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
       expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
@@ -135,6 +136,7 @@ describe('Service: PerformanceTransformerService', () => {
       expect(actual.positionId).toBe(entity.positionId);
       expect(actual.name).toBe(entity.name);
       expect(actual.positionDescription).toBe(entity.positionDescription);
+      expect(actual.entityType).toEqual(entity.entityType);
       expect(actual.performance).toBeDefined();
       expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
       expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
