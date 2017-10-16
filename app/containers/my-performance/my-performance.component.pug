@@ -10,7 +10,8 @@ my-performance-breadcrumb(
   [currentUserFullName]="currentUserFullName",
   [performanceStateVersions]="performanceStateVersions$ | async",
   [showBackButton]="showLeftBackButton",
-  (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)")
+  (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
+  (backButtonClicked)="handleBackButtonClicked()")
 
 my-performance-table.left(
   [tableData]="salesHierarchy",
@@ -20,7 +21,6 @@ my-performance-table.left(
   [totalRow]="salesHierarchyTotal",
   [sortingCriteria]="sortingCriteria",
   [viewType]="leftTableViewType",
-  [showBackButton]="showLeftBackButton",
   [showOpportunities]="false",
   (onSublineClicked)="handleSublineClicked($event)",
   (onSortingCriteriaChanged)="handleSortRows($event)",

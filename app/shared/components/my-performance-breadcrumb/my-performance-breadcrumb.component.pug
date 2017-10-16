@@ -1,4 +1,4 @@
-span(colspan=1, [ngClass]="getHeaderLeftClasses()", (click)="onCellClicked.emit(0)")
+span([ngClass]="getBackButtonClass()", (click)="backButtonClicked.emit()")
 .breadcrumb-container
   span.breadcrumb-entity(
     *ngFor="let entity of breadcrumbTrail",

@@ -34,7 +34,6 @@ div.performance-table-wrapper
       tr.total-row.col-100-pct(my-performance-table-row,
                               *ngIf="totalRow",
                               [rowData]="totalRow",
-                              [showBackButton]="showBackButton",
                               [showOpportunities]="showOpportunities",
                               [contributionToVolume] ="contributionToVolume",
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")

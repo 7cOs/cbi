@@ -115,12 +115,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
-        if (current.responsibilities.entityWithPerformance.length) {
-          this.entityType = current.responsibilities.entityWithPerformance[0].entityType;
-          console.log(this.entityType + 'kk');
-          console.log(current.selectedEntity);
-        }
-
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
             current.responsibilities.entityWithPerformance
@@ -180,12 +174,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {
-          if (this.showLeftBackButton) {
-            const previousIndex: number = this.versions.length - 1;
-            const previousState = this.versions[previousIndex];
-            this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
-            this.fetchProductMetricsForPreviousState(previousState);
-          }
           console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
           console.log(`clicked on cell ${parameters.index} from the right side`);
@@ -245,9 +233,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               break;
             default:
               console.log('clicked on left row:', parameters.row);
+          }
         }
-      }
     }
+  }
+
+  public handleBackButtonClicked(): void {
+    const previousIndex: number = this.versions.length - 1;
+    const previousState = this.versions[previousIndex];
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+    this.fetchProductMetricsForPreviousState(previousState);
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {

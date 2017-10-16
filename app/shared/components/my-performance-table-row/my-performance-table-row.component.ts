@@ -16,7 +16,6 @@ export class MyPerformanceTableRowComponent {
   @Output() onSublineClicked = new EventEmitter<any>();
 
   @Input() rowData: MyPerformanceTableRow;
-  @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
   @Input() contributionToVolume: boolean;
   @Input() viewType: ViewType;
@@ -39,7 +38,6 @@ export class MyPerformanceTableRowComponent {
   public getHeaderLeftClasses(): CssClasses {
     return {
       [this.columnWidth()]: true,
-      ['back-button']: this.showBackButton
     };
   }
 
