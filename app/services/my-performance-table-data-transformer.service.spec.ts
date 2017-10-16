@@ -39,6 +39,37 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         responsibilityEntitiesPerformanceOpenPositionMock = getEntitiesWithPerformancesOpenPositionMock();
     }));
 
+    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+      const expectedRow: MyPerformanceTableRow = {
+        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
+        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
+        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
+        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
+        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
+          entityDescription: responsibilityEntitiesPerformanceMock[0].name
+        },
+        performanceError: false
+      };
+
+      if (responsibilityEntitiesPerformanceMock[0].entityType === EntityType.Distributor) {
+        expectedRow.descriptionRow1 = 'GO TO DASHBOARD';
+      }
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual(expectedRow);
+    });
+
     it('should return formatted ResponsibilityEntityPerformance data for anything other than RoleGroup', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
