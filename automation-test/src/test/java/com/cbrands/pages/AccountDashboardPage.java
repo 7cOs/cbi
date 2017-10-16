@@ -36,7 +36,8 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
   private WebElement retailerChainFilter;
 
-  @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
+  @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button" +
+    ".btn-action")
   private WebElement applyFilters;
 
   @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
@@ -192,7 +193,7 @@ public class AccountDashboardPage extends TestNGBasePage {
       "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
     waitForElementToClickable(notesButton, true).click();
 
-    return  PageFactory.initElements(driver, NotesModal.class);
+    return PageFactory.initElements(driver, NotesModal.class);
   }
 
   public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
@@ -234,7 +235,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public enum LeftPanelLevel {
-    Brand ("Brand"),
+    Brand("Brand"),
     SkuPackage("SKU / PACKAGE");
 
     private final String header;
