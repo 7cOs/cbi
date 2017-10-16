@@ -39,13 +39,14 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         responsibilityEntitiesPerformanceOpenPositionMock = getEntitiesWithPerformancesOpenPositionMock();
     }));
 
-    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor', () => {
+    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor/subaccount', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
 
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.RoleGroup), 1);
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.Distributor), 1);
+      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.SubAccount), 1);
 
       responsibilityEntitiesPerformanceMock[0].entityType = entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})];
 
