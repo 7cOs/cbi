@@ -30,7 +30,7 @@ module.exports = function (config) {
       accounts: 'https://api-account-internal-prod.herokuapp.com',
       distributors: 'https://api-distributors-internal-prod.herokuapp.com',
       positions: 'https://api-position-internal-prod.herokuapp.com',
-      productMetrics: 'https://cbi-product-metrics-api-prod.herokuapp.com/'
+      productMetrics: 'https://cbi-product-metrics-api-prod.herokuapp.com'
     }
   };
 
