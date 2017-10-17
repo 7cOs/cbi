@@ -97,7 +97,7 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('GetPeopleByRoleGroupAction', () => {
-    const entityPeopleType = getEntityPeopleResponsibilitiesMock().peopleType;
+    const entityPeopleType = EntityPeopleType['MARKET DEVELOPMENT MANAGER'];
     let action: ResponsibilitiesActions.GetPeopleByRoleGroupAction;
 
     beforeEach(() => {

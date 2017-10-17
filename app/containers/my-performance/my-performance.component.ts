@@ -8,15 +8,16 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import { ConstructRoleGroups,
-         FetchEntityWithPerformance,
+import { FetchEntityWithPerformance,
          FetchResponsibilities,
          FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
-import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -168,8 +169,23 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
-    const accountDashboardStateParams: AccountDashboardStateParameters =
-      this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+    let accountDashboardStateParams: AccountDashboardStateParameters;
+    if (row.metadata.entityType === EntityType.Distributor) {
+      accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+    } else if (row.metadata.entityType === EntityType.SubAccount) {
+      const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
+      const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
+        .find(groupedEntity => groupedEntity.positionId === row.metadata.positionId);
+      let premiseType: PremiseTypeValue;
+      if (hierarchyEntity) {
+        premiseType = hierarchyEntity.premiseType;
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, premiseType);
+      } else {
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+      }
+
+    }
+
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     const currentWindow = this.windowService.nativeWindow();
     currentWindow.open(accountDashboardUrl, '_blank');
@@ -203,24 +219,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           switch (this.salesHierarchyViewType) {
             case SalesHierarchyViewType.roleGroups:
-              const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
+              const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
-              if (parameters.row.metadata.entityType === EntityType.ResponsibilitiesGroup) {
-                this.store.dispatch(new ConstructRoleGroups({
-                  positionId: parameters.row.metadata.positionId,
-                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-                  filter: this.filterState
-                }));
-              } else {
-                this.store.dispatch(new FetchEntityWithPerformance({
-                  selectedPositionId: parameters.row.metadata.positionId,
-                  entityTypeGroupName: entityTypeGroupName,
-                  entityTypeCode: parameters.row.metadata.entityTypeCode,
-                  entityType: parameters.row.metadata.entityType,
-                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-                  filter: this.filterState
-                }));
-              }
+              this.store.dispatch(new FetchEntityWithPerformance({
+                selectedPositionId: parameters.row.metadata.positionId,
+                entityTypeGroupName: entityTypeGroupName,
+                entityTypeCode: parameters.row.metadata.entityTypeCode,
+                entityType: parameters.row.metadata.entityType,
+                entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                filter: this.filterState
+              }));
               this.store.dispatch(new FetchProductMetricsAction({
                 positionId: parameters.row.metadata.positionId,
                 entityTypeCode: parameters.row.metadata.entityTypeCode,

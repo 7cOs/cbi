@@ -1,4 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Inject } from '@angular/core';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
@@ -22,12 +23,17 @@ export class MyPerformanceTableRowComponent {
 
   public sortStatus = SortStatus;
 
+  constructor(
+    @Inject('ieHackService') private ieHackService: any
+  ) { }
+
   public getTrendClass(num: number): string {
     return num >= 0 ? 'positive' : 'negative';
   }
 
   public columnWidth(): string {
-    return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
+    return this.showOpportunities
+      ? ((this.ieHackService.isIE || this.ieHackService.isEdge) ? 'col-17-pct' : 'col-16-pct') : 'col-20-pct';
   }
 
   public getHeaderLeftClasses(): CssClasses {
@@ -38,14 +44,14 @@ export class MyPerformanceTableRowComponent {
   }
 
   public getSublineClass(): CssClasses {
-    return {
-      ['link']: this.viewType === SalesHierarchyViewType.distributors, // TODO: Check if that would work if I pass in a PM VT
-      ['forward-arrow']: this.viewType === SalesHierarchyViewType.distributors
+    return { // TODO: Check if that would work if I pass in a PM VT
+      ['link']: this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts,
+      ['forward-arrow']: this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts
     };
   }
 
   public sublineClicked(): void {
-    if (this.viewType === SalesHierarchyViewType.distributors) {
+    if (this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts) {
       this.onSublineClicked.emit();
     }
   }

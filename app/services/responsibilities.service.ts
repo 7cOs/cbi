@@ -16,6 +16,7 @@ import { MyPerformanceFilterState } from '../state/reducers/my-performance-filte
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
@@ -48,6 +49,7 @@ export interface SubAccountData {
   entityWithPerformance?: Array<EntityWithPerformance>;
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
+  premiseType?: PremiseTypeValue;
 }
 
 @Injectable()
@@ -270,8 +272,8 @@ export class ResponsibilitiesService {
           const geographyEntityTypeName: string = EntityPeopleType.GEOGRAPHY;
           const hierarchyGroups: Array<HierarchyGroup> = [{
             name: geographyEntityTypeName,
-            type: responsibilitiesData.positionId,
-            entityType: EntityType.ResponsibilitiesGroup
+            type: response.positions[0].type,
+            entityType: EntityType.RoleGroup
           }].concat(responsibilitiesData.hierarchyGroups);
           const transformedPositions: HierarchyEntity[] =
             this.responsibilitiesTransformerService.transformHierarchyEntityDTOCollection(response.positions);

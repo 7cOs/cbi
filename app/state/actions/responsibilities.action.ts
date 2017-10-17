@@ -136,17 +136,6 @@ export class SetTotalPerformanceForSelectedRoleGroup implements Action {
   constructor(public payload: string) { }
 }
 
-export const CONSTRUCT_ROLE_GROUPS = '[Responsibilities] CONSTRUCT_ROLE_GROUPS';
-export class ConstructRoleGroups implements Action {
-  readonly type = CONSTRUCT_ROLE_GROUPS;
-
-  constructor(public payload: {
-    positionId: string,
-    entities: HierarchyEntity[],
-    filter: MyPerformanceFilterState
-  }) { }
-}
-
 export type Action
   = FetchResponsibilities
   | FetchResponsibilitiesSuccess
@@ -160,5 +149,4 @@ export type Action
   | FetchTotalPerformanceSuccess
   | FetchTotalPerformanceFailure
   | SetTotalPerformance
-  | SetTotalPerformanceForSelectedRoleGroup
-  | ConstructRoleGroups;
+  | SetTotalPerformanceForSelectedRoleGroup;

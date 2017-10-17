@@ -11,7 +11,8 @@ import {
   getTargetListNotificationNotificationMock,
   getOpportunityNotificationMock,
   getStoreNotificationMock,
-  getAccountNotificationMock
+  getAccountNotificationMock,
+  getDistributorNotificationMock
 } from '../../../models/notification.model.mock';
 
 describe('NotificationsComponent', () => {
@@ -134,17 +135,47 @@ describe('NotificationsComponent', () => {
 
       const notificationsMock = [
         getOpportunityNotificationMock(),
-        getOpportunityNotificationMock()
+        getTargetListNotificationNotificationMock(),
+        getAccountNotificationMock(),
+        getStoreNotificationMock(),
+        getDistributorNotificationMock()
       ];
-
       component.notifications = notificationsMock;
-      component.clickOn(notificationsMock[0]);
 
-      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+      component.clickOn(notificationsMock[0]);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
         'Notifications',
         'Read Notification',
         'Shared Opportunity'
-      );
+      ]);
+
+      component.clickOn(notificationsMock[1]);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(1)).toEqual([
+        'Notifications',
+        'Read Notification',
+        'Shared Target List'
+      ]);
+
+      component.clickOn(notificationsMock[2]);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
+        'Notifications',
+        'Read Notification',
+        'Shared Note'
+      ]);
+
+      component.clickOn(notificationsMock[3]);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(3)).toEqual([
+        'Notifications',
+        'Read Notification',
+        'Shared Note'
+      ]);
+
+      component.clickOn(notificationsMock[4]);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(4)).toEqual([
+        'Notifications',
+        'Read Notification',
+        'Shared Note'
+      ]);
     }));
 
   });

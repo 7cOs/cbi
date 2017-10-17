@@ -6,6 +6,7 @@ export interface MyPerformanceTableRowMetadata {
   entityType?: EntityType;
   entityTypeCode?: string;
   brandCode?: string;
+  entityName?: string;
 }
 
 export interface MyPerformanceTableRow {

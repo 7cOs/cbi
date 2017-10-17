@@ -77,16 +77,6 @@ export class ResponsibilitiesEffects {
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
   }
 
-  @Effect() constructRoleGroups$(): Observable<Action> {
-    return this.actions$
-      .ofType(ResponsibilitiesActions.CONSTRUCT_ROLE_GROUPS)
-      .switchMap((action: Action) => Observable.of(action.payload))
-      .switchMap((responsibilitiesData) => this.responsibilitiesService.groupPeopleResponsibilities(responsibilitiesData))
-      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
-      .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
-      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
-  }
-
   @Effect({dispatch: false})
   fetchResponsibilitiesFailure$(): Observable<Action> {
     return this.actions$
