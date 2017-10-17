@@ -1000,54 +1000,55 @@ describe('Responsibilities Effects', () => {
     });
   });
 
-  describe('when groupPeopleResponsibilities is called', () => {
-    let responsibilitiesDataMock: ResponsibilitiesData;
+  // TODO !!! - MAKE THIS THE OTHER FUNCTION TESt
+  // describe('when groupPeopleResponsibilities is called', () => {
+  //   let responsibilitiesDataMock: ResponsibilitiesData;
 
-    beforeEach(() => {
-      responsibilitiesDataMock = {
-        positionId: positionIdMock,
-        entities: [ getEntityPeopleResponsibilitiesMock(), getEntityPeopleResponsibilitiesMock() ],
-        filter: performanceFilterStateMock
-      };
-    });
+  //   beforeEach(() => {
+  //     responsibilitiesDataMock = {
+  //       positionId: positionIdMock,
+  //       entities: [ getEntityPeopleResponsibilitiesMock(), getEntityPeopleResponsibilitiesMock() ],
+  //       filter: performanceFilterStateMock
+  //     };
+  //   });
 
-    it('should call groupPeopleEntitiesByRole with the passed in entities', (done) => {
-      const groupPeopleEntitiesByRoleSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleEntitiesByRole').and.callThrough();
+  //   it('should call groupPeopleEntitiesByRole with the passed in entities', (done) => {
+  //     const groupPeopleEntitiesByRoleSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleEntitiesByRole').and.callThrough();
 
-      responsibilitiesService.groupPeopleResponsibilities(responsibilitiesDataMock).subscribe(() => {
-        expect(groupPeopleEntitiesByRoleSpy).toHaveBeenCalledWith(responsibilitiesDataMock.entities);
-        done();
-      });
-    });
+  //     responsibilitiesService.groupPeopleResponsibilities(responsibilitiesDataMock).subscribe(() => {
+  //       expect(groupPeopleEntitiesByRoleSpy).toHaveBeenCalledWith(responsibilitiesDataMock.entities);
+  //       done();
+  //     });
+  //   });
 
-    it('should return responsibilities data with grouped entities, roleGroups view type, and hierarchyGroups', (done) => {
-      spyOn(responsibilitiesTransformerService, 'groupPeopleEntitiesByRole').and.returnValue(groupedEntitiesMock);
+  //   it('should return responsibilities data with grouped entities, roleGroups view type, and hierarchyGroups', (done) => {
+  //     spyOn(responsibilitiesTransformerService, 'groupPeopleEntitiesByRole').and.returnValue(groupedEntitiesMock);
 
-      const expectedHierarchyGroups = [{
-        type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
-        name: 'GENERAL MANAGER',
-        entityType: EntityType.RoleGroup,
-        positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription,
-      }, {
-        type: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].type,
-        name: 'MARKET DEVELOPMENT MANAGER',
-        entityType: EntityType.RoleGroup,
-        positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
-      }];
+  //     const expectedHierarchyGroups = [{
+  //       type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
+  //       name: 'GENERAL MANAGER',
+  //       entityType: EntityType.RoleGroup,
+  //       positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription,
+  //     }, {
+  //       type: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].type,
+  //       name: 'MARKET DEVELOPMENT MANAGER',
+  //       entityType: EntityType.RoleGroup,
+  //       positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
+  //     }];
 
-      const expectedResponsibilitiesData: ResponsibilitiesData = Object.assign({}, responsibilitiesDataMock, {
-        groupedEntities: groupedEntitiesMock,
-        hierarchyGroups: expectedHierarchyGroups,
-        viewType: ViewType.roleGroups
-      });
+  //     const expectedResponsibilitiesData: ResponsibilitiesData = Object.assign({}, responsibilitiesDataMock, {
+  //       groupedEntities: groupedEntitiesMock,
+  //       hierarchyGroups: expectedHierarchyGroups,
+  //       viewType: ViewType.roleGroups
+  //     });
 
-      responsibilitiesService.groupPeopleResponsibilities(responsibilitiesDataMock)
-      .subscribe((actualResponsibilitiesData: ResponsibilitiesData) => {
-        expect(actualResponsibilitiesData).toEqual(expectedResponsibilitiesData);
-        done();
-      });
-    });
-  });
+  //     responsibilitiesService.groupPeopleResponsibilities(responsibilitiesDataMock)
+  //     .subscribe((actualResponsibilitiesData: ResponsibilitiesData) => {
+  //       expect(actualResponsibilitiesData).toEqual(expectedResponsibilitiesData);
+  //       done();
+  //     });
+  //   });
+  // });
 
   describe('when getAlternateHierarchy is called', () => {
     let responsibilitiesDataMock: ResponsibilitiesData;

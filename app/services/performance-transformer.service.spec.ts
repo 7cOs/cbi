@@ -66,7 +66,7 @@ describe('Service: PerformanceTransformerService', () => {
     });
   });
 
-  describe('transformEntityPerformanceDTO', () => {
+  describe('transformEntityWithPerformanceDTOs', () => {
 
     beforeEach(inject([ PerformanceTransformerService, UtilService ],
       (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {

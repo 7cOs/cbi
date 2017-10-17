@@ -11,6 +11,7 @@ import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entit
 import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
+import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
@@ -36,6 +37,7 @@ export interface ResponsibilitiesData {
   entitiesURL?: string;
   alternateEntitiesURL?: string;
   positionId?: string;
+  alternateHierarchyId?: string;
   entityTypeCode?: string;
   filter?: MyPerformanceFilterState;
   entityWithPerformance?: Array<EntityWithPerformance>;
@@ -66,63 +68,29 @@ export class ResponsibilitiesService {
   public getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
     return this.myPerformanceApiService.getResponsibilities(responsibilitiesData.positionId)
       .map((response: PeopleResponsibilitiesDTO) => {
-        let groupedEntities: GroupedEntities;
-        let viewType: ViewType;
-        let hierarchyGroups: Array<HierarchyGroup>;
-        let entitiesURL: string;
-
         if (response.positions) {
-          viewType = ViewType.roleGroups;
-          groupedEntities = this.responsibilitiesTransformerService.groupPeopleByGroupedEntities(response.positions);
-          hierarchyGroups = Object.keys(groupedEntities).map((roleGroup: string) => {
-            return {
-              type: groupedEntities[roleGroup][0].type,
-              name: roleGroup,
-              entityType: EntityType.RoleGroup,
-              positionDescription: groupedEntities[roleGroup][0].positionDescription
-            };
-          });
+          return this.handleResponsibilitiesPositionsResponse(response.positions, responsibilitiesData);
         } else if (response.entityURIs) {
-          viewType = response.entityURIs[0].search('distributors') !== -1
-            ? ViewType.distributors
-            : ViewType.accounts;
-
-          entitiesURL = response.entityURIs[0];
+          return Object.assign({}, responsibilitiesData, {
+            entitiesURL: response.entityURIs[0],
+            viewType: response.entityURIs[0].search('distributors') !== -1 ? ViewType.distributors : ViewType.accounts
+          });
         }
-
-        return Object.assign({}, responsibilitiesData, {
-          groupedEntities: groupedEntities,
-          viewType: viewType,
-          hierarchyGroups: hierarchyGroups,
-          entitiesURL: entitiesURL
-        });
       });
   }
 
   public getAlternateHierarchyResponsibilities(responsibilitiesData: ResponsibilitiesData): any {
-    console.log('getAlternateHierarchyResponsibilities', responsibilitiesData);
-  }
-
-  public groupPeopleResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    let hierarchyGroups: Array<HierarchyGroup>;
-
-    const groupedEntities: GroupedEntities =
-      this.responsibilitiesTransformerService.groupPeopleEntitiesByRole(responsibilitiesData.entities);
-
-    hierarchyGroups = Object.keys(groupedEntities).map((roleGroup: string) => {
-      return {
-        type: groupedEntities[roleGroup][0].type,
-        name: roleGroup,
-        entityType: EntityType.RoleGroup,
-        positionDescription: groupedEntities[roleGroup][0].positionDescription
-      };
-    });
-
-    return Observable.of(Object.assign({}, responsibilitiesData, {
-      hierarchyGroups: hierarchyGroups,
-      groupedEntities: groupedEntities,
-      viewType: ViewType.roleGroups
-    }));
+    return this.myPerformanceApiService.getAlternateHierarchy(responsibilitiesData.positionId, responsibilitiesData.alternateHierarchyId)
+      .map((response: PeopleResponsibilitiesDTO) => {
+        if (response.positions) {
+          return this.handleResponsibilitiesPositionsResponse(response.positions, responsibilitiesData);
+        } else if (response.entityURIs) {
+          return Object.assign({}, responsibilitiesData, {
+            entitiesURL: response.entityURIs[0],
+            viewType: response.entityURIs[0].search('distributors') !== -1 ? ViewType.distributors : ViewType.accounts
+          });
+        }
+      });
   }
 
   public getResponsibilitiesPerformances(entities: Array<HierarchyGroup>, filter: MyPerformanceFilterState, positionId?: string)
@@ -382,5 +350,29 @@ export class ResponsibilitiesService {
           responsibilitiesData.entityWithPerformance = entityPerformances;
           return responsibilitiesData;
         });
+  }
+
+  private getHierarchyGroups(groupedEntities: GroupedEntities, entityType: EntityType): Array<HierarchyGroup> {
+    return Object.keys(groupedEntities).map((groupName: string) => {
+      return {
+        type: groupedEntities[groupName][0].type,
+        name: groupName,
+        entityType: EntityType[entityType],
+        positionDescription: groupedEntities[groupName][0].positionDescription
+      };
+    });
+  }
+
+  private handleResponsibilitiesPositionsResponse(positions: Array<HierarchyEntityDTO>, responsibilitiesData: ResponsibilitiesData)
+  : ResponsibilitiesData {
+    const groupedEntities: GroupedEntities =
+      this.responsibilitiesTransformerService.groupPeopleByGroupedEntities(positions);
+    const hierarchyGroups: Array<HierarchyGroup> = this.getHierarchyGroups(groupedEntities, EntityType.RoleGroup);
+
+    return Object.assign({}, responsibilitiesData, {
+      groupedEntities: groupedEntities,
+      hierarchyGroups: hierarchyGroups,
+      viewType: ViewType.roleGroups
+    });
   }
 }

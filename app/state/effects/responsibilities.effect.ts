@@ -42,6 +42,17 @@ export class ResponsibilitiesEffects {
   }
 
   @Effect()
+  fetchAlternateHierarchyResponsibilities$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES)
+      .switchMap((action: Action) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(action.payload))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
+      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
+  }
+
+  @Effect()
   FetchEntityWithPerformance$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
@@ -103,14 +114,6 @@ export class ResponsibilitiesEffects {
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchTotalPerformanceFailure(err)));
       });
   }
-
-  // @Effect()
-  // fetchAlternateHierarchyResponsibilities$(): Observable<Action> {
-  //   return this.actions$
-  //     .ofType(ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES)
-  //     .switchMap((action: Action) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesData))
-  //     .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
-  // }
 
   @Effect({dispatch: false})
   fetchPerformanceFailure$(): Observable<Action> {
