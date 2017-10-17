@@ -31,8 +31,15 @@ public class NotesTest extends BaseTestCase {
   }
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")
-  public void createNote(String noteTopic, String noteText) {
-    openNotesModalFor(TestUser.NOTES_ACTOR, "Taco Joint", "IL", "Ontario");
+  public void createNote(
+    String noteTopic,
+    String noteText,
+    TestUser testUser,
+    String storeName,
+    String stateLocation,
+    String address
+  ) {
+    openNotesModalFor(testUser, storeName, stateLocation, address);
 
     notesModal
       .clickAddNoteButton()
@@ -46,11 +53,17 @@ public class NotesTest extends BaseTestCase {
   }
 
   @Test(dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
-  public void deleteNote(String noteTopic, String noteText) {
-    openNotesModalFor(TestUser.NOTES_ACTOR, "Taco Joint", "IL", "Ontario");
+  public void deleteNote(
+    String noteTopic,
+    String noteText,
+    TestUser testUser,
+    String storeName,
+    String stateLocation,
+    String address
+  ) {
+    openNotesModalFor(testUser, storeName, stateLocation, address);
 
     final WebElement deleteMe = notesModal.findNoteWithText(noteText);
-
     notesModal
       .clickDeleteIcon(deleteMe)
       .confirmDelete(deleteMe)
@@ -64,7 +77,16 @@ public class NotesTest extends BaseTestCase {
 
   @DataProvider(name = "NoteData")
   public static Object[][] noteData() {
-    return new Object[][]{{"Distribution", "Testing create notes: " + current_time_stamp}};
+    return new Object[][]{
+      {
+        "Distribution",
+        "Testing create notes: " + current_time_stamp,
+        TestUser.NOTES_ACTOR,
+        "Taco Joint",
+        "IL",
+        "Ontario"
+      }
+    };
   }
 
   private void login(TestUser testUser) {
