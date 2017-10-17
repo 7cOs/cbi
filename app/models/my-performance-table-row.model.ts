@@ -6,6 +6,7 @@ export interface MyPerformanceTableRowMetadata {
   alternateHierarchyId?: string;
   entityType: EntityType;
   entityTypeCode?: string;
+  entityName: string;
 }
 
 export interface MyPerformanceTableRow {

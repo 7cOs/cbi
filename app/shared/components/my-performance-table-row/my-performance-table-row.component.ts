@@ -1,4 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Inject } from '@angular/core';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
@@ -21,12 +22,17 @@ export class MyPerformanceTableRowComponent {
 
   public sortStatus = SortStatus;
 
+  constructor(
+    @Inject('ieHackService') private ieHackService: any
+  ) { }
+
   public getTrendClass(num: number): string {
     return num >= 0 ? 'positive' : 'negative';
   }
 
   public columnWidth(): string {
-    return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
+    return this.showOpportunities
+      ? ((this.ieHackService.isIE || this.ieHackService.isEdge) ? 'col-17-pct' : 'col-16-pct') : 'col-20-pct';
   }
 
   public getHeaderLeftClasses(): CssClasses {
@@ -38,13 +44,13 @@ export class MyPerformanceTableRowComponent {
 
   public getSublineClass(): CssClasses {
     return {
-      ['link']: this.viewType === ViewType.distributors,
-      ['forward-arrow']: this.viewType === ViewType.distributors
+      ['link']: this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts,
+      ['forward-arrow']: this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts
     };
   }
 
   public sublineClicked(): void {
-    if (this.viewType === ViewType.distributors) {
+    if (this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts) {
       this.onSublineClicked.emit();
     }
   }
