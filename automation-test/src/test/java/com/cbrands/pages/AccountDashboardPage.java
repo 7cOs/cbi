@@ -33,8 +33,14 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//inline-search[@type='distributor']")
   private WebElement distributorFilter;
 
+  @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
+  private WebElement retailerTypeDropdown;
+
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
   private WebElement retailerChainFilter;
+
+  @FindBy(how = How.XPATH, using = "//inline-search[@type='store']")
+  private WebElement retailerStoreFilter;
 
   @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button" +
     ".btn-action")
@@ -93,34 +99,46 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public AccountDashboardPage enterRetailerChainSearchText(String text) {
-    final WebElement retailerChainTextBox = retailerChainFilter
-      .findElement(By.xpath(".//input[@placeholder='Account or Subaccount Name']"));
-    waitForElementToClickable(retailerChainTextBox, true).click();
-    retailerChainTextBox.sendKeys(text);
+  public AccountDashboardPage clickRetailerType() {
+    waitForElementToClickable(retailerTypeDropdown, true).click();
+    return this;
+  }
+
+  public AccountDashboardPage chooseStoreRetailerType() {
+    final By retailerTypeHandle = By.xpath("//md-option[@aria-label='Store']");
+    waitForElementToClickable(findElement(retailerTypeHandle), true).click();
+    waitForElementToClickable(findElement(retailerTypeHandle), false);
+    return this;
+  }
+
+  public AccountDashboardPage enterRetailerStoreSearchText(String text) {
+    final WebElement retailerStoreTextBox = retailerStoreFilter
+      .findElement(By.xpath(".//input[@placeholder='Name, Address, TDLinx']"));
+    waitForElementToClickable(retailerStoreTextBox, true).click();
+    retailerStoreTextBox.sendKeys(text);
 
     return this;
   }
 
-  public AccountDashboardPage clickSearchForRetailerChain() {
-    final WebElement searchButton = retailerChainFilter
+  public AccountDashboardPage clickSearchForRetailerStore() {
+    final WebElement searchButton = retailerStoreFilter
       .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
     waitForElementToClickable(searchButton, true).click();
 
     return this;
   }
 
-  public AccountDashboardPage selectRetailerChainFilterByName(String accountName) {
-    final WebElement resultsContainer = retailerChainFilter
-      .findElement(By.xpath(".//div[contains(@class, 'results-container')]"));
-    waitForVisibleFluentWait(resultsContainer);
+  public AccountDashboardPage waitForStoreLoaderToDisappear() {
+    waitForElementToDisappear(By.xpath("//md-progress-circular"));
+    return this;
+  }
 
-    final List<WebElement> results = resultsContainer.findElements(By.xpath(".//li"));
-    waitForElementsVisibleFluentWait(results);
-
-    final WebElement retailer = getFirstElementTextMatchByName(accountName, results);
-    Assert.assertNotNull(retailer, "No retailer found by the name of " + accountName);
-    waitForElementToClickable(retailer, true).click();
+  public AccountDashboardPage selectRetailerStoreByState(String stateLocation, String address) {
+    final WebElement selectMe = retailerStoreFilter
+      .findElement(By.xpath(".//div[contains(@class, 'results-container')]"))
+      .findElement(By.xpath(".//label[contains(@class, 'state-group')][contains(., '" + stateLocation + "')]"))
+      .findElement(By.xpath("./following-sibling::li[contains(., '" + address + "')]"));
+    waitForElementToClickable(selectMe, true).click();
 
     return this;
   }
@@ -164,22 +182,6 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public AccountDashboardPage drillIntoRightPanelWithName(String name) {
-    final List<WebElement> elements = getRightPanelRows();
-    final WebElement element = getFirstElementTextMatchByName(name, elements);
-    Assert.assertNotNull(element, "No item found by name: " + name);
-
-    scrollToAndClick(element);
-
-    return this;
-  }
-
-  private List<WebElement> getRightPanelRows() {
-    final List<WebElement> elements = rightPanel.findElements(By.xpath(RIGHT_PANEL_ROW_XPATH));
-    waitForElementsVisibleFluentWait(elements);
-    return elements;
-  }
-
   public AccountDashboardPage drillUpRightPanel() {
     final WebElement backButton = rightPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
     waitForVisibleFluentWait(backButton);
@@ -192,6 +194,19 @@ public class AccountDashboardPage extends TestNGBasePage {
     final WebElement notesButton = findElement(By.xpath(
       "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
     waitForElementToClickable(notesButton, true).click();
+
+    return PageFactory.initElements(driver, NotesModal.class);
+  }
+
+  public NotesModal openNotesModalForStore(String storeAccountName, String stateLocation, String address) {
+    clickRetailerType()
+      .chooseStoreRetailerType()
+      .enterRetailerStoreSearchText(storeAccountName)
+      .clickSearchForRetailerStore()
+      .waitForStoreLoaderToDisappear()
+      .selectRetailerStoreByState(stateLocation, address)
+      .clickApplyFilters()
+      .clickNotesButton();
 
     return PageFactory.initElements(driver, NotesModal.class);
   }

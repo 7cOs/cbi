@@ -25,7 +25,12 @@ public class NotesTest extends BaseTestCase {
     driver.get(webAppBaseUrl);
 
     login(TestUser.NOTES_ACTOR);
-    openNotesModal("Taco Joint");
+    final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
+    accountDashboardPage.goToPage();
+
+    notesModal = accountDashboardPage.openNotesModalForStore("Taco Joint", "IL", "Ontario");
+    Assert.assertTrue(notesModal.isLoaded(), "Failure to load Notes modal \n");
+    notesModal.waitForLoaderToDisappear();
   }
 
   @AfterMethod
@@ -70,23 +75,6 @@ public class NotesTest extends BaseTestCase {
     final Login loginPage = new Login(driver);
     final HomePage homePage = loginPage.loginAs(testUser);
     Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
-  }
-
-  private void openNotesModal(String storeAccountName) {
-    final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
-    accountDashboardPage.goToPage();
-
-    notesModal = accountDashboardPage
-      .enterRetailerChainSearchText(storeAccountName)
-      .clickSearchForRetailerChain()
-      .selectRetailerChainFilterByName(storeAccountName)
-      .clickApplyFilters()
-      .drillIntoRightPanelWithName(storeAccountName)
-      .drillIntoRightPanelWithName(storeAccountName)
-      .clickNotesButton()
-      .waitForLoaderToDisappear();
-
-    Assert.assertTrue(notesModal.isLoaded(), "Failure to load Notes modal \n");
   }
 
 }
