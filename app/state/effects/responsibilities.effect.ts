@@ -104,6 +104,14 @@ export class ResponsibilitiesEffects {
       });
   }
 
+  // @Effect()
+  // fetchAlternateHierarchyResponsibilities$(): Observable<Action> {
+  //   return this.actions$
+  //     .ofType(ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES)
+  //     .switchMap((action: Action) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesData))
+  //     .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
+  // }
+
   @Effect({dispatch: false})
   fetchPerformanceFailure$(): Observable<Action> {
     return this.actions$

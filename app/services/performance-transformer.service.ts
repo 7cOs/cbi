@@ -36,6 +36,7 @@ export class PerformanceTransformerService {
         name: entity.name,
         entityType: EntityType[entity.entityType],
         positionDescription: entity.positionDescription,
+        alternateHierarchyId: entity.alternateHierarchyId,
         performance: this.transformPerformanceDTO(entity.performance)
       };
     });

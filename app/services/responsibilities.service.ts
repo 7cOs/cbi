@@ -24,6 +24,7 @@ export interface HierarchyGroup {
   type: string;
   entityType: EntityType;
   positionId?: string;
+  alternateHierarchyId?: string;
   positionDescription?: string;
 }
 
@@ -94,6 +95,10 @@ export class ResponsibilitiesService {
           entitiesURL: entitiesURL
         });
       });
+  }
+
+  public getAlternateHierarchyResponsibilities(responsibilitiesData: ResponsibilitiesData): any {
+    console.log('getAlternateHierarchyResponsibilities', responsibilitiesData);
   }
 
   public groupPeopleResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -265,12 +270,13 @@ export class ResponsibilitiesService {
     return this.myPerformanceApiService.getAlternateHierarchy(responsibilitiesData.positionId, responsibilitiesData.positionId)
       .switchMap((response: PeopleResponsibilitiesDTO) => {
         if (response.positions) {
-          const geographyEntityTypeName: string = EntityPeopleType.GEOGRAPHY;
-          const hierarchyGroups: Array<HierarchyGroup> = [{
-            name: geographyEntityTypeName,
+          const alternateHierarchyGroup: HierarchyGroup = {
+            name: EntityPeopleType.GEOGRAPHY,
             type: response.positions[0].type,
-            entityType: EntityType.RoleGroup
-          }].concat(responsibilitiesData.hierarchyGroups);
+            entityType: EntityType.RoleGroup,
+            alternateHierarchyId: responsibilitiesData.positionId
+          };
+          const hierarchyGroups: Array<HierarchyGroup> = responsibilitiesData.hierarchyGroups.concat([alternateHierarchyGroup]);
           const transformedPositions: HierarchyEntity[] =
             this.responsibilitiesTransformerService.transformHierarchyEntityDTOCollection(response.positions);
           const groupedEntities: GroupedEntities = Object.assign({}, responsibilitiesData.groupedEntities, {
@@ -297,13 +303,13 @@ export class ResponsibilitiesService {
         .switchMap((response: Array<EntityDTO>) => {
           const groupedEntities = Object.assign({}, responsibilitiesData.groupedEntities,
             this.responsibilitiesTransformerService.groupsAccountsDistributors(response, EntityPeopleType.GEOGRAPHY));
-          const geographyEntityType: string = EntityPeopleType.GEOGRAPHY;
-          const entityTypeCode: string = response[0].type;
-          const hierarchyGroups: Array<HierarchyGroup> = [{
-            name: geographyEntityType,
-            type: entityTypeCode,
-            entityType: response[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
-          }].concat(responsibilitiesData.hierarchyGroups);
+          const alternateHierarchyGroup: HierarchyGroup = {
+            name: EntityPeopleType.GEOGRAPHY,
+            type: response[0].type,
+            entityType: response[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup,
+            alternateHierarchyId: responsibilitiesData.positionId
+          };
+          const hierarchyGroups: Array<HierarchyGroup> = responsibilitiesData.hierarchyGroups.concat([alternateHierarchyGroup]);
 
           return Observable.of(Object.assign({}, responsibilitiesData, {
             hierarchyGroups: hierarchyGroups,

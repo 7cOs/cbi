@@ -8,11 +8,13 @@ export interface EntityWithPerformanceDTO {
   entityType: EntityType;
   positionDescription?: string;
   performance: PerformanceDTO;
+  alternateHierarchyId?: string;
 }
 
 export interface EntityWithPerformance {
   positionId: string;
   contextPositionId?: string;
+  alternateHierarchyId?: string;
   name: string;
   entityTypeCode?: string;
   entityType: EntityType;

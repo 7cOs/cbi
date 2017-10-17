@@ -45,6 +45,12 @@ export interface FetchSubAccountsSuccessPayload {
   entityWithPerformance: EntityWithPerformance[];
 }
 
+export interface FetchAlternateHierarchyResponsibilitiesPayload {
+  positionId: string;
+  alternateHierarchyId: string;
+  filter: MyPerformanceFilterState;
+}
+
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
 export class FetchResponsibilities implements Action {
   readonly type = FETCH_RESPONSIBILITIES;
@@ -101,6 +107,20 @@ export class FetchSubAccountsSuccessAction implements Action {
   constructor(public payload: FetchSubAccountsSuccessPayload) { }
 }
 
+export const SET_ALTERNATE_HIERARCHY_ID = '[Responsibilities] SET_ALTERNATE_HIERARCHY_ID';
+export class SetAlternateHierarchyId implements Action {
+  readonly type = SET_ALTERNATE_HIERARCHY_ID;
+
+  constructor(public payload: string) { }
+}
+
+export const FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES = '[Responsibilities] FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES';
+export class FetchAlternateHierarchyResponsibilities implements Action {
+  readonly type = FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES;
+
+  constructor(public payload: FetchAlternateHierarchyResponsibilitiesPayload) { }
+}
+
 export const FETCH_TOTAL_PERFORMANCE = '[Performance Total] FETCH_TOTAL_PERFORMANCE';
 export class FetchTotalPerformance implements Action {
   readonly type = FETCH_TOTAL_PERFORMANCE;
@@ -145,6 +165,8 @@ export type Action
   | GetPeopleByRoleGroupAction
   | FetchSubAccountsAction
   | FetchSubAccountsSuccessAction
+  | SetAlternateHierarchyId
+  | FetchAlternateHierarchyResponsibilities
   | FetchTotalPerformance
   | FetchTotalPerformanceSuccess
   | FetchTotalPerformanceFailure

@@ -37,6 +37,7 @@ export class MyPerformanceApiService {
     })
       .map(res => ({
         id: positionId,
+        alternateHierarchyId: entity.alternateHierarchyId,
         name: entity.name,
         entityType: entity.entityType,
         positionDescription: entity.positionDescription,
@@ -46,6 +47,7 @@ export class MyPerformanceApiService {
       .catch((err) => {
         return Observable.of({
           id: positionId,
+          alternateHierarchyId: entity.alternateHierarchyId,
           name: entity.name,
           entityType: entity.entityType,
           positionDescription: entity.positionDescription,

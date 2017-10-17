@@ -10,7 +10,8 @@ import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-cli
 import { ColumnType } from '../../enums/column-type.enum';
 import { FetchEntityWithPerformance,
          FetchResponsibilities,
-         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
+         FetchSubAccountsAction,
+         SetAlternateHierarchyId } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
@@ -189,31 +190,68 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             case ViewType.roleGroups:
               const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
 
-              this.store.dispatch(new FetchEntityWithPerformance({
-                selectedPositionId: parameters.row.metadata.positionId,
-                entityTypeGroupName: entityTypeGroupName,
-                entityTypeCode: parameters.row.metadata.entityTypeCode,
-                entityType: parameters.row.metadata.entityType,
-                entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-                filter: this.filterState
-              }));
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                entityTypeCode: parameters.row.metadata.entityTypeCode,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.RoleGroup
-              }));
+              if (parameters.row.metadata.alternateHierarchyId) {
+                this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+                this.store.dispatch(new FetchEntityWithPerformance({
+                  selectedPositionId: parameters.row.metadata.positionId,
+                  entityTypeGroupName: entityTypeGroupName,
+                  entityTypeCode: parameters.row.metadata.entityTypeCode,
+                  entityType: parameters.row.metadata.entityType,
+                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                  filter: this.filterState
+                }));
+                this.store.dispatch(new FetchProductMetricsAction({
+                  positionId: parameters.row.metadata.positionId,
+                  entityTypeCode: parameters.row.metadata.entityTypeCode,
+                  filter: this.filterState,
+                  selectedEntityType: SelectedEntityType.RoleGroup
+                }));
+              } else {
+                this.store.dispatch(new FetchEntityWithPerformance({
+                  selectedPositionId: parameters.row.metadata.positionId,
+                  entityTypeGroupName: entityTypeGroupName,
+                  entityTypeCode: parameters.row.metadata.entityTypeCode,
+                  entityType: parameters.row.metadata.entityType,
+                  entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                  filter: this.filterState
+                }));
+                this.store.dispatch(new FetchProductMetricsAction({
+                  positionId: parameters.row.metadata.positionId,
+                  entityTypeCode: parameters.row.metadata.entityTypeCode,
+                  filter: this.filterState,
+                  selectedEntityType: SelectedEntityType.RoleGroup
+                }));
+              }
               break;
+
             case ViewType.people:
-              this.store.dispatch(new FetchResponsibilities({
-                positionId: parameters.row.metadata.positionId,
-                filter: this.filterState
-              }));
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.Position
-              }));
+              if (this.currentState.responsibilities.alternateHierarchyId) {
+                // this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
+                //   positionId: parameters.row.metadata.positionId,
+                //   alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+                //   filter: this.filterState
+                // }));
+                this.store.dispatch(new FetchResponsibilities({
+                  positionId: parameters.row.metadata.positionId,
+                  filter: this.filterState
+                }));
+                this.store.dispatch(new FetchProductMetricsAction({
+                  positionId: parameters.row.metadata.positionId,
+                  filter: this.filterState,
+                  selectedEntityType: SelectedEntityType.Position
+                }));
+
+              } else {
+                this.store.dispatch(new FetchResponsibilities({
+                  positionId: parameters.row.metadata.positionId,
+                  filter: this.filterState
+                }));
+                this.store.dispatch(new FetchProductMetricsAction({
+                  positionId: parameters.row.metadata.positionId,
+                  filter: this.filterState,
+                  selectedEntityType: SelectedEntityType.Position
+                }));
+              }
               break;
             case ViewType.accounts:
               this.store.dispatch(new FetchSubAccountsAction({
