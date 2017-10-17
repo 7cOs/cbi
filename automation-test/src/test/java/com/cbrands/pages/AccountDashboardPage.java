@@ -190,27 +190,6 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public NotesModal clickNotesButton() {
-    final WebElement notesButton = findElement(By.xpath(
-      "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
-    waitForElementToClickable(notesButton, true).click();
-
-    return PageFactory.initElements(driver, NotesModal.class);
-  }
-
-  public NotesModal openNotesModalForStore(String storeAccountName, String stateLocation, String address) {
-    clickRetailerType()
-      .chooseStoreRetailerType()
-      .enterRetailerStoreSearchText(storeAccountName)
-      .clickSearchForRetailerStore()
-      .waitForStoreLoaderToDisappear()
-      .selectRetailerStoreByState(stateLocation, address)
-      .clickApplyFilters()
-      .clickNotesButton();
-
-    return PageFactory.initElements(driver, NotesModal.class);
-  }
-
   public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
     boolean resultsAreLoaded;
 
@@ -240,6 +219,27 @@ public class AccountDashboardPage extends TestNGBasePage {
     }
 
     return resultsAreLoaded;
+  }
+
+  public NotesModal clickNotesButton() {
+    final WebElement notesButton = findElement(By.xpath(
+      "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
+    waitForElementToClickable(notesButton, true).click();
+
+    return PageFactory.initElements(driver, NotesModal.class);
+  }
+
+  public NotesModal openNotesModalForStore(String storeAccountName, String stateLocation, String address) {
+    clickRetailerType()
+      .chooseStoreRetailerType()
+      .enterRetailerStoreSearchText(storeAccountName)
+      .clickSearchForRetailerStore()
+      .waitForStoreLoaderToDisappear()
+      .selectRetailerStoreByState(stateLocation, address)
+      .clickApplyFilters()
+      .clickNotesButton();
+
+    return PageFactory.initElements(driver, NotesModal.class);
   }
 
   public enum RightPanelLevel {
