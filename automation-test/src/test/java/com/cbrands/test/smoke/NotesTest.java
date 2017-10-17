@@ -23,8 +23,6 @@ public class NotesTest extends BaseTestCase {
     logoutPage = new LogoutPage(driver);
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-
-    openNotesModalFor(TestUser.NOTES_ACTOR, "Taco Joint", "IL", "Ontario");
   }
 
   @AfterMethod
@@ -34,6 +32,8 @@ public class NotesTest extends BaseTestCase {
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")
   public void createNote(String noteTopic, String noteText) {
+    openNotesModalFor(TestUser.NOTES_ACTOR, "Taco Joint", "IL", "Ontario");
+
     notesModal
       .clickAddNoteButton()
       .clickNoteTopicSelector()
@@ -47,6 +47,8 @@ public class NotesTest extends BaseTestCase {
 
   @Test(dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
   public void deleteNote(String noteTopic, String noteText) {
+    openNotesModalFor(TestUser.NOTES_ACTOR, "Taco Joint", "IL", "Ontario");
+
     final WebElement deleteMe = notesModal.findNoteWithText(noteText);
 
     notesModal
