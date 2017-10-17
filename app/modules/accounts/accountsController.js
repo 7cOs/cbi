@@ -986,7 +986,8 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
-      const isNavigatedFromMyPerformance = $state.params.distributorid;
+      const isNavigatedFromMyPerformanceDistributorRow = $state.params.distributorid;
+      const isNavigatedFromMyPerformanceSubaccountRow = $state.params.subaccountid;
       const isSettingNotes = $state.params.openNotesOnLoad;
 
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
@@ -998,20 +999,19 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
       if (isNavigatedFromOpps) {
         setDataForNavigationFromOpps();
+      } else if (isNavigatedFromMyPerformanceDistributorRow) {
+        setDataForNavigationFromMyPerformanceDistributorRow();
+      } else if (isNavigatedFromMyPerformanceSubaccountRow) {
+        setDataForNavigationFromMyPerformanceSubaccountRow();
+      } else if (isNavigatedFromScorecard) {
+        setDataForNavigationFromScorecard();
+      }
+      if (!isNavigatedFromMyPerformanceSubaccountRow && !isNavigatedFromScorecard) {
+        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
       if (isSettingNotes) {
         setNotes();
-      }
-
-      if (isNavigatedFromMyPerformance) {
-        setDataForNavigationFromMyPerformance();
-      }
-
-      if (isNavigatedFromScorecard) {
-        setDataForNavigationFromScorecard();
-      } else {
-        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
       resetStateParameters();
@@ -1060,23 +1060,40 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
     }
 
-    function setDataForNavigationFromMyPerformance() {
+    function setDataForNavigationFromMyPerformanceDistributorRow() {
       setFilter({id: $state.params.distributorid, name: $state.params.distributorname, type: 'distributor'}, 'distributor');
+      filtersService.model.distributor = $state.params.distributorname;
       vm.showXDistributor = true;
 
-      if ($state.params.premisetype === 'On') {
-        vm.premiseTypeValue = 'on';
-        vm.filtersService.model.selected.premiseType = 'on';
-        vm.updateChip('On-Premise', 'premiseType');
-      } else if ($state.params.premisetype === 'Off') {
-        vm.premiseTypeValue = 'off';
-        vm.filtersService.model.selected.premiseType = 'off';
-        vm.updateChip('Off-Premise', 'premiseType');
-      }
+      setPremiseType($state.params.premisetype);
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
       vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
       filterTopBottom();
+    }
+
+    function setDataForNavigationFromMyPerformanceSubaccountRow() {
+      setFilter({ids: [$state.params.subaccountid], name: $state.params.subaccountname, type: 'subAccounts'}, 'account');
+
+      setPremiseType($state.params.premisetype);
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
+      vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
+      vm.showXChain = true;
+      filterTopBottom();
+      vm.selectedStore = $state.params.subaccountname;
+    }
+
+    function setPremiseType(premiseType) {
+      if (premiseType === 'On') {
+        vm.premiseTypeValue = 'on';
+        vm.filtersService.model.selected.premiseType = 'on';
+        vm.updateChip('On-Premise', 'premiseType');
+      } else if (premiseType === 'Off') {
+        vm.premiseTypeValue = 'off';
+        vm.filtersService.model.selected.premiseType = 'off';
+        vm.updateChip('Off-Premise', 'premiseType');
+      }
     }
 
     function setNotes() {

@@ -10,6 +10,7 @@ import { getEntityPeopleResponsibilitiesMock,
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 
 describe('Service: ResponsibilitiesTransformerService', () => {
@@ -117,12 +118,14 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       expect(groupedSubAccounts[entityTypeMock][0]).toEqual({
         positionId: entitySubAccountDTOMock[0].id,
         name: entitySubAccountDTOMock[0].name,
-        entityType: EntityType.SubAccount
+        entityType: EntityType.SubAccount,
+        premiseType: PremiseTypeValue[entitySubAccountDTOMock[0].premiseTypes[0]]
       });
       expect(groupedSubAccounts[entityTypeMock][1]).toEqual({
         positionId: entitySubAccountDTOMock[1].id,
         name: entitySubAccountDTOMock[1].name,
-        entityType: EntityType.SubAccount
+        entityType: EntityType.SubAccount,
+        premiseType: PremiseTypeValue[entitySubAccountDTOMock[1].premiseTypes[0]]
       });
     });
   });

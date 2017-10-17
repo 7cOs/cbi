@@ -1,4 +1,5 @@
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 export interface HierarchyEntity {
   positionId: string;
@@ -10,6 +11,7 @@ export interface HierarchyEntity {
   type?: string;
   hierarchyType?: string;
   entityType: EntityType;
+  premiseType?: PremiseTypeValue;
 }
 
 export interface HierarchyEntityDTO {

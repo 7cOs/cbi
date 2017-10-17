@@ -4,8 +4,10 @@ const chance = new Chance();
 import { HierarchyEntity } from './hierarchy-entity.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { HierarchyEntityDTO } from './hierarchy-entity.model';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
+const premiseTypeValues = Object.keys(PremiseTypeValue).map(key => PremiseTypeValue[key]);
 
 export function getEntityPeopleResponsibilitiesMock(): HierarchyEntity {
   return {
@@ -40,7 +42,8 @@ export function getEntityPropertyResponsibilitiesMock(): HierarchyEntity {
     type: chance.string(),
     hierarchyType: chance.string(),
     description: chance.string(),
-    entityType: entityTypeValues[chance.integer({min: 0, max: entityTypeValues.length - 1})]
+    entityType: entityTypeValues[chance.integer({min: 0, max: entityTypeValues.length - 1})],
+    premiseType: premiseTypeValues[chance.integer({min: 0, max: premiseTypeValues.length - 1})]
   };
 }
 

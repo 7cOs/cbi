@@ -7,4 +7,6 @@ export interface AccountDashboardStateParameters {
   distributorid?: string;
   distributorname?: string;
   premisetype?: string;
+  subaccountid?: string;
+  subaccountname?: string;
 }
