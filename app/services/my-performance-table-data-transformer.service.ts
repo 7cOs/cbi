@@ -13,9 +13,11 @@ export class MyPerformanceTableDataTransformerService {
 
   public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
+      const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
+        ? PluralizedRoleGroup[entity.name]
+        : entity.name;
       const transformedEntity: MyPerformanceTableRow = {
-        descriptionRow0: entity.entityType === 'RoleGroup'
-        || entity.entityType === 'AccountGroup' ? PluralizedRoleGroup[entity.name] : entity.name,
+        descriptionRow0: descriptionRow0,
         metricColumn0: entity.performance.total,
         metricColumn1: entity.performance.totalYearAgo,
         metricColumn2: entity.performance.totalYearAgoPercent,

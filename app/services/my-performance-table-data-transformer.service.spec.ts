@@ -139,13 +139,13 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.RoleGroup;
-      responsibilityEntitiesPerformanceMock[0].name = 'ACCOUNT';
+      responsibilityEntitiesPerformanceMock[0].name = 'ON PREM DIRECTOR';
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
         .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
       const expectedRow: MyPerformanceTableRow = {
-        descriptionRow0: 'ACCOUNTS',
+        descriptionRow0: 'ON PREM DIRECTORS',
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
