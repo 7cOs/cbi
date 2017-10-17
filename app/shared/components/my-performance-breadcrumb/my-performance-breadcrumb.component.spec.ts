@@ -94,4 +94,23 @@ fdescribe('Breadcrumb Component', () => {
         [breadcrumbEntityIndexToClick].triggerEventHandler('click', null);
     });
   });
+
+  describe('return proper class for back button', () => {
+    it('should return the back button class', () => {
+      const mockInputs = {
+        currentUserFullName: chance.string(),
+        performanceStateVersions: myPerformanceStateMock.versions,
+        showBackButton: chance.bool()
+      };
+
+      componentInstance.currentUserFullName = mockInputs.currentUserFullName;
+      componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = true;
+
+      fixture.detectChanges();
+
+      const backButtonClass = componentInstance.getBackButtonClass();
+      expect(backButtonClass).toEqual({'back-button': true});
+    });
+  });
 });

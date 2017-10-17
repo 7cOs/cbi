@@ -122,13 +122,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
 
         if (current.responsibilities.entityWithPerformance.length) {
-          this.entityType = current.responsibilities.entitiesTotalPerformances[0].entityType;
+          this.entityType = current.responsibilities.entityWithPerformance[0].entityType;
         }
 
         if (current.responsibilities.entityWithPerformance) {
           const data = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
-          this.contributionToVolume = this.leftTotalRow();
+          this.contributionToVolume = true;
           this.salesHierarchyTotal =  this.leftTotalRow() && data;
           this.salesHierarchyTotalRight = this.rightTotalRow() && data;
         }
@@ -301,13 +301,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private leftTotalRow(): boolean {
-    const entityTypes: Array<string> = [EntityType['Person'], EntityType['Distributor'], EntityType['Account'],
-      EntityType['SubAccount']];
-    return this.leftTableViewType !== 'roleGroups' || entityTypes.includes(this.entityType);
+    return this.leftTableViewType !== 'roleGroups' || this.entityType === EntityType['Person'] ||
+      this.entityType === EntityType['Distributor'] || this.entityType === EntityType['Account'] ||
+      this.entityType === EntityType['SubAccount'];
   }
 
   private rightTotalRow(): boolean {
-    const entityTypes: Array<string> = [EntityType['RoleGroup'], EntityType['DistributorGroup']];
-    return this.leftTableViewType === 'roleGroups' || entityTypes.includes(this.entityType);
+    return this.leftTableViewType === 'roleGroups' || this.entityType === EntityType['RoleGroup']
+      || this.entityType === EntityType['DistributorGroup'];
   }
 }
