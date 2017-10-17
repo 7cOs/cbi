@@ -59,8 +59,10 @@ class MyPerformanceFilterComponentMock {
 })
 class MyPerformanceBreadcrumbComponentMock {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
+  @Output() backButtonClicked = new EventEmitter();
   @Input() currentUserFullName: string[];
   @Input() performanceStateVersions: MyPerformanceEntitiesData[];
+  @Input() showBackButton: boolean;
 }
 
 @Component({
@@ -77,9 +79,10 @@ class MyPerformanceTableComponentMock {
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() viewType: ViewType;
+  @Input() contributionToVolume: boolean;
 }
 
-describe('MyPerformanceComponent', () => {
+fdescribe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
   let userServiceMock: any;

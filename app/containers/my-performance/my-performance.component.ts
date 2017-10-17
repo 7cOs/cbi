@@ -121,6 +121,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           );
         }
 
+        if (current.responsibilities.entityWithPerformance.length) {
+          this.entityType = current.responsibilities.entitiesTotalPerformances[0].entityType;
+        }
+
         if (current.responsibilities.entityWithPerformance) {
           const data = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);

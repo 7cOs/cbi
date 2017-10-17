@@ -44,7 +44,6 @@ export class MyPerformanceTableComponent {
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
   public rowType = RowType;
-  public ctv: boolean;
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;

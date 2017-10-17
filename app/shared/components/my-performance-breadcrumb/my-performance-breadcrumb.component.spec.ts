@@ -11,7 +11,7 @@ import { MyPerformanceBreadcrumbComponent } from './my-performance-breadcrumb.co
 
 const chance = new Chance();
 
-describe('Breadcrumb Component', () => {
+fdescribe('Breadcrumb Component', () => {
   let fixture: ComponentFixture<MyPerformanceBreadcrumbComponent>;
   let componentInstance: MyPerformanceBreadcrumbComponent;
   let myPerformanceStateMock: MyPerformanceState;
@@ -32,13 +32,15 @@ describe('Breadcrumb Component', () => {
     it('should translate inputs into breadcrumb trail with initial performance state', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceStateVersions: initialState.versions
+        performanceStateVersions: initialState.versions,
+        showBackButton: chance.bool()
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = mockInputs.showBackButton;
 
-      fixture.detectChanges();
+        fixture.detectChanges();
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
@@ -48,11 +50,13 @@ describe('Breadcrumb Component', () => {
     it('should translate inputs into breadcrumb trail with initial performance state', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceStateVersions: myPerformanceStateMock.versions
+        performanceStateVersions: myPerformanceStateMock.versions,
+        showBackButton: chance.bool()
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = mockInputs.showBackButton;
 
       fixture.detectChanges();
 
@@ -67,11 +71,13 @@ describe('Breadcrumb Component', () => {
     it('should output proper event when breadcrumb entity is clicked', (done) => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceStateVersions: myPerformanceStateMock.versions
+        performanceStateVersions: myPerformanceStateMock.versions,
+        showBackButton: chance.bool()
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = mockInputs.showBackButton;
 
       const breadcrumbEntityIndexToClick = chance.natural({min: 0, max: mockInputs.performanceStateVersions.length});
 
