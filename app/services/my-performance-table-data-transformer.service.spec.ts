@@ -39,13 +39,14 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         responsibilityEntitiesPerformanceOpenPositionMock = getEntitiesWithPerformancesOpenPositionMock();
     }));
 
-    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor', () => {
+    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor/subaccount', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
 
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.RoleGroup), 1);
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.Distributor), 1);
+      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.SubAccount), 1);
 
       responsibilityEntitiesPerformanceMock[0].entityType = entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})];
 
@@ -74,6 +75,36 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data for distributor', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
+
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+      const expectedRow: MyPerformanceTableRow = {
+        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
+        descriptionRow1: 'GO TO DASHBOARD',
+        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
+        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
+        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
+        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
+          entityName: responsibilityEntitiesPerformanceMock[0].name
+        },
+        performanceError: false
+      };
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual(expectedRow);
+    });
+
+    it('should return formatted ResponsibilityEntityPerformance data for subAccount', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
@@ -174,7 +205,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       for (let i = 0; i < tableData.length; i++) {
         expect(tableData[i]).toEqual({
           descriptionRow0: 'Open Position',
-          descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.Distributor
+          descriptionRow1: ( responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.Distributor ||
+                          responsibilityEntitiesPerformanceOpenPositionMock[i].entityType === EntityType.SubAccount )
             ? 'GO TO DASHBOARD'
             : responsibilityEntitiesPerformanceOpenPositionMock[i].positionDescription,
           metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.total,
@@ -201,7 +233,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceOpenPositionMock.length);
       expect(tableData[0]).toEqual({
         descriptionRow0: 'Open Position',
-        descriptionRow1: responsibilityEntitiesPerformanceOpenPositionMock[0].entityType === EntityType.Distributor
+        descriptionRow1: ( responsibilityEntitiesPerformanceOpenPositionMock[0].entityType === EntityType.Distributor ||
+                        responsibilityEntitiesPerformanceOpenPositionMock[0].entityType === EntityType.SubAccount )
           ? 'GO TO DASHBOARD'
           : responsibilityEntitiesPerformanceOpenPositionMock[0].positionDescription,
         metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.total,
