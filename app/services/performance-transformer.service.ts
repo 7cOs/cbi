@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
+import { HierarchyGroup } from './responsibilities.service';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { UtilService } from './util.service';
 
@@ -58,5 +59,21 @@ export class PerformanceTransformerService {
       entityType: EntityType[entity.entityType],
       performance: this.transformPerformanceDTO(performanceDTO)
     };
+  }
+
+  public transformHierarchyGroupPerformance(performanceDTO: PerformanceDTO, group: HierarchyGroup, positionId: string)
+  : EntityWithPerformance {
+    const entityWithPerformance: EntityWithPerformance = {
+      positionId: positionId,
+      name: group.name,
+      entityType: group.entityType,
+      positionDescription: group.positionDescription,
+      entityTypeCode: group.type,
+      performance: this.transformPerformanceDTO(performanceDTO)
+    };
+
+    if (group.alternateHierarchyId) entityWithPerformance.alternateHierarchyId = group.alternateHierarchyId;
+
+    return entityWithPerformance;
   }
 }

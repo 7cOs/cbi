@@ -7,7 +7,7 @@ import 'rxjs/add/operator/catch';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
+import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
@@ -93,17 +93,20 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getResponsibilitiesPerformances(entities: Array<HierarchyGroup>, filter: MyPerformanceFilterState, positionId?: string)
-  : Observable<(EntityWithPerformance | Error)[]> {
-    const apiCalls: Observable<EntityWithPerformanceDTO | Error>[] = [];
-    entities.forEach((entity: HierarchyGroup) => {
-      apiCalls.push(this.myPerformanceApiService.getResponsibilityPerformance(entity, filter, entity.positionId || positionId));
+  public getHierarchyGroupsPerformances(entities: Array<HierarchyGroup>, filter: MyPerformanceFilterState, positionId: string)
+  : Observable<EntityWithPerformance[]> {
+    const apiCalls: Observable<EntityWithPerformance>[] = entities.map((group: HierarchyGroup) => {
+      return this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId)
+        .map((response: PerformanceDTO) => {
+          return this.performanceTransformerService.transformHierarchyGroupPerformance(response, group, positionId);
+        })
+        .catch(() => {
+          this.toastService.showPerformanceDataErrorToast();
+          return Observable.of(this.performanceTransformerService.transformHierarchyGroupPerformance(null, group, positionId));
+        });
     });
 
-    return Observable.forkJoin(apiCalls)
-      .switchMap((response: EntityWithPerformanceDTO[]) => {
-        return Observable.of(this.performanceTransformerService.transformEntityWithPerformanceDTOs(response));
-      });
+    return Observable.forkJoin(apiCalls);
   }
 
   public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState) {
@@ -321,7 +324,7 @@ export class ResponsibilitiesService {
   }
 
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
-    return this.getResponsibilitiesPerformances(responsibilitiesData.hierarchyGroups,
+    return this.getHierarchyGroupsPerformances(responsibilitiesData.hierarchyGroups,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
         .map((entityPerformances: EntityWithPerformance[]) => {
