@@ -44,7 +44,7 @@ fdescribe('Breadcrumb Component', () => {
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
-      expect(breadcrumbContainer.textContent).toBe(` ${mockInputs.currentUserFullName}`);
+      expect(breadcrumbContainer.textContent).toBe(`${mockInputs.currentUserFullName}`);
     });
 
     it('should translate inputs into breadcrumb trail with initial performance state', () => {
@@ -63,7 +63,7 @@ fdescribe('Breadcrumb Component', () => {
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
       expect(breadcrumbContainer.textContent).toBe(
-        ` ${mockInputs.currentUserFullName + mockInputs.performanceStateVersions.map(version => version.selectedEntity).join('')}`);
+        `${mockInputs.currentUserFullName + mockInputs.performanceStateVersions.map(version => version.selectedEntity).join('')}`);
     });
   });
 
