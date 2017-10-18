@@ -116,9 +116,28 @@ describe('Service: PerformanceTransformerService', () => {
 
       expect(actual.positionId).toBe(entity.positionId);
       expect(actual.name).toBe(entity.name);
+      expect(actual.entityType).toEqual(entity.entityType);
       expect(actual.performance).toBeDefined();
       expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
       expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
     });
+
+    it('should transform data given an entity and performance data with positionDescription present', () => {
+      const transformPerformanceSpy = spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callThrough();
+
+      const entity = getEntityPropertyResponsibilitiesMock();
+      const performanceDTO = getPerformanceDTOMock();
+
+      const actual = performanceTransformerService.transformEntityWithPerformance(performanceDTO, entity);
+
+      expect(actual.positionId).toBe(entity.positionId);
+      expect(actual.name).toBe(entity.name);
+      expect(actual.positionDescription).toBe(entity.positionDescription);
+      expect(actual.entityType).toEqual(entity.entityType);
+      expect(actual.performance).toBeDefined();
+      expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
+      expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
+    });
+
   });
 });
