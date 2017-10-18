@@ -9,7 +9,7 @@ import { getEntitiesWithPerformancesMock,
          getEntitiesWithPerformancesOpenPositionMock } from '../models/entity-with-performance.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { MyPerformanceTableRow, MyPerformanceTableRowMetadata } from '../models/my-performance-table-row.model';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
@@ -286,6 +286,40 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceOpenPositionMock[0].entityType = EntityType.Distributor;
       const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
       expect(tableData[0].descriptionRow1).toEqual('GO TO DASHBOARD');
+    });
+
+    it('returned table entities should contain alternateHierarchyId in their metadata if the EntityWithPerformance' +
+    'contained a alternateHierarchyId', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      const alternateHierarchyIdMock = chance.string();
+      responsibilityEntitiesPerformanceMock[0].alternateHierarchyId = alternateHierarchyIdMock;
+
+      let actualMetaData: MyPerformanceTableRowMetadata =
+        myPerformanceTableDataTransformerService.getLeftTableData([responsibilityEntitiesPerformanceMock[0]])[0].metadata;
+      let expectedMetaData: MyPerformanceTableRowMetadata = {
+        positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+        contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+        entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+        entityType: responsibilityEntitiesPerformanceMock[0].entityType,
+        entityName: responsibilityEntitiesPerformanceMock[0].name,
+        alternateHierarchyId: alternateHierarchyIdMock
+      };
+
+      expect(actualMetaData).toEqual(expectedMetaData);
+
+      delete responsibilityEntitiesPerformanceMock[0].alternateHierarchyId;
+
+      actualMetaData = myPerformanceTableDataTransformerService.getLeftTableData([responsibilityEntitiesPerformanceMock[0]])[0].metadata;
+      expectedMetaData = {
+        positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+        contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+        entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+        entityType: responsibilityEntitiesPerformanceMock[0].entityType,
+        entityName: responsibilityEntitiesPerformanceMock[0].name
+      };
+
+      expect(actualMetaData).toEqual(expectedMetaData);
     });
   });
 

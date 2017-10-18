@@ -54,7 +54,7 @@ export class PerformanceTransformerService {
       positionId: positionId,
       name: group.name,
       entityType: group.entityType,
-      positionDescription: group.positionDescription,
+      positionDescription: group.positionDescription || '',
       entityTypeCode: group.type,
       performance: this.transformPerformanceDTO(performanceDTO)
     };
