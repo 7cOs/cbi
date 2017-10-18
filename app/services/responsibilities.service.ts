@@ -355,7 +355,7 @@ export class ResponsibilitiesService {
         });
   }
 
-  private getHierarchyGroups(groupedEntities: GroupedEntities, entityType: EntityType): Array<HierarchyGroup> {
+  private getHierarchyRoleGroups(groupedEntities: GroupedEntities, entityType: EntityType): Array<HierarchyGroup> {
     return Object.keys(groupedEntities).map((groupName: string) => {
       return {
         type: groupedEntities[groupName][0].type,
@@ -370,7 +370,7 @@ export class ResponsibilitiesService {
   : ResponsibilitiesData {
     const groupedEntities: GroupedEntities =
       this.responsibilitiesTransformerService.groupPeopleByGroupedEntities(positions);
-    const hierarchyGroups: Array<HierarchyGroup> = this.getHierarchyGroups(groupedEntities, EntityType.RoleGroup);
+    const hierarchyGroups: Array<HierarchyGroup> = this.getHierarchyRoleGroups(groupedEntities, EntityType.RoleGroup);
 
     return Object.assign({}, responsibilitiesData, {
       groupedEntities: groupedEntities,

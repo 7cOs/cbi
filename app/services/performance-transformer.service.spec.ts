@@ -1,18 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
-import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { UtilService } from './util.service';
 
 describe('Service: PerformanceTransformerService', () => {
   let performanceTransformerService: PerformanceTransformerService;
   let utilService: UtilService;
   let entitiesTotalPerformancesDTOMock: PerformanceDTO;
-  let responsibilityEntitiesPerformanceDTOMock: EntityWithPerformanceDTO[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -66,40 +63,40 @@ describe('Service: PerformanceTransformerService', () => {
     });
   });
 
-  describe('transformEntityWithPerformanceDTOs', () => {
+  // describe('transformEntityWithPerformanceDTOs', () => {
 
-    beforeEach(inject([ PerformanceTransformerService, UtilService ],
-      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
-        performanceTransformerService = _performanceTransformerService;
-        utilService = _utilService;
-        responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
-    }));
+  //   beforeEach(inject([ PerformanceTransformerService, UtilService ],
+  //     (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
+  //       performanceTransformerService = _performanceTransformerService;
+  //       utilService = _utilService;
+  //       responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
+  //   }));
 
-    it('should return transformed EntityPerformance data given EntityPerformanceDTO data', () => {
-      spyOn(performanceTransformerService, 'transformEntityWithPerformanceDTOs').and.callThrough();
+  //   it('should return transformed EntityPerformance data given EntityPerformanceDTO data', () => {
+  //     spyOn(performanceTransformerService, 'transformEntityWithPerformanceDTOs').and.callThrough();
 
-      const entityPerformance: EntityWithPerformance[] =
-        performanceTransformerService.transformEntityWithPerformanceDTOs(responsibilityEntitiesPerformanceDTOMock);
-      const entityPerformanceMock = responsibilityEntitiesPerformanceDTOMock[0].performance;
+  //     const entityPerformance: EntityWithPerformance[] =
+  //       performanceTransformerService.transformEntityWithPerformanceDTOs(responsibilityEntitiesPerformanceDTOMock);
+  //     const entityPerformanceMock = responsibilityEntitiesPerformanceDTOMock[0].performance;
 
-      expect(entityPerformance).toBeDefined();
-      expect(entityPerformance.length).toBeTruthy();
-      expect(entityPerformance[0]).toEqual({
-        positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
-        entityTypeCode: responsibilityEntitiesPerformanceDTOMock[0].entityTypeCode,
-        name: responsibilityEntitiesPerformanceDTOMock[0].name,
-        entityType: responsibilityEntitiesPerformanceDTOMock[0].entityType,
-        positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
-        performance: {
-          total: parseInt((entityPerformanceMock.total).toFixed(), 10),
-          totalYearAgo: utilService.getYearAgoDelta(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
-          totalYearAgoPercent: utilService.getYearAgoPercent(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
-          contributionToVolume: 0,
-          error: false
-        }
-      });
-    });
-  });
+  //     expect(entityPerformance).toBeDefined();
+  //     expect(entityPerformance.length).toBeTruthy();
+  //     expect(entityPerformance[0]).toEqual({
+  //       positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
+  //       entityTypeCode: responsibilityEntitiesPerformanceDTOMock[0].entityTypeCode,
+  //       name: responsibilityEntitiesPerformanceDTOMock[0].name,
+  //       entityType: responsibilityEntitiesPerformanceDTOMock[0].entityType,
+  //       positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
+  //       performance: {
+  //         total: parseInt((entityPerformanceMock.total).toFixed(), 10),
+  //         totalYearAgo: utilService.getYearAgoDelta(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
+  //         totalYearAgoPercent: utilService.getYearAgoPercent(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
+  //         contributionToVolume: 0,
+  //         error: false
+  //       }
+  //     });
+  //   });
+  // });
 
   describe('transformEntityWithPerformancesDTO', () => {
 

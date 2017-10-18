@@ -5,9 +5,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-// TODO - CHECK THIS!!!!
-// import { EntityType } from '../enums/entity-responsibilities.enum';
-// import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { PerformanceDTO } from '../models/performance.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
@@ -231,49 +229,41 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
-  // TODO - Fix this shit you asshole!
-  // describe('getHierarchyGroupPerformance', () => {
+  describe('getHierarchyGroupPerformance', () => {
 
-  //   it('should call the responsibility performance endpoint and return performance data for the responsibility', (done) => {
-  //     const filterMock = {
-  //       metricType: MetricTypeValue.velocity,
-  //       dateRangeCode: DateRangeTimePeriodValue.L90BDL,
-  //       premiseType: PremiseTypeValue.All
-  //     };
-  //     const entityMock = {
-  //       name: chance.string(),
-  //       type: chance.string(),
-  //       entityType: EntityType.RoleGroup,
-  //       positionDescription: chance.string()
-  //     };
-  //     const positionIdMock = chance.string();
-  //     const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ entityMock.type }/performanceTotal`;
-  //     const expectedUrlParams = '?metricType=velocity&dateRangeCode=L90BDL&premiseType=All';
+    it('should call the responsibility performance endpoint and return performance data for the responsibility', (done) => {
+      const filterMock = {
+        metricType: MetricTypeValue.velocity,
+        dateRangeCode: DateRangeTimePeriodValue.L90BDL,
+        premiseType: PremiseTypeValue.All
+      };
+      const entityMock = {
+        name: chance.string(),
+        type: chance.string(),
+        entityType: EntityType.RoleGroup,
+        positionDescription: chance.string()
+      };
+      const positionIdMock = chance.string();
+      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ entityMock.type }/performanceTotal`;
+      const expectedUrlParams = '?metricType=velocity&dateRangeCode=L90BDL&premiseType=All';
 
-  //     mockBackend.connections.subscribe((connection: MockConnection) => {
-  //       const options = new ResponseOptions({
-  //         body: JSON.stringify(performanceResponseMock)
-  //       });
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(performanceResponseMock)
+        });
 
-  //       connection.mockRespond(new Response(options));
-  //       expect(connection.request.method).toEqual(RequestMethod.Get);
-  //       expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
-  //     });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
+      });
 
-  //     myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterMock, positionIdMock)
-  //       .subscribe((response: EntityWithPerformanceDTO) => {
-  //         expect(response).toEqual({
-  //           id: positionIdMock,
-  //           name: entityMock.name,
-  //           entityType: entityMock.entityType,
-  //           positionDescription: entityMock.positionDescription,
-  //           performance: performanceResponseMock,
-  //           entityTypeCode: entityMock.type
-  //         });
-  //         done();
-  //     });
-  //   });
-  // });
+      myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterMock, positionIdMock)
+        .subscribe((response: PerformanceDTO) => {
+          expect(response).toEqual(performanceResponseMock);
+          done();
+      });
+    });
+  });
 
   describe('getSubAccounts', () => {
 
