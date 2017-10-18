@@ -11,7 +11,7 @@ import { MyPerformanceBreadcrumbComponent } from './my-performance-breadcrumb.co
 
 const chance = new Chance();
 
-fdescribe('Breadcrumb Component', () => {
+describe('Breadcrumb Component', () => {
   let fixture: ComponentFixture<MyPerformanceBreadcrumbComponent>;
   let componentInstance: MyPerformanceBreadcrumbComponent;
   let myPerformanceStateMock: MyPerformanceState;
