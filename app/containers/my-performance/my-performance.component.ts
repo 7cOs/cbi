@@ -33,7 +33,6 @@ import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
