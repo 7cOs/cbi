@@ -2,6 +2,7 @@ const webpack       = require('webpack');
 const helpers       = require('./helpers');
 const path          = require('path');
 const DefinePlugin  = require('webpack/lib/DefinePlugin');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const ENV = process.env.ENV = process.env.NODE_ENV = 'unittest';
 
@@ -107,6 +108,8 @@ module.exports = {
   },
 
   plugins: [
+    new CheckerPlugin(),
+
     new DefinePlugin({
       'ENV': JSON.stringify(ENV),
       'process.env': {
@@ -138,7 +141,9 @@ module.exports = {
           emitErrors: false,
           failOnHint: true,
           formatter: 'stylish',
-          typeCheck: true
+          // this will deactivate tslint rules that rely on type checking, but is much faster,
+          // and we are still linting with type-checking enabled in CI (npm run lint:ts)
+          typeCheck: false
         },
 
         eslint: {
