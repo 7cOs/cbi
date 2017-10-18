@@ -11,7 +11,7 @@ import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metr
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[], inAltHierarchy: boolean = false): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
       const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
         ? PluralizedRoleGroup[entity.name]
@@ -30,9 +30,15 @@ export class MyPerformanceTableDataTransformerService {
         performanceError: entity.performance.error
       };
 
-      if (entity.name === 'Open') {
-        transformedEntity.descriptionRow0 = 'Open Position';
-        transformedEntity.descriptionRow1 = entity.positionDescription;
+      console.log('entity ', entity);
+      if (entity.entityType === EntityType.Person) {
+        if (entity.name === 'Open') {
+          transformedEntity.descriptionRow0 = 'Open Position';
+          transformedEntity.descriptionRow1 = entity.positionDescription;
+        } else if (inAltHierarchy) {
+          transformedEntity.descriptionRow0 = entity.positionDescription ? entity.positionDescription : 'AREA';
+          transformedEntity.descriptionRow1 = entity.name;
+        }
       }
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;

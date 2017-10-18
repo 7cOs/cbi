@@ -114,11 +114,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
+        let inAltHierarchy: boolean = (current.responsibilities.alternateHierarchyId) ? true : false;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
-            current.responsibilities.entityWithPerformance
-          );
+            current.responsibilities.entityWithPerformance, inAltHierarchy);
         }
 
         if (current.responsibilities.entityWithPerformance) {
