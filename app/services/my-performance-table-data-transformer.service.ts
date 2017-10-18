@@ -3,6 +3,7 @@ import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
@@ -12,15 +13,19 @@ export class MyPerformanceTableDataTransformerService {
 
   public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
+      const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
+        ? PluralizedRoleGroup[entity.name]
+        : entity.name;
       const transformedEntity: MyPerformanceTableRow = {
-        descriptionRow0: entity.name,
+        descriptionRow0: descriptionRow0,
         metricColumn0: entity.performance.total,
         metricColumn1: entity.performance.totalYearAgo,
         metricColumn2: entity.performance.totalYearAgoPercent,
         ctv: entity.performance.contributionToVolume,
         metadata: {
           positionId: entity.positionId,
-          entityType: entity.entityType
+          entityType: entity.entityType,
+          entityName: entity.name
         },
         performanceError: entity.performance.error
       };
@@ -33,7 +38,7 @@ export class MyPerformanceTableDataTransformerService {
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
       if (entity.entityTypeCode) transformedEntity.metadata.entityTypeCode = entity.entityTypeCode;
 
-      if (entity.entityType === EntityType.Distributor) {
+      if (entity.entityType === EntityType.Distributor || entity.entityType === EntityType.SubAccount) {
         transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';
       }
 

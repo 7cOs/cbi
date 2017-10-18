@@ -15,10 +15,12 @@ import { FetchEntityWithPerformance,
          FetchResponsibilities,
          FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
+import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
+import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -99,6 +101,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   const versionsSubject: Subject<MyPerformanceEntitiesData[]> = new Subject<MyPerformanceEntitiesData[]>();
+  const currentSubject: Subject<MyPerformanceEntitiesData> = new Subject<MyPerformanceEntitiesData>();
 
   const windowMock = {
     open: jasmine.createSpy('open')
@@ -123,6 +126,8 @@ describe('MyPerformanceComponent', () => {
 
       if (selectedValue === stateMock.myPerformance.versions) {
         return versionsSubject;
+      } else if (selectedValue === stateMock.myPerformance.current) {
+        return currentSubject;
       } else {
         return Observable.of(selectedValue);
       }
@@ -183,6 +188,7 @@ describe('MyPerformanceComponent', () => {
     componentInstance = fixture.componentInstance;
     fixture.detectChanges();
 
+    currentSubject.next(myPerformanceStateMock.current);
     versionsSubject.next(initialVersionsMock);
   });
 
@@ -527,21 +533,63 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when left side data row distributor link clicked', () => {
+  describe('when left side data row link clicked', () => {
     let rowMock: MyPerformanceTableRow;
+    let accountNameMock: string;
+    let hierarchyEntityMock: HierarchyEntity;
+    let currentMock: MyPerformanceEntitiesData;
 
     beforeEach(() => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
+      accountNameMock = chance.string();
+      hierarchyEntityMock = getEntityPropertyResponsibilitiesMock();
+      currentMock = getMyPerformanceEntitiesDataMock();
+    });
+    describe('when distributor subline link clicked', () => {
+      it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
+        rowMock.metadata.entityType = EntityType.Distributor;
+        componentInstance.handleSublineClicked(rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
+        expect(stateMock.href).toHaveBeenCalledWith(
+          'accounts',
+          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
+        expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+        expect(windowMock.open).toHaveBeenCalled();
+      });
     });
 
-    it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
-      componentInstance.handleSublineClicked(rowMock);
-      expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
-      expect(stateMock.href).toHaveBeenCalledWith(
-        'accounts',
-        myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
-      expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
-      expect(windowMock.open).toHaveBeenCalled();
+    describe('when subaccount subline link clicked', () => {
+      it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy enity', () => {
+        rowMock.metadata.entityType = EntityType.SubAccount;
+        hierarchyEntityMock.positionId = rowMock.metadata.positionId;
+        currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
+        currentSubject.next(currentMock);
+        componentInstance.handleSublineClicked(rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
+                                                                                              rowMock,
+                                                                                              hierarchyEntityMock.premiseType);
+        expect(stateMock.href).toHaveBeenCalledWith(
+          'accounts',
+          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter,
+                                                                  rowMock,
+                                                                  hierarchyEntityMock.premiseType));
+        expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+        expect(windowMock.open).toHaveBeenCalled();
+      });
+
+      it('should correctly call functions for accountDashboard when subAccount clicked but no matching hierarchy entity', () => {
+        rowMock.metadata.entityType = EntityType.SubAccount;
+        hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
+        myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
+        currentSubject.next(currentMock);
+        componentInstance.handleSublineClicked(rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
+        expect(stateMock.href).toHaveBeenCalledWith(
+          'accounts',
+          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
+        expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+        expect(windowMock.open).toHaveBeenCalled();
+      });
     });
   });
 
