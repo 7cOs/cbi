@@ -76,7 +76,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsSubscription: Subscription;
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
-  private salesHierarchyTotal: MyPerformanceTableRow;
+  private salesHierarchyTotalLeft: MyPerformanceTableRow;
   private salesHierarchyTotalRight: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: string;
@@ -126,11 +126,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
 
         if (current.responsibilities.entityWithPerformance) {
-          const data = this.myPerformanceTableDataTransformerService
+          const totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
           this.contributionToVolume = this.displayRightTotalRow();
-          this.salesHierarchyTotal =  !this.displayRightTotalRow() && data;
-          this.salesHierarchyTotalRight = this.displayRightTotalRow() && data;
+          this.salesHierarchyTotalLeft =  !this.displayRightTotalRow() && totalRowData;
+          this.salesHierarchyTotalRight = this.displayRightTotalRow() && totalRowData;
         }
 
     });
