@@ -128,9 +128,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (current.responsibilities.entityWithPerformance) {
           const data = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
-          this.contributionToVolume = true;
-          this.salesHierarchyTotal =  this.leftTotalRow() && data;
-          this.salesHierarchyTotalRight = this.rightTotalRow() && data;
+          this.contributionToVolume = this.displayRightTotalRow();
+          this.salesHierarchyTotal =  !this.displayRightTotalRow() && data;
+          this.salesHierarchyTotalRight = this.displayRightTotalRow() && data;
         }
 
     });
@@ -300,13 +300,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private leftTotalRow(): boolean {
-    return this.leftTableViewType !== 'roleGroups' || this.entityType === EntityType['Person'] ||
-      this.entityType === EntityType['Distributor'] || this.entityType === EntityType['Account'] ||
-      this.entityType === EntityType['SubAccount'];
-  }
-
-  private rightTotalRow(): boolean {
+  private displayRightTotalRow(): boolean {
     return this.leftTableViewType === 'roleGroups' || this.entityType === EntityType['RoleGroup']
       || this.entityType === EntityType['DistributorGroup'];
   }
