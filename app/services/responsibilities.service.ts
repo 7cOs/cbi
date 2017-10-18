@@ -79,7 +79,7 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getAlternateHierarchyResponsibilities(responsibilitiesData: ResponsibilitiesData): any {
+  public getAlternateHierarchyResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
     return this.myPerformanceApiService.getAlternateHierarchy(responsibilitiesData.positionId, responsibilitiesData.alternateHierarchyId)
       .map((response: PeopleResponsibilitiesDTO) => {
         if (response.positions) {

@@ -1,4 +1,3 @@
-// tslint:disable:no-unused-variable
 import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
