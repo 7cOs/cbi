@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricMock } from '../../models/product-metrics.model.mock';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
@@ -10,7 +11,6 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsService, ProductMetricsData } from '../../services/product-metrics.service';
-import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 
 const chance = new Chance();
 
@@ -20,7 +20,7 @@ describe('ProductMetrics Effects', () => {
   let entityTypeCodeMock: string;
   let productMetricsMock: ProductMetrics;
   let performanceFilterStateMock: MyPerformanceFilterState;
-  let selectedEntityTypeMock: SelectedEntityType = SelectedEntityType.Position;
+  let selectedEntityTypeMock: EntityType = EntityType.Person;
   let productMetricsSuccessPayloadMock: ProductMetricsActions.FetchProductMetricsSuccessPayload;
   let error: Error;
   let runner: EffectsRunner;
@@ -81,7 +81,7 @@ describe('ProductMetrics Effects', () => {
         contextPositionId: contextPositionIdMock,
         entityTypeCode: entityTypeCodeMock,
         filter: performanceFilterStateMock,
-        selectedEntityType: SelectedEntityType.Position
+        selectedEntityType: EntityType.Person
       }));
     });
 

@@ -6,7 +6,7 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
+import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -44,9 +44,10 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
-    return (productMetrics.brandValues).map((item: ProductMetricsBrandValue) => {
+    const productsValues = productMetrics.brandValues || productMetrics.skuValues;
+    return (productsValues).map((item: ProductMetricsValues) => {
       return {
-        descriptionRow0: item.brandDescription,
+        descriptionRow0: productMetrics.brandValues ? item.brandDescription : item.beerId.masterPackageSKUDescription,
         metricColumn0: item.current,
         metricColumn1: item.yearAgo,
         metricColumn2: item.yearAgoPercent,

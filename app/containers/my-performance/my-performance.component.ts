@@ -15,7 +15,7 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
+import { FetchProductMetricsAction, FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -31,7 +31,6 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import { ProductMetricsViewTypeState } from '../../state/reducers/product-metrics-view-type.reducer';
 import { RowType } from '../../enums/row-type.enum';
-import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
@@ -115,8 +114,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsViewTypeSubscription = this.store
       .select(state => state.myPerformanceProductMetricsViewType)
       .subscribe((productMetricsViewTypeState: ProductMetricsViewTypeState) => {
-        debugger;
-
         this.productMetricsViewType = productMetricsViewTypeState.viewType;
     });
 
@@ -126,7 +123,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
         this.selectedBrand = current.selectedBrand;
-        debugger;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
@@ -155,12 +151,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.store.dispatch(new FetchProductMetricsAction({
       positionId: currentUserId,
       filter: this.filterState,
-      selectedEntityType: SelectedEntityType.Position
+      selectedEntityType: EntityType.Person,
+      selectedBrand: this.selectedBrand
     }));
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceStateAction());
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceState());
     this.filterStateSubscription.unsubscribe();
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
@@ -202,7 +199,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           if (this.showLeftBackButton) {
             const previousIndex: number = this.versions.length - 1;
             const previousState = this.versions[previousIndex];
-            this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+            this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
             this.fetchProductMetricsForPreviousState(previousState);
           }
           console.log(`clicked on cell ${parameters.index} from the left side`);
@@ -214,8 +211,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.data:
       default:
         if (parameters.leftSide) {
-          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
-          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(parameters.row.descriptionRow0));
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
+          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
 
           switch (this.salesHierarchyViewType) {
             case SalesHierarchyViewType.roleGroups:
@@ -229,23 +227,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                 filter: this.filterState
               }));
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                entityTypeCode: parameters.row.metadata.entityTypeCode,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.RoleGroup
-              }));
+              this.fetchProductMetricsWhenClick(parameters);
               break;
             case SalesHierarchyViewType.people:
               this.store.dispatch(new FetchResponsibilities({
                 positionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.Position
-              }));
+              this.fetchProductMetricsWhenClick(parameters);
               break;
             case SalesHierarchyViewType.accounts:
               this.store.dispatch(new FetchSubAccountsAction({
@@ -255,23 +244,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedPositionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                contextPositionId: this.currentState.responsibilities.positionId,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.Account
-              }));
+              this.fetchProductMetricsWhenClick(parameters);
               break;
             default:
               console.log('clicked on left row:', parameters.row);
         }
       } else {
-        debugger;
         switch (this.productMetricsViewType) {
           case ProductMetricsViewType.brands:
+            this.selectedBrand = parameters.row.metadata.brandCode;
             this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(
               parameters.row.metadata.brandCode
             ));
+            this.fetchProductMetricsWhenClick(parameters);
             break;
           default:
             console.log('clicked on right row:', parameters.row);
@@ -287,7 +272,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedIndex: number = this.versions.length - stepsBack;
     const clickedState = this.versions[clickedIndex];
     if (stepsBack < 1) return;
-    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(stepsBack));
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(stepsBack));
     this.fetchProductMetricsForPreviousState(clickedState);
   }
 
@@ -319,15 +304,69 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.store.dispatch(new FetchProductMetricsAction({
         positionId: state.responsibilities.positionId,
         filter: this.filterState,
-        selectedEntityType: SelectedEntityType.Position
+        selectedEntityType: EntityType.Person,
+        selectedBrand: this.selectedBrand
       }));
     } else if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.people) {
       this.store.dispatch(new FetchProductMetricsAction({
         positionId: state.responsibilities.positionId,
         entityTypeCode: state.responsibilities.entityTypeCode,
         filter: this.filterState,
-        selectedEntityType: SelectedEntityType.RoleGroup
+        selectedEntityType: EntityType.RoleGroup,
+        selectedBrand: this.selectedBrand
       }));
     }
   }
+
+  private fetchProductMetricsWhenClick(parameters: HandleElementClickedParameters) {
+    let actionParameters: FetchProductMetricsPayload = {
+      positionId: parameters.row.metadata.positionId || this.currentState.responsibilities.positionId,
+      filter: this.filterState,
+      selectedEntityType: this.currentState.selectedEntityType,
+      selectedBrand: this.selectedBrand
+    };
+
+    if (parameters.leftSide) {
+      switch (this.salesHierarchyViewType) {
+        case SalesHierarchyViewType.roleGroups:
+          actionParameters = Object.assign({}, actionParameters, {
+            entityTypeCode: parameters.row.metadata.entityTypeCode,
+            selectedEntityType: EntityType.RoleGroup
+          });
+          break;
+        case SalesHierarchyViewType.accounts:
+          actionParameters = Object.assign({}, actionParameters, {
+            contextPositionId: this.currentState.responsibilities.positionId,
+            selectedEntityType: EntityType.Account
+          });
+          break;
+        case SalesHierarchyViewType.people:
+          actionParameters = Object.assign({}, actionParameters, {
+            selectedEntityType: EntityType.Person
+          });
+          break;
+        default:
+          break;
+        }
+    } else {
+      switch (this.salesHierarchyViewType) {
+        case SalesHierarchyViewType.roleGroups:
+          actionParameters = Object.assign({}, actionParameters, {
+            entityTypeCode: this.currentState.responsibilities.entityTypeCode
+          });
+          break;
+        case SalesHierarchyViewType.accounts:
+          actionParameters = Object.assign({}, actionParameters, {
+            contextPositionId: this.currentState.responsibilities.positionId
+          });
+          break;
+        case SalesHierarchyViewType.people:
+        default:
+          break;
+        }
+    }
+
+      this.store.dispatch(new FetchProductMetricsAction(actionParameters));
+  }
+
 }

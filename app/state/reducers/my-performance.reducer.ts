@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { initialState as initialStateResponsibilities } from './responsibilities.reducer';
 import { initialState as initialStateSalesHierarchyViewType } from './sales-hierarchy-view-type.reducer';
 import { initialStateVersions } from './my-performance-version.reducer';
@@ -14,6 +15,7 @@ export interface MyPerformanceEntitiesData {
   responsibilities?: ResponsibilitiesState;
   salesHierarchyViewType?: SalesHierarchyViewTypeState;
   selectedEntity?: string;
+  selectedEntityType: EntityType;
   selectedBrand?: string;
 }
 
@@ -26,6 +28,7 @@ export const initialState: MyPerformanceState = {
   current: {
     responsibilities: initialStateResponsibilities,
     salesHierarchyViewType: initialStateSalesHierarchyViewType,
+    selectedEntityType: EntityType.Person
   },
   versions: initialStateVersions
 };
@@ -39,6 +42,7 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE:
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
@@ -60,7 +64,8 @@ export function myPerformanceReducer(
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
           salesHierarchyViewType: state.current.salesHierarchyViewType,
-          selectedEntity: state.current.selectedEntity
+          selectedEntity: state.current.selectedEntity,
+          selectedEntityType: state.current.selectedEntityType
         },
         versions: state.versions
       };
@@ -73,7 +78,8 @@ export function myPerformanceReducer(
             state.current.salesHierarchyViewType,
             action as SalesHierarchyViewTypeActions.Action
           ),
-          selectedEntity: state.current.selectedEntity
+          selectedEntity: state.current.selectedEntity,
+          selectedEntityType: state.current.selectedEntityType
         },
         versions: state.versions
       };

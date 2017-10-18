@@ -2,14 +2,15 @@ import { Action } from '@ngrx/store';
 
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
-import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 
 export interface FetchProductMetricsPayload {
   positionId: string;
   contextPositionId?: string;
   entityTypeCode?: string;
   filter: MyPerformanceFilterState;
-  selectedEntityType: SelectedEntityType;
+  selectedEntityType: EntityType;
+  selectedBrand?: string;
 }
 
 export interface FetchProductMetricsSuccessPayload {

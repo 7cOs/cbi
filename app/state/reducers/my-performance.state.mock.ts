@@ -1,5 +1,6 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
@@ -28,7 +29,8 @@ export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
   return {
     responsibilities: getResponsibilitesStateMock(),
     salesHierarchyViewType: getViewTypeStateMock(),
-    selectedEntity: chance.string()
+    selectedEntity: chance.string(),
+    selectedEntityType: getEntityTypeMock()
   };
 }
 

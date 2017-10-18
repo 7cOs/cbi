@@ -1,10 +1,10 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { initialState, productMetricsReducer } from './product-metrics.reducer';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricMock } from '../../models/product-metrics.model.mock';
+import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
-import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 
 const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
@@ -21,7 +21,7 @@ describe('ProductMetrics Reducer', () => {
     const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetricsAction({
       positionId: positionIdMock,
       filter: performanceFilterStateMock,
-      selectedEntityType: SelectedEntityType.Position
+      selectedEntityType: EntityType.Person
     }));
 
     expect(actualState).toEqual(expectedState);

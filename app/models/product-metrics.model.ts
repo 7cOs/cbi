@@ -1,24 +1,33 @@
-export interface ProductMetricsBrandValue {
+export interface ProductMetricsValues {
   brandDescription: string;
   current: number;
   yearAgo: number;
   collectionMethod: string;
   yearAgoPercent: number;
   brandCode: string;
+  beerId?: {
+    masterPackageSKUCode: string;
+    masterPackageSKUDescription: string;
+  };
 }
 
 export interface ProductMetrics {
-  brandValues?: ProductMetricsBrandValue[];
+  brandValues?: ProductMetricsValues[];
+  skuValues?: ProductMetricsValues[];
 }
 
-export interface ProductMetricsBrandValueDTO {
+export interface ProductMetricsValuesDTO {
   values: [
     {
       current: number;
       yearAgo: number;
       collectionMethod: string;
     }
-    ];
+  ];
+  beerId?: {
+    masterPackageSKUCode: string;
+    masterPackageSKUDescription: string;
+  };
   operatingCompanyCode: string;
   operatingCompanyDescription: string;
   beverageTypeCode: string;
@@ -27,9 +36,12 @@ export interface ProductMetricsBrandValueDTO {
   brandDescription: string;
   varietalCode: string;
   varietalDescription: string;
+  subBrandCode?: string;
+  subBrandDescription?: string;
 }
 
 export interface ProductMetricsDTO {
-  brandValues?: ProductMetricsBrandValueDTO[];
+  brandValues?: ProductMetricsValuesDTO[];
+  skuValues?: ProductMetricsValuesDTO[];
   type: string;
 }

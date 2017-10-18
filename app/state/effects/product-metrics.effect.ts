@@ -8,6 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import { ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
+import * as ProductMetricsViewTypeActions from '../../state/actions/product-metrics-view-type.action';
 
 @Injectable()
 export class ProductMetricsEffects {
@@ -29,6 +30,7 @@ export class ProductMetricsEffects {
           entityTypeCode: payload.entityTypeCode,
           filter: payload.filter,
           selectedEntityType: payload.selectedEntityType,
+          selectedBrand: payload.selectedBrand
         };
 
         return Observable.of(productMetricsData);
@@ -48,11 +50,12 @@ export class ProductMetricsEffects {
   }
 
   private constructSuccessAction(productMetricsData: ProductMetricsData): Observable<Action> {
-    return Observable.of(
+    return Observable.from([
+      new ProductMetricsViewTypeActions.SetProductMetricsViewType(productMetricsData.productMetricsViewType),
       new ProductMetricsActions.FetchProductMetricsSuccessAction({
         positionId: productMetricsData.positionId,
         products: productMetricsData.products
       })
-    );
+    ]);
   }
 }

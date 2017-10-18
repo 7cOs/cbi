@@ -6,13 +6,13 @@ let chance = new Chance();
 
 describe('Responsibilities Actions', () => {
 
-  describe('SaveMyPerformanceStateAction', () => {
-    let action: MyPerformanceVersionActions.SaveMyPerformanceStateAction;
+  describe('SaveMyPerformanceState', () => {
+    let action: MyPerformanceVersionActions.SaveMyPerformanceState;
     let myPerformanceDataMock: any;
 
     beforeEach(() => {
       myPerformanceDataMock = chance.string();
-      action = new MyPerformanceVersionActions.SaveMyPerformanceStateAction(myPerformanceDataMock);
+      action = new MyPerformanceVersionActions.SaveMyPerformanceState(myPerformanceDataMock);
     });
 
     it('should have the correct type', () => {
@@ -26,10 +26,10 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('RestoreMyPerformanceAction', () => {
-    let action: MyPerformanceVersionActions.RestoreMyPerformanceStateAction;
+    let action: MyPerformanceVersionActions.RestoreMyPerformanceState;
 
     beforeEach(() => {
-      action = new MyPerformanceVersionActions.RestoreMyPerformanceStateAction();
+      action = new MyPerformanceVersionActions.RestoreMyPerformanceState();
     });
 
     it('should have the correct type', () => {
@@ -44,18 +44,18 @@ describe('Responsibilities Actions', () => {
 
     it('should contain the correct payload when one is provided', () => {
       const actionPayloadMock = chance.natural();
-      const actionWithPayloadMock = new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(actionPayloadMock);
+      const actionWithPayloadMock = new MyPerformanceVersionActions.RestoreMyPerformanceState(actionPayloadMock);
       expect(actionWithPayloadMock.payload).toEqual(actionPayloadMock);
     });
   });
 
-  describe('SetMyPerformanceSelectedEntityAction', () => {
+  describe('SetMyPerformanceSelectedEntity', () => {
     let entityNameMock: string;
-    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedEntity;
 
     beforeEach(() => {
       entityNameMock = chance.string();
-      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(entityNameMock);
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(entityNameMock);
     });
 
     it('should have the correct type', () => {
@@ -70,10 +70,10 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('ClearMyPerformanceAction', () => {
-    let action: MyPerformanceVersionActions.ClearMyPerformanceStateAction;
+    let action: MyPerformanceVersionActions.ClearMyPerformanceState;
 
     beforeEach(() => {
-      action = new MyPerformanceVersionActions.ClearMyPerformanceStateAction();
+      action = new MyPerformanceVersionActions.ClearMyPerformanceState();
     });
 
     it('should have the correct type', () => {

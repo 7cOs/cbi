@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
 import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { getProductMetricMock } from '../models/product-metrics.model.mock';
@@ -13,7 +14,6 @@ import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
-import { SelectedEntityType } from '../enums/selected-entity-type.enum';
 
 const chance = new Chance();
 
@@ -24,7 +24,7 @@ describe('ProductMetrics Service', () => {
   let productMetricsMock: ProductMetrics;
   let productMetricsDTOMock: ProductMetricsDTO;
   let performanceFilterStateMock: MyPerformanceFilterState;
-  let selectedEntityTypeMock: SelectedEntityType = SelectedEntityType.Position;
+  let selectedEntityTypeMock: EntityType = EntityType.Person;
   let error: Error;
   let productMetricsApiServiceMock: any;
   let productMetricsTransformerServiceMock: any;
@@ -131,7 +131,7 @@ describe('ProductMetrics Service', () => {
       });
 
       it('should call getPositionProductMetrics when metrics for a position are requested', (done) => {
-        productMetricsDataMock.selectedEntityType = SelectedEntityType.Position;
+        productMetricsDataMock.selectedEntityType = EntityType.Person;
 
         productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
           expect(productMetricsData).toEqual({
@@ -161,7 +161,7 @@ describe('ProductMetrics Service', () => {
       });
 
       it('should call getPositionProductMetrics when metrics for an account are requested', (done) => {
-        productMetricsDataMock.selectedEntityType = SelectedEntityType.Account;
+        productMetricsDataMock.selectedEntityType = EntityType.Account;
 
         productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
           expect(productMetricsData).toEqual({
@@ -192,7 +192,7 @@ describe('ProductMetrics Service', () => {
       });
 
       it('should call getPositionProductMetrics when metrics for a role group are requested', (done) => {
-        productMetricsDataMock.selectedEntityType = SelectedEntityType.RoleGroup;
+        productMetricsDataMock.selectedEntityType = EntityType.RoleGroup;
 
         productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
           expect(productMetricsData).toEqual({

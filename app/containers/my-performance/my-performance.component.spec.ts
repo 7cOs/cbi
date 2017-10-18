@@ -35,8 +35,7 @@ import { MyPerformanceTableRowComponent } from '../../shared/components/my-perfo
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../enums/row-type.enum';
-import { SaveMyPerformanceStateAction, SetMyPerformanceSelectedEntityAction } from '../../state/actions/my-performance-version.action';
-import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
+import { SaveMyPerformanceState, SetMyPerformanceSelectedEntity } from '../../state/actions/my-performance-version.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
@@ -222,7 +221,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetricsAction({
         positionId: userServiceMock.model.currentUser.positionId,
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.Position
+        selectedEntityType: EntityType.Person
       }));
     });
 
@@ -361,7 +360,7 @@ describe('MyPerformanceComponent', () => {
         componentInstance.showLeftBackButton = true;
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction when last version has a leftTableViewType of distributors', () => {
+      it('should dispatch RestoreMyPerformanceState when last version has a leftTableViewType of distributors', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.distributors;
         versionsSubject.next(versionsMock);
 
@@ -370,10 +369,10 @@ describe('MyPerformanceComponent', () => {
         componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+      it('should dispatch RestoreMyPerformanceState and FetchProductMetricsAction ' +
         'when last version has a leftTableViewType of people', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.people;
         versionsSubject.next(versionsMock);
@@ -383,16 +382,16 @@ describe('MyPerformanceComponent', () => {
         componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           entityTypeCode: versionsMock[versionsMock.length - 1].responsibilities.entityTypeCode,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: SelectedEntityType.RoleGroup
+          selectedEntityType: EntityType.RoleGroup
         }));
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction when last version has a leftTableViewType of subAccounts', () => {
+      it('should dispatch RestoreMyPerformanceState when last version has a leftTableViewType of subAccounts', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
         versionsSubject.next(versionsMock);
 
@@ -401,10 +400,10 @@ describe('MyPerformanceComponent', () => {
         componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+      it('should dispatch RestoreMyPerformanceState and FetchProductMetricsAction ' +
         'when last version has a leftTableViewType of roleGroups', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.roleGroups;
         versionsSubject.next(versionsMock);
@@ -414,15 +413,15 @@ describe('MyPerformanceComponent', () => {
         componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: SelectedEntityType.Position
+          selectedEntityType: EntityType.Person
         }));
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+      it('should dispatch RestoreMyPerformanceState and FetchProductMetricsAction ' +
         'when last version has a leftTableViewType of accounts', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
         versionsSubject.next(versionsMock);
@@ -432,11 +431,11 @@ describe('MyPerformanceComponent', () => {
         componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: SelectedEntityType.Position
+          selectedEntityType: EntityType.Person
         }));
       });
     });
@@ -457,8 +456,8 @@ describe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(4);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntity(rowMock.descriptionRow0));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceState(stateMock.myPerformance.current));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
@@ -471,7 +470,7 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         entityTypeCode: rowMock.metadata.entityTypeCode,
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.RoleGroup
+        selectedEntityType: EntityType.RoleGroup
       }));
     });
 
@@ -480,8 +479,8 @@ describe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(4);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntity(rowMock.descriptionRow0));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceState(stateMock.myPerformance.current));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchSubAccountsAction({
         positionId: rowMock.metadata.positionId,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
@@ -493,7 +492,7 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.Account
+        selectedEntityType: EntityType.Account
       }));
     });
 
@@ -502,8 +501,8 @@ describe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(4);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntity(rowMock.descriptionRow0));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceState(stateMock.myPerformance.current));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilities({
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any
@@ -511,7 +510,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.Position
+        selectedEntityType: EntityType.Person
       }));
     });
 
@@ -634,7 +633,7 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction when selected step has distributors view type', () => {
+      it('should dispatch RestoreMyPerformanceState when selected step has distributors view type', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.distributors);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
@@ -642,12 +641,12 @@ describe('MyPerformanceComponent', () => {
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState(
           expectedStepsBack
         ));
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction when selected step has subAccounts view type', () => {
+      it('should dispatch RestoreMyPerformanceState when selected step has subAccounts view type', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.subAccounts);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
@@ -655,12 +654,12 @@ describe('MyPerformanceComponent', () => {
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState(
           expectedStepsBack
         ));
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+      it('should dispatch RestoreMyPerformanceState and FetchProductMetricsAction ' +
         'when selected step has people view type', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.people);
         componentInstance.handleBreadcrumbEntityClicked({
@@ -669,18 +668,18 @@ describe('MyPerformanceComponent', () => {
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState(
           expectedStepsBack
         ));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: expectedPositionId,
           entityTypeCode: expectedEntityTypeCode,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: SelectedEntityType.RoleGroup
+          selectedEntityType: EntityType.RoleGroup
         }));
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+      it('should dispatch RestoreMyPerformanceState and FetchProductMetricsAction ' +
         'when selected step has roleGroups view type', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.roleGroups);
         componentInstance.handleBreadcrumbEntityClicked({
@@ -689,17 +688,17 @@ describe('MyPerformanceComponent', () => {
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState(
           expectedStepsBack
         ));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: expectedPositionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: SelectedEntityType.Position
+          selectedEntityType: EntityType.Person
         }));
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+      it('should dispatch RestoreMyPerformanceState and FetchProductMetricsAction ' +
         'when selected step has accounts view type', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.accounts);
         componentInstance.handleBreadcrumbEntityClicked({
@@ -708,13 +707,13 @@ describe('MyPerformanceComponent', () => {
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState(
           expectedStepsBack
         ));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: expectedPositionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: SelectedEntityType.Position
+          selectedEntityType: EntityType.Person
         }));
       });
     });
@@ -738,7 +737,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('onDestroy', () => {
-    it('should dispatch ClearMyPerformanceStateAction as its final call dispatch', () => {
+    it('should dispatch ClearMyPerformanceState as its final call dispatch', () => {
       componentInstance.ngOnDestroy();
       expect(storeMock.dispatch.calls.mostRecent().args[0].type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE);
     });
