@@ -108,7 +108,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return formatted ResponsibilityEntityPerformance data for subAccount', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
+      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.SubAccount;
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
         .getLeftTableData(responsibilityEntitiesPerformanceMock);
