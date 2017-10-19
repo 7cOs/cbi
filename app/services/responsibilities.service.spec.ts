@@ -8,6 +8,7 @@ import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entit
 import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
+import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { getEntityPeopleResponsibilitiesMock, getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
 import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock,
@@ -20,7 +21,6 @@ import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row
 import { getPeopleResponsibilitiesDTOMock } from '../models/people-responsibilities-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
-import { HierarchyGroup, ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from './responsibilities.service';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
@@ -29,6 +29,7 @@ import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from '../services/performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
+import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from './responsibilities.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
 const chance = new Chance();

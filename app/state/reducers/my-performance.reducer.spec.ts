@@ -36,6 +36,7 @@ describe('My Performance Reducer', () => {
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
       positionId: chance.string(),
       groupedEntities: {},
+      hierarchyGroups: [],
       entityWithPerformance: []
     }));
     myPerformanceReducer(

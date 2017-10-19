@@ -119,6 +119,7 @@ export class ResponsibilitiesEffects {
       new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
         positionId: responsibilitiesData.positionId,
         groupedEntities: responsibilitiesData.groupedEntities,
+        hierarchyGroups: responsibilitiesData.hierarchyGroups,
         entityWithPerformance: responsibilitiesData.entityWithPerformance
       })
     ]);

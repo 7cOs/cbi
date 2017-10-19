@@ -11,6 +11,7 @@ import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entit
 import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
+import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
@@ -19,14 +20,6 @@ import { PerformanceTransformerService } from './performance-transformer.service
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
-
-export interface HierarchyGroup {
-  name: string;
-  type: string;
-  entityType: EntityType;
-  positionId?: string;
-  positionDescription?: string;
-}
 
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;

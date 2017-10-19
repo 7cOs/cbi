@@ -25,10 +25,12 @@ import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-enti
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
+import { getHierarchyGroupMock } from '../../models/hierarchy-group.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
+import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
 import { ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
@@ -43,6 +45,7 @@ describe('Responsibilities Effects', () => {
   const entityWithPerformanceMock = getEntitiesWithPerformancesMock();
   const error = new Error(chance.string());
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
+  const hierarchyGroupsMock: Array<HierarchyGroup> = Array(chance.natural({min: 1, max: 9})).fill('').map(() => getHierarchyGroupMock());
   const performanceMock: Performance = getPerformanceMock();
   const positionIdMock = chance.string();
   const entityTypeCodeMock = chance.string();
@@ -94,6 +97,7 @@ describe('Responsibilities Effects', () => {
   const responsibilitiesSuccessPayloadMock = {
     positionId: positionIdMock,
     groupedEntities: groupedEntitiesMock,
+    hierarchyGroups: hierarchyGroupsMock,
     entityWithPerformance: entityWithPerformanceMock
   };
 

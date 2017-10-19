@@ -1,7 +1,8 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
-import { Performance } from '../../models/performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
+import { HierarchyGroup } from '../../models/hierarchy-group.model';
+import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 export interface ResponsibilitiesState extends State {
@@ -9,6 +10,7 @@ export interface ResponsibilitiesState extends State {
   positionId: string;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
+  hierarchyGroups: Array<HierarchyGroup>;
   entityWithPerformance: EntityWithPerformance[];
   entitiesTotalPerformances: Performance;
 }
@@ -17,6 +19,7 @@ export const initialState: ResponsibilitiesState = {
   status: ActionStatus.NotFetched,
   positionId: '0',
   groupedEntities: {},
+  hierarchyGroups: [],
   entityWithPerformance: [],
   entitiesTotalPerformances: {
     total: 0,
@@ -43,6 +46,7 @@ export function responsibilitiesReducer(
         status: ActionStatus.Fetched,
         positionId: action.payload.positionId,
         groupedEntities: action.payload.groupedEntities,
+        hierarchyGroups: action.payload.hierarchyGroups,
         entityWithPerformance: action.payload.entityWithPerformance
       });
 

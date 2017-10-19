@@ -4,12 +4,14 @@ import { EntityWithPerformance } from '../../models/entity-with-performance.mode
 import { Performance } from '../../models/performance.model';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
   groupedEntities: GroupedEntities;
+  hierarchyGroups: Array<HierarchyGroup>;
   entityWithPerformance: EntityWithPerformance[];
 }
 
