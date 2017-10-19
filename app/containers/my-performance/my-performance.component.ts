@@ -66,6 +66,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public performanceMetric: string = 'Depletions';
   public dateRange: DateRange = getDateRangeMock();
   public showOpportunities: boolean = true;
+  public totalRowData: MyPerformanceTableRow;
 
   private currentState: MyPerformanceEntitiesData;
   private versions: MyPerformanceEntitiesData[];
@@ -77,8 +78,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsSubscription: Subscription;
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
-  private salesHierarchyTotalLeft: MyPerformanceTableRow;
-  private salesHierarchyTotalRight: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: string;
   private showContributionToVolume: boolean;
@@ -127,11 +126,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
 
         if (current.responsibilities.entityWithPerformance) {
-          const totalRowData = this.myPerformanceTableDataTransformerService
+          this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
           this.showContributionToVolume = this.displayRightTotalRow();
-          this.salesHierarchyTotalLeft =  !this.displayRightTotalRow() && totalRowData;
-          this.salesHierarchyTotalRight = this.displayRightTotalRow() && totalRowData;
         }
 
     });
@@ -298,6 +295,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  public displayRightTotalRow(): boolean {
+    return this.leftTableViewType === 'roleGroups' || this.entityType === EntityType.RoleGroup
+      || this.entityType === EntityType.DistributorGroup;
+  }
+
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
     if (state.viewType.leftTableViewType === ViewType.roleGroups
       || state.viewType.leftTableViewType === ViewType.accounts) {
@@ -314,10 +316,5 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedEntityType: SelectedEntityType.RoleGroup
       }));
     }
-  }
-
-  private displayRightTotalRow(): boolean {
-    return this.leftTableViewType === 'roleGroups' || this.entityType === EntityType.RoleGroup
-      || this.entityType === EntityType.DistributorGroup;
   }
 }

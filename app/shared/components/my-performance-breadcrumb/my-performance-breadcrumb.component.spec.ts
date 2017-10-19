@@ -40,7 +40,7 @@ describe('Breadcrumb Component', () => {
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
       componentInstance.showBackButton = mockInputs.showBackButton;
 
-        fixture.detectChanges();
+      fixture.detectChanges();
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 

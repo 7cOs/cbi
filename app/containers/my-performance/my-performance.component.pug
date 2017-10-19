@@ -18,7 +18,7 @@ my-performance-table.left(
   [dateRange]="dateRange",
   [tableHeaderRow]="tableHeaderRowLeft",
   [performanceMetric]="performanceMetric",
-  [totalRow]="salesHierarchyTotalLeft",
+  [totalRow]="!displayRightTotalRow() ? totalRowData : null",
   [sortingCriteria]="sortingCriteria",
   [viewType]="leftTableViewType",
   [showContributionToVolume] = "showContributionToVolume",
@@ -30,7 +30,7 @@ my-performance-table.left(
 my-performance-table.right(
   [tableData]="productPerformance",
   [tableHeaderRow]="tableHeaderRowRight",
-  [totalRow]="salesHierarchyTotalRight",
+  [totalRow]="displayRightTotalRow() ? totalRowData : null",
   [performanceMetric]="'Product Snapshot'",
   [sortingCriteria]="sortingCriteria",
   [showOpportunities]="showOpportunities",
