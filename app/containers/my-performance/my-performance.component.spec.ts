@@ -81,7 +81,7 @@ class MyPerformanceTableComponentMock {
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() viewType: ViewType;
-  @Input() contributionToVolume: boolean;
+  @Input() showContributionToVolume: boolean;
 }
 
 describe('MyPerformanceComponent', () => {

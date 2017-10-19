@@ -81,7 +81,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private salesHierarchyTotalRight: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: string;
-  private contributionToVolume: boolean;
+  private showContributionToVolume: boolean;
 
   constructor(
     private store: Store<AppState>,
@@ -129,7 +129,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (current.responsibilities.entityWithPerformance) {
           const totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
-          this.contributionToVolume = this.displayRightTotalRow();
+          this.showContributionToVolume = this.displayRightTotalRow();
           this.salesHierarchyTotalLeft =  !this.displayRightTotalRow() && totalRowData;
           this.salesHierarchyTotalRight = this.displayRightTotalRow() && totalRowData;
         }
@@ -317,7 +317,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private displayRightTotalRow(): boolean {
-    return this.leftTableViewType === 'roleGroups' || this.entityType === EntityType['RoleGroup']
-      || this.entityType === EntityType['DistributorGroup'];
+    return this.leftTableViewType === 'roleGroups' || this.entityType === EntityType.RoleGroup
+      || this.entityType === EntityType.DistributorGroup;
   }
 }

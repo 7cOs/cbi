@@ -39,7 +39,7 @@ export class MyPerformanceTableComponent {
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() viewType: ViewType;
-  @Input() contributionToVolume: boolean;
+  @Input() showContributionToVolume: boolean;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;

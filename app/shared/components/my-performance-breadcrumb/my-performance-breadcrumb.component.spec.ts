@@ -33,7 +33,7 @@ describe('Breadcrumb Component', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
         performanceStateVersions: initialState.versions,
-        showBackButton: chance.bool()
+        showBackButton: true
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
@@ -51,7 +51,7 @@ describe('Breadcrumb Component', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
         performanceStateVersions: myPerformanceStateMock.versions,
-        showBackButton: chance.bool()
+        showBackButton: true
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
@@ -72,7 +72,7 @@ describe('Breadcrumb Component', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
         performanceStateVersions: myPerformanceStateMock.versions,
-        showBackButton: chance.bool()
+        showBackButton: true
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
@@ -100,12 +100,12 @@ describe('Breadcrumb Component', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
         performanceStateVersions: myPerformanceStateMock.versions,
-        showBackButton: chance.bool()
+        showBackButton: true
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
-      componentInstance.showBackButton = true;
+      componentInstance.showBackButton = mockInputs.showBackButton;
 
       fixture.detectChanges();
 
