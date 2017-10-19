@@ -113,4 +113,21 @@ describe('Breadcrumb Component', () => {
       expect(backButtonClass).toEqual({'back-button': true});
     });
   });
+
+  it('should not return the back button class', () => {
+    const mockInputs = {
+      currentUserFullName: chance.string(),
+      performanceStateVersions: myPerformanceStateMock.versions,
+      showBackButton: false
+    };
+
+    componentInstance.currentUserFullName = mockInputs.currentUserFullName;
+    componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+    componentInstance.showBackButton = mockInputs.showBackButton;
+
+    fixture.detectChanges();
+
+    const backButtonClass = componentInstance.getBackButtonClass();
+    expect(backButtonClass).toEqual({'back-button': false});
+  });
 });

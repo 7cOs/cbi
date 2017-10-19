@@ -79,7 +79,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private defaultUserPremiseType: PremiseTypeValue;
-  private entityType: string;
+  private entityType: EntityType;
   private showContributionToVolume: boolean;
 
   constructor(
@@ -296,7 +296,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public displayRightTotalRow(): boolean {
-    return this.leftTableViewType === 'roleGroups' || this.entityType === EntityType.RoleGroup
+    return this.leftTableViewType === ViewType.roleGroups || this.entityType === EntityType.RoleGroup
       || this.entityType === EntityType.DistributorGroup;
   }
 
