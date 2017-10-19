@@ -29,20 +29,6 @@ export class PerformanceTransformerService {
     };
   }
 
-  public transformEntityWithPerformanceDTOs(entities: EntityWithPerformanceDTO[]): EntityWithPerformance[] {
-    return entities.map((entity: EntityWithPerformanceDTO) => {
-      return {
-        positionId: entity.id,
-        entityTypeCode: entity.entityTypeCode,
-        name: entity.name,
-        entityType: EntityType[entity.entityType],
-        positionDescription: entity.positionDescription,
-        alternateHierarchyId: entity.alternateHierarchyId,
-        performance: this.transformPerformanceDTO(entity.performance)
-      };
-    });
-  }
-
   public transformEntityWithPerformanceDTO(entity: EntityWithPerformanceDTO): EntityWithPerformance {
     return {
       positionId: entity.id,
@@ -68,7 +54,7 @@ export class PerformanceTransformerService {
       positionId: positionId,
       name: group.name,
       entityType: group.entityType,
-      positionDescription: group.positionDescription,
+      positionDescription: group.positionDescription || '',
       entityTypeCode: group.type,
       performance: this.transformPerformanceDTO(performanceDTO)
     };
