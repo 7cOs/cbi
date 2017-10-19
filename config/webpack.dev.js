@@ -75,7 +75,9 @@ module.exports = webpackMerge(commonConfig, {
           emitErrors: false,
           failOnHint: true,
           formatter: 'stylish',
-          typeCheck: true
+          // this will deactivate tslint rules that rely on type checking, but is much faster,
+          // and we are still linting with type-checking enabled in CI (npm run lint:ts)
+          typeCheck: false
         },
 
         eslint: {
