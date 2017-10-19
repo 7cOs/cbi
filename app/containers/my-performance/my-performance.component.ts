@@ -227,7 +227,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               }));
               break;
             case ViewType.people:
-              if (this.currentState.responsibilities.alternateHierarchyId) {
+              if (this.isInsideAlternateHierarchy()) {
                 this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
                   positionId: parameters.row.metadata.positionId,
                   alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
@@ -316,5 +316,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedEntityType: SelectedEntityType.RoleGroup
       }));
     }
+  }
+
+  private isInsideAlternateHierarchy(): boolean {
+    return !!this.currentState.responsibilities.alternateHierarchyId;
   }
 }
