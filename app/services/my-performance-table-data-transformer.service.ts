@@ -11,7 +11,7 @@ import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metr
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntityWithPerformance[], inAltHierarchy: boolean = false): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[], inAltHierarchy: boolean): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
       const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
         ? PluralizedRoleGroup[entity.name]
