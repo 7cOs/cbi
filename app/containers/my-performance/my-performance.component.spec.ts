@@ -852,7 +852,6 @@ describe('MyPerformanceComponent', () => {
     it('should set variable to true when productmetrics.products is empty', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      debugger;
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
   });
