@@ -13,8 +13,11 @@ export class MyPerformanceTableDataTransformerService {
 
   public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
+      const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
+        ? PluralizedRoleGroup[entity.name]
+        : entity.name;
       const transformedEntity: MyPerformanceTableRow = {
-        descriptionRow0: entity.entityType === 'RoleGroup' ? PluralizedRoleGroup[entity.name] : entity.name,
+        descriptionRow0: descriptionRow0,
         metricColumn0: entity.performance.total,
         metricColumn1: entity.performance.totalYearAgo,
         metricColumn2: entity.performance.totalYearAgoPercent,
@@ -34,6 +37,7 @@ export class MyPerformanceTableDataTransformerService {
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
       if (entity.entityTypeCode) transformedEntity.metadata.entityTypeCode = entity.entityTypeCode;
+      if (entity.alternateHierarchyId) transformedEntity.metadata.alternateHierarchyId = entity.alternateHierarchyId;
 
       if (entity.entityType === EntityType.Distributor || entity.entityType === EntityType.SubAccount) {
         transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';

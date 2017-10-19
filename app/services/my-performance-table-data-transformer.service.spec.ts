@@ -9,7 +9,7 @@ import { getEntitiesWithPerformancesMock,
          getEntitiesWithPerformancesOpenPositionMock } from '../models/entity-with-performance.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { MyPerformanceTableRow, MyPerformanceTableRowMetadata } from '../models/my-performance-table-row.model';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
@@ -47,6 +47,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.RoleGroup), 1);
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.Distributor), 1);
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.SubAccount), 1);
+      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.AccountGroup), 1);
 
       responsibilityEntitiesPerformanceMock[0].entityType = entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})];
 
@@ -107,7 +108,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return formatted ResponsibilityEntityPerformance data for subAccount', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
+      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.SubAccount;
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
         .getLeftTableData(responsibilityEntitiesPerformanceMock);
@@ -138,6 +139,36 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.RoleGroup;
+      responsibilityEntitiesPerformanceMock[0].name = 'ON PREM DIRECTOR';
+
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+      const expectedRow: MyPerformanceTableRow = {
+        descriptionRow0: 'ON PREM DIRECTORS',
+        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
+        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
+        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
+        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
+          entityName: responsibilityEntitiesPerformanceMock[0].name
+        },
+        performanceError: false
+      };
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual(expectedRow);
+    });
+
+    it('should return formatted ResponsibilityEntityPerformance data for AccountGroup', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.AccountGroup;
       responsibilityEntitiesPerformanceMock[0].name = 'ACCOUNT';
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
@@ -255,6 +286,40 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceOpenPositionMock[0].entityType = EntityType.Distributor;
       const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
       expect(tableData[0].descriptionRow1).toEqual('GO TO DASHBOARD');
+    });
+
+    it('returned table entities should contain alternateHierarchyId in their metadata if the EntityWithPerformance' +
+    'contained a alternateHierarchyId', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      const alternateHierarchyIdMock = chance.string();
+      responsibilityEntitiesPerformanceMock[0].alternateHierarchyId = alternateHierarchyIdMock;
+
+      let actualMetaData: MyPerformanceTableRowMetadata =
+        myPerformanceTableDataTransformerService.getLeftTableData([responsibilityEntitiesPerformanceMock[0]])[0].metadata;
+      let expectedMetaData: MyPerformanceTableRowMetadata = {
+        positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+        contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+        entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+        entityType: responsibilityEntitiesPerformanceMock[0].entityType,
+        entityName: responsibilityEntitiesPerformanceMock[0].name,
+        alternateHierarchyId: alternateHierarchyIdMock
+      };
+
+      expect(actualMetaData).toEqual(expectedMetaData);
+
+      delete responsibilityEntitiesPerformanceMock[0].alternateHierarchyId;
+
+      actualMetaData = myPerformanceTableDataTransformerService.getLeftTableData([responsibilityEntitiesPerformanceMock[0]])[0].metadata;
+      expectedMetaData = {
+        positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+        contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
+        entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
+        entityType: responsibilityEntitiesPerformanceMock[0].entityType,
+        entityName: responsibilityEntitiesPerformanceMock[0].name
+      };
+
+      expect(actualMetaData).toEqual(expectedMetaData);
     });
   });
 

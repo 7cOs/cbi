@@ -8,9 +8,11 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import { FetchEntityWithPerformance,
+import { FetchAlternateHierarchyResponsibilities,
+         FetchEntityWithPerformance,
          FetchResponsibilities,
-         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
+         FetchSubAccountsAction,
+         SetAlternateHierarchyId } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
@@ -213,6 +215,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             case ViewType.roleGroups:
               const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
+              if (parameters.row.metadata.alternateHierarchyId) {
+                this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+              }
               this.store.dispatch(new FetchEntityWithPerformance({
                 selectedPositionId: parameters.row.metadata.positionId,
                 entityTypeGroupName: entityTypeGroupName,
@@ -229,10 +234,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               }));
               break;
             case ViewType.people:
-              this.store.dispatch(new FetchResponsibilities({
-                positionId: parameters.row.metadata.positionId,
-                filter: this.filterState
-              }));
+              if (this.currentState.responsibilities.alternateHierarchyId) {
+                this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
+                  positionId: parameters.row.metadata.positionId,
+                  alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+                  filter: this.filterState
+                }));
+              } else {
+                this.store.dispatch(new FetchResponsibilities({
+                  positionId: parameters.row.metadata.positionId,
+                  filter: this.filterState
+                }));
+              }
               this.store.dispatch(new FetchProductMetricsAction({
                 positionId: parameters.row.metadata.positionId,
                 filter: this.filterState,
