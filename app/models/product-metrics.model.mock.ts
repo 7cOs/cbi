@@ -44,22 +44,48 @@ export const productMetricsBrandDTOMock: ProductMetricsDTO = {
 
 export function getProductMetricsBrandDTOMock(): ProductMetricsValuesDTO {
   return {
-        values: [
-          {
-            current: chance.natural(),
-            yearAgo: chance.natural(),
-            collectionMethod: chance.string()
-          }
-        ],
-        operatingCompanyCode: chance.string(),
-        operatingCompanyDescription: chance.string(),
-        beverageTypeCode: chance.string(),
-        beverageTypeDescription: chance.string(),
-        brandCode: chance.string(),
-        brandDescription: chance.string(),
-        varietalCode: chance.string(),
-        varietalDescription: chance.string()
-      };
+    values: [
+      {
+        current: chance.natural(),
+        yearAgo: chance.natural(),
+        collectionMethod: chance.string()
+      }
+    ],
+    operatingCompanyCode: chance.string(),
+    operatingCompanyDescription: chance.string(),
+    beverageTypeCode: chance.string(),
+    beverageTypeDescription: chance.string(),
+    brandCode: chance.string(),
+    brandDescription: chance.string(),
+    varietalCode: chance.string(),
+    varietalDescription: chance.string(),
+  };
+}
+
+export function getProductMetricsSkuDTOMock(): ProductMetricsValuesDTO {
+  return {
+    values: [
+      {
+        current: chance.natural(),
+        yearAgo: chance.natural(),
+        collectionMethod: chance.string()
+      }
+    ],
+    beerId: {
+      masterPackageSKUCode: chance.string(),
+      masterPackageSKUDescription: chance.string()
+    },
+    operatingCompanyCode: chance.string(),
+    operatingCompanyDescription: chance.string(),
+    beverageTypeCode: chance.string(),
+    beverageTypeDescription: chance.string(),
+    brandCode: chance.string(),
+    brandDescription: chance.string(),
+    varietalCode: chance.string(),
+    varietalDescription: chance.string(),
+    subBrandCode: chance.string(),
+    subBrandDescription: chance.string()
+  };
 }
 
 export function getProductMetricsBrandMock(): ProductMetricsValues {
@@ -69,18 +95,22 @@ export function getProductMetricsBrandMock(): ProductMetricsValues {
     yearAgo: chance.natural(),
     collectionMethod: chance.string(),
     yearAgoPercent: chance.natural(),
-    brandCode: chance.string()
+    brandCode: chance.string(),
+    beerId: {
+      masterPackageSKUCode: chance.string(),
+      masterPackageSKUDescription: chance.string(),
+    }
   };
 }
 
-export function getProductMetricDTOMock() {
-  return {
-    brand: [ getProductMetricsBrandDTOMock() ]
-  };
-}
-
-export function getProductMetricMock(): ProductMetrics {
+export function getProductMetricsWithBrandValuesMock(): ProductMetrics {
   return {
     brandValues: [ getProductMetricsBrandMock() ]
+  };
+}
+
+export function getProductMetricsWithSkuValuesMock(): ProductMetrics {
+  return {
+    skuValues: [ getProductMetricsBrandMock() ]
   };
 }

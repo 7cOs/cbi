@@ -720,7 +720,7 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('getPositionsPerformances', () => {
-    it('should call getPerformance with the proper id', (done: any) => {
+    it('should call getPerformance with the proper id', (done) => {
       const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
@@ -771,7 +771,7 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('getDistributorsPerformances', () => {
-    it('should call getDistributorPerformance with the proper id for each distributor', (done: any) => {
+    it('should call getDistributorPerformance with the proper id for each distributor', (done) => {
       const getDistributorPerformanceSpy = spyOn(myPerformanceApiService, 'getDistributorPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
@@ -824,7 +824,7 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('getAccountsPerformances', () => {
-    it('should call getAccountPerformance total with the proper id for each account', (done: any) => {
+    it('should call getAccountPerformance total with the proper id for each account', (done) => {
       const getAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getAccountPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });

@@ -5,12 +5,15 @@ import * as Chance from 'chance';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsService, ProductMetricsData } from '../../services/product-metrics.service';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { SetProductMetricsViewType } from '../actions/product-metrics-view-type.action';
 
 const chance = new Chance();
 
@@ -18,7 +21,9 @@ describe('ProductMetrics Effects', () => {
   let positionIdMock: string;
   let contextPositionIdMock: string;
   let entityTypeCodeMock: string;
-  let productMetricsMock: ProductMetrics;
+  let selectedBrandMock: string;
+  let productMetricsWithBrandValuesMock: ProductMetrics;
+  let productMetricsWithSkuValuesMock: ProductMetrics;
   let performanceFilterStateMock: MyPerformanceFilterState;
   let selectedEntityTypeMock: EntityType = EntityType.Person;
   let productMetricsSuccessPayloadMock: ProductMetricsActions.FetchProductMetricsSuccessPayload;
@@ -38,7 +43,9 @@ describe('ProductMetrics Effects', () => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
-    productMetricsMock = getProductMetricMock();
+    selectedBrandMock = chance.string();
+    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
     performanceFilterStateMock = getMyPerformanceFilterMock();
     error = new Error(chance.string());
 
@@ -47,7 +54,8 @@ describe('ProductMetrics Effects', () => {
       contextPositionId: contextPositionIdMock,
       entityTypeCode: entityTypeCodeMock,
       filter: performanceFilterStateMock,
-      selectedEntityType: selectedEntityTypeMock
+      selectedEntityType: selectedEntityTypeMock,
+      selectedBrand: selectedBrandMock
     };
 
     TestBed.configureTestingModule({
@@ -81,7 +89,8 @@ describe('ProductMetrics Effects', () => {
         contextPositionId: contextPositionIdMock,
         entityTypeCode: entityTypeCodeMock,
         filter: performanceFilterStateMock,
-        selectedEntityType: EntityType.Person
+        selectedEntityType: EntityType.Person,
+        selectedBrand: selectedBrandMock
       }));
     });
 
@@ -97,20 +106,23 @@ describe('ProductMetrics Effects', () => {
     });
 
     describe('when ProductMetricsService returns successfully', () => {
-      it('should return a FetchProductMetricsSuccess', (done) => {
+      it('should return a SetProductMetricsViewType and FetchProductMetricsSuccess', (done) => {
+        const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
+
         spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
-          productMetricsData.products = productMetricsMock;
+          productMetricsData.products = productMetricsWithBrandValuesMock;
+          productMetricsData.productMetricsViewType = productMetricsViewTypeMock;
           return Observable.of(productMetricsData);
         });
 
         productMetricsSuccessPayloadMock = {
           positionId: positionIdMock,
-          products: productMetricsMock
+          products: productMetricsWithBrandValuesMock
         };
 
-        productMetricsEffects.fetchProductMetrics$().subscribe(action => {
-          expect(action).toEqual(new ProductMetricsActions.FetchProductMetricsSuccess(
-            productMetricsSuccessPayloadMock));
+        productMetricsEffects.fetchProductMetrics$().pairwise().subscribe(([action1, action2]) => {
+          expect(action1).toEqual(new SetProductMetricsViewType(productMetricsViewTypeMock));
+          expect(action2).toEqual(new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock));
           done();
         });
       });

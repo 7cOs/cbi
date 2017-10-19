@@ -7,7 +7,7 @@ import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getPerformanceMock } from '../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock,
          getEntitiesWithPerformancesOpenPositionMock } from '../models/entity-with-performance.model.mock';
-import { getProductMetricMock } from '../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock } from '../models/product-metrics.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
@@ -20,7 +20,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
   const productMetricsState: ProductMetricsState = {
     status: ActionStatus.Fetched,
-    products: getProductMetricMock()
+    products: getProductMetricsWithBrandValuesMock()
   };
 
   beforeEach(() => {

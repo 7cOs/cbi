@@ -15,7 +15,7 @@ export class ProductMetricsTransformerService {
           return this.formatProductMetricsDTO(productMetricsValuesDTO);
         })}
       : { skuValues: productMetricsDTOs.skuValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) => {
-          return this.formatProductMetricsDTO(productMetricsValuesDTO);
+          return this.formatProductMetricsSkuDTO(productMetricsValuesDTO);
         })};
   }
 
@@ -27,7 +27,12 @@ export class ProductMetricsTransformerService {
       yearAgo: this.utilService.getYearAgoDelta(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
       yearAgoPercent: this.utilService.getYearAgoPercent(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
       brandCode: productMetricsDTO.brandCode,
-      beerId: productMetricsDTO.beerId
     };
+  }
+
+  private formatProductMetricsSkuDTO(productMetricsDTO: ProductMetricsValuesDTO): ProductMetricsValues {
+    return Object.assign({}, this.formatProductMetricsDTO(productMetricsDTO), {
+      beerId: productMetricsDTO.beerId
+    });
   }
 }

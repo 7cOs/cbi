@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
+import { FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
 import { ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
@@ -21,20 +22,7 @@ export class ProductMetricsEffects {
   fetchProductMetrics$(): Observable<Action> {
     return this.actions$
       .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS)
-      .switchMap((action: Action) => {
-        const payload: ProductMetricsActions.FetchProductMetricsPayload = action.payload;
-
-        const productMetricsData: ProductMetricsData = {
-          positionId: payload.positionId,
-          contextPositionId: payload.contextPositionId,
-          entityTypeCode: payload.entityTypeCode,
-          filter: payload.filter,
-          selectedEntityType: payload.selectedEntityType,
-          selectedBrand: payload.selectedBrand
-        };
-
-        return Observable.of(productMetricsData);
-      })
+      .switchMap((action: Action): Observable<FetchProductMetricsPayload> => Observable.of(action.payload))
       .switchMap((productMetricsData) => this.productMetricsService.getProductMetrics(productMetricsData))
       .switchMap((productMetricsData) => this.constructSuccessAction(productMetricsData))
       .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailure(error)));

@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import * as ProductMetricsActions from './product-metrics.action';
@@ -42,7 +42,7 @@ describe('ProductMetrics Actions', () => {
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      product = getProductMetricMock();
+      product = getProductMetricsWithBrandValuesMock();
       mockUserId = chance.natural();
       mockSuccessActionPayload = {
         positionId: mockUserId,

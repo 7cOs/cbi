@@ -308,7 +308,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         positionId: state.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: EntityType.Person,
-        selectedBrand: this.selectedBrand
+        selectedBrand: state.selectedBrand
       }));
     } else if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.people) {
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
@@ -316,7 +316,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         entityTypeCode: state.responsibilities.entityTypeCode,
         filter: this.filterState,
         selectedEntityType: EntityType.RoleGroup,
-        selectedBrand: this.selectedBrand
+        selectedBrand: state.selectedBrand
       }));
     }
   }

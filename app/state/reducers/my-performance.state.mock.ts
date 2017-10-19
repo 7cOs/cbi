@@ -32,7 +32,8 @@ export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
     responsibilities: getResponsibilitesStateMock(),
     salesHierarchyViewType: getViewTypeStateMock(),
     selectedEntity: chance.string(),
-    selectedEntityType: getEntityTypeMock()
+    selectedEntityType: getEntityTypeMock(),
+    selectedBrand: chance.string()
   };
 }
 

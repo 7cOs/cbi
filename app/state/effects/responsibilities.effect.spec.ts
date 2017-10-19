@@ -142,7 +142,7 @@ describe('Responsibilities Effects', () => {
     });
 
     describe('when everything returns successfully', () => {
-      it('should return a FetchResponsibilitiesSuccess', (done) => {
+      it('should return a SetSalesHierarchyViewType and FetchResponsibilitiesSuccess', (done) => {
         const viewTypeMock = SalesHierarchyViewType[getSalesHierarchyViewTypeMock()];
 
         spyOn(responsibilitiesService, 'getResponsibilities').and.callFake((responsibilitiesData: ResponsibilitiesData) => {
@@ -154,6 +154,7 @@ describe('Responsibilities Effects', () => {
         spyOn(responsibilitiesService, 'getPerformanceForGroupedEntities').and.callFake(
           (responsibilitiesData: ResponsibilitiesData) => {
           responsibilitiesData.entityWithPerformance = entityWithPerformanceMock;
+          responsibilitiesData.hierarchyGroups = hierarchyGroupsMock;
           return Observable.of(responsibilitiesData);
         });
 

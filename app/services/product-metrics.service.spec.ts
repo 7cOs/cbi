@@ -6,7 +6,7 @@ import * as Chance from 'chance';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
 import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
-import { getProductMetricMock } from '../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../models/product-metrics.model';
@@ -14,6 +14,7 @@ import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
+import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 
 const chance = new Chance();
 
@@ -21,8 +22,9 @@ describe('ProductMetrics Service', () => {
   let positionIdMock: string;
   let contextPositionIdMock: string;
   let entityTypeCodeMock: string;
-  let productMetricsMock: ProductMetrics;
-  let productMetricsDTOMock: ProductMetricsDTO;
+  let productMetricsWithBrandValuesMock: ProductMetrics;
+  let productMetricsWithSkuValuesMock: ProductMetrics;
+  let productMetricsBrandsDTOMock: ProductMetricsDTO;
   let performanceFilterStateMock: MyPerformanceFilterState;
   let selectedEntityTypeMock: EntityType = EntityType.Person;
   let error: Error;
@@ -39,8 +41,9 @@ describe('ProductMetrics Service', () => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
-    productMetricsMock = getProductMetricMock();
-    productMetricsDTOMock = {
+    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
+    productMetricsBrandsDTOMock = {
       brandValues: Array(chance.natural({min: 1, max: 9})).fill('').map(() => getProductMetricsBrandDTOMock()),
       type: chance.string()
     };
@@ -48,19 +51,19 @@ describe('ProductMetrics Service', () => {
     error = new Error(chance.string());
     productMetricsApiServiceMock = {
       getPositionProductMetrics() {
-        return Observable.of(productMetricsDTOMock);
+        return Observable.of(productMetricsBrandsDTOMock);
       },
       getAccountProductMetrics() {
-        return Observable.of(productMetricsDTOMock);
+        return Observable.of(productMetricsBrandsDTOMock);
       },
       getRoleGroupProductMetrics() {
-        return Observable.of(productMetricsDTOMock);
+        return Observable.of(productMetricsBrandsDTOMock);
       }
     };
 
     productMetricsTransformerServiceMock = {
       transformProductMetrics(): ProductMetrics {
-        return productMetricsMock;
+        return productMetricsWithBrandValuesMock;
       }
     };
 
@@ -130,6 +133,17 @@ describe('ProductMetrics Service', () => {
         transformProductMetricsSpy = spyOn(productMetricsTransformerService, 'transformProductMetrics').and.callThrough();
       });
 
+      it('should return a productMetricViewType of skus when the API returns skuValues', (done) => {
+        productMetricsDataMock.selectedEntityType = EntityType.Person;
+        getPositionProductMetricsSpy.and
+          .callFake(() => Observable.of(productMetricsWithSkuValuesMock));
+
+        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+          expect(productMetricsData.productMetricsViewType).toEqual(ProductMetricsViewType.skus);
+          done();
+        });
+      });
+
       it('should call getPositionProductMetrics when metrics for a position are requested', (done) => {
         productMetricsDataMock.selectedEntityType = EntityType.Person;
 
@@ -140,7 +154,8 @@ describe('ProductMetrics Service', () => {
             entityTypeCode: productMetricsDataMock.entityTypeCode,
             filter: productMetricsDataMock.filter,
             selectedEntityType: productMetricsDataMock.selectedEntityType,
-            products: productMetricsMock
+            products: productMetricsWithBrandValuesMock,
+            productMetricsViewType: ProductMetricsViewType.brands
           });
           done();
         });
@@ -156,7 +171,7 @@ describe('ProductMetrics Service', () => {
           ProductMetricsAggregationType.brand
         ]);
         expect(transformProductMetricsSpy.calls.argsFor(0)).toEqual([
-          productMetricsDTOMock
+          productMetricsBrandsDTOMock
         ]);
       });
 
@@ -170,7 +185,8 @@ describe('ProductMetrics Service', () => {
             entityTypeCode: productMetricsDataMock.entityTypeCode,
             filter: productMetricsDataMock.filter,
             selectedEntityType: productMetricsDataMock.selectedEntityType,
-            products: productMetricsMock
+            products: productMetricsWithBrandValuesMock,
+            productMetricsViewType: ProductMetricsViewType.brands
           });
           done();
         });
@@ -187,7 +203,7 @@ describe('ProductMetrics Service', () => {
           ProductMetricsAggregationType.brand
         ]);
         expect(transformProductMetricsSpy.calls.argsFor(0)).toEqual([
-          productMetricsDTOMock
+          productMetricsBrandsDTOMock
         ]);
       });
 
@@ -201,7 +217,8 @@ describe('ProductMetrics Service', () => {
             entityTypeCode: productMetricsDataMock.entityTypeCode,
             filter: productMetricsDataMock.filter,
             selectedEntityType: productMetricsDataMock.selectedEntityType,
-            products: productMetricsMock
+            products: productMetricsWithBrandValuesMock,
+            productMetricsViewType: ProductMetricsViewType.brands
           });
           done();
         });
@@ -218,7 +235,7 @@ describe('ProductMetrics Service', () => {
           ProductMetricsAggregationType.brand
         ]);
         expect(transformProductMetricsSpy.calls.argsFor(0)).toEqual([
-          productMetricsDTOMock
+          productMetricsBrandsDTOMock
         ]);
       });
     });

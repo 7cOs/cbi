@@ -1,7 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
@@ -28,7 +28,7 @@ describe('ProductMetrics Reducer', () => {
   });
 
   it('should store the payload when a fetch ProductMetrics is successful', () => {
-    const products = getProductMetricMock();
+    const products = getProductMetricsWithBrandValuesMock();
 
     const payloadMock = {
       positionId: positionIdMock,
