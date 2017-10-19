@@ -120,7 +120,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
-        this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
+        this.fetchResponsibilitiesFailure = current.responsibilities &&
+        (current.responsibilities.status === ActionStatus.Error || current.responsibilities.groupedEntities === {});
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
@@ -128,7 +129,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           );
         }
 
-        if (current.responsibilities.entityWithPerformance && !this.fetchProductMetricsFailure && !this.fetchResponsibilitiesFailure) {
+        if (current.responsibilities.entityWithPerformance && !this.fetchProductMetricsFailure) {
           this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
@@ -190,8 +191,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
-    console.log(this.leftTableViewType);
-    console.log(parameters.row);
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {

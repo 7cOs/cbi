@@ -214,21 +214,5 @@ describe('ProductMetrics Service', () => {
         ]);
       });
     });
-
-    describe('when ProductMetricsApiService returns an error', () => {
-      beforeEach(() => {
-        spyOn(productMetricsApiService, 'getPositionProductMetrics').and.returnValue(Observable.throw(error));
-        spyOn(productMetricsTransformerService, 'transformProductMetrics');
-      });
-
-      it('should return the original productMetricsData after catching an error', (done) => {
-        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData | Error) => {
-          expect(productMetricsData).toEqual(productMetricsDataMock);
-          done();
-        });
-
-        expect(productMetricsTransformerService.transformProductMetrics).not.toHaveBeenCalled();
-      });
-    });
   });
 });
