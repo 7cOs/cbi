@@ -11,8 +11,6 @@ import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metr
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  constructor() { }
-
   public getLeftTableData(entities: EntityWithPerformance[], total?: number): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
       const transformedEntity: MyPerformanceTableRow = {
