@@ -74,9 +74,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
-  private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
-  private productMetricsSubscription: Subscription;
+  private productMetricsAndCurrentStateSubscription: Subscription;
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
@@ -92,31 +91,22 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
-    this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
+    const productMetricsState = this.store.select(state => state.myPerformanceProductMetrics);
+    const currentState = this.store.select(state => state.myPerformance.current);
 
-    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-      this.filterState = filterState;
-    });
+    const productMetricsAndCurrentState = Observable.combineLatest(
+      productMetricsState,
+      currentState,
+      (productMetrics, current) => {
+        let responsibilitiesTotal: number;
 
-    this.productMetricsSubscription = this.store
-      .select(state => state.myPerformanceProductMetrics)
-      .subscribe(productMetrics => {
-        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
-          this.productPerformance = this.myPerformanceTableDataTransformerService
-            .getRightTableData(productMetrics.products);
-        }
-    });
-
-    this.myPerformanceCurrentSubscription = this.store
-      .select(state => state.myPerformance.current)
-      .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
         this.showCTV = this.getShowCTV();
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
+          responsibilitiesTotal = current.responsibilities.entitiesTotalPerformances.total;
+
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
             current.responsibilities.entityWithPerformance,
             responsibilitiesTotal
@@ -128,6 +118,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
 
+        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
+          this.productPerformance = this.myPerformanceTableDataTransformerService
+            .getRightTableData(
+              productMetrics.products,
+              responsibilitiesTotal
+            );
+        }
+      }
+    );
+
+    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
+    this.dateRanges$ = this.store.select(state => state.dateRanges);
+    this.productMetricsAndCurrentStateSubscription = productMetricsAndCurrentState.subscribe();
+    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
+
+    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
+      this.filterState = filterState;
+      this.getShowCTV();
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
@@ -151,10 +159,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceStateAction());
+    this.productMetricsAndCurrentStateSubscription.unsubscribe();
     this.filterStateSubscription.unsubscribe();
-    this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
-    this.productMetricsSubscription.unsubscribe();
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
