@@ -261,7 +261,6 @@ div.ctv {
   &.view-type-brands {
 
     /deep/td.left-col {
-      color: $blue;
       font-weight: normal;
     }
   }
@@ -424,14 +423,6 @@ div.ctv {
 
 .total-row-absent {
   height: 597px;
-}
-
-.back-button {
-  background-image: url('../../../assets/img/icons/arrow-left-white.svg');
-  background-repeat: no-repeat;
-  background-position: left 13px center;
-  padding-left: 32px;
-  box-sizing: border-box;
 }
 
 .link {

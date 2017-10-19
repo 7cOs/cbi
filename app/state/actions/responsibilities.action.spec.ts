@@ -304,4 +304,23 @@ describe('Responsibilities Actions', () => {
       expect(action.payload).toEqual(payloadMock);
     });
   });
+
+  describe('SetAlternateHierarchyId Action', () => {
+    let payloadMock: string;
+    let action: ResponsibilitiesActions.SetAlternateHierarchyId;
+
+    beforeEach(() => {
+      payloadMock = chance.string();
+      action = new ResponsibilitiesActions.SetAlternateHierarchyId(payloadMock);
+    });
+
+    it('should be the correct type', () => {
+      expect(ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID).toBe('[Responsibilities] SET_ALTERNATE_HIERARCHY_ID');
+      expect(action.type).toBe(ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
 });

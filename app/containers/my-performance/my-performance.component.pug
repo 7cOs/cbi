@@ -9,17 +9,18 @@ my-performance-filter(
 my-performance-breadcrumb(
   [currentUserFullName]="currentUserFullName",
   [performanceStateVersions]="performanceStateVersions$ | async",
-  (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)")
+  [showBackButton]="showLeftBackButton",
+  (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
+  (backButtonClicked)="handleBackButtonClicked()")
 
 my-performance-table.left(
   [tableData]="salesHierarchy",
   [dateRange]="dateRange",
   [tableHeaderRow]="tableHeaderRowLeft",
   [performanceMetric]="performanceMetric",
-  [totalRow]="salesHierarchyTotal",
+  [totalRow]="!displayRightTotalRow() ? totalRowData : null",
   [sortingCriteria]="sortingCriteria",
   [viewType]="leftTableViewType",
-  [showBackButton]="showLeftBackButton",
   [showContributionToVolume]="showContributionToVolume",
   [showOpportunities]="false",
   (onSublineClicked)="handleSublineClicked($event)",
@@ -29,6 +30,7 @@ my-performance-table.left(
 my-performance-table.right(
   [tableData]="productPerformance",
   [tableHeaderRow]="tableHeaderRowRight",
+  [totalRow]="displayRightTotalRow() ? totalRowData : null",
   [performanceMetric]="'Product Snapshot'",
   [sortingCriteria]="sortingCriteria",
   [showContributionToVolume]="showContributionToVolume",

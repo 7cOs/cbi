@@ -35,7 +35,6 @@ export class MyPerformanceTableComponent {
 
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() showBackButton: boolean = true;
   @Input() showOpportunities: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() tableHeaderRow: Array<string>;
