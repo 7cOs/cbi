@@ -7,6 +7,7 @@ import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 export interface ResponsibilitiesState extends State {
   status: ActionStatus;
   positionId: string;
+  alternateHierarchyId?: string;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
   entityWithPerformance: EntityWithPerformance[];
@@ -111,6 +112,16 @@ export function responsibilitiesReducer(
         status: ActionStatus.Fetched,
         groupedEntities: action.payload.groupedEntities,
         entityWithPerformance: action.payload.entityWithPerformance
+      });
+
+    case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
+      return Object.assign({}, state, {
+        alternateHierarchyId: action.payload
+      });
+
+    case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetching
       });
 
     default:

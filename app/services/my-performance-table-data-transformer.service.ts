@@ -37,6 +37,7 @@ export class MyPerformanceTableDataTransformerService {
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
       if (entity.entityTypeCode) transformedEntity.metadata.entityTypeCode = entity.entityTypeCode;
+      if (entity.alternateHierarchyId) transformedEntity.metadata.alternateHierarchyId = entity.alternateHierarchyId;
 
       if (entity.entityType === EntityType.Distributor || entity.entityType === EntityType.SubAccount) {
         transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';
