@@ -11,9 +11,6 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchEntityWithPerformance,
-         FetchResponsibilities,
-         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
@@ -33,6 +30,7 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
 import { SaveMyPerformanceStateAction, SetMyPerformanceSelectedEntityAction } from '../../state/actions/my-performance-version.action';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
@@ -217,7 +215,7 @@ describe('MyPerformanceComponent', () => {
         stateMock.myPerformanceFilter.metricType,
         userService.model.currentUser.srcTypeCd[0]
       );
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchResponsibilities({
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.FetchResponsibilities({
         positionId: userServiceMock.model.currentUser.positionId,
         filter: stateMock.myPerformanceFilter as any
       }));
@@ -234,7 +232,7 @@ describe('MyPerformanceComponent', () => {
       fixture.detectChanges();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
-      expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchResponsibilities({
+      expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new ResponsibilitiesActions.FetchResponsibilities({
         positionId: '0',
         filter: stateMock.myPerformanceFilter as any
       })]);
@@ -246,7 +244,7 @@ describe('MyPerformanceComponent', () => {
       fixture.detectChanges();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
-      expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchResponsibilities({
+      expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new ResponsibilitiesActions.FetchResponsibilities({
         positionId: '0',
         filter: stateMock.myPerformanceFilter as any
       })]);
@@ -438,22 +436,26 @@ describe('MyPerformanceComponent', () => {
 
   describe('when left side data row is clicked', () => {
     let rowMock: MyPerformanceTableRow;
+    let currentMock: MyPerformanceEntitiesData;
 
     beforeEach(() => {
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
       rowMock = getMyPerformanceTableRowMock(1)[0];
+      currentMock = getMyPerformanceEntitiesDataMock();
     });
 
-    it('should trigger appropriate actions when current ViewType is roleGroups', () => {
+    it('should trigger appropriate actions when current ViewType is roleGroups and the row metadata ' +
+    'does NOT contain alternateHierarchyId', () => {
       componentInstance.leftTableViewType = ViewType.roleGroups;
       rowMock.metadata.entityType = EntityType.RoleGroup;
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
+
       expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchEntityWithPerformance({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
@@ -469,14 +471,46 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should trigger appropriate actions when current ViewType is accounts', () => {
-      componentInstance.leftTableViewType = ViewType.accounts;
+    it('should trigger appropriate actions when current ViewType is roleGroups and the row metadata ' +
+    'contains a alternateHierarchyId', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+
+      componentInstance.leftTableViewType = ViewType.roleGroups;
+      rowMock.metadata.entityType = EntityType.RoleGroup;
+      rowMock.metadata.alternateHierarchyId = chance.string();
       componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
+        new ResponsibilitiesActions.SetAlternateHierarchyId(rowMock.metadata.alternateHierarchyId));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
+        selectedPositionId: rowMock.metadata.positionId,
+        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeCode: rowMock.metadata.entityTypeCode,
+        entityType: rowMock.metadata.entityType,
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        filter: stateMock.myPerformanceFilter as any
+      }));
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new FetchProductMetricsAction({
+        positionId: rowMock.metadata.positionId,
+        entityTypeCode: rowMock.metadata.entityTypeCode,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: SelectedEntityType.RoleGroup
+      }));
+    });
+
+    it('should trigger appropriate actions when current ViewType is accounts', () => {
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+
+      componentInstance.leftTableViewType = ViewType.accounts;
+      componentInstance.handleElementClicked(params);
+
       expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchSubAccountsAction({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchSubAccountsAction({
         positionId: rowMock.metadata.positionId,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         entityTypeAccountName: rowMock.descriptionRow0,
@@ -491,15 +525,43 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should trigger appropriate actions when current ViewType is people', () => {
-      componentInstance.leftTableViewType = ViewType.people;
+    it('should trigger appropriate actions when current ViewType is people and the responsibilitiesState ' +
+    'does NOT contain a alternateHierarchyId', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+
+      componentInstance.leftTableViewType = ViewType.people;
       componentInstance.handleElementClicked(params);
+
       expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilities({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchResponsibilities({
         positionId: rowMock.metadata.positionId,
+        filter: stateMock.myPerformanceFilter as any
+      }));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
+        positionId: rowMock.metadata.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: SelectedEntityType.Position
+      }));
+    });
+
+    it('should trigger appropriate actions when current ViewType is people and the responsibilitiesState ' +
+    'contains an alternateHierarchyId', () => {
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      const alternateHierarchyIdMock = chance.string();
+
+      currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+      currentSubject.next(currentMock);
+      componentInstance.leftTableViewType = ViewType.people;
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(currentMock));
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities({
+        positionId: rowMock.metadata.positionId,
+        alternateHierarchyId: alternateHierarchyIdMock,
         filter: stateMock.myPerformanceFilter as any
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
@@ -522,7 +584,7 @@ describe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchEntityWithPerformance({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
@@ -545,6 +607,7 @@ describe('MyPerformanceComponent', () => {
       hierarchyEntityMock = getEntityPropertyResponsibilitiesMock();
       currentMock = getMyPerformanceEntitiesDataMock();
     });
+
     describe('when distributor subline link clicked', () => {
       it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
