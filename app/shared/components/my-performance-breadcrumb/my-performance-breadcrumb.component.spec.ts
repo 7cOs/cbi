@@ -32,34 +32,38 @@ describe('Breadcrumb Component', () => {
     it('should translate inputs into breadcrumb trail with initial performance state', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceStateVersions: initialState.versions
+        performanceStateVersions: initialState.versions,
+        showBackButton: true
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = mockInputs.showBackButton;
 
       fixture.detectChanges();
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
-      expect(breadcrumbContainer.textContent).toBe(` ${mockInputs.currentUserFullName}`);
+      expect(breadcrumbContainer.textContent).toBe(`${mockInputs.currentUserFullName}`);
     });
 
     it('should translate inputs into breadcrumb trail with initial performance state', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceStateVersions: myPerformanceStateMock.versions
+        performanceStateVersions: myPerformanceStateMock.versions,
+        showBackButton: true
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = mockInputs.showBackButton;
 
       fixture.detectChanges();
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
       expect(breadcrumbContainer.textContent).toBe(
-        ` ${mockInputs.currentUserFullName + mockInputs.performanceStateVersions.map(version => version.selectedEntity).join('')}`);
+        `${mockInputs.currentUserFullName + mockInputs.performanceStateVersions.map(version => version.selectedEntity).join('')}`);
     });
   });
 
@@ -67,11 +71,13 @@ describe('Breadcrumb Component', () => {
     it('should output proper event when breadcrumb entity is clicked', (done) => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceStateVersions: myPerformanceStateMock.versions
+        performanceStateVersions: myPerformanceStateMock.versions,
+        showBackButton: true
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
       componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = mockInputs.showBackButton;
 
       const breadcrumbEntityIndexToClick = chance.natural({min: 0, max: mockInputs.performanceStateVersions.length});
 
@@ -87,5 +93,41 @@ describe('Breadcrumb Component', () => {
       fixture.debugElement.queryAll(By.css('.breadcrumb-entity'))
         [breadcrumbEntityIndexToClick].triggerEventHandler('click', null);
     });
+  });
+
+  describe('return proper class for back button', () => {
+    it('should return the back button class', () => {
+      const mockInputs = {
+        currentUserFullName: chance.string(),
+        performanceStateVersions: myPerformanceStateMock.versions,
+        showBackButton: true
+      };
+
+      componentInstance.currentUserFullName = mockInputs.currentUserFullName;
+      componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+      componentInstance.showBackButton = mockInputs.showBackButton;
+
+      fixture.detectChanges();
+
+      const backButtonClass = componentInstance.getBackButtonClass();
+      expect(backButtonClass).toEqual({'back-button': true});
+    });
+  });
+
+  it('should not return the back button class', () => {
+    const mockInputs = {
+      currentUserFullName: chance.string(),
+      performanceStateVersions: myPerformanceStateMock.versions,
+      showBackButton: false
+    };
+
+    componentInstance.currentUserFullName = mockInputs.currentUserFullName;
+    componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
+    componentInstance.showBackButton = mockInputs.showBackButton;
+
+    fixture.detectChanges();
+
+    const backButtonClass = componentInstance.getBackButtonClass();
+    expect(backButtonClass).toEqual({'back-button': false});
   });
 });

@@ -91,7 +91,7 @@ describe('Responsibilities Reducer', () => {
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
 
-    const actualState = responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
+    const actualState = responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroup(payload));
 
     expect(actualState).toEqual(expectedState);
   });
@@ -277,6 +277,7 @@ describe('Responsibilities Reducer', () => {
 
     expect(actualState).toEqual(expectedState);
   });
+
   it('should update the state status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
@@ -296,5 +297,23 @@ describe('Responsibilities Reducer', () => {
       initialState,
       { type: 'UNKNOWN_ACTION' } as any
     )).toBe(initialState);
+  });
+
+  describe('SetAlternateHierarchyId action is received', () => {
+    it('should update the responsibilities state to hold the entry point id for alternate hierarchy', () => {
+      const payloadMock: string = chance.string();
+      const expectedState: ResponsibilitiesState = {
+        status: initialState.status,
+        positionId: initialState.positionId,
+        alternateHierarchyId: payloadMock,
+        groupedEntities: initialState.groupedEntities,
+        hierarchyGroups: initialState.hierarchyGroups,
+        entityWithPerformance: initialState.entityWithPerformance,
+        entitiesTotalPerformances: initialState.entitiesTotalPerformances
+      };
+      const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.SetAlternateHierarchyId(payloadMock));
+
+      expect(actualState).toEqual(expectedState);
+    });
   });
 });

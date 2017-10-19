@@ -8,9 +8,11 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import { FetchEntityWithPerformance,
+import { FetchAlternateHierarchyResponsibilities,
+         FetchEntityWithPerformance,
          FetchResponsibilities,
-         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
+         FetchSubAccounts,
+         SetAlternateHierarchyId } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
@@ -68,6 +70,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public performanceMetric: string = 'Depletions';
   public dateRange: DateRange = getDateRangeMock();
   public showOpportunities: boolean = true;
+  public totalRowData: MyPerformanceTableRow;
 
   private currentState: MyPerformanceEntitiesData;
   private versions: MyPerformanceEntitiesData[];
@@ -81,9 +84,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetrics: Array<MyPerformanceTableRow>;
   private productMetricsTotal: MyPerformanceTableRow;
   private salesHierarchy: Array<MyPerformanceTableRow>;
-  private salesHierarchyTotal: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
   private selectedBrand: string;
+  private entityType: EntityType;
+  private showContributionToVolume: boolean;
 
   constructor(
     private store: Store<AppState>,
@@ -134,9 +138,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           );
         }
 
+        if (current.responsibilities.entityWithPerformance.length) {
+          this.entityType = current.responsibilities.entityWithPerformance[0].entityType;
+        }
+
         if (current.responsibilities.entityWithPerformance) {
-          this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
+          this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
+          this.showContributionToVolume = this.displayRightTotalRow();
         }
     });
 
@@ -200,12 +209,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {
-          if (this.showLeftBackButton) {
-            const previousIndex: number = this.versions.length - 1;
-            const previousState = this.versions[previousIndex];
-            this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
-            this.fetchProductMetricsForPreviousState(previousState);
-          }
           console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
           console.log(`clicked on cell ${parameters.index} from the right side`);
@@ -223,6 +226,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             case SalesHierarchyViewType.roleGroups:
               const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
+              if (parameters.row.metadata.alternateHierarchyId) {
+                this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+              }
               this.store.dispatch(new FetchEntityWithPerformance({
                 selectedPositionId: parameters.row.metadata.positionId,
                 entityTypeGroupName: entityTypeGroupName,
@@ -234,14 +240,22 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               this.fetchProductMetricsWhenClick(parameters);
               break;
             case SalesHierarchyViewType.people:
-              this.store.dispatch(new FetchResponsibilities({
-                positionId: parameters.row.metadata.positionId,
-                filter: this.filterState
-              }));
+              if (this.isInsideAlternateHierarchy()) {
+                this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
+                  positionId: parameters.row.metadata.positionId,
+                  alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+                  filter: this.filterState
+                }));
+              } else {
+                this.store.dispatch(new FetchResponsibilities({
+                  positionId: parameters.row.metadata.positionId,
+                  filter: this.filterState
+                }));
+              }
               this.fetchProductMetricsWhenClick(parameters);
               break;
             case SalesHierarchyViewType.accounts:
-              this.store.dispatch(new FetchSubAccountsAction({
+              this.store.dispatch(new FetchSubAccounts({
                 positionId: parameters.row.metadata.positionId,
                 contextPositionId: this.currentState.responsibilities.positionId,
                 entityTypeAccountName: parameters.row.descriptionRow0,
@@ -252,8 +266,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               break;
             default:
               console.log('clicked on left row:', parameters.row);
-        }
-      } else {
+          }
+        } else {
         switch (this.productMetricsViewType) {
           case ProductMetricsViewType.brands:
             this.selectedBrand = parameters.row.metadata.brandCode;
@@ -266,6 +280,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  public handleBackButtonClicked(): void {
+    const previousIndex: number = this.versions.length - 1;
+    const previousState = this.versions[previousIndex];
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
+    this.fetchProductMetricsForPreviousState(previousState);
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
@@ -299,6 +320,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);
     }
+  }
+
+  public displayRightTotalRow(): boolean {
+    return this.salesHierarchyViewType === SalesHierarchyViewType.roleGroups || this.entityType === EntityType.RoleGroup
+      || this.entityType === EntityType.DistributorGroup;
   }
 
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
@@ -372,4 +398,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
   }
 
+  private isInsideAlternateHierarchy(): boolean {
+    return !!this.currentState.responsibilities.alternateHierarchyId;
+  }
 }

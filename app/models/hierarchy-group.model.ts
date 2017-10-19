@@ -5,5 +5,6 @@ export interface HierarchyGroup {
   type: string;
   entityType: EntityType;
   positionId?: string;
+  alternateHierarchyId?: string;
   positionDescription?: string;
 }

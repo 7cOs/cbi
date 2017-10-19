@@ -34,7 +34,7 @@ export interface FetchEntityWithPerformanceSuccessPayload {
   entityTypeCode: string;
 }
 
-export interface FetchSubAccountsActionPayload {
+export interface FetchSubAccountsPayload {
   positionId: string;
   contextPositionId: string;
   entityTypeAccountName: string;
@@ -45,6 +45,12 @@ export interface FetchSubAccountsActionPayload {
 export interface FetchSubAccountsSuccessPayload {
   groupedEntities: GroupedEntities;
   entityWithPerformance: EntityWithPerformance[];
+}
+
+export interface FetchAlternateHierarchyResponsibilitiesPayload {
+  positionId: string;
+  alternateHierarchyId: string;
+  filter: MyPerformanceFilterState;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
@@ -83,24 +89,38 @@ export class FetchEntityWithPerformanceSuccess implements Action {
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP';
-export class GetPeopleByRoleGroupAction implements Action {
+export class GetPeopleByRoleGroup implements Action {
   readonly type = GET_PEOPLE_BY_ROLE_GROUP;
 
   constructor(public payload: EntityPeopleType) { }
 }
 
 export const FETCH_SUBACCOUNTS = '[Responsibilities] FETCH_SUBACCOUNTS';
-export class FetchSubAccountsAction implements Action {
+export class FetchSubAccounts implements Action {
   readonly type = FETCH_SUBACCOUNTS;
 
-  constructor(public payload: FetchSubAccountsActionPayload) { }
+  constructor(public payload: FetchSubAccountsPayload) { }
 }
 
 export const FETCH_SUBACCOUNTS_SUCCESS = '[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS';
-export class FetchSubAccountsSuccessAction implements Action {
+export class FetchSubAccountsSuccess implements Action {
   readonly type = FETCH_SUBACCOUNTS_SUCCESS;
 
   constructor(public payload: FetchSubAccountsSuccessPayload) { }
+}
+
+export const SET_ALTERNATE_HIERARCHY_ID = '[Responsibilities] SET_ALTERNATE_HIERARCHY_ID';
+export class SetAlternateHierarchyId implements Action {
+  readonly type = SET_ALTERNATE_HIERARCHY_ID;
+
+  constructor(public payload: string) { }
+}
+
+export const FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES = '[Responsibilities] FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES';
+export class FetchAlternateHierarchyResponsibilities implements Action {
+  readonly type = FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES;
+
+  constructor(public payload: FetchAlternateHierarchyResponsibilitiesPayload) { }
 }
 
 export const FETCH_TOTAL_PERFORMANCE = '[Performance Total] FETCH_TOTAL_PERFORMANCE';
@@ -144,9 +164,11 @@ export type Action
   | FetchResponsibilitiesFailure
   | FetchEntityWithPerformance
   | FetchEntityWithPerformanceSuccess
-  | GetPeopleByRoleGroupAction
-  | FetchSubAccountsAction
-  | FetchSubAccountsSuccessAction
+  | GetPeopleByRoleGroup
+  | FetchSubAccounts
+  | FetchSubAccountsSuccess
+  | SetAlternateHierarchyId
+  | FetchAlternateHierarchyResponsibilities
   | FetchTotalPerformance
   | FetchTotalPerformanceSuccess
   | FetchTotalPerformanceFailure

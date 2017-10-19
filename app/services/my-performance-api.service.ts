@@ -7,7 +7,6 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
@@ -28,34 +27,15 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilityPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string)
-  : Observable<EntityWithPerformanceDTO|Error> {
+  public getHierarchyGroupPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string)
+  : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
-    return this.http.get(`${ url }`, {
+    return this.http.get(url, {
       params: this.getFilterStateParams(filter)
     })
-      .map(res => ({
-        id: positionId,
-        name: entity.name,
-        entityType: entity.entityType,
-        positionDescription: entity.positionDescription,
-        entityTypeCode: entity.type,
-        performance: res.json()
-      }))
-      .catch((err) => {
-        return Observable.of({
-          id: positionId,
-          name: entity.name,
-          entityType: entity.entityType,
-          positionDescription: entity.positionDescription,
-          entityTypeCode: entity.type,
-          performance: {
-            total: 0,
-            totalYearAgo: 0
-          }
-        });
-      });
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
   }
 
   public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {

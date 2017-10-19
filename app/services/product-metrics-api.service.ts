@@ -78,7 +78,7 @@ export class ProductMetricsApiService {
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
     return {
-      metricType: filter.hasOwnProperty('distributionType')
+      type: filter.hasOwnProperty('distributionType')
         ? DistributionTypeValue[filter.distributionType] + MetricTypeValue[filter.metricType]
         : MetricTypeValue[filter.metricType],
       dateRangeCode: DateRangeTimePeriodValue[filter.dateRangeCode],

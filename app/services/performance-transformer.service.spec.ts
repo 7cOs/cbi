@@ -1,18 +1,18 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { getPerformanceDTOMock } from '../models/performance.model.mock';
-import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
-import { Performance, PerformanceDTO } from '../models/performance.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
+import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
+import { HierarchyGroup } from '../models/hierarchy-group.model';
+import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { UtilService } from './util.service';
 
 describe('Service: PerformanceTransformerService', () => {
   let performanceTransformerService: PerformanceTransformerService;
   let utilService: UtilService;
   let entitiesTotalPerformancesDTOMock: PerformanceDTO;
-  let responsibilityEntitiesPerformanceDTOMock: EntityWithPerformanceDTO[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -66,41 +66,6 @@ describe('Service: PerformanceTransformerService', () => {
     });
   });
 
-  describe('transformEntityPerformanceDTO', () => {
-
-    beforeEach(inject([ PerformanceTransformerService, UtilService ],
-      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
-        performanceTransformerService = _performanceTransformerService;
-        utilService = _utilService;
-        responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
-    }));
-
-    it('should return transformed EntityPerformance data given EntityPerformanceDTO data', () => {
-      spyOn(performanceTransformerService, 'transformEntityWithPerformanceDTOs').and.callThrough();
-
-      const entityPerformance: EntityWithPerformance[] =
-        performanceTransformerService.transformEntityWithPerformanceDTOs(responsibilityEntitiesPerformanceDTOMock);
-      const entityPerformanceMock = responsibilityEntitiesPerformanceDTOMock[0].performance;
-
-      expect(entityPerformance).toBeDefined();
-      expect(entityPerformance.length).toBeTruthy();
-      expect(entityPerformance[0]).toEqual({
-        positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
-        entityTypeCode: responsibilityEntitiesPerformanceDTOMock[0].entityTypeCode,
-        name: responsibilityEntitiesPerformanceDTOMock[0].name,
-        entityType: responsibilityEntitiesPerformanceDTOMock[0].entityType,
-        positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
-        performance: {
-          total: parseInt((entityPerformanceMock.total).toFixed(), 10),
-          totalYearAgo: utilService.getYearAgoDelta(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
-          totalYearAgoPercent: utilService.getYearAgoPercent(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
-          contributionToVolume: 0,
-          error: false
-        }
-      });
-    });
-  });
-
   describe('transformEntityWithPerformancesDTO', () => {
 
     beforeEach(inject([ PerformanceTransformerService, UtilService ],
@@ -141,6 +106,96 @@ describe('Service: PerformanceTransformerService', () => {
       expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
       expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
     });
+  });
 
+  describe('transformHierarchyGroupPerformance', () => {
+    let positionIdMock: string;
+    let hierarchyGroupMock: HierarchyGroup;
+    let hierarchyGroupPerformanceMock: Performance;
+    let hierarchyGroupPerformanceDTOMock: PerformanceDTO;
+
+    beforeEach(inject([ PerformanceTransformerService, UtilService ],
+      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
+        performanceTransformerService = _performanceTransformerService;
+        utilService = _utilService;
+
+        positionIdMock = chance.string();
+        hierarchyGroupMock = {
+          name: chance.string(),
+          positionDescription: chance.string(),
+          type: chance.string(),
+          entityType: EntityType.RoleGroup
+        };
+        hierarchyGroupPerformanceMock = getPerformanceMock();
+        hierarchyGroupPerformanceDTOMock = getPerformanceDTOMock();
+    }));
+
+    it('should return an EntityWithPerformance given a hierarchy group, its performance, and positionId', () => {
+      spyOn(performanceTransformerService, 'transformHierarchyGroupPerformance').and.callThrough();
+      spyOn(performanceTransformerService, 'transformPerformanceDTO').and.returnValue(hierarchyGroupPerformanceMock);
+
+      const actualTransformedEntity: EntityWithPerformance = performanceTransformerService.transformHierarchyGroupPerformance(
+        hierarchyGroupPerformanceDTOMock,
+        hierarchyGroupMock,
+        positionIdMock);
+
+      const expectedTransformedEntity: EntityWithPerformance = {
+        positionId: positionIdMock,
+        name: hierarchyGroupMock.name,
+        entityType: EntityType.RoleGroup,
+        positionDescription: hierarchyGroupMock.positionDescription,
+        entityTypeCode: hierarchyGroupMock.type,
+        performance: hierarchyGroupPerformanceMock
+      };
+
+      expect(actualTransformedEntity).toEqual(expectedTransformedEntity);
+    });
+
+    it('should contain an empty string for positionDescription if the given hierarchy group does not have a positionDescription', () => {
+      spyOn(performanceTransformerService, 'transformHierarchyGroupPerformance').and.callThrough();
+      spyOn(performanceTransformerService, 'transformPerformanceDTO').and.returnValue(hierarchyGroupPerformanceMock);
+
+      delete hierarchyGroupMock.positionDescription;
+
+      const actualTransformedEntity: EntityWithPerformance = performanceTransformerService.transformHierarchyGroupPerformance(
+        hierarchyGroupPerformanceDTOMock,
+        hierarchyGroupMock,
+        positionIdMock);
+
+      const expectedTransformedEntity: EntityWithPerformance = {
+        positionId: positionIdMock,
+        name: hierarchyGroupMock.name,
+        entityType: EntityType.RoleGroup,
+        positionDescription: '',
+        entityTypeCode: hierarchyGroupMock.type,
+        performance: hierarchyGroupPerformanceMock
+      };
+
+      expect(actualTransformedEntity).toEqual(expectedTransformedEntity);
+    });
+
+    it('should contain an alternateHierarchyId if the given hierarchy group has one', () => {
+      spyOn(performanceTransformerService, 'transformHierarchyGroupPerformance').and.callThrough();
+      spyOn(performanceTransformerService, 'transformPerformanceDTO').and.returnValue(hierarchyGroupPerformanceMock);
+
+      hierarchyGroupMock.alternateHierarchyId = chance.string();
+
+      const actualTransformedEntity: EntityWithPerformance = performanceTransformerService.transformHierarchyGroupPerformance(
+        hierarchyGroupPerformanceDTOMock,
+        hierarchyGroupMock,
+        positionIdMock);
+
+      const expectedTransformedEntity: EntityWithPerformance = {
+        positionId: positionIdMock,
+        name: hierarchyGroupMock.name,
+        entityType: EntityType.RoleGroup,
+        positionDescription: hierarchyGroupMock.positionDescription,
+        entityTypeCode: hierarchyGroupMock.type,
+        alternateHierarchyId: hierarchyGroupMock.alternateHierarchyId,
+        performance: hierarchyGroupPerformanceMock
+      };
+
+      expect(actualTransformedEntity).toEqual(expectedTransformedEntity);
+    });
   });
 });

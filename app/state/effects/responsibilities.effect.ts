@@ -6,6 +6,8 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
+import { FetchAlternateHierarchyResponsibilitiesPayload,
+         FetchSubAccountsPayload } from '../../state/actions/responsibilities.action';
 import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
@@ -42,6 +44,18 @@ export class ResponsibilitiesEffects {
   }
 
   @Effect()
+  fetchAlternateHierarchyResponsibilities$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES)
+      .switchMap((action: Action): Observable<FetchAlternateHierarchyResponsibilitiesPayload> => Observable.of(action.payload))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
+      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
+  }
+
+  @Effect()
   FetchEntityWithPerformance$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
@@ -53,7 +67,7 @@ export class ResponsibilitiesEffects {
           .switchMap((entityWithPerformance: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(entityTypeCode),
-              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityTypeGroupName),
+              new ResponsibilitiesActions.GetPeopleByRoleGroup(entityTypeGroupName),
               new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess({
                 entityWithPerformance: entityWithPerformance,
                 entityTypeCode: entityTypeCode
@@ -68,9 +82,7 @@ export class ResponsibilitiesEffects {
   @Effect() fetchSubAccounts$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS)
-      .switchMap((action: Action): Observable<SubAccountData> => {
-        return Observable.of(action.payload);
-      })
+      .switchMap((action: Action): Observable<FetchSubAccountsPayload> => Observable.of(action.payload))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
@@ -114,6 +126,7 @@ export class ResponsibilitiesEffects {
   }
 
   private constructSuccessAction(responsibilitiesData: ResponsibilitiesData): Observable<Action> {
+    debugger;
     return Observable.from([
       new ViewTypeActions.SetSalesHierarchyViewType(responsibilitiesData.salesHierarchyViewType),
       new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
@@ -128,7 +141,7 @@ export class ResponsibilitiesEffects {
   private constructSubAccountsSuccessAction(subAccountsData: SubAccountData): Observable<Action> {
     return Observable.from([
       new ResponsibilitiesActions.SetTotalPerformance(subAccountsData.selectedPositionId),
-      new ResponsibilitiesActions.FetchSubAccountsSuccessAction({
+      new ResponsibilitiesActions.FetchSubAccountsSuccess({
         groupedEntities: subAccountsData.groupedEntities,
         entityWithPerformance: subAccountsData.entityWithPerformance
       }),
