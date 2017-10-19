@@ -4,6 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const SassLintPlugin    = require('sasslint-webpack-plugin');
 const path              = require('path');
 const helpers           = require('./helpers');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 module.exports = {
   entry: {
@@ -119,6 +120,7 @@ module.exports = {
   },
 
   plugins: [
+    new CheckerPlugin(),
 
     new ExtractTextPlugin('app/[name].[hash].css'),
 
