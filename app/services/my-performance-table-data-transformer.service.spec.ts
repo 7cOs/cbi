@@ -149,7 +149,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        ctv: 0,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,

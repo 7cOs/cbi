@@ -8,11 +8,11 @@ my-performance-table {
   vertical-align: top;
 
   &.left {
-    box-shadow: inset -15px 0 15px -11px $t-gray;
+    box-shadow: inset -15px 0 15px -8px $t-gray;
 
     /deep/td.center-col:nth-last-child(1),
     /deep/th.center-col:nth-last-child(1) {
-      box-shadow: inset -15px 0 15px -11px $t-gray;
+      box-shadow: inset -15px 0 15px -8px $t-gray;
     }
 
     /deep/tr.total-row {
