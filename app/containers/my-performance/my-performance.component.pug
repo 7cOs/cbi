@@ -26,9 +26,10 @@ my-performance-table.left(
   (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
 
 my-performance-table.right(
-  [tableData]="productPerformance",
+  [tableData]="productMetrics",
   [tableHeaderRow]="tableHeaderRowRight",
   [performanceMetric]="'Product Snapshot'",
+  [dismissableTotalRow]="productMetricsTotal",
   [sortingCriteria]="sortingCriteria",
   [showOpportunities]="showOpportunities",
   [viewType]="leftTableViewType",

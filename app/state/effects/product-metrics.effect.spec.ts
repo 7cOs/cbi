@@ -74,9 +74,9 @@ describe('ProductMetrics Effects', () => {
     }
   ));
 
-  describe('when a FetchProductMetricsAction is received', () => {
+  describe('when a FetchProductMetrics is received', () => {
     beforeEach(() => {
-      runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
+      runner.queue(new ProductMetricsActions.FetchProductMetrics({
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
         entityTypeCode: entityTypeCodeMock,
@@ -97,7 +97,7 @@ describe('ProductMetrics Effects', () => {
     });
 
     describe('when ProductMetricsService returns successfully', () => {
-      it('should return a FetchProductMetricsSuccessAction', (done) => {
+      it('should return a FetchProductMetricsSuccess', (done) => {
         spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
           productMetricsData.products = productMetricsMock;
           return Observable.of(productMetricsData);
@@ -109,7 +109,7 @@ describe('ProductMetrics Effects', () => {
         };
 
         productMetricsEffects.fetchProductMetrics$().subscribe(action => {
-          expect(action).toEqual(new ProductMetricsActions.FetchProductMetricsSuccessAction(
+          expect(action).toEqual(new ProductMetricsActions.FetchProductMetricsSuccess(
             productMetricsSuccessPayloadMock));
           done();
         });
@@ -117,21 +117,21 @@ describe('ProductMetrics Effects', () => {
     });
 
     describe('when ProductMetricsApiService returns an error', () => {
-      it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
+      it('should return a FetchProductMetricsFailure after catching an error', (done) => {
         spyOn(productMetricsService, 'getProductMetrics').and.returnValue(Observable.throw(error));
 
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
-          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(error));
+          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailure(error));
           done();
         });
       });
     });
   });
 
-  describe('when a failed FetchProductMetricsFailureAction is received', () => {
+  describe('when a failed FetchProductMetricsFailure is received', () => {
 
     beforeEach(() => {
-      runner.queue(new ProductMetricsActions.FetchProductMetricsFailureAction(error));
+      runner.queue(new ProductMetricsActions.FetchProductMetricsFailure(error));
       spyOn(console, 'error');
     });
 

@@ -72,4 +72,14 @@ export class MyPerformanceTableDataTransformerService {
 
     return totalRow;
   }
+
+  public getProductMetricsTotal(productMetricsValues: ProductMetricsValues): MyPerformanceTableRow {
+    return {
+      descriptionRow0: productMetricsValues.brandDescription,
+      metricColumn0: productMetricsValues.current,
+      metricColumn1: productMetricsValues.yearAgo,
+      metricColumn2: productMetricsValues.yearAgoPercent,
+      ctv: chance.natural({max: 100}),
+    };
+  }
 }

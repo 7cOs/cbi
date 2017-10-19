@@ -20,7 +20,7 @@ export class ProductMetricsEffects {
   @Effect()
   fetchProductMetrics$(): Observable<Action> {
     return this.actions$
-      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_ACTION)
+      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS)
       .switchMap((action: Action) => {
         const payload: ProductMetricsActions.FetchProductMetricsPayload = action.payload;
 
@@ -37,13 +37,13 @@ export class ProductMetricsEffects {
       })
       .switchMap((productMetricsData) => this.productMetricsService.getProductMetrics(productMetricsData))
       .switchMap((productMetricsData) => this.constructSuccessAction(productMetricsData))
-      .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailureAction(error)));
+      .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailure(error)));
   }
 
   @Effect({dispatch: false})
   fetchProdcutMetricsFailure$(): Observable<Action> {
     return this.actions$
-      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE_ACTION)
+      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE)
       .do((action: Action) => {
         console.error('ProductMetrics fetch failure:', action.payload);
       });
@@ -52,7 +52,7 @@ export class ProductMetricsEffects {
   private constructSuccessAction(productMetricsData: ProductMetricsData): Observable<Action> {
     return Observable.from([
       new ProductMetricsViewTypeActions.SetProductMetricsViewType(productMetricsData.productMetricsViewType),
-      new ProductMetricsActions.FetchProductMetricsSuccessAction({
+      new ProductMetricsActions.FetchProductMetricsSuccess({
         positionId: productMetricsData.positionId,
         products: productMetricsData.products
       })

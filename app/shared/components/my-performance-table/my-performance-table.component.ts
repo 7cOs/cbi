@@ -40,6 +40,7 @@ export class MyPerformanceTableComponent {
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
+  @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
@@ -55,8 +56,10 @@ export class MyPerformanceTableComponent {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
   }
 
-  public getTableHeight(totalRow: MyPerformanceTableRow): string {
-    return totalRow ? 'total-row-present' : 'total-row-absent';
+  public getTableHeight(): string {
+    return this.totalRow
+      ? this.dismissableTotalRow ? '2-total-row-present' : 'total-row-present'
+      : this.dismissableTotalRow ? 'total-row-present' : 'total-row-absent';
   }
 
   public columnWidth(): string {

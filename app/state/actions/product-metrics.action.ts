@@ -18,28 +18,36 @@ export interface FetchProductMetricsSuccessPayload {
   products: ProductMetrics;
 }
 
-export const FETCH_PRODUCT_METRICS_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_ACTION';
-export class FetchProductMetricsAction implements Action {
-  readonly type = FETCH_PRODUCT_METRICS_ACTION;
+export const FETCH_PRODUCT_METRICS = '[ProductMetrics] FETCH_PRODUCT_METRICS';
+export class FetchProductMetrics implements Action {
+  readonly type = FETCH_PRODUCT_METRICS;
 
   constructor(public payload: FetchProductMetricsPayload) { }
 }
 
-export const FETCH_PRODUCT_METRICS_SUCCESS_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_SUCCESS_ACTION';
-export class FetchProductMetricsSuccessAction implements Action {
-  readonly type = FETCH_PRODUCT_METRICS_SUCCESS_ACTION;
+export const FETCH_PRODUCT_METRICS_SUCCESS = '[ProductMetrics] FETCH_PRODUCT_METRICS_SUCCESS';
+export class FetchProductMetricsSuccess implements Action {
+  readonly type = FETCH_PRODUCT_METRICS_SUCCESS;
 
   constructor(public payload: FetchProductMetricsSuccessPayload) { }
 }
 
-export const FETCH_PRODUCT_METRICS_FAILURE_ACTION = '[ProductMetrics] FETCH_PRODUCT_METRICS_FAILURE_ACTION';
-export class FetchProductMetricsFailureAction implements Action {
-  readonly type = FETCH_PRODUCT_METRICS_FAILURE_ACTION;
+export const FETCH_PRODUCT_METRICS_FAILURE = '[ProductMetrics] FETCH_PRODUCT_METRICS_FAILURE';
+export class FetchProductMetricsFailure implements Action {
+  readonly type = FETCH_PRODUCT_METRICS_FAILURE;
 
   constructor(public payload: Error) { }
 }
 
+export const SET_SELECTED_BRAND = '[ProductMetrics] SET_SELECTED_BRAND';
+export class SetSelectedBrand implements Action {
+  readonly type = SET_SELECTED_BRAND;
+
+  constructor(public payload: string) { }
+}
+
 export type Action =
-  FetchProductMetricsAction
-  | FetchProductMetricsSuccessAction
-  | FetchProductMetricsFailureAction;
+  FetchProductMetrics
+  | FetchProductMetricsSuccess
+  | FetchProductMetricsFailure
+  | SetSelectedBrand;

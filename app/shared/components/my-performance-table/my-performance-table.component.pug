@@ -34,11 +34,16 @@ div.performance-table-wrapper
       tr.total-row.col-100-pct(my-performance-table-row,
                               *ngIf="totalRow",
                               [rowData]="totalRow",
-                              [showBackButton]="showBackButton",
                               [showOpportunities]="showOpportunities",
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")
 
-    tbody([ngClass]="getTableHeight(totalRow)")
+      tr.dismissable-total-row.col-100-pct(my-performance-table-row,
+                              *ngIf="dismissableTotalRow",
+                              [rowData]="dismissableTotalRow",
+                              [showOpportunities]="showOpportunities",
+                              (onCellClicked)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event})")
+
+    tbody([ngClass]="getTableHeight()")
       tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let i = index",
                                 [ngClass]="{'performance-error': rowData.performanceError}",
                                 my-performance-table-row,

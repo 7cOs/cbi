@@ -15,7 +15,7 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchProductMetricsAction, FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
+import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -78,7 +78,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private myPerformanceVersionSubscription: Subscription;
   private productMetricsSubscription: Subscription;
   private productMetricsViewTypeSubscription: Subscription;
-  private productPerformance: Array<MyPerformanceTableRow>;
+  private productMetrics: Array<MyPerformanceTableRow>;
+  private productMetricsTotal: MyPerformanceTableRow;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
@@ -106,8 +107,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformanceProductMetrics)
       .subscribe((productMetrics: ProductMetricsState) => {
         if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
-          this.productPerformance = this.myPerformanceTableDataTransformerService
+          this.productMetrics = this.myPerformanceTableDataTransformerService
             .getRightTableData(productMetrics.products);
+          this.productMetricsTotal = this.productMetricsViewType === ProductMetricsViewType.skus
+            ? this.myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetrics.selectedBrandValues)
+            : null;
         }
     });
 
@@ -148,7 +152,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
-    this.store.dispatch(new FetchProductMetricsAction({
+    this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
       positionId: currentUserId,
       filter: this.filterState,
       selectedEntityType: EntityType.Person,
@@ -253,9 +257,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         switch (this.productMetricsViewType) {
           case ProductMetricsViewType.brands:
             this.selectedBrand = parameters.row.metadata.brandCode;
-            this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(
-              parameters.row.metadata.brandCode
-            ));
+            this.store.dispatch(new ProductMetricsActions.SetSelectedBrand(parameters.row.metadata.brandCode));
+            this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(parameters.row.metadata.brandCode));
             this.fetchProductMetricsWhenClick(parameters);
             break;
           default:
@@ -301,14 +304,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
     if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.roleGroups
       || state.salesHierarchyViewType.viewType === SalesHierarchyViewType.accounts) {
-      this.store.dispatch(new FetchProductMetricsAction({
+      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
         positionId: state.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: EntityType.Person,
         selectedBrand: this.selectedBrand
       }));
     } else if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.people) {
-      this.store.dispatch(new FetchProductMetricsAction({
+      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
         positionId: state.responsibilities.positionId,
         entityTypeCode: state.responsibilities.entityTypeCode,
         filter: this.filterState,
@@ -319,7 +322,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private fetchProductMetricsWhenClick(parameters: HandleElementClickedParameters) {
-    let actionParameters: FetchProductMetricsPayload = {
+    let actionParameters: ProductMetricsActions.FetchProductMetricsPayload = {
       positionId: parameters.row.metadata.positionId || this.currentState.responsibilities.positionId,
       filter: this.filterState,
       selectedEntityType: this.currentState.selectedEntityType,
@@ -366,7 +369,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
     }
 
-      this.store.dispatch(new FetchProductMetricsAction(actionParameters));
+      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
   }
 
 }

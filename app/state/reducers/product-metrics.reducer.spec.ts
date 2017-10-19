@@ -18,7 +18,7 @@ describe('ProductMetrics Reducer', () => {
       products: initialState.products
     };
 
-    const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetricsAction({
+    const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetrics({
       positionId: positionIdMock,
       filter: performanceFilterStateMock,
       selectedEntityType: EntityType.Person
@@ -42,7 +42,7 @@ describe('ProductMetrics Reducer', () => {
 
     const actualState = productMetricsReducer(
       initialState,
-      new ProductMetricsActions.FetchProductMetricsSuccessAction(payloadMock)
+      new ProductMetricsActions.FetchProductMetricsSuccess(payloadMock)
     );
 
     expect(actualState).toEqual(expectedState);
@@ -56,7 +56,7 @@ describe('ProductMetrics Reducer', () => {
 
     const actualState = productMetricsReducer(
       initialState,
-      new ProductMetricsActions.FetchProductMetricsFailureAction(new Error())
+      new ProductMetricsActions.FetchProductMetricsFailure(new Error())
     );
 
     expect(actualState).toEqual(expectedState);

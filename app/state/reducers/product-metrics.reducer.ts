@@ -1,10 +1,11 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { ProductMetrics } from '../../models/product-metrics.model';
+import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 
 export interface ProductMetricsState extends State {
   status: ActionStatus;
   products: ProductMetrics;
+  selectedBrandValues?: ProductMetricsValues;
 }
 
 export const initialState: ProductMetricsState = {
@@ -18,20 +19,27 @@ export function productMetricsReducer(
 ): ProductMetricsState {
 
   switch (action.type) {
-    case ProductMetricsActions.FETCH_PRODUCT_METRICS_ACTION:
+    case ProductMetricsActions.FETCH_PRODUCT_METRICS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching
       });
 
-    case ProductMetricsActions.FETCH_PRODUCT_METRICS_SUCCESS_ACTION:
+    case ProductMetricsActions.FETCH_PRODUCT_METRICS_SUCCESS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         products: action.payload.products
       });
 
-    case ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE_ACTION:
+    case ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE:
       return Object.assign({}, state, {
         status: ActionStatus.Error
+      });
+
+    case ProductMetricsActions.SET_SELECTED_BRAND:
+      const selectedBrand = state.products.brandValues.find(brand => brand.brandCode === action.payload);
+
+      return Object.assign({}, state, {
+        selectedBrandValues: selectedBrand
       });
 
     default:
