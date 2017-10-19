@@ -30,7 +30,6 @@ export class MyPerformanceTableDataTransformerService {
         performanceError: entity.performance.error
       };
 
-      console.log('entity ', entity);
       if (entity.entityType === EntityType.Person) {
         if (entity.name === 'Open') {
           transformedEntity.descriptionRow0 = 'Open Position';
