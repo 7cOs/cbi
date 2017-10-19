@@ -71,10 +71,7 @@ export class ResponsibilitiesService {
         if (response.positions) {
           return this.handleResponsibilitiesPositionsResponse(response.positions, responsibilitiesData);
         } else if (response.entityURIs) {
-          return Object.assign({}, responsibilitiesData, {
-            entitiesURL: response.entityURIs[0],
-            viewType: response.entityURIs[0].search('distributors') !== -1 ? ViewType.distributors : ViewType.accounts
-          });
+          return Object.assign({}, responsibilitiesData, this.handleResponsibilitiesEntityURIResponse(response.entityURIs));
         }
       });
   }
@@ -85,10 +82,7 @@ export class ResponsibilitiesService {
         if (response.positions) {
           return this.handleResponsibilitiesPositionsResponse(response.positions, responsibilitiesData);
         } else if (response.entityURIs) {
-          return Object.assign({}, responsibilitiesData, {
-            entitiesURL: response.entityURIs[0],
-            viewType: response.entityURIs[0].search('distributors') !== -1 ? ViewType.distributors : ViewType.accounts
-          });
+          return Object.assign({}, responsibilitiesData, this.handleResponsibilitiesEntityURIResponse(response.entityURIs));
         }
       });
   }
@@ -377,5 +371,12 @@ export class ResponsibilitiesService {
       hierarchyGroups: hierarchyGroups,
       viewType: ViewType.roleGroups
     });
+  }
+
+  private handleResponsibilitiesEntityURIResponse(entityURIArray: string[]): ResponsibilitiesData {
+    return {
+      entitiesURL: entityURIArray[0],
+      viewType: entityURIArray[0].search('distributors') !== -1 ? ViewType.distributors : ViewType.accounts
+    };
   }
 }
