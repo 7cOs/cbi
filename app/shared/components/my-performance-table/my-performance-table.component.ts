@@ -58,7 +58,7 @@ export class MyPerformanceTableComponent {
 
   public getTableHeight(): string {
     return this.totalRow
-      ? this.dismissableTotalRow ? '2-total-row-present' : 'total-row-present'
+      ? this.dismissableTotalRow ? 'two-total-rows-present' : 'total-row-present'
       : this.dismissableTotalRow ? 'total-row-present' : 'total-row-absent';
   }
 
