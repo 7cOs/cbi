@@ -54,7 +54,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
   public leftTableViewType: ViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
-  public showCTV: boolean = false;
+  public showContributionToVolume: boolean = false;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -102,7 +102,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
-        this.showCTV = this.getShowCTV();
+        this.showContributionToVolume = this.getshowContributionToVolume();
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           responsibilitiesTotal = current.responsibilities.entitiesTotalPerformances.total;
@@ -135,7 +135,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
       this.filterState = filterState;
-      this.getShowCTV();
+      this.getshowContributionToVolume();
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
@@ -298,7 +298,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getShowCTV() {
+  private getshowContributionToVolume() {
     return this.leftTableViewType !== ViewType.roleGroups &&
            this.filterState.metricType === MetricTypeValue.volume;
   }

@@ -17,7 +17,7 @@ export class MyPerformanceTableRowComponent {
 
   @Input() rowData: MyPerformanceTableRow;
   @Input() showBackButton: boolean;
-  @Input() showCTV: boolean = false;
+  @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
   @Input() viewType: ViewType;
 

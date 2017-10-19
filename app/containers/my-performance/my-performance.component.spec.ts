@@ -75,7 +75,7 @@ class MyPerformanceTableComponentMock {
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
   @Input() showBackButton: boolean = false;
-  @Input() showCTV: boolean = false;
+  @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
