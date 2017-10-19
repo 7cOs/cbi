@@ -51,6 +51,8 @@ export interface HandleElementClickedParameters {
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
+  public fetchResponsibilitiesFailure: boolean = false;
+  public fetchProductMetricsFailure: boolean = false;
   public leftTableViewType: ViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
   public showLeftBackButton = false;
@@ -101,6 +103,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe(productMetrics => {
+
+        this.fetchProductMetricsFailure = productMetrics.products && productMetrics.status === ActionStatus.Error;
+
         if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
           this.productPerformance = this.myPerformanceTableDataTransformerService
             .getRightTableData(productMetrics.products);
@@ -113,13 +118,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
+        this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
+
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
             current.responsibilities.entityWithPerformance
           );
         }
 
-        if (current.responsibilities.entityWithPerformance) {
+        if (current.responsibilities.entityWithPerformance && !this.fetchProductMetricsFailure && !this.fetchResponsibilitiesFailure) {
           this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }

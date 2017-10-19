@@ -28,7 +28,6 @@ describe('ProductMetrics Service', () => {
   let error: Error;
   let productMetricsApiServiceMock: any;
   let productMetricsTransformerServiceMock: any;
-  let toastServiceMock: any;
 
   let runner: EffectsRunner;
   let productMetricsService: ProductMetricsService;
@@ -64,10 +63,6 @@ describe('ProductMetrics Service', () => {
       }
     };
 
-    toastServiceMock = {
-      showPerformanceDataErrorToast: jasmine.createSpy('showPerformanceDataErrorToast')
-    };
-
     TestBed.configureTestingModule({
       imports: [
         EffectsTestingModule
@@ -81,10 +76,6 @@ describe('ProductMetrics Service', () => {
         {
           provide: ProductMetricsTransformerService,
           useValue: productMetricsTransformerServiceMock
-        },
-        {
-          provide: 'toastService',
-          useValue: toastServiceMock
         }
       ]
     });
@@ -99,8 +90,6 @@ describe('ProductMetrics Service', () => {
       productMetricsService = _productMetricsService;
       productMetricsApiService = _productMetricsApiService;
       productMetricsTransformerService = _productMetricsTransformerService;
-
-      toastServiceMock.showPerformanceDataErrorToast.calls.reset();
     }
   ));
 
@@ -238,7 +227,6 @@ describe('ProductMetrics Service', () => {
           done();
         });
 
-        expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(1);
         expect(productMetricsTransformerService.transformProductMetrics).not.toHaveBeenCalled();
       });
     });

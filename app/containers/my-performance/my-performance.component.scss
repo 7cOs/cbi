@@ -24,3 +24,43 @@ my-performance-table {
     }
   }
 }
+
+.tables {
+  display: inline-block;
+  position: relative;
+}
+
+.error-cover {
+  width: 100%;
+  z-index: 1;
+  height: 599px;
+  background-color: $t-light-gray;
+  display: block;
+  position: absolute;
+  bottom: 0;
+
+  .error-container {
+    width: 277px;
+    margin: 120 auto;
+    text-align: center;
+
+    .error-ico {
+      display: inline-block;
+      width: 117px;
+      height: 117px;
+      object-fit: contain;
+      margin: 20 auto;
+    }
+
+    .error-cover-message {
+      width: 277px;
+      height: 66px;
+      font-family: WorkSans;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.38;
+      text-align: center;
+      color: #9b9b9b;
+    }
+  }
+}
