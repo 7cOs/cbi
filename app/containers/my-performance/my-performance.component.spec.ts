@@ -837,13 +837,13 @@ describe('MyPerformanceComponent', () => {
 
   describe('when error for product metrics', () => {
 
-    it('should set variables to false when productmetrics status is fetched', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
+    it('should set variable to false when productmetrics status is fetched', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {brand: []}};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(false);
     });
 
-    it('should set variables to true when productmetrics status is error', () => {
+    it('should set variable to true when productmetrics status is error', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.Error, products: undefined};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
@@ -852,6 +852,7 @@ describe('MyPerformanceComponent', () => {
     it('should set variable to true when productmetrics.products is empty', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
+      debugger;
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
   });

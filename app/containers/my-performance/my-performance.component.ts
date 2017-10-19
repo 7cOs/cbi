@@ -105,9 +105,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe(productMetrics => {
-        this.fetchProductMetricsFailure = productMetrics.products && productMetrics.status === ActionStatus.Error;
+        debugger;
+        this.fetchProductMetricsFailure = productMetrics.status === ActionStatus.Error ||
+        (productMetrics.products && Object.keys(productMetrics.products).length === 0);
 
-        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
+        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productPerformance = this.myPerformanceTableDataTransformerService
             .getRightTableData(productMetrics.products);
         }
@@ -122,7 +124,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchResponsibilitiesFailure = current.responsibilities &&
         (current.responsibilities.status === ActionStatus.Error || current.responsibilities.groupedEntities === {});
 
-        if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
+        if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
             current.responsibilities.entityWithPerformance
           );
