@@ -122,7 +122,7 @@ describe('MyPerformanceComponent', () => {
   };
 
   const storeMock = {
-    select: jasmine.createSpy('select.myPerformance').and.callFake((selectFunction: (state: any) => any) => {
+    select: jasmine.createSpy('myPerformance').and.callFake((selectFunction: (state: any) => any) => {
       const selectedValue = selectFunction(stateMock);
 
       if (selectedValue === stateMock.myPerformance.versions) {
@@ -134,7 +134,7 @@ describe('MyPerformanceComponent', () => {
       } else {
         return Observable.of(selectedValue);
       }
-    }),
+  }),
     dispatch: jasmine.createSpy('dispatch')
   };
 
@@ -836,27 +836,22 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when error for product metrics', () => {
-    let productMetricsMock: ProductMetricsState;
-
-    beforeEach(() => {
-      productMetricsMock = {status: ActionStatus.Fetching, products: {}};
-    });
 
     it('should set variables to false when productmetrics status is fetched', () => {
-      productMetricsMock = {status: ActionStatus.Fetched, products: {}};
-      productMetricsSubject.next(productMetricsMock);
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(false);
     });
 
     it('should set variables to true when productmetrics status is error', () => {
-      productMetricsMock = {status: ActionStatus.Error, products: undefined};
-      productMetricsSubject.next(productMetricsMock);
+      myPerformanceProductMetricsMock = {status: ActionStatus.Error, products: undefined};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
 
     it('should set variable to true when productmetrics.products is empty', () => {
-      productMetricsMock = {status: ActionStatus.Fetched, products: {}};
-      productMetricsSubject.next(productMetricsMock);
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
   });
