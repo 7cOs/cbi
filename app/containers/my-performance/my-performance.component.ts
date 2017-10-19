@@ -105,7 +105,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe(productMetrics => {
-        debugger;
         this.fetchProductMetricsFailure = productMetrics.products && productMetrics.status === ActionStatus.Error;
 
         if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
