@@ -223,43 +223,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       expect(tableData[0]).toEqual(expectedRow);
     });
 
-    it('should return formatted ResponsibilityEntityPerformance data when in Alt-Hierarchy and ViewType Person', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Person;
-      responsibilityEntitiesPerformanceMock[0].positionDescription = chance.string();
-
-      responsibilityEntitiesPerformanceMock[1].entityType = EntityType.Person;
-      responsibilityEntitiesPerformanceMock[1].positionDescription = chance.string();
-
-      responsibilityEntitiesPerformanceMock[2].entityType = EntityType.Person;
-      delete responsibilityEntitiesPerformanceMock[2].positionDescription;
-
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, true);
-
-      expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
-      for (let i = 0; i < tableData.length; i++) {
-        expect(tableData[i]).toEqual({
-          descriptionRow0: responsibilityEntitiesPerformanceMock[i].positionDescription
-            ? responsibilityEntitiesPerformanceMock[i].positionDescription : 'AREA',
-          descriptionRow1: responsibilityEntitiesPerformanceMock[i].name,
-          metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
-          metricColumn1: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo,
-          metricColumn2: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent,
-          ctv: responsibilityEntitiesPerformanceMock[i].performance.contributionToVolume,
-          metadata: {
-            positionId: responsibilityEntitiesPerformanceMock[i].positionId,
-            contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
-            entityName: responsibilityEntitiesPerformanceMock[i].name,
-            entityType: responsibilityEntitiesPerformanceMock[i].entityType,
-            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode
-          },
-          performanceError: false
-        });
-      }
-    });
-
     it('should return formatted ResponsibilityEntityPerformance data with Open Position', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
@@ -283,6 +246,43 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(tableData[i]).toEqual({
           descriptionRow0: 'Open Position',
           descriptionRow1: responsibilityEntitiesPerformanceMock[i].positionDescription,
+          metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
+          metricColumn1: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo,
+          metricColumn2: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent,
+          ctv: responsibilityEntitiesPerformanceMock[i].performance.contributionToVolume,
+          metadata: {
+            positionId: responsibilityEntitiesPerformanceMock[i].positionId,
+            contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
+            entityName: responsibilityEntitiesPerformanceMock[i].name,
+            entityType: responsibilityEntitiesPerformanceMock[i].entityType,
+            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode
+          },
+          performanceError: false
+        });
+      }
+    });
+
+    it('should return formatted ResponsibilityEntityPerformance data when in Alt-Hierarchy and ViewType Person', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Person;
+      responsibilityEntitiesPerformanceMock[0].positionDescription = chance.string();
+
+      responsibilityEntitiesPerformanceMock[1].entityType = EntityType.Person;
+      responsibilityEntitiesPerformanceMock[1].positionDescription = chance.string();
+
+      responsibilityEntitiesPerformanceMock[2].entityType = EntityType.Person;
+      delete responsibilityEntitiesPerformanceMock[2].positionDescription;
+
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, true);
+
+      expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
+      for (let i = 0; i < tableData.length; i++) {
+        expect(tableData[i]).toEqual({
+          descriptionRow0: responsibilityEntitiesPerformanceMock[i].positionDescription
+            ? responsibilityEntitiesPerformanceMock[i].positionDescription : 'AREA',
+          descriptionRow1: responsibilityEntitiesPerformanceMock[i].name,
           metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
           metricColumn1: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo,
           metricColumn2: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent,
