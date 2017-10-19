@@ -6,6 +6,8 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
+import { FetchAlternateHierarchyResponsibilitiesPayload,
+         FetchSubAccountsActionPayload } from '../../state/actions/responsibilities.action';
 import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
@@ -45,7 +47,8 @@ export class ResponsibilitiesEffects {
   fetchAlternateHierarchyResponsibilities$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES)
-      .switchMap((action: Action) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(action.payload))
+      .switchMap((action: Action): Observable<FetchAlternateHierarchyResponsibilitiesPayload> => Observable.of(action.payload))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
@@ -79,9 +82,7 @@ export class ResponsibilitiesEffects {
   @Effect() fetchSubAccounts$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
-      .switchMap((action: Action): Observable<SubAccountData> => {
-        return Observable.of(action.payload);
-      })
+      .switchMap((action: Action): Observable<FetchSubAccountsActionPayload> => Observable.of(action.payload))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))

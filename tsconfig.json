@@ -21,9 +21,7 @@
     "coverage",
     "node_modules",
     "public",
-    "server",
-    "typings/main",
-    "typings/main.d.ts"
+    "server"
   ],
   "lib": [
     "dom",
@@ -31,9 +29,6 @@
   ],
   "compileOnSave": false,
   "buildOnSave": false,
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true
-  },
   "atom": {
     "rewriteTsconfig": false
   }
