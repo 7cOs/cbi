@@ -35,11 +35,11 @@ export class MyPerformanceTableComponent {
 
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() showBackButton: boolean = false;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() viewType: ViewType;
+  @Input() showContributionToVolume: boolean;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;

@@ -68,6 +68,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public performanceMetric: string = 'Depletions';
   public dateRange: DateRange = getDateRangeMock();
   public showOpportunities: boolean = true;
+  public totalRowData: MyPerformanceTableRow;
 
   private currentState: MyPerformanceEntitiesData;
   private versions: MyPerformanceEntitiesData[];
@@ -79,8 +80,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsSubscription: Subscription;
   private productPerformance: Array<MyPerformanceTableRow>;
   private salesHierarchy: Array<MyPerformanceTableRow>;
-  private salesHierarchyTotal: MyPerformanceTableRow;
   private defaultUserPremiseType: PremiseTypeValue;
+  private entityType: EntityType;
+  private showContributionToVolume: boolean;
 
   constructor(
     private store: Store<AppState>,
@@ -121,9 +123,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           );
         }
 
+        if (current.responsibilities.entityWithPerformance.length) {
+          this.entityType = current.responsibilities.entityWithPerformance[0].entityType;
+        }
+
         if (current.responsibilities.entityWithPerformance) {
-          this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
+          this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
+          this.showContributionToVolume = this.displayRightTotalRow();
         }
 
     });
@@ -186,12 +193,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {
-          if (this.showLeftBackButton) {
-            const previousIndex: number = this.versions.length - 1;
-            const previousState = this.versions[previousIndex];
-            this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
-            this.fetchProductMetricsForPreviousState(previousState);
-          }
           console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
           console.log(`clicked on cell ${parameters.index} from the right side`);
@@ -262,9 +263,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               break;
             default:
               console.log('clicked on left row:', parameters.row);
+          }
         }
-      }
     }
+  }
+
+  public handleBackButtonClicked(): void {
+    const previousIndex: number = this.versions.length - 1;
+    const previousState = this.versions[previousIndex];
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+    this.fetchProductMetricsForPreviousState(previousState);
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
@@ -298,6 +306,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);
     }
+  }
+
+  public displayRightTotalRow(): boolean {
+    return this.leftTableViewType === ViewType.roleGroups || this.entityType === EntityType.RoleGroup
+      || this.entityType === EntityType.DistributorGroup;
   }
 
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
