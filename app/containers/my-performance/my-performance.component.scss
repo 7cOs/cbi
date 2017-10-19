@@ -7,12 +7,13 @@ my-performance-table {
   min-width: 565px;
   vertical-align: top;
 
-  &.right {
-  }
-
   &.left {
-    box-shadow: inset -8px 0 15px $t-gray;
+    box-shadow: inset -15px 0 15px -11px $t-gray;
 
+    /deep/td.center-col:nth-last-child(1),
+    /deep/th.center-col:nth-last-child(1) {
+      box-shadow: inset -15px 0 15px -11px $t-gray;
+    }
 
     /deep/tr.total-row {
       background-color: $dark-blue-2;
