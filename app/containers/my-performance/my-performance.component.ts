@@ -190,6 +190,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
+    console.log(this.leftTableViewType);
+    console.log(parameters.row);
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {
@@ -226,12 +228,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                 filter: this.filterState
               }));
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                entityTypeCode: parameters.row.metadata.entityTypeCode,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.RoleGroup
-              }));
+              if (!parameters.row.metadata.alternateHierarchyId && parameters.row.descriptionRow0 !== 'ACCOUNTS') {
+                this.store.dispatch(new FetchProductMetricsAction({
+                  positionId: parameters.row.metadata.positionId,
+                  entityTypeCode: parameters.row.metadata.entityTypeCode,
+                  filter: this.filterState,
+                  selectedEntityType: SelectedEntityType.RoleGroup
+                }));
+              }
               break;
             case ViewType.people:
               if (this.currentState.responsibilities.alternateHierarchyId) {
@@ -245,12 +249,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                   positionId: parameters.row.metadata.positionId,
                   filter: this.filterState
                 }));
+                this.store.dispatch(new FetchProductMetricsAction({
+                  positionId: parameters.row.metadata.positionId,
+                  filter: this.filterState,
+                  selectedEntityType: SelectedEntityType.Position
+                }));
               }
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.Position
-              }));
               break;
             case ViewType.accounts:
               this.store.dispatch(new FetchSubAccountsAction({
@@ -260,12 +264,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedPositionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
-              this.store.dispatch(new FetchProductMetricsAction({
-                positionId: parameters.row.metadata.positionId,
-                contextPositionId: this.currentState.responsibilities.positionId,
-                filter: this.filterState,
-                selectedEntityType: SelectedEntityType.Account
-              }));
+              if (!this.currentState.responsibilities.alternateHierarchyId) {
+                this.store.dispatch(new FetchProductMetricsAction({
+                  positionId: parameters.row.metadata.positionId,
+                  contextPositionId: this.currentState.responsibilities.positionId,
+                  filter: this.filterState,
+                  selectedEntityType: SelectedEntityType.Account
+                }));
+              }
               break;
             default:
               console.log('clicked on left row:', parameters.row);

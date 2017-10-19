@@ -18,6 +18,8 @@ module.exports = function(app) {
         v3BaseURLKey = 'accounts';
       } else if (req.url.match(/\/v3\/distributors.+/)) {
         v3BaseURLKey = 'distributors';
+      } else if (req.url.match(/.+\/productMetrics/)) {
+        v3BaseURLKey = 'productMetrics';
       } else if (req.url.match(/\/v3\/positions\/.*\/responsibilities/)) {
         v3BaseURLKey = 'positions';
       } else if (req.url.match(/\/v3\/positions\/.*\/distributors/)) {
