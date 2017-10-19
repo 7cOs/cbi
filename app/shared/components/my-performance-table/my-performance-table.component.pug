@@ -12,7 +12,7 @@ div.performance-table-wrapper
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
         th.center-col.sort-indicator(colspan=3, [ngClass]="centerColumnsWidth()") {{ tableHeaderRow[1] }}
-        th.right-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)")
+        th.right-col.sort-indicator(*ngIf="showCTV", colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)")
           span {{ tableHeaderRow[2] }}
             sort-indicator([status]="getSortStatus(columnType.ctv)")
         th.right-col.sort-indicator(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
@@ -28,13 +28,14 @@ div.performance-table-wrapper
         th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn2)")
           span VS YA %
             sort-indicator([status]='getSortStatus(columnType.metricColumn2)')
-        th.right-col(colspan=1, [ngClass]="columnWidth()")
+        th.right-col(*ngIf="showCTV", colspan=1, [ngClass]="columnWidth()")
         th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
 
       tr.total-row.col-100-pct(my-performance-table-row,
                               *ngIf="totalRow",
                               [rowData]="totalRow",
                               [showBackButton]="showBackButton",
+                              [showCTV]="showCTV",
                               [showOpportunities]="showOpportunities",
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")
 
@@ -43,6 +44,7 @@ div.performance-table-wrapper
                                 [ngClass]="{'performance-error': rowData.performanceError}",
                                 my-performance-table-row,
                                 [rowData]="rowData",
+                                [showCTV]="showCTV",
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
                                 (onSublineClicked)="onSublineClicked.emit(rowData);",

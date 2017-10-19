@@ -35,8 +35,9 @@ export class MyPerformanceTableComponent {
 
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() showBackButton: boolean = false;
-  @Input() showOpportunities: boolean = true;
+  @Input() showBackButton: boolean = true;
+  @Input() showOpportunities: boolean = false;
+  @Input() showCTV: boolean = false;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() viewType: ViewType;

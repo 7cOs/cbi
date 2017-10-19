@@ -18,6 +18,7 @@ import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -53,6 +54,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
   public leftTableViewType: ViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
+  public showCTV: boolean = false;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -65,7 +67,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
   public performanceMetric: string = 'Depletions';
   public dateRange: DateRange = getDateRangeMock();
-  public showOpportunities: boolean = true;
+  public showOpportunities: boolean = false;
 
   private currentState: MyPerformanceEntitiesData;
   private versions: MyPerformanceEntitiesData[];
@@ -112,6 +114,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
+        this.showCTV = this.getShowCTV();
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
@@ -285,6 +288,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);
     }
+  }
+
+  private getShowCTV() {
+    return this.leftTableViewType !== ViewType.roleGroups &&
+           this.filterState.metricType === MetricTypeValue.volume;
   }
 
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {

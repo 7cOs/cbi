@@ -20,6 +20,7 @@ my-performance-table.left(
   [sortingCriteria]="sortingCriteria",
   [viewType]="leftTableViewType",
   [showBackButton]="showLeftBackButton",
+  [showCTV]="showCTV",
   [showOpportunities]="false",
   (onSublineClicked)="handleSublineClicked($event)",
   (onSortingCriteriaChanged)="handleSortRows($event)",
@@ -30,7 +31,8 @@ my-performance-table.right(
   [tableHeaderRow]="tableHeaderRowRight",
   [performanceMetric]="'Product Snapshot'",
   [sortingCriteria]="sortingCriteria",
-  [showOpportunities]="showOpportunities",
+  [showCTV]="showCTV",
+  [showOpportunities]="false",
   [viewType]="viewType.brands",
   (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
   (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})")
