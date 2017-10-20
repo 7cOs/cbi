@@ -121,7 +121,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         this.fetchResponsibilitiesFailure = current.responsibilities &&
-        (current.responsibilities.status === ActionStatus.Error || current.responsibilities.groupedEntities === {});
+            (current.responsibilities.status === ActionStatus.Error ||
+             current.responsibilities.groupedEntities && Object.keys(current.responsibilities.groupedEntities).length === 0);
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(

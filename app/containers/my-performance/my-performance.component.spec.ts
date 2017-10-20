@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
+import { ActionStatus } from '../../enums/action-status.enum';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -32,6 +33,7 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
 import { SaveMyPerformanceStateAction, SetMyPerformanceSelectedEntityAction } from '../../state/actions/my-performance-version.action';
@@ -41,8 +43,6 @@ import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
 import { ViewType } from '../../enums/view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { ActionStatus } from '../../enums/action-status.enum';
-import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 
 const chance = new Chance();
 
@@ -122,7 +122,7 @@ describe('MyPerformanceComponent', () => {
   };
 
   const storeMock = {
-    select: jasmine.createSpy('myPerformance').and.callFake((selectFunction: (state: any) => any) => {
+    select: jasmine.createSpy('select.myPerformance').and.callFake((selectFunction: (state: any) => any) => {
       const selectedValue = selectFunction(stateMock);
 
       if (selectedValue === stateMock.myPerformance.versions) {
@@ -134,7 +134,7 @@ describe('MyPerformanceComponent', () => {
       } else {
         return Observable.of(selectedValue);
       }
-  }),
+    }),
     dispatch: jasmine.createSpy('dispatch')
   };
 
@@ -504,12 +504,6 @@ describe('MyPerformanceComponent', () => {
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any
       }));
-      /* expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new FetchProductMetricsAction({
-        positionId: rowMock.metadata.positionId,
-        entityTypeCode: rowMock.metadata.entityTypeCode,
-        filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.RoleGroup
-      })); */
     });
 
     it('should trigger appropriate actions when current ViewType is accounts', () => {
@@ -575,11 +569,6 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: alternateHierarchyIdMock,
         filter: stateMock.myPerformanceFilter as any
       }));
-      /* expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
-        positionId: rowMock.metadata.positionId,
-        filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.Position
-      })); */
     });
 
     it('should dispatch FetchEntityWithPerformance when ViewType is roleGroups', () => {
