@@ -63,8 +63,10 @@ class MyPerformanceFilterComponentMock {
 })
 class MyPerformanceBreadcrumbComponentMock {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
+  @Output() backButtonClicked = new EventEmitter();
   @Input() currentUserFullName: string[];
   @Input() performanceStateVersions: MyPerformanceEntitiesData[];
+  @Input() showBackButton: boolean;
 }
 
 @Component({
@@ -77,6 +79,7 @@ class MyPerformanceTableComponentMock {
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
   @Input() showBackButton: boolean = false;
+  @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
@@ -369,8 +372,7 @@ describe('MyPerformanceComponent', () => {
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
-        componentInstance.handleElementClicked(params);
+        componentInstance.handleBackButtonClicked();
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
@@ -382,8 +384,7 @@ describe('MyPerformanceComponent', () => {
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
-        componentInstance.handleElementClicked(params);
+        componentInstance.handleBackButtonClicked();
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
@@ -400,8 +401,7 @@ describe('MyPerformanceComponent', () => {
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
-        componentInstance.handleElementClicked(params);
+        componentInstance.handleBackButtonClicked();
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
@@ -413,8 +413,7 @@ describe('MyPerformanceComponent', () => {
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
-        componentInstance.handleElementClicked(params);
+        componentInstance.handleBackButtonClicked();
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
@@ -431,8 +430,7 @@ describe('MyPerformanceComponent', () => {
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
-        componentInstance.handleElementClicked(params);
+        componentInstance.handleBackButtonClicked();
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());

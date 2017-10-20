@@ -9,7 +9,9 @@ my-performance-filter(
 my-performance-breadcrumb(
   [currentUserFullName]="currentUserFullName",
   [performanceStateVersions]="performanceStateVersions$ | async",
-  (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)")
+  [showBackButton]="showLeftBackButton",
+  (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
+  (backButtonClicked)="handleBackButtonClicked()")
 
 div.tables
   my-performance-table.left(
@@ -17,10 +19,10 @@ div.tables
     [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
-    [totalRow]="salesHierarchyTotal",
+    [totalRow]="!displayRightTotalRow() ? totalRowData : null",
     [sortingCriteria]="sortingCriteria",
     [viewType]="leftTableViewType",
-    [showBackButton]="showLeftBackButton",
+    [showContributionToVolume]="showSalesContributionToVolume",
     [showOpportunities]="false",
     (onSublineClicked)="handleSublineClicked($event)",
     (onSortingCriteriaChanged)="handleSortRows($event)",
@@ -29,9 +31,11 @@ div.tables
   my-performance-table.right(
     [tableData]="productPerformance",
     [tableHeaderRow]="tableHeaderRowRight",
+    [totalRow]="displayRightTotalRow() ? totalRowData : null",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="sortingCriteria",
-    [showOpportunities]="showOpportunities",
+    [showContributionToVolume]="showProductMetricsContributionToVolume",
+    [showOpportunities]="false",
     [viewType]="viewType.brands",
     (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
     (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})")
