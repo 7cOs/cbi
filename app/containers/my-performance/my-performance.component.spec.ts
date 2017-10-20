@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
+import { ActionStatus } from '../../enums/action-status.enum';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -14,7 +15,9 @@ import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilitie
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
+import { getMyPerformanceEntitiesDataMock,
+         getMyPerformanceStateMock,
+         getResponsibilitesStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
@@ -30,6 +33,7 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
 import { SaveMyPerformanceStateAction, SetMyPerformanceSelectedEntityAction } from '../../state/actions/my-performance-version.action';
@@ -88,6 +92,7 @@ describe('MyPerformanceComponent', () => {
   let userServiceMock: any;
   let myPerformanceServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
+  let myPerformanceProductMetricsMock: ProductMetricsState = {status: ActionStatus.Fetching, products: {}};
 
   function generateMockVersions(min: number, max: number): MyPerformanceEntitiesData[] {
     return Array(chance.natural({min: min, max: max})).fill('').map(() => getMyPerformanceEntitiesDataMock());
@@ -100,6 +105,7 @@ describe('MyPerformanceComponent', () => {
 
   const versionsSubject: Subject<MyPerformanceEntitiesData[]> = new Subject<MyPerformanceEntitiesData[]>();
   const currentSubject: Subject<MyPerformanceEntitiesData> = new Subject<MyPerformanceEntitiesData>();
+  const productMetricsSubject: Subject<ProductMetricsState> = new Subject<ProductMetricsState>();
 
   const windowMock = {
     open: jasmine.createSpy('open')
@@ -111,7 +117,7 @@ describe('MyPerformanceComponent', () => {
 
   const stateMock = {
     myPerformance: myPerformanceStateMock,
-    myPerformanceProductMetrics: chance.string(),
+    myPerformanceProductMetrics: myPerformanceProductMetricsMock,
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
     viewTypes: chance.string(),
@@ -126,6 +132,8 @@ describe('MyPerformanceComponent', () => {
         return versionsSubject;
       } else if (selectedValue === stateMock.myPerformance.current) {
         return currentSubject;
+      } else if (selectedValue === stateMock.myPerformanceProductMetrics) {
+        return productMetricsSubject;
       } else {
         return Observable.of(selectedValue);
       }
@@ -187,6 +195,7 @@ describe('MyPerformanceComponent', () => {
     fixture.detectChanges();
 
     currentSubject.next(myPerformanceStateMock.current);
+    productMetricsSubject.next(myPerformanceProductMetricsMock);
     versionsSubject.next(initialVersionsMock);
   });
 
@@ -307,19 +316,19 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.select.calls.count()).toBe(6);
       const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
-      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.myPerformanceProductMetrics);
+      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
 
       const functionPassToSelectCall1 = storeMock.select.calls.argsFor(1)[0];
-      expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance.current);
+      expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance.versions);
 
       const functionPassToSelectCall2 = storeMock.select.calls.argsFor(2)[0];
-      expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.dateRanges);
+      expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
 
       const functionPassToSelectCall3 = storeMock.select.calls.argsFor(3)[0];
-      expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformance.versions);
+      expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformanceProductMetrics);
 
       const functionPassToSelectCall4 = storeMock.select.calls.argsFor(4)[0];
-      expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformanceFilter);
+      expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current);
 
       const functionPassToSelectCall5 = storeMock.select.calls.argsFor(5)[0];
       expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformance.versions);
@@ -480,7 +489,7 @@ describe('MyPerformanceComponent', () => {
       rowMock.metadata.alternateHierarchyId = chance.string();
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(stateMock.myPerformance.current));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
@@ -492,12 +501,6 @@ describe('MyPerformanceComponent', () => {
         entityType: rowMock.metadata.entityType,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any
-      }));
-      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new FetchProductMetricsAction({
-        positionId: rowMock.metadata.positionId,
-        entityTypeCode: rowMock.metadata.entityTypeCode,
-        filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.RoleGroup
       }));
     });
 
@@ -556,18 +559,13 @@ describe('MyPerformanceComponent', () => {
       componentInstance.leftTableViewType = ViewType.people;
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.count()).toBe(3);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SetMyPerformanceSelectedEntityAction(rowMock.descriptionRow0));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SaveMyPerformanceStateAction(currentMock));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities({
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: alternateHierarchyIdMock,
         filter: stateMock.myPerformanceFilter as any
-      }));
-      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
-        positionId: rowMock.metadata.positionId,
-        filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: SelectedEntityType.Position
       }));
     });
 
@@ -791,6 +789,55 @@ describe('MyPerformanceComponent', () => {
       });
 
       expect(storeMock.dispatch.calls.count()).toBe(0);
+    });
+  });
+
+  describe('when fetching responsibilities returns an error', () => {
+    let currentMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
+    });
+
+    it('should set fetchResponsibilitiesFailure to false when responsibilities fetched with data', () => {
+      currentMock.responsibilities.status = ActionStatus.Fetched;
+      currentSubject.next(currentMock);
+      expect(componentInstance.fetchResponsibilitiesFailure).toBe(false);
+    });
+
+    it('should set fetchResponsibilitiesFailure to true when responsibilities status is error', () => {
+      currentMock.responsibilities.status = ActionStatus.Error;
+      currentSubject.next(currentMock);
+      expect(componentInstance.fetchResponsibilitiesFailure).toBe(true);
+    });
+
+    it('should set fetchResponsibilitiesFailure to true when responsibilities.groupedEntities is empty', () => {
+      currentMock.responsibilities.status = ActionStatus.Error;
+      currentMock.responsibilities.groupedEntities = {};
+      currentSubject.next(currentMock);
+      expect(componentInstance.fetchResponsibilitiesFailure).toBe(true);
+    });
+  });
+
+  describe('when fetching productMetrics returns and error', () => {
+
+    it('should set fetchProductMetricsFailure to false when productmetrics status is fetched', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {brand: []}};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.fetchProductMetricsFailure).toBe(false);
+    });
+
+    it('should set fetchProductMetricsFailure to true when productmetrics status is error', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Error, products: undefined};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.fetchProductMetricsFailure).toBe(true);
+    });
+
+    it('should set fetchProductMetricsFailure to true when productmetrics.products is empty', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
   });
 

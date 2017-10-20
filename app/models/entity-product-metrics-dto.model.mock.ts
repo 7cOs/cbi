@@ -81,6 +81,6 @@ export function getProductMetricDTOMock() {
 
 export function getProductMetricMock(): ProductMetrics {
   return {
-    brand: [ getProductMetricsBrandMock() ]
+    brand: [ getProductMetricsBrandMock(), getProductMetricsBrandMock(), getProductMetricsBrandMock() ]
     };
 }
