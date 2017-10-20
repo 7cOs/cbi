@@ -260,8 +260,11 @@ div.ctv {
 .view-type {
   &.view-type-brands {
 
-    /deep/td.left-col {
-      font-weight: normal;
+    tr.entity-row {
+
+      /deep/ td.left-col {
+        font-weight: normal;
+      }
     }
   }
 
