@@ -220,9 +220,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.data:
       default:
         if (parameters.leftSide) {
+          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
-          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
 
           switch (this.salesHierarchyViewType) {
             case SalesHierarchyViewType.roleGroups:
