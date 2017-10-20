@@ -33,7 +33,7 @@ my-performance-table {
     width: 100%;
     z-index: 1;
     height: 599px;
-    background-color: $t-light-gray;
+    background-color: $gray-4;
     display: block;
     position: absolute;
     bottom: 0;
@@ -56,12 +56,12 @@ my-performance-table {
       .error-cover-message {
         width: 277px;
         height: 66px;
-        font-family: WorkSans;
+        font-family: $work-sans;
         font-size: 16px;
         font-weight: 500;
         line-height: 1.38;
         text-align: center;
-        color: #9b9b9b;
+        color: $gray-2;
       }
     }
   }
