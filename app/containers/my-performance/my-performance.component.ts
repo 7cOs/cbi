@@ -230,6 +230,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                 filter: this.filterState
               }));
+              // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
               if (!parameters.row.metadata.alternateHierarchyId && parameters.row.descriptionRow0 !== 'ACCOUNTS') {
                 this.store.dispatch(new FetchProductMetricsAction({
                   positionId: parameters.row.metadata.positionId,
@@ -266,7 +267,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedPositionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
-              if (!this.currentState.responsibilities.alternateHierarchyId) {
+              if (!this.isInsideAlternateHierarchy) {
                 this.store.dispatch(new FetchProductMetricsAction({
                   positionId: parameters.row.metadata.positionId,
                   contextPositionId: this.currentState.responsibilities.positionId,
