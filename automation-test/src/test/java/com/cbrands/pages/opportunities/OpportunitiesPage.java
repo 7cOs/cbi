@@ -254,7 +254,9 @@ public class OpportunitiesPage extends TestNGBasePage {
     WebElement savedReportOption = clickSavedReportsDropdown().getFirstSavedReportOption();
 
     while(!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
-      deleteSavedReport(savedReportOption).clickSavedReportsDropdown();
+      openEditSavedReportModal(savedReportOption)
+        .clickDeleteSavedReportLink()
+        .clickSavedReportsDropdown();
       savedReportOption = getFirstSavedReportOption();
     }
 
@@ -269,8 +271,7 @@ public class OpportunitiesPage extends TestNGBasePage {
       true
     );
   }
-
-  private OpportunitiesPage deleteSavedReport(WebElement savedReport) {
+  private SavedReportModal openEditSavedReportModal(WebElement savedReport) {
     waitForElementToClickable(savedReport, true);
 
     final Actions action = new Actions(driver);
@@ -280,14 +281,7 @@ public class OpportunitiesPage extends TestNGBasePage {
       .perform();
     waitForLoaderToDisappear();
 
-    final By editModalBy = By.xpath("//div[@class='modal edit-report']");
-    final WebElement editModalElement = findElement(editModalBy);
-
-    waitForElementToClickable(editModalElement.findElement(By.xpath(".//p[contains(., 'Delete Report')]")), true)
-      .click();
-    waitForElementToDisappear(editModalBy);
-
-    return this;
+    return PageFactory.initElements(driver, SavedReportModal.class);
   }
 
   public boolean isMyAccountsOnlySelected() {
