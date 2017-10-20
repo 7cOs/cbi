@@ -7,13 +7,11 @@ module.exports = function (config) {
     frameworks: [ 'jasmine' ],
 
     files: [
-      './config/karma-source-bundle.js',  // include ng1 sources (through JS as workaround for remap-coverage)
       './config/karma-spec-bundle.js',
       './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' // Include a Material theme in the test suite
     ],
 
     preprocessors: {
-      './config/karma-source-bundle.js': [ 'coverage', 'webpack', 'sourcemap' ],
       './config/karma-spec-bundle.js': [ 'coverage', 'webpack', 'sourcemap' ]
     },
 

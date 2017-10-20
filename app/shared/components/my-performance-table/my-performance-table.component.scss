@@ -260,9 +260,11 @@ div.ctv {
 .view-type {
   &.view-type-brands {
 
-    /deep/td.left-col {
-      color: $blue;
-      font-weight: normal;
+    tr.entity-row {
+
+      /deep/ td.left-col {
+        font-weight: normal;
+      }
     }
   }
 
@@ -321,7 +323,12 @@ div.ctv {
         }
 
         span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
           font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0;
         }
       }
     }
@@ -361,6 +368,7 @@ div.ctv {
     }
   }
 
+  &.view-type-subAccounts,
   &.view-type-distributors {
 
     tr.total-row {
@@ -424,14 +432,6 @@ div.ctv {
 
 .total-row-absent {
   height: 597px;
-}
-
-.back-button {
-  background-image: url('../../../assets/img/icons/arrow-left-white.svg');
-  background-repeat: no-repeat;
-  background-position: left 13px center;
-  padding-left: 32px;
-  box-sizing: border-box;
 }
 
 .link {

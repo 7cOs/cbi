@@ -6,7 +6,6 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
-import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { PerformanceDTO } from '../models/performance.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
@@ -230,7 +229,7 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
-  describe('getResponsibilityPerformance', () => {
+  describe('getHierarchyGroupPerformance', () => {
 
     it('should call the responsibility performance endpoint and return performance data for the responsibility', (done) => {
       const filterMock = {
@@ -258,16 +257,9 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getResponsibilityPerformance(entityMock, filterMock, positionIdMock)
-        .subscribe((response: EntityWithPerformanceDTO) => {
-          expect(response).toEqual({
-            id: positionIdMock,
-            name: entityMock.name,
-            entityType: entityMock.entityType,
-            positionDescription: entityMock.positionDescription,
-            performance: performanceResponseMock,
-            entityTypeCode: entityMock.type
-          });
+      myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterMock, positionIdMock)
+        .subscribe((response: PerformanceDTO) => {
+          expect(response).toEqual(performanceResponseMock);
           done();
       });
     });
