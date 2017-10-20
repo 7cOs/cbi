@@ -12,7 +12,7 @@ div.performance-table-wrapper
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
         th.center-col.sort-indicator(colspan=3, [ngClass]="centerColumnsWidth()") {{ tableHeaderRow[1] }}
-        th.right-col.sort-indicator(colspan=1, *ngIf="showContributionToVolume", [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)")
+        th.right-col.sort-indicator(*ngIf="showContributionToVolume", colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)")
           span {{ tableHeaderRow[2] }}
             sort-indicator([status]="getSortStatus(columnType.ctv)")
         th.right-col.sort-indicator(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
@@ -28,14 +28,14 @@ div.performance-table-wrapper
         th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn2)")
           span VS YA %
             sort-indicator([status]='getSortStatus(columnType.metricColumn2)')
-        th.right-col(colspan=1, *ngIf="showContributionToVolume", [ngClass]="columnWidth()")
+        th.right-col(*ngIf="showContributionToVolume", colspan=1, [ngClass]="columnWidth()")
         th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
 
       tr.total-row.col-100-pct(my-performance-table-row,
                               *ngIf="totalRow",
                               [rowData]="totalRow",
+                              [showContributionToVolume]="showContributionToVolume",
                               [showOpportunities]="showOpportunities",
-                              [showContributionToVolume] ="showContributionToVolume",
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")
 
     tbody([ngClass]="getTableHeight(totalRow)")
@@ -43,8 +43,8 @@ div.performance-table-wrapper
                                 [ngClass]="{'performance-error': rowData.performanceError}",
                                 my-performance-table-row,
                                 [rowData]="rowData",
+                                [showContributionToVolume]="showContributionToVolume",
                                 [showOpportunities]="showOpportunities",
-                                [showContributionToVolume] ="showContributionToVolume",
                                 [viewType]="viewType",
                                 (onSublineClicked)="onSublineClicked.emit(rowData);",
                                 (click)="onElementClicked.emit({type: rowType.data, index: i, row: rowData})")

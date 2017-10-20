@@ -56,7 +56,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        ctv: 0,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -86,7 +86,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        ctv: 0,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -116,7 +116,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        ctv: 0,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -146,7 +146,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        ctv: 0,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -176,7 +176,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        ctv: 0,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -207,7 +207,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
+        ctv: 0,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -249,7 +249,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
           metricColumn1: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo,
           metricColumn2: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent,
-          ctv: responsibilityEntitiesPerformanceMock[i].performance.contributionToVolume,
+          ctv: 0,
           metadata: {
             positionId: responsibilityEntitiesPerformanceMock[i].positionId,
             contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
@@ -263,6 +263,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data when in Alt-Hierarchy and ViewType Person', () => {
+
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Person;
@@ -286,7 +287,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
           metricColumn1: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo,
           metricColumn2: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent,
-          ctv: responsibilityEntitiesPerformanceMock[i].performance.contributionToVolume,
+          ctv: 0,
           metadata: {
             positionId: responsibilityEntitiesPerformanceMock[i].positionId,
             contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
@@ -297,6 +298,33 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           performanceError: false
         });
       }
+    });
+
+    it('should calculate ctv when a total is provided,', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      const totalMock = chance.natural();
+      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
+      responsibilityEntitiesPerformanceMock[0].performance.error = true;
+
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, false, totalMock);
+
+      const expectedCTV: number = Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / totalMock) * 1000) / 10;
+
+      expect(tableData[0].ctv).toBe(expectedCTV);
+    });
+
+    it('should provide 0 for ctv when no total is provided,', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
+      responsibilityEntitiesPerformanceMock[0].performance.error = true;
+
+      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+
+      expect(tableData[0].ctv).toBe(0);
     });
 
     it('should return the correct descriptionRow1 when the property type is entity distributors', () => {
@@ -361,7 +389,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: performanceMock.total,
         metricColumn1: performanceMock.totalYearAgo,
         metricColumn2: performanceMock.totalYearAgoPercent,
-        ctv: performanceMock.contributionToVolume
+        ctv: 100
       });
     });
   });
