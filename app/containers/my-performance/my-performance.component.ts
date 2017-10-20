@@ -334,14 +334,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private getShowSalesContributionToVolume(): boolean {
-    if (!this.leftTableViewType || !this.filterState) return false;
-    return this.leftTableViewType !== ViewType.roleGroups &&
-           this.filterState.metricType === MetricTypeValue.volume;
+    return this.leftTableViewType && this.leftTableViewType !== ViewType.roleGroups
+           && this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
   private getShowProductMetricsContributionToVolume(): boolean {
-    if (!this.filterState) return false;
-    return this.filterState.metricType === MetricTypeValue.volume;
+    return this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
   private isInsideAlternateHierarchy(): boolean {
