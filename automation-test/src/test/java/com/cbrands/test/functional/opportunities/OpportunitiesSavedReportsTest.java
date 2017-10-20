@@ -31,6 +31,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
+
+    opportunitiesPage.deleteAllSavedReports(driver);
   }
 
   @AfterMethod

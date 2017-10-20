@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
@@ -34,6 +35,9 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
+
+  @FindBy(how = How.XPATH, using = "//md-select[@placeholder='Select Saved Report']")
+  private WebElement savedReportsDropdown;
 
   public OpportunitiesPage(WebDriver driver) {
     this.driver = driver;
@@ -235,6 +239,51 @@ public class OpportunitiesPage extends TestNGBasePage {
       By.xpath("//md-chip[contains(., '" + substring + "')]//div[contains(@md-chip-remove, 'md-chip-remove')]")
     );
     waitForElementToClickable(chipToBeRemoved, true).click();
+
+    return this;
+  }
+
+  public OpportunitiesPage clickSavedReportsDropdown() {
+    waitForElementToClickable(savedReportsDropdown, true).click();
+    return this;
+  }
+
+  public OpportunitiesPage deleteAllSavedReports(WebDriver driver) {
+    WebElement savedReportOption = clickSavedReportsDropdown().getFirstSavedReportOption();
+
+    while(!"No saved reports".equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
+      deleteSavedReport(driver, savedReportOption).clickSavedReportsDropdown();
+      savedReportOption = getFirstSavedReportOption();
+    }
+
+    waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
+
+    return this;
+  }
+
+  private WebElement getFirstSavedReportOption() {
+    return waitForElementToClickable(
+      findElement(By.xpath("//md-option[contains(@class, 'saved-filter-option')]")),
+      true
+    );
+  }
+
+  private OpportunitiesPage deleteSavedReport(WebDriver driver, WebElement savedReport) {
+    waitForElementToClickable(savedReport, true);
+
+    final Actions action = new Actions(driver);
+    action.moveToElement(savedReport)
+      .moveByOffset(110, 0)
+      .click()
+      .perform();
+    waitForLoaderToDisappear();
+
+    final By editModalBy = By.xpath("//div[@class='modal edit-report']");
+    final WebElement editModalElement = findElement(editModalBy);
+
+    waitForElementToClickable(editModalElement.findElement(By.xpath(".//p[contains(., 'Delete Report')]")), true)
+      .click();
+    waitForElementToDisappear(editModalBy);
 
     return this;
   }
