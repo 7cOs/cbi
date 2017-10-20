@@ -56,13 +56,3 @@ export function getEntitiesWithPerformancesMock(): EntityWithPerformance[] {
     performance: getPerformanceMock()
   }];
 }
-
-export function getEntitiesWithPerformancesOpenPositionMock(): EntityWithPerformance[] {
-  return [{
-    positionId: chance.string(),
-    name: 'Open',
-    entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
-    positionDescription: chance.string(),
-    performance: getPerformanceMock()
-  }];
-}
