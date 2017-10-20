@@ -249,11 +249,11 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage deleteAllSavedReports(WebDriver driver) {
+  public OpportunitiesPage deleteAllSavedReports() {
     WebElement savedReportOption = clickSavedReportsDropdown().getFirstSavedReportOption();
 
     while(!"No saved reports".equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
-      deleteSavedReport(driver, savedReportOption).clickSavedReportsDropdown();
+      deleteSavedReport(savedReportOption).clickSavedReportsDropdown();
       savedReportOption = getFirstSavedReportOption();
     }
 
@@ -269,7 +269,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     );
   }
 
-  private OpportunitiesPage deleteSavedReport(WebDriver driver, WebElement savedReport) {
+  private OpportunitiesPage deleteSavedReport(WebElement savedReport) {
     waitForElementToClickable(savedReport, true);
 
     final Actions action = new Actions(driver);
