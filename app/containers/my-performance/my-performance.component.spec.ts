@@ -792,29 +792,27 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when error for responsibilities', () => {
+  describe('when fetching responsibilities returns an error', () => {
     let currentMock: MyPerformanceEntitiesData;
 
     beforeEach(() => {
       currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
     });
 
-    it('should set variable to false when responsibilities fetched with data', () => {
-      currentMock.responsibilities = getResponsibilitesStateMock();
+    it('should set fetchResponsibilitiesFailure to false when responsibilities fetched with data', () => {
       currentMock.responsibilities.status = ActionStatus.Fetched;
       currentSubject.next(currentMock);
       expect(componentInstance.fetchResponsibilitiesFailure).toBe(false);
     });
 
-    it('should set variable to true when responsibilities status is error', () => {
-      currentMock.responsibilities = getResponsibilitesStateMock();
+    it('should set fetchResponsibilitiesFailure to true when responsibilities status is error', () => {
       currentMock.responsibilities.status = ActionStatus.Error;
       currentSubject.next(currentMock);
       expect(componentInstance.fetchResponsibilitiesFailure).toBe(true);
     });
 
-    it('should set variable to true when responsibilities.groupedEntities is empty', () => {
-      currentMock.responsibilities = getResponsibilitesStateMock();
+    it('should set fetchResponsibilitiesFailure to true when responsibilities.groupedEntities is empty', () => {
       currentMock.responsibilities.status = ActionStatus.Error;
       currentMock.responsibilities.groupedEntities = {};
       currentSubject.next(currentMock);
@@ -822,21 +820,21 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when error for product metrics', () => {
+  describe('when fetching productMetrics returns and error', () => {
 
-    it('should set variable to false when productmetrics status is fetched', () => {
+    it('should set fetchProductMetricsFailure to false when productmetrics status is fetched', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {brand: []}};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(false);
     });
 
-    it('should set variable to true when productmetrics status is error', () => {
+    it('should set fetchProductMetricsFailure to true when productmetrics status is error', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.Error, products: undefined};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
 
-    it('should set variable to true when productmetrics.products is empty', () => {
+    it('should set fetchProductMetricsFailure to true when productmetrics.products is empty', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
