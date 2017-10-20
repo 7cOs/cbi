@@ -410,7 +410,7 @@ describe('Responsibilities Effects', () => {
         peopleResponsibilitiesDTOMock.entityURIs[0] = 'accounts';
       });
 
-      it('returns accounts and their performances', (done: any) => {
+      it('returns accounts and their performances', (done) => {
         const expectedResponsibilities = {
           positionId: positionIdMock,
           alternateHierarchyId: alternateHierarchyIdMock,

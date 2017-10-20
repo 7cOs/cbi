@@ -518,7 +518,7 @@ describe('Responsibilities Effects', () => {
     });
 
     describe('when everything returns successfully', () => {
-      it('should return a FetchResponsibilitiesSuccess', (done: any) => {
+      it('should return a FetchResponsibilitiesSuccess', (done) => {
         const salesHierarchyViewTypeMock = SalesHierarchyViewType[getSalesHierarchyViewTypeMock()];
 
         spyOn(responsibilitiesService, 'getAlternateHierarchyResponsibilities').and.callFake(

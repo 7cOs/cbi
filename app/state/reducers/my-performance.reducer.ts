@@ -67,7 +67,8 @@ export function myPerformanceReducer(
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: state.current.selectedEntity,
-          selectedEntityType: state.current.selectedEntityType
+          selectedEntityType: state.current.selectedEntityType,
+          selectedBrand: state.current.selectedBrand
         },
         versions: state.versions
       };
@@ -81,7 +82,8 @@ export function myPerformanceReducer(
             action as SalesHierarchyViewTypeActions.Action
           ),
           selectedEntity: state.current.selectedEntity,
-          selectedEntityType: state.current.selectedEntityType
+          selectedEntityType: state.current.selectedEntityType,
+          selectedBrand: state.current.selectedBrand
         },
         versions: state.versions
       };

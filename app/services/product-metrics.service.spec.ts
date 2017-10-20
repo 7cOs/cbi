@@ -273,7 +273,7 @@ describe('ProductMetrics Service', () => {
       });
 
       describe('when a brand is selected', () => {
-        it('should return the sku that matches the selected brand', (done: any) => {
+        it('should return the sku that matches the selected brand', (done) => {
           productMetricsDataMock.selectedBrand = productMetricsWithSkuValuesMock.skuValues[0].brandCode;
           const nonMatchingBrandCode = productMetricsDataMock.selectedBrand + 'NONMATCH';
           productMetricsWithSkuValuesMock.skuValues = productMetricsWithSkuValuesMock.skuValues
