@@ -22,6 +22,12 @@ public class SavedReportModal extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH + "//p[contains(., 'Delete Report')]")
   private WebElement deleteSavedReportLink;
 
+  @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH + "//input[@placeholder='Enter a name']")
+  private WebElement nameField;
+
+  @FindBy(how = How.XPATH, using = "//button[contains(., 'Save Report')]")
+  private WebElement saveButton;
+
   public SavedReportModal(WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
@@ -36,6 +42,19 @@ public class SavedReportModal extends TestNGBasePage {
   public boolean isLoaded() {
     waitForVisibleFluentWait(savedReportModalContainer);
     return isElementPresent(By.xpath(MODAL_CONTAINER_XPATH));
+  }
+
+  public SavedReportModal enterReportName(String name) {
+    waitForElementToClickable(nameField, true).click();
+    nameField.sendKeys(name);
+
+    return this;
+  }
+
+  public OpportunitiesPage clickSaveReportButton() {
+    waitForElementToClickable(saveButton, true).click();
+    waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH));
+    return PageFactory.initElements(driver, OpportunitiesPage.class);
   }
 
   public OpportunitiesPage clickDeleteSavedReportLink() {

@@ -51,7 +51,15 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .clickFirstDistributorResult()
       .clickApplyFiltersButton()
       .waitForLoaderToDisappear()
-      .clickSaveReportLink();
+      .clickSaveReportLink()
+      .enterReportName(name)
+      .clickSaveReportButton()
+      .clickSavedReportsDropdown();
+
+    Assert.assertTrue(
+      opportunitiesPage.doesSavedReportExistWithName(name),
+      "Saved Report failed to appear in the dropdown on the Opportunities page."
+    );
   }
 
   @DataProvider

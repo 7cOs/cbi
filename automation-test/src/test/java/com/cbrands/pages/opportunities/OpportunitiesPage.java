@@ -305,6 +305,10 @@ public class OpportunitiesPage extends TestNGBasePage {
     return Integer.parseInt(displayedCount);
   }
 
+  public boolean doesSavedReportExistWithName(String name) {
+    return isElementPresent(By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]"));
+  }
+
   public enum PremiseType {
     On,
     Off
