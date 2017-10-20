@@ -323,7 +323,12 @@ div.ctv {
         }
 
         span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
           font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0;
         }
       }
     }
