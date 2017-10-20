@@ -42,7 +42,13 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @Test(description = "Creating an Opportunities Saved Report")
   public void createSavedReport() {
-    Assert.fail("Test not implemented");
+    opportunitiesPage
+      .enterDistributorSearchText("Healy Wholesale")
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickSaveReportLink();
   }
 
 }
