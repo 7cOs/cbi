@@ -12,7 +12,7 @@ import org.testng.Assert;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class SavedReportModal extends TestNGBasePage {
-  private static final String MODAL_CONTAINER_XPATH = "//div[@class='modal edit-report']";
+  private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, '-report')]";
 
   private final WebDriver driver;
 
@@ -35,7 +35,7 @@ public class SavedReportModal extends TestNGBasePage {
   @Override
   public boolean isLoaded() {
     waitForVisibleFluentWait(savedReportModalContainer);
-    return savedReportModalContainer.isDisplayed();
+    return isElementPresent(By.xpath(MODAL_CONTAINER_XPATH));
   }
 
   public OpportunitiesPage clickDeleteSavedReportLink() {

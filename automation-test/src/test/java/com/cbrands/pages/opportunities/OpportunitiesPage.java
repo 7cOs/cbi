@@ -15,6 +15,7 @@ import static com.cbrands.helper.SeleniumUtils.*;
 public class OpportunitiesPage extends TestNGBasePage {
   private static final String FILTER_FORM_XPATH = "//form[contains(@class, 'filters')]";
   private static final String NO_SAVED_REPORTS_TEXT = "No saved reports";
+  private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH)
@@ -261,7 +262,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   public OpportunitiesPage deleteAllSavedReports() {
     WebElement savedReportOption = clickSavedReportsDropdown().getFirstSavedReportOption();
 
-    while(!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
+    while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
       openEditSavedReportModal(savedReportOption)
         .clickDeleteSavedReportLink()
         .clickSavedReportsDropdown();
@@ -275,10 +276,11 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private WebElement getFirstSavedReportOption() {
     return waitForElementToClickable(
-      findElement(By.xpath("//md-option[contains(@class, 'saved-filter-option')]")),
+      findElement(By.xpath(SAVED_FILTER_OPTION_XPATH)),
       true
     );
   }
+
   private SavedReportModal openEditSavedReportModal(WebElement savedReport) {
     waitForElementToClickable(savedReport, true);
 
