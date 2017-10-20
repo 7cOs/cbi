@@ -91,6 +91,12 @@ describe('Responsibilities Effects', () => {
     },
     getAlternateHierarchyResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
+    },
+    checkEmptyResponsibilitiesResponse(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+      return Observable.of(responsibilitiesData);
+    },
+    checkEmptySubaccountsResponse(subAccountsData: SubAccountData): Observable<SubAccountData> {
+      return Observable.of(subAccountsData);
     }
   };
 

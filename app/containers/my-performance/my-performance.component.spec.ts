@@ -811,13 +811,6 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       expect(componentInstance.fetchResponsibilitiesFailure).toBe(true);
     });
-
-    it('should set fetchResponsibilitiesFailure to true when responsibilities.groupedEntities is empty', () => {
-      currentMock.responsibilities.status = ActionStatus.Error;
-      currentMock.responsibilities.groupedEntities = {};
-      currentSubject.next(currentMock);
-      expect(componentInstance.fetchResponsibilitiesFailure).toBe(true);
-    });
   });
 
   describe('when fetching productMetrics returns and error', () => {
@@ -829,13 +822,7 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should set fetchProductMetricsFailure to true when productmetrics status is error', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Error, products: undefined};
-      productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.fetchProductMetricsFailure).toBe(true);
-    });
-
-    it('should set fetchProductMetricsFailure to true when productmetrics.products is empty', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
+      myPerformanceProductMetricsMock = {status: ActionStatus.Error, products: {brand: []}};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });

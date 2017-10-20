@@ -34,6 +34,7 @@ export class ProductMetricsEffects {
         return Observable.of(productMetricsData);
       })
       .switchMap((productMetricsData) => this.productMetricsService.getProductMetrics(productMetricsData))
+      .switchMap((productMetricsData) => this.productMetricsService.checkEmptyProductMetricsResponse(productMetricsData))
       .switchMap((productMetricsData) => this.constructSuccessAction(productMetricsData))
       .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailureAction(error)));
   }

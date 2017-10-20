@@ -215,4 +215,34 @@ describe('ProductMetrics Service', () => {
       });
     });
   });
+
+  describe('when checkEmptyProductMetricsResponse is called', () => {
+    let productMetricsDataMock: ProductMetricsData;
+
+    beforeEach(() => {
+      spyOn(productMetricsService, 'checkEmptyProductMetricsResponse').and.callThrough();
+      productMetricsDataMock = {
+        positionId: positionIdMock,
+        contextPositionId: contextPositionIdMock,
+        entityTypeCode: entityTypeCodeMock,
+        filter: performanceFilterStateMock,
+        selectedEntityType: selectedEntityTypeMock
+      };
+    });
+
+    it('should return an observable of the input when product metrics is defined with products', () => {
+      expect(productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock))
+      .toEqual(Observable.of(productMetricsDataMock));
+    });
+
+    it('should throw an error when products is empty', () => {
+      productMetricsDataMock.products = {};
+      expect(productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock)).toThrowError();
+    });
+
+    it('should throw an error when products is undefined', () => {
+      productMetricsDataMock.products = undefined;
+      expect(productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock)).toThrowError();
+    });
+  });
 });

@@ -29,8 +29,11 @@ describe('ProductMetrics Effects', () => {
   let productMetricsDataMock: ProductMetricsData;
 
   const productMetricsServiceMock = {
-    getProductMetrics(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
-      return Observable.of(responsibilitiesData);
+    getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
+      return Observable.of(productMetricsData);
+    },
+    checkEmptyProductMetricsResponse(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
+      return Observable.of(productMetricsData);
     }
   };
 

@@ -110,8 +110,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe(productMetrics => {
-        this.fetchProductMetricsFailure = productMetrics.status === ActionStatus.Error ||
-        (productMetrics.products && Object.keys(productMetrics.products).length === 0);
+        this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
 
         if (productMetrics.products && productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productPerformance = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
@@ -125,9 +124,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.leftTableViewType = current.viewType.leftTableViewType;
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
-        this.fetchResponsibilitiesFailure = current.responsibilities &&
-            (current.responsibilities.status === ActionStatus.Error ||
-             current.responsibilities.groupedEntities && Object.keys(current.responsibilities.groupedEntities).length === 0);
+        this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
