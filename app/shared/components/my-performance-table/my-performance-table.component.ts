@@ -36,12 +36,12 @@ export class MyPerformanceTableComponent {
 
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() showOpportunities: boolean = true;
+  @Input() showOpportunities: boolean = false;
+  @Input() showContributionToVolume: boolean = false;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
-  @Input() showContributionToVolume: boolean;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;

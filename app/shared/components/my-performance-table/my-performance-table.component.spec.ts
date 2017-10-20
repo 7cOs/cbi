@@ -18,10 +18,9 @@ import { UtilService } from '../../../services/util.service';
 })
 class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
-  @Input() showBackButton: boolean;
+  @Input() showContributionToVolume: boolean;
   @Input() showOpportunities: boolean;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
-  @Input() showContributionToVolume: boolean;
 }
 
 describe('MyPerformanceTableComponent', () => {

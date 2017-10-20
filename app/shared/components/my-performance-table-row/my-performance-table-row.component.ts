@@ -17,8 +17,8 @@ export class MyPerformanceTableRowComponent {
   @Output() onSublineClicked = new EventEmitter<any>();
 
   @Input() rowData: MyPerformanceTableRow;
-  @Input() showOpportunities: boolean;
-  @Input() showContributionToVolume: boolean;
+  @Input() showContributionToVolume: boolean = false;
+  @Input() showOpportunities: boolean = false;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 
   public sortStatus = SortStatus;

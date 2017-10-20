@@ -79,12 +79,12 @@ class MyPerformanceTableComponentMock {
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
   @Input() showBackButton: boolean = false;
+  @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
-  @Input() showContributionToVolume: boolean;
 }
 
 describe('MyPerformanceComponent', () => {
@@ -313,22 +313,22 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.select.calls.count()).toBe(7);
       const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
-      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
+      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.myPerformanceProductMetrics);
 
       const functionPassToSelectCall1 = storeMock.select.calls.argsFor(1)[0];
-      expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance.versions);
+      expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance.current);
 
       const functionPassToSelectCall2 = storeMock.select.calls.argsFor(2)[0];
-      expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
+      expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.dateRanges);
 
       const functionPassToSelectCall3 = storeMock.select.calls.argsFor(3)[0];
-      expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformanceProductMetrics);
+      expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformance.versions);
 
       const functionPassToSelectCall4 = storeMock.select.calls.argsFor(4)[0];
-      expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformanceProductMetricsViewType);
+      expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformanceFilter);
 
       const functionPassToSelectCall5 = storeMock.select.calls.argsFor(5)[0];
-      expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformance.current);
+      expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformanceProductMetricsViewType);
 
       const functionPassToSelectCall6 = storeMock.select.calls.argsFor(6)[0];
       expect(functionPassToSelectCall6(stateMock)).toBe(stateMock.myPerformance.versions);

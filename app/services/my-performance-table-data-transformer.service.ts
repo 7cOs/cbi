@@ -3,15 +3,15 @@ import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[], total?: number): MyPerformanceTableRow[] {
     return entities.map((entity: EntityWithPerformance) => {
       const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
         ? PluralizedRoleGroup[entity.name]
@@ -21,7 +21,7 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn0: entity.performance.total,
         metricColumn1: entity.performance.totalYearAgo,
         metricColumn2: entity.performance.totalYearAgoPercent,
-        ctv: entity.performance.contributionToVolume,
+        ctv:  total ? this.getPercentageOfTotal(entity.performance.total, total) : 0,
         metadata: {
           positionId: entity.positionId,
           entityType: entity.entityType,
@@ -47,15 +47,15 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
+  public getRightTableData(productMetrics: ProductMetrics, total?: number): MyPerformanceTableRow[] {
     const productsValues = productMetrics.brandValues || productMetrics.skuValues;
-    return (productsValues).map((item: ProductMetricsValues) => {
+    return productsValues.map((item: ProductMetricsValues) => {
       return {
         descriptionRow0: productMetrics.brandValues ? item.brandDescription : item.beerId.masterPackageSKUDescription,
         metricColumn0: item.current,
         metricColumn1: item.yearAgo,
         metricColumn2: item.yearAgoPercent,
-        ctv: chance.natural({max: 100}),
+        ctv: total ? this.getPercentageOfTotal(item.current, total) : 0,
         metadata: {
           brandCode: item.brandCode
         }
@@ -69,7 +69,7 @@ export class MyPerformanceTableDataTransformerService {
       metricColumn0: performance.total,
       metricColumn1: performance.totalYearAgo,
       metricColumn2: performance.totalYearAgoPercent,
-      ctv: performance.contributionToVolume
+      ctv: 100
     };
 
     if (performance.name) totalRow['descriptionRow1'] = performance.name;
@@ -85,5 +85,11 @@ export class MyPerformanceTableDataTransformerService {
       metricColumn2: productMetricsValues.yearAgoPercent,
       ctv: chance.natural({max: 100}),
     };
+  }
+
+  private getPercentageOfTotal(contribution: number, total: number): number {
+    return contribution && total
+      ? Math.round((contribution / total) * 1000) / 10
+      : 0;
   }
 }
