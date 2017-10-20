@@ -126,7 +126,6 @@ export class ResponsibilitiesEffects {
   }
 
   private constructSuccessAction(responsibilitiesData: ResponsibilitiesData): Observable<Action> {
-    debugger;
     return Observable.from([
       new ViewTypeActions.SetSalesHierarchyViewType(responsibilitiesData.salesHierarchyViewType),
       new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
