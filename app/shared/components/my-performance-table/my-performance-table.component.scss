@@ -274,8 +274,11 @@ div.ctv {
 .view-type {
   &.view-type-brands {
 
-    /deep/td.left-col {
-      font-weight: normal;
+    tr.entity-row {
+
+      /deep/ td.left-col {
+        font-weight: normal;
+      }
     }
   }
 
@@ -334,7 +337,12 @@ div.ctv {
         }
 
         span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
           font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0;
         }
       }
     }
@@ -374,6 +382,7 @@ div.ctv {
     }
   }
 
+  &.view-type-subAccounts,
   &.view-type-distributors {
 
     tr.total-row {

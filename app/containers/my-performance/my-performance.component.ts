@@ -59,7 +59,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public salesHierarchyViewType: SalesHierarchyViewType;
   public productMetricsViewType: ProductMetricsViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
-  public showContributionToVolume: boolean = false;
+  public showSalesContributionToVolume: boolean = false;
+  public showProductMetricsContributionToVolume: boolean = true;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -79,11 +80,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private entityType: EntityType;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
+  private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
   private productMetricsViewTypeSubscription: Subscription;
   private productMetrics: Array<MyPerformanceTableRow>;
   private productMetricsTotal: MyPerformanceTableRow;
-  private productMetricsAndCurrentStateSubscription: Subscription;
+  private productMetricsSubscription: Subscription;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrand: string;
   private versions: MyPerformanceEntitiesData[];
@@ -98,26 +100,38 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const productMetricsState = this.store.select(state => state.myPerformanceProductMetrics);
-    const currentState = this.store.select(state => state.myPerformance.current);
+    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
+    this.dateRanges$ = this.store.select(state => state.dateRanges);
+    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
-    const productMetricsAndCurrentState = Observable.combineLatest(
-      productMetricsState,
-      currentState,
-      (productMetrics: ProductMetricsState, current: MyPerformanceEntitiesData) => {
-        let responsibilitiesTotal: number;
+    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
+      this.filterState = filterState;
+      this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
+      this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+    });
 
+    this.productMetricsSubscription = this.store
+      .select(state => state.myPerformanceProductMetrics)
+      .subscribe((productMetrics: ProductMetricsState) => {
+        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
+          this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
+          this.productMetricsTotal = this.productMetricsViewType === ProductMetricsViewType.skus
+            ? this.myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetrics.selectedBrandValues)
+            : null;
+        }
+      });
+
+    this.myPerformanceCurrentSubscription = this.store
+      .select(state => state.myPerformance.current)
+      .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
         this.selectedBrand = current.selectedBrand;
-        this.showContributionToVolume = this.getShowContributionToVolume();
+        this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
-          responsibilitiesTotal = current.responsibilities.entitiesTotalPerformances.total;
-
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
-            current.responsibilities.entityWithPerformance,
-            responsibilitiesTotal
+            current.responsibilities.entityWithPerformance
           );
         }
 
@@ -129,28 +143,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
-
-        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
-          this.productMetrics = this.myPerformanceTableDataTransformerService
-            .getRightTableData(
-              productMetrics.products,
-              responsibilitiesTotal);
-          this.productMetricsTotal = this.productMetricsViewType === ProductMetricsViewType.skus
-            ? this.myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetrics.selectedBrandValues)
-            : null;
-        }
-      }
-    );
-
-    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
-    this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.productMetricsAndCurrentStateSubscription = productMetricsAndCurrentState.subscribe();
-    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
-
-    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-      this.filterState = filterState;
-      this.getShowContributionToVolume();
-    });
+      });
 
     this.productMetricsViewTypeSubscription = this.store
       .select(state => state.myPerformanceProductMetricsViewType)
@@ -180,9 +173,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceState());
-    this.productMetricsAndCurrentStateSubscription.unsubscribe();
     this.filterStateSubscription.unsubscribe();
+    this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
+    this.productMetricsSubscription.unsubscribe();
     this.productMetricsViewTypeSubscription.unsubscribe();
   }
 
@@ -407,10 +401,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
   }
 
-  private getShowContributionToVolume(): boolean {
-    if (!this.salesHierarchyViewType || !this.filterState) return false;
-    return this.salesHierarchyViewType !== SalesHierarchyViewType.roleGroups &&
-           this.filterState.metricType === MetricTypeValue.volume;
+  private getShowSalesContributionToVolume(): boolean {
+    return this.salesHierarchyViewType && this.salesHierarchyViewType !== SalesHierarchyViewType.roleGroups
+           && this.filterState && this.filterState.metricType === MetricTypeValue.volume;
+  }
+
+  private getShowProductMetricsContributionToVolume(): boolean {
+    return this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
   private isInsideAlternateHierarchy(): boolean {

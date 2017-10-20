@@ -95,8 +95,8 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
-  public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState) {
-    const apiCalls: Observable<EntityWithPerformance | Error>[] =
+  public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState): Observable<EntityWithPerformance[]> {
+    const apiCalls: Observable<EntityWithPerformance>[] =
       entities.map((entity: HierarchyEntity) => {
         return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
           .map((response: PerformanceDTO) => {

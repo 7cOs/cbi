@@ -11,7 +11,11 @@ import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntityWithPerformance[], total?: number): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
+    const total: number = entities.reduce((sum: number, entity: EntityWithPerformance): number => {
+      return sum + entity.performance.total;
+    }, 0);
+
     return entities.map((entity: EntityWithPerformance) => {
       const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
         ? PluralizedRoleGroup[entity.name]
@@ -47,8 +51,12 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getRightTableData(productMetrics: ProductMetrics, total?: number): MyPerformanceTableRow[] {
+  public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
     const productsValues = productMetrics.brandValues || productMetrics.skuValues;
+    const total: number = productsValues.reduce((sum: number, item: ProductMetricsValues): number => {
+      return sum + item.current;
+    }, 0);
+
     return productsValues.map((item: ProductMetricsValues) => {
       return {
         descriptionRow0: productMetrics.brandValues ? item.brandDescription : item.beerId.masterPackageSKUDescription,

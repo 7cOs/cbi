@@ -10,6 +10,7 @@ import { getEntitiesWithPerformancesMock,
 import { getProductMetricsWithBrandValuesMock } from '../models/product-metrics.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, MyPerformanceTableRowMetadata } from '../models/my-performance-table-row.model';
+import { ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
@@ -17,6 +18,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   let performanceMock: Performance;
   let responsibilityEntitiesPerformanceMock: EntityWithPerformance[];
   let responsibilityEntitiesPerformanceOpenPositionMock: EntityWithPerformance[];
+  let total: number;
+  let openPositionsTotal: number;
 
   const productMetricsState: ProductMetricsState = {
     status: ActionStatus.Fetched,
@@ -37,6 +40,14 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
         responsibilityEntitiesPerformanceMock = getEntitiesWithPerformancesMock();
         responsibilityEntitiesPerformanceOpenPositionMock = getEntitiesWithPerformancesOpenPositionMock();
+        total = 0;
+        responsibilityEntitiesPerformanceMock.forEach((entity: EntityWithPerformance) => {
+          total += entity.performance.total;
+        });
+        openPositionsTotal = 0;
+        responsibilityEntitiesPerformanceOpenPositionMock.forEach((entity: EntityWithPerformance) => {
+          openPositionsTotal += entity.performance.total;
+        });
     }));
 
     it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor/subaccount', () => {
@@ -59,7 +70,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: 0,
+        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -89,7 +100,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: 0,
+        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -119,7 +130,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: 0,
+        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -149,7 +160,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: 0,
+        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -179,7 +190,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: 0,
+        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -210,7 +221,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: 0,
+        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId,
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -243,7 +254,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.total,
           metricColumn1: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.totalYearAgo,
           metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[i].performance.totalYearAgoPercent,
-          ctv: 0,
+          ctv: Math.round((responsibilityEntitiesPerformanceOpenPositionMock[i].performance.total / openPositionsTotal) * 1000) / 10,
           metadata: {
             positionId: responsibilityEntitiesPerformanceOpenPositionMock[i].positionId,
             entityType: responsibilityEntitiesPerformanceOpenPositionMock[i].entityType,
@@ -252,33 +263,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           performanceError: false
         });
       }
-    });
-
-    it('should calculate ctv when a total is provided,', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
-      const totalMock = chance.natural();
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
-      responsibilityEntitiesPerformanceMock[0].performance.error = true;
-
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, totalMock);
-
-      const expectedCTV: number = Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / totalMock) * 1000) / 10;
-
-      expect(tableData[0].ctv).toBe(expectedCTV);
-    });
-
-    it('should provide 0 for ctv when no total is provided,', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
-      responsibilityEntitiesPerformanceMock[0].performance.error = true;
-
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
-
-      expect(tableData[0].ctv).toBe(0);
     });
 
     it('should return formatted ResponsibilityEntityPerformance data with Open Position when a positionDescription is undefined', () => {
@@ -298,7 +282,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.total,
         metricColumn1: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgoPercent,
-        ctv: 0,
+        ctv: Math.round((responsibilityEntitiesPerformanceOpenPositionMock[0].performance.total / openPositionsTotal) * 1000) / 10,
         metadata: {
           positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId,
           entityType: responsibilityEntitiesPerformanceOpenPositionMock[0].entityType,
@@ -373,15 +357,34 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('myPerformanceRightTableData', () => {
-    it('should return properly formatted table data for ProductMetrics', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getRightTableData').and.callThrough();
+    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
+      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
+        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+      }));
 
+    it('should return properly formatted table data for ProductMetrics', () => {
       const transformedProductMetricsData =
         myPerformanceTableDataTransformerService.getRightTableData(productMetricsState.products);
 
       expect(transformedProductMetricsData).toBeDefined();
       expect(transformedProductMetricsData.length).toBeTruthy();
       expect(transformedProductMetricsData[0].descriptionRow0).toEqual(productMetricsState.products.brandValues[0].brandDescription);
+    });
+
+    it('should calculate ctv based on total of provided rows,', () => {
+      total = 0;
+      productMetricsState.products.brandValues.forEach((metric: ProductMetricsValues) => {
+        total += metric.current;
+      });
+
+      const transformedProductMetricsData =
+        myPerformanceTableDataTransformerService.getRightTableData(productMetricsState.products);
+
+      expect(transformedProductMetricsData.length).toBe(productMetricsState.products.brandValues.length);
+      for (let i = 0; i < transformedProductMetricsData.length; i++) {
+        const expectedCTV: number = Math.round((productMetricsState.products.brandValues[i].current / total) * 1000) / 10;
+        expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
+      }
     });
   });
 });
