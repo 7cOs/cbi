@@ -42,7 +42,7 @@ describe('ProductMetrics Actions', () => {
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      product = getProductMetricsWithBrandValuesMock();
+      product = getProductMetricsWithBrandValuesMock(1, 9);
       mockUserId = chance.natural();
       mockSuccessActionPayload = {
         positionId: mockUserId,

@@ -95,6 +95,17 @@ export function getProductMetricsBrandMock(): ProductMetricsValues {
     yearAgo: chance.natural(),
     collectionMethod: chance.string(),
     yearAgoPercent: chance.natural(),
+    brandCode: chance.string()
+  };
+}
+
+export function getProductMetricsSkuMock(): ProductMetricsValues {
+  return {
+    brandDescription: chance.string(),
+    current: chance.natural(),
+    yearAgo: chance.natural(),
+    collectionMethod: chance.string(),
+    yearAgoPercent: chance.natural(),
     brandCode: chance.string(),
     beerId: {
       masterPackageSKUCode: chance.string(),
@@ -103,14 +114,14 @@ export function getProductMetricsBrandMock(): ProductMetricsValues {
   };
 }
 
-export function getProductMetricsWithBrandValuesMock(): ProductMetrics {
+export function getProductMetricsWithBrandValuesMock(min: number, max: number): ProductMetrics {
   return {
-    brandValues: [ getProductMetricsBrandMock() ]
+    brandValues: Array(chance.natural({min: min, max: max})).fill('').map(() => getProductMetricsBrandMock())
   };
 }
 
-export function getProductMetricsWithSkuValuesMock(): ProductMetrics {
+export function getProductMetricsWithSkuValuesMock(min: number, max: number): ProductMetrics {
   return {
-    skuValues: [ getProductMetricsBrandMock() ]
+    skuValues: Array(chance.natural({min: min, max: max})).fill('').map(() => getProductMetricsSkuMock())
   };
 }

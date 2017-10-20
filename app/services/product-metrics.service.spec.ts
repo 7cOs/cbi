@@ -9,8 +9,7 @@ import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.m
 import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
-import { ProductMetrics } from '../models/product-metrics.model';
-import { ProductMetricsDTO } from '../models/product-metrics.model';
+import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
@@ -41,8 +40,8 @@ describe('ProductMetrics Service', () => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
-    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
-    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
+    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock(1, 9);
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(1, 9);
     productMetricsBrandsDTOMock = {
       brandValues: Array(chance.natural({min: 1, max: 9})).fill('').map(() => getProductMetricsBrandDTOMock()),
       type: chance.string()
@@ -254,6 +253,111 @@ describe('ProductMetrics Service', () => {
 
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(1);
         expect(productMetricsTransformerService.transformProductMetrics).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('when filterProductMetricsBrand is called', () => {
+    describe('when skus are passed in', () => {
+      let productMetricsDataMock: ProductMetricsData;
+
+      beforeEach(() => {
+        productMetricsDataMock = {
+          positionId: positionIdMock,
+          contextPositionId: contextPositionIdMock,
+          entityTypeCode: entityTypeCodeMock,
+          filter: performanceFilterStateMock,
+          selectedEntityType: selectedEntityTypeMock,
+          products: productMetricsWithSkuValuesMock
+        };
+      });
+
+      describe('when a brand is selected', () => {
+        it('should return the sku that matches the selected brand', (done: any) => {
+          productMetricsDataMock.selectedBrand = productMetricsWithSkuValuesMock.skuValues[0].brandCode;
+          const nonMatchingBrandCode = productMetricsDataMock.selectedBrand + 'NONMATCH';
+          productMetricsWithSkuValuesMock.skuValues = productMetricsWithSkuValuesMock.skuValues
+            .map((productMetricsValues: ProductMetricsValues) => {
+              productMetricsValues.brandCode = nonMatchingBrandCode;
+              return productMetricsValues;
+            });
+
+          productMetricsWithSkuValuesMock.skuValues[0].brandCode = productMetricsDataMock.selectedBrand;
+
+          productMetricsService.filterProductMetricsBrand(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+            expect(productMetricsData).toEqual({
+              positionId: positionIdMock,
+              contextPositionId: contextPositionIdMock,
+              entityTypeCode: entityTypeCodeMock,
+              filter: performanceFilterStateMock,
+              selectedEntityType: selectedEntityTypeMock,
+              products: {
+                skuValues: [productMetricsWithSkuValuesMock.skuValues[0]]
+              },
+              selectedBrand: productMetricsDataMock.selectedBrand
+            });
+            done();
+          });
+        });
+
+        it('should return an empty array when no brand matches', (done) => {
+          productMetricsDataMock.selectedBrand = productMetricsWithSkuValuesMock.skuValues[0].brandCode;
+          const nonMatchingBrandCode = productMetricsDataMock.selectedBrand + 'NONMATCH';
+          productMetricsWithSkuValuesMock.skuValues = productMetricsWithSkuValuesMock.skuValues
+            .map((productMetricsValues: ProductMetricsValues) => {
+              productMetricsValues.brandCode = nonMatchingBrandCode;
+              return productMetricsValues;
+            });
+
+          productMetricsService.filterProductMetricsBrand(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+            expect(productMetricsData).toEqual({
+              positionId: positionIdMock,
+              contextPositionId: contextPositionIdMock,
+              entityTypeCode: entityTypeCodeMock,
+              filter: performanceFilterStateMock,
+              selectedEntityType: selectedEntityTypeMock,
+              products: {
+                skuValues: []
+              },
+              selectedBrand: productMetricsDataMock.selectedBrand
+            });
+            done();
+          });
+        });
+      });
+
+      describe('when NO brand is selected', () => {
+        it('should return the input data', (done) => {
+          productMetricsDataMock.selectedBrand = null;
+
+          productMetricsService.filterProductMetricsBrand(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+            expect(productMetricsData).toEqual(productMetricsDataMock);
+            done();
+          });
+        });
+      });
+    });
+
+    describe('when brands are passed in', () => {
+      let productMetricsDataMock: ProductMetricsData;
+
+      beforeEach(() => {
+        productMetricsDataMock = {
+          positionId: positionIdMock,
+          contextPositionId: contextPositionIdMock,
+          entityTypeCode: entityTypeCodeMock,
+          filter: performanceFilterStateMock,
+          selectedEntityType: selectedEntityTypeMock,
+          products: productMetricsWithBrandValuesMock,
+          selectedBrand: chance.string()
+        };
+      });
+
+      it('should return the input data', (done) => {
+        productMetricsService.filterProductMetricsBrand(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+          expect(productMetricsData).toEqual(productMetricsDataMock);
+          done();
+        });
       });
     });
   });

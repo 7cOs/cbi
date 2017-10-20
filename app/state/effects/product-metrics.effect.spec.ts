@@ -36,6 +36,9 @@ describe('ProductMetrics Effects', () => {
   const productMetricsServiceMock = {
     getProductMetrics(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
       return Observable.of(responsibilitiesData);
+    },
+    filterProductMetricsBrand(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
+      return Observable.of(responsibilitiesData);
     }
   };
 
@@ -44,8 +47,8 @@ describe('ProductMetrics Effects', () => {
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
     selectedBrandMock = chance.string();
-    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
-    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
+    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock(1, 9);
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(1, 9);
     performanceFilterStateMock = getMyPerformanceFilterMock();
     error = new Error(chance.string());
 

@@ -28,7 +28,7 @@ describe('ProductMetrics Reducer', () => {
   });
 
   it('should store the payload when a fetch ProductMetrics is successful', () => {
-    const products = getProductMetricsWithBrandValuesMock();
+    const products = getProductMetricsWithBrandValuesMock(1, 9);
 
     const payloadMock = {
       positionId: positionIdMock,
