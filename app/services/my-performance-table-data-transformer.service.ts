@@ -35,12 +35,12 @@ export class MyPerformanceTableDataTransformerService {
       };
 
       if (entity.entityType === EntityType.Person) {
-        if (entity.name === 'Open') {
-          transformedEntity.descriptionRow0 = 'Open Position';
-          transformedEntity.descriptionRow1 = entity.positionDescription;
-        } else if (inAltHierarchy) {
+        if (inAltHierarchy) {
           transformedEntity.descriptionRow0 = entity.positionDescription ? entity.positionDescription : 'AREA';
           transformedEntity.descriptionRow1 = entity.name;
+        } else if (entity.name === 'Open') {
+          transformedEntity.descriptionRow0 = 'Open Position';
+          transformedEntity.descriptionRow1 = entity.positionDescription;
         }
       }
 
