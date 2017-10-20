@@ -104,7 +104,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const productMetricsAndCurrentState = Observable.combineLatest(
       productMetricsState,
       currentState,
-      (productMetrics: ProductMetricsState, current) => {
+      (productMetrics: ProductMetricsState, current: MyPerformanceEntitiesData) => {
         let responsibilitiesTotal: number;
 
         this.currentState = current;
