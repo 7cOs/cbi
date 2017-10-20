@@ -1,5 +1,6 @@
-package com.cbrands.pages;
+package com.cbrands.pages.opportunities;
 
+import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;

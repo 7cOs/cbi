@@ -9,6 +9,7 @@ import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cbrands.pages.opportunities.Opportunities;
 import com.cbrands.pages.targetList.TargetList;
 import com.cbrands.pages.targetList.TargetListListingsPage;
 import org.apache.commons.logging.Log;
