@@ -267,7 +267,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedPositionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
-              if (!this.isInsideAlternateHierarchy) {
+              if (!this.isInsideAlternateHierarchy()) {
                 this.store.dispatch(new FetchProductMetricsAction({
                   positionId: parameters.row.metadata.positionId,
                   contextPositionId: this.currentState.responsibilities.positionId,
