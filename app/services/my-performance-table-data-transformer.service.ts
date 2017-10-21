@@ -11,7 +11,7 @@ import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[], inAltHierarchy: boolean): MyPerformanceTableRow[] {
     const total: number = entities.reduce((sum: number, entity: EntityWithPerformance): number => {
       return sum + entity.performance.total;
     }, 0);
@@ -34,9 +34,14 @@ export class MyPerformanceTableDataTransformerService {
         performanceError: entity.performance.error
       };
 
-      if (entity.name === 'Open') {
-        transformedEntity.descriptionRow0 = 'Open Position';
-        transformedEntity.descriptionRow1 = entity.positionDescription;
+      if (entity.entityType === EntityType.Person) {
+        if (inAltHierarchy) {
+          transformedEntity.descriptionRow0 = entity.positionDescription ? entity.positionDescription : 'AREA';
+          transformedEntity.descriptionRow1 = entity.name;
+        } else if (entity.name === 'Open') {
+          transformedEntity.descriptionRow0 = 'Open Position';
+          transformedEntity.descriptionRow1 = entity.positionDescription;
+        }
       }
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;

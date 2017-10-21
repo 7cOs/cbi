@@ -56,6 +56,8 @@ export interface HandleElementClickedParameters {
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
+  public fetchResponsibilitiesFailure: boolean = false;
+  public fetchProductMetricsFailure: boolean = false;
   public salesHierarchyViewType: SalesHierarchyViewType;
   public productMetricsViewType: ProductMetricsViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
@@ -113,7 +115,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe((productMetrics: ProductMetricsState) => {
-        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched) {
+        this.fetchProductMetricsFailure = productMetrics.status === ActionStatus.Error
+          || (productMetrics.products && Object.keys(productMetrics.products).length === 0);
+
+        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
           this.productMetricsTotal = this.productMetricsViewType === ProductMetricsViewType.skus
             ? this.myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetrics.selectedBrandValues)
@@ -129,9 +134,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.selectedBrand = current.selectedBrand;
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
-        if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
+        this.fetchResponsibilitiesFailure = current.responsibilities &&
+            (current.responsibilities.status === ActionStatus.Error ||
+             current.responsibilities.groupedEntities && Object.keys(current.responsibilities.groupedEntities).length === 0);
+
+        if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
-            current.responsibilities.entityWithPerformance
+            current.responsibilities.entityWithPerformance, this.isInsideAlternateHierarchy()
           );
         }
 
@@ -139,7 +148,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.entityType = current.responsibilities.entityWithPerformance[0].entityType;
         }
 
-        if (current.responsibilities.entityWithPerformance) {
+        if (current.responsibilities.entityWithPerformance && !this.fetchProductMetricsFailure) {
           this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
@@ -239,7 +248,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                 filter: this.filterState
               }));
-              this.fetchProductMetricsWhenClick(parameters);
+              // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
+              if (!parameters.row.metadata.alternateHierarchyId && parameters.row.descriptionRow0 !== 'ACCOUNTS') {
+                this.fetchProductMetricsWhenClick(parameters);
+              }
               break;
             case SalesHierarchyViewType.people:
               if (this.isInsideAlternateHierarchy()) {
@@ -253,8 +265,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                   positionId: parameters.row.metadata.positionId,
                   filter: this.filterState
                 }));
+                this.fetchProductMetricsWhenClick(parameters);
               }
-              this.fetchProductMetricsWhenClick(parameters);
               break;
             case SalesHierarchyViewType.accounts:
               this.store.dispatch(new FetchSubAccounts({
@@ -264,7 +276,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedPositionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
-              this.fetchProductMetricsWhenClick(parameters);
+              if (!this.isInsideAlternateHierarchy()) {
+                this.fetchProductMetricsWhenClick(parameters);
+              }
               break;
             default:
               console.log('clicked on left row:', parameters.row);

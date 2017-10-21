@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
@@ -30,8 +30,7 @@ export class ProductMetricsService {
 
   constructor(
     private productMetricsApiService: ProductMetricsApiService,
-    private productMetricsTransformerService: ProductMetricsTransformerService,
-    @Inject('toastService') private toastService: any
+    private productMetricsTransformerService: ProductMetricsTransformerService
   ) { }
 
   public getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
@@ -66,10 +65,6 @@ export class ProductMetricsService {
         products: this.productMetricsTransformerService.transformProductMetrics(productMetricsDTO),
         productMetricsViewType: productMetricsDTO.brandValues ? ProductMetricsViewType.brands : ProductMetricsViewType.skus
       });
-    })
-    .catch(() => {
-      this.toastService.showPerformanceDataErrorToast();
-      return Observable.of(productMetricsData);
     });
   }
 

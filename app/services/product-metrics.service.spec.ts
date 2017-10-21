@@ -29,7 +29,6 @@ describe('ProductMetrics Service', () => {
   let error: Error;
   let productMetricsApiServiceMock: any;
   let productMetricsTransformerServiceMock: any;
-  let toastServiceMock: any;
 
   let runner: EffectsRunner;
   let productMetricsService: ProductMetricsService;
@@ -66,10 +65,6 @@ describe('ProductMetrics Service', () => {
       }
     };
 
-    toastServiceMock = {
-      showPerformanceDataErrorToast: jasmine.createSpy('showPerformanceDataErrorToast')
-    };
-
     TestBed.configureTestingModule({
       imports: [
         EffectsTestingModule
@@ -83,10 +78,6 @@ describe('ProductMetrics Service', () => {
         {
           provide: ProductMetricsTransformerService,
           useValue: productMetricsTransformerServiceMock
-        },
-        {
-          provide: 'toastService',
-          useValue: toastServiceMock
         }
       ]
     });
@@ -101,8 +92,6 @@ describe('ProductMetrics Service', () => {
       productMetricsService = _productMetricsService;
       productMetricsApiService = _productMetricsApiService;
       productMetricsTransformerService = _productMetricsTransformerService;
-
-      toastServiceMock.showPerformanceDataErrorToast.calls.reset();
     }
   ));
 
@@ -236,23 +225,6 @@ describe('ProductMetrics Service', () => {
         expect(transformProductMetricsSpy.calls.argsFor(0)).toEqual([
           productMetricsBrandsDTOMock
         ]);
-      });
-    });
-
-    describe('when ProductMetricsApiService returns an error', () => {
-      beforeEach(() => {
-        spyOn(productMetricsApiService, 'getPositionProductMetrics').and.returnValue(Observable.throw(error));
-        spyOn(productMetricsTransformerService, 'transformProductMetrics');
-      });
-
-      it('should return the original productMetricsData after catching an error', (done) => {
-        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData | Error) => {
-          expect(productMetricsData).toEqual(productMetricsDataMock);
-          done();
-        });
-
-        expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(1);
-        expect(productMetricsTransformerService.transformProductMetrics).not.toHaveBeenCalled();
       });
     });
   });

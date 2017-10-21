@@ -13,29 +13,35 @@ my-performance-breadcrumb(
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
   (backButtonClicked)="handleBackButtonClicked()")
 
-my-performance-table.left(
-  [tableData]="salesHierarchy",
-  [dateRange]="dateRange",
-  [tableHeaderRow]="tableHeaderRowLeft",
-  [performanceMetric]="performanceMetric",
-  [totalRow]="!displayRightTotalRow() ? totalRowData : null",
-  [sortingCriteria]="sortingCriteria",
-  [viewType]="leftTableViewType",
-  [showContributionToVolume]="showSalesContributionToVolume",
-  [showOpportunities]="false",
-  (onSublineClicked)="handleSublineClicked($event)",
-  (onSortingCriteriaChanged)="handleSortRows($event)",
-  (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
+div.tables
+  my-performance-table.left(
+    [tableData]="salesHierarchy",
+    [dateRange]="dateRange",
+    [tableHeaderRow]="tableHeaderRowLeft",
+    [performanceMetric]="performanceMetric",
+    [totalRow]="!displayRightTotalRow() ? totalRowData : null",
+    [sortingCriteria]="sortingCriteria",
+    [viewType]="leftTableViewType",
+    [showContributionToVolume]="showSalesContributionToVolume",
+    [showOpportunities]="false",
+    (onSublineClicked)="handleSublineClicked($event)",
+    (onSortingCriteriaChanged)="handleSortRows($event)",
+    (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
 
-my-performance-table.right(
-  [tableData]="productMetrics",
-  [tableHeaderRow]="tableHeaderRowRight",
-  [totalRow]="displayRightTotalRow() ? totalRowData : null",
-  [performanceMetric]="'Product Snapshot'",
-  [dismissableTotalRow]="productMetricsTotal",
-  [sortingCriteria]="sortingCriteria",
-  [showContributionToVolume]="showProductMetricsContributionToVolume",
-  [showOpportunities]="false",
-  [viewType]="leftTableViewType",
-  (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
-  (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})")
+  my-performance-table.right(
+    [tableData]="productMetrics",
+    [tableHeaderRow]="tableHeaderRowRight",
+    [totalRow]="displayRightTotalRow() ? totalRowData : null",
+    [performanceMetric]="'Product Snapshot'",
+    [dismissableTotalRow]="productMetricsTotal",
+    [sortingCriteria]="sortingCriteria",
+    [showContributionToVolume]="showProductMetricsContributionToVolume",
+    [showOpportunities]="false",
+    [viewType]="leftTableViewType",
+    (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
+    (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})")
+
+  div.error-cover(*ngIf="fetchResponsibilitiesFailure || fetchProductMetricsFailure")
+    div.error-container
+      img.error-icon(src="../../assets/img/icons/error-ico.svg")
+      p.error-cover-message Sorry, something went wrong. Try refreshing the page or navigate back to a previous view.
