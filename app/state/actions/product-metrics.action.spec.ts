@@ -82,4 +82,23 @@ describe('ProductMetrics Actions', () => {
     });
   });
 
+  describe('SelectBrandValues', () => {
+    let action: ProductMetricsActions.SelectBrandValues;
+    let actionPayloadMock: string;
+
+    beforeEach(() => {
+      actionPayloadMock = chance.string();
+      action = new ProductMetricsActions.SelectBrandValues(actionPayloadMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(ProductMetricsActions.SELECT_BRAND_VALUES).toBe('[ProductMetrics] SELECT_BRAND_VALUES');
+      expect(action.type).toBe(ProductMetricsActions.SELECT_BRAND_VALUES);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
 });

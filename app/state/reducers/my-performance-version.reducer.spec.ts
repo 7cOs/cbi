@@ -78,6 +78,42 @@ describe('My Performance Version Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
+  it('should set the selected entity type when SetMyPerformanceSelectedEntityType is received', () => {
+    const entityTypeMock = getEntityTypeMock();
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntity: beforeState.current.selectedEntity,
+        selectedBrand: beforeState.current.selectedBrand,
+        selectedEntityType: entityTypeMock
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(entityTypeMock));
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should set the selected brand when SetMyPerformanceSelectedBrand is received', () => {
+    const selectedBrandMock = chance.string();
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntity: beforeState.current.selectedEntity,
+        selectedBrand: selectedBrandMock,
+        selectedEntityType: beforeState.current.selectedEntityType
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(selectedBrandMock));
+    expect(actualState).toEqual(expectedState);
+  });
+
   it('should return the MyPerformanceState to its initial state when ClearMyPerformanceState is received', () => {
 
     expect(myPerformanceVersionReducer(getMyPerformanceStateMock(), new MyPerformanceVersionActions.ClearMyPerformanceState()))

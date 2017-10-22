@@ -64,7 +64,7 @@ describe('ProductMetrics Reducer', () => {
 
   it('should update selectedBrandValues with the first item in product corresponding to the given brand code in payload', () => {
     const products = getProductMetricsWithBrandValuesMock(1, 9);
-    const chosenProductMetricsValuesIndex = chance.natural({min: 1, max: products.brandValues.length - 1});
+    const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.brandValues.length - 1});
     const chosenBrandCode = chance.string();
     const notChosenBrancode = chosenBrandCode + 'NOT_CHOSEN';
     products.brandValues.forEach(values => {

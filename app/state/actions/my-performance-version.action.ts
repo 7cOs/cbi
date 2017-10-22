@@ -36,7 +36,7 @@ export class SetMyPerformanceSelectedEntityType implements Action {
   constructor(public payload: EntityType) { }
 }
 
-export const SET_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance]  SET_MY_PERFORMANCE_SELECTED_BRAND';
+export const SET_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance] SET_MY_PERFORMANCE_SELECTED_BRAND';
 export class SetMyPerformanceSelectedBrand implements Action {
   readonly type = SET_MY_PERFORMANCE_SELECTED_BRAND;
 

@@ -1,5 +1,7 @@
 import * as Chance from 'chance';
 
+import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import * as MyPerformanceVersionActions from './my-performance-version.action';
 
 let chance = new Chance();
@@ -66,6 +68,46 @@ describe('Responsibilities Actions', () => {
 
     it('should contain the correct payload', () => {
       expect(action.payload).toEqual(entityNameMock);
+    });
+  });
+
+  describe('SetMyPerformanceSelectedEntityType', () => {
+    let entityTypeMock: EntityType;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType;
+
+    beforeEach(() => {
+      entityTypeMock = getEntityTypeMock();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(entityTypeMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(entityTypeMock);
+    });
+  });
+
+  describe('SetMyPerformanceSelectedBrand', () => {
+    let selectedBrandMock: string;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedBrand;
+
+    beforeEach(() => {
+      selectedBrandMock = chance.string();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(selectedBrandMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_BRAND');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(selectedBrandMock);
     });
   });
 
