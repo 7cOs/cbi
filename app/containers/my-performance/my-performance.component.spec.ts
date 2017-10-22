@@ -606,13 +606,14 @@ describe('MyPerformanceComponent', () => {
       accountNameMock = chance.string();
       hierarchyEntityMock = getEntityPropertyResponsibilitiesMock();
       currentMock = getMyPerformanceEntitiesDataMock();
-      alternateHierarchyIdMock = chance.string();
     });
 
     describe('when distributor subline link clicked', () => {
-      fit('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
+      it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
+        alternateHierarchyIdMock = chance.string();
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
         myAccountOnly = !alternateHierarchyIdMock;
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
@@ -628,7 +629,10 @@ describe('MyPerformanceComponent', () => {
     describe('when subaccount subline link clicked', () => {
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy enity', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
-        myAccountOnly = true;
+        alternateHierarchyIdMock = null;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
+        myAccountOnly = !alternateHierarchyIdMock;
         hierarchyEntityMock.positionId = rowMock.metadata.positionId;
         currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
         currentSubject.next(currentMock);
@@ -647,7 +651,10 @@ describe('MyPerformanceComponent', () => {
 
       it('should correctly call functions for accountDashboard when subAccount clicked but no matching hierarchy entity', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
-        myAccountOnly = true;
+        alternateHierarchyIdMock = null;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
+        myAccountOnly = !alternateHierarchyIdMock;
         hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
