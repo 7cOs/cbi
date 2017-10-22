@@ -118,7 +118,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsFailure = productMetrics.status === ActionStatus.Error
           || (productMetrics.products && Object.keys(productMetrics.products).length === 0);
 
-        if (productMetrics.products && productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
+        if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
           this.productMetricsTotal = this.productMetricsViewType === ProductMetricsViewType.skus
             ? this.myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetrics.selectedBrandValues)
@@ -131,7 +131,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
-        this.selectedBrand = current.selectedBrand;
+        this.selectedBrand = current.selectedBrand || this.selectedBrand; // TODO: compare both selected brands to trigger or not a refresh
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
         this.fetchResponsibilitiesFailure = current.responsibilities &&
@@ -287,7 +287,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         switch (this.productMetricsViewType) {
           case ProductMetricsViewType.brands:
             this.selectedBrand = parameters.row.metadata.brandCode;
-            this.store.dispatch(new ProductMetricsActions.SetSelectedBrand(parameters.row.metadata.brandCode));
+            this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
             this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(parameters.row.metadata.brandCode));
             this.fetchProductMetricsWhenClick(parameters);
             break;
@@ -351,7 +351,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         positionId: state.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: EntityType.Person,
-        selectedBrand: state.selectedBrand
+        selectedBrand: this.selectedBrand
       }));
     } else if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.people) {
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
@@ -359,7 +359,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         entityTypeCode: state.responsibilities.entityTypeCode,
         filter: this.filterState,
         selectedEntityType: EntityType.RoleGroup,
-        selectedBrand: state.selectedBrand
+        selectedBrand: this.selectedBrand
       }));
     }
   }
@@ -396,17 +396,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
     } else {
       switch (this.salesHierarchyViewType) {
-        case SalesHierarchyViewType.roleGroups:
-          actionParameters = Object.assign({}, actionParameters, {
-            entityTypeCode: this.currentState.responsibilities.entityTypeCode
-          });
-          break;
         case SalesHierarchyViewType.accounts:
           actionParameters = Object.assign({}, actionParameters, {
             contextPositionId: this.currentState.responsibilities.positionId
           });
           break;
         case SalesHierarchyViewType.people:
+          actionParameters = Object.assign({}, actionParameters, {
+            entityTypeCode: this.currentState.responsibilities.entityTypeCode
+          });
+          break;
+
+        case SalesHierarchyViewType.roleGroups:
         default:
           break;
         }

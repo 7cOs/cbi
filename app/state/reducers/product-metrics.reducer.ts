@@ -35,7 +35,7 @@ export function productMetricsReducer(
         status: ActionStatus.Error
       });
 
-    case ProductMetricsActions.SET_SELECTED_BRAND:
+    case ProductMetricsActions.SELECT_BRAND_VALUES:
       const selectedBrand = state.products.brandValues.find(brand => brand.brandCode === action.payload);
 
       return Object.assign({}, state, {

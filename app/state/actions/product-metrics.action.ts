@@ -39,9 +39,9 @@ export class FetchProductMetricsFailure implements Action {
   constructor(public payload: Error) { }
 }
 
-export const SET_SELECTED_BRAND = '[ProductMetrics] SET_SELECTED_BRAND';
-export class SetSelectedBrand implements Action {
-  readonly type = SET_SELECTED_BRAND;
+export const SELECT_BRAND_VALUES = '[ProductMetrics] SELECT_BRAND_VALUES';
+export class SelectBrandValues implements Action {
+  readonly type = SELECT_BRAND_VALUES;
 
   constructor(public payload: string) { }
 }
@@ -50,4 +50,4 @@ export type Action =
   FetchProductMetrics
   | FetchProductMetricsSuccess
   | FetchProductMetricsFailure
-  | SetSelectedBrand;
+  | SelectBrandValues;

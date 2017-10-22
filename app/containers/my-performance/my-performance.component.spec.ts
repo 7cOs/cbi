@@ -12,7 +12,7 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchProductMetrics } from '../../state/actions/product-metrics.action';
+import { FetchProductMetrics, SelectBrandValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -395,6 +395,8 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
 
+        const expectedSelectedBrand = stateMock.myPerformance.current.selectedBrand;
+
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
@@ -402,7 +404,7 @@ describe('MyPerformanceComponent', () => {
           entityTypeCode: versionsMock[versionsMock.length - 1].responsibilities.entityTypeCode,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: EntityType.RoleGroup,
-          selectedBrand: versionsMock[versionsMock.length - 1].selectedBrand
+          selectedBrand: expectedSelectedBrand
         }));
       });
 
@@ -425,13 +427,15 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
 
+        const expectedSelectedBrand = stateMock.myPerformance.current.selectedBrand;
+
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: EntityType.Person,
-          selectedBrand: versionsMock[versionsMock.length - 1].selectedBrand
+          selectedBrand: expectedSelectedBrand
         }));
       });
 
@@ -443,13 +447,15 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
 
+        const expectedSelectedBrand = stateMock.myPerformance.current.selectedBrand;
+
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: EntityType.Person,
-          selectedBrand: versionsMock[versionsMock.length - 1].selectedBrand
+          selectedBrand: expectedSelectedBrand
         }));
       });
     });
@@ -611,6 +617,91 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
+  describe('when right side data row is clicked', () => {
+    let rowMock: MyPerformanceTableRow;
+
+    beforeEach(() => {
+      storeMock.dispatch.and.callThrough();
+      storeMock.dispatch.calls.reset();
+      rowMock = getMyPerformanceTableRowMock(1)[0];
+      rowMock.metadata.positionId = undefined;
+    });
+
+    it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
+      'when productMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectBrandValues(rowMock.metadata.brandCode));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(rowMock.metadata.brandCode)
+      );
+
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+        positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+        selectedBrand: rowMock.metadata.brandCode
+      }));
+    });
+
+    it('should trigger appropriate actions when current salesHierarchyViewType is accounts and ' +
+      'when productMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectBrandValues(rowMock.metadata.brandCode));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(rowMock.metadata.brandCode)
+      );
+
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+        positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+        selectedBrand: rowMock.metadata.brandCode,
+        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId
+      }));
+    });
+
+    it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
+      'when productMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectBrandValues(rowMock.metadata.brandCode));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(rowMock.metadata.brandCode)
+      );
+
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+        positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+        selectedBrand: rowMock.metadata.brandCode,
+        entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode
+      }));
+    });
+
+    it('should NOT trigger any actions when ProductMetricsViewType is skus and rowType is data', () => {
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(0);
+    });
+
+  });
+
   describe('when left side data row link clicked', () => {
     let rowMock: MyPerformanceTableRow;
     let accountNameMock: string;
@@ -700,7 +791,7 @@ describe('MyPerformanceComponent', () => {
         versionsMock[breadcrumbSelectionIndex].salesHierarchyViewType.viewType = selectedSalesHierarchyViewType;
         expectedPositionId = versionsMock[breadcrumbSelectionIndex].responsibilities.positionId;
         expectedEntityTypeCode = versionsMock[breadcrumbSelectionIndex].responsibilities.entityTypeCode;
-        expectedSelectedBrand = versionsMock[breadcrumbSelectionIndex].selectedBrand;
+        expectedSelectedBrand = stateMock.myPerformance.current.selectedBrand;
         versionsSubject.next(versionsMock);
       }
 
