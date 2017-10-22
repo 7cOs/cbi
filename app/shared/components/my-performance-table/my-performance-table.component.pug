@@ -41,6 +41,7 @@ div.performance-table-wrapper
       tr.dismissable-total-row.col-100-pct(my-performance-table-row,
                               *ngIf="dismissableTotalRow",
                               [rowData]="dismissableTotalRow",
+                              [showContributionToVolume]="showContributionToVolume",
                               [showOpportunities]="showOpportunities",
                               (onCellClicked)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event})")
 
