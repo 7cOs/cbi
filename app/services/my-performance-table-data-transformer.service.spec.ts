@@ -6,7 +6,7 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getPerformanceMock } from '../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock } from '../models/entity-with-performance.model.mock';
-import { getProductMetricsWithBrandValuesMock } from '../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock, getProductMetricsBrandMock } from '../models/product-metrics.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, MyPerformanceTableRowMetadata } from '../models/my-performance-table-row.model';
 import { ProductMetricsValues } from '../models/product-metrics.model';
@@ -15,6 +15,7 @@ import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let performanceMock: Performance;
+  let productMetricsValuesMock: ProductMetricsValues;
   let responsibilityEntitiesPerformanceMock: EntityWithPerformance[];
   let total: number;
 
@@ -31,20 +32,21 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
   });
 
+  beforeEach(inject([ MyPerformanceTableDataTransformerService ],
+    (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
+      myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+  }));
+
   describe('getLeftTableData', () => {
-    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
-      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+    beforeEach(() => {
         responsibilityEntitiesPerformanceMock = getEntitiesWithPerformancesMock();
         total = 0;
         responsibilityEntitiesPerformanceMock.forEach((entity: EntityWithPerformance) => {
           total += entity.performance.total;
         });
-    }));
+    });
 
     it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor/subaccount', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
 
       entityTypeValues.splice(entityTypeValues.indexOf(EntityType.RoleGroup), 1);
@@ -79,8 +81,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data for distributor', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
@@ -109,8 +109,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data for subAccount', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.SubAccount;
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
@@ -139,8 +137,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data for RoleGroup', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.RoleGroup;
       responsibilityEntitiesPerformanceMock[0].name = 'ON PREM DIRECTOR';
 
@@ -169,8 +165,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data for AccountGroup', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.AccountGroup;
       responsibilityEntitiesPerformanceMock[0].name = 'ACCOUNT';
 
@@ -199,8 +193,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data with performanceError value', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
       responsibilityEntitiesPerformanceMock[0].performance.error = true;
 
@@ -230,8 +222,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data with Open Position', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Person;
       responsibilityEntitiesPerformanceMock[0].positionDescription = chance.string();
       responsibilityEntitiesPerformanceMock[0].name = 'Open';
@@ -269,9 +259,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return formatted ResponsibilityEntityPerformance data when in Alt-Hierarchy and ViewType Person', () => {
-
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Person;
       responsibilityEntitiesPerformanceMock[0].positionDescription = chance.string();
 
@@ -307,7 +294,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
 
     it('should return the correct descriptionRow1 when the property type is entity distributors', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
       const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(
         responsibilityEntitiesPerformanceMock, false);
@@ -316,8 +302,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
     it('returned table entities should contain alternateHierarchyId in their metadata if the EntityWithPerformance' +
     'contained a alternateHierarchyId', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-
       const alternateHierarchyIdMock = chance.string();
       responsibilityEntitiesPerformanceMock[0].alternateHierarchyId = alternateHierarchyIdMock;
 
@@ -352,15 +336,11 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('getTotalRowData', () => {
-    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
-      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+    beforeEach(() => {
         performanceMock = getPerformanceMock();
-    }));
+    });
 
     it('should return a formatted total row from total performance data', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getTotalRowData').and.callThrough();
-
       const performanceRowData = myPerformanceTableDataTransformerService.getTotalRowData(performanceMock);
 
       expect(performanceRowData).toEqual({
@@ -373,12 +353,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
   });
 
-  describe('myPerformanceRightTableData', () => {
-    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
-      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
-      }));
-
+  describe('getRightTableData', () => {
     it('should return properly formatted table data for ProductMetrics', () => {
       const transformedProductMetricsData =
         myPerformanceTableDataTransformerService.getRightTableData(productMetricsState.products);
@@ -402,6 +377,21 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         const expectedCTV: number = Math.round((productMetricsState.products.brandValues[i].current / total) * 1000) / 10;
         expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
       }
+    });
+  });
+
+  describe('getProductMetricsTotal', () => {
+    beforeEach(() => {
+        productMetricsValuesMock = getProductMetricsBrandMock();
+    });
+
+    it('should return a formatted total row from brand product metrics values', () => {
+      const rowData = myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetricsValuesMock);
+
+      expect(rowData.descriptionRow0).toEqual(productMetricsValuesMock.brandDescription);
+      expect(rowData.metricColumn0).toEqual(productMetricsValuesMock.current);
+      expect(rowData.metricColumn1).toEqual(productMetricsValuesMock.yearAgo);
+      expect(rowData.metricColumn2).toEqual(productMetricsValuesMock.yearAgoPercent);
     });
   });
 });

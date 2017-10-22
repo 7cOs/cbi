@@ -43,7 +43,7 @@ export class MyPerformanceTableRowComponent {
   }
 
   public getSublineClass(): CssClasses {
-    return { // TODO: Check if that would work if I pass in a PM VT
+    return {
       ['link']: this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts,
       ['forward-arrow']: this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts
     };
