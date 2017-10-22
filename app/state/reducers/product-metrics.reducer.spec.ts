@@ -62,6 +62,33 @@ describe('ProductMetrics Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
+  it('should update selectedBrandValues with the first item in product corresponding to the given brand code in payload', () => {
+    const products = getProductMetricsWithBrandValuesMock(1, 9);
+    const chosenProductMetricsValuesIndex = chance.natural({min: 1, max: products.brandValues.length - 1});
+    const chosenBrandCode = chance.string();
+    const notChosenBrancode = chosenBrandCode + 'NOT_CHOSEN';
+    products.brandValues.forEach(values => {
+      values.brandCode = notChosenBrancode;
+    });
+
+    products.brandValues[chosenProductMetricsValuesIndex].brandCode = chosenBrandCode;
+
+    initialState.products = products;
+
+    const expectedState = {
+      status: initialState.status,
+      products: initialState.products,
+      selectedBrandValues: products.brandValues[chosenProductMetricsValuesIndex]
+    };
+
+    const actualState = productMetricsReducer(
+      initialState,
+      new ProductMetricsActions.SelectBrandValues(chosenBrandCode)
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
+
   it('should return current state when an unknown action is dispatched', () => {
     expect(productMetricsReducer(
       initialState,
