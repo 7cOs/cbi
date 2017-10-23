@@ -121,13 +121,13 @@ export function getProductMetricsSkuMock(): ProductMetricsValues {
   };
 }
 
-export function getProductMetricsWithBrandValuesMock(min: number, max: number): ProductMetrics {
+export function getProductMetricsWithBrandValuesMock(min: number = 9, max: number = 9): ProductMetrics {
   return {
     brandValues: Array(chance.natural({min: min, max: max})).fill('').map(() => getProductMetricsBrandMock())
   };
 }
 
-export function getProductMetricsWithSkuValuesMock(min: number, max: number): ProductMetrics {
+export function getProductMetricsWithSkuValuesMock(min: number = 9, max: number = 9): ProductMetrics {
   return {
     skuValues: Array(chance.natural({min: min, max: max})).fill('').map(() => getProductMetricsSkuMock())
   };

@@ -46,8 +46,8 @@ describe('ProductMetrics Effects', () => {
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
     selectedBrandCodeMock = chance.string();
-    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock(1, 9);
-    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(1, 9);
+    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
     performanceFilterStateMock = getMyPerformanceFilterMock();
     error = new Error(chance.string());
 

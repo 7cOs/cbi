@@ -22,7 +22,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
   const productMetricsState: ProductMetricsState = {
     status: ActionStatus.Fetched,
-    products: getProductMetricsWithBrandValuesMock(1, 9),
+    products: getProductMetricsWithBrandValuesMock(),
     productMetricsViewType: ProductMetricsViewType.brands
   };
 

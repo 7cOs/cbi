@@ -31,7 +31,7 @@ describe('ProductMetrics Reducer', () => {
   });
 
   it('should store the payload when a fetch ProductMetrics is successful', () => {
-    const products = getProductMetricsWithBrandValuesMock(1, 9);
+    const products = getProductMetricsWithBrandValuesMock();
 
     const payloadMock = {
       positionId: positionIdMock,
@@ -68,7 +68,7 @@ describe('ProductMetrics Reducer', () => {
   });
 
   it('should update selectedBrandCodeValues with the first item in product corresponding to the given brand code in payload', () => {
-    const products = getProductMetricsWithBrandValuesMock(1, 9);
+    const products = getProductMetricsWithBrandValuesMock();
     const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.brandValues.length - 1});
     const chosenBrandCode = chance.string();
     const notChosenBrancode = chosenBrandCode + 'NOT_CHOSEN';

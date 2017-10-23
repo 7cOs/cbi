@@ -44,7 +44,7 @@ describe('ProductMetrics Actions', () => {
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      product = getProductMetricsWithBrandValuesMock(1, 9);
+      product = getProductMetricsWithBrandValuesMock();
       mockUserId = chance.natural();
       mockSuccessActionPayload = {
         positionId: mockUserId,

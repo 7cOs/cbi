@@ -39,8 +39,8 @@ describe('ProductMetrics Service', () => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
-    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock(1, 9);
-    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(1, 9);
+    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
     productMetricsBrandsDTOMock = {
       brandValues: Array(chance.natural({min: 1, max: 9})).fill('').map(() => getProductMetricsBrandValuesDTOMock()),
       type: chance.string()
