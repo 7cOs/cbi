@@ -6,8 +6,8 @@ export interface ProductMetricsValues {
   yearAgoPercent: number;
   brandCode: string;
   beerId?: {
-    masterPackageSKUCode: string;
-    masterPackageSKUDescription: string;
+    masterPackageSKUDescription?: string;
+    masterSKUDescription?: string;
   };
 }
 
@@ -27,6 +27,8 @@ export interface ProductMetricsValuesDTO {
   beerId?: {
     masterPackageSKUCode: string;
     masterPackageSKUDescription: string;
+    masterSKUCode?: string;
+    masterSKUDescription?: string;
   };
   operatingCompanyCode: string;
   operatingCompanyDescription: string;

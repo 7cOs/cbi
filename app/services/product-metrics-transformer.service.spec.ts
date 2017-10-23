@@ -75,7 +75,10 @@ describe('Service: ProductMetricsTransformerService', () => {
             productMectricsSkuDTOMock.values[0].yearAgo
           ),
           brandCode: productMectricsSkuDTOMock.brandCode,
-          beerId: productMectricsSkuDTOMock.beerId
+          beerId: {
+            masterPackageSKUDescription: productMectricsSkuDTOMock.beerId.masterPackageSKUDescription,
+            masterSKUDescription: productMectricsSkuDTOMock.beerId.masterSKUDescription
+          }
         }]
       };
       const transformedProductMetrics =

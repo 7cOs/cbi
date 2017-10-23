@@ -64,7 +64,9 @@ export class MyPerformanceTableDataTransformerService {
 
     return productsValues.map((item: ProductMetricsValues) => {
       return {
-        descriptionRow0: productMetrics.brandValues ? item.brandDescription : item.beerId.masterPackageSKUDescription,
+        descriptionRow0: productMetrics.brandValues
+          ? item.brandDescription
+          : item.beerId.masterPackageSKUDescription || item.beerId.masterSKUDescription,
         metricColumn0: item.current,
         metricColumn1: item.yearAgo,
         metricColumn2: item.yearAgoPercent,

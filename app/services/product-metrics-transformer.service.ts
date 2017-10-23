@@ -32,7 +32,10 @@ export class ProductMetricsTransformerService {
 
   private formatProductMetricsSkuDTO(productMetricsDTO: ProductMetricsValuesDTO): ProductMetricsValues {
     return Object.assign({}, this.formatProductMetricsDTO(productMetricsDTO), {
-      beerId: productMetricsDTO.beerId
+      beerId: {
+        masterPackageSKUDescription: productMetricsDTO.beerId.masterPackageSKUDescription,
+        masterSKUDescription: productMetricsDTO.beerId.masterSKUDescription
+      }
     });
   }
 }

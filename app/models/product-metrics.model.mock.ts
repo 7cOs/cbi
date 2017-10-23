@@ -108,8 +108,8 @@ export function getProductMetricsSkuMock(): ProductMetricsValues {
     yearAgoPercent: chance.natural(),
     brandCode: chance.string(),
     beerId: {
-      masterPackageSKUCode: chance.string(),
       masterPackageSKUDescription: chance.string(),
+      masterSKUDescription: chance.string(),
     }
   };
 }
