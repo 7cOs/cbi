@@ -86,7 +86,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private myPerformanceVersionSubscription: Subscription;
   private productMetricsViewTypeSubscription: Subscription;
   private productMetrics: Array<MyPerformanceTableRow>;
-  private productMetricsTotal: MyPerformanceTableRow;
+  private productMetricsSelectedBrandRow: MyPerformanceTableRow;
   private productMetricsSubscription: Subscription;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrand: string;
@@ -120,8 +120,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
-          this.productMetricsTotal = this.productMetricsViewType === ProductMetricsViewType.skus
-            ? this.myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetrics.selectedBrandValues)
+          this.productMetricsSelectedBrandRow = this.productMetricsViewType === ProductMetricsViewType.skus
+            ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandValues)
             : null;
         }
       });
@@ -229,72 +229,80 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.data:
       default:
         if (parameters.leftSide) {
-          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
-          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(parameters.row.descriptionRow0));
-          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
-
-          switch (this.salesHierarchyViewType) {
-            case SalesHierarchyViewType.roleGroups:
-              const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
-
-              if (parameters.row.metadata.alternateHierarchyId) {
-                this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
-              }
-              this.store.dispatch(new FetchEntityWithPerformance({
-                selectedPositionId: parameters.row.metadata.positionId,
-                entityTypeGroupName: entityTypeGroupName,
-                entityTypeCode: parameters.row.metadata.entityTypeCode,
-                entityType: parameters.row.metadata.entityType,
-                entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-                filter: this.filterState
-              }));
-              // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
-              if (!parameters.row.metadata.alternateHierarchyId && parameters.row.descriptionRow0 !== 'ACCOUNTS') {
-                this.fetchProductMetricsWhenClick(parameters);
-              }
-              break;
-            case SalesHierarchyViewType.people:
-              if (this.isInsideAlternateHierarchy()) {
-                this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
-                  positionId: parameters.row.metadata.positionId,
-                  alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-                  filter: this.filterState
-                }));
-              } else {
-                this.store.dispatch(new FetchResponsibilities({
-                  positionId: parameters.row.metadata.positionId,
-                  filter: this.filterState
-                }));
-                this.fetchProductMetricsWhenClick(parameters);
-              }
-              break;
-            case SalesHierarchyViewType.accounts:
-              this.store.dispatch(new FetchSubAccounts({
-                positionId: parameters.row.metadata.positionId,
-                contextPositionId: this.currentState.responsibilities.positionId,
-                entityTypeAccountName: parameters.row.descriptionRow0,
-                selectedPositionId: parameters.row.metadata.positionId,
-                filter: this.filterState
-              }));
-              if (!this.isInsideAlternateHierarchy()) {
-                this.fetchProductMetricsWhenClick(parameters);
-              }
-              break;
-            default:
-              console.log('clicked on left row:', parameters.row);
-          }
+          this.handleLeftRowDataElementClicked(parameters);
         } else {
-        switch (this.productMetricsViewType) {
-          case ProductMetricsViewType.brands:
-            this.selectedBrand = parameters.row.metadata.brandCode;
-            this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
-            this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(parameters.row.metadata.brandCode));
-            this.fetchProductMetricsWhenClick(parameters);
-            break;
-          default:
-            console.log('clicked on right row:', parameters.row);
-        }
+          this.handleRightRowDataElementClicked(parameters);
       }
+    }
+  }
+
+  private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
+    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(parameters.row.descriptionRow0));
+    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
+
+    switch (this.salesHierarchyViewType) {
+      case SalesHierarchyViewType.roleGroups:
+        const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
+
+        if (parameters.row.metadata.alternateHierarchyId) {
+          this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+        }
+        this.store.dispatch(new FetchEntityWithPerformance({
+          selectedPositionId: parameters.row.metadata.positionId,
+          entityTypeGroupName: entityTypeGroupName,
+          entityTypeCode: parameters.row.metadata.entityTypeCode,
+          entityType: parameters.row.metadata.entityType,
+          entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+          filter: this.filterState
+        }));
+        // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
+        if (!parameters.row.metadata.alternateHierarchyId && parameters.row.descriptionRow0 !== 'ACCOUNTS') {
+          this.fetchProductMetricsWhenClick(parameters);
+        }
+        break;
+      case SalesHierarchyViewType.people:
+        if (this.isInsideAlternateHierarchy()) {
+          this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
+            positionId: parameters.row.metadata.positionId,
+            alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+            filter: this.filterState
+          }));
+        } else {
+          this.store.dispatch(new FetchResponsibilities({
+            positionId: parameters.row.metadata.positionId,
+            filter: this.filterState
+          }));
+          this.fetchProductMetricsWhenClick(parameters);
+        }
+        break;
+      case SalesHierarchyViewType.accounts:
+        this.store.dispatch(new FetchSubAccounts({
+          positionId: parameters.row.metadata.positionId,
+          contextPositionId: this.currentState.responsibilities.positionId,
+          entityTypeAccountName: parameters.row.descriptionRow0,
+          selectedPositionId: parameters.row.metadata.positionId,
+          filter: this.filterState
+        }));
+        if (!this.isInsideAlternateHierarchy()) {
+          this.fetchProductMetricsWhenClick(parameters);
+        }
+        break;
+      default:
+        console.log('clicked on left row:', parameters.row);
+    }
+  }
+
+  private handleRightRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    switch (this.productMetricsViewType) {
+      case ProductMetricsViewType.brands:
+        this.selectedBrand = parameters.row.metadata.brandCode;
+        this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
+        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(parameters.row.metadata.brandCode));
+        this.fetchProductMetricsWhenClick(parameters);
+        break;
+      default:
+        console.log('clicked on right row:', parameters.row);
     }
   }
 

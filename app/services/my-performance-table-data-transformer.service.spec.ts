@@ -380,13 +380,13 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
   });
 
-  describe('getProductMetricsTotal', () => {
+  describe('getProductMetricsSelectedBrandRow', () => {
     beforeEach(() => {
         productMetricsValuesMock = getProductMetricsBrandMock();
     });
 
     it('should return a formatted total row from brand product metrics values', () => {
-      const rowData = myPerformanceTableDataTransformerService.getProductMetricsTotal(productMetricsValuesMock);
+      const rowData = myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock);
 
       expect(rowData.descriptionRow0).toEqual(productMetricsValuesMock.brandDescription);
       expect(rowData.metricColumn0).toEqual(productMetricsValuesMock.current);
