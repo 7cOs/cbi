@@ -21,7 +21,7 @@ div.tables
     [performanceMetric]="performanceMetric",
     [totalRow]="!displayRightTotalRow() ? totalRowData : null",
     [sortingCriteria]="sortingCriteria",
-    [viewType]="leftTableViewType",
+    [viewType]="salesHierarchyViewType",
     [showContributionToVolume]="showSalesContributionToVolume",
     [showOpportunities]="false",
     (onSublineClicked)="handleSublineClicked($event)",
@@ -37,7 +37,7 @@ div.tables
     [sortingCriteria]="sortingCriteria",
     [showContributionToVolume]="showProductMetricsContributionToVolume",
     [showOpportunities]="false",
-    [viewType]="leftTableViewType",
+    [viewType]="productMetricsViewType",
     (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
     (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})")
 
