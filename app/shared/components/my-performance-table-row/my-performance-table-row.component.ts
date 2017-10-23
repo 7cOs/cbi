@@ -19,9 +19,15 @@ export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
-  @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
+  @Input()
+  set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
+    this.isSubAcountsOrDistributors = viewType === SalesHierarchyViewType.distributors
+      || viewType === SalesHierarchyViewType.subAccounts;
+  }
 
   public sortStatus = SortStatus;
+
+  private isSubAcountsOrDistributors: boolean;
 
   constructor(
     @Inject('ieHackService') private ieHackService: any
@@ -44,13 +50,13 @@ export class MyPerformanceTableRowComponent {
 
   public getSublineClass(): CssClasses {
     return {
-      ['link']: this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts,
-      ['forward-arrow']: this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts
+      ['link']: this.isSubAcountsOrDistributors,
+      ['forward-arrow']: this.isSubAcountsOrDistributors
     };
   }
 
   public sublineClicked(): void {
-    if (this.viewType === SalesHierarchyViewType.distributors || this.viewType === SalesHierarchyViewType.subAccounts) {
+    if (this.isSubAcountsOrDistributors) {
       this.onSublineClicked.emit();
     }
   }
