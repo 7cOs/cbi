@@ -3,13 +3,14 @@ import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { ColumnType } from '../../../enums/column-type.enum';
+import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
-import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
+import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
-import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { UtilService } from '../../../services/util.service';
-import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -19,7 +20,7 @@ class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean;
   @Input() showOpportunities: boolean;
-  @Input() viewType: ViewType;
+  @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 }
 
 describe('MyPerformanceTableComponent', () => {
@@ -162,15 +163,26 @@ describe('MyPerformanceTableComponent', () => {
 
   describe('getTableHeight', () => {
 
+    it('should set the proper class to set the table height when 2 total rows are present', () => {
+      const totalRowsMock: Array<MyPerformanceTableRow> = getMyPerformanceTableRowMock(2);
+      componentInstance.totalRow = totalRowsMock[0];
+      componentInstance.dismissableTotalRow = totalRowsMock[1];
+      const tableClass = componentInstance.getTableHeight();
+      expect(tableClass).toBe('two-total-rows-present');
+    });
+
     it('should set the proper class to set the table height when total row is present', () => {
-      let totalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      const tableClass = componentInstance.getTableHeight(totalRowMock);
+      const totalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.totalRow = totalRowMock;
+      const tableClass = componentInstance.getTableHeight();
       expect(tableClass).toBe('total-row-present');
     });
 
     it('should set the proper class to set the table height when total row is absent', () => {
       let totalRowMock: MyPerformanceTableRow = null;
-      const tableClass = componentInstance.getTableHeight(totalRowMock);
+
+      componentInstance.totalRow = totalRowMock;
+      const tableClass = componentInstance.getTableHeight();
       expect(tableClass).toBe('total-row-absent');
     });
   });
