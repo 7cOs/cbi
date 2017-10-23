@@ -9,7 +9,7 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
-import { HierarchyGroup } from './responsibilities.service';
+import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';

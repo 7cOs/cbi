@@ -1,10 +1,12 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { initialState, productMetricsReducer } from './product-metrics.reducer';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
+import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
+import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
-import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
@@ -15,20 +17,21 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetching,
-      products: initialState.products
+      products: initialState.products,
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
-    const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetricsAction({
+    const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetrics({
       positionId: positionIdMock,
       filter: performanceFilterStateMock,
-      selectedEntityType: SelectedEntityType.Position
+      selectedEntityType: EntityType.Person
     }));
 
     expect(actualState).toEqual(expectedState);
   });
 
   it('should store the payload when a fetch ProductMetrics is successful', () => {
-    const products = getProductMetricMock();
+    const products = getProductMetricsWithBrandValuesMock();
 
     const payloadMock = {
       positionId: positionIdMock,
@@ -37,12 +40,13 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetched,
-      products: products
+      products: products,
+      productMetricsViewType: initialState.productMetricsViewType
     };
 
     const actualState = productMetricsReducer(
       initialState,
-      new ProductMetricsActions.FetchProductMetricsSuccessAction(payloadMock)
+      new ProductMetricsActions.FetchProductMetricsSuccess(payloadMock)
     );
 
     expect(actualState).toEqual(expectedState);
@@ -51,12 +55,58 @@ describe('ProductMetrics Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
-      products: initialState.products
+      products: initialState.products,
+      productMetricsViewType: initialState.productMetricsViewType
     };
 
     const actualState = productMetricsReducer(
       initialState,
-      new ProductMetricsActions.FetchProductMetricsFailureAction(new Error())
+      new ProductMetricsActions.FetchProductMetricsFailure(new Error())
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should update selectedBrandCodeValues with the first item in product corresponding to the given brand code in payload', () => {
+    const products = getProductMetricsWithBrandValuesMock();
+    const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.brandValues.length - 1});
+    const chosenBrandCode = chance.string();
+    const notChosenBrancode = chosenBrandCode + 'NOT_CHOSEN';
+    products.brandValues.forEach(values => {
+      values.brandCode = notChosenBrancode;
+    });
+
+    products.brandValues[chosenProductMetricsValuesIndex].brandCode = chosenBrandCode;
+
+    initialState.products = products;
+
+    const expectedState = {
+      status: initialState.status,
+      products: initialState.products,
+      selectedBrandCodeValues: products.brandValues[chosenProductMetricsValuesIndex],
+      productMetricsViewType: initialState.productMetricsViewType
+    };
+
+    const actualState = productMetricsReducer(
+      initialState,
+      new ProductMetricsActions.SelectBrandValues(chosenBrandCode)
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should store the new sales hierarchy view type', () => {
+    const payload: ProductMetricsViewType = ProductMetricsViewType[getProductMetricsViewTypeMock()];
+
+    const expectedState = {
+      status: initialState.status,
+      products: initialState.products,
+      productMetricsViewType: payload
+    };
+
+    const actualState = productMetricsReducer(
+      initialState,
+      new ProductMetricsActions.SetProductMetricsViewType(payload)
     );
 
     expect(actualState).toEqual(expectedState);

@@ -7,7 +7,7 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { HierarchyGroup } from './responsibilities.service';
+import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../models/performance.model';

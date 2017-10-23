@@ -1,7 +1,8 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
-import { Performance } from '../../models/performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
+import { HierarchyGroup } from '../../models/hierarchy-group.model';
+import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 export interface ResponsibilitiesState extends State {
@@ -10,6 +11,7 @@ export interface ResponsibilitiesState extends State {
   alternateHierarchyId?: string;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
+  hierarchyGroups: Array<HierarchyGroup>;
   entityWithPerformance: EntityWithPerformance[];
   entitiesTotalPerformances: Performance;
 }
@@ -18,6 +20,7 @@ export const initialState: ResponsibilitiesState = {
   status: ActionStatus.NotFetched,
   positionId: '0',
   groupedEntities: {},
+  hierarchyGroups: [],
   entityWithPerformance: [],
   entitiesTotalPerformances: {
     total: 0,
@@ -44,6 +47,7 @@ export function responsibilitiesReducer(
         status: ActionStatus.Fetched,
         positionId: action.payload.positionId,
         groupedEntities: action.payload.groupedEntities,
+        hierarchyGroups: action.payload.hierarchyGroups,
         entityWithPerformance: action.payload.entityWithPerformance
       });
 
@@ -52,7 +56,7 @@ export function responsibilitiesReducer(
         status: ActionStatus.Error
       });
 
-    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
+    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP:
       return Object.assign({}, state, {
         groupedEntities: {
           [action.payload]: state.groupedEntities[action.payload]
@@ -102,12 +106,12 @@ export function responsibilitiesReducer(
         entitiesTotalPerformances: selectedRoleGroup.performance
       });
 
-    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching
       });
 
-    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         groupedEntities: action.payload.groupedEntities,
