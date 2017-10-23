@@ -319,14 +319,14 @@ export class ResponsibilitiesService {
 
   public checkEmptyResponsibilitiesResponse(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
     if (responsibilitiesData && Object.keys(responsibilitiesData.groupedEntities).length === 0) {
-      return Observable.throw('Empty Data');
+      return Observable.throw('Empty ResponsibilitiesData Error');
     }
     return Observable.of(responsibilitiesData);
   }
 
   public checkEmptySubaccountsResponse(subAccountsData: SubAccountData): Observable<SubAccountData> {
     if (subAccountsData && Object.keys(subAccountsData.groupedEntities).length === 0) {
-      return Observable.throw('Empty Data');
+      return Observable.throw('Empty SubAccountData Error');
     }
     return Observable.of(subAccountsData);
   }

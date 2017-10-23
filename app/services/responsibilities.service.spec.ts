@@ -1388,7 +1388,7 @@ describe('Responsibilities Effects', () => {
             filter: performanceFilterStateMock};
         });
 
-    it('should return an observable of the input if is non-empty', (done) => {
+    it('should return an observable of responsibilities if is non-empty', (done) => {
       responsibilitiesService.checkEmptyResponsibilitiesResponse(responsibilitiesDataMock)
         .subscribe((responsibilitiesData: ResponsibilitiesData) => {
         expect(responsibilitiesData).toEqual(responsibilitiesDataMock);
@@ -1413,7 +1413,7 @@ describe('Responsibilities Effects', () => {
       };
     });
 
-    it('should return an observable of the input if is non-empty', (done) => {
+    it('should return an observable of subaccounts if is non-empty', (done) => {
       responsibilitiesService.checkEmptySubaccountsResponse(subAccountDataMock)
         .subscribe((subAccountData: SubAccountData) => {
         expect(subAccountData).toEqual(subAccountDataMock);

@@ -231,7 +231,7 @@ describe('ProductMetrics Service', () => {
       };
     });
 
-    it('should return an observable of the input when product metrics is defined with products', (done) => {
+    it('should return an observable of product metrics when product metrics is defined with products', (done) => {
       productMetricsDataMock.products = {brand: []};
       productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
         expect(productMetricsData).toEqual(productMetricsDataMock);
