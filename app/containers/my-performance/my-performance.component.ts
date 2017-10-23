@@ -32,7 +32,6 @@ import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.r
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
-import { ProductMetricsViewTypeState } from '../../state/reducers/product-metrics-view-type.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
@@ -84,7 +83,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private filterStateSubscription: Subscription;
   private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
-  private productMetricsViewTypeSubscription: Subscription;
   private productMetrics: Array<MyPerformanceTableRow>;
   private productMetricsSelectedBrandRow: MyPerformanceTableRow;
   private productMetricsSubscription: Subscription;
@@ -115,6 +113,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe((productMetrics: ProductMetricsState) => {
+        this.productMetricsViewType = productMetrics.productMetricsViewType;
+
         this.fetchProductMetricsFailure = productMetrics.status === ActionStatus.Error
           || (productMetrics.products && Object.keys(productMetrics.products).length === 0);
 
@@ -155,12 +155,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
-      });
-
-    this.productMetricsViewTypeSubscription = this.store
-      .select(state => state.myPerformanceProductMetricsViewType)
-      .subscribe((productMetricsViewTypeState: ProductMetricsViewTypeState) => {
-        this.productMetricsViewType = productMetricsViewTypeState.viewType;
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
@@ -189,7 +183,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
     this.productMetricsSubscription.unsubscribe();
-    this.productMetricsViewTypeSubscription.unsubscribe();
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {

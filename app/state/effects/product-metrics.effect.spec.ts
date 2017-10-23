@@ -13,7 +13,6 @@ import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsService, ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
-import { SetProductMetricsViewType } from '../actions/product-metrics-view-type.action';
 
 const chance = new Chance();
 
@@ -124,7 +123,7 @@ describe('ProductMetrics Effects', () => {
         };
 
         productMetricsEffects.fetchProductMetrics$().pairwise().subscribe(([action1, action2]) => {
-          expect(action1).toEqual(new SetProductMetricsViewType(productMetricsViewTypeMock));
+          expect(action1).toEqual(new ProductMetricsActions.SetProductMetricsViewType(productMetricsViewTypeMock));
           expect(action2).toEqual(new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock));
           done();
         });

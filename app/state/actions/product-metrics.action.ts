@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 
 export interface FetchProductMetricsPayload {
@@ -46,8 +47,16 @@ export class SelectBrandValues implements Action {
   constructor(public payload: string) { }
 }
 
+export const SET_PRODUCT_METRICS_VIEW_TYPE = '[View Types] SET_PRODUCT_METRICS_VIEW_TYPE';
+export class SetProductMetricsViewType implements Action {
+  readonly type = SET_PRODUCT_METRICS_VIEW_TYPE;
+
+  constructor(public payload: ProductMetricsViewType) { }
+}
+
 export type Action =
   FetchProductMetrics
   | FetchProductMetricsSuccess
   | FetchProductMetricsFailure
-  | SelectBrandValues;
+  | SelectBrandValues
+  | SetProductMetricsViewType;

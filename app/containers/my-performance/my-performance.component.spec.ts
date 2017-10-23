@@ -97,7 +97,11 @@ describe('MyPerformanceComponent', () => {
   let userServiceMock: any;
   let myPerformanceServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
-  let myPerformanceProductMetricsMock: ProductMetricsState = {status: ActionStatus.Fetching, products: {}};
+  let myPerformanceProductMetricsMock: ProductMetricsState = {
+    status: ActionStatus.Fetching,
+    products: {},
+    productMetricsViewType: ProductMetricsViewType.brands
+  };
 
   function generateMockVersions(min: number, max: number): MyPerformanceEntitiesData[] {
     return Array(chance.natural({min: min, max: max})).fill('').map(() => getMyPerformanceEntitiesDataMock());
@@ -320,7 +324,7 @@ describe('MyPerformanceComponent', () => {
       fixture = TestBed.createComponent(MyPerformanceComponent);
       fixture.detectChanges();
 
-      expect(storeMock.select.calls.count()).toBe(7);
+      expect(storeMock.select.calls.count()).toBe(6);
       const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
       expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
 
@@ -336,10 +340,7 @@ describe('MyPerformanceComponent', () => {
       const functionPassToSelectCall4 = storeMock.select.calls.argsFor(4)[0];
       expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current);
 
-      const functionPassToSelectCall5 = storeMock.select.calls.argsFor(5)[0];
-      expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformanceProductMetricsViewType);
-
-      const functionPassToSelectCall6 = storeMock.select.calls.argsFor(6)[0];
+      const functionPassToSelectCall6 = storeMock.select.calls.argsFor(5)[0];
       expect(functionPassToSelectCall6(stateMock)).toBe(stateMock.myPerformance.versions);
 
       fixture.detectChanges();
@@ -766,6 +767,14 @@ describe('MyPerformanceComponent', () => {
   describe('when right side data row is clicked', () => {
     it('should not dispatch any actions', () => {
       storeMock.dispatch.calls.reset();
+
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetching,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.skus
+      };
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(0);
@@ -937,19 +946,31 @@ describe('MyPerformanceComponent', () => {
   describe('when fetching productMetrics returns and error', () => {
 
     it('should set fetchProductMetricsFailure to false when productmetrics status is fetched', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {brandValues: []}};
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetched,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.brands
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(false);
     });
 
     it('should set fetchProductMetricsFailure to true when productmetrics status is error', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Error, products: undefined};
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Error,
+        products: undefined,
+        productMetricsViewType: ProductMetricsViewType.brands
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
 
     it('should set fetchProductMetricsFailure to true when productmetrics.products is empty', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched, products: {}};
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetched,
+        products: {},
+        productMetricsViewType: ProductMetricsViewType.brands
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });

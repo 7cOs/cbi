@@ -9,8 +9,9 @@ import { getEntitiesWithPerformancesMock } from '../models/entity-with-performan
 import { getProductMetricsWithBrandValuesMock, getProductMetricsBrandMock } from '../models/product-metrics.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, MyPerformanceTableRowMetadata } from '../models/my-performance-table-row.model';
-import { ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
+import { ProductMetricsValues } from '../models/product-metrics.model';
+import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
@@ -21,7 +22,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
   const productMetricsState: ProductMetricsState = {
     status: ActionStatus.Fetched,
-    products: getProductMetricsWithBrandValuesMock(1, 9)
+    products: getProductMetricsWithBrandValuesMock(1, 9),
+    productMetricsViewType: ProductMetricsViewType.brands
   };
 
   beforeEach(() => {

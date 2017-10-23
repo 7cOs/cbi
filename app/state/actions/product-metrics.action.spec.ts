@@ -1,9 +1,11 @@
 import * as Chance from 'chance';
 
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from './product-metrics.action';
 
 const chance = new Chance();
@@ -98,6 +100,19 @@ describe('ProductMetrics Actions', () => {
 
     it('should contain the correct payload', () => {
       expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
+  describe('SetProductMetricsViewType', () => {
+    let action: ProductMetricsActions.SetProductMetricsViewType;
+
+    beforeEach(() => {
+      action = new ProductMetricsActions.SetProductMetricsViewType(ProductMetricsViewType[getProductMetricsViewTypeMock()]);
+    });
+
+    it('should have the correct type', () => {
+      expect(ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE).toBe('[View Types] SET_PRODUCT_METRICS_VIEW_TYPE');
+      expect(action.type).toBe(ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE);
     });
   });
 
