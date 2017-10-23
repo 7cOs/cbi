@@ -501,6 +501,16 @@ describe('Responsibilities Effects', () => {
           });
         });
       });
+
+      describe('when checkEmptySubaccountsResponse returns an error', () => {
+        it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
+          spyOn(responsibilitiesService, 'checkEmptySubaccountsResponse').and.returnValue(Observable.throw(error));
+          responsibilitiesEffects.fetchSubAccounts$().subscribe((result) => {
+            expect(result).toEqual(new FetchResponsibilitiesFailure(error));
+            done();
+          });
+        });
+      });
     });
   });
 
@@ -602,6 +612,16 @@ describe('Responsibilities Effects', () => {
     describe('when getPerformanceForGroupedEntities returns an error', () => {
       it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
         spyOn(responsibilitiesService, 'getPerformanceForGroupedEntities').and.returnValue(Observable.throw(error));
+        responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((result) => {
+          expect(result).toEqual(new FetchResponsibilitiesFailure(error));
+          done();
+        });
+      });
+    });
+
+    describe('when checkEmptyResponsibilitiesResponse returns an error', () => {
+      it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
+        spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();

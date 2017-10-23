@@ -218,9 +218,10 @@ describe('ProductMetrics Service', () => {
 
   describe('when checkEmptyProductMetricsResponse is called', () => {
     let productMetricsDataMock: ProductMetricsData;
+    let checkEmptyProductMetricsResponseSpy: jasmine.Spy;
 
     beforeEach(() => {
-      spyOn(productMetricsService, 'checkEmptyProductMetricsResponse').and.callThrough();
+      checkEmptyProductMetricsResponseSpy = spyOn(productMetricsService, 'checkEmptyProductMetricsResponse').and.callThrough();
       productMetricsDataMock = {
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
@@ -230,19 +231,12 @@ describe('ProductMetrics Service', () => {
       };
     });
 
-    it('should return an observable of the input when product metrics is defined with products', () => {
-      expect(productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock))
-      .toEqual(Observable.of(productMetricsDataMock));
-    });
-
-    it('should throw an error when products is empty', () => {
-      productMetricsDataMock.products = {};
-      expect(productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock)).toThrowError();
-    });
-
-    it('should throw an error when products is undefined', () => {
-      productMetricsDataMock.products = undefined;
-      expect(productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock)).toThrowError();
+    it('should return an observable of the input when product metrics is defined with products', (done) => {
+      productMetricsDataMock.products = {brand: []};
+      productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+        expect(productMetricsData).toEqual(productMetricsDataMock);
+        done();
+      });
     });
   });
 });

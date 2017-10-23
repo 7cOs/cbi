@@ -55,7 +55,7 @@ export class ProductMetricsService {
 
   public checkEmptyProductMetricsResponse(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
     if (productMetricsData && Object.keys(productMetricsData.products).length === 0) {
-      return Observable.throw('Empty Product Metrics Data');
+      return Observable.throw('Empty Product Metrics Data Error');
     }
     return Observable.of(productMetricsData);
   }
