@@ -213,6 +213,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               }
               this.store.dispatch(new FetchEntityWithPerformance({
                 selectedPositionId: parameters.row.metadata.positionId,
+                alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
                 entityTypeGroupName: entityTypeGroupName,
                 entityTypeCode: parameters.row.metadata.entityTypeCode,
                 entityType: parameters.row.metadata.entityType,

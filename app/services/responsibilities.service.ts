@@ -87,11 +87,13 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getHierarchyGroupsPerformances(entities: Array<HierarchyGroup>, filter: MyPerformanceFilterState, positionId: string)
+  public getHierarchyGroupsPerformances(entities: Array<HierarchyGroup>,
+    filter: MyPerformanceFilterState, positionId: string, alternateHierarchyId?: string)
   : Observable<EntityWithPerformance[]> {
     const apiCalls: Observable<EntityWithPerformance>[] = entities.map((group: HierarchyGroup) => {
-      const fetchGroupPerformanceCall = group.alternateHierarchyId
-        ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group, positionId, group.alternateHierarchyId, filter)
+      const fetchGroupPerformanceCall = group.alternateHierarchyId || alternateHierarchyId
+        ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group, positionId,
+            group.alternateHierarchyId || alternateHierarchyId, filter)
         : this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId);
 
       return fetchGroupPerformanceCall
@@ -107,17 +109,20 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
-  public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState) {
+  public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState, alternateHierarchyId?: string) {
     const apiCalls: Observable<EntityWithPerformance | Error>[] =
       entities.map((entity: HierarchyEntity) => {
-        return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
-          .map((response: PerformanceDTO) => {
-            return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
-          })
-          .catch(() => {
-            this.toastService.showPerformanceDataErrorToast();
-            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, entity));
-          });
+        const performanceCall = alternateHierarchyId
+          ? this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(entity.positionId, alternateHierarchyId, filter)
+          : this.myPerformanceApiService.getPerformance(entity.positionId, filter);
+
+        return performanceCall.map((response: PerformanceDTO) => {
+          return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
+        })
+        .catch(() => {
+          this.toastService.showPerformanceDataErrorToast();
+          return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, entity));
+        });
       });
 
     return Observable.forkJoin(apiCalls);
@@ -296,7 +301,9 @@ export class ResponsibilitiesService {
   public getEntitiesWithPerformanceForGroup(payload: FetchEntityWithPerformancePayload): Observable<(EntityWithPerformance | Error)[]> {
     switch (payload.entityType) {
       case EntityType.RoleGroup:
-        return this.getPositionsPerformances(payload.entities, payload.filter);
+        return payload.alternateHierarchyId
+          ? this.getPositionsPerformances(payload.entities, payload.filter, payload.alternateHierarchyId)
+          : this.getPositionsPerformances(payload.entities, payload.filter);
       case EntityType.DistributorGroup:
         return this.getDistributorsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
       case EntityType.AccountGroup:
@@ -322,13 +329,17 @@ export class ResponsibilitiesService {
   }
 
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
-    return this.getHierarchyGroupsPerformances(responsibilitiesData.hierarchyGroups,
-      responsibilitiesData.filter,
-      responsibilitiesData.positionId)
-        .map((entityPerformances: EntityWithPerformance[]) => {
-          responsibilitiesData.entityWithPerformance = entityPerformances;
-          return responsibilitiesData;
-        });
+    const fetchPerformanceCall = responsibilitiesData.alternateHierarchyId
+      ? this.getHierarchyGroupsPerformances(responsibilitiesData.hierarchyGroups, responsibilitiesData.filter,
+          responsibilitiesData.positionId, responsibilitiesData.alternateHierarchyId)
+      : this.getHierarchyGroupsPerformances(responsibilitiesData.hierarchyGroups, responsibilitiesData.filter,
+          responsibilitiesData.positionId);
+
+    return fetchPerformanceCall.map((entityPerformances: EntityWithPerformance[]) => {
+      return Object.assign({}, responsibilitiesData, {
+        entityWithPerformance: entityPerformances
+      });
+    });
    }
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData) {
