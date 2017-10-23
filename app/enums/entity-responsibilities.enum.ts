@@ -17,7 +17,8 @@ export enum EntityPeopleType {
   'DRAFT' = 'DRAFT',
   'DISTRIBUTOR' = 'DISTRIBUTOR',
   'ACCOUNT' = 'ACCOUNT',
-  'GEOGRAPHY' = 'GEOGRAPHY'
+  'GEOGRAPHY' = 'GEOGRAPHY',
+  'BRAND MARKET MANAGER' = 'BRAND MARKET MANAGER'
 }
 
 export enum EntityType {

@@ -110,7 +110,7 @@ export class ResponsibilitiesService {
   }
 
   public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState, alternateHierarchyId?: string) {
-    const apiCalls: Observable<EntityWithPerformance | Error>[] =
+    const apiCalls: Observable<EntityWithPerformance>[] =
       entities.map((entity: HierarchyEntity) => {
         const performanceCall = alternateHierarchyId
           ? this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(entity.positionId, alternateHierarchyId, filter)

@@ -101,33 +101,39 @@ describe('Unit: filter service', function() {
                 name: 'CMTH',
                 displayValue: 'Clo Mth',
                 v3ApiCode: 'LCM',
-                id: 1
+                id: 1,
+                type: 'month'
                 }, {
                 name: 'CYTM',
                 displayValue: 'CYTM',
                 v3ApiCode: 'CYTM',
-                id: 2
+                id: 2,
+                type: 'month'
                 }, {
                 name: 'FYTM',
                 displayValue: 'FYTM',
                 v3ApiCode: 'FYTM',
-                id: 3
+                id: 3,
+                type: 'month'
                 }],
                 year: [{
                 name: 'MTD',
                 displayValue: 'MTD',
                 v3ApiCode: 'CMIPBDL',
-                id: 4
+                id: 4,
+                type: 'year'
                 }, {
                 name: 'CYTD',
                 displayValue: 'CYTD',
-                v3ApiCode: 'CYTD',
-                id: 5
+                v3ApiCode: 'CYTDBDL',
+                id: 5,
+                type: 'year'
                 }, {
                 name: 'FYTD',
                 displayValue: 'FYTD',
-                v3ApiCode: 'FYTD',
-                id: 6
+                v3ApiCode: 'FYTDBDL',
+                id: 6,
+                type: 'year'
                 }]
             },
             distributionTimePeriod: {
@@ -135,27 +141,31 @@ describe('Unit: filter service', function() {
                 name: 'L60',
                 displayValue: 'L60',
                 displayCode: 'L60 Days',
-                v3ApiCode: 'L60',
-                id: 1
+                v3ApiCode: 'L60BDL',
+                id: 1,
+                type: 'year'
                 }, {
                 name: 'L90',
                 displayValue: 'L90',
                 displayCode: 'L90 Days',
-                v3ApiCode: 'L90',
-                id: 2
+                v3ApiCode: 'L90BDL',
+                id: 2,
+                type: 'year'
                 }, {
                 name: 'L120',
                 displayValue: 'L120',
                 displayCode: 'L120 Days',
-                v3ApiCode: 'L120',
-                id: 3
+                v3ApiCode: 'L120BDL',
+                id: 3,
+                type: 'year'
                 }],
                 month: [{
                 name: 'L03',
                 displayValue: 'L03',
                 displayCode: 'L03 Mth',
                 v3ApiCode: 'L3CM',
-                id: 4
+                id: 4,
+                type: 'month'
                 }]
             },
             scorecardDistributionTimePeriod: {
@@ -163,7 +173,7 @@ describe('Unit: filter service', function() {
                 name: 'L90',
                 displayValue: 'L90',
                 displayCode: 'L90 Days',
-                v3ApiCode: 'L90',
+                v3ApiCode: 'L90BDL',
                 id: 2
               }],
               month: [{
@@ -356,33 +366,39 @@ describe('Unit: filter service', function() {
                 name: 'CMTH',
                 displayValue: 'Clo Mth',
                 v3ApiCode: 'LCM',
-                id: 1
+                id: 1,
+                type: 'month'
                 }, {
                 name: 'CYTM',
                 displayValue: 'CYTM',
                 v3ApiCode: 'CYTM',
-                id: 2
+                id: 2,
+                type: 'month'
                 }, {
                 name: 'FYTM',
                 displayValue: 'FYTM',
                 v3ApiCode: 'FYTM',
-                id: 3
+                id: 3,
+                type: 'month'
                 }],
                 year: [{
                 name: 'MTD',
                 displayValue: 'MTD',
                 v3ApiCode: 'CMIPBDL',
-                id: 4
+                id: 4,
+                type: 'year'
                 }, {
                 name: 'CYTD',
                 displayValue: 'CYTD',
-                v3ApiCode: 'CYTD',
-                id: 5
+                v3ApiCode: 'CYTDBDL',
+                id: 5,
+                type: 'year'
                 }, {
                 name: 'FYTD',
                 displayValue: 'FYTD',
-                v3ApiCode: 'FYTD',
-                id: 6
+                v3ApiCode: 'FYTDBDL',
+                id: 6,
+                type: 'year'
                 }]
             },
             distributionTimePeriod: {
@@ -390,27 +406,31 @@ describe('Unit: filter service', function() {
                 name: 'L60',
                 displayValue: 'L60',
                 displayCode: 'L60 Days',
-                v3ApiCode: 'L60',
-                id: 1
+                v3ApiCode: 'L60BDL',
+                id: 1,
+                type: 'year'
                 }, {
                 name: 'L90',
                 displayValue: 'L90',
                 displayCode: 'L90 Days',
-                v3ApiCode: 'L90',
-                id: 2
+                v3ApiCode: 'L90BDL',
+                id: 2,
+                type: 'year'
                 }, {
                 name: 'L120',
                 displayValue: 'L120',
                 displayCode: 'L120 Days',
-                v3ApiCode: 'L120',
-                id: 3
+                v3ApiCode: 'L120BDL',
+                id: 3,
+                type: 'year'
                 }],
                 month: [{
                 name: 'L03',
                 displayValue: 'L03',
                 displayCode: 'L03 Mth',
                 v3ApiCode: 'L3CM',
-                id: 4
+                id: 4,
+                type: 'month'
                 }]
             },
             scorecardDistributionTimePeriod: {
@@ -418,7 +438,7 @@ describe('Unit: filter service', function() {
                 name: 'L90',
                 displayValue: 'L90',
                 displayCode: 'L90 Days',
-                v3ApiCode: 'L90',
+                v3ApiCode: 'L90BDL',
                 id: 2
               }],
               month: [{
@@ -568,7 +588,8 @@ describe('Unit: filter service', function() {
       expect(filtersService.resetSort).toBeDefined();
       expect(filtersService.resetPagination).toBeDefined();
       expect(filtersService.depletionsTimePeriodFromName).toBeDefined();
-      expect(filtersService.distributionTimePeriodFromName).toBeDefined();
+      expect(filtersService.depletionsTimePeriodFromV3APICode).toBeDefined();
+      expect(filtersService.distributionTimePeriodFromV3APICode).toBeDefined();
   });
 
   it('should have valid default model state', function() {
@@ -844,15 +865,30 @@ describe('Unit: filter service', function() {
   });
 
   it('Gets the correct names for distribution and depletions time periods', function () {
-    const depletionTimePeriods = ['CMTH', 'MTD', 'NotDepletionTimePeriod'];
+    const depletionTimePeriods = ['CMTH', 'CYTM', 'FYTM', 'MTD', 'CYTD', 'FYTD', 'NotDepletionTimePeriod'];
     expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[0])).toEqual(resetModelObject.depletionsTimePeriod.month[0]);
-    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[1])).toEqual(resetModelObject.depletionsTimePeriod.year[0]);
-    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[2])).toBe(null);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[1])).toEqual(resetModelObject.depletionsTimePeriod.month[1]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[2])).toEqual(resetModelObject.depletionsTimePeriod.month[2]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[3])).toEqual(resetModelObject.depletionsTimePeriod.year[0]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[4])).toEqual(resetModelObject.depletionsTimePeriod.year[1]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[5])).toEqual(resetModelObject.depletionsTimePeriod.year[2]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[6])).toBe(null);
 
-    const distributionTimePeriods = ['L60', 'L03', 'NotDistributionTimePeriod'];
-    expect(filtersService.distributionTimePeriodFromName(distributionTimePeriods[0])).toEqual(resetModelObject.distributionTimePeriod.year[0]);
-    expect(filtersService.distributionTimePeriodFromName(distributionTimePeriods[1])).toEqual(resetModelObject.distributionTimePeriod.month[0]);
-    expect(filtersService.distributionTimePeriodFromName(distributionTimePeriods[2])).toBe(null);
+    const depletionTimePeriodsAPI = ['LCM', 'CYTM', 'FYTM', 'CMIPBDL', 'CYTDBDL', 'FYTDBDL', 'NotDepletionTimePeriod'];
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[0])).toEqual(resetModelObject.depletionsTimePeriod.month[0]);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[1])).toEqual(resetModelObject.depletionsTimePeriod.month[1]);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[2])).toEqual(resetModelObject.depletionsTimePeriod.month[2]);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[3])).toEqual(resetModelObject.depletionsTimePeriod.year[0]);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[4])).toEqual(resetModelObject.depletionsTimePeriod.year[1]);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[5])).toEqual(resetModelObject.depletionsTimePeriod.year[2]);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[6])).toBe(null);
+
+    const distributionTimePeriodsAPI = ['L60BDL', 'L90BDL', 'L120BDL', 'L3CM', 'NotDistributionTimePeriod'];
+    expect(filtersService.distributionTimePeriodFromV3APICode(distributionTimePeriodsAPI[0])).toEqual(resetModelObject.distributionTimePeriod.year[0]);
+    expect(filtersService.distributionTimePeriodFromV3APICode(distributionTimePeriodsAPI[1])).toEqual(resetModelObject.distributionTimePeriod.year[1]);
+    expect(filtersService.distributionTimePeriodFromV3APICode(distributionTimePeriodsAPI[2])).toEqual(resetModelObject.distributionTimePeriod.year[2]);
+    expect(filtersService.distributionTimePeriodFromV3APICode(distributionTimePeriodsAPI[3])).toEqual(resetModelObject.distributionTimePeriod.month[0]);
+    expect(filtersService.distributionTimePeriodFromV3APICode(distributionTimePeriodsAPI[4])).toBe(null);
 
   });
 });

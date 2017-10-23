@@ -19,11 +19,11 @@ export class DateRangeService {
     this.dateRangesArray = [
       this.store.select(state => state.dateRanges.FYTM),
       this.store.select(state => state.dateRanges.CYTM),
-      this.store.select(state => state.dateRanges.CYTD),
-      this.store.select(state => state.dateRanges.FYTD),
-      this.store.select(state => state.dateRanges.L60),
-      this.store.select(state => state.dateRanges.L90),
-      this.store.select(state => state.dateRanges.L120),
+      this.store.select(state => state.dateRanges.CYTDBDL),
+      this.store.select(state => state.dateRanges.FYTDBDL),
+      this.store.select(state => state.dateRanges.L60BDL),
+      this.store.select(state => state.dateRanges.L90BDL),
+      this.store.select(state => state.dateRanges.L120BDL),
       this.store.select(state => state.dateRanges.L3CM),
       this.store.select(state => state.dateRanges.LCM),
       this.store.select(state => state.dateRanges.CMIPBDL)

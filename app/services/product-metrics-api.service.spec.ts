@@ -54,7 +54,7 @@ describe('Service: ProductMetricsApiService', () => {
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(`/v3/positions/${expectedPositionId}/productMetrics`
-          + '?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand');
+          + '?type=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand');
       });
 
       productMetricsApiService
@@ -84,7 +84,7 @@ describe('Service: ProductMetricsApiService', () => {
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(`/v3/accounts/${expectedAccountId}/productMetrics`
-          + `?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand&positionId=${expectedPositionId}`);
+          + `?type=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand&positionId=${expectedPositionId}`);
       });
 
       productMetricsApiService
@@ -114,7 +114,7 @@ describe('Service: ProductMetricsApiService', () => {
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(`/v3/positions/${expectedPositionId}/responsibilities/${expectedEntityType}/productMetrics`
-          + `?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand`);
+          + `?type=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand`);
       });
 
       productMetricsApiService
