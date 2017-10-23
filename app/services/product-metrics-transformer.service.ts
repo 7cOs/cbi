@@ -15,7 +15,7 @@ export class ProductMetricsTransformerService {
           return this.formatProductMetricsDTO(productMetricsValuesDTO);
         })}
       : { skuValues: productMetricsDTOs.skuValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) => {
-          return this.formatProductMetricsSkuDTO(productMetricsValuesDTO);
+          return this.formatProductMetricsPackageSkuDTO(productMetricsValuesDTO);
         })};
   }
 
@@ -30,7 +30,7 @@ export class ProductMetricsTransformerService {
     };
   }
 
-  private formatProductMetricsSkuDTO(productMetricsDTO: ProductMetricsValuesDTO): ProductMetricsValues {
+  private formatProductMetricsPackageSkuDTO(productMetricsDTO: ProductMetricsValuesDTO): ProductMetricsValues {
     return Object.assign({}, this.formatProductMetricsDTO(productMetricsDTO), {
       beerId: {
         masterPackageSKUDescription: productMetricsDTO.beerId.masterPackageSKUDescription,
