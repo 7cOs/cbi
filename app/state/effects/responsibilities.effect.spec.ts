@@ -518,8 +518,9 @@ describe('Responsibilities Effects', () => {
     });
 
     describe('when everything returns successfully', () => {
-      it('should return a FetchResponsibilitiesSuccess', (done) => {
+      it('should dispatch the appropriate success actions', (done) => {
         const salesHierarchyViewTypeMock = SalesHierarchyViewType[getSalesHierarchyViewTypeMock()];
+        const dispatchedActions: Action[] = [];
 
         spyOn(responsibilitiesService, 'getAlternateHierarchyResponsibilities').and.callFake(
           (responsibilitiesData: ResponsibilitiesData) => {
@@ -535,10 +536,18 @@ describe('Responsibilities Effects', () => {
             return Observable.of(responsibilitiesData);
         });
 
-        responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().pairwise().subscribe(([result1, result2]) => {
-          expect(result1).toEqual(new SetSalesHierarchyViewType(salesHierarchyViewTypeMock));
-          expect(result2).toEqual(new FetchResponsibilitiesSuccess(responsibilitiesSuccessPayloadMock));
-          done();
+        responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((dispatchedAction: Action) => {
+          dispatchedActions.push(dispatchedAction);
+
+          if (dispatchedActions.length === 3) {
+            expect(dispatchedActions).toEqual([
+              new SetSalesHierarchyViewType(salesHierarchyViewTypeMock),
+              new SetTotalPerformance(alternateResponsibilitiesDataMock.positionId),
+              new FetchResponsibilitiesSuccess(responsibilitiesSuccessPayloadMock)
+            ]);
+
+            done();
+          }
         });
       });
 

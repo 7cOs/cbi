@@ -51,7 +51,7 @@ export class ResponsibilitiesEffects {
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
-      .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.constructFetchAlternateHierarchySuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
   }
 
@@ -145,6 +145,19 @@ export class ResponsibilitiesEffects {
         entityWithPerformance: subAccountsData.entityWithPerformance
       }),
       new ViewTypeActions.SetSalesHierarchyViewType(SalesHierarchyViewType.subAccounts)
+    ]);
+  }
+
+  private constructFetchAlternateHierarchySuccessAction(responsibilitiesData: ResponsibilitiesData): Observable<Action> {
+    return Observable.from([
+      new ViewTypeActions.SetSalesHierarchyViewType(responsibilitiesData.salesHierarchyViewType),
+      new ResponsibilitiesActions.SetTotalPerformance(responsibilitiesData.positionId),
+      new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
+        positionId: responsibilitiesData.positionId,
+        groupedEntities: responsibilitiesData.groupedEntities,
+        hierarchyGroups: responsibilitiesData.hierarchyGroups,
+        entityWithPerformance: responsibilitiesData.entityWithPerformance
+      })
     ]);
   }
 }
