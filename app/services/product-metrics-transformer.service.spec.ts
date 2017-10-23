@@ -1,9 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
-import { ProductMetrics, ProductMetricsValuesDTO } from '../models/product-metrics.model';
+import { getProductMetricsSkuValuesDTOMock, getProductMetricsDTOBrandMock } from '../models/product-metrics.model.mock';
+import { ProductMetrics, ProductMetricsValuesDTO, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { productMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { UtilService } from './util.service';
 
 const chance = new Chance();
@@ -26,7 +25,8 @@ describe('Service: ProductMetricsTransformerService', () => {
     }));
 
     it('should return a collection of formatted ProductMetrics from a collection of ProductMetricsDTOs', () => {
-      spyOn(productMetricsTransformerService, 'transformProductMetrics').and.callThrough();
+      const productMetricsBrandDTOMock: ProductMetricsDTO = getProductMetricsDTOBrandMock(2, 2);
+
       const expectedProductMetrics: ProductMetrics = {
         brandValues: [{
           brandDescription: productMetricsBrandDTOMock.brandValues[0].brandDescription,
@@ -58,8 +58,7 @@ describe('Service: ProductMetricsTransformerService', () => {
     });
 
     it('should return a collection of formatted Sku ProductMetrics from a collection of ProductMetricsDTOs containing skus', () => {
-      spyOn(productMetricsTransformerService, 'transformProductMetrics').and.callThrough();
-      const productMectricsSkuDTOMock: ProductMetricsValuesDTO = getProductMetricsSkuDTOMock();
+      const productMectricsSkuDTOMock: ProductMetricsValuesDTO = getProductMetricsSkuValuesDTOMock();
 
       const expectedProductMetrics: ProductMetrics = {
         skuValues: [{

@@ -10,13 +10,22 @@ export class ProductMetricsTransformerService {
   constructor(private utilService: UtilService) { }
 
   public transformProductMetrics(productMetricsDTOs: ProductMetricsDTO): ProductMetrics {
-    return productMetricsDTOs.brandValues
-      ? { brandValues: productMetricsDTOs.brandValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) => {
-          return this.formatProductMetricsDTO(productMetricsValuesDTO);
-        })}
-      : { skuValues: productMetricsDTOs.skuValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) => {
-          return this.formatProductMetricsPackageSkuDTO(productMetricsValuesDTO);
-        })};
+    let productMetrics: ProductMetrics;
+
+    if (productMetricsDTOs.brandValues) {
+      productMetrics = {
+        brandValues: productMetricsDTOs.brandValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) =>
+          this.formatProductMetricsDTO(productMetricsValuesDTO)
+        )
+      };
+    } else {
+      productMetrics = {
+        skuValues: productMetricsDTOs.skuValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) =>
+          this.formatProductMetricsPackageSkuDTO(productMetricsValuesDTO))
+      };
+    }
+
+    return productMetrics;
   }
 
   private formatProductMetricsDTO(productMetricsDTO: ProductMetricsValuesDTO): ProductMetricsValues {

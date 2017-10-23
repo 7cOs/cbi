@@ -5,7 +5,7 @@ import * as Chance from 'chance';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
-import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
+import { getProductMetricsBrandValuesDTOMock } from '../models/product-metrics.model.mock';
 import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
@@ -42,7 +42,7 @@ describe('ProductMetrics Service', () => {
     productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock(1, 9);
     productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(1, 9);
     productMetricsBrandsDTOMock = {
-      brandValues: Array(chance.natural({min: 1, max: 9})).fill('').map(() => getProductMetricsBrandDTOMock()),
+      brandValues: Array(chance.natural({min: 1, max: 9})).fill('').map(() => getProductMetricsBrandValuesDTOMock()),
       type: chance.string()
     };
     performanceFilterStateMock = getMyPerformanceFilterMock();

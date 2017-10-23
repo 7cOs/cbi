@@ -42,7 +42,14 @@ export const productMetricsBrandDTOMock: ProductMetricsDTO = {
   ]
 };
 
-export function getProductMetricsBrandDTOMock(): ProductMetricsValuesDTO {
+export function getProductMetricsDTOBrandMock(min: number = 1, max: number = 9): ProductMetricsDTO {
+  return {
+    type: 'volume',
+    brandValues: Array(chance.natural({min: min, max: max})).fill('').map(() => this.getProductMetricsBrandValuesDTOMock())
+  };
+}
+
+export function getProductMetricsBrandValuesDTOMock(): ProductMetricsValuesDTO {
   return {
     values: [
       {
@@ -62,7 +69,7 @@ export function getProductMetricsBrandDTOMock(): ProductMetricsValuesDTO {
   };
 }
 
-export function getProductMetricsSkuDTOMock(): ProductMetricsValuesDTO {
+export function getProductMetricsSkuValuesDTOMock(): ProductMetricsValuesDTO {
   return {
     values: [
       {
