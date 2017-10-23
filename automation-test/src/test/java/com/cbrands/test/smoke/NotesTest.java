@@ -6,10 +6,9 @@ import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+
+import java.net.MalformedURLException;
 
 public class NotesTest extends BaseTestCase {
   private static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util
@@ -18,38 +17,31 @@ public class NotesTest extends BaseTestCase {
   private LogoutPage logoutPage;
   private NotesModal notesModal;
 
-  @BeforeMethod
-  public void setUp() {
-    final TestUser testUser = TestUser.NOTES_ACTOR;
-    final String storeAccountName = "Taco Joint";
+  @BeforeClass
+  public void setUpClass() throws MalformedURLException {
+    startUpBrowser();
 
-    final Login loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
-
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
+
+    final Login loginPage = new Login(driver);
+    final HomePage homePage = loginPage.loginAs(TestUser.NOTES_ACTOR);
+    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + TestUser.NOTES_ACTOR.userName());
 
     final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
     accountDashboardPage.goToPage();
 
-    notesModal = accountDashboardPage
-      .enterRetailerChainSearchText(storeAccountName)
-      .clickSearchForRetailerChain()
-      .selectRetailerChainFilterByName(storeAccountName)
-      .clickApplyFilters()
-      .drillIntoRightPanelWithName(storeAccountName)
-      .drillIntoRightPanelWithName(storeAccountName)
-      .clickNotesButton()
-      .waitForLoaderToDisappear();
-
+    notesModal = accountDashboardPage.openNotesModalForStore("Taco Joint", "IL", "Ontario");
     Assert.assertTrue(notesModal.isLoaded(), "Failure to load Notes modal \n");
+
+    notesModal.waitForLoaderToDisappear();
   }
 
-  @AfterMethod
-  public void tearDown() {
+  @AfterClass
+  public void tearDownClass() {
     logoutPage.goToPage();
+    shutDownBrowser();
   }
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")
@@ -68,7 +60,6 @@ public class NotesTest extends BaseTestCase {
   @Test(dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
   public void deleteNote(String noteTopic, String noteText) {
     final WebElement deleteMe = notesModal.findNoteWithText(noteText);
-
     notesModal
       .clickDeleteIcon(deleteMe)
       .confirmDelete(deleteMe)
@@ -82,7 +73,12 @@ public class NotesTest extends BaseTestCase {
 
   @DataProvider(name = "NoteData")
   public static Object[][] noteData() {
-    return new Object[][]{{"Distribution", "Testing create notes: " + current_time_stamp}};
+    return new Object[][]{
+      {
+        "Distribution",
+        "Testing create notes: " + current_time_stamp
+      }
+    };
   }
 
 }
