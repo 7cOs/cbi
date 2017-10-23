@@ -41,29 +41,29 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
-      case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
-        return {
-          current: {
-            responsibilities: state.current.responsibilities,
-            salesHierarchyViewType: state.current.salesHierarchyViewType,
-            selectedEntity: state.current.selectedEntity,
-            selectedBrandCode: state.current.selectedBrandCode,
-            selectedEntityType: action.payload
-          },
-          versions: state.versions
-        };
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
+      return {
+        current: {
+          responsibilities: state.current.responsibilities,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
+          selectedEntity: state.current.selectedEntity,
+          selectedBrandCode: state.current.selectedBrandCode,
+          selectedEntityType: action.payload
+        },
+        versions: state.versions
+      };
 
-      case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
-        return {
-          current: {
-            responsibilities: state.current.responsibilities,
-            salesHierarchyViewType: state.current.salesHierarchyViewType,
-            selectedEntity: state.current.selectedEntity,
-            selectedBrandCode: action.payload,
-            selectedEntityType: state.current.selectedEntityType
-          },
-          versions: state.versions
-        };
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
+      return {
+        current: {
+          responsibilities: state.current.responsibilities,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
+          selectedEntity: state.current.selectedEntity,
+          selectedBrandCode: action.payload,
+          selectedEntityType: state.current.selectedEntityType
+        },
+        versions: state.versions
+      };
 
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return initialState;
