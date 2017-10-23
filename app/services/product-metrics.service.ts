@@ -20,7 +20,7 @@ export interface ProductMetricsData {
   entityTypeCode?: string;
   filter: MyPerformanceFilterState;
   selectedEntityType: EntityType;
-  selectedBrand?: string;
+  selectedBrandCode?: string;
   products?: ProductMetrics;
   productMetricsViewType?: ProductMetricsViewType;
 }
@@ -36,7 +36,7 @@ export class ProductMetricsService {
   public getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
     let dtos: Observable<ProductMetricsDTO | Error>;
 
-    const aggregationLevel = productMetricsData.selectedBrand ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
+    const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
 
     if (productMetricsData.selectedEntityType === EntityType.Person) {
       dtos = this.productMetricsApiService.getPositionProductMetrics(
@@ -69,11 +69,11 @@ export class ProductMetricsService {
   }
 
   public filterProductMetricsBrand(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
-    if (productMetricsData.selectedBrand && productMetricsData.products && productMetricsData.products.skuValues) {
+    if (productMetricsData.selectedBrandCode && productMetricsData.products && productMetricsData.products.skuValues) {
       return Observable.of(Object.assign({}, productMetricsData, {
         products: {
           skuValues: productMetricsData.products.skuValues.filter((productMetricsValues: ProductMetricsValues) => {
-            return productMetricsValues.brandCode === productMetricsData.selectedBrand;
+            return productMetricsValues.brandCode === productMetricsData.selectedBrandCode;
           })
         }
       }));

@@ -91,13 +91,13 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('SetMyPerformanceSelectedBrand', () => {
-    let selectedBrandMock: string;
-    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedBrand;
+  describe('SetMyPerformanceSelectedBrandCode', () => {
+    let selectedBrandCodeMock: string;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode;
 
     beforeEach(() => {
-      selectedBrandMock = chance.string();
-      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(selectedBrandMock);
+      selectedBrandCodeMock = chance.string();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(selectedBrandCodeMock);
     });
 
     it('should have the correct type', () => {
@@ -107,7 +107,7 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(selectedBrandMock);
+      expect(action.payload).toEqual(selectedBrandCodeMock);
     });
   });
 

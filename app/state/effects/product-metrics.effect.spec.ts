@@ -21,7 +21,7 @@ describe('ProductMetrics Effects', () => {
   let positionIdMock: string;
   let contextPositionIdMock: string;
   let entityTypeCodeMock: string;
-  let selectedBrandMock: string;
+  let selectedBrandCodeMock: string;
   let productMetricsWithBrandValuesMock: ProductMetrics;
   let productMetricsWithSkuValuesMock: ProductMetrics;
   let performanceFilterStateMock: MyPerformanceFilterState;
@@ -46,7 +46,7 @@ describe('ProductMetrics Effects', () => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
-    selectedBrandMock = chance.string();
+    selectedBrandCodeMock = chance.string();
     productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock(1, 9);
     productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(1, 9);
     performanceFilterStateMock = getMyPerformanceFilterMock();
@@ -58,7 +58,7 @@ describe('ProductMetrics Effects', () => {
       entityTypeCode: entityTypeCodeMock,
       filter: performanceFilterStateMock,
       selectedEntityType: selectedEntityTypeMock,
-      selectedBrand: selectedBrandMock
+      selectedBrandCode: selectedBrandCodeMock
     };
 
     TestBed.configureTestingModule({
@@ -93,7 +93,7 @@ describe('ProductMetrics Effects', () => {
         entityTypeCode: entityTypeCodeMock,
         filter: performanceFilterStateMock,
         selectedEntityType: EntityType.Person,
-        selectedBrand: selectedBrandMock
+        selectedBrandCode: selectedBrandCodeMock
       }));
     });
 

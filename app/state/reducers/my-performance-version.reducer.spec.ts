@@ -68,7 +68,7 @@ describe('My Performance Version Reducer', () => {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntity: entityNameMock,
-        selectedBrand: beforeState.current.selectedBrand,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedEntityType: beforeState.current.selectedEntityType
       },
       versions: beforeState.versions
@@ -86,7 +86,7 @@ describe('My Performance Version Reducer', () => {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntity: beforeState.current.selectedEntity,
-        selectedBrand: beforeState.current.selectedBrand,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedEntityType: entityTypeMock
       },
       versions: beforeState.versions
@@ -96,21 +96,21 @@ describe('My Performance Version Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
-  it('should set the selected brand when SetMyPerformanceSelectedBrand is received', () => {
-    const selectedBrandMock = chance.string();
+  it('should set the selected brand when SetMyPerformanceSelectedBrandCode is received', () => {
+    const selectedBrandCodeMock = chance.string();
     const beforeState = getMyPerformanceStateMock();
     const expectedState = {
       current: {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntity: beforeState.current.selectedEntity,
-        selectedBrand: selectedBrandMock,
+        selectedBrandCode: selectedBrandCodeMock,
         selectedEntityType: beforeState.current.selectedEntityType
       },
       versions: beforeState.versions
     };
     const actualState =
-      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedBrand(selectedBrandMock));
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(selectedBrandCodeMock));
     expect(actualState).toEqual(expectedState);
   });
 

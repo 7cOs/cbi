@@ -62,7 +62,7 @@ describe('ProductMetrics Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
-  it('should update selectedBrandValues with the first item in product corresponding to the given brand code in payload', () => {
+  it('should update selectedBrandCodeValues with the first item in product corresponding to the given brand code in payload', () => {
     const products = getProductMetricsWithBrandValuesMock(1, 9);
     const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.brandValues.length - 1});
     const chosenBrandCode = chance.string();
@@ -78,7 +78,7 @@ describe('ProductMetrics Reducer', () => {
     const expectedState = {
       status: initialState.status,
       products: initialState.products,
-      selectedBrandValues: products.brandValues[chosenProductMetricsValuesIndex]
+      selectedBrandCodeValues: products.brandValues[chosenProductMetricsValuesIndex]
     };
 
     const actualState = productMetricsReducer(

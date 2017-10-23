@@ -5,7 +5,7 @@ import * as ProductMetricsActions from '../actions/product-metrics.action';
 export interface ProductMetricsState extends State {
   status: ActionStatus;
   products: ProductMetrics;
-  selectedBrandValues?: ProductMetricsValues;
+  selectedBrandCodeValues?: ProductMetricsValues;
 }
 
 export const initialState: ProductMetricsState = {
@@ -36,10 +36,10 @@ export function productMetricsReducer(
       });
 
     case ProductMetricsActions.SELECT_BRAND_VALUES:
-      const selectedBrand = state.products.brandValues.find(brand => brand.brandCode === action.payload);
+      const selectedBrandCode = state.products.brandValues.find(brand => brand.brandCode === action.payload);
 
       return Object.assign({}, state, {
-        selectedBrandValues: selectedBrand
+        selectedBrandCodeValues: selectedBrandCode
       });
 
     default:

@@ -16,7 +16,7 @@ export interface MyPerformanceEntitiesData {
   salesHierarchyViewType?: SalesHierarchyViewTypeState;
   selectedEntity?: string;
   selectedEntityType: EntityType;
-  selectedBrand?: string;
+  selectedBrandCode?: string;
 }
 
 export interface MyPerformanceState {
@@ -68,7 +68,7 @@ export function myPerformanceReducer(
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: state.current.selectedEntity,
           selectedEntityType: state.current.selectedEntityType,
-          selectedBrand: state.current.selectedBrand
+          selectedBrandCode: state.current.selectedBrandCode
         },
         versions: state.versions
       };
@@ -83,7 +83,7 @@ export function myPerformanceReducer(
           ),
           selectedEntity: state.current.selectedEntity,
           selectedEntityType: state.current.selectedEntityType,
-          selectedBrand: state.current.selectedBrand
+          selectedBrandCode: state.current.selectedBrandCode
         },
         versions: state.versions
       };

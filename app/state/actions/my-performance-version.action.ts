@@ -37,7 +37,7 @@ export class SetMyPerformanceSelectedEntityType implements Action {
 }
 
 export const SET_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance] SET_MY_PERFORMANCE_SELECTED_BRAND';
-export class SetMyPerformanceSelectedBrand implements Action {
+export class SetMyPerformanceSelectedBrandCode implements Action {
   readonly type = SET_MY_PERFORMANCE_SELECTED_BRAND;
 
 constructor(public payload: string) { }
@@ -49,4 +49,4 @@ export type Action =
   | ClearMyPerformanceState
   | SetMyPerformanceSelectedEntity
   | SetMyPerformanceSelectedEntityType
-  | SetMyPerformanceSelectedBrand;
+  | SetMyPerformanceSelectedBrandCode;

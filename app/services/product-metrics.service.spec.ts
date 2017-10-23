@@ -246,15 +246,15 @@ describe('ProductMetrics Service', () => {
 
       describe('when a brand is selected', () => {
         it('should return the sku that matches the selected brand', (done) => {
-          productMetricsDataMock.selectedBrand = productMetricsWithSkuValuesMock.skuValues[0].brandCode;
-          const nonMatchingBrandCode = productMetricsDataMock.selectedBrand + 'NONMATCH';
+          productMetricsDataMock.selectedBrandCode = productMetricsWithSkuValuesMock.skuValues[0].brandCode;
+          const nonMatchingBrandCode = productMetricsDataMock.selectedBrandCode + 'NONMATCH';
           productMetricsWithSkuValuesMock.skuValues = productMetricsWithSkuValuesMock.skuValues
             .map((productMetricsValues: ProductMetricsValues) => {
               productMetricsValues.brandCode = nonMatchingBrandCode;
               return productMetricsValues;
             });
 
-          productMetricsWithSkuValuesMock.skuValues[0].brandCode = productMetricsDataMock.selectedBrand;
+          productMetricsWithSkuValuesMock.skuValues[0].brandCode = productMetricsDataMock.selectedBrandCode;
 
           productMetricsService.filterProductMetricsBrand(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
             expect(productMetricsData).toEqual({
@@ -266,15 +266,15 @@ describe('ProductMetrics Service', () => {
               products: {
                 skuValues: [productMetricsWithSkuValuesMock.skuValues[0]]
               },
-              selectedBrand: productMetricsDataMock.selectedBrand
+              selectedBrandCode: productMetricsDataMock.selectedBrandCode
             });
             done();
           });
         });
 
         it('should return an empty array when no brand matches', (done) => {
-          productMetricsDataMock.selectedBrand = productMetricsWithSkuValuesMock.skuValues[0].brandCode;
-          const nonMatchingBrandCode = productMetricsDataMock.selectedBrand + 'NONMATCH';
+          productMetricsDataMock.selectedBrandCode = productMetricsWithSkuValuesMock.skuValues[0].brandCode;
+          const nonMatchingBrandCode = productMetricsDataMock.selectedBrandCode + 'NONMATCH';
           productMetricsWithSkuValuesMock.skuValues = productMetricsWithSkuValuesMock.skuValues
             .map((productMetricsValues: ProductMetricsValues) => {
               productMetricsValues.brandCode = nonMatchingBrandCode;
@@ -291,7 +291,7 @@ describe('ProductMetrics Service', () => {
               products: {
                 skuValues: []
               },
-              selectedBrand: productMetricsDataMock.selectedBrand
+              selectedBrandCode: productMetricsDataMock.selectedBrandCode
             });
             done();
           });
@@ -300,7 +300,7 @@ describe('ProductMetrics Service', () => {
 
       describe('when NO brand is selected', () => {
         it('should return the input data', (done) => {
-          productMetricsDataMock.selectedBrand = null;
+          productMetricsDataMock.selectedBrandCode = null;
 
           productMetricsService.filterProductMetricsBrand(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
             expect(productMetricsData).toEqual(productMetricsDataMock);
@@ -321,7 +321,7 @@ describe('ProductMetrics Service', () => {
           filter: performanceFilterStateMock,
           selectedEntityType: selectedEntityTypeMock,
           products: productMetricsWithBrandValuesMock,
-          selectedBrand: chance.string()
+          selectedBrandCode: chance.string()
         };
       });
 
