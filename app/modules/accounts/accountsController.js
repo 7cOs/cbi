@@ -1068,6 +1068,23 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       setPremiseType($state.params.premisetype);
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
 
+      setIncomingTimePeriod();
+      filterTopBottom();
+    }
+
+    function setDataForNavigationFromMyPerformanceSubaccountRow() {
+      setFilter({ids: [$state.params.subaccountid], name: $state.params.subaccountname, type: 'subAccounts'}, 'account');
+
+      setPremiseType($state.params.premisetype);
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+
+      setIncomingTimePeriod();
+      vm.showXChain = true;
+      filterTopBottom();
+      vm.selectedStore = $state.params.subaccountname;
+    }
+
+    function setIncomingTimePeriod() {
       if ($state.params.depletiontimeperiod) {
         let period = filtersService.depletionsTimePeriodFromV3APICode($state.params.depletiontimeperiod);
         vm.filterModel.endingTimePeriod = period.type;
@@ -1079,19 +1096,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         updateDistributionTimePeriod(period.type, false);
         vm.filterModel.distributionTimePeriod = period;
       }
-      filterTopBottom();
-    }
-
-    function setDataForNavigationFromMyPerformanceSubaccountRow() {
-      setFilter({ids: [$state.params.subaccountid], name: $state.params.subaccountname, type: 'subAccounts'}, 'account');
-
-      setPremiseType($state.params.premisetype);
-      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
-      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromV3APICode($state.params.depletiontimeperiod);
-      vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromV3APICode($state.params.distributiontimeperiod);
-      vm.showXChain = true;
-      filterTopBottom();
-      vm.selectedStore = $state.params.subaccountname;
     }
 
     function setPremiseType(premiseType) {
