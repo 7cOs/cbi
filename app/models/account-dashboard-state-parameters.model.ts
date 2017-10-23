@@ -9,5 +9,5 @@ export interface AccountDashboardStateParameters {
   premisetype?: string;
   subaccountid?: string;
   subaccountname?: string;
-  myAccountOnly?: boolean;
+  myAccountOnlyValue?: boolean;
 }

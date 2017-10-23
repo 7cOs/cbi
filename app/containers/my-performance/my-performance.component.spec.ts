@@ -598,7 +598,7 @@ describe('MyPerformanceComponent', () => {
     let accountNameMock: string;
     let hierarchyEntityMock: HierarchyEntity;
     let currentMock: MyPerformanceEntitiesData;
-    let myAccountOnly: boolean;
+    let myAccountOnlyValue: boolean;
     let alternateHierarchyIdMock: string;
 
     beforeEach(() => {
@@ -614,13 +614,13 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyIdMock = chance.string();
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
-        myAccountOnly = !alternateHierarchyIdMock;
+        myAccountOnlyValue = !alternateHierarchyIdMock;
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (myAccountOnly, stateMock.myPerformanceFilter, rowMock);
+        (myAccountOnlyValue, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnly, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnlyValue, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
@@ -632,17 +632,17 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyIdMock = null;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
-        myAccountOnly = !alternateHierarchyIdMock;
+        myAccountOnlyValue = !alternateHierarchyIdMock;
         hierarchyEntityMock.positionId = rowMock.metadata.positionId;
         currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(myAccountOnly, stateMock.myPerformanceFilter,
-                                                                                              rowMock,
-                                                                                              hierarchyEntityMock.premiseType);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(myAccountOnlyValue,
+                                                                                              stateMock.myPerformanceFilter,
+                                                                                              rowMock, hierarchyEntityMock.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnly, stateMock.myPerformanceFilter,
+          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnlyValue, stateMock.myPerformanceFilter,
                                                                   rowMock,
                                                                   hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
@@ -654,16 +654,16 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyIdMock = null;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
-        myAccountOnly = !alternateHierarchyIdMock;
+        myAccountOnlyValue = !alternateHierarchyIdMock;
         hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (myAccountOnly, stateMock.myPerformanceFilter, rowMock);
+        (myAccountOnlyValue, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnly, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnlyValue, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
