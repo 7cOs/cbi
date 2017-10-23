@@ -592,8 +592,8 @@ describe('Unit: accountsController', function() {
 
   describe('displayBrandValueAccountBrandVelocity', () => {
     it('Should display N/A only when the first depletion is after the beginning of the time period', () => {
-      const dateRangeMock = {L90: getDateRangeMock()};
-      dateRangeMock.L90.range = '05/14/17 - 08/11/17';
+      const dateRangeMock = {L90BDL: getDateRangeMock()};
+      dateRangeMock.L90BDL.range = '05/14/17 - 08/11/17';
       const dateRangeServiceWithRangeMock = {
         getDateRanges: () => Observable.of(dateRangeMock)
       };
@@ -1503,6 +1503,16 @@ describe('Unit: accountsController', function() {
   });
 
   describe('getValueBoundForAcctType', () => {
+    beforeEach(() => {
+      const dateRangeMock = {L90BDL: getDateRangeMock()};
+      dateRangeMock.L90BDL.range = '05/14/17 - 08/11/17';
+      const dateRangeServiceWithRangeMock = {
+        getDateRanges: () => Observable.of(dateRangeMock)
+      };
+
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
+    });
+
     it('Should get the correct property from the measure', function() {
       var displayValue;
       // MTD
@@ -1539,14 +1549,6 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should display N/A only when the first depletion is after the beginning of the time period', () => {
-      const dateRangeMock = {L90: getDateRangeMock()};
-      dateRangeMock.L90.range = '05/14/17 - 08/11/17';
-      const dateRangeServiceWithRangeMock = {
-        getDateRanges: () => Observable.of(dateRangeMock)
-      };
-
-      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
-
       const storeData = {
         measures: topBottomSnapshotDistributorData.performance[0].measures[7],
         performanceData: {

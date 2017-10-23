@@ -40,7 +40,7 @@ notes
     div(column='4')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value); a.disableApplyFilter(false);") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value, true); a.disableApplyFilter(false);") {{filter.name}}
     div(column='8')
       div(row).dropdown-filter.dashboard-filter
         div(column='6').dropdown
