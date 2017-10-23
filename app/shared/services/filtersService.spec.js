@@ -173,7 +173,7 @@ describe('Unit: filter service', function() {
                 name: 'L90',
                 displayValue: 'L90',
                 displayCode: 'L90 Days',
-                v3ApiCode: 'L90',
+                v3ApiCode: 'L90BDL',
                 id: 2
               }],
               month: [{
@@ -438,7 +438,7 @@ describe('Unit: filter service', function() {
                 name: 'L90',
                 displayValue: 'L90',
                 displayCode: 'L90 Days',
-                v3ApiCode: 'L90',
+                v3ApiCode: 'L90BDL',
                 id: 2
               }],
               month: [{
