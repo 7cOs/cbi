@@ -92,33 +92,39 @@ module.exports = /*  @ngInject */
           name: 'CMTH',
           displayValue: 'Clo Mth',
           v3ApiCode: 'LCM',
-          id: 1
+          id: 1,
+          type: 'month'
         }, {
           name: 'CYTM',
           displayValue: 'CYTM',
           v3ApiCode: 'CYTM',
-          id: 2
+          id: 2,
+          type: 'month'
         }, {
           name: 'FYTM',
           displayValue: 'FYTM',
           v3ApiCode: 'FYTM',
-          id: 3
+          id: 3,
+          type: 'month'
         }],
         year: [{
           name: 'MTD',
           displayValue: 'MTD',
           v3ApiCode: 'CMIPBDL',
-          id: 4
+          id: 4,
+          type: 'year'
         }, {
           name: 'CYTD',
           displayValue: 'CYTD',
-          v3ApiCode: 'CYTD',
-          id: 5
+          v3ApiCode: 'CYTDBDL',
+          id: 5,
+          type: 'year'
         }, {
           name: 'FYTD',
           displayValue: 'FYTD',
-          v3ApiCode: 'FYTD',
-          id: 6
+          v3ApiCode: 'FYTDBDL',
+          id: 6,
+          type: 'year'
         }]
       },
       distributionTimePeriod: {
@@ -126,27 +132,31 @@ module.exports = /*  @ngInject */
           name: 'L60',
           displayValue: 'L60',
           displayCode: 'L60 Days',
-          v3ApiCode: 'L60',
-          id: 1
+          v3ApiCode: 'L60BDL',
+          id: 1,
+          type: 'year'
         }, {
           name: 'L90',
           displayValue: 'L90',
           displayCode: 'L90 Days',
-          v3ApiCode: 'L90',
-          id: 2
+          v3ApiCode: 'L90BDL',
+          id: 2,
+          type: 'year'
         }, {
           name: 'L120',
           displayValue: 'L120',
           displayCode: 'L120 Days',
-          v3ApiCode: 'L120',
-          id: 3
+          v3ApiCode: 'L120BDL',
+          id: 3,
+          type: 'year'
         }],
         month: [{
           name: 'L03',
           displayValue: 'L03',
           displayCode: 'L03 Mth',
           v3ApiCode: 'L3CM',
-          id: 4
+          id: 4,
+          type: 'month'
         }]
       },
       scorecardDistributionTimePeriod: {
@@ -439,7 +449,8 @@ module.exports = /*  @ngInject */
       trendPropertyNames: trendPropertyNames,
       resetPagination: resetPagination,
       depletionsTimePeriodFromName: depletionsTimePeriodFromName,
-      distributionTimePeriodFromName: distributionTimePeriodFromName,
+      depletionsTimePeriodFromV3APICode: depletionsTimePeriodFromV3APICode,
+      distributionTimePeriodFromV3APICode: distributionTimePeriodFromV3APICode,
       getNewPaginationState: getNewPaginationState
     };
 
@@ -568,10 +579,19 @@ module.exports = /*  @ngInject */
       return (period && period.length > 0) ? period[0] : null;
     }
 
-    function distributionTimePeriodFromName(name) {
+    function depletionsTimePeriodFromV3APICode(code) {
+      let flattenPeriods = [...service.model.depletionsTimePeriod.month, ...service.model.depletionsTimePeriod.year];
+      let period = flattenPeriods.filter(timePeriod => {
+        return timePeriod.v3ApiCode === code;
+      });
+
+      return (period && period.length > 0) ? period[0] : null;
+    }
+
+    function distributionTimePeriodFromV3APICode(code) {
       let flattenPeriods = [...service.model.distributionTimePeriod.month, ...service.model.distributionTimePeriod.year];
       let period = flattenPeriods.filter(timePeriod => {
-        return timePeriod.name === name;
+        return timePeriod.v3ApiCode === code;
       });
 
       return (period && period.length > 0) ? period[0] : null;
