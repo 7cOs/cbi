@@ -379,21 +379,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (parameters.leftSide) {
       switch (this.salesHierarchyViewType) {
         case SalesHierarchyViewType.roleGroups:
-          actionParameters = Object.assign({}, actionParameters, {
-            entityTypeCode: parameters.row.metadata.entityTypeCode,
-            selectedEntityType: EntityType.RoleGroup
-          });
+          actionParameters.entityTypeCode = parameters.row.metadata.entityTypeCode;
+          actionParameters.selectedEntityType = EntityType.RoleGroup;
           break;
         case SalesHierarchyViewType.accounts:
-          actionParameters = Object.assign({}, actionParameters, {
-            contextPositionId: this.currentState.responsibilities.positionId,
-            selectedEntityType: EntityType.Account
-          });
+          actionParameters.contextPositionId = this.currentState.responsibilities.positionId;
+          actionParameters.selectedEntityType = EntityType.Account;
           break;
         case SalesHierarchyViewType.people:
-          actionParameters = Object.assign({}, actionParameters, {
-            selectedEntityType: EntityType.Person
-          });
+          actionParameters.selectedEntityType = EntityType.Person;
           break;
         default:
           break;
@@ -401,14 +395,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     } else {
       switch (this.salesHierarchyViewType) {
         case SalesHierarchyViewType.accounts:
-          actionParameters = Object.assign({}, actionParameters, {
-            contextPositionId: this.currentState.responsibilities.positionId
-          });
+          actionParameters.contextPositionId = this.currentState.responsibilities.positionId;
           break;
         case SalesHierarchyViewType.people:
-          actionParameters = Object.assign({}, actionParameters, {
-            entityTypeCode: this.currentState.responsibilities.entityTypeCode
-          });
+          actionParameters.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
           break;
 
         case SalesHierarchyViewType.roleGroups:
