@@ -18,6 +18,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   private Login loginPage;
   private LogoutPage logoutPage;
+  private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeMethod
@@ -29,7 +30,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    final HomePage homePage = loginPage.loginAs(testUser);
+    homePage = loginPage.loginAs(testUser);
     Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
 
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
@@ -58,7 +59,13 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     Assert.assertTrue(
       opportunitiesPage.doesSavedReportExistWithName(name),
-      "Saved Report failed to appear in the dropdown on the Opportunities page."
+      "Saved Report with name " + name + " failed to appear in the dropdown on the Opportunities page."
+    );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(name),
+      "Saved Report with name " + name + " failed to appear in the dropdown on the Home page."
     );
   }
 
@@ -66,7 +73,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public static Object[][] savedReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {testReportName, "Healy Wholesale"}
+      {"First " + testReportName, "Healy Wholesale"}
     };
   }
 
