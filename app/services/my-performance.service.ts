@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { AccountDashboardStateParameters } from '../models/account-dashboard-state-parameters.model';
-import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
@@ -64,16 +64,11 @@ export class MyPerformanceService {
 
     switch (filter.metricType) {
       case MetricTypeValue.volume:
-          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriod[filter.dateRangeCode];
-          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriod[DateRangeTimePeriod.L90];
+          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
           break;
       case MetricTypeValue.PointsOfDistribution:
-          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriod[DateRangeTimePeriod.FYTD];
-          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriod[filter.dateRangeCode];
-          break;
       case MetricTypeValue.velocity:
-          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriod[DateRangeTimePeriod.FYTD];
-          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriod[filter.dateRangeCode];
+          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
           break;
       default:
         return {};

@@ -428,9 +428,9 @@ describe('Unit: scorecardsController', function() {
 
  describe('[Method] changeDepletionOption', function() {
    it('should update the distribution', function() {
-     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'FYTD', displayValue: 'FYTD', v3ApiCode: 'FYTD', id: 6 });
+     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'FYTD', displayValue: 'FYTD', v3ApiCode: 'FYTDBDL', id: 6, type: 'year' });
      ctrl.changeDepletionOption('CYTD');
-     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'CYTD', displayValue: 'CYTD', v3ApiCode: 'CYTD', id: 5 });
+     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'CYTD', displayValue: 'CYTD', v3ApiCode: 'CYTDBDL', id: 5, type: 'year' });
    });
  });
 
@@ -454,8 +454,8 @@ describe('Unit: scorecardsController', function() {
 
   describe('[Method] updateEndingTimePeriod', function() {
     beforeEach(function() {
-      ctrl.filtersService.model.scorecardDistributionTimePeriod = {'year': [{'name': 'L90', 'displayValue': 'L90', displayCode: 'L90 Days', v3ApiCode: 'L90', 'id': 2, '$$hashKey': 'object:37'}], 'month': [{'name': 'L03', 'displayValue': 'L03', displayCode: 'L03 Mth', v3ApiCode: 'L3CM', 'id': 4}]};
-      ctrl.filtersService.model.depletionsTimePeriod = {month: [{'name': 'CMTH', 'displayValue': 'Clo Mth', v3ApiCode: 'LCM', 'id': 1}, { 'name': 'CYTM', 'displayValue': 'CYTM', v3ApiCode: 'CYTM', 'id': 2 }, {'name': 'FYTM', 'displayValue': 'FYTM', v3ApiCode: 'FYTM', 'id': 3}], year: [{'name': 'MTD', 'displayValue': 'MTD', v3ApiCode: 'MTD', 'id': 4, '$$hashKey': 'object:81 '}, {'name': 'CYTD', 'displayValue': 'CYTD', v3ApiCode: 'CYTD', 'id': 5, '$$hashKey': 'object:82 '}, {'name': 'FYTD', 'displayValue': 'FYTD', v3ApiCode: 'FYTD', 'id': 6}]};
+      ctrl.filtersService.model.scorecardDistributionTimePeriod = {'year': [{'name': 'L90', 'displayValue': 'L90', displayCode: 'L90 Days', v3ApiCode: 'L90BDL', 'id': 2, '$$hashKey': 'object:37'}], 'month': [{'name': 'L03', 'displayValue': 'L03', displayCode: 'L03 Mth', v3ApiCode: 'L3CM', 'id': 4}]};
+      ctrl.filtersService.model.depletionsTimePeriod = {month: [{'name': 'CMTH', 'displayValue': 'Clo Mth', v3ApiCode: 'LCM', 'id': 1, type: 'month'}, { 'name': 'CYTM', 'displayValue': 'CYTM', v3ApiCode: 'CYTM', 'id': 2, type: 'month' }, {'name': 'FYTM', 'displayValue': 'FYTM', v3ApiCode: 'FYTM', 'id': 3, type: 'month'}], year: [{'name': 'MTD', 'displayValue': 'MTD', v3ApiCode: 'CMIPBDL', 'id': 4, type: 'year', '$$hashKey': 'object:81 '}, {'name': 'CYTD', 'displayValue': 'CYTD', v3ApiCode: 'CYTDBDL', 'id': 5, type: 'year', '$$hashKey': 'object:82 '}, {'name': 'FYTD', 'displayValue': 'FYTD', v3ApiCode: 'FYTDBDL', 'id': 6, type: 'year'}]};
     });
     it('should update the time period for year', function() {
       ctrl.filtersService.lastEndingTimePeriod.endingPeriodType = 'year';
@@ -463,7 +463,7 @@ describe('Unit: scorecardsController', function() {
 
       expect(ctrl.distributionSelectOptions.selected).toEqual('L90');
       expect(ctrl.filtersService.model.depletionsTimePeriod['year'][2].name).toEqual('FYTD');
-      expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({name: 'FYTD', displayValue: 'FYTD', v3ApiCode: 'FYTD', id: 6});
+      expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({name: 'FYTD', displayValue: 'FYTD', v3ApiCode: 'FYTDBDL', id: 6, type: 'year'});
     });
 
       it('should update the time period for month', function() {
@@ -472,7 +472,7 @@ describe('Unit: scorecardsController', function() {
 
       expect(ctrl.distributionSelectOptions.selected).toEqual('L03');
       expect(ctrl.filtersService.model.depletionsTimePeriod['month'][2].name).toEqual('FYTM');
-      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ displayCode: 'L03 Mth', name: 'L03', displayValue: 'L03', v3ApiCode: 'L3CM', id: 4 });
+      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ displayCode: 'L03 Mth', name: 'L03', displayValue: 'L03', v3ApiCode: 'L3CM', id: 4, type: 'month' });
     });
   });
 
@@ -480,7 +480,7 @@ describe('Unit: scorecardsController', function() {
     it('should update the distribution time period', function() {
       ctrl.changeDistributionTimePeriod('L90');
       expect(ctrl.distributionSelectOptions.selected).toEqual('L90');
-      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ name: 'L90', displayValue: 'L90', displayCode: 'L90 Days', v3ApiCode: 'L90', id: 2 });
+      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ name: 'L90', displayValue: 'L90', displayCode: 'L90 Days', v3ApiCode: 'L90BDL', id: 2, type: 'year' });
     });
   });
   describe('[Method] setDefaultFilterOptions', function() {

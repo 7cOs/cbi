@@ -1,11 +1,11 @@
 export enum DateRangeTimePeriod {
   FYTM,
   CYTM,
-  CYTD,
-  FYTD,
-  L60,
-  L90,
-  L120,
+  CYTDBDL,
+  FYTDBDL,
+  L60BDL,
+  L90BDL,
+  L120BDL,
   L3CM,
   LCM,
   CMIPBDL
