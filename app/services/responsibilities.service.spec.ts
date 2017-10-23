@@ -5,7 +5,7 @@ import * as Chance from 'chance';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
-import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType, HierarchyGroupTypeCode } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock, getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
@@ -62,6 +62,9 @@ describe('Responsibilities Effects', () => {
       return Observable.of(peopleResponsibilitiesDTOMock);
     },
     getHierarchyGroupPerformance() {
+      return Observable.of(performanceDTOMock);
+    },
+    getAlternateHierarchyGroupPerformance() {
       return Observable.of(performanceDTOMock);
     },
     getPerformance() {
@@ -724,8 +727,10 @@ describe('Responsibilities Effects', () => {
         });
     });
 
-    it('calls getHierarchyGroupPerformance with the given positionId', (done) => {
-      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callThrough();
+    it('calls getHierarchyGroupPerformance with the given positionId when the given HierarchyGroup has ' +
+    'no alternateHierarchyId', (done) => {
+      const getGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callThrough();
+      const getAlternateGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
 
       responsibilitiesService.getHierarchyGroupsPerformances(hierarchyGroups, performanceFilterStateMock, positionIdMock)
         .subscribe((entityWithPerformance: EntityWithPerformance[]) => {
@@ -733,15 +738,48 @@ describe('Responsibilities Effects', () => {
           done();
         });
 
-      expect(getPerformanceSpy.calls.count()).toBe(hierarchyGroups.length);
+      expect(getGroupPerformanceSpy.calls.count()).toBe(hierarchyGroups.length);
 
       hierarchyGroups.forEach((hierarchyGroup: HierarchyGroup, index: number) => {
-        expect(getPerformanceSpy.calls.argsFor(index)).toEqual([
+        expect(getGroupPerformanceSpy.calls.argsFor(index)).toEqual([
           hierarchyGroup,
           performanceFilterStateMock,
           positionIdMock
         ]);
       });
+
+      expect(getAlternateGroupPerformanceSpy).not.toHaveBeenCalled();
+    });
+
+    it('calls getAlternateHierarchyGroupPerformance with the group`s postiionId and alternateHierarchyId given HierarchyGroup has ' +
+    'an alternateHierarchyId', (done) => {
+      const getGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callThrough();
+      const getAlternateGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
+
+      hierarchyGroups = hierarchyGroups.map((hierarchyGroup: HierarchyGroup) => {
+        return Object.assign({}, hierarchyGroup, {
+          alternateHierarchyId: chance.string()
+        });
+      });
+
+      responsibilitiesService.getHierarchyGroupsPerformances(hierarchyGroups, performanceFilterStateMock, positionIdMock)
+        .subscribe((entityWithPerformance: EntityWithPerformance[]) => {
+          expect(entityWithPerformance).toEqual([entityWithPerformanceMock[0], entityWithPerformanceMock[0]]);
+          done();
+        });
+
+      expect(getAlternateGroupPerformanceSpy.calls.count()).toBe(hierarchyGroups.length);
+
+      hierarchyGroups.forEach((hierarchyGroup: HierarchyGroup, index: number) => {
+        expect(getAlternateGroupPerformanceSpy.calls.argsFor(index)).toEqual([
+          hierarchyGroup,
+          positionIdMock,
+          hierarchyGroups[index].alternateHierarchyId,
+          performanceFilterStateMock
+        ]);
+      });
+
+      expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
     });
 
     it('calls transformHierarchyGroupPerformance with the right parameters', (done) => {
@@ -1262,7 +1300,7 @@ describe('Responsibilities Effects', () => {
         });
         const expectedGeographyGroup: HierarchyGroup = {
           name: EntityPeopleType.GEOGRAPHY,
-          type: 'Distributor',
+          type: HierarchyGroupTypeCode.distributors,
           entityType: EntityType.DistributorGroup,
           alternateHierarchyId: positionIdMock
         };

@@ -5,7 +5,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType, HierarchyGroupTypeCode } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
@@ -90,7 +90,11 @@ export class ResponsibilitiesService {
   public getHierarchyGroupsPerformances(entities: Array<HierarchyGroup>, filter: MyPerformanceFilterState, positionId: string)
   : Observable<EntityWithPerformance[]> {
     const apiCalls: Observable<EntityWithPerformance>[] = entities.map((group: HierarchyGroup) => {
-      return this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId)
+      const fetchGroupPerformanceCall = group.alternateHierarchyId
+        ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group, positionId, group.alternateHierarchyId, filter)
+        : this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId);
+
+      return fetchGroupPerformanceCall
         .map((response: PerformanceDTO) => {
           return this.performanceTransformerService.transformHierarchyGroupPerformance(response, group, positionId);
         })
@@ -201,7 +205,7 @@ export class ResponsibilitiesService {
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
           const hierarchyGroups: Array<HierarchyGroup> = [{
             name: accountsOrDistributors[0].type.toUpperCase(),
-            type: accountsOrDistributors[0].type,
+            type: accountsOrDistributors[0].type === 'Distributor' ? HierarchyGroupTypeCode.distributors : HierarchyGroupTypeCode.accounts,
             entityType: accountsOrDistributors[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
           }];
           const groupedEntities: GroupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(
@@ -272,7 +276,7 @@ export class ResponsibilitiesService {
             this.responsibilitiesTransformerService.groupsAccountsDistributors(response, EntityPeopleType.GEOGRAPHY));
           const alternateHierarchyGroup: HierarchyGroup = {
             name: EntityPeopleType.GEOGRAPHY,
-            type: response[0].type,
+            type: response[0].type === 'Distributor' ? HierarchyGroupTypeCode.distributors : HierarchyGroupTypeCode.accounts,
             entityType: response[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup,
             alternateHierarchyId: responsibilitiesData.positionId
           };
