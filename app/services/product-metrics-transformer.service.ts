@@ -43,7 +43,9 @@ export class ProductMetricsTransformerService {
     return Object.assign({}, this.formatProductMetricsDTO(productMetricsDTO), {
       beerId: {
         masterPackageSKUDescription: productMetricsDTO.beerId.masterPackageSKUDescription,
-        masterSKUDescription: productMetricsDTO.beerId.masterSKUDescription
+        masterSKUDescription: productMetricsDTO.beerId.masterSKUDescription,
+        masterPackageSKUCode: productMetricsDTO.beerId.masterPackageSKUCode,
+        masterSKUCode: productMetricsDTO.beerId.masterSKUCode,
       }
     });
   }

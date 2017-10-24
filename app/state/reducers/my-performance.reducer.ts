@@ -17,6 +17,7 @@ export interface MyPerformanceEntitiesData {
   selectedEntity?: string;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
+  selectedSkuCode?: string;
 }
 
 export interface MyPerformanceState {
@@ -44,6 +45,7 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
@@ -68,7 +70,8 @@ export function myPerformanceReducer(
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: state.current.selectedEntity,
           selectedEntityType: state.current.selectedEntityType,
-          selectedBrandCode: state.current.selectedBrandCode
+          selectedBrandCode: state.current.selectedBrandCode,
+          selectedSkuCode: state.current.selectedSkuCode
         },
         versions: state.versions
       };
@@ -83,7 +86,8 @@ export function myPerformanceReducer(
           ),
           selectedEntity: state.current.selectedEntity,
           selectedEntityType: state.current.selectedEntityType,
-          selectedBrandCode: state.current.selectedBrandCode
+          selectedBrandCode: state.current.selectedBrandCode,
+          selectedSkuCode: state.current.selectedSkuCode
         },
         versions: state.versions
       };

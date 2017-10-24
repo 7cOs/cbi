@@ -43,10 +43,18 @@ export class SetMyPerformanceSelectedBrandCode implements Action {
 constructor(public payload: string) { }
 }
 
+export const SET_MY_PERFORMANCE_SELECTED_SKU = '[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU';
+export class SetMyPerformanceSelectedSkuCode implements Action {
+  readonly type = SET_MY_PERFORMANCE_SELECTED_SKU;
+
+  constructor(public payload: string) { }
+}
+
 export type Action =
   SaveMyPerformanceState
   | RestoreMyPerformanceState
   | ClearMyPerformanceState
   | SetMyPerformanceSelectedEntity
   | SetMyPerformanceSelectedEntityType
-  | SetMyPerformanceSelectedBrandCode;
+  | SetMyPerformanceSelectedBrandCode
+  | SetMyPerformanceSelectedSkuCode;

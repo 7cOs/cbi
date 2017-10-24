@@ -72,7 +72,8 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn2: item.yearAgoPercent,
         ctv: total ? this.getPercentageOfTotal(item.current, total) : 0,
         metadata: {
-          brandCode: item.brandCode
+          brandCode: item.brandCode,
+          skuCode: item.beerId.masterSKUCode
         }
       };
     });

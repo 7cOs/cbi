@@ -88,6 +88,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsSubscription: Subscription;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrandCode: string;
+  private selectedSkuCode: string;
   private versions: MyPerformanceEntitiesData[];
 
   constructor(
@@ -342,6 +343,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
         this.fetchProductMetricsWhenClick(parameters);
+        break;
+      case ProductMetricsViewType.skus:
+        this.selectedSkuCode = parameters.row.metadata.skuCode;
+        this.store.dispatch(new ProductMetricsActions.SelectSkuValues(parameters.row.metadata.skuCode));
+        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(parameters.row.metadata.skuCode));
         break;
       default:
         console.log('clicked on right row:', parameters.row);
