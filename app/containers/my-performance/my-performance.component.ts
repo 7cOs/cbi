@@ -209,7 +209,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       } else {
         accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
       }
-
     }
 
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
@@ -237,7 +236,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
           this.handleRightRowDataElementClicked(parameters);
-      }
+        }
     }
   }
 
@@ -299,14 +298,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
         }
+
         this.store.dispatch(new FetchEntityWithPerformance({
           selectedPositionId: parameters.row.metadata.positionId,
+          alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
           entityTypeGroupName: entityTypeGroupName,
           entityTypeCode: parameters.row.metadata.entityTypeCode,
           entityType: parameters.row.metadata.entityType,
           entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
           filter: this.filterState
         }));
+
         // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
         if (!parameters.row.metadata.alternateHierarchyId && parameters.row.descriptionRow0 !== 'ACCOUNTS') {
           this.fetchProductMetricsWhenClick(parameters);
@@ -378,7 +380,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private fetchProductMetricsWhenClick(parameters: HandleElementClickedParameters) {
-    let actionParameters: ProductMetricsActions.FetchProductMetricsPayload = {
+    const actionParameters: ProductMetricsActions.FetchProductMetricsPayload = {
       positionId: parameters.row.metadata.positionId || this.currentState.responsibilities.positionId,
       filter: this.filterState,
       selectedEntityType: this.currentState.selectedEntityType,
@@ -409,7 +411,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         case SalesHierarchyViewType.people:
           actionParameters.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
           break;
-
         case SalesHierarchyViewType.roleGroups:
         default:
           break;
