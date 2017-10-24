@@ -120,6 +120,41 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
+  describe('getAlternateHierarchyPersonPerformance', () => {
+    it('should call the alternate hierarchy performance API and return performance data', (done) => {
+      const positionIdMock: string = chance.string();
+      const alternateHierarchyIdMock: string = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
+      });
+      const filterStateMock: MyPerformanceFilterState = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+
+      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/performanceTotal`;
+      const expectedUrlParams = `?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&contextPositionId=${ alternateHierarchyIdMock }`;
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(performanceDTOResponseMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
+      });
+
+      myPerformanceApiService.getAlternateHierarchyPersonPerformance(
+        positionIdMock,
+        alternateHierarchyIdMock,
+        filterStateMock
+      ).subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(performanceDTOResponseMock);
+        done();
+      });
+    });
+  });
+
   describe('getSubAccountsPerformance', () => {
     it('should call the SubAccountsperformance  API and return performance data', (done) => {
       const filterStateMock: MyPerformanceFilterState = {

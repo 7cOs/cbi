@@ -71,6 +71,9 @@ describe('Responsibilities Effects', () => {
     getPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
+    getAlternateHierarchyPersonPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    },
     getAccountsDistributors() {
       return Observable.of(accountsDistributorsDTOMock);
     },
@@ -840,26 +843,59 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('getPositionsPerformances', () => {
-    it('should call getPerformance with the proper id', (done) => {
-      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callFake(() => {
-        return Observable.of(entitiesTotalPerformancesDTOMock);
-      });
+    it('should call getPerformance when no alternate hierarchy id is passed in', (done) => {
+      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callThrough();
+      const getAlternateHierarchyPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyPersonPerformance')
+        .and.callThrough();
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
-      const mockFilter = {
+
+      const myPerformanceFilterState: MyPerformanceFilterState = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
+      const numberOfEntities: number = chance.natural({min: 1, max: 99});
+      const entities: Array<HierarchyEntity> = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
 
-      const numberOfEntities = chance.natural({min: 1, max: 99});
-      const entities = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getPositionsPerformances(entities, mockFilter).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
-        entities.map((entity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter);
+
+        entities.forEach((entity: HierarchyEntity) => {
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
+          expect(getAlternateHierarchyPerformanceSpy).not.toHaveBeenCalled();
         });
+
+        done();
+      });
+    });
+
+    it('should call getAlternateHierarchyPersonPerformance when an alternate hierarchy id is passed in', (done) => {
+      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callThrough();
+      const getAlternateHierarchyPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyPersonPerformance')
+        .and.callThrough();
+      const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
+
+      const myPerformanceFilterMock: MyPerformanceFilterState = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+      const numberOfEntities: number = chance.natural({min: 1, max: 99});
+      const entities: Array<HierarchyEntity> = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
+
+      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterMock, alternateHierarchyIdMock).subscribe(() => {
+        expect(getAlternateHierarchyPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+
+        entities.forEach((entity: HierarchyEntity) => {
+          expect(getAlternateHierarchyPerformanceSpy).toHaveBeenCalledWith(entity.positionId,
+            alternateHierarchyIdMock, myPerformanceFilterMock);
+          expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
+          expect(getPerformanceSpy).not.toHaveBeenCalled();
+        });
+
         done();
       });
     });

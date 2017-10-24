@@ -486,6 +486,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: undefined,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -518,6 +519,7 @@ describe('MyPerformanceComponent', () => {
         new ResponsibilitiesActions.SetAlternateHierarchyId(rowMock.metadata.alternateHierarchyId));
       expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: undefined,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -609,6 +611,32 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: undefined,
+        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeCode: rowMock.metadata.entityTypeCode,
+        entityType: rowMock.metadata.entityType,
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        filter: stateMock.myPerformanceFilter as any
+      }));
+    });
+
+    it('should dispatch FetchEntityWithPerformance with an alternateHierarchyId when the responsibilitiesState ' +
+    'contains an alternateHierarchyId', () => {
+      currentMock.responsibilities.alternateHierarchyId = chance.string();
+      currentSubject.next(currentMock);
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+
+      const entityTypes: EntityType[] = Object.keys(EntityType)
+        .filter((key: EntityType) => key !== EntityType.ResponsibilitiesGroup)
+        .map((key: EntityType) => EntityType[key]);
+
+      rowMock.metadata.entityType = entityTypes[chance.integer({ min: 0, max: entityTypes.length - 1 })];
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
+        selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,

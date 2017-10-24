@@ -63,10 +63,6 @@ export class ResponsibilitiesEffects {
         const { entityType, entityTypeGroupName, entityTypeCode } = action.payload;
         const salesHierarchyViewType: SalesHierarchyViewType = this.responsibilitiesService.getEntityGroupViewType(entityType);
 
-        // TODO: Rename these:
-          // FetchPerformancesForEntities
-          // GetPeopleInRoleGroup
-
         return this.responsibilitiesService.getEntitiesWithPerformanceForGroup(action.payload)
           .switchMap((entityWithPerformance: EntityWithPerformance[]) => {
             return Observable.from([
