@@ -22,6 +22,8 @@ import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
+const CORPORATE_USER_POSITION_ID = '0';
+
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
   salesHierarchyViewType?: SalesHierarchyViewType;
@@ -295,7 +297,7 @@ export class ResponsibilitiesService {
           : this.getPositionsPerformances(payload.entities, payload.filter);
       case EntityType.DistributorGroup:
         return payload.alternateHierarchyId
-          ? this.getDistributorsPerformances(payload.entities, payload.filter, '0')
+          ? this.getDistributorsPerformances(payload.entities, payload.filter, CORPORATE_USER_POSITION_ID)
           : this.getDistributorsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
       case EntityType.AccountGroup:
         return this.getAccountsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
@@ -334,7 +336,9 @@ export class ResponsibilitiesService {
    }
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData) {
-    const contextPositionId: string = responsibilitiesData.alternateHierarchyId ? '0' : responsibilitiesData.positionId;
+    const contextPositionId: string = responsibilitiesData.alternateHierarchyId
+      ? CORPORATE_USER_POSITION_ID
+      : responsibilitiesData.positionId;
 
     return this.getDistributorsPerformances(
       responsibilitiesData.groupedEntities[EntityPeopleType.DISTRIBUTOR],
