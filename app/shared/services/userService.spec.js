@@ -803,7 +803,7 @@ describe('[Services.userService - notifications]', function() {
           creator: '1234',
           action: 'SHARE_TARGET_LIST',
           objectType: 'test_obj_type',
-          objectId: 'test_object_id',
+          objectID: 'test_object_id',
           salesforceUserNoteID: '999873UU542'
         };
       var payloadObject = {
