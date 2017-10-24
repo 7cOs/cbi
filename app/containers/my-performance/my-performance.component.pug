@@ -7,6 +7,7 @@ my-performance-filter(
 )
 
 my-performance-breadcrumb(
+  [currentPerformanceState]="currentState",
   [currentUserFullName]="currentUserFullName",
   [performanceStateVersions]="performanceStateVersions$ | async",
   [showBackButton]="showLeftBackButton",

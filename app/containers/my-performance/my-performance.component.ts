@@ -130,6 +130,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
+        console.log('CURRENT STATE selectedEntityDescription:', current.selectedEntityDescription);
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
 
          // TODO: compare both selected brands to trigger or not a refresh
@@ -168,7 +169,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
     this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
-    this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
+    this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState,
+      selectedEntityDescription: 'ME' }));
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
       positionId: currentUserId,
       filter: this.filterState,
@@ -279,7 +281,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
     this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
-    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(parameters.row.descriptionRow0));
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
     switch (this.salesHierarchyViewType) {
@@ -297,7 +298,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           entityTypeCode: parameters.row.metadata.entityTypeCode,
           entityType: parameters.row.metadata.entityType,
           entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-          filter: this.filterState
+          filter: this.filterState,
+          selectedEntityDescription: parameters.row.descriptionRow0
         }));
 
         // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
@@ -310,12 +312,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
             positionId: parameters.row.metadata.positionId,
             alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-            filter: this.filterState
+            filter: this.filterState,
+            selectedEntityDescription: parameters.row.descriptionRow0
           }));
         } else {
           this.store.dispatch(new FetchResponsibilities({
             positionId: parameters.row.metadata.positionId,
-            filter: this.filterState
+            filter: this.filterState,
+            selectedEntityDescription: parameters.row.descriptionRow0
           }));
           this.fetchProductMetricsWhenClick(parameters);
         }
@@ -326,7 +330,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           contextPositionId: this.currentState.responsibilities.positionId,
           entityTypeAccountName: parameters.row.descriptionRow0,
           selectedPositionId: parameters.row.metadata.positionId,
-          filter: this.filterState
+          filter: this.filterState,
+          selectedEntityDescription: parameters.row.descriptionRow0
         }));
         if (!this.isInsideAlternateHierarchy()) {
           this.fetchProductMetricsWhenClick(parameters);

@@ -60,24 +60,6 @@ describe('My Performance Version Reducer', () => {
     expect(newState.current).toEqual(savedObject);
   });
 
-  it('should set the selected entity when SetMyPerformanceSelectedEntity is received', () => {
-    const entityNameMock = chance.string();
-    const beforeState = getMyPerformanceStateMock();
-    const expectedState = {
-      current: {
-        responsibilities: beforeState.current.responsibilities,
-        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: entityNameMock,
-        selectedBrandCode: beforeState.current.selectedBrandCode,
-        selectedEntityType: beforeState.current.selectedEntityType
-      },
-      versions: beforeState.versions
-    };
-    const actualState =
-      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(entityNameMock));
-    expect(actualState).toEqual(expectedState);
-  });
-
   it('should set the selected entity type when SetMyPerformanceSelectedEntityType is received', () => {
     const entityTypeMock = getEntityTypeMock();
     const beforeState = getMyPerformanceStateMock();
@@ -85,7 +67,7 @@ describe('My Performance Version Reducer', () => {
       current: {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: beforeState.current.selectedEntity,
+        selectedEntity: beforeState.current.selectedEntityDescription,
         selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedEntityType: entityTypeMock
       },
@@ -103,7 +85,7 @@ describe('My Performance Version Reducer', () => {
       current: {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: beforeState.current.selectedEntity,
+        selectedEntity: beforeState.current.selectedEntityDescription,
         selectedBrandCode: selectedBrandCodeMock,
         selectedEntityType: beforeState.current.selectedEntityType
       },

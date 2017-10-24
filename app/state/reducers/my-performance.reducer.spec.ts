@@ -62,6 +62,33 @@ describe('My Performance Reducer', () => {
     expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
   });
 
+  // it('should call set selectedEn reducer when a responsibility action is received', () => {
+  //   myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
+  //     positionId: chance.string(),
+  //     filter: null
+  //   }));
+  //   myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
+  //     positionId: chance.string(),
+  //     groupedEntities: {},
+  //     hierarchyGroups: [],
+  //     entityWithPerformance: []
+  //   }));
+  //   myPerformanceReducer(
+  //     initialState,
+  //     new ResponsibilitiesActions.SetTotalPerformance(chance.string())
+  //   );
+  //   myPerformanceReducer(
+  //     initialState,
+  //     new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(chance.string())
+  //   );
+  //   myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailure(new Error()));
+  //
+  //   expect(responsibilitiesReducerSpy).toHaveBeenCalled();
+  //   expect(responsibilitiesReducerSpy.calls.count()).toBe(5);
+  //   expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
+  //   expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
+  // });
+
   it('should call the salesHierarchyViewType reducer when a salesHierarchyViewType action is received', () => {
     myPerformanceReducer(initialState, new SalesHierarchyViewTypeActions.SetSalesHierarchyViewType(
       SalesHierarchyViewType[getSalesHierarchyViewTypeMock()])

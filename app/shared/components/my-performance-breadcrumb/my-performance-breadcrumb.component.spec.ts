@@ -63,7 +63,8 @@ describe('Breadcrumb Component', () => {
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
       expect(breadcrumbContainer.textContent).toBe(
-        `${mockInputs.currentUserFullName + mockInputs.performanceStateVersions.map(version => version.selectedEntity).join('')}`);
+        `${mockInputs.currentUserFullName
+        + mockInputs.performanceStateVersions.map(version => version.selectedEntityDescription).join('')}`);
     });
   });
 
@@ -85,7 +86,7 @@ describe('Breadcrumb Component', () => {
 
       componentInstance.breadcrumbEntityClicked.subscribe((event: BreadcrumbEntityClickedEvent) => {
         const expectedBreadcrumbTrail =
-          [ mockInputs.currentUserFullName ].concat(myPerformanceStateMock.versions.map(version => version.selectedEntity));
+          [ mockInputs.currentUserFullName ].concat(myPerformanceStateMock.versions.map(version => version.selectedEntityDescription));
         expect(event).toEqual({trail: expectedBreadcrumbTrail, entity: expectedBreadcrumbTrail[breadcrumbEntityIndexToClick]});
         done();
       });
