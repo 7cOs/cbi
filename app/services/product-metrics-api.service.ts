@@ -8,7 +8,7 @@ import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model';
+import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 
 @Injectable()

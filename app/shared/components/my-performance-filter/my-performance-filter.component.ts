@@ -47,8 +47,8 @@ export class MyPerformanceFilterComponent {
   }
 
   private initDateRanges(dateType: string, dateRanges: DateRangesState): Array<CompassSelectOption> {
-    const depletionDateRangeCodes: Array<string> = ['CYTD', 'FYTD', 'CMIPBDL', 'LCM', 'CYTM', 'FYTM'];
-    const distributionDateRangeCodes: Array<string> = ['L60', 'L90', 'L120', 'L3CM'];
+    const depletionDateRangeCodes: Array<string> = ['CYTDBDL', 'FYTDBDL', 'CMIPBDL', 'LCM', 'CYTM', 'FYTM'];
+    const distributionDateRangeCodes: Array<string> = ['L60BDL', 'L90BDL', 'L120BDL', 'L3CM'];
 
     const initDateRangeData = (dateRangeCodes: Array<string>, dateRangeObject: DateRangesState): Array<CompassSelectOption> => {
       return dateRangeCodes.map(dateCode => {

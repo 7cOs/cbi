@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
+import { FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
 import { ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
@@ -19,40 +20,30 @@ export class ProductMetricsEffects {
   @Effect()
   fetchProductMetrics$(): Observable<Action> {
     return this.actions$
-      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_ACTION)
-      .switchMap((action: Action) => {
-        const payload: ProductMetricsActions.FetchProductMetricsPayload = action.payload;
-
-        const productMetricsData: ProductMetricsData = {
-          positionId: payload.positionId,
-          contextPositionId: payload.contextPositionId,
-          entityTypeCode: payload.entityTypeCode,
-          filter: payload.filter,
-          selectedEntityType: payload.selectedEntityType,
-        };
-
-        return Observable.of(productMetricsData);
-      })
+      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS)
+      .switchMap((action: Action): Observable<FetchProductMetricsPayload> => Observable.of(action.payload))
       .switchMap((productMetricsData) => this.productMetricsService.getProductMetrics(productMetricsData))
+      .switchMap((productMetricsData) => this.productMetricsService.filterProductMetricsBrand(productMetricsData))
       .switchMap((productMetricsData) => this.constructSuccessAction(productMetricsData))
-      .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailureAction(error)));
+      .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailure(error)));
   }
 
   @Effect({dispatch: false})
   fetchProdcutMetricsFailure$(): Observable<Action> {
     return this.actions$
-      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE_ACTION)
+      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE)
       .do((action: Action) => {
         console.error('ProductMetrics fetch failure:', action.payload);
       });
   }
 
   private constructSuccessAction(productMetricsData: ProductMetricsData): Observable<Action> {
-    return Observable.of(
-      new ProductMetricsActions.FetchProductMetricsSuccessAction({
+    return Observable.from([
+      new ProductMetricsActions.SetProductMetricsViewType(productMetricsData.productMetricsViewType),
+      new ProductMetricsActions.FetchProductMetricsSuccess({
         positionId: productMetricsData.positionId,
         products: productMetricsData.products
       })
-    );
+    ]);
   }
 }

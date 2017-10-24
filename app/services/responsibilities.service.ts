@@ -12,6 +12,7 @@ import { FetchEntityWithPerformancePayload } from '../state/actions/responsibili
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
 import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
+import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
@@ -19,20 +20,11 @@ import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
-import { ViewType } from '../enums/view-type.enum';
-
-export interface HierarchyGroup {
-  name: string;
-  type: string;
-  entityType: EntityType;
-  positionId?: string;
-  alternateHierarchyId?: string;
-  positionDescription?: string;
-}
+import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
-  viewType?: ViewType;
+  salesHierarchyViewType?: SalesHierarchyViewType;
   hierarchyGroups?: Array<HierarchyGroup>;
   entitiesURL?: string;
   alternateEntitiesURL?: string;
@@ -184,11 +176,11 @@ export class ResponsibilitiesService {
   }
 
   public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.roleGroups) {
+    if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups) {
       return this.handleResponsibilitiesPerformances(responsibilitiesData);
-    } else if (responsibilitiesData.viewType === ViewType.distributors) {
+    } else if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
       return this.handleDistributorsPerformances(responsibilitiesData);
-    } else if (responsibilitiesData.viewType === ViewType.accounts) {
+    } else if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.accounts) {
       return this.handleAccountsPerformances(responsibilitiesData);
     } else {
       return Observable.of(responsibilitiesData);
@@ -196,7 +188,8 @@ export class ResponsibilitiesService {
   }
 
   public getAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.distributors || responsibilitiesData.viewType === ViewType.accounts) {
+    if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.distributors
+      || responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
           const hierarchyGroups: Array<HierarchyGroup> = [{
@@ -281,7 +274,7 @@ export class ResponsibilitiesService {
           return Observable.of(Object.assign({}, responsibilitiesData, {
             hierarchyGroups: hierarchyGroups,
             groupedEntities: groupedEntities,
-            viewType: ViewType.roleGroups
+            salesHierarchyViewType: SalesHierarchyViewType.roleGroups
           }));
         });
     } else {
@@ -302,16 +295,16 @@ export class ResponsibilitiesService {
     }
   }
 
-  public getEntityGroupViewType(type: EntityType): ViewType {
+  public getEntityGroupViewType(type: EntityType): SalesHierarchyViewType {
     switch (type) {
       case EntityType.ResponsibilitiesGroup:
-        return ViewType.roleGroups;
+        return SalesHierarchyViewType.roleGroups;
       case EntityType.RoleGroup:
-        return ViewType.people;
+        return SalesHierarchyViewType.people;
       case EntityType.DistributorGroup:
-        return ViewType.distributors;
+        return SalesHierarchyViewType.distributors;
       case EntityType.AccountGroup:
-        return ViewType.accounts;
+        return SalesHierarchyViewType.accounts;
       default:
         throw new Error(`[getEntityGroupViewType]: EntityType of ${ type } is not supported.`);
     }
@@ -369,14 +362,16 @@ export class ResponsibilitiesService {
     return Object.assign({}, responsibilitiesData, {
       groupedEntities: groupedEntities,
       hierarchyGroups: hierarchyGroups,
-      viewType: ViewType.roleGroups
+      salesHierarchyViewType: SalesHierarchyViewType.roleGroups
     });
   }
 
   private handleResponsibilitiesEntityURIResponse(entityURIArray: string[]): ResponsibilitiesData {
     return {
       entitiesURL: entityURIArray[0],
-      viewType: entityURIArray[0].search('distributors') !== -1 ? ViewType.distributors : ViewType.accounts
+      salesHierarchyViewType: entityURIArray[0].search('distributors') !== -1
+        ? SalesHierarchyViewType.distributors
+        : SalesHierarchyViewType.accounts
     };
   }
 }

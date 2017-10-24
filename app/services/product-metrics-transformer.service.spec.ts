@@ -1,10 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { ProductMetrics } from '../models/product-metrics.model';
+import { getProductMetricsSkuValuesDTOMock, getProductMetricsDTOBrandMock } from '../models/product-metrics.model.mock';
+import { ProductMetrics, ProductMetricsValuesDTO, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
-import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
 import { UtilService } from './util.service';
+
+const chance = new Chance();
 
 let utilService: UtilService;
 let productMetricsTransformerService: ProductMetricsTransformerService;
@@ -24,33 +25,67 @@ describe('Service: ProductMetricsTransformerService', () => {
     }));
 
     it('should return a collection of formatted ProductMetrics from a collection of ProductMetricsDTOs', () => {
-      spyOn(productMetricsTransformerService, 'transformProductMetrics').and.callThrough();
-      const expectedProductBrands: ProductMetrics = {
-        brand: [{
-          brandDescription: 'CORONA FAMILIAR',
+      const productMetricsBrandDTOMock: ProductMetricsDTO = getProductMetricsDTOBrandMock(2, 2);
+
+      const expectedProductMetrics: ProductMetrics = {
+        brandValues: [{
+          brandDescription: productMetricsBrandDTOMock.brandValues[0].brandDescription,
           current: parseInt((productMetricsBrandDTOMock.brandValues[0].values[0].current).toFixed(), 10),
           yearAgo: utilService.getYearAgoDelta(
             productMetricsBrandDTOMock.brandValues[0].values[0].current,
             productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
-          collectionMethod: 'RAD',
+          collectionMethod: productMetricsBrandDTOMock.brandValues[0].values[0].collectionMethod,
           yearAgoPercent: utilService.getYearAgoPercent(
             productMetricsBrandDTOMock.brandValues[0].values[0].current,
-            productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo)
+            productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
+          brandCode: productMetricsBrandDTOMock.brandValues[0].brandCode
         }, {
-          brandDescription: 'CERVEZAS CLASICAS',
+          brandDescription: productMetricsBrandDTOMock.brandValues[1].brandDescription,
           current: parseInt((productMetricsBrandDTOMock.brandValues[1].values[0].current).toFixed(), 10),
           yearAgo: utilService.getYearAgoDelta(
             productMetricsBrandDTOMock.brandValues[1].values[0].current,
             productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
-          collectionMethod: 'RAD',
+          collectionMethod: productMetricsBrandDTOMock.brandValues[1].values[0].collectionMethod,
           yearAgoPercent: utilService.getYearAgoPercent(
             productMetricsBrandDTOMock.brandValues[1].values[0].current,
-            productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo)
+            productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
+            brandCode: productMetricsBrandDTOMock.brandValues[1].brandCode
         }]
       };
       const transformedProductMetrics =
-        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock, ProductMetricsAggregationType.brand);
-      expect(transformedProductMetrics).toEqual(expectedProductBrands);
+        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock);
+      expect(transformedProductMetrics).toEqual(expectedProductMetrics);
+    });
+
+    it('should return a collection of formatted Sku ProductMetrics from a collection of ProductMetricsDTOs containing skus', () => {
+      const productMectricsSkuDTOMock: ProductMetricsValuesDTO = getProductMetricsSkuValuesDTOMock();
+
+      const expectedProductMetrics: ProductMetrics = {
+        skuValues: [{
+          brandDescription: productMectricsSkuDTOMock.brandDescription,
+          collectionMethod: productMectricsSkuDTOMock.values[0].collectionMethod,
+          current: Math.round(productMectricsSkuDTOMock.values[0].current),
+          yearAgo: utilService.getYearAgoDelta(
+            productMectricsSkuDTOMock.values[0].current,
+            productMectricsSkuDTOMock.values[0].yearAgo
+          ),
+          yearAgoPercent: utilService.getYearAgoPercent(
+            productMectricsSkuDTOMock.values[0].current,
+            productMectricsSkuDTOMock.values[0].yearAgo
+          ),
+          brandCode: productMectricsSkuDTOMock.brandCode,
+          beerId: {
+            masterPackageSKUDescription: productMectricsSkuDTOMock.beerId.masterPackageSKUDescription,
+            masterSKUDescription: productMectricsSkuDTOMock.beerId.masterSKUDescription
+          }
+        }]
+      };
+      const transformedProductMetrics =
+        productMetricsTransformerService.transformProductMetrics({
+          skuValues: [productMectricsSkuDTOMock],
+          type: chance.string()
+        });
+      expect(transformedProductMetrics).toEqual(expectedProductMetrics);
     });
   });
 });

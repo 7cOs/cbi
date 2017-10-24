@@ -4,7 +4,7 @@ const chance = new Chance();
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchEntityWithPerformancePayload,
          FetchEntityWithPerformanceSuccessPayload,
-         FetchSubAccountsActionPayload,
+         FetchSubAccountsPayload,
          FetchSubAccountsSuccessPayload } from './responsibilities.action';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
@@ -96,17 +96,17 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('GetPeopleByRoleGroupAction', () => {
+  describe('GetPeopleByRoleGroup', () => {
     const entityPeopleType = EntityPeopleType['MARKET DEVELOPMENT MANAGER'];
-    let action: ResponsibilitiesActions.GetPeopleByRoleGroupAction;
+    let action: ResponsibilitiesActions.GetPeopleByRoleGroup;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityPeopleType);
+      action = new ResponsibilitiesActions.GetPeopleByRoleGroup(entityPeopleType);
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION).toBe('[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION);
+      expect(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP).toBe('[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP');
+      expect(action.type).toBe(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP);
     });
 
     it('should contain the mock payload', () => {
@@ -260,23 +260,23 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchSubAccountsAction', () => {
-    const payloadMock: FetchSubAccountsActionPayload = {
+  describe('FetchSubAccounts', () => {
+    const payloadMock: FetchSubAccountsPayload = {
       positionId: chance.string({pool: '0123456789'}),
       contextPositionId: chance.string({pool: '0123456789'}),
       entityTypeAccountName: chance.string(),
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       filter: performanceFilterStateMock
     };
-    let action: ResponsibilitiesActions.FetchSubAccountsAction;
+    let action: ResponsibilitiesActions.FetchSubAccounts;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchSubAccountsAction(payloadMock);
+      action = new ResponsibilitiesActions.FetchSubAccounts(payloadMock);
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION).toBe('[Responsibilities] FETCH_SUBACCOUNTS_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION);
+      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS).toBe('[Responsibilities] FETCH_SUBACCOUNTS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS);
     });
 
     it('should contain the correct payload', () => {
@@ -284,20 +284,20 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchSubAccountsSuccessAction', () => {
+  describe('FetchSubAccountsSuccess', () => {
     const payloadMock: FetchSubAccountsSuccessPayload = {
       groupedEntities: getGroupedEntitiesMock(),
       entityWithPerformance: getEntitiesWithPerformancesMock()
     };
-    let action: ResponsibilitiesActions.FetchSubAccountsSuccessAction;
+    let action: ResponsibilitiesActions.FetchSubAccountsSuccess;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchSubAccountsSuccessAction(payloadMock);
+      action = new ResponsibilitiesActions.FetchSubAccountsSuccess(payloadMock);
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION).toBe('[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION);
+      expect(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS).toBe('[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS);
     });
 
     it('should contain the correct payload', () => {

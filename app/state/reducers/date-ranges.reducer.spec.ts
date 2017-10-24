@@ -10,11 +10,11 @@ describe('Date Ranges Reducer', () => {
       status: ActionStatus.Fetching,
       FYTM: initialState.FYTM,
       CYTM: initialState.CYTM,
-      CYTD: initialState.CYTD,
-      FYTD: initialState.FYTD,
-      L60: initialState.L60,
-      L90: initialState.L90,
-      L120: initialState.L120,
+      CYTDBDL: initialState.CYTDBDL,
+      FYTDBDL: initialState.FYTDBDL,
+      L60BDL: initialState.L60BDL,
+      L90BDL: initialState.L90BDL,
+      L120BDL: initialState.L120BDL,
       LCM: initialState.LCM,
       L3CM: initialState.L3CM,
       CMIPBDL: initialState.CMIPBDL
@@ -30,16 +30,16 @@ describe('Date Ranges Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetched,
-      L60: dateRangeCollectionMock[0],
-      L90: dateRangeCollectionMock[1],
+      L60BDL: dateRangeCollectionMock[0],
+      L90BDL: dateRangeCollectionMock[1],
       CYTM: dateRangeCollectionMock[2],
       FYTM: dateRangeCollectionMock[3],
-      FYTD: dateRangeCollectionMock[4],
+      FYTDBDL: dateRangeCollectionMock[4],
       L3CM: dateRangeCollectionMock[5],
       LCM: dateRangeCollectionMock[6],
       CMIPBDL: dateRangeCollectionMock[7],
-      L120: dateRangeCollectionMock[8],
-      CYTD: dateRangeCollectionMock[9]
+      L120BDL: dateRangeCollectionMock[8],
+      CYTDBDL: dateRangeCollectionMock[9]
     };
 
     const actualState = dateRangesReducer(initialState, new DateRangesActions.FetchDateRangesSuccessAction(payload));
@@ -52,11 +52,11 @@ describe('Date Ranges Reducer', () => {
       status: ActionStatus.Error,
       FYTM: initialState.FYTM,
       CYTM: initialState.CYTM,
-      CYTD: initialState.CYTD,
-      FYTD: initialState.FYTD,
-      L60: initialState.L60,
-      L90: initialState.L90,
-      L120: initialState.L120,
+      CYTDBDL: initialState.CYTDBDL,
+      FYTDBDL: initialState.FYTDBDL,
+      L60BDL: initialState.L60BDL,
+      L90BDL: initialState.L90BDL,
+      L120BDL: initialState.L120BDL,
       LCM: initialState.LCM,
       L3CM: initialState.L3CM,
       CMIPBDL: initialState.CMIPBDL

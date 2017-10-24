@@ -6,7 +6,7 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { ProductMetricsApiService } from './product-metrics-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
+import { productMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 
 describe('Service: ProductMetricsApiService', () => {

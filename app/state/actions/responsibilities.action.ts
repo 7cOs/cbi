@@ -4,12 +4,14 @@ import { EntityWithPerformance } from '../../models/entity-with-performance.mode
 import { Performance } from '../../models/performance.model';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
   groupedEntities: GroupedEntities;
+  hierarchyGroups: Array<HierarchyGroup>;
   entityWithPerformance: EntityWithPerformance[];
 }
 
@@ -32,7 +34,7 @@ export interface FetchEntityWithPerformanceSuccessPayload {
   entityTypeCode: string;
 }
 
-export interface FetchSubAccountsActionPayload {
+export interface FetchSubAccountsPayload {
   positionId: string;
   contextPositionId: string;
   entityTypeAccountName: string;
@@ -86,23 +88,23 @@ export class FetchEntityWithPerformanceSuccess implements Action {
   constructor(public payload: FetchEntityWithPerformanceSuccessPayload) { }
 }
 
-export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
-export class GetPeopleByRoleGroupAction implements Action {
-  readonly type = GET_PEOPLE_BY_ROLE_GROUP_ACTION;
+export const GET_PEOPLE_BY_ROLE_GROUP = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP';
+export class GetPeopleByRoleGroup implements Action {
+  readonly type = GET_PEOPLE_BY_ROLE_GROUP;
 
   constructor(public payload: EntityPeopleType) { }
 }
 
-export const FETCH_SUBACCOUNTS_ACTION = '[Responsibilities] FETCH_SUBACCOUNTS_ACTION';
-export class FetchSubAccountsAction implements Action {
-  readonly type = FETCH_SUBACCOUNTS_ACTION;
+export const FETCH_SUBACCOUNTS = '[Responsibilities] FETCH_SUBACCOUNTS';
+export class FetchSubAccounts implements Action {
+  readonly type = FETCH_SUBACCOUNTS;
 
-  constructor(public payload: FetchSubAccountsActionPayload) { }
+  constructor(public payload: FetchSubAccountsPayload) { }
 }
 
-export const FETCH_SUBACCOUNTS_SUCCESS_ACTION = '[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS_ACTION';
-export class FetchSubAccountsSuccessAction implements Action {
-  readonly type = FETCH_SUBACCOUNTS_SUCCESS_ACTION;
+export const FETCH_SUBACCOUNTS_SUCCESS = '[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS';
+export class FetchSubAccountsSuccess implements Action {
+  readonly type = FETCH_SUBACCOUNTS_SUCCESS;
 
   constructor(public payload: FetchSubAccountsSuccessPayload) { }
 }
@@ -162,9 +164,9 @@ export type Action
   | FetchResponsibilitiesFailure
   | FetchEntityWithPerformance
   | FetchEntityWithPerformanceSuccess
-  | GetPeopleByRoleGroupAction
-  | FetchSubAccountsAction
-  | FetchSubAccountsSuccessAction
+  | GetPeopleByRoleGroup
+  | FetchSubAccounts
+  | FetchSubAccountsSuccess
   | SetAlternateHierarchyId
   | FetchAlternateHierarchyResponsibilities
   | FetchTotalPerformance
