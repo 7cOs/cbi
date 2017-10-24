@@ -187,10 +187,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
     let accountDashboardStateParams: AccountDashboardStateParameters;
-    const insideAlternateHierarchy = this.isInsideAlternateHierarchy();
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams =
-        this.myPerformanceService.accountDashboardStateParameters(insideAlternateHierarchy, this.filterState, row);
+        this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(), this.filterState, row);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
@@ -198,10 +197,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       let premiseType: PremiseTypeValue;
       if (hierarchyEntity) {
         premiseType = hierarchyEntity.premiseType;
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(insideAlternateHierarchy,
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
           this.filterState, row, premiseType);
       } else {
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(insideAlternateHierarchy,
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
           this.filterState, row);
       }
 

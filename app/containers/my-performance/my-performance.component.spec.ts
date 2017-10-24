@@ -721,7 +721,8 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when distributor subline link clicked', () => {
-      it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
+      it('should correctly call functions to go to account dashboard when distributor clicked with correct ' +
+        'params within alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
@@ -737,7 +738,8 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when subaccount subline link clicked', () => {
-      it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy enity', () => {
+      it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity outside ' +
+        'alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = null;
         currentSubject.next(currentMock);
@@ -760,7 +762,8 @@ describe('MyPerformanceComponent', () => {
         expect(windowMock.open).toHaveBeenCalled();
       });
 
-      it('should correctly call functions for accountDashboard when subAccount clicked but no matching hierarchy entity', () => {
+      it('should correctly call functions for accountDashboard when subAccount clicked but no matching ' +
+        'hierarchy entity outside alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = null;
         currentSubject.next(currentMock);

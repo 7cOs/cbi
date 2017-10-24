@@ -134,6 +134,7 @@ describe('Service: MyPerformanceService', () => {
     beforeEach(() => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
       filterMock = getMyPerformanceFilterMock();
+      insideAlternateHierarchyMock = chance.bool();
       spyOn(myPerformanceService, 'accountDashboardStateParameters').and.callThrough();
     });
 
@@ -146,10 +147,9 @@ describe('Service: MyPerformanceService', () => {
     it('should return the correct option when metric type is depletions and entityType is distributor', () => {
       filterMock.metricType = MetricTypeValue.volume;
       rowMock.metadata.entityType = EntityType.Distributor;
-      insideAlternateHierarchyMock = false;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(insideAlternateHierarchyMock,
         filterMock, rowMock, undefined);
-      expect(accountDashboardParams).toEqual({myaccountsonly: true,
+      expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         depletiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
         distributorname: rowMock.descriptionRow0,
@@ -161,10 +161,9 @@ describe('Service: MyPerformanceService', () => {
       'is distributor with no alternate hierarchy', () => {
       filterMock.metricType = MetricTypeValue.PointsOfDistribution;
       rowMock.metadata.entityType = EntityType.Distributor;
-      insideAlternateHierarchyMock = true;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(insideAlternateHierarchyMock,
         filterMock, rowMock, undefined);
-      expect(accountDashboardParams).toEqual({myaccountsonly: false,
+      expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
         distributorname: rowMock.descriptionRow0,
@@ -175,10 +174,9 @@ describe('Service: MyPerformanceService', () => {
     it('should return the correct option when metric type is velocity and entityType is distributor with alternate hierarchy', () => {
       filterMock.metricType = MetricTypeValue.velocity;
       rowMock.metadata.entityType = EntityType.Distributor;
-      insideAlternateHierarchyMock = true;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(insideAlternateHierarchyMock,
         filterMock, rowMock, undefined);
-      expect(accountDashboardParams).toEqual({myaccountsonly: false,
+      expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
         distributorname: rowMock.descriptionRow0,
@@ -189,12 +187,11 @@ describe('Service: MyPerformanceService', () => {
     it('should return the correct option when metric type is depletions and entityType is subAccount', () => {
       filterMock.metricType = MetricTypeValue.volume;
       rowMock.metadata.entityType = EntityType.SubAccount;
-      insideAlternateHierarchyMock = true;
       const premiseType = premiseTypeValues[chance.integer({min: 0, max: premiseTypeValues.length - 1})];
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(insideAlternateHierarchyMock,
         filterMock, rowMock, premiseType);
 
-      expect(accountDashboardParams).toEqual({myaccountsonly: false,
+      expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         depletiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         subaccountid: rowMock.metadata.positionId,
         subaccountname: rowMock.descriptionRow0,
