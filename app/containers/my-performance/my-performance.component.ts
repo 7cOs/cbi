@@ -59,7 +59,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public fetchProductMetricsFailure: boolean = false;
   public salesHierarchyViewType: SalesHierarchyViewType;
   public productMetricsViewType: ProductMetricsViewType;
-  public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
   public showSalesContributionToVolume: boolean = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showLeftBackButton = false;
@@ -102,7 +101,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
       this.filterState = filterState;
