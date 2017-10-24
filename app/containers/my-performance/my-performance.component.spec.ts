@@ -738,6 +738,47 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when subaccount subline link clicked', () => {
+      it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity within ' +
+        'alternate hierarchy', () => {
+        rowMock.metadata.entityType = EntityType.SubAccount;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
+        hierarchyEntityMock.positionId = rowMock.metadata.positionId;
+        currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
+        currentSubject.next(currentMock);
+        componentInstance.handleSublineClicked(rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          stateMock.myPerformanceFilter,
+          rowMock,
+          hierarchyEntityMock.premiseType
+        );
+        expect(stateMock.href).toHaveBeenCalledWith(
+          'accounts',
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
+            rowMock, hierarchyEntityMock.premiseType));
+        expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+        expect(windowMock.open).toHaveBeenCalled();
+      });
+
+      it('should correctly call functions for accountDashboard when subAccount clicked but no matching ' +
+        'hierarchy entity within alternate hierarchy', () => {
+        rowMock.metadata.entityType = EntityType.SubAccount;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
+        hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
+        myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
+        currentSubject.next(currentMock);
+        componentInstance.handleSublineClicked(rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
+        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
+        expect(stateMock.href).toHaveBeenCalledWith(
+          'accounts',
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
+        expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+        expect(windowMock.open).toHaveBeenCalled();
+      });
+
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity outside ' +
         'alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
@@ -758,25 +799,6 @@ describe('MyPerformanceComponent', () => {
           'accounts',
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
             rowMock, hierarchyEntityMock.premiseType));
-        expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
-        expect(windowMock.open).toHaveBeenCalled();
-      });
-
-      it('should correctly call functions for accountDashboard when subAccount clicked but no matching ' +
-        'hierarchy entity outside alternate hierarchy', () => {
-        rowMock.metadata.entityType = EntityType.SubAccount;
-        currentMock.responsibilities.alternateHierarchyId = null;
-        currentSubject.next(currentMock);
-        insideAlternateHierarchyMock = false;
-        hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
-        myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
-        currentSubject.next(currentMock);
-        componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
-        expect(stateMock.href).toHaveBeenCalledWith(
-          'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
