@@ -3,14 +3,16 @@ import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
+import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsService, ProductMetricsData } from '../../services/product-metrics.service';
-import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 const chance = new Chance();
 
@@ -18,9 +20,11 @@ describe('ProductMetrics Effects', () => {
   let positionIdMock: string;
   let contextPositionIdMock: string;
   let entityTypeCodeMock: string;
-  let productMetricsMock: ProductMetrics;
+  let selectedBrandCodeMock: string;
+  let productMetricsWithBrandValuesMock: ProductMetrics;
+  let productMetricsWithSkuValuesMock: ProductMetrics;
   let performanceFilterStateMock: MyPerformanceFilterState;
-  let selectedEntityTypeMock: SelectedEntityType = SelectedEntityType.Position;
+  let selectedEntityTypeMock: EntityType = EntityType.Person;
   let productMetricsSuccessPayloadMock: ProductMetricsActions.FetchProductMetricsSuccessPayload;
   let error: Error;
   let runner: EffectsRunner;
@@ -34,6 +38,9 @@ describe('ProductMetrics Effects', () => {
     },
     checkEmptyProductMetricsResponse(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
       return Observable.of(productMetricsData);
+    },
+    filterProductMetricsBrand(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
+      return Observable.of(responsibilitiesData);
     }
   };
 
@@ -41,7 +48,9 @@ describe('ProductMetrics Effects', () => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
     entityTypeCodeMock = chance.string();
-    productMetricsMock = getProductMetricMock();
+    selectedBrandCodeMock = chance.string();
+    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
     performanceFilterStateMock = getMyPerformanceFilterMock();
     error = new Error(chance.string());
 
@@ -50,7 +59,8 @@ describe('ProductMetrics Effects', () => {
       contextPositionId: contextPositionIdMock,
       entityTypeCode: entityTypeCodeMock,
       filter: performanceFilterStateMock,
-      selectedEntityType: selectedEntityTypeMock
+      selectedEntityType: selectedEntityTypeMock,
+      selectedBrandCode: selectedBrandCodeMock
     };
 
     TestBed.configureTestingModule({
@@ -77,14 +87,15 @@ describe('ProductMetrics Effects', () => {
     }
   ));
 
-  describe('when a FetchProductMetricsAction is received', () => {
+  describe('when a FetchProductMetrics is received', () => {
     beforeEach(() => {
-      runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
+      runner.queue(new ProductMetricsActions.FetchProductMetrics({
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
         entityTypeCode: entityTypeCodeMock,
         filter: performanceFilterStateMock,
-        selectedEntityType: SelectedEntityType.Position
+        selectedEntityType: EntityType.Person,
+        selectedBrandCode: selectedBrandCodeMock
       }));
     });
 
@@ -111,31 +122,34 @@ describe('ProductMetrics Effects', () => {
     });
 
     describe('when ProductMetricsService returns successfully', () => {
-      it('should return a FetchProductMetricsSuccessAction', (done) => {
+      it('should return a SetProductMetricsViewType and FetchProductMetricsSuccess', (done) => {
+        const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
+
         spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
-          productMetricsData.products = productMetricsMock;
+          productMetricsData.products = productMetricsWithBrandValuesMock;
+          productMetricsData.productMetricsViewType = productMetricsViewTypeMock;
           return Observable.of(productMetricsData);
         });
 
         productMetricsSuccessPayloadMock = {
           positionId: positionIdMock,
-          products: productMetricsMock
+          products: productMetricsWithBrandValuesMock
         };
 
-        productMetricsEffects.fetchProductMetrics$().subscribe(action => {
-          expect(action).toEqual(new ProductMetricsActions.FetchProductMetricsSuccessAction(
-            productMetricsSuccessPayloadMock));
+        productMetricsEffects.fetchProductMetrics$().pairwise().subscribe(([action1, action2]) => {
+          expect(action1).toEqual(new ProductMetricsActions.SetProductMetricsViewType(productMetricsViewTypeMock));
+          expect(action2).toEqual(new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock));
           done();
         });
       });
     });
 
     describe('when ProductMetricsApiService returns an error', () => {
-      it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
+      it('should return a FetchProductMetricsFailure after catching an error', (done) => {
         spyOn(productMetricsService, 'getProductMetrics').and.returnValue(Observable.throw(error));
 
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
-          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(error));
+          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailure(error));
           done();
         });
       });
@@ -146,17 +160,17 @@ describe('ProductMetrics Effects', () => {
         spyOn(productMetricsService, 'checkEmptyProductMetricsResponse').and.returnValue(Observable.throw(error));
 
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
-          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(error));
+          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailure(error));
           done();
         });
       });
     });
   });
 
-  describe('when a failed FetchProductMetricsFailureAction is received', () => {
+  describe('when a failed FetchProductMetricsFailure is received', () => {
 
     beforeEach(() => {
-      runner.queue(new ProductMetricsActions.FetchProductMetricsFailureAction(error));
+      runner.queue(new ProductMetricsActions.FetchProductMetricsFailure(error));
       spyOn(console, 'error');
     });
 

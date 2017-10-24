@@ -32,8 +32,8 @@ module.exports = /*  @ngInject */
 
     // Set values
     vm.greetingName = userService.model.currentUser.firstName;
-    vm.fytdDateRange = DateRangeTimePeriod.FYTD;
-    vm.l90DateRange = DateRangeTimePeriod.L90;
+    vm.fytdDateRange = DateRangeTimePeriod.FYTDBDL;
+    vm.l90DateRange = DateRangeTimePeriod.L90BDL;
 
     init();
 

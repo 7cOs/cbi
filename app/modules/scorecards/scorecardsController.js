@@ -292,7 +292,7 @@ module.exports = /*  @ngInject */
         // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
-        vm.depletionSelectApiCode = 'FYTD';
+        vm.depletionSelectApiCode = 'FYTDBDL';
         vm.distributionSelectOptions = {
           selected: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].name,
           v3ApiCode: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].v3ApiCode

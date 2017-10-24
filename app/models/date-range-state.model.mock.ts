@@ -14,31 +14,31 @@ export const dateRangeStateMock: DateRangesState = {
     description: 'From First Day of Current Calendar Year to Last Closed Month',
     range: '01/01/17 - 05/31/17'
   },
-  CYTD: {
+  CYTDBDL: {
     code: 'CYTDBDL',
     displayCode: 'CYTD',
     description: 'From First Day of Current Calendar Year to Date With Business Day Lag',
     range: '01/01/17 - 06/02/17'
   },
-  FYTD: {
+  FYTDBDL: {
     code: 'FYTDBDL',
     displayCode: 'FYTD',
     description: 'Current Fiscal Year to Date With Business Day Lag',
     range: '03/01/17 - 06/02/17'
   },
-  L60: {
+  L60BDL: {
     code: 'L60BDL',
     displayCode: 'L60 Days',
     description: 'Last 60 Days Of Current Year With Business Day Lag',
     range: '04/04/17 - 06/02/17'
   },
-  L90: {
+  L90BDL: {
     code: 'L90BDL',
     displayCode: 'L90 Days',
     description: 'Last 90 Days Of Current Year With Business Day Lag',
     range: '03/05/17 - 06/02/17'
   },
-  L120: {
+  L120BDL: {
     code: 'L120BDL',
     displayCode: 'L120 Days',
     description: 'Last 120 Days Of Current Year With Business Day Lag',

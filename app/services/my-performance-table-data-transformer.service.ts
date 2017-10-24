@@ -6,7 +6,7 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
-import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
+import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -57,17 +57,23 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
-    const total: number = productMetrics.brand.reduce((sum: number, item: ProductMetricsBrandValue): number => {
+    const productsValues = productMetrics.brandValues || productMetrics.skuValues;
+    const total: number = productsValues.reduce((sum: number, item: ProductMetricsValues): number => {
       return sum + item.current;
     }, 0);
 
-    return (productMetrics.brand).map((item: ProductMetricsBrandValue) => {
+    return productsValues.map((item: ProductMetricsValues) => {
       return {
-        descriptionRow0: item.brandDescription,
+        descriptionRow0: productMetrics.brandValues
+          ? item.brandDescription
+          : item.beerId.masterPackageSKUDescription || item.beerId.masterSKUDescription,
         metricColumn0: item.current,
         metricColumn1: item.yearAgo,
         metricColumn2: item.yearAgoPercent,
-        ctv:  total ? this.getPercentageOfTotal(item.current, total) : 0,
+        ctv: total ? this.getPercentageOfTotal(item.current, total) : 0,
+        metadata: {
+          brandCode: item.brandCode
+        }
       };
     });
   }
@@ -84,6 +90,16 @@ export class MyPerformanceTableDataTransformerService {
     if (performance.name) totalRow['descriptionRow1'] = performance.name;
 
     return totalRow;
+  }
+
+  public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues): MyPerformanceTableRow {
+    return {
+      descriptionRow0: productMetricsValues.brandDescription,
+      metricColumn0: productMetricsValues.current,
+      metricColumn1: productMetricsValues.yearAgo,
+      metricColumn2: productMetricsValues.yearAgoPercent,
+      ctv: chance.natural({max: 100}),
+    };
   }
 
   private getPercentageOfTotal(contribution: number, total: number): number {

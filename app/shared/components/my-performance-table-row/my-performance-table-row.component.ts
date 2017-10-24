@@ -3,8 +3,9 @@ import { Inject } from '@angular/core';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { ViewType } from '../../../enums/view-type.enum';
+import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -18,9 +19,15 @@ export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
-  @Input() viewType: ViewType;
+  @Input()
+  set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
+    this.isSubAcountsOrDistributors = viewType === SalesHierarchyViewType.distributors
+      || viewType === SalesHierarchyViewType.subAccounts;
+  }
 
   public sortStatus = SortStatus;
+
+  private isSubAcountsOrDistributors: boolean;
 
   constructor(
     @Inject('ieHackService') private ieHackService: any
@@ -43,13 +50,13 @@ export class MyPerformanceTableRowComponent {
 
   public getSublineClass(): CssClasses {
     return {
-      ['link']: this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts,
-      ['forward-arrow']: this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts
+      ['link']: this.isSubAcountsOrDistributors,
+      ['forward-arrow']: this.isSubAcountsOrDistributors
     };
   }
 
   public sublineClicked(): void {
-    if (this.viewType === ViewType.distributors || this.viewType === ViewType.subAccounts) {
+    if (this.isSubAcountsOrDistributors) {
       this.onSublineClicked.emit();
     }
   }

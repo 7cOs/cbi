@@ -3,6 +3,7 @@ import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilitie
 import { FetchEntityWithPerformancePayload, FetchEntityWithPerformanceSuccessPayload } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getHierarchyGroupMock } from '../../models/hierarchy-group.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
@@ -24,6 +25,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetching,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -38,11 +40,13 @@ describe('Responsibilities Reducer', () => {
 
   it('should store the payload when a fetch responsibilities is successful', () => {
     const groupedEntitiesMock = getGroupedEntitiesMock();
+    const hierarchyGroupsMock = Array(chance.natural({min: 1, max: 9})).fill('').map(() => getHierarchyGroupMock());
     const entityWithPerformanceMock = getEntitiesWithPerformancesMock();
 
     const payloadMock = {
       positionId: positionIdMock,
       groupedEntities: groupedEntitiesMock,
+      hierarchyGroups: hierarchyGroupsMock,
       entityWithPerformance: entityWithPerformanceMock
     };
 
@@ -50,6 +54,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetched,
       positionId: positionIdMock,
       groupedEntities: groupedEntitiesMock,
+      hierarchyGroups: hierarchyGroupsMock,
       entityWithPerformance: entityWithPerformanceMock,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -70,6 +75,7 @@ describe('Responsibilities Reducer', () => {
       status: initialState.status,
       positionId: initialState.positionId,
       groupedEntities: groupedEntitiesMock,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -80,11 +86,12 @@ describe('Responsibilities Reducer', () => {
       groupedEntities: {
         [payload]: groupedEntitiesMock[payload]
       },
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
 
-    const actualState = responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
+    const actualState = responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroup(payload));
 
     expect(actualState).toEqual(expectedState);
   });
@@ -94,6 +101,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Error,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -126,6 +134,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetching,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -145,6 +154,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: payloadMock.entityWithPerformance,
       entityTypeCode: payloadMock.entityTypeCode,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
@@ -161,6 +171,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetching,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -178,6 +189,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: payloadMock
     };
@@ -208,6 +220,7 @@ describe('Responsibilities Reducer', () => {
       status: mockState.status,
       positionId: mockState.positionId,
       groupedEntities: mockState.groupedEntities,
+      hierarchyGroups: mockState.hierarchyGroups,
       entityWithPerformance: mockState.entityWithPerformance,
       entitiesTotalPerformances: {
         total: selectedRowMock.metricColumn0,
@@ -246,6 +259,7 @@ describe('Responsibilities Reducer', () => {
       status: mockState.status,
       positionId: mockState.positionId,
       groupedEntities: mockState.groupedEntities,
+      hierarchyGroups: mockState.hierarchyGroups,
       entityWithPerformance: mockState.entityWithPerformance,
       entitiesTotalPerformances: {
         total: selectedRowMock.metricColumn0,
@@ -269,6 +283,7 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Error,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
       entityWithPerformance: initialState.entityWithPerformance,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -292,6 +307,7 @@ describe('Responsibilities Reducer', () => {
         positionId: initialState.positionId,
         alternateHierarchyId: payloadMock,
         groupedEntities: initialState.groupedEntities,
+        hierarchyGroups: initialState.hierarchyGroups,
         entityWithPerformance: initialState.entityWithPerformance,
         entitiesTotalPerformances: initialState.entitiesTotalPerformances
       };

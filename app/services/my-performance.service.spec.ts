@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
@@ -146,8 +146,7 @@ describe('Service: MyPerformanceService', () => {
       rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, undefined);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
-        depletiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
-        distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
+        depletiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
         distributorname: rowMock.descriptionRow0,
         premisetype: PremiseTypeValue[filterMock.premiseType]
@@ -159,8 +158,7 @@ describe('Service: MyPerformanceService', () => {
       rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, undefined);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
-        depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
-        distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
         distributorname: rowMock.descriptionRow0,
         premisetype: PremiseTypeValue[filterMock.premiseType]
@@ -172,8 +170,7 @@ describe('Service: MyPerformanceService', () => {
       rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, undefined);
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
-        depletiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.FYTD],
-        distributiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
+        distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
         distributorname: rowMock.descriptionRow0,
         premisetype: PremiseTypeValue[filterMock.premiseType]
@@ -187,8 +184,7 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(filterMock, rowMock, premiseType);
 
       expect(accountDashboardParams).toEqual({myaccountsonly: true,
-        depletiontimeperiod: DateRangeTimePeriod[filterMock.dateRangeCode],
-        distributiontimeperiod: DateRangeTimePeriod[DateRangeTimePeriod.L90],
+        depletiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         subaccountid: rowMock.metadata.positionId,
         subaccountname: rowMock.descriptionRow0,
         premisetype: PremiseTypeValue[premiseType]

@@ -224,7 +224,7 @@ module.exports = /*  @ngInject */
             creator: id,
             action: p.action,
             objectType: p.objectType,
-            objectID: p.objectId,
+            objectID: p.objectID,
             salesforceUserNoteID: p.salesforceUserNoteID
           };
 

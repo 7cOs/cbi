@@ -853,7 +853,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       vm.disableApplyFilter(false);
     }
 
-    function updateDistributionTimePeriod(value) {
+    function updateDistributionTimePeriod(value, refetch) {
       // deplIndex = 2 is FYTD and FYTM resp
       // distIndex = 1 is L90
       var deplIndex = 2;
@@ -863,7 +863,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       }
       vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][deplIndex];
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][distIndex];
-      onFilterPropertiesChange();
+      if (refetch) onFilterPropertiesChange();
     }
 
     function canOpenNote() {
@@ -1067,8 +1067,8 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
       setPremiseType($state.params.premisetype);
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
-      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
-      vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
+
+      setIncomingTimePeriod();
       filterTopBottom();
     }
 
@@ -1077,11 +1077,25 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
       setPremiseType($state.params.premisetype);
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
-      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
-      vm.filterModel.distributionTimePeriod = filtersService.distributionTimePeriodFromName($state.params.distributiontimeperiod);
+
+      setIncomingTimePeriod();
       vm.showXChain = true;
       filterTopBottom();
       vm.selectedStore = $state.params.subaccountname;
+    }
+
+    function setIncomingTimePeriod() {
+      if ($state.params.depletiontimeperiod) {
+        let period = filtersService.depletionsTimePeriodFromV3APICode($state.params.depletiontimeperiod);
+        vm.filterModel.endingTimePeriod = period.type;
+        updateDistributionTimePeriod(period.type, false);
+        vm.filterModel.depletionsTimePeriod = period;
+      } else if ($state.params.distributiontimeperiod) {
+        let period = filtersService.distributionTimePeriodFromV3APICode($state.params.distributiontimeperiod);
+        vm.filterModel.endingTimePeriod = period.type;
+        updateDistributionTimePeriod(period.type, false);
+        vm.filterModel.distributionTimePeriod = period;
+      }
     }
 
     function setPremiseType(premiseType) {

@@ -125,6 +125,20 @@ th {
   }
 }
 
+.dismissable-total-row {
+  height: 60px;
+  border-bottom: 1px solid $gray-10;
+  border-right: 1px solid $gray-10;
+  text-transform: uppercase;
+  background-color: $light-blue-4;
+
+  /deep/.left-col, /deep/.center-col, /deep/.right-col {
+    font-weight: $semibold;
+    color: $gray-1;
+    background-color: $light-blue-4;
+  }
+}
+
 .center-col {
   text-align: center;
   background-color: $gray-4;
@@ -363,7 +377,6 @@ div.ctv {
         span {
           color: $blue;
           font-weight: normal;
-          text-transform: uppercase;
         }
       }
     }
@@ -427,6 +440,10 @@ div.ctv {
   }
 }
 
+.two-total-rows-present {
+  height: 477px;
+}
+
 .total-row-present {
   height: 537px;
 }
@@ -452,4 +469,3 @@ div.ctv {
     background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
   }
 }
-
