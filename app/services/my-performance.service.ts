@@ -47,12 +47,12 @@ export class MyPerformanceService {
     return defaultPremiseType;
   }
 
-  public accountDashboardStateParameters(myAccountOnly: boolean,
+  public accountDashboardStateParameters(insideAlternateHierarchy: boolean,
                                          filter: MyPerformanceFilterState,
                                         row: MyPerformanceTableRow,
                                         premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
 
-    let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: myAccountOnly};
+    let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: !insideAlternateHierarchy};
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams.distributorname = row.descriptionRow0;
       accountDashboardStateParams.distributorid = row.metadata.positionId;

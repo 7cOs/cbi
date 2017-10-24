@@ -598,7 +598,7 @@ describe('MyPerformanceComponent', () => {
     let accountNameMock: string;
     let hierarchyEntityMock: HierarchyEntity;
     let currentMock: MyPerformanceEntitiesData;
-    let myAccountOnlyMock: boolean;
+    let insideAlternateHierarchyMock: boolean;
     let alternateHierarchyIdMock: string;
 
     beforeEach(() => {
@@ -614,13 +614,13 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyIdMock = chance.string();
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
-        myAccountOnlyMock = !alternateHierarchyIdMock;
+        insideAlternateHierarchyMock = !!alternateHierarchyIdMock;
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (myAccountOnlyMock, stateMock.myPerformanceFilter, rowMock);
+        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnlyMock, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
@@ -632,20 +632,20 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyIdMock = null;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
-        myAccountOnlyMock = !alternateHierarchyIdMock;
+        insideAlternateHierarchyMock = !!alternateHierarchyIdMock;
         hierarchyEntityMock.positionId = rowMock.metadata.positionId;
         currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
-          myAccountOnlyMock,
+          insideAlternateHierarchyMock,
           stateMock.myPerformanceFilter,
           rowMock,
           hierarchyEntityMock.premiseType
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnlyMock, stateMock.myPerformanceFilter,
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
             rowMock, hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
@@ -656,16 +656,16 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyIdMock = null;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
-        myAccountOnlyMock = !alternateHierarchyIdMock;
+        insideAlternateHierarchyMock = !!alternateHierarchyIdMock;
         hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (myAccountOnlyMock, stateMock.myPerformanceFilter, rowMock);
+        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(myAccountOnlyMock, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
