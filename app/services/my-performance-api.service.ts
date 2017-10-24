@@ -65,7 +65,7 @@ export class MyPerformanceApiService {
 
   public getAlternateHierarchyPersonPerformance(positionId: string, alternateHierarchyId: string, filter: MyPerformanceFilterState)
   : Observable<PerformanceDTO> {
-    const url = `/v3/positions/${ positionId }/alternateHierarchy/performanceTotal`;
+    const url = `/v3/positions/${ positionId }/alternateHierarchyPerformanceTotal`;
     const params = Object.assign({}, this.getFilterStateParams(filter), {
       contextPositionId: alternateHierarchyId
     });

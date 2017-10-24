@@ -8,6 +8,7 @@ import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
+import { getHierarchyGroupMock } from '../models/hierarchy-group.model.mock';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
@@ -132,7 +133,7 @@ describe('Service: MyPerformanceApiService', () => {
         premiseType: PremiseTypeValue.On
       };
 
-      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/performanceTotal`;
+      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchyPerformanceTotal`;
       const expectedUrlParams = `?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&contextPositionId=${ alternateHierarchyIdMock }`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -304,21 +305,17 @@ describe('Service: MyPerformanceApiService', () => {
 
   describe('getAlternateHierarchyGroupPerformance', () => {
     it('should call the alternateHierarchy performanceTotal endpoint and return performance data for the group', (done) => {
+      const positionIdMock = chance.string();
+      const alternateHierarchyIdMock = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
+      });
+      const hierarchyGroupMock: HierarchyGroup = getHierarchyGroupMock();
       const filterStateMock: MyPerformanceFilterState = {
         metricType: MetricTypeValue.velocity,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL,
         premiseType: PremiseTypeValue.All
       };
-      const hierarchyGroupMock: HierarchyGroup = {
-        name: chance.string(),
-        type: chance.string(),
-        entityType: EntityType.RoleGroup,
-        positionDescription: chance.string()
-      };
-      const positionIdMock = chance.string();
-      const alternateHierarchyIdMock = chance.string({
-        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
-      });
+
       const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ hierarchyGroupMock.type }/performanceTotal`;
       const expectedUrlParams = `?metricType=velocity&dateRangeCode=L90BDL&premiseType=All&contextPositionId=${alternateHierarchyIdMock}`;
 
