@@ -8,7 +8,7 @@ my-performance-filter(
 
 my-performance-breadcrumb(
   [currentUserFullName]="currentUserFullName",
-  [performanceStateVersions]="performanceStateVersions$ | async",
+  [performanceStateVersions]="versions",
   [showBackButton]="showLeftBackButton",
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
   (backButtonClicked)="handleBackButtonClicked()")

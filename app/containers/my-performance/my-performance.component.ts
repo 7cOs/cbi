@@ -102,7 +102,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
       this.filterState = filterState;
@@ -236,6 +235,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const previousState = this.versions[previousIndex];
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
     this.fetchProductMetricsForPreviousState(previousState);
+
+    console.log('this.filterState', this.filterState);
+    console.log('previousState.filter', previousState.filter);
+    if (this.filterState === previousState.filter) {
+      console.log('REFETCH DATA');
+    }
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {

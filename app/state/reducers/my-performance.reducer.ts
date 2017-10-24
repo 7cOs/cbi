@@ -1,9 +1,12 @@
 import { Action } from '@ngrx/store';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { initialState as initialStateMyPerformanceFilter } from './my-performance-filter.reducer';
 import { initialState as initialStateResponsibilities } from './responsibilities.reducer';
 import { initialState as initialStateSalesHierarchyViewType } from './sales-hierarchy-view-type.reducer';
 import { initialStateVersions } from './my-performance-version.reducer';
+import * as MyPerformanceFilterActions from '../actions/my-performance-filter.action';
+import { myPerformanceFilterReducer, MyPerformanceFilterState } from './my-performance-filter.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
@@ -17,6 +20,7 @@ export interface MyPerformanceEntitiesData {
   selectedEntity?: string;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
+  filter?: MyPerformanceFilterState;
 }
 
 export interface MyPerformanceState {
@@ -28,7 +32,8 @@ export const initialState: MyPerformanceState = {
   current: {
     responsibilities: initialStateResponsibilities,
     salesHierarchyViewType: initialStateSalesHierarchyViewType,
-    selectedEntityType: EntityType.Person
+    selectedEntityType: EntityType.Person,
+    filter: initialStateMyPerformanceFilter
   },
   versions: initialStateVersions
 };
@@ -62,13 +67,18 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS:
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
     case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:
+    case MyPerformanceFilterActions.SET_METRIC:
+    case MyPerformanceFilterActions.SET_TIME_PERIOD:
+    case MyPerformanceFilterActions.SET_PREMISE_TYPE:
+    case MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE:
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: state.current.selectedEntity,
           selectedEntityType: state.current.selectedEntityType,
-          selectedBrandCode: state.current.selectedBrandCode
+          selectedBrandCode: state.current.selectedBrandCode,
+          filter: myPerformanceFilterReducer(state.current.filter, action as MyPerformanceFilterActions.Action)
         },
         versions: state.versions
       };
