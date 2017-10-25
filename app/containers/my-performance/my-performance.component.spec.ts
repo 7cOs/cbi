@@ -51,6 +51,14 @@ import { WindowService } from '../../services/window.service';
 const chance = new Chance();
 
 @Component({
+  selector: 'beer-loader',
+  template: ''
+})
+class BeerLoaderComponentMock {
+  @Input() showLoader: false;
+}
+
+@Component({
   selector: 'my-performance-filter',
   template: ''
 })
@@ -167,6 +175,7 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        BeerLoaderComponentMock,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
         MyPerformanceTableComponentMock,
@@ -971,6 +980,27 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
+  describe('when fetching responsibilities', () => {
+    let currentMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
+    });
+
+    it('should set responsibilitiesFetching to true when responsibilities are currently fetching', () => {
+      currentMock.responsibilities.status = ActionStatus.Fetching;
+      currentSubject.next(currentMock);
+      expect(componentInstance.responsibilitiesFetching).toBe(true);
+    });
+
+    it('should set responsibilitiesFetching to false when responsibilities are fetched or not fetching', () => {
+      currentMock.responsibilities.status = ActionStatus.Fetched;
+      currentSubject.next(currentMock);
+      expect(componentInstance.responsibilitiesFetching).toBe(false);
+    });
+  });
+
   describe('when fetching productMetrics returns and error', () => {
 
     it('should set fetchProductMetricsFailure to false when productmetrics status is fetched', () => {
@@ -1001,6 +1031,25 @@ describe('MyPerformanceComponent', () => {
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
+    });
+  });
+
+  describe('when fetching productMetrics', () => {
+
+    it('should set productMetricsFetching to true when productmetrics status is fetching', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetching,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.skus};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.productMetricsFetching).toBe(true);
+    });
+
+    it('should set productMetricsFetching to false when productmetrics status is notfetched', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.NotFetched,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.skus};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.productMetricsFetching).toBe(false);
     });
   });
 
