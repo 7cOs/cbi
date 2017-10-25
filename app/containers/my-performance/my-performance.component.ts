@@ -243,11 +243,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
     this.fetchProductMetricsForPreviousState(previousState);
 
-    if (!isEqual(this.filterState, previousState.filter)) {
-      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceFilterState(this.filterState));
-      // TODO: reload data based on this.filterState
-      console.log('REALOAD SALES HIERARCHY PERFORMANCE DATA!');
-    }
+    if (!isEqual(this.filterState, previousState.filter)) this.handleFilterVersionMismatch();
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
@@ -257,8 +253,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedIndex: number = this.versions.length - stepsBack;
     const clickedState = this.versions[clickedIndex];
     if (stepsBack < 1) return;
+
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(stepsBack));
     this.fetchProductMetricsForPreviousState(clickedState);
+
+    if (!isEqual(this.filterState, clickedState.filter)) this.handleFilterVersionMismatch();
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
@@ -423,7 +422,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
     }
 
-      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
+    this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
   }
 
   private getShowSalesContributionToVolume(): boolean {
@@ -446,5 +445,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+  }
+
+  private handleFilterVersionMismatch(): void {
+    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceFilterState(this.filterState));
+    // TODO: reload data based on this.filterState
+    console.log('REALOAD SALES HIERARCHY PERFORMANCE DATA!');
   }
 }

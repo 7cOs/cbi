@@ -20,7 +20,7 @@ export interface MyPerformanceEntitiesData {
   selectedEntityDescription: string;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
-  filter?: MyPerformanceFilterState;
+  filter: MyPerformanceFilterState;
 }
 
 export interface MyPerformanceState {

@@ -1,6 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getHierarchyGroupMock } from '../../models/hierarchy-group.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
@@ -37,18 +38,17 @@ export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
     salesHierarchyViewType: getViewTypeStateMock(),
     selectedEntityDescription: chance.string(),
     selectedEntityType: getEntityTypeMock(),
-    selectedBrandCode: chance.string()
+    selectedBrandCode: chance.string(),
+    filter: getMyPerformanceFilterMock()
   };
 }
 
 export function getMyPerformanceStateMock(): MyPerformanceState  {
-  const performanceStateMock = {
+  return {
     current: getMyPerformanceEntitiesDataMock(),
     versions: <MyPerformanceEntitiesData[]>
               Array(chance.natural({min: 0, max: 9}))
               .fill('')
               .map(element => getMyPerformanceEntitiesDataMock())
   };
-
-  return performanceStateMock;
 }

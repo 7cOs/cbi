@@ -2,11 +2,13 @@ import * as Chance from 'chance';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as MyPerformanceVersionActions from './my-performance-version.action';
 
-let chance = new Chance();
+const chance = new Chance();
 
-describe('Responsibilities Actions', () => {
+describe('My Performance Version Actions', () => {
 
   describe('SaveMyPerformanceState', () => {
     let action: MyPerformanceVersionActions.SaveMyPerformanceState;
@@ -122,6 +124,25 @@ describe('Responsibilities Actions', () => {
       expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE)
         .toBe('[My Performance] CLEAR_MY_PERFORMANCE_STATE');
       expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE);
+    });
+  });
+
+  describe('SetMyPerformanceFilterState', () => {
+    let myPerformanceFilterStateMock: MyPerformanceFilterState;
+    let action: MyPerformanceVersionActions.SetMyPerformanceFilterState;
+
+    beforeEach(() => {
+      myPerformanceFilterStateMock = getMyPerformanceFilterMock();
+      action = new MyPerformanceVersionActions.SetMyPerformanceFilterState(myPerformanceFilterStateMock);
+    });
+
+    it('should have the correct type for the SetMyPerformanceFilterState action', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_FILTER_STATE).toBe('[My Performance Version] SET_MY_PERFORMANCE_FILTER_STATE');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_FILTER_STATE);
+    });
+
+    it('should have the correct payload for the SetMyPerformanceFilterState action', () => {
+      expect(action.payload).toEqual(myPerformanceFilterStateMock);
     });
   });
 });
