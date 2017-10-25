@@ -8,6 +8,7 @@ import { getSortingCriteriaMock } from '../../../models/my-performance-table-sor
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
+import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { UtilService } from '../../../services/util.service';
@@ -184,6 +185,48 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.totalRow = totalRowMock;
       const tableClass = componentInstance.getTableHeight();
       expect(tableClass).toBe('total-row-absent');
+    });
+  });
+
+  describe('when calling onRowClicked', () => {
+    let rowTypeMock: RowType = RowType.data;
+    let indexMock: number;
+    let myPerformanceTableRowMock: MyPerformanceTableRow;
+
+    beforeEach(() => {
+      indexMock = chance.natural();
+      myPerformanceTableRowMock = getMyPerformanceTableRowMock(1)[0];
+      spyOn(componentInstance.onElementClicked, 'emit');
+    });
+
+    it('should emit an event when the viewtype is accounts', () => {
+      componentInstance.viewType = SalesHierarchyViewType.accounts;
+      componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalled();
+    });
+
+    it('should emit an event when the viewtype is people', () => {
+      componentInstance.viewType = SalesHierarchyViewType.people;
+      componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalled();
+    });
+
+    it('should emit an event when the viewtype is rolegroups', () => {
+      componentInstance.viewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalled();
+    });
+
+    it('should not emit an event when the viewtype is distributors', () => {
+      componentInstance.viewType = SalesHierarchyViewType.distributors;
+      componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
+      expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
+    });
+
+    it('should not emit an event when the viewtype is subaccounts', () => {
+      componentInstance.viewType = SalesHierarchyViewType.subAccounts;
+      componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
+      expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
     });
   });
 });

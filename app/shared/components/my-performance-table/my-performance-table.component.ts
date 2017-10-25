@@ -82,10 +82,10 @@ export class MyPerformanceTableComponent {
     const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
     this.applySortingCriteria(criteria);
   }
-  // {type: rowType.data, index: i, row: rowData}
-  public onRowClicked(clikedType: RowType, clickedIndex: number, clickedRow: MyPerformanceTableRow) {
+
+  public onRowClicked(clickedType: RowType, clickedIndex: number, clickedRow: MyPerformanceTableRow) {
     if (this.viewType !== SalesHierarchyViewType.distributors && this.viewType !== SalesHierarchyViewType.subAccounts) {
-      this.onElementClicked.emit({type: clikedType, index: clickedIndex, row: clickedRow});
+      this.onElementClicked.emit({type: clickedType, index: clickedIndex, row: clickedRow});
     }
   }
 
