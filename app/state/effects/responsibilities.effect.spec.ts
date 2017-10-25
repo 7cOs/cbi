@@ -296,7 +296,8 @@ describe('Responsibilities Effects', () => {
       entityTypeCode: entityTypeCodeMock,
       entityType: EntityType.RoleGroup,
       entities: [getEntityPeopleResponsibilitiesMock()],
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     };
 
     beforeEach(() => {

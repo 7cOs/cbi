@@ -121,7 +121,8 @@ describe('Responsibilities Actions', () => {
       entityTypeCode: chance.string(),
       entityType: getMyPerformanceTableRowMock(1)[0].metadata.entityType,
       entities: [getEntityPeopleResponsibilitiesMock()],
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     };
     let action: ResponsibilitiesActions.FetchEntityWithPerformance;
 

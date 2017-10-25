@@ -1384,7 +1384,8 @@ describe('Responsibilities Effects', () => {
         entities: peopleResponsibilitiesMock,
         filter: performanceFilterStateMock,
         selectedPositionId: chance.string(),
-        entityType: EntityType.RoleGroup
+        entityType: EntityType.RoleGroup,
+        selectedEntityDescription: chance.string()
       };
     });
 

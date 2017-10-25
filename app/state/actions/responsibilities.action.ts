@@ -29,7 +29,7 @@ export interface FetchEntityWithPerformancePayload {
   selectedPositionId: string;
   alternateHierarchyId?: string;
   entityType: EntityType;
-  selectedEntityDescription?: string;
+  selectedEntityDescription: string;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {

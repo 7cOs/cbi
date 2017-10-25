@@ -121,16 +121,17 @@ describe('Responsibilities Reducer', () => {
     )).toBe(initialState);
   });
 
-  it('should update the status when a FetchEntityWithPerformance action is received', () => {
+  it('should update the status and selectedEntityDescription when a FetchEntityWithPerformance action is received', () => {
     const payloadMock: FetchEntityWithPerformancePayload = {
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: entityTypeCodeMock,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      entityType: EntityType.Person
+      entityType: EntityType.Person,
+      selectedEntityDescription: chance.string()
     };
-    const expectedState = {
+    const expectedState: ResponsibilitiesState = {
       status: ActionStatus.Fetching,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
