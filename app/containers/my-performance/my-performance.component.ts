@@ -111,11 +111,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe((productMetrics: ProductMetricsState) => {
+        this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
-
-        this.fetchProductMetricsFailure = productMetrics.status === ActionStatus.Error
-          || (productMetrics.products && Object.keys(productMetrics.products).length === 0);
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
@@ -137,9 +135,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
-        this.fetchResponsibilitiesFailure = current.responsibilities &&
-            (current.responsibilities.status === ActionStatus.Error ||
-             current.responsibilities.groupedEntities && Object.keys(current.responsibilities.groupedEntities).length === 0);
+        this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
@@ -193,7 +189,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public handleSublineClicked(row: MyPerformanceTableRow): void {
     let accountDashboardStateParams: AccountDashboardStateParameters;
     if (row.metadata.entityType === EntityType.Distributor) {
-      accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+      accountDashboardStateParams =
+        this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(), this.filterState, row);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
@@ -201,9 +198,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       let premiseType: PremiseTypeValue;
       if (hierarchyEntity) {
         premiseType = hierarchyEntity.premiseType;
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, premiseType);
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
+          this.filterState, row, premiseType);
       } else {
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
+          this.filterState, row);
       }
     }
 

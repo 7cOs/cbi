@@ -38,6 +38,7 @@ export class ResponsibilitiesEffects {
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchy(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.checkEmptyResponsibilitiesResponse(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
@@ -50,6 +51,7 @@ export class ResponsibilitiesEffects {
       .switchMap((action: Action): Observable<FetchAlternateHierarchyResponsibilitiesPayload> => Observable.of(action.payload))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.checkEmptyResponsibilitiesResponse(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructFetchAlternateHierarchySuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
@@ -84,6 +86,7 @@ export class ResponsibilitiesEffects {
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS)
       .switchMap((action: Action): Observable<FetchSubAccountsPayload> => Observable.of(action.payload))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
+      .switchMap((subAccountsData) => this.responsibilitiesService.checkEmptySubaccountsResponse(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));

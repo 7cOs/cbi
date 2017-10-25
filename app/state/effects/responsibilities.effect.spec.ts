@@ -92,6 +92,12 @@ describe('Responsibilities Effects', () => {
     },
     getAlternateHierarchyResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
+    },
+    checkEmptyResponsibilitiesResponse(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+      return Observable.of(responsibilitiesData);
+    },
+    checkEmptySubaccountsResponse(subAccountsData: SubAccountData): Observable<SubAccountData> {
+      return Observable.of(subAccountsData);
     }
   };
 
@@ -222,6 +228,17 @@ describe('Responsibilities Effects', () => {
 
         expect(getPerformanceSpy.calls.count()).toBe(1);
         expect(getPerformanceSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
+      });
+
+      it('should call checkEmptyResponsibilitiesResponse with the right arguments', (done) => {
+        const checkEmptyResponsibilitiesSpy = spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.callThrough();
+
+        responsibilitiesEffects.fetchResponsibilities$().subscribe(() => {
+          done();
+        });
+
+        expect(checkEmptyResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(checkEmptyResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
       });
     });
 
@@ -437,6 +454,17 @@ describe('Responsibilities Effects', () => {
           expect(getSubAccountsSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
         });
 
+        it('should call checkEmptySubaccountsResponse with the right arguments', (done) => {
+          const checkEmptySubaccountsSpy = spyOn(responsibilitiesService, 'checkEmptySubaccountsResponse').and.callThrough();
+
+          responsibilitiesEffects.fetchSubAccounts$().subscribe(() => {
+            done();
+          });
+
+          expect(checkEmptySubaccountsSpy.calls.count()).toBe(1);
+          expect(checkEmptySubaccountsSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
+        });
+
         it('should call getSubAccountsPerformances with the right arguments', (done) => {
           const getSubAccountsPerformanceSpy = spyOn(responsibilitiesService, 'getSubAccountsPerformances').and.callThrough();
 
@@ -485,6 +513,16 @@ describe('Responsibilities Effects', () => {
       describe('when getSubAccounts returns an error', () => {
         it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
           spyOn(responsibilitiesService, 'getSubAccounts').and.returnValue(Observable.throw(error));
+          responsibilitiesEffects.fetchSubAccounts$().subscribe((result) => {
+            expect(result).toEqual(new FetchResponsibilitiesFailure(error));
+            done();
+          });
+        });
+      });
+
+      describe('when checkEmptySubaccountsResponse returns an error', () => {
+        it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
+          spyOn(responsibilitiesService, 'checkEmptySubaccountsResponse').and.returnValue(Observable.throw(error));
           responsibilitiesEffects.fetchSubAccounts$().subscribe((result) => {
             expect(result).toEqual(new FetchResponsibilitiesFailure(error));
             done();
@@ -579,6 +617,18 @@ describe('Responsibilities Effects', () => {
         expect(getAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(alternateResponsibilitiesDataMock);
       });
 
+      it('should call checkEmptyResponsibilitiesResponse with the right arguments', (done) => {
+        const checkEmptyResponsibilitiesResponseSpy =
+          spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.callThrough();
+
+        responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe(() => {
+          done();
+        });
+
+        expect(checkEmptyResponsibilitiesResponseSpy.calls.count()).toBe(1);
+        expect(checkEmptyResponsibilitiesResponseSpy.calls.argsFor(0)[0]).toEqual(alternateResponsibilitiesDataMock);
+      });
+
       it('should call getPerformanceForGroupedEntities with the right arguments', (done) => {
         const getPerformanceSpy = spyOn(responsibilitiesService, 'getPerformanceForGroupedEntities').and.callThrough();
 
@@ -604,6 +654,16 @@ describe('Responsibilities Effects', () => {
     describe('when getAccountsDistributors returns an error', () => {
       it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
         spyOn(responsibilitiesService, 'getAccountsDistributors').and.returnValue(Observable.throw(error));
+        responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((result) => {
+          expect(result).toEqual(new FetchResponsibilitiesFailure(error));
+          done();
+        });
+      });
+    });
+
+    describe('when checkEmptyResponsibilitiesResponse returns an error', () => {
+      it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
+        spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();

@@ -1491,4 +1491,56 @@ describe('Responsibilities Effects', () => {
       expect(actualViewType).toBe(expectedViewType);
     });
   });
+
+  describe('when checkEmptyResponsibilitiesResponse is called', () => {
+    let responsibilitiesDataMock: ResponsibilitiesData;
+    let checkEmptyResponsibilitiesResponseSpy: jasmine.Spy;
+
+        beforeEach(() => {
+          checkEmptyResponsibilitiesResponseSpy = spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.callThrough();
+          responsibilitiesDataMock = {
+            positionId: positionIdMock,
+            hierarchyGroups: [{
+              type: chance.string(),
+              name: chance.string(),
+              positionDescription: chance.string(),
+              entityType: EntityType.RoleGroup
+            }],
+            groupedEntities: accountsDistributorsMock,
+            filter: performanceFilterStateMock};
+        });
+
+    it('should return an observable of responsibilities if is non-empty', (done) => {
+      responsibilitiesService.checkEmptyResponsibilitiesResponse(responsibilitiesDataMock)
+        .subscribe((responsibilitiesData: ResponsibilitiesData) => {
+        expect(responsibilitiesData).toEqual(responsibilitiesDataMock);
+        done();
+      });
+    });
+  });
+
+  describe('when checkEmptySubaccountsResponse is called', () => {
+    let subAccountDataMock: SubAccountData;
+    let checkEmptySubaccountsResponseMock: jasmine.Spy;
+
+    beforeEach(() => {
+      checkEmptySubaccountsResponseMock = spyOn(responsibilitiesService, 'checkEmptySubaccountsResponse').and.callThrough();
+      subAccountDataMock = {
+        positionId: positionIdMock,
+        contextPositionId: contextPositionIdMock,
+        entityTypeAccountName: chance.string(),
+        selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
+        filter: performanceFilterStateMock,
+        groupedEntities: groupedSubAccountsMock
+      };
+    });
+
+    it('should return an observable of subaccounts if is non-empty', (done) => {
+      responsibilitiesService.checkEmptySubaccountsResponse(subAccountDataMock)
+        .subscribe((subAccountData: SubAccountData) => {
+        expect(subAccountData).toEqual(subAccountDataMock);
+        done();
+      });
+    });
+  });
 });
