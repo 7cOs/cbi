@@ -313,6 +313,17 @@ public class OpportunitiesPage extends TestNGBasePage {
     return isElementPresent(By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]"));
   }
 
+  public OpportunitiesPage selectSavedReportWithName(String reportName) {
+    waitForElementToClickable(
+      savedReportsDropdown.findElement(
+        By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + reportName + "')]")
+      ),
+      true
+    ).click();
+
+    return this;
+  }
+
   public enum PremiseType {
     On,
     Off
