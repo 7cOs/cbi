@@ -153,7 +153,9 @@ export class ResponsibilitiesService {
     : Observable<RefreshEntitiesTotalPerformancesData> {
       debugger;
     return this.getHierarchyGroupPerformance(
-        refreshEntitiesTotalPerformancesData.hierarchyGroups[0],
+        refreshEntitiesTotalPerformancesData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
+          hierarchyGroup.name === Object.keys(refreshEntitiesTotalPerformancesData.groupedEntities)[0]
+        ),
         refreshEntitiesTotalPerformancesData.filter,
         refreshEntitiesTotalPerformancesData.positionId,
         refreshEntitiesTotalPerformancesData.brandCode
