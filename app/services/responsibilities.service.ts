@@ -50,7 +50,7 @@ export interface FetchEntityWithPerformanceData {
 export interface RefreshAllPerformancesData {
   // Common
   positionId?: string;
-  filter?: MyPerformanceFilterState;
+  filter: MyPerformanceFilterState;
   brandCode?: string;
   groupedEntities?: GroupedEntities;
 
@@ -446,28 +446,30 @@ export class ResponsibilitiesService {
         });
    }
 
-  private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData) {
+  private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
     return this.getDistributorsPerformances(
       responsibilitiesData.groupedEntities[EntityPeopleType.DISTRIBUTOR],
       responsibilitiesData.filter,
       responsibilitiesData.positionId,
       responsibilitiesData.brandCode)
-        .map((entityPerformances: EntityWithPerformance[]) => {
-          responsibilitiesData.entityWithPerformance = entityPerformances;
-          return responsibilitiesData;
+      .map((entityPerformances: EntityWithPerformance[]) => {
+        return Object.assign({}, responsibilitiesData, { // TODO: WTF?
+          entityWithPerformance: entityPerformances
         });
+      });
   }
 
-  private handleAccountsPerformances(responsibilitiesData: ResponsibilitiesData) {
+  private handleAccountsPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
     return this.getAccountsPerformances(
       responsibilitiesData.groupedEntities[EntityPeopleType.ACCOUNT],
       responsibilitiesData.filter,
       responsibilitiesData.positionId,
       responsibilitiesData.brandCode)
-        .map((entityPerformances: EntityWithPerformance[]) => {
-          responsibilitiesData.entityWithPerformance = entityPerformances;
-          return responsibilitiesData;
+      .map((entityPerformances: EntityWithPerformance[]) => {
+        return Object.assign({}, responsibilitiesData, { // TODO: WTF?
+          entityWithPerformance: entityPerformances
         });
+      });
   }
 
   private getHierarchyRoleGroups(groupedEntities: GroupedEntities, entityType: EntityType): Array<HierarchyGroup> {
