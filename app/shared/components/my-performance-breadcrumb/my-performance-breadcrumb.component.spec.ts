@@ -170,7 +170,6 @@ describe('Breadcrumb Component', () => {
       fixture.detectChanges();
 
       componentInstance.backButtonClicked.subscribe(() => {
-        expect(true).toBe(true);
         done();
       });
 

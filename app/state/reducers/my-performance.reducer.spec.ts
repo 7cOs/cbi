@@ -88,7 +88,7 @@ describe('My Performance Reducer', () => {
       entityWithPerformance: []
     }));
 
-    expect(actualState.current.selectedEntityDescription).toBe(startingState.current.selectedEntityDescription);
+    expect(actualState.current.selectedEntityDescription).toBe(initialSelectedEntityDescription);
   });
 
   it('should call the salesHierarchyViewType reducer when a salesHierarchyViewType action is received', () => {

@@ -122,7 +122,7 @@ describe('Responsibilities Reducer', () => {
     )).toBe(initialState);
   });
 
-  it('should update the status and selectedEntityDescription when a FetchEntityWithPerformance action is received', () => {
+  it('should update the status when a FetchEntityWithPerformance action is received', () => {
     const payloadMock: FetchEntityWithPerformancePayload = {
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: entityTypeCodeMock,
