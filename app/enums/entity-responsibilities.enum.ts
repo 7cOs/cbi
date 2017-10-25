@@ -33,6 +33,6 @@ export enum EntityType {
 }
 
 export enum HierarchyGroupTypeCode {
-  accounts = 'accounts',
-  distributors = 'distributors'
+  accounts = 'account',
+  distributors = 'distributor'
 }
