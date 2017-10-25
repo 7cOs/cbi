@@ -33,8 +33,11 @@ describe('ProductMetrics Effects', () => {
   let productMetricsDataMock: ProductMetricsData;
 
   const productMetricsServiceMock = {
-    getProductMetrics(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
-      return Observable.of(responsibilitiesData);
+    getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
+      return Observable.of(productMetricsData);
+    },
+    checkEmptyProductMetricsResponse(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
+      return Observable.of(productMetricsData);
     },
     filterProductMetricsBrand(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
       return Observable.of(responsibilitiesData);
@@ -107,6 +110,17 @@ describe('ProductMetrics Effects', () => {
       expect(getProductMetricsSpy.calls.argsFor(0)[0]).toEqual(productMetricsDataMock);
     });
 
+    it('should call checkEmptyProductMetricsResponse with productMetricsData', (done) => {
+      const checkEmptyProductMetricsResponseSpy = spyOn(productMetricsService, 'checkEmptyProductMetricsResponse').and.callThrough();
+
+      productMetricsEffects.fetchProductMetrics$().subscribe(() => {
+        done();
+      });
+
+      expect(checkEmptyProductMetricsResponseSpy.calls.count()).toBe(1);
+      expect(checkEmptyProductMetricsResponseSpy.calls.argsFor(0)[0]).toEqual(productMetricsDataMock);
+    });
+
     describe('when ProductMetricsService returns successfully', () => {
       it('should return a SetProductMetricsViewType and FetchProductMetricsSuccess', (done) => {
         const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
@@ -133,6 +147,17 @@ describe('ProductMetrics Effects', () => {
     describe('when ProductMetricsApiService returns an error', () => {
       it('should return a FetchProductMetricsFailure after catching an error', (done) => {
         spyOn(productMetricsService, 'getProductMetrics').and.returnValue(Observable.throw(error));
+
+        productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
+          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailure(error));
+          done();
+        });
+      });
+    });
+
+    describe('when checkEmptyProductMetricsResponse returns an error', () => {
+      it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
+        spyOn(productMetricsService, 'checkEmptyProductMetricsResponse').and.returnValue(Observable.throw(error));
 
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
           expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailure(error));

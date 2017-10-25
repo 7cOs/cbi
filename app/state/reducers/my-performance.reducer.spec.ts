@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
 import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
-import { myPerformanceReducer, initialState } from './my-performance.reducer';
+import { myPerformanceReducer, initialState, MyPerformanceState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import * as myPerformanceVersion from './my-performance-version.reducer';
 import * as responsibilities from './responsibilities.reducer';
@@ -38,7 +38,8 @@ describe('My Performance Reducer', () => {
   it('should call the responsibilities reducer when a responsibility action is received', () => {
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
       positionId: chance.string(),
-      filter: null
+      filter: null,
+      selectedEntityDescription: chance.string()
     }));
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
       positionId: chance.string(),
@@ -60,6 +61,34 @@ describe('My Performance Reducer', () => {
     expect(responsibilitiesReducerSpy.calls.count()).toBe(5);
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
     expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
+  });
+
+  it('should update selectedEntityDescription when a responsibility action is received with a selectedEntityDescription set', () => {
+    const expectedSelectedEntityDescription = chance.string();
+    const actualState: MyPerformanceState = myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
+      positionId: chance.string(),
+      filter: null,
+      selectedEntityDescription: expectedSelectedEntityDescription
+    }));
+
+    expect(actualState.current.selectedEntityDescription).toBe(expectedSelectedEntityDescription);
+  });
+
+  it('should NOT modify selectedEntityDescription when a responsibility action is received without a selectedEntityDescription set', () => {
+    const initialSelectedEntityDescription = chance.string();
+    const startingState: MyPerformanceState = Object.assign({}, initialState, {
+      current: Object.assign({}, initialState.current, {
+        selectedEntityDescription: initialSelectedEntityDescription
+      })
+    });
+    const actualState: MyPerformanceState = myPerformanceReducer(startingState, new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
+      positionId: chance.string(),
+      groupedEntities: {},
+      hierarchyGroups: [],
+      entityWithPerformance: []
+    }));
+
+    expect(actualState.current.selectedEntityDescription).toBe(initialSelectedEntityDescription);
   });
 
   it('should call the salesHierarchyViewType reducer when a salesHierarchyViewType action is received', () => {

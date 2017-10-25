@@ -29,24 +29,12 @@ export function myPerformanceVersionReducer(
           }
         : state;
 
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY:
-      return {
-        current: {
-          responsibilities: state.current.responsibilities,
-          salesHierarchyViewType: state.current.salesHierarchyViewType,
-          selectedEntity: action.payload,
-          selectedBrandCode: state.current.selectedBrandCode,
-          selectedEntityType: state.current.selectedEntityType
-        },
-        versions: state.versions
-      };
-
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
       return {
         current: {
           responsibilities: state.current.responsibilities,
           salesHierarchyViewType: state.current.salesHierarchyViewType,
-          selectedEntity: state.current.selectedEntity,
+          selectedEntityDescription: state.current.selectedEntityDescription,
           selectedBrandCode: state.current.selectedBrandCode,
           selectedEntityType: action.payload
         },
@@ -58,7 +46,7 @@ export function myPerformanceVersionReducer(
         current: {
           responsibilities: state.current.responsibilities,
           salesHierarchyViewType: state.current.salesHierarchyViewType,
-          selectedEntity: state.current.selectedEntity,
+          selectedEntityDescription: state.current.selectedEntityDescription,
           selectedBrandCode: action.payload,
           selectedEntityType: state.current.selectedEntityType
         },
