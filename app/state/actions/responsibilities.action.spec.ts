@@ -267,7 +267,8 @@ describe('Responsibilities Actions', () => {
       contextPositionId: chance.string({pool: '0123456789'}),
       entityTypeAccountName: chance.string(),
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     };
     let action: ResponsibilitiesActions.FetchSubAccounts;
 

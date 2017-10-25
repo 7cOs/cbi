@@ -139,7 +139,8 @@ describe('Responsibilities Effects', () => {
     beforeEach(() => {
       runner.queue(new FetchResponsibilities({
         positionId: positionIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: chance.string()
       }));
     });
 
@@ -415,7 +416,8 @@ describe('Responsibilities Effects', () => {
           contextPositionId: chance.string({pool: '0123456789'}),
           entityTypeAccountName: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-          filter: performanceFilterStateMock
+          filter: performanceFilterStateMock,
+          selectedEntityDescription: chance.string()
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 
@@ -508,7 +510,8 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchAlternateHierarchyResponsibilities({
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: chance.string()
       }));
 
       alternateResponsibilitiesDataMock = {

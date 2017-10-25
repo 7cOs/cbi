@@ -48,7 +48,7 @@ export interface FetchSubAccountsPayload {
   entityTypeAccountName: string;
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
-  selectedEntityDescription?: string;
+  selectedEntityDescription: string;
 }
 
 export interface FetchSubAccountsSuccessPayload {
@@ -60,7 +60,7 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   positionId: string;
   alternateHierarchyId: string;
   filter: MyPerformanceFilterState;
-  selectedEntityDescription?: string;
+  selectedEntityDescription: string;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';

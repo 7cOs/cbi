@@ -165,8 +165,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
     this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
-    this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState,
-      selectedEntityDescription: currentUserFullName }));
+    this.store.dispatch(new FetchResponsibilities({
+      positionId: currentUserId,
+      filter: this.filterState,
+      selectedEntityDescription: currentUserFullName
+    }));
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
       positionId: currentUserId,
       filter: this.filterState,
