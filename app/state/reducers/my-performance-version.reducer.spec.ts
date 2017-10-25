@@ -67,7 +67,7 @@ describe('My Performance Version Reducer', () => {
       current: {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: beforeState.current.selectedEntityDescription,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedEntityType: entityTypeMock
       },
@@ -85,7 +85,7 @@ describe('My Performance Version Reducer', () => {
       current: {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: beforeState.current.selectedEntityDescription,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedBrandCode: selectedBrandCodeMock,
         selectedEntityType: beforeState.current.selectedEntityType
       },

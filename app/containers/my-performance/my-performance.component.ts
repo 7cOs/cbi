@@ -54,7 +54,6 @@ export interface HandleElementClickedParameters {
 })
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
-  public currentUserFullName: string;
   public fetchResponsibilitiesFailure: boolean = false;
   public fetchProductMetricsFailure: boolean = false;
   public salesHierarchyViewType: SalesHierarchyViewType;
@@ -99,7 +98,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.dateRanges$ = this.store.select(state => state.dateRanges);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
@@ -162,12 +160,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
+    const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
       this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
     this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState,
-      selectedEntityDescription: this.currentUserFullName }));
+      selectedEntityDescription: currentUserFullName }));
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
       positionId: currentUserId,
       filter: this.filterState,
