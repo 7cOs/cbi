@@ -1291,7 +1291,7 @@ describe('Responsibilities Effects', () => {
         entityTypeCode: chance.string(),
         entities: peopleResponsibilitiesMock,
         filter: performanceFilterStateMock,
-        selectedPositionId: chance.string(),
+        positionId: chance.string(),
         entityType: EntityType.RoleGroup
       };
     });
@@ -1320,7 +1320,7 @@ describe('Responsibilities Effects', () => {
           expect(getDistributorsPerformancesSpy).toHaveBeenCalledWith(
             entityWithPerformancePayloadMock.entities,
             entityWithPerformancePayloadMock.filter,
-            entityWithPerformancePayloadMock.selectedPositionId);
+            entityWithPerformancePayloadMock.positionId);
           done();
         });
       });
@@ -1338,7 +1338,7 @@ describe('Responsibilities Effects', () => {
           expect(getAccountsPerformancesSpy).toHaveBeenCalledWith(
             entityWithPerformancePayloadMock.entities,
             entityWithPerformancePayloadMock.filter,
-            entityWithPerformancePayloadMock.selectedPositionId);
+            entityWithPerformancePayloadMock.positionId);
           done();
         });
       });

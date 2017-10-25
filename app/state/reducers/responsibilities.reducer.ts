@@ -81,6 +81,7 @@ export function responsibilitiesReducer(
       });
 
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_SUCCESS:
+    debugger;
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         entitiesTotalPerformances: action.payload
@@ -92,6 +93,7 @@ export function responsibilitiesReducer(
       });
 
     case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE:
+      debugger;
       const selectedEntity = state.entityWithPerformance.find(entity => entity.positionId === action.payload);
 
       return Object.assign({}, state, {

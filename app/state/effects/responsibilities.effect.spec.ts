@@ -291,7 +291,7 @@ describe('Responsibilities Effects', () => {
 
   describe('when a FetchEntityWithPerformance is received', () => {
     const fetchEntityPerformancePayloadMock: FetchEntityWithPerformancePayload = {
-      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
+      positionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: entityTypeCodeMock,
       entityType: EntityType.RoleGroup,

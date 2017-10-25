@@ -485,7 +485,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntity(rowMock.descriptionRow0));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
-        selectedPositionId: rowMock.metadata.positionId,
+        positionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -517,7 +517,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(
         new ResponsibilitiesActions.SetAlternateHierarchyId(rowMock.metadata.alternateHierarchyId));
       expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
-        selectedPositionId: rowMock.metadata.positionId,
+        positionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -608,7 +608,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.handleElementClicked(params);
 
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
-        selectedPositionId: rowMock.metadata.positionId,
+        positionId: rowMock.metadata.positionId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,

@@ -1,12 +1,19 @@
 import { Action } from '@ngrx/store';
 
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
-import { Performance } from '../../models/performance.model';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { HierarchyGroup } from '../../models/hierarchy-group.model';
-import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { Performance } from '../../models/performance.model';
+import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
+
+export interface FetchResponsibilitiesPayload {
+  positionId: string;
+  filter: MyPerformanceFilterState;
+  brandCode?: string;
+}
 
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
@@ -20,8 +27,9 @@ export interface FetchEntityWithPerformancePayload {
   entityTypeCode: string;
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
-  selectedPositionId: string;
+  positionId: string;
   entityType: EntityType;
+  brandCode?: string;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
@@ -29,9 +37,20 @@ export interface FetchEntityWithPerformanceSuccessPayload {
   entityTypeCode: string;
 }
 
-export interface FetchEntityWithPerformanceSuccessPayload {
-  entityWithPerformance: EntityWithPerformance[];
-  entityTypeCode: string;
+export interface RefreshAllPerformancesPayload {
+  positionId: string;
+  groupedEntities: GroupedEntities;
+  hierarchyGroups: Array<HierarchyGroup>;
+  selectedEntityType: EntityType;
+  selectedEntityTypeCode: string;
+  salesHierarchyViewType: SalesHierarchyViewType;
+  filter: MyPerformanceFilterState;
+  brandCode?: string;
+  entityType?: EntityType;
+}
+
+export interface RefreshAllPerformancesSuccesPayload {
+
 }
 
 export interface FetchSubAccountsPayload {
@@ -57,7 +76,7 @@ export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES
 export class FetchResponsibilities implements Action {
   readonly type = FETCH_RESPONSIBILITIES;
 
-  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: FetchResponsibilitiesPayload) { }
 }
 
 export const FETCH_RESPONSIBILITIES_SUCCESS = '[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS';
@@ -86,6 +105,20 @@ export class FetchEntityWithPerformanceSuccess implements Action {
   readonly type = FETCH_ENTITIES_PERFORMANCES_SUCCESS;
 
   constructor(public payload: FetchEntityWithPerformanceSuccessPayload) { }
+}
+
+export const REFRESH_ALL_PERFORMANCES = '[Responsibilities] REFRESH_ALL_PERFORMANCES';
+export class RefreshAllPerformances implements Action {
+  readonly type = REFRESH_ALL_PERFORMANCES;
+
+  constructor(public payload: RefreshAllPerformancesPayload) { }
+}
+
+export const REFRESH_ALL_PERFORMANCES_SUCCESS = '[Responsibilities] REFRESH_ALL_PERFORMANCES_SUCCESS';
+export class RefreshAllPerformancesSuccess implements Action {
+  readonly type = REFRESH_ALL_PERFORMANCES;
+
+  constructor(public payload: RefreshAllPerformancesSuccesPayload) { }
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP';
