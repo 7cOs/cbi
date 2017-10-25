@@ -24,6 +24,9 @@ public class NotesModal extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH)
   private WebElement modalContainer;
 
+  @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH + "//a[contains(@ng-click, 'notesClose')]")
+  private WebElement closeButton;
+
   public NotesModal(WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
@@ -169,5 +172,10 @@ public class NotesModal extends TestNGBasePage {
     waitForElementToClickable(confirmDeleteButton, true).click();
 
     return this;
+  }
+
+  public AccountDashboardPage closeModal() {
+    waitForElementToClickable(closeButton, true).click();
+    return PageFactory.initElements(driver, AccountDashboardPage.class);
   }
 }

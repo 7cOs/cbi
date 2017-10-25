@@ -61,6 +61,14 @@ public class NotesTest extends BaseTestCase {
       "New Note did not display after clicking the Save button."
     );
 
+    notesModal
+      .closeModal()
+      .clickNotesButton();
+    Assert.assertEquals(
+      notesModal.getTextFromFirstNote(),
+      noteText,
+      "Failed to retrieve and display newly saved Note."
+    );
   }
 
   @Test(dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
