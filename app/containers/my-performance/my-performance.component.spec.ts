@@ -51,6 +51,14 @@ import { WindowService } from '../../services/window.service';
 const chance = new Chance();
 
 @Component({
+  selector: 'beer-loader',
+  template: ''
+})
+class BeerLoaderComponentMock {
+  @Input() showLoader: false;
+}
+
+@Component({
   selector: 'my-performance-filter',
   template: ''
 })
@@ -167,6 +175,7 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        BeerLoaderComponentMock,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
         MyPerformanceTableComponentMock,
@@ -736,56 +745,97 @@ describe('MyPerformanceComponent', () => {
     let accountNameMock: string;
     let hierarchyEntityMock: HierarchyEntity;
     let currentMock: MyPerformanceEntitiesData;
+    let insideAlternateHierarchyMock: boolean;
+    let alternateHierarchyIdMock: string;
 
     beforeEach(() => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
       accountNameMock = chance.string();
       hierarchyEntityMock = getEntityPropertyResponsibilitiesMock();
       currentMock = getMyPerformanceEntitiesDataMock();
+      alternateHierarchyIdMock = chance.string();
+      insideAlternateHierarchyMock = !!alternateHierarchyIdMock;
     });
 
     describe('when distributor subline link clicked', () => {
-      it('should correctly call functions to go to account dashboard when distributor clicked with correct params', () => {
+      it('should correctly call functions to go to account dashboard when distributor clicked with correct ' +
+        'params within alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
+        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
     });
 
     describe('when subaccount subline link clicked', () => {
-      it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy enity', () => {
+      it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity within ' +
+        'alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
         hierarchyEntityMock.positionId = rowMock.metadata.positionId;
         currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter,
-                                                                                              rowMock,
-                                                                                              hierarchyEntityMock.premiseType);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          stateMock.myPerformanceFilter,
+          rowMock,
+          hierarchyEntityMock.premiseType
+        );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter,
-                                                                  rowMock,
-                                                                  hierarchyEntityMock.premiseType));
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
+            rowMock, hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
 
-      it('should correctly call functions for accountDashboard when subAccount clicked but no matching hierarchy entity', () => {
+      it('should correctly call functions for accountDashboard when subAccount clicked but no matching ' +
+        'hierarchy entity within alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
         hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(stateMock.myPerformanceFilter, rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
+        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
+        expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
+        expect(windowMock.open).toHaveBeenCalled();
+      });
+
+      it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity outside ' +
+        'alternate hierarchy', () => {
+        rowMock.metadata.entityType = EntityType.SubAccount;
+        currentMock.responsibilities.alternateHierarchyId = null;
+        currentSubject.next(currentMock);
+        insideAlternateHierarchyMock = false;
+        hierarchyEntityMock.positionId = rowMock.metadata.positionId;
+        currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
+        currentSubject.next(currentMock);
+        componentInstance.handleSublineClicked(rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          stateMock.myPerformanceFilter,
+          rowMock,
+          hierarchyEntityMock.premiseType
+        );
+        expect(stateMock.href).toHaveBeenCalledWith(
+          'accounts',
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
+            rowMock, hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
       });
@@ -964,6 +1014,27 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
+  describe('when fetching responsibilities', () => {
+    let currentMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
+    });
+
+    it('should set responsibilitiesFetching to true when responsibilities are currently fetching', () => {
+      currentMock.responsibilities.status = ActionStatus.Fetching;
+      currentSubject.next(currentMock);
+      expect(componentInstance.responsibilitiesFetching).toBe(true);
+    });
+
+    it('should set responsibilitiesFetching to false when responsibilities are fetched or not fetching', () => {
+      currentMock.responsibilities.status = ActionStatus.Fetched;
+      currentSubject.next(currentMock);
+      expect(componentInstance.responsibilitiesFetching).toBe(false);
+    });
+  });
+
   describe('when fetching productMetrics returns and error', () => {
 
     it('should set fetchProductMetricsFailure to false when productmetrics status is fetched', () => {
@@ -985,15 +1056,24 @@ describe('MyPerformanceComponent', () => {
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
     });
+  });
 
-    it('should set fetchProductMetricsFailure to true when productmetrics.products is empty', () => {
-      myPerformanceProductMetricsMock = {
-        status: ActionStatus.Fetched,
-        products: {},
-        productMetricsViewType: ProductMetricsViewType.brands
-      };
+  describe('when fetching productMetrics', () => {
+
+    it('should set productMetricsFetching to true when productmetrics status is fetching', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetching,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.skus};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.fetchProductMetricsFailure).toBe(true);
+      expect(componentInstance.productMetricsFetching).toBe(true);
+    });
+
+    it('should set productMetricsFetching to false when productmetrics status is notfetched', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.NotFetched,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.brands};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.productMetricsFetching).toBe(false);
     });
   });
 
