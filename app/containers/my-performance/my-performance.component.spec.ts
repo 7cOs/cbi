@@ -19,6 +19,7 @@ import { getMyPerformanceEntitiesDataMock,
          getMyPerformanceStateMock,
          getResponsibilitesStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -86,6 +87,7 @@ class MyPerformanceTableComponentMock {
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
+  @Input() tableSubHeaderTimePeriod: string;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
@@ -130,6 +132,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetricsViewType: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
+    dateRange: getDateRangeMock(),
     href: jasmine.createSpy('href')
   };
 
@@ -220,7 +223,7 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
     }));
 
-    it('should dispatch actions on init', () => {
+    fit('should dispatch actions on init', () => {
       myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
       fixture = TestBed.createComponent(MyPerformanceComponent);
       fixture.detectChanges();

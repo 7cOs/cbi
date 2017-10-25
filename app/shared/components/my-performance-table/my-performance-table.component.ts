@@ -36,6 +36,7 @@ export class MyPerformanceTableComponent {
 
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
+  @Input() tableSubHeaderTimePeriod: string;
   @Input() showOpportunities: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() tableHeaderRow: Array<string>;

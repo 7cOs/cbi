@@ -28,6 +28,7 @@ describe('MyPerformanceTableComponent', () => {
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
   let componentInstance: MyPerformanceTableComponent;
   let tableHeaderRow: Array<string> = ['column1', 'column2', 'column3'];
+  let tableSubHeaderTimePeriod: string = chance.string();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,6 +45,7 @@ describe('MyPerformanceTableComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceTableComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
+    componentInstance.tableSubHeaderTimePeriod = tableSubHeaderTimePeriod;
   });
 
   describe('setSortingcriteria', () => {

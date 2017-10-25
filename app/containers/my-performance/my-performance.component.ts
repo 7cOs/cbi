@@ -17,7 +17,6 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -37,6 +36,7 @@ import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { WindowService } from '../../services/window.service';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -68,12 +68,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     ascending: false
   }];
   public totalRowData: MyPerformanceTableRow;
-
-  // mocks
-  public dateRange: DateRange = getDateRangeMock();
-  public performanceMetric: string = 'Depletions';
+  public dateRange: DateRange;
+  public performanceMetric: string;
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
+  public tableSubHeaderTimePeriod: string;
 
   private currentState: MyPerformanceEntitiesData;
   private dateRanges$: Observable<DateRangesState>;
@@ -105,9 +104,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
+      let currentTypeValue = MetricTypeValue[filterState.metricType] === 'volume'
+        ? 'Depletions ' : (MetricTypeValue[filterState.metricType] === 'velocity' ? 'Velocity ' : 'Distribution ');
       this.filterState = filterState;
       this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
       this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+      this.performanceMetric = currentTypeValue;
+      this.tableHeaderRowLeft[1] = currentTypeValue.toUpperCase();
+      this.tableHeaderRowRight[1] = currentTypeValue.toUpperCase();
+      this.dateRanges$.subscribe(dateRange => {
+        this.dateRange = dateRange[DateRangeTimePeriodValue[filterState.dateRangeCode]];
+        this.tableSubHeaderTimePeriod = dateRange[DateRangeTimePeriodValue[filterState.dateRangeCode]].displayCode;
+        // this.dateRange.displayCode;
+      });
     });
 
     this.productMetricsSubscription = this.store
