@@ -35,8 +35,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
-
-    opportunitiesPage.deleteAllSavedReports();
   }
 
   @AfterMethod
@@ -47,6 +45,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(description = "Creating an Opportunities Saved Report", dataProvider = "savedReportData")
   public void createSavedReport(String name, String distributorSearchText) {
     opportunitiesPage
+      .deleteAllSavedReports()
       .enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
       .clickFirstDistributorResult()
@@ -73,7 +72,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public static Object[][] savedReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {"First " + testReportName, "Healy Wholesale"}
+      {testReportName, "Healy Wholesale"}
     };
   }
 

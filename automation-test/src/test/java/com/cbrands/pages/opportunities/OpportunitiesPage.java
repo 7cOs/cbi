@@ -16,6 +16,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   private static final String FILTER_FORM_XPATH = "//form[contains(@class, 'filters')]";
   private static final String NO_SAVED_REPORTS_TEXT = "No saved reports";
   private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
+  private static final int HOVER_ARROW_ICON_SIZE = 17;
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH)
@@ -263,7 +264,8 @@ public class OpportunitiesPage extends TestNGBasePage {
     WebElement savedReportOption = clickSavedReportsDropdown().getFirstSavedReportOption();
 
     while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
-      openEditSavedReportModal(savedReportOption)
+      this
+        .clickSavedReportHoverArrow(savedReportOption)
         .clickDeleteSavedReportLink()
         .clickSavedReportsDropdown();
       savedReportOption = getFirstSavedReportOption();
@@ -281,12 +283,14 @@ public class OpportunitiesPage extends TestNGBasePage {
     );
   }
 
-  private SavedReportModal openEditSavedReportModal(WebElement savedReport) {
+  private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
     waitForElementToClickable(savedReport, true);
+    final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
+    final int yPos = savedReport.getSize().getHeight() / 2;
 
     final Actions action = new Actions(driver);
-    action.moveToElement(savedReport)
-      .moveByOffset(110, 0)
+    action
+      .moveToElement(savedReport, xPos, yPos)
       .click()
       .perform();
     waitForLoaderToDisappear();
