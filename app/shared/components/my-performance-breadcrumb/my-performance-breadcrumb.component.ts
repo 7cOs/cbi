@@ -1,7 +1,6 @@
-import { Component, Input, EventEmitter, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, EventEmitter, OnChanges, Output, SimpleChanges, OnInit } from '@angular/core';
 import { CssClasses } from '../../../models/css-classes.model';
 
-// tslint:disable-next-line:no-unused-variable
 import { BreadcrumbEntityClickedEvent } from '../../../models/breadcrumb-entity-clicked-event.model';
 import { MyPerformanceEntitiesData } from '../../../state/reducers/my-performance.reducer';
 
@@ -11,7 +10,7 @@ import { MyPerformanceEntitiesData } from '../../../state/reducers/my-performanc
   styles: [ require('./my-performance-breadcrumb.component.scss') ]
 })
 
-export class MyPerformanceBreadcrumbComponent implements OnChanges {
+export class MyPerformanceBreadcrumbComponent implements OnChanges, OnInit {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
   @Output() backButtonClicked = new EventEmitter<any>();
   @Input() currentPerformanceState: MyPerformanceEntitiesData;
@@ -19,6 +18,10 @@ export class MyPerformanceBreadcrumbComponent implements OnChanges {
   @Input() showBackButton: boolean;
 
   public breadcrumbTrail: string[];
+
+  public ngOnInit() {
+    this.breadcrumbTrail = this.constructBreadcrumbTrail(this.performanceStateVersions, this.currentPerformanceState);
+  }
 
   public ngOnChanges(changes: SimpleChanges) {
     const versions = changes['performanceStateVersions'] ? changes['performanceStateVersions'].currentValue : this.performanceStateVersions;
