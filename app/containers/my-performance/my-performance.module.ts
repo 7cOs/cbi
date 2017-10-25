@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { BeerLoaderComponent } from '../../shared/components/beer-loader/beer-loader.component';
 import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterComponent } from '../../shared/components/my-performance-filter/my-performance-filter.component';
@@ -25,6 +26,7 @@ import { WindowService } from '../../services/window.service';
     SharedModule
   ],
   declarations: [
+    BeerLoaderComponent,
     MyPerformanceBreadcrumbComponent,
     MyPerformanceComponent,
     MyPerformanceFilterComponent,

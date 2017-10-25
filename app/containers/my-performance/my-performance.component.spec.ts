@@ -52,6 +52,14 @@ import { WindowService } from '../../services/window.service';
 const chance = new Chance();
 
 @Component({
+  selector: 'beer-loader',
+  template: ''
+})
+class BeerLoaderComponentMock {
+  @Input() showLoader: false;
+}
+
+@Component({
   selector: 'my-performance-filter',
   template: ''
 })
@@ -170,6 +178,7 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        BeerLoaderComponentMock,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
         MyPerformanceTableComponentMock,
@@ -489,6 +498,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: undefined,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -521,6 +531,7 @@ describe('MyPerformanceComponent', () => {
         new ResponsibilitiesActions.SetAlternateHierarchyId(rowMock.metadata.alternateHierarchyId));
       expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: undefined,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -612,6 +623,32 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: undefined,
+        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeCode: rowMock.metadata.entityTypeCode,
+        entityType: rowMock.metadata.entityType,
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        filter: stateMock.myPerformanceFilter as any
+      }));
+    });
+
+    it('should dispatch FetchEntityWithPerformance with an alternateHierarchyId when the responsibilitiesState ' +
+    'contains an alternateHierarchyId', () => {
+      currentMock.responsibilities.alternateHierarchyId = chance.string();
+      currentSubject.next(currentMock);
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+
+      const entityTypes: EntityType[] = Object.keys(EntityType)
+        .filter((key: EntityType) => key !== EntityType.ResponsibilitiesGroup)
+        .map((key: EntityType) => EntityType[key]);
+
+      rowMock.metadata.entityType = entityTypes[chance.integer({ min: 0, max: entityTypes.length - 1 })];
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
+        selectedPositionId: rowMock.metadata.positionId,
+        alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -946,6 +983,27 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
+  describe('when fetching responsibilities', () => {
+    let currentMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
+    });
+
+    it('should set responsibilitiesFetching to true when responsibilities are currently fetching', () => {
+      currentMock.responsibilities.status = ActionStatus.Fetching;
+      currentSubject.next(currentMock);
+      expect(componentInstance.responsibilitiesFetching).toBe(true);
+    });
+
+    it('should set responsibilitiesFetching to false when responsibilities are fetched or not fetching', () => {
+      currentMock.responsibilities.status = ActionStatus.Fetched;
+      currentSubject.next(currentMock);
+      expect(componentInstance.responsibilitiesFetching).toBe(false);
+    });
+  });
+
   describe('when fetching productMetrics returns and error', () => {
 
     it('should set fetchProductMetricsFailure to false when productmetrics status is fetched', () => {
@@ -976,6 +1034,25 @@ describe('MyPerformanceComponent', () => {
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.fetchProductMetricsFailure).toBe(true);
+    });
+  });
+
+  describe('when fetching productMetrics', () => {
+
+    it('should set productMetricsFetching to true when productmetrics status is fetching', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetching,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.skus};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.productMetricsFetching).toBe(true);
+    });
+
+    it('should set productMetricsFetching to false when productmetrics status is notfetched', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.NotFetched,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.skus};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.productMetricsFetching).toBe(false);
     });
   });
 
