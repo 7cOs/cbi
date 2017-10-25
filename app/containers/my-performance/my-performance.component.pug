@@ -1,6 +1,6 @@
 h1 Performance
 
-beer-loader(*ngIf="productMetricsFetching || responsibilitiesFetching")
+beer-loader([showLoader]="productMetricsFetching || responsibilitiesFetching")
 
 my-performance-filter(
   [dateRanges]="dateRanges$ | async",

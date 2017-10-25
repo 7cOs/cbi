@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'beer-loader',
@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
 })
 export class BeerLoaderComponent {
 
+  @Input() showLoader: boolean;
   constructor() {}
 }

@@ -54,7 +54,9 @@ const chance = new Chance();
   selector: 'beer-loader',
   template: ''
 })
-class BeerLoaderComponentMock {}
+class BeerLoaderComponentMock {
+  @Input() showLoader: false;
+}
 
 @Component({
   selector: 'my-performance-filter',
@@ -173,13 +175,13 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        BeerLoaderComponentMock,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
         MyPerformanceTableComponentMock,
         MyPerformanceComponent,
         MyPerformanceTableRowComponent,
-        SortIndicatorComponent,
-        BeerLoaderComponentMock
+        SortIndicatorComponent
       ],
       providers: [
         MyPerformanceTableDataTransformerService,
@@ -986,7 +988,7 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities = getResponsibilitesStateMock();
     });
 
-    it('should set responsibilitiesFetching to true when responsibilities are fetching', () => {
+    it('should set responsibilitiesFetching to true when responsibilities are currently fetching', () => {
       currentMock.responsibilities.status = ActionStatus.Fetching;
       currentSubject.next(currentMock);
       expect(componentInstance.responsibilitiesFetching).toBe(true);

@@ -81,6 +81,10 @@ describe('Responsibilities Reducer', () => {
 
     const stateWithGroupedEntities = {
       status: initialState.status,
+      responsibilitiesStatus: initialState.responsibilitiesStatus,
+      entitiesPerformanceStatus: initialState.entitiesPerformanceStatus,
+      totalPerformanceStatus: initialState.totalPerformanceStatus,
+      subaccountsStatus: initialState.subaccountsStatus,
       positionId: initialState.positionId,
       groupedEntities: groupedEntitiesMock,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -90,6 +94,10 @@ describe('Responsibilities Reducer', () => {
 
     const expectedState = {
       status: initialState.status,
+      responsibilitiesStatus: initialState.responsibilitiesStatus,
+      entitiesPerformanceStatus: initialState.entitiesPerformanceStatus,
+      totalPerformanceStatus: initialState.totalPerformanceStatus,
+      subaccountsStatus: initialState.subaccountsStatus,
       positionId: initialState.positionId,
       groupedEntities: {
         [payload]: groupedEntitiesMock[payload]

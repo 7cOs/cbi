@@ -7,10 +7,10 @@ import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 export interface ResponsibilitiesState extends State {
   status: ActionStatus;
-  responsibilitiesStatus?: ActionStatus;
-  entitiesPerformanceStatus?: ActionStatus;
-  totalPerformanceStatus?: ActionStatus;
-  subaccountsStatus?: ActionStatus;
+  responsibilitiesStatus: ActionStatus;
+  entitiesPerformanceStatus: ActionStatus;
+  totalPerformanceStatus: ActionStatus;
+  subaccountsStatus: ActionStatus;
   positionId: string;
   alternateHierarchyId?: string;
   entityTypeCode?: string;

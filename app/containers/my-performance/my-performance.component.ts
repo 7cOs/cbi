@@ -132,13 +132,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.myPerformanceCurrentSubscription = this.store
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
-        this.responsibilitiesFetching = current.responsibilities &&
-        (current.responsibilities.status === ActionStatus.Fetching ||
-        current.responsibilities.responsibilitiesStatus === ActionStatus.Fetching ||
-        current.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
-        current.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
-        current.responsibilities.subaccountsStatus === ActionStatus.Fetching);
         this.currentState = current;
+        this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
 
          // TODO: compare both selected brands to trigger or not a refresh
@@ -431,5 +426,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private isInsideAlternateHierarchy(): boolean {
     return !!this.currentState.responsibilities.alternateHierarchyId;
+  }
+
+  private isFetchingResponsibilities(): boolean {
+    return this.currentState.responsibilities &&
+    (this.currentState.responsibilities.status === ActionStatus.Fetching ||
+      this.currentState.responsibilities.responsibilitiesStatus === ActionStatus.Fetching ||
+      this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
+      this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
+      this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
   }
 }

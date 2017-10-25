@@ -26,13 +26,13 @@ import { WindowService } from '../../services/window.service';
     SharedModule
   ],
   declarations: [
+    BeerLoaderComponent,
     MyPerformanceBreadcrumbComponent,
     MyPerformanceComponent,
     MyPerformanceFilterComponent,
     MyPerformanceTableComponent,
     MyPerformanceTableRowComponent,
-    SortIndicatorComponent,
-    BeerLoaderComponent
+    SortIndicatorComponent
   ],
   providers: [
     MyPerformanceApiService,
