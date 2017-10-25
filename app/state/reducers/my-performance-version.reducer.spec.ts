@@ -3,7 +3,7 @@ import * as Chance from 'chance';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import { getMyPerformanceStateMock, getMyPerformanceEntitiesDataMock } from './my-performance.state.mock';
-import { initialState } from './my-performance.reducer';
+import { initialState, MyPerformanceEntitiesData } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 
@@ -36,7 +36,7 @@ describe('My Performance Version Reducer', () => {
   });
 
   it('should update the current state when a restore action is dispatched', () => {
-    const savedObject = {
+    const savedObject: MyPerformanceEntitiesData = {
       responsibilities: {
         status: ActionStatus.Fetched,
         positionId: chance.string(),
@@ -51,6 +51,7 @@ describe('My Performance Version Reducer', () => {
           error: false
         }
       },
+      selectedEntityDescription: chance.string(),
       selectedEntityType: getEntityTypeMock()
     };
 

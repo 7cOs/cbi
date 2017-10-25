@@ -14,7 +14,7 @@ import { salesHierarchyViewTypeReducer, SalesHierarchyViewTypeState } from './sa
 export interface MyPerformanceEntitiesData {
   responsibilities?: ResponsibilitiesState;
   salesHierarchyViewType?: SalesHierarchyViewTypeState;
-  selectedEntityDescription?: string;
+  selectedEntityDescription: string;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
 }
@@ -28,6 +28,7 @@ export const initialState: MyPerformanceState = {
   current: {
     responsibilities: initialStateResponsibilities,
     salesHierarchyViewType: initialStateSalesHierarchyViewType,
+    selectedEntityDescription: '',
     selectedEntityType: EntityType.Person
   },
   versions: initialStateVersions
