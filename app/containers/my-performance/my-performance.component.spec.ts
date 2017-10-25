@@ -1012,13 +1012,6 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       expect(componentInstance.fetchResponsibilitiesFailure).toBe(true);
     });
-
-    it('should set fetchResponsibilitiesFailure to true when responsibilities.groupedEntities is empty', () => {
-      currentMock.responsibilities.status = ActionStatus.Error;
-      currentMock.responsibilities.groupedEntities = {};
-      currentSubject.next(currentMock);
-      expect(componentInstance.fetchResponsibilitiesFailure).toBe(true);
-    });
   });
 
   describe('when fetching responsibilities', () => {
@@ -1057,17 +1050,7 @@ describe('MyPerformanceComponent', () => {
     it('should set fetchProductMetricsFailure to true when productmetrics status is error', () => {
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Error,
-        products: undefined,
-        productMetricsViewType: ProductMetricsViewType.brands
-      };
-      productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.fetchProductMetricsFailure).toBe(true);
-    });
-
-    it('should set fetchProductMetricsFailure to true when productmetrics.products is empty', () => {
-      myPerformanceProductMetricsMock = {
-        status: ActionStatus.Fetched,
-        products: {},
+        products: {brandValues: []},
         productMetricsViewType: ProductMetricsViewType.brands
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
@@ -1088,7 +1071,7 @@ describe('MyPerformanceComponent', () => {
     it('should set productMetricsFetching to false when productmetrics status is notfetched', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.NotFetched,
         products: {brandValues: []},
-        productMetricsViewType: ProductMetricsViewType.skus};
+        productMetricsViewType: ProductMetricsViewType.brands};
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.productMetricsFetching).toBe(false);
     });
