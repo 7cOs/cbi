@@ -67,7 +67,7 @@ class MyPerformanceFilterComponentMock {
 class MyPerformanceBreadcrumbComponentMock {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
   @Output() backButtonClicked = new EventEmitter();
-  @Input() currentUserFullName: string[];
+  @Input() currentPerformanceState: MyPerformanceEntitiesData;
   @Input() performanceStateVersions: MyPerformanceEntitiesData[];
   @Input() showBackButton: boolean;
 }

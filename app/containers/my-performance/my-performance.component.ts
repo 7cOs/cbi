@@ -128,7 +128,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
-        console.log('CURRENT STATE selectedEntityDescription:', current.selectedEntityDescription);
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
 
          // TODO: compare both selected brands to trigger or not a refresh
