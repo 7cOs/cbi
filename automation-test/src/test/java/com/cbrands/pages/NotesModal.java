@@ -124,7 +124,7 @@ public class NotesModal extends TestNGBasePage {
     try {
       findNoteWithText(noteText);
       doesExist = true;
-    } catch(NoSuchElementException e) {
+    } catch (NoSuchElementException e) {
       log.info("No Note found with the following text: " + noteText);
     }
 
@@ -154,7 +154,7 @@ public class NotesModal extends TestNGBasePage {
     final String isNote = "contains(@class, 'note-body ')";
     final String containsMatchingText = ".//div.note-body-field-text/*[contains(., '" + noteText + "')]";
 
-    return modalContainer.findElement(By.xpath(".//div["+ isNote +" and "+ containsMatchingText +"]"));
+    return modalContainer.findElement(By.xpath(".//div[" + isNote + " and " + containsMatchingText + "]"));
   }
 
   public NotesModal clickDeleteIcon(WebElement deleteMe) {
