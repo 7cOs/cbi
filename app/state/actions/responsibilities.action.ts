@@ -21,6 +21,7 @@ export interface FetchEntityWithPerformancePayload {
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
   selectedPositionId: string;
+  alternateHierarchyId?: string;
   entityType: EntityType;
 }
 
