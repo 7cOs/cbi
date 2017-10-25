@@ -21,7 +21,7 @@ const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFil
 describe('Responsibilities Reducer', () => {
   it('updates the status when a fetch is dispatched', () => {
 
-    const expectedState = {
+    const expectedState: ResponsibilitiesState = {
       status: ActionStatus.Fetching,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
@@ -32,7 +32,8 @@ describe('Responsibilities Reducer', () => {
 
     const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
       positionId: positionIdMock,
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     }));
 
     expect(actualState).toEqual(expectedState);

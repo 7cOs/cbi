@@ -51,6 +51,7 @@ describe('Responsibilities Effects', () => {
   const positionIdMock = chance.string();
   const alternateHierarchyIdMock = chance.string();
   const entityTypeCodeMock = chance.string();
+  const selectedEntityDescriptionMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -511,13 +512,14 @@ describe('Responsibilities Effects', () => {
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
         filter: performanceFilterStateMock,
-        selectedEntityDescription: chance.string()
+        selectedEntityDescription: selectedEntityDescriptionMock
       }));
 
       alternateResponsibilitiesDataMock = {
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: selectedEntityDescriptionMock
       };
     });
 

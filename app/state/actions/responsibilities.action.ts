@@ -11,7 +11,7 @@ import { MyPerformanceFilterState } from '../../state/reducers/my-performance-fi
 export interface FetchResponsibilitiesPayload {
   positionId: string;
   filter: MyPerformanceFilterState;
-  selectedEntityDescription?: string;
+  selectedEntityDescription: string;
 }
 
 export interface FetchResponsibilitiesSuccessPayload {

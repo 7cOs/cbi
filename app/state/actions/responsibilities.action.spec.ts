@@ -31,7 +31,8 @@ describe('Responsibilities Actions', () => {
       positionIdMock = chance.natural();
       actionPayloadMock = {
         positionId: positionIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: chance.string()
       };
       action = new ResponsibilitiesActions.FetchResponsibilities(actionPayloadMock);
     });
