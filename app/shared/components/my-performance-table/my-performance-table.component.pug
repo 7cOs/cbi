@@ -54,4 +54,4 @@ div.performance-table-wrapper
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
                                 (onSublineClicked)="onSublineClicked.emit(rowData);",
-                                (click)="onElementClicked.emit({type: rowType.data, index: i, row: rowData})")
+                                (click)="onRowClicked(rowType.data, i, rowData)")

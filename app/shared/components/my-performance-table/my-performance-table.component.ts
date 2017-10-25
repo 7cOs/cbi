@@ -82,6 +82,12 @@ export class MyPerformanceTableComponent {
     const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
     this.applySortingCriteria(criteria);
   }
+  // {type: rowType.data, index: i, row: rowData}
+  public onRowClicked(clikedType: RowType, clickedIndex: number, clickedRow: MyPerformanceTableRow) {
+    if (this.viewType !== SalesHierarchyViewType.distributors && this.viewType !== SalesHierarchyViewType.subAccounts) {
+      this.onElementClicked.emit({type: clikedType, index: clickedIndex, row: clickedRow});
+    }
+  }
 
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
