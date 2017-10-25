@@ -17,7 +17,11 @@ export function getResponsibilitesStateMock(): ResponsibilitiesState {
     entityWithPerformance: getEntitiesWithPerformancesMock(),
     entitiesTotalPerformances: getPerformanceMock(),
     positionId: chance.string(),
-    status: ActionStatus.Fetched
+    status: ActionStatus.Fetched,
+    responsibilitiesStatus: ActionStatus.Fetched,
+    entitiesPerformanceStatus: ActionStatus.Fetched,
+    totalPerformanceStatus: ActionStatus.Fetched,
+    subaccountsStatus: ActionStatus.Fetched
   };
 }
 

@@ -39,6 +39,10 @@ describe('My Performance Version Reducer', () => {
     const savedObject: MyPerformanceEntitiesData = {
       responsibilities: {
         status: ActionStatus.Fetched,
+        responsibilitiesStatus: ActionStatus.Fetched,
+        entitiesPerformanceStatus: ActionStatus.Fetched,
+        totalPerformanceStatus: ActionStatus.Fetched,
+        subaccountsStatus: ActionStatus.Fetched,
         positionId: chance.string(),
         groupedEntities: chance.string() as any,
         hierarchyGroups: chance.string() as any,
