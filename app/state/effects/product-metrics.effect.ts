@@ -23,6 +23,7 @@ export class ProductMetricsEffects {
       .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS)
       .switchMap((action: Action): Observable<FetchProductMetricsPayload> => Observable.of(action.payload))
       .switchMap((productMetricsData) => this.productMetricsService.getProductMetrics(productMetricsData))
+      .switchMap((productMetricsData) => this.productMetricsService.checkEmptyProductMetricsResponse(productMetricsData))
       .switchMap((productMetricsData) => this.productMetricsService.filterProductMetricsBrand(productMetricsData))
       .switchMap((productMetricsData) => this.constructSuccessAction(productMetricsData))
       .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailure(error)));

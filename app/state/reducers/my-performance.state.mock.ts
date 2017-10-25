@@ -17,7 +17,11 @@ export function getResponsibilitesStateMock(): ResponsibilitiesState {
     entityWithPerformance: getEntitiesWithPerformancesMock(),
     entitiesTotalPerformances: getPerformanceMock(),
     positionId: chance.string(),
-    status: ActionStatus.Fetched
+    status: ActionStatus.Fetched,
+    responsibilitiesStatus: ActionStatus.Fetched,
+    entitiesPerformanceStatus: ActionStatus.Fetched,
+    totalPerformanceStatus: ActionStatus.Fetched,
+    subaccountsStatus: ActionStatus.Fetched
   };
 }
 
@@ -31,7 +35,7 @@ export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
   return {
     responsibilities: getResponsibilitesStateMock(),
     salesHierarchyViewType: getViewTypeStateMock(),
-    selectedEntity: chance.string(),
+    selectedEntityDescription: chance.string(),
     selectedEntityType: getEntityTypeMock(),
     selectedBrandCode: chance.string()
   };

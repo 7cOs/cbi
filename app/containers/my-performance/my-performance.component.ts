@@ -55,15 +55,15 @@ export interface HandleElementClickedParameters {
 })
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
-  public currentUserFullName: string;
   public fetchResponsibilitiesFailure: boolean = false;
   public fetchProductMetricsFailure: boolean = false;
-  public salesHierarchyViewType: SalesHierarchyViewType;
+  public productMetricsFetching: boolean;
   public productMetricsViewType: ProductMetricsViewType;
-  public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
-  public showSalesContributionToVolume: boolean = false;
-  public showProductMetricsContributionToVolume: boolean = true;
+  public responsibilitiesFetching: boolean;
+  public salesHierarchyViewType: SalesHierarchyViewType;
   public showLeftBackButton = false;
+  public showProductMetricsContributionToVolume: boolean = true;
+  public showSalesContributionToVolume: boolean = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
     ascending: false
@@ -101,7 +101,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.dateRanges$ = this.store.select(state => state.dateRanges);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
@@ -113,10 +112,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe((productMetrics: ProductMetricsState) => {
+        this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
+        this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
-
-        this.fetchProductMetricsFailure = productMetrics.status === ActionStatus.Error
-          || (productMetrics.products && Object.keys(productMetrics.products).length === 0);
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
@@ -130,6 +128,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
+        this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
 
          // TODO: compare both selected brands to trigger or not a refresh
@@ -137,9 +136,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
-        this.fetchResponsibilitiesFailure = current.responsibilities &&
-            (current.responsibilities.status === ActionStatus.Error ||
-             current.responsibilities.groupedEntities && Object.keys(current.responsibilities.groupedEntities).length === 0);
+        this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
@@ -164,11 +161,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
+    const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
       this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
     this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
-    this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
+    this.store.dispatch(new FetchResponsibilities({
+      positionId: currentUserId,
+      filter: this.filterState,
+      selectedEntityDescription: currentUserFullName
+    }));
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
       positionId: currentUserId,
       filter: this.filterState,
@@ -188,7 +190,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public handleSublineClicked(row: MyPerformanceTableRow): void {
     let accountDashboardStateParams: AccountDashboardStateParameters;
     if (row.metadata.entityType === EntityType.Distributor) {
-      accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+      accountDashboardStateParams =
+        this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(), this.filterState, row);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
@@ -196,9 +199,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       let premiseType: PremiseTypeValue;
       if (hierarchyEntity) {
         premiseType = hierarchyEntity.premiseType;
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row, premiseType);
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
+          this.filterState, row, premiseType);
       } else {
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.filterState, row);
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
+          this.filterState, row);
       }
     }
 
@@ -246,9 +251,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
-    const { trail, entity } = event;
+    const { trail, entityDescription } = event;
     const indexOffset = 1;
-    const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
+    const stepsBack = trail.length - indexOffset - trail.indexOf(entityDescription);
     const clickedIndex: number = this.versions.length - stepsBack;
     const clickedState = this.versions[clickedIndex];
     if (stepsBack < 1) return;
@@ -286,7 +291,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
     this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
-    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(parameters.row.descriptionRow0));
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
     switch (this.salesHierarchyViewType) {
@@ -304,7 +308,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           entityTypeCode: parameters.row.metadata.entityTypeCode,
           entityType: parameters.row.metadata.entityType,
           entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-          filter: this.filterState
+          filter: this.filterState,
+          selectedEntityDescription: parameters.row.descriptionRow0
         }));
 
         // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
@@ -317,12 +322,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
             positionId: parameters.row.metadata.positionId,
             alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-            filter: this.filterState
+            filter: this.filterState,
+            selectedEntityDescription: parameters.row.descriptionRow0
           }));
         } else {
           this.store.dispatch(new FetchResponsibilities({
             positionId: parameters.row.metadata.positionId,
-            filter: this.filterState
+            filter: this.filterState,
+            selectedEntityDescription: parameters.row.descriptionRow0
           }));
           this.fetchProductMetricsWhenClick(parameters);
         }
@@ -333,7 +340,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           contextPositionId: this.currentState.responsibilities.positionId,
           entityTypeAccountName: parameters.row.descriptionRow0,
           selectedPositionId: parameters.row.metadata.positionId,
-          filter: this.filterState
+          filter: this.filterState,
+          selectedEntityDescription: parameters.row.descriptionRow0
         }));
         if (!this.isInsideAlternateHierarchy()) {
           this.fetchProductMetricsWhenClick(parameters);
@@ -429,5 +437,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private isInsideAlternateHierarchy(): boolean {
     return !!this.currentState.responsibilities.alternateHierarchyId;
+  }
+
+  private isFetchingResponsibilities(): boolean {
+    return this.currentState.responsibilities &&
+    (this.currentState.responsibilities.status === ActionStatus.Fetching ||
+      this.currentState.responsibilities.responsibilitiesStatus === ActionStatus.Fetching ||
+      this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
+      this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
+      this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
   }
 }
