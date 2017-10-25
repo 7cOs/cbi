@@ -63,7 +63,7 @@ describe('My Performance Reducer', () => {
     expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
   });
 
-  it('should set selectedEntityDescription when a responsibility action is received with a selectedEntityDescription set', () => {
+  it('should update selectedEntityDescription when a responsibility action is received with a selectedEntityDescription set', () => {
     const expectedSelectedEntityDescription = chance.string();
     const actualState: MyPerformanceState = myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
       positionId: chance.string(),
@@ -74,7 +74,7 @@ describe('My Performance Reducer', () => {
     expect(actualState.current.selectedEntityDescription).toBe(expectedSelectedEntityDescription);
   });
 
-  it('should set NOT selectedEntityDescription when a responsibility action is received without a selectedEntityDescription set', () => {
+  it('should NOT modify selectedEntityDescription when a responsibility action is received without a selectedEntityDescription set', () => {
     const initialSelectedEntityDescription = chance.string();
     const startingState: MyPerformanceState = Object.assign({}, initialState, {
       current: Object.assign({}, initialState.current, {

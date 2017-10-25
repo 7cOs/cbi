@@ -14,7 +14,7 @@ export class MyPerformanceBreadcrumbComponent implements OnChanges, OnInit {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
   @Output() backButtonClicked = new EventEmitter<any>();
   @Input() currentPerformanceState: MyPerformanceEntitiesData;
-  @Input() performanceStateVersions: MyPerformanceEntitiesData[];
+  @Input() performanceStateVersions: MyPerformanceEntitiesData[] = [];
   @Input() showBackButton: boolean;
 
   public breadcrumbTrail: string[];
@@ -24,8 +24,8 @@ export class MyPerformanceBreadcrumbComponent implements OnChanges, OnInit {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    const versions = changes['performanceStateVersions'] ? changes['performanceStateVersions'].currentValue : this.performanceStateVersions;
-    const current = changes['currentPerformanceState'] ? changes['currentPerformanceState'].currentValue : this.currentPerformanceState;
+    const versions = changes.performanceStateVersions ? changes.performanceStateVersions.currentValue : this.performanceStateVersions;
+    const current = changes.currentPerformanceState ? changes.currentPerformanceState.currentValue : this.currentPerformanceState;
     this.breadcrumbTrail = this.constructBreadcrumbTrail(versions, current);
   }
 
@@ -44,11 +44,8 @@ export class MyPerformanceBreadcrumbComponent implements OnChanges, OnInit {
   }
 
   private constructBreadcrumbTrail(versions: MyPerformanceEntitiesData[], current: MyPerformanceEntitiesData) {
-    const versionDescriptions: string[] = versions
-      ? versions.map((version: MyPerformanceEntitiesData) => version.selectedEntityDescription)
-      : [];
-    const currentDescription: string[] = current ? [ current.selectedEntityDescription ] : [];
-
-    return versionDescriptions.concat(currentDescription);
+    return versions
+      .map((version: MyPerformanceEntitiesData) => version.selectedEntityDescription)
+      .concat(current ? current.selectedEntityDescription : null);
   }
 }
