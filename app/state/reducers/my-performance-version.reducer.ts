@@ -36,7 +36,8 @@ export function myPerformanceVersionReducer(
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: action.payload,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedEntityType: state.current.selectedEntityType
+          selectedEntityType: state.current.selectedEntityType,
+          filter: state.current.filter
         },
         versions: state.versions
       };
@@ -48,7 +49,8 @@ export function myPerformanceVersionReducer(
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: state.current.selectedEntity,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedEntityType: action.payload
+          selectedEntityType: action.payload,
+          filter: state.current.filter
         },
         versions: state.versions
       };
@@ -60,13 +62,21 @@ export function myPerformanceVersionReducer(
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntity: state.current.selectedEntity,
           selectedBrandCode: action.payload,
-          selectedEntityType: state.current.selectedEntityType
+          selectedEntityType: state.current.selectedEntityType,
+          filter: state.current.filter
         },
         versions: state.versions
       };
 
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return initialState;
+
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_FILTER_STATE:
+      return Object.assign({}, state, {
+        current: Object.assign({}, state.current, {
+          filter: action.payload
+        })
+      });
 
     default:
       return state;

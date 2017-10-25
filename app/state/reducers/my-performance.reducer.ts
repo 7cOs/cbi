@@ -50,6 +50,7 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_FILTER_STATE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES:
@@ -67,10 +68,6 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS:
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
     case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:
-    case MyPerformanceFilterActions.SET_METRIC:
-    case MyPerformanceFilterActions.SET_TIME_PERIOD:
-    case MyPerformanceFilterActions.SET_PREMISE_TYPE:
-    case MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE:
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
@@ -78,7 +75,7 @@ export function myPerformanceReducer(
           selectedEntity: state.current.selectedEntity,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
-          filter: myPerformanceFilterReducer(state.current.filter, action as MyPerformanceFilterActions.Action)
+          filter: state.current.filter
         },
         versions: state.versions
       };
@@ -93,10 +90,21 @@ export function myPerformanceReducer(
           ),
           selectedEntity: state.current.selectedEntity,
           selectedEntityType: state.current.selectedEntityType,
-          selectedBrandCode: state.current.selectedBrandCode
+          selectedBrandCode: state.current.selectedBrandCode,
+          filter: state.current.filter
         },
         versions: state.versions
       };
+
+    case MyPerformanceFilterActions.SET_METRIC:
+    case MyPerformanceFilterActions.SET_TIME_PERIOD:
+    case MyPerformanceFilterActions.SET_PREMISE_TYPE:
+    case MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE:
+      return Object.assign({}, state, {
+        current: Object.assign({}, state.current, {
+          filter: myPerformanceFilterReducer(state.current.filter, action as MyPerformanceFilterActions.Action)
+        })
+      });
 
     default:
       return state;

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
+import { isEqual } from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -233,13 +234,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public handleBackButtonClicked(): void {
     const previousIndex: number = this.versions.length - 1;
     const previousState = this.versions[previousIndex];
+
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
     this.fetchProductMetricsForPreviousState(previousState);
 
-    console.log('this.filterState', this.filterState);
-    console.log('previousState.filter', previousState.filter);
-    if (this.filterState === previousState.filter) {
-      console.log('REFETCH DATA');
+    if (!isEqual(this.filterState, previousState.filter)) {
+      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceFilterState(this.filterState));
+      // TODO: reload data based on this.filterState
+      console.log('REALOAD SALES HIERARCHY PERFORMANCE DATA!');
     }
   }
 
