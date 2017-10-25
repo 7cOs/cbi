@@ -162,6 +162,20 @@ describe('Breadcrumb Component', () => {
       fixture.debugElement.queryAll(By.css('.breadcrumb-entity'))
         [breadcrumbEntityIndexToClick].triggerEventHandler('click', null);
     });
+
+    it('should output proper event when back button is clicked', (done) => {
+      componentInstance.currentPerformanceState = currentStateMock;
+      componentInstance.performanceStateVersions = versionsMock;
+      componentInstance.showBackButton = true;
+      fixture.detectChanges();
+
+      componentInstance.backButtonClicked.subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      fixture.debugElement.query(By.css('.back-button')).triggerEventHandler('click', null);
+    });
   });
 
   describe('return proper class for back button', () => {
