@@ -54,6 +54,13 @@ export class SelectSkuValues implements Action {
   constructor(public payload: string) { }
 }
 
+export const CLEAR_SKU_VALUES = '[ProductMetrics] CLEAR_SKU_VALUES';
+export class ClearSkuValues implements Action {
+  readonly type = CLEAR_SKU_VALUES;
+
+  constructor() { }
+}
+
 export const SET_PRODUCT_METRICS_VIEW_TYPE = '[View Types] SET_PRODUCT_METRICS_VIEW_TYPE';
 export class SetProductMetricsViewType implements Action {
   readonly type = SET_PRODUCT_METRICS_VIEW_TYPE;
@@ -67,4 +74,5 @@ export type Action =
   | FetchProductMetricsFailure
   | SelectBrandValues
   | SelectSkuValues
+  | ClearSkuValues
   | SetProductMetricsViewType;

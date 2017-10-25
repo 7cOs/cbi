@@ -42,6 +42,7 @@ export class MyPerformanceTableComponent {
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
+  @Input() selectedSkuName: string;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;

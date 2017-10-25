@@ -47,7 +47,8 @@ div.performance-table-wrapper
 
     tbody([ngClass]="getTableHeight()")
       tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let i = index",
-                                [ngClass]="{'performance-error': rowData.performanceError}",
+                                [ngClass]="{'performance-error': rowData.performanceError ," +
+                                "'selectedSku': rowData.descriptionRow0 === selectedSkuName}",
                                 my-performance-table-row,
                                 [rowData]="rowData",
                                 [showContributionToVolume]="showContributionToVolume",

@@ -74,6 +74,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public performanceMetric: string = 'Depletions';
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
+  public selectedSkuName: string;
 
   private currentState: MyPerformanceEntitiesData;
   private dateRanges$: Observable<DateRangesState>;
@@ -345,9 +346,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsWhenClick(parameters);
         break;
       case ProductMetricsViewType.skus:
-        this.selectedSkuCode = parameters.row.metadata.skuCode;
-        this.store.dispatch(new ProductMetricsActions.SelectSkuValues(parameters.row.metadata.skuCode));
-        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(parameters.row.metadata.skuCode));
+        if (this.productMetricsSelectedBrandRow && parameters.row) {
+          this.selectedSkuCode = parameters.row.metadata.skuCode;
+          this.store.dispatch(new ProductMetricsActions.SelectSkuValues(parameters.row.metadata.skuCode));
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(parameters.row.metadata.skuCode));
+          this.selectedSkuName = parameters.row.descriptionRow0;
+        } else {
+          this.store.dispatch(new ProductMetricsActions.ClearSkuValues());
+          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+          this.selectedSkuName = null;
+        }
         break;
       default:
         console.log('clicked on right row:', parameters.row);

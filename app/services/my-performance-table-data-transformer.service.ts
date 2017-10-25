@@ -63,7 +63,7 @@ export class MyPerformanceTableDataTransformerService {
     }, 0);
 
     return productsValues.map((item: ProductMetricsValues) => {
-      return {
+      const rightTableData = {
         descriptionRow0: productMetrics.brandValues
           ? item.brandDescription
           : item.beerId.masterPackageSKUDescription || item.beerId.masterSKUDescription,
@@ -71,11 +71,15 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn1: item.yearAgo,
         metricColumn2: item.yearAgoPercent,
         ctv: total ? this.getPercentageOfTotal(item.current, total) : 0,
-        metadata: {
-          brandCode: item.brandCode,
-          skuCode: item.beerId.masterSKUCode
-        }
+        metadata: {}
       };
+
+      if (item.brandCode) {
+        rightTableData.metadata['brandCode'] =  item.brandCode;
+      } else {
+        rightTableData.metadata['skuCode'] = item.beerId.masterPackageSKUCode;
+      }
+      return rightTableData;
     });
   }
 

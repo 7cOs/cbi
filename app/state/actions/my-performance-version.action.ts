@@ -50,11 +50,17 @@ export class SetMyPerformanceSelectedSkuCode implements Action {
   constructor(public payload: string) { }
 }
 
+export const CLEAR_MY_PERFORMANCE_SELECTED_SKU = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU';
+export class ClearMyPerformanceSelectedSkuCode implements Action {
+  readonly type = CLEAR_MY_PERFORMANCE_SELECTED_SKU;
+}
+
 export type Action =
   SaveMyPerformanceState
   | RestoreMyPerformanceState
   | ClearMyPerformanceState
   | SetMyPerformanceSelectedEntity
   | SetMyPerformanceSelectedEntityType
+  | ClearMyPerformanceSelectedSkuCode
   | SetMyPerformanceSelectedBrandCode
   | SetMyPerformanceSelectedSkuCode;

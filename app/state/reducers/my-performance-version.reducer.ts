@@ -79,6 +79,18 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU:
+      return {
+        current: {
+          responsibilities: state.current.responsibilities,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
+          selectedEntity: state.current.selectedEntity,
+          selectedSkuCode: null,
+          selectedEntityType: state.current.selectedEntityType
+        },
+        versions: state.versions
+      };
+
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return initialState;
 

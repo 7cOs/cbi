@@ -46,10 +46,15 @@ export function productMetricsReducer(
       });
 
     case ProductMetricsActions.SELECT_SKU_VALUES:
-      const selectedSkuCode = state.products.brandValues.find(sku => sku.beerId.masterSKUCode === action.payload);
+      const selectedSkuCode = state.products.skuValues.find(sku => sku.beerId.masterPackageSKUCode === action.payload);
 
       return Object.assign({}, state, {
         selectedSkuCodeValues: selectedSkuCode
+      });
+
+    case ProductMetricsActions.CLEAR_SKU_VALUES:
+      return Object.assign({}, state, {
+        selectedSkuCodeValues: null
       });
 
     case ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE:
