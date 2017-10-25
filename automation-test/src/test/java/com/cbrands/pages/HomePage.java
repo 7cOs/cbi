@@ -1,5 +1,6 @@
 package com.cbrands.pages;
 
+import com.cbrands.pages.opportunities.OpportunitiesPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -42,8 +43,18 @@ public class HomePage extends TestNGBasePage {
   }
 
   public boolean doesSavedReportExistWithName(String name) {
-    return isElementPresent(
-      By.xpath("//md-option[contains(@class, 'saved-filter-option')]/div[contains(., '" + name + "')]")
-    );
+    return isElementPresent(getByHandleForSavedReportWithName(name));
+  }
+
+  public OpportunitiesPage selectSavedReportWithName(String reportName) {
+    waitForElementToClickable(
+      savedReportsDropdown.findElement(getByHandleForSavedReportWithName(reportName)),
+      true
+    ).click();
+    return PageFactory.initElements(driver, OpportunitiesPage.class);
+  }
+
+  private By getByHandleForSavedReportWithName(String name) {
+    return By.xpath("//md-option[contains(@class, 'saved-filter-option')]/div[contains(., '" + name + "')]");
   }
 }
