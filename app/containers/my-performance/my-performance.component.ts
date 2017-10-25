@@ -239,9 +239,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
-    const { trail, entity } = event;
+    const { trail, entityDescription } = event;
     const indexOffset = 1;
-    const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
+    const stepsBack = trail.length - indexOffset - trail.indexOf(entityDescription);
     const clickedIndex: number = this.versions.length - stepsBack;
     const clickedState = this.versions[clickedIndex];
     if (stepsBack < 1) return;

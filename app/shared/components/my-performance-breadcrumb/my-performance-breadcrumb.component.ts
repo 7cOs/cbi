@@ -35,10 +35,18 @@ export class MyPerformanceBreadcrumbComponent implements OnChanges, OnInit {
     };
   }
 
+  public handleEntityClicked(entityDescription: string) {
+    const evt: BreadcrumbEntityClickedEvent = {
+      trail: this.breadcrumbTrail,
+      entityDescription: entityDescription
+    };
+    this.breadcrumbEntityClicked.emit(evt);
+  }
+
   private constructBreadcrumbTrail(versions: MyPerformanceEntitiesData[], current: MyPerformanceEntitiesData) {
-    const versionDescriptions: string[] = versions ?
-      versions.map((version: MyPerformanceEntitiesData) => version.selectedEntityDescription) :
-      [];
+    const versionDescriptions: string[] = versions
+      ? versions.map((version: MyPerformanceEntitiesData) => version.selectedEntityDescription)
+      : [];
     const currentDescription: string[] = current ? [ current.selectedEntityDescription ] : [];
 
     return versionDescriptions.concat(currentDescription);

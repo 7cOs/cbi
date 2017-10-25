@@ -835,7 +835,7 @@ describe('MyPerformanceComponent', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.distributors);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
-          entity: breadcrumbTrailMock[breadcrumbSelectionIndex]
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
@@ -848,7 +848,7 @@ describe('MyPerformanceComponent', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.subAccounts);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
-          entity: breadcrumbTrailMock[breadcrumbSelectionIndex]
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
@@ -862,7 +862,7 @@ describe('MyPerformanceComponent', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.people);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
-          entity: breadcrumbTrailMock[breadcrumbSelectionIndex]
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
@@ -883,7 +883,7 @@ describe('MyPerformanceComponent', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.roleGroups);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
-          entity: breadcrumbTrailMock[breadcrumbSelectionIndex]
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
@@ -903,7 +903,7 @@ describe('MyPerformanceComponent', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.accounts);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
-          entity: breadcrumbTrailMock[breadcrumbSelectionIndex]
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
@@ -930,7 +930,7 @@ describe('MyPerformanceComponent', () => {
 
       componentInstance.handleBreadcrumbEntityClicked({
         trail: breadcrumbMock,
-        entity: entityMock
+        entityDescription: entityMock
       });
 
       expect(storeMock.dispatch.calls.count()).toBe(0);

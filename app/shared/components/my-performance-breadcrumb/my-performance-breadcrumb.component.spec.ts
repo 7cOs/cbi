@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MdCardModule } from '@angular/material';
 import * as Chance from 'chance';
 
-// import { BreadcrumbEntityClickedEvent } from '../../../models/breadcrumb-entity-clicked-event.model';
+import { BreadcrumbEntityClickedEvent } from '../../../models/breadcrumb-entity-clicked-event.model';
 import { getMyPerformanceEntitiesDataMock } from '../../../state/reducers/my-performance.state.mock';
 import { MyPerformanceEntitiesData } from '../../../state/reducers/my-performance.reducer';
 import { MyPerformanceBreadcrumbComponent } from './my-performance-breadcrumb.component';
@@ -28,12 +28,12 @@ describe('Breadcrumb Component', () => {
     componentInstance = fixture.componentInstance;
 
     currentStateMock = getMyPerformanceEntitiesDataMock();
-    versionsMock = Array(chance.natural({min: 0, max: 9}))
+    versionsMock = Array(chance.natural({min: 1, max: 9}))
       .fill('')
       .map(element => getMyPerformanceEntitiesDataMock());
   });
 
-  fdescribe('component inputs', () => {
+  describe('component inputs', () => {
     it('should render empty breadcrumb trail when inputs are null', () => {
       componentInstance.currentPerformanceState = null;
       componentInstance.performanceStateVersions = null;
@@ -62,7 +62,7 @@ describe('Breadcrumb Component', () => {
       fixture.detectChanges();
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
-      const expectedVersionTrail = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
+      const expectedVersionTrail: string = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedTrail = expectedVersionTrail + currentStateMock.selectedEntityDescription;
@@ -85,7 +85,7 @@ describe('Breadcrumb Component', () => {
       fixture.detectChanges();
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
-      const expectedVersionTrail = changedVersionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
+      const expectedVersionTrail: string = changedVersionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedTrail = expectedVersionTrail + currentStateMock.selectedEntityDescription;
@@ -107,7 +107,7 @@ describe('Breadcrumb Component', () => {
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
-      const expectedVersionTrail = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
+      const expectedVersionTrail: string = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedTrail = expectedVersionTrail + changedCurrentStateMock.selectedEntityDescription;
@@ -133,7 +133,7 @@ describe('Breadcrumb Component', () => {
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
-      const expectedVersionTrail = changedVersionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
+      const expectedVersionTrail: string = changedVersionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedTrail = expectedVersionTrail + changedCurrentStateMock.selectedEntityDescription;
@@ -146,15 +146,16 @@ describe('Breadcrumb Component', () => {
       componentInstance.currentPerformanceState = currentStateMock;
       componentInstance.performanceStateVersions = versionsMock;
       componentInstance.showBackButton = true;
-
-      const breadcrumbEntityIndexToClick = chance.natural({min: 0, max: mockInputs.performanceStateVersions.length});
-
       fixture.detectChanges();
 
+      const expectedVersionTrail: string[] = versionsMock.map((version: MyPerformanceEntitiesData) => {
+        return version.selectedEntityDescription;
+      });
+      const expectedBreadcrumbTrail: string[] = expectedVersionTrail.concat([currentStateMock.selectedEntityDescription]);
+      const breadcrumbEntityIndexToClick = chance.natural({min: 0, max: versionsMock.length});
+
       componentInstance.breadcrumbEntityClicked.subscribe((event: BreadcrumbEntityClickedEvent) => {
-        const expectedBreadcrumbTrail =
-          [ mockInputs.currentUserFullName ].concat(myPerformanceStateMock.versions.map(version => version.selectedEntityDescription));
-        expect(event).toEqual({trail: expectedBreadcrumbTrail, entity: expectedBreadcrumbTrail[breadcrumbEntityIndexToClick]});
+        expect(event).toEqual({trail: expectedBreadcrumbTrail, entityDescription: expectedBreadcrumbTrail[breadcrumbEntityIndexToClick]});
         done();
       });
 
@@ -165,16 +166,9 @@ describe('Breadcrumb Component', () => {
 
   describe('return proper class for back button', () => {
     it('should return the back button class when showBackButton is true', () => {
-      const mockInputs = {
-        currentUserFullName: chance.string(),
-        performanceStateVersions: myPerformanceStateMock.versions,
-        showBackButton: true
-      };
-
-      componentInstance.currentUserFullName = mockInputs.currentUserFullName;
-      componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
-      componentInstance.showBackButton = mockInputs.showBackButton;
-
+      componentInstance.currentPerformanceState = currentStateMock;
+      componentInstance.performanceStateVersions = versionsMock;
+      componentInstance.showBackButton = true;
       fixture.detectChanges();
 
       const backButtonClass = componentInstance.getBackButtonClass();
@@ -182,16 +176,9 @@ describe('Breadcrumb Component', () => {
     });
 
     it('should not return the back button class when showBackButton is false', () => {
-      const mockInputs = {
-        currentUserFullName: chance.string(),
-        performanceStateVersions: myPerformanceStateMock.versions,
-        showBackButton: false
-      };
-
-      componentInstance.currentUserFullName = mockInputs.currentUserFullName;
-      componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
-      componentInstance.showBackButton = mockInputs.showBackButton;
-
+      componentInstance.currentPerformanceState = currentStateMock;
+      componentInstance.performanceStateVersions = versionsMock;
+      componentInstance.showBackButton = false;
       fixture.detectChanges();
 
       const backButtonClass = componentInstance.getBackButtonClass();
