@@ -29,7 +29,6 @@ export class MyPerformanceApiService {
 
   public getHierarchyGroupPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string, brandCode?: string)
   : Observable<PerformanceDTO> {
-    debugger;
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(url, {
@@ -40,7 +39,6 @@ export class MyPerformanceApiService {
   }
 
   public getPerformance(positionId: string, filter: MyPerformanceFilterState, brandCode?: string): Observable<PerformanceDTO> {
-    debugger;
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {

@@ -151,7 +151,6 @@ export class ResponsibilitiesService {
 
   public getRefreshEntitiesTotalPerformances(refreshEntitiesTotalPerformancesData: RefreshEntitiesTotalPerformancesData)
     : Observable<RefreshEntitiesTotalPerformancesData> {
-      debugger;
     return this.getHierarchyGroupPerformance(
         refreshEntitiesTotalPerformancesData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
           hierarchyGroup.name === Object.keys(refreshEntitiesTotalPerformancesData.groupedEntities)[0]
@@ -262,14 +261,16 @@ export class ResponsibilitiesService {
   public getRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData)
     : Observable<ResponsibilitiesData | RefreshAllPerformancesData> {
       // TODO: Change that for EntityType if possible
-     if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups) {
-       return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
-     } else {
-       refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
-         entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
-       });
-       return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
-     }
+    if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
+      || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.accounts
+      || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
+     return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
+    } else {
+     refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
+       entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
+     });
+     return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
+    }
   }
 
   public getPerformanceForGroupedEntities(pipelineData: ResponsibilitiesData | RefreshAllPerformancesData)

@@ -99,8 +99,9 @@ export class ResponsibilitiesEffects {
     )
     .switchMap((action: Action) => Observable.of(action.payload))
     .switchMap((refreshEntitiesTotalPerformancesData: RefreshEntitiesTotalPerformancesData) => {
-      debugger;
-      if (refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups) {
+      if (refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
+        || refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.accounts
+        || refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
         return this.responsibilitiesService.getPerformance(
           refreshEntitiesTotalPerformancesData.positionId,
           refreshEntitiesTotalPerformancesData.filter,
