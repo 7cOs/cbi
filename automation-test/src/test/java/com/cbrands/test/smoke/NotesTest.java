@@ -32,10 +32,11 @@ public class NotesTest extends BaseTestCase {
     final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
     accountDashboardPage.goToPage();
 
-    notesModal = accountDashboardPage.openNotesModalForStore("Taco Joint", "IL", "Ontario");
-    Assert.assertTrue(notesModal.isLoaded(), "Failure to load Notes modal \n");
-
-    notesModal.waitForLoaderToDisappear();
+    notesModal = accountDashboardPage
+      .filterForStore("Taco Joint", "IL", "Ontario")
+      .clickApplyFilters()
+      .clickNotesButton()
+      .waitForLoaderToDisappear();
   }
 
   @AfterClass
@@ -54,7 +55,20 @@ public class NotesTest extends BaseTestCase {
       .clickSave()
       .waitForLoaderToDisappear();
 
-    Assert.assertEquals(notesModal.getTextFromFirstNote(), noteText);
+    Assert.assertEquals(
+      notesModal.getTextFromFirstNote(),
+      noteText,
+      "New Note did not display after clicking the Save button."
+    );
+
+    notesModal
+      .closeModal()
+      .clickNotesButton();
+    Assert.assertEquals(
+      notesModal.getTextFromFirstNote(),
+      noteText,
+      "Failed to retrieve and display newly saved Note."
+    );
   }
 
   @Test(dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
