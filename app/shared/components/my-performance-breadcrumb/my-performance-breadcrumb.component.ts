@@ -46,6 +46,6 @@ export class MyPerformanceBreadcrumbComponent implements OnChanges, OnInit {
   private constructBreadcrumbTrail(versions: MyPerformanceEntitiesData[], current: MyPerformanceEntitiesData) {
     return versions
       .map((version: MyPerformanceEntitiesData) => version.selectedEntityDescription)
-      .concat(current ? current.selectedEntityDescription : null);
+      .concat(current ? current.selectedEntityDescription : []);
   }
 }

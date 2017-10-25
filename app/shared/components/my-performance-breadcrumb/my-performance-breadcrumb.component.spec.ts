@@ -38,8 +38,9 @@ describe('Breadcrumb Component', () => {
       fixture.detectChanges();
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
-
+      const breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
       expect(breadcrumbContainer.textContent).toBe('');
+      expect(breadcrumbEntities.length).toBe(0);
     });
 
     it('should render current state only in breadcrumb trail when versions are empty', () => {
@@ -48,8 +49,10 @@ describe('Breadcrumb Component', () => {
       componentInstance.showBackButton = true;
       fixture.detectChanges();
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
+      const breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
 
       expect(breadcrumbContainer.textContent).toBe(currentStateMock.selectedEntityDescription);
+      expect(breadcrumbEntities.length).toBe(1);
     });
 
     it('should render initial versions and initial current state description in breadcrumb trail', () => {
@@ -58,12 +61,14 @@ describe('Breadcrumb Component', () => {
       componentInstance.showBackButton = true;
       fixture.detectChanges();
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
+      const breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
 
       const expectedVersionTrail: string = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedTrail = expectedVersionTrail + currentStateMock.selectedEntityDescription;
       expect(breadcrumbContainer.textContent).toBe(expectedTrail);
+      expect(breadcrumbEntities.length).toBe(versionsMock.length + 1);
     });
 
     it('should render changed versions and initial current state description in breadcrumb trail when ngOnChanges fires', () => {
@@ -71,14 +76,15 @@ describe('Breadcrumb Component', () => {
       componentInstance.performanceStateVersions = versionsMock;
       componentInstance.showBackButton = true;
       fixture.detectChanges();
-
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
+      let breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
 
       const expectedInitialVersionTrail: string = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedInitialTrail = expectedInitialVersionTrail + currentStateMock.selectedEntityDescription;
       expect(breadcrumbContainer.textContent).toBe(expectedInitialTrail);
+      expect(breadcrumbEntities.length).toBe(versionsMock.length + 1);
 
       let changedVersionsMock = Array(chance.natural({ min: 0, max: 9 }))
         .fill('')
@@ -93,6 +99,8 @@ describe('Breadcrumb Component', () => {
       }, '');
       const expectedChangedTrail = expectedChangedVersionTrail + currentStateMock.selectedEntityDescription;
       expect(breadcrumbContainer.textContent).toBe(expectedChangedTrail);
+      breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
+      expect(breadcrumbEntities.length).toBe(changedVersionsMock.length + 1);
     });
 
     it('should render initial versions and changed current state description in breadcrumb trail when ngOnChanges fires', () => {
@@ -100,14 +108,15 @@ describe('Breadcrumb Component', () => {
       componentInstance.performanceStateVersions = versionsMock;
       componentInstance.showBackButton = true;
       fixture.detectChanges();
-
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
+      let breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
 
       const expectedVersionTrail: string = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedInitialTrail = expectedVersionTrail + currentStateMock.selectedEntityDescription;
       expect(breadcrumbContainer.textContent).toBe(expectedInitialTrail);
+      expect(breadcrumbEntities.length).toBe(versionsMock.length + 1);
 
       let changedCurrentStateMock = getMyPerformanceEntitiesDataMock();
       componentInstance.ngOnChanges({
@@ -117,6 +126,8 @@ describe('Breadcrumb Component', () => {
 
       const expectedChangedTrail = expectedVersionTrail + changedCurrentStateMock.selectedEntityDescription;
       expect(breadcrumbContainer.textContent).toBe(expectedChangedTrail);
+      breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
+      expect(breadcrumbEntities.length).toBe(versionsMock.length + 1);
     });
 
     it('should render changed versions and changed current state description in breadcrumb trail when ngOnChanges fires', () => {
@@ -124,14 +135,15 @@ describe('Breadcrumb Component', () => {
       componentInstance.performanceStateVersions = versionsMock;
       componentInstance.showBackButton = true;
       fixture.detectChanges();
-
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
+      let breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
 
       const expectedInitialVersionTrail: string = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
         return trail + version.selectedEntityDescription;
       }, '');
       const expectedInitialTrail = expectedInitialVersionTrail + currentStateMock.selectedEntityDescription;
       expect(breadcrumbContainer.textContent).toBe(expectedInitialTrail);
+      expect(breadcrumbEntities.length).toBe(versionsMock.length + 1);
 
       let changedCurrentStateMock = getMyPerformanceEntitiesDataMock();
       let changedVersionsMock = Array(chance.natural({ min: 0, max: 9 }))
@@ -149,6 +161,8 @@ describe('Breadcrumb Component', () => {
       }, '');
       const expectedChangedTrail = expectedChangedVersionTrail + changedCurrentStateMock.selectedEntityDescription;
       expect(breadcrumbContainer.textContent).toBe(expectedChangedTrail);
+      breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
+      expect(breadcrumbEntities.length).toBe(changedVersionsMock.length + 1);
     });
   });
 
