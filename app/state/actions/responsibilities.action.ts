@@ -8,6 +8,12 @@ import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 
+export interface FetchResponsibilitiesPayload {
+  positionId: string;
+  filter: MyPerformanceFilterState;
+  selectedEntityDescription: string;
+}
+
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
   groupedEntities: GroupedEntities;
@@ -23,6 +29,7 @@ export interface FetchEntityWithPerformancePayload {
   selectedPositionId: string;
   alternateHierarchyId?: string;
   entityType: EntityType;
+  selectedEntityDescription: string;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
@@ -41,6 +48,7 @@ export interface FetchSubAccountsPayload {
   entityTypeAccountName: string;
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
+  selectedEntityDescription: string;
 }
 
 export interface FetchSubAccountsSuccessPayload {
@@ -52,13 +60,14 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   positionId: string;
   alternateHierarchyId: string;
   filter: MyPerformanceFilterState;
+  selectedEntityDescription: string;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
 export class FetchResponsibilities implements Action {
   readonly type = FETCH_RESPONSIBILITIES;
 
-  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: FetchResponsibilitiesPayload) { }
 }
 
 export const FETCH_RESPONSIBILITIES_SUCCESS = '[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS';

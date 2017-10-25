@@ -36,6 +36,7 @@ export interface ResponsibilitiesData {
   filter?: MyPerformanceFilterState;
   entityWithPerformance?: Array<EntityWithPerformance>;
   entities?: HierarchyEntity[];
+  selectedEntityDescription?: string;
 }
 
 export interface SubAccountData {

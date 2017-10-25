@@ -3,7 +3,7 @@ import * as Chance from 'chance';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import { getMyPerformanceStateMock, getMyPerformanceEntitiesDataMock } from './my-performance.state.mock';
-import { initialState } from './my-performance.reducer';
+import { initialState, MyPerformanceEntitiesData } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 
@@ -36,7 +36,7 @@ describe('My Performance Version Reducer', () => {
   });
 
   it('should update the current state when a restore action is dispatched', () => {
-    const savedObject = {
+    const savedObject: MyPerformanceEntitiesData = {
       responsibilities: {
         status: ActionStatus.Fetched,
         responsibilitiesStatus: ActionStatus.Fetched,
@@ -55,6 +55,7 @@ describe('My Performance Version Reducer', () => {
           error: false
         }
       },
+      selectedEntityDescription: chance.string(),
       selectedEntityType: getEntityTypeMock()
     };
 
@@ -64,24 +65,6 @@ describe('My Performance Version Reducer', () => {
     expect(newState.current).toEqual(savedObject);
   });
 
-  it('should set the selected entity when SetMyPerformanceSelectedEntity is received', () => {
-    const entityNameMock = chance.string();
-    const beforeState = getMyPerformanceStateMock();
-    const expectedState = {
-      current: {
-        responsibilities: beforeState.current.responsibilities,
-        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: entityNameMock,
-        selectedBrandCode: beforeState.current.selectedBrandCode,
-        selectedEntityType: beforeState.current.selectedEntityType
-      },
-      versions: beforeState.versions
-    };
-    const actualState =
-      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedEntity(entityNameMock));
-    expect(actualState).toEqual(expectedState);
-  });
-
   it('should set the selected entity type when SetMyPerformanceSelectedEntityType is received', () => {
     const entityTypeMock = getEntityTypeMock();
     const beforeState = getMyPerformanceStateMock();
@@ -89,7 +72,7 @@ describe('My Performance Version Reducer', () => {
       current: {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: beforeState.current.selectedEntity,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedEntityType: entityTypeMock
       },
@@ -107,7 +90,7 @@ describe('My Performance Version Reducer', () => {
       current: {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
-        selectedEntity: beforeState.current.selectedEntity,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedBrandCode: selectedBrandCodeMock,
         selectedEntityType: beforeState.current.selectedEntityType
       },

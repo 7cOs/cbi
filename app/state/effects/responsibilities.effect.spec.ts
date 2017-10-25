@@ -51,6 +51,7 @@ describe('Responsibilities Effects', () => {
   const positionIdMock = chance.string();
   const alternateHierarchyIdMock = chance.string();
   const entityTypeCodeMock = chance.string();
+  const selectedEntityDescriptionMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -145,7 +146,8 @@ describe('Responsibilities Effects', () => {
     beforeEach(() => {
       runner.queue(new FetchResponsibilities({
         positionId: positionIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: chance.string()
       }));
     });
 
@@ -313,7 +315,8 @@ describe('Responsibilities Effects', () => {
       entityTypeCode: entityTypeCodeMock,
       entityType: EntityType.RoleGroup,
       entities: [getEntityPeopleResponsibilitiesMock()],
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     };
 
     beforeEach(() => {
@@ -431,7 +434,8 @@ describe('Responsibilities Effects', () => {
           contextPositionId: chance.string({pool: '0123456789'}),
           entityTypeAccountName: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-          filter: performanceFilterStateMock
+          filter: performanceFilterStateMock,
+          selectedEntityDescription: chance.string()
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 
@@ -545,13 +549,15 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchAlternateHierarchyResponsibilities({
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: selectedEntityDescriptionMock
       }));
 
       alternateResponsibilitiesDataMock = {
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: selectedEntityDescriptionMock
       };
     });
 

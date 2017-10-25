@@ -1,7 +1,6 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, OnChanges, Output, SimpleChanges, OnInit } from '@angular/core';
 import { CssClasses } from '../../../models/css-classes.model';
 
-// tslint:disable-next-line:no-unused-variable
 import { BreadcrumbEntityClickedEvent } from '../../../models/breadcrumb-entity-clicked-event.model';
 import { MyPerformanceEntitiesData } from '../../../state/reducers/my-performance.reducer';
 
@@ -11,22 +10,42 @@ import { MyPerformanceEntitiesData } from '../../../state/reducers/my-performanc
   styles: [ require('./my-performance-breadcrumb.component.scss') ]
 })
 
-export class MyPerformanceBreadcrumbComponent {
+export class MyPerformanceBreadcrumbComponent implements OnChanges, OnInit {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
   @Output() backButtonClicked = new EventEmitter<any>();
-  @Input() currentUserFullName: string;
-  @Input()
-  set performanceStateVersions (versions: MyPerformanceEntitiesData[]) {
-    this.breadcrumbTrail = [ this.currentUserFullName ]
-      .concat(versions.map((version: MyPerformanceEntitiesData) => version.selectedEntity));
-  }
+  @Input() currentPerformanceState: MyPerformanceEntitiesData;
+  @Input() performanceStateVersions: MyPerformanceEntitiesData[] = [];
   @Input() showBackButton: boolean;
 
   public breadcrumbTrail: string[];
+
+  public ngOnInit() {
+    this.breadcrumbTrail = this.constructBreadcrumbTrail(this.performanceStateVersions, this.currentPerformanceState);
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    const versions = changes.performanceStateVersions ? changes.performanceStateVersions.currentValue : this.performanceStateVersions;
+    const current = changes.currentPerformanceState ? changes.currentPerformanceState.currentValue : this.currentPerformanceState;
+    this.breadcrumbTrail = this.constructBreadcrumbTrail(versions, current);
+  }
 
   public getBackButtonClass(): CssClasses {
     return {
       ['back-button']: this.showBackButton
     };
+  }
+
+  public handleEntityClicked(entityDescription: string) {
+    const evt: BreadcrumbEntityClickedEvent = {
+      trail: this.breadcrumbTrail,
+      entityDescription: entityDescription
+    };
+    this.breadcrumbEntityClicked.emit(evt);
+  }
+
+  private constructBreadcrumbTrail(versions: MyPerformanceEntitiesData[], current: MyPerformanceEntitiesData) {
+    return versions
+      .map((version: MyPerformanceEntitiesData) => version.selectedEntityDescription)
+      .concat(current ? current.selectedEntityDescription : []);
   }
 }
