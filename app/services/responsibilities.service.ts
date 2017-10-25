@@ -321,6 +321,20 @@ export class ResponsibilitiesService {
     }
   }
 
+  public checkEmptyResponsibilitiesResponse(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    if (responsibilitiesData && Object.keys(responsibilitiesData.groupedEntities).length === 0) {
+      return Observable.throw('Empty ResponsibilitiesData Error');
+    }
+    return Observable.of(responsibilitiesData);
+  }
+
+  public checkEmptySubaccountsResponse(subAccountsData: SubAccountData): Observable<SubAccountData> {
+    if (subAccountsData && Object.keys(subAccountsData.groupedEntities).length === 0) {
+      return Observable.throw('Empty SubAccountData Error');
+    }
+    return Observable.of(subAccountsData);
+  }
+
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
     const fetchPerformanceCall = responsibilitiesData.alternateHierarchyId
       ? this.getHierarchyGroupsPerformances(responsibilitiesData.hierarchyGroups, responsibilitiesData.filter,
