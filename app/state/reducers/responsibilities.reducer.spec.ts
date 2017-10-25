@@ -21,8 +21,12 @@ const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFil
 describe('Responsibilities Reducer', () => {
   it('updates the status when a fetch is dispatched', () => {
 
-    const expectedState = {
+    const expectedState: ResponsibilitiesState = {
       status: ActionStatus.Fetching,
+      responsibilitiesStatus: ActionStatus.Fetching,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.NotFetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -32,7 +36,8 @@ describe('Responsibilities Reducer', () => {
 
     const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
       positionId: positionIdMock,
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     }));
 
     expect(actualState).toEqual(expectedState);
@@ -52,6 +57,10 @@ describe('Responsibilities Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetched,
+      responsibilitiesStatus: ActionStatus.Fetched,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.NotFetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: positionIdMock,
       groupedEntities: groupedEntitiesMock,
       hierarchyGroups: hierarchyGroupsMock,
@@ -73,6 +82,10 @@ describe('Responsibilities Reducer', () => {
 
     const stateWithGroupedEntities = {
       status: initialState.status,
+      responsibilitiesStatus: initialState.responsibilitiesStatus,
+      entitiesPerformanceStatus: initialState.entitiesPerformanceStatus,
+      totalPerformanceStatus: initialState.totalPerformanceStatus,
+      subaccountsStatus: initialState.subaccountsStatus,
       positionId: initialState.positionId,
       groupedEntities: groupedEntitiesMock,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -82,6 +95,10 @@ describe('Responsibilities Reducer', () => {
 
     const expectedState = {
       status: initialState.status,
+      responsibilitiesStatus: initialState.responsibilitiesStatus,
+      entitiesPerformanceStatus: initialState.entitiesPerformanceStatus,
+      totalPerformanceStatus: initialState.totalPerformanceStatus,
+      subaccountsStatus: initialState.subaccountsStatus,
       positionId: initialState.positionId,
       groupedEntities: {
         [payload]: groupedEntitiesMock[payload]
@@ -99,6 +116,10 @@ describe('Responsibilities Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
+      responsibilitiesStatus: ActionStatus.Error,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.NotFetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -128,10 +149,15 @@ describe('Responsibilities Reducer', () => {
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       positionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      entityType: EntityType.Person
+      entityType: EntityType.Person,
+      selectedEntityDescription: chance.string()
     };
-    const expectedState = {
+    const expectedState: ResponsibilitiesState = {
       status: ActionStatus.Fetching,
+      responsibilitiesStatus: ActionStatus.NotFetched,
+      entitiesPerformanceStatus: ActionStatus.Fetching,
+      totalPerformanceStatus: ActionStatus.NotFetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -152,6 +178,10 @@ describe('Responsibilities Reducer', () => {
     };
     const expectedState = {
       status: ActionStatus.Fetched,
+      responsibilitiesStatus: ActionStatus.NotFetched,
+      entitiesPerformanceStatus: ActionStatus.Fetched,
+      totalPerformanceStatus: ActionStatus.NotFetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -169,6 +199,10 @@ describe('Responsibilities Reducer', () => {
   it('should update its status when a fetch action is dispatched', () => {
     const expectedState = {
       status: ActionStatus.Fetching,
+      responsibilitiesStatus: ActionStatus.NotFetched,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.Fetching,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -187,6 +221,10 @@ describe('Responsibilities Reducer', () => {
     const payloadMock: Performance = getPerformanceMock();
     const expectedState = {
       status: ActionStatus.Fetched,
+      responsibilitiesStatus: ActionStatus.NotFetched,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.Fetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -218,6 +256,10 @@ describe('Responsibilities Reducer', () => {
 
     const expectedState: ResponsibilitiesState = {
       status: mockState.status,
+      responsibilitiesStatus: ActionStatus.NotFetched,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.NotFetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: mockState.positionId,
       groupedEntities: mockState.groupedEntities,
       hierarchyGroups: mockState.hierarchyGroups,
@@ -257,6 +299,10 @@ describe('Responsibilities Reducer', () => {
 
     const expectedState: ResponsibilitiesState = {
       status: mockState.status,
+      responsibilitiesStatus: ActionStatus.NotFetched,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.NotFetched,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: mockState.positionId,
       groupedEntities: mockState.groupedEntities,
       hierarchyGroups: mockState.hierarchyGroups,
@@ -281,6 +327,10 @@ describe('Responsibilities Reducer', () => {
   it('should update the state status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
+      responsibilitiesStatus: ActionStatus.NotFetched,
+      entitiesPerformanceStatus: ActionStatus.NotFetched,
+      totalPerformanceStatus: ActionStatus.Error,
+      subaccountsStatus: ActionStatus.NotFetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
       hierarchyGroups: initialState.hierarchyGroups,
@@ -304,6 +354,10 @@ describe('Responsibilities Reducer', () => {
       const payloadMock: string = chance.string();
       const expectedState: ResponsibilitiesState = {
         status: initialState.status,
+        responsibilitiesStatus: ActionStatus.NotFetched,
+        entitiesPerformanceStatus: ActionStatus.NotFetched,
+        totalPerformanceStatus: ActionStatus.NotFetched,
+        subaccountsStatus: ActionStatus.NotFetched,
         positionId: initialState.positionId,
         alternateHierarchyId: payloadMock,
         groupedEntities: initialState.groupedEntities,

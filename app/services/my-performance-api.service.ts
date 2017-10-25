@@ -48,6 +48,35 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
+  public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
+    alternateHierarchyId: string, filter: MyPerformanceFilterState)
+  : Observable<PerformanceDTO> {
+    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ group.type }/performanceTotal`;
+    const params = Object.assign({}, this.getFilterStateParams(filter), {
+      contextPositionId: alternateHierarchyId
+    });
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getAlternateHierarchyPersonPerformance(positionId: string, alternateHierarchyId: string, filter: MyPerformanceFilterState)
+  : Observable<PerformanceDTO> {
+    const url = `/v3/positions/${ positionId }/alternateHierarchyPerformanceTotal`;
+    const params = Object.assign({}, this.getFilterStateParams(filter), {
+      contextPositionId: alternateHierarchyId
+    });
+
+    return this.http.get(url, {
+      params: params
+    })
+    .map(res => res.json())
+    .catch(err => this.handleError(new Error(err)));
+  }
+
   public getAccountsDistributors(entityURI: string): Observable<Array<EntityDTO>> {
     const url = `/v3${ entityURI }`;
 

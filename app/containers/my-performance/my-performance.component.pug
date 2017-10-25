@@ -1,5 +1,7 @@
 h1 Performance
 
+beer-loader([showLoader]="productMetricsFetching || responsibilitiesFetching")
+
 my-performance-filter(
   [dateRanges]="dateRanges$ | async",
   [filterState]="filterState",
@@ -7,8 +9,8 @@ my-performance-filter(
 )
 
 my-performance-breadcrumb(
-  [currentUserFullName]="currentUserFullName",
-  [performanceStateVersions]="performanceStateVersions$ | async",
+  [currentPerformanceState]="currentState",
+  [performanceStateVersions]="versions",
   [showBackButton]="showLeftBackButton",
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
   (backButtonClicked)="handleBackButtonClicked()")

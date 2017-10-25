@@ -15,6 +15,12 @@ export interface FetchResponsibilitiesPayload {
   brandCode?: string;
 }
 
+export interface FetchResponsibilitiesPayload {
+  positionId: string;
+  filter: MyPerformanceFilterState;
+  selectedEntityDescription: string;
+}
+
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
   groupedEntities: GroupedEntities;
@@ -28,8 +34,9 @@ export interface FetchEntityWithPerformancePayload {
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
   positionId: string;
+  alternateHierarchyId?: string;
   entityType: EntityType;
-  brandCode?: string;
+  selectedEntityDescription: string;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
@@ -59,6 +66,7 @@ export interface FetchSubAccountsPayload {
   entityTypeAccountName: string;
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
+  selectedEntityDescription: string;
 }
 
 export interface FetchSubAccountsSuccessPayload {
@@ -70,6 +78,7 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   positionId: string;
   alternateHierarchyId: string;
   filter: MyPerformanceFilterState;
+  selectedEntityDescription: string;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';

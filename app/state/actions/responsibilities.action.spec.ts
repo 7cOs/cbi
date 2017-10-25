@@ -31,7 +31,8 @@ describe('Responsibilities Actions', () => {
       positionIdMock = chance.natural();
       actionPayloadMock = {
         positionId: positionIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: chance.string()
       };
       action = new ResponsibilitiesActions.FetchResponsibilities(actionPayloadMock);
     });
@@ -121,7 +122,8 @@ describe('Responsibilities Actions', () => {
       entityTypeCode: chance.string(),
       entityType: getMyPerformanceTableRowMock(1)[0].metadata.entityType,
       entities: [getEntityPeopleResponsibilitiesMock()],
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     };
     let action: ResponsibilitiesActions.FetchEntityWithPerformance;
 
@@ -266,7 +268,8 @@ describe('Responsibilities Actions', () => {
       contextPositionId: chance.string({pool: '0123456789'}),
       entityTypeAccountName: chance.string(),
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     };
     let action: ResponsibilitiesActions.FetchSubAccounts;
 

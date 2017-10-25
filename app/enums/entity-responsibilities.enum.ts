@@ -31,3 +31,8 @@ export enum EntityType {
   AccountGroup = 'AccountGroup',
   SubAccount = 'SubAccount'
 }
+
+export enum HierarchyGroupTypeCode {
+  accounts = 'account',
+  distributors = 'distributor'
+}

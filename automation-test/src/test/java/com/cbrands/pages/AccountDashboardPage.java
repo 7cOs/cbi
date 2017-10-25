@@ -226,20 +226,18 @@ public class AccountDashboardPage extends TestNGBasePage {
       "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
     waitForElementToClickable(notesButton, true).click();
 
-    return PageFactory.initElements(driver, NotesModal.class);
+    final NotesModal notesModal = PageFactory.initElements(driver, NotesModal.class);
+    notesModal.isLoaded();
+    return notesModal;
   }
 
-  public NotesModal openNotesModalForStore(String storeAccountName, String stateLocation, String address) {
-    clickRetailerType()
+  public AccountDashboardPage filterForStore(String storeAccountName, String stateLocation, String address) {
+    return clickRetailerType()
       .chooseStoreRetailerType()
       .enterRetailerStoreSearchText(storeAccountName)
       .clickSearchForRetailerStore()
       .waitForStoreLoaderToDisappear()
-      .selectRetailerStoreByState(stateLocation, address)
-      .clickApplyFilters()
-      .clickNotesButton();
-
-    return PageFactory.initElements(driver, NotesModal.class);
+      .selectRetailerStoreByState(stateLocation, address);
   }
 
   public enum RightPanelLevel {

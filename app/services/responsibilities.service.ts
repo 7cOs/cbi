@@ -5,7 +5,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType, HierarchyGroupTypeCode } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { GroupedEntities } from '../models/grouped-entities.model';
@@ -21,6 +21,8 @@ import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
+const CORPORATE_USER_POSITION_ID = '0';
+
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
   salesHierarchyViewType?: SalesHierarchyViewType;
@@ -34,6 +36,7 @@ export interface ResponsibilitiesData {
   brandCode?: string;
   entityWithPerformance?: Array<EntityWithPerformance>;
   entities?: HierarchyEntity[];
+  selectedEntityDescription?: string;
 }
 
 export interface FetchEntityWithPerformanceData {
@@ -137,13 +140,27 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getHierarchyGroupsPerformances(hierarchyGroups: Array<HierarchyGroup>,
+  public getHierarchyGroupsPerformances(
+    hierarchyGroups: Array<HierarchyGroup>,
     filter: MyPerformanceFilterState,
     positionId: string,
-    brandCode?: string)
+    brandCode?: string,
+    alternateHierarchyId?: string)
   : Observable<EntityWithPerformance[]> {
-    const apiCalls: Observable<EntityWithPerformance>[] = hierarchyGroups.map((hierarchyGroup: HierarchyGroup) => {
-      return this.getHierarchyGroupPerformance(hierarchyGroup, filter, positionId, brandCode);
+    const apiCalls: Observable<EntityWithPerformance>[] = hierarchyGroups.map((group: HierarchyGroup) => {
+      const fetchGroupPerformanceCall = group.alternateHierarchyId || alternateHierarchyId
+        ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group, positionId,
+            group.alternateHierarchyId || alternateHierarchyId, filter)
+        : this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId, brandCode);
+
+      return fetchGroupPerformanceCall
+        .map((response: PerformanceDTO) => {
+          return this.performanceTransformerService.transformHierarchyGroupPerformance(response, group, positionId);
+        })
+        .catch(() => {
+          this.toastService.showPerformanceDataErrorToast();
+          return Observable.of(this.performanceTransformerService.transformHierarchyGroupPerformance(null, group, positionId));
+        });
     });
 
     return Observable.forkJoin(apiCalls);
@@ -166,18 +183,24 @@ export class ResponsibilitiesService {
     });
   }
 
-  public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState, brandCode?: string)
-    : Observable<EntityWithPerformance[]> {
+  public getPositionsPerformances(
+    positions: HierarchyEntity[],
+    filter: MyPerformanceFilterState,
+    brandCode?: string,
+    alternateHierarchyId?: string) {
     const apiCalls: Observable<EntityWithPerformance>[] =
-      entities.map((entity: HierarchyEntity) => {
-        return this.myPerformanceApiService.getPerformance(entity.positionId, filter, brandCode)
-          .map((response: PerformanceDTO) => {
-            return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
-          })
-          .catch(() => {
-            this.toastService.showPerformanceDataErrorToast();
-            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, entity));
-          });
+      positions.map((position: HierarchyEntity) => {
+        const performanceCall = alternateHierarchyId
+          ? this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(position.positionId, alternateHierarchyId, filter)
+          : this.myPerformanceApiService.getPerformance(position.positionId, filter);
+
+        return performanceCall.map((response: PerformanceDTO) => {
+          return this.performanceTransformerService.transformEntityWithPerformance(response, position);
+        })
+        .catch(() => {
+          this.toastService.showPerformanceDataErrorToast();
+          return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, position));
+        });
       });
 
     return Observable.forkJoin(apiCalls);
@@ -190,6 +213,7 @@ export class ResponsibilitiesService {
       });
   }
 
+
   public getDistributorsPerformances(
     distributors: HierarchyEntity[],
     filter: MyPerformanceFilterState,
@@ -198,14 +222,12 @@ export class ResponsibilitiesService {
     const apiCalls: Observable<EntityWithPerformance | Error>[] =
       distributors.map((distributor: HierarchyEntity) => {
         return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId, brandCode)
-          .map(response => {
-            return this.performanceTransformerService.transformEntityWithPerformance(response, distributor);
-          })
+          .map(response: PerformanceDTO => this.performanceTransformerService.transformEntityWithPerformance(response, distributor))
           .catch(() => {
             this.toastService.showPerformanceDataErrorToast();
             return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, distributor));
           });
-      });
+    });
 
     return Observable.forkJoin(apiCalls);
   }
@@ -215,17 +237,14 @@ export class ResponsibilitiesService {
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
     brandCode?: string) {
-    const apiCalls: Observable<EntityWithPerformance | Error>[] =
-      accounts.map((account: HierarchyEntity) => {
+    const apiCalls: Observable<EntityWithPerformance>[] = accounts.map((account: HierarchyEntity) => {
         return this.myPerformanceApiService.getAccountPerformance(account.positionId, filter, contextPositionId, brandCode)
-          .map(response => {
-            return this.performanceTransformerService.transformEntityWithPerformance(response, account);
-          })
+          .map((response: PerformanceDTO) => this.performanceTransformerService.transformEntityWithPerformance(response, account))
           .catch(() => {
             this.toastService.showPerformanceDataErrorToast();
             return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, account));
           });
-      });
+    });
 
     return Observable.forkJoin(apiCalls);
   }
@@ -293,8 +312,10 @@ export class ResponsibilitiesService {
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
           const hierarchyGroups: Array<HierarchyGroup> = [{
             name: accountsOrDistributors[0].type.toUpperCase(),
-            type: accountsOrDistributors[0].type,
-            entityType: accountsOrDistributors[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
+            type: accountsOrDistributors[0].type === EntityType.Distributor
+              ? HierarchyGroupTypeCode.distributors
+              : HierarchyGroupTypeCode.accounts,
+            entityType: accountsOrDistributors[0].type === EntityType.Distributor ? EntityType.DistributorGroup : EntityType.AccountGroup
           }];
           const groupedEntities: GroupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(
             accountsOrDistributors,
@@ -364,8 +385,8 @@ export class ResponsibilitiesService {
             this.responsibilitiesTransformerService.groupsAccountsDistributors(response, EntityPeopleType.GEOGRAPHY));
           const alternateHierarchyGroup: HierarchyGroup = {
             name: EntityPeopleType.GEOGRAPHY,
-            type: response[0].type,
-            entityType: response[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup,
+            type: response[0].type === EntityType.Distributor ? HierarchyGroupTypeCode.distributors : HierarchyGroupTypeCode.accounts,
+            entityType: response[0].type === EntityType.Distributor ? EntityType.DistributorGroup : EntityType.AccountGroup,
             alternateHierarchyId: responsibilitiesData.positionId
           };
           const hierarchyGroups: Array<HierarchyGroup> = responsibilitiesData.hierarchyGroups.concat([alternateHierarchyGroup]);
@@ -389,7 +410,8 @@ export class ResponsibilitiesService {
         entityWithPerformanceObservable = this.getPositionsPerformances(
           pipelineData.entities,
           pipelineData.filter,
-          pipelineData.brandCode
+          pipelineData.brandCode,
+          pipelineData.alternateHierarchyId ? pipelineData.alternateHierarchyId : null
         );
         break;
       case EntityType.DistributorGroup:
@@ -397,7 +419,8 @@ export class ResponsibilitiesService {
           pipelineData.entities,
           pipelineData.filter,
           pipelineData.positionId,
-          pipelineData.brandCode
+          pipelineData.brandCode,
+          pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : payload.selectedPositionId
         );
         break;
       case EntityType.AccountGroup:
@@ -434,11 +457,26 @@ export class ResponsibilitiesService {
     }
   }
 
+  public checkEmptyResponsibilitiesResponse(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    if (responsibilitiesData && Object.keys(responsibilitiesData.groupedEntities).length === 0) {
+      return Observable.throw('Empty ResponsibilitiesData Error');
+    }
+    return Observable.of(responsibilitiesData);
+  }
+
+  public checkEmptySubaccountsResponse(subAccountsData: SubAccountData): Observable<SubAccountData> {
+    if (subAccountsData && Object.keys(subAccountsData.groupedEntities).length === 0) {
+      return Observable.throw('Empty SubAccountData Error');
+    }
+    return Observable.of(subAccountsData);
+  }
+
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
     return this.getHierarchyGroupsPerformances(responsibilitiesData.hierarchyGroups,
       responsibilitiesData.filter,
       responsibilitiesData.positionId,
-      responsibilitiesData.brandCode)
+      responsibilitiesData.brandCode,
+      responsibilitiesData.alternateHierarchyId ? responsibilitiesData.alternateHierarchyId : null)
         .map((entityPerformances: EntityWithPerformance[]) => {
           return Object.assign({}, responsibilitiesData, { // TODO: WTF?
             entityWithPerformance: entityPerformances
@@ -447,10 +485,14 @@ export class ResponsibilitiesService {
    }
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
+    const contextPositionId: string = responsibilitiesData.alternateHierarchyId
+      ? CORPORATE_USER_POSITION_ID
+      : responsibilitiesData.positionId;
+
     return this.getDistributorsPerformances(
       responsibilitiesData.groupedEntities[EntityPeopleType.DISTRIBUTOR],
       responsibilitiesData.filter,
-      responsibilitiesData.positionId,
+      contextPositionId,
       responsibilitiesData.brandCode)
       .map((entityPerformances: EntityWithPerformance[]) => {
         return Object.assign({}, responsibilitiesData, { // TODO: WTF?
