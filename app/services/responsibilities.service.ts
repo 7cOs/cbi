@@ -416,8 +416,8 @@ export class ResponsibilitiesService {
         entityWithPerformanceObservable = this.getDistributorsPerformances(
           pipelineData.entities,
           pipelineData.filter,
-          pipelineData.brandCode,
-          pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : pipelineData.positionId
+          pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : pipelineData.positionId,
+          pipelineData.brandCode
         );
         break;
       case EntityType.AccountGroup:
