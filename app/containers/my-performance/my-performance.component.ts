@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -77,7 +76,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public tableSubHeaderTimePeriod: string;
 
   private currentState: MyPerformanceEntitiesData;
-  // private dateRanges$: Observable<DateRangesState>;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: EntityType;
   private filterState: MyPerformanceFilterState;
@@ -102,16 +100,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-console.log('Before ');
     this.dateRangeSubscription = this.store
       .select(state => state.dateRanges)
-      .subscribe((dateRangesState: DateRangesState)  => {
-      if (dateRangesState.status === ActionStatus.Fetched) {
-console.log('dateRangeState', dateRangesState);
-        this.dateRanges = dateRangesState;
+      .subscribe((dateRanges: DateRangesState)  => {
+      if (dateRanges.status === ActionStatus.Fetched) {
+        this.dateRanges = dateRanges;
+        this.dateRange = dateRanges[DateRangeTimePeriodValue[2]];
+        this.tableSubHeaderTimePeriod = this.dateRange.displayCode;
+console.log('this.dateRanges ', this.dateRange);
       }
     });
-console.log('After ');
 
     this.filterStateSubscription = this.store
       .select(state => state.myPerformanceFilter)
@@ -125,11 +123,9 @@ console.log('After ');
       this.performanceMetric = currentTypeValue;
       this.tableHeaderRowLeft[1] = currentTypeValue.toUpperCase();
       this.tableHeaderRowRight[1] = currentTypeValue.toUpperCase();
-console.log('filterState ', filterState);       // MyPerformanceFilter.dateRangeCode
       this.dateRange = this.dateRanges ? this.dateRanges[DateRangeTimePeriodValue[filterState.dateRangeCode]] : getDateRangeMock();
       this.tableSubHeaderTimePeriod = this.dateRange.displayCode;
     });
-console.log('I cant tell again');
 
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)

@@ -139,7 +139,6 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetricsViewType: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
-    dateRange: getDateRangeMock(),
     href: jasmine.createSpy('href')
   };
 
@@ -233,7 +232,7 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
     }));
 
-    fit('should dispatch actions on init', () => {
+    it('should dispatch actions on init', () => {
       myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
       fixture = TestBed.createComponent(MyPerformanceComponent);
       fixture.detectChanges();
