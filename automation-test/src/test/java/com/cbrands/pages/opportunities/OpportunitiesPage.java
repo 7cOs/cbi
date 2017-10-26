@@ -266,7 +266,8 @@ public class OpportunitiesPage extends TestNGBasePage {
     while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
       this
         .clickSavedReportHoverArrow(savedReportOption)
-        .clickDeleteSavedReportLink()
+        .clickSavedReportDeleteLink()
+        .waitForModalToClose()
         .clickSavedReportsDropdown();
       savedReportOption = getFirstSavedReportOption();
     }
@@ -310,18 +311,20 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public boolean doesSavedReportExistWithName(String name) {
-    return isElementPresent(By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]"));
+    return isElementPresent(getHandleForSavedReportWithName(name));
   }
 
   public OpportunitiesPage selectSavedReportWithName(String reportName) {
     waitForElementToClickable(
-      savedReportsDropdown.findElement(
-        By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + reportName + "')]")
-      ),
+      savedReportsDropdown.findElement(getHandleForSavedReportWithName(reportName)),
       true
     ).click();
 
     return this;
+  }
+
+  private By getHandleForSavedReportWithName(String name) {
+    return By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
   }
 
   public enum PremiseType {

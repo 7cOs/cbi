@@ -53,7 +53,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .waitForLoaderToDisappear()
       .clickSaveReportLink()
       .enterReportName(name)
-      .clickSaveReportButton()
+      .clickSave()
+      .waitForModalToClose()
       .clickSavedReportsDropdown();
 
     Assert.assertTrue(
