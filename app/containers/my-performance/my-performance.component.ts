@@ -312,7 +312,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             positionId: parameters.row.metadata.positionId,
             alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
             filter: this.filterState,
-            selectedEntityDescription: parameters.row.descriptionRow0
+            selectedEntityDescription: parameters.row.descriptionRow0,
+            brandCode: this.selectedBrandCode
           }));
         } else {
           this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({

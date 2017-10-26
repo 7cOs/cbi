@@ -80,6 +80,7 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   alternateHierarchyId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
+  brandCode?: string;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
