@@ -11,14 +11,13 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
-fdescribe('ProductMetrics Reducer', () => {
+describe('ProductMetrics Reducer', () => {
 
   it('updates the status when a fetch is dispatched', () => {
 
     const expectedState = {
       status: ActionStatus.Fetching,
-      products: initialState.products,
-      productMetricsViewType: ProductMetricsViewType.brands
+      products: initialState.products
     };
 
     const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetrics({
@@ -40,8 +39,7 @@ fdescribe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetched,
-      products: products,
-      productMetricsViewType: initialState.productMetricsViewType
+      products: products
     };
 
     const actualState = productMetricsReducer(
@@ -55,8 +53,7 @@ fdescribe('ProductMetrics Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
-      products: initialState.products,
-      productMetricsViewType: initialState.productMetricsViewType
+      products: initialState.products
     };
 
     const actualState = productMetricsReducer(
@@ -84,7 +81,7 @@ fdescribe('ProductMetrics Reducer', () => {
       status: initialState.status,
       products: initialState.products,
       selectedBrandCodeValues: products.brandValues[chosenProductMetricsValuesIndex],
-      productMetricsViewType: initialState.productMetricsViewType
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(
@@ -107,13 +104,12 @@ fdescribe('ProductMetrics Reducer', () => {
     products.skuValues[chosenProductMetricsValuesIndex].beerId.masterPackageSKUCode = chosenSkuCode;
 
     initialState.products = products;
-    initialState.productMetricsViewType = ProductMetricsViewType.skus;
 
     const expectedState = {
       status: initialState.status,
       products: initialState.products,
       selectedSkuCodeValues: products.skuValues[chosenProductMetricsValuesIndex],
-      productMetricsViewType: initialState.productMetricsViewType
+      productMetricsViewType: ProductMetricsViewType.skus
     };
 
     const actualState = productMetricsReducer(
@@ -137,7 +133,7 @@ fdescribe('ProductMetrics Reducer', () => {
       status: initialState.status,
       products: initialState.products,
       selectedSkuCodeValues: products.skuValues[chosenProductMetricsValuesIndex],
-      productMetricsViewType: initialState.productMetricsViewType
+      productMetricsViewType: ProductMetricsViewType.skus
     };
 
     const actualState = productMetricsReducer(

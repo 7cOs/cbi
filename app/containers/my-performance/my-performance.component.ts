@@ -346,7 +346,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsWhenClick(parameters);
         break;
       case ProductMetricsViewType.skus:
-        if (this.productMetricsSelectedBrandRow && parameters.row) {
+        if (parameters.row) {
           this.selectedSkuCode = parameters.row.metadata.skuCode;
           this.store.dispatch(new ProductMetricsActions.SelectSkuValues(parameters.row.metadata.skuCode));
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(parameters.row.metadata.skuCode));
@@ -355,6 +355,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new ProductMetricsActions.ClearSkuValues());
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
           this.selectedSkuName = null;
+          console.log('else');
         }
         break;
       default:

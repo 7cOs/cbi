@@ -12,7 +12,7 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchProductMetrics, SelectBrandValues } from '../../state/actions/product-metrics.action';
+import { FetchProductMetrics, SelectBrandValues, SelectSkuValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -650,6 +650,20 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
+    it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
+      'when productMetricsViewType is skus', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(rowMock.metadata.skuCode));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(rowMock.metadata.skuCode)
+      );
+    });
+
     it('should trigger appropriate actions when current salesHierarchyViewType is accounts and ' +
       'when productMetricsViewType is brands', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
@@ -672,7 +686,21 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
+    it('should trigger appropriate actions when current salesHierarchyViewType is accounts and ' +
+      'when productMetricsViewType is skus', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(rowMock.metadata.skuCode));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(rowMock.metadata.skuCode)
+      );
+    });
+
+    it('should trigger appropriate actions when current salesHierarchyViewType is people and ' +
       'when productMetricsViewType is brands', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
@@ -692,6 +720,20 @@ describe('MyPerformanceComponent', () => {
         selectedBrandCode: rowMock.metadata.brandCode,
         entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode
       }));
+    });
+
+    it('should trigger appropriate actions when current salesHierarchyViewType is people and ' +
+      'when productMetricsViewType is skus', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(rowMock.metadata.skuCode));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(rowMock.metadata.skuCode)
+      );
     });
 
     it('should trigger approapriate actions when ProductMetricsViewType is skus and rowType is data', () => {
