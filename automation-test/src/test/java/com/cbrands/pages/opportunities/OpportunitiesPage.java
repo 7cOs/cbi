@@ -284,6 +284,14 @@ public class OpportunitiesPage extends TestNGBasePage {
     );
   }
 
+  public SavedReportModal openModalForSavedReportWithName(String reportName) {
+    this.clickSavedReportHoverArrow(
+      findElement(getHandleForSavedReportWithName(reportName))
+    );
+
+    return PageFactory.initElements(driver, SavedReportModal.class);
+  }
+
   private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
     waitForElementToClickable(savedReport, true);
     final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;

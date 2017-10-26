@@ -99,6 +99,33 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
   }
 
+  @Test(
+    description = "Editing a Saved Report",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "savedReportData"
+  )
+  public void editSavedReport(String reportName, String distributor) {
+    final String editedReportName = "EDITED " + reportName;
+    opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportName)
+      .enterNewReportName(editedReportName)
+      .clickSave()
+      .waitForModalToClose();
+
+    Assert.assertTrue(
+      opportunitiesPage.doesSavedReportExistWithName(editedReportName),
+      "Saved Report with edited name " + editedReportName +
+        " failed to appear in the dropdown on the Opportunities page."
+    );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+      "Saved Report with edited  name " + editedReportName + " failed to appear in the dropdown on the Home page."
+    );
+  }
+
   @DataProvider
   public static Object[][] savedReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;

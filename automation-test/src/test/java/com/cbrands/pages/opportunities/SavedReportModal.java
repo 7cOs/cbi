@@ -13,6 +13,8 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class SavedReportModal extends TestNGBasePage {
   private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, '-report')]";
+  private static final String EDIT_NAME_XPATH = MODAL_CONTAINER_XPATH +
+    "//input[contains(@ng-model, 'editedFilterName')]";
 
   private final WebDriver driver;
 
@@ -24,6 +26,9 @@ public class SavedReportModal extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH + "//input[@placeholder='Enter a name']")
   private WebElement nameField;
+
+  @FindBy(how = How.XPATH, using = EDIT_NAME_XPATH)
+  private WebElement editNameField;
 
   @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH + "//button[contains(., 'Save')]")
   private WebElement saveButton;
@@ -47,6 +52,14 @@ public class SavedReportModal extends TestNGBasePage {
   public SavedReportModal enterReportName(String name) {
     waitForElementToClickable(nameField, true).click();
     nameField.sendKeys(name);
+
+    return this;
+  }
+
+  public SavedReportModal enterNewReportName(String newReportName) {
+    waitForElementToClickable(editNameField, true).click();
+    editNameField.clear();
+    editNameField.sendKeys(newReportName);
 
     return this;
   }
