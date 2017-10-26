@@ -348,7 +348,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.selectedBrandCode = parameters.row.metadata.brandCode;
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
-        this.fetchProductMetricsWhenClick(parameters);
+        if (!this.isInsideAlternateHierarchy()) {
+          this.fetchProductMetricsWhenClick(parameters);
+        }
         break;
       default:
         console.log('clicked on right row:', parameters.row);

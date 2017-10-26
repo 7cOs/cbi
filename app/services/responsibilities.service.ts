@@ -217,6 +217,7 @@ export class ResponsibilitiesService {
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
     brandCode?: string) {
+      debugger;
     const apiCalls: Observable<EntityWithPerformance | Error>[] =
       distributors.map((distributor: HierarchyEntity) => {
         return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId, brandCode)
@@ -486,8 +487,9 @@ export class ResponsibilitiesService {
       ? CORPORATE_USER_POSITION_ID
       : responsibilitiesData.positionId;
 
+debugger;
     return this.getDistributorsPerformances(
-      responsibilitiesData.groupedEntities[EntityPeopleType.DISTRIBUTOR],
+      responsibilitiesData.groupedEntities[Object.keys(responsibilitiesData.groupedEntities)[0]],
       responsibilitiesData.filter,
       contextPositionId,
       responsibilitiesData.brandCode)
@@ -500,7 +502,7 @@ export class ResponsibilitiesService {
 
   private handleAccountsPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
     return this.getAccountsPerformances(
-      responsibilitiesData.groupedEntities[EntityPeopleType.ACCOUNT],
+      responsibilitiesData.groupedEntities[Object.keys(responsibilitiesData.groupedEntities)[0]],
       responsibilitiesData.filter,
       responsibilitiesData.positionId,
       responsibilitiesData.brandCode)
