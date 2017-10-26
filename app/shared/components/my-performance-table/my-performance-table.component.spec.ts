@@ -202,19 +202,22 @@ describe('MyPerformanceTableComponent', () => {
     it('should emit an event when the viewtype is accounts', () => {
       componentInstance.viewType = SalesHierarchyViewType.accounts;
       componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
-      expect(componentInstance.onElementClicked.emit).toHaveBeenCalled();
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalledWith(
+        {type: rowTypeMock, index: indexMock, row: myPerformanceTableRowMock});
     });
 
     it('should emit an event when the viewtype is people', () => {
       componentInstance.viewType = SalesHierarchyViewType.people;
       componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
-      expect(componentInstance.onElementClicked.emit).toHaveBeenCalled();
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalledWith(
+        {type: rowTypeMock, index: indexMock, row: myPerformanceTableRowMock});
     });
 
     it('should emit an event when the viewtype is rolegroups', () => {
       componentInstance.viewType = SalesHierarchyViewType.roleGroups;
       componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
-      expect(componentInstance.onElementClicked.emit).toHaveBeenCalled();
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalledWith(
+        {type: rowTypeMock, index: indexMock, row: myPerformanceTableRowMock});
     });
 
     it('should not emit an event when the viewtype is distributors', () => {

@@ -46,7 +46,7 @@ div.performance-table-wrapper
                               (onCellClicked)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event})")
 
     tbody([ngClass]="getTableHeight()")
-      tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let i = index",
+      tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let rowIndex = index",
                                 [ngClass]="{'performance-error': rowData.performanceError}",
                                 my-performance-table-row,
                                 [rowData]="rowData",
@@ -54,4 +54,4 @@ div.performance-table-wrapper
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
                                 (onSublineClicked)="onSublineClicked.emit(rowData);",
-                                (click)="onRowClicked(rowType.data, i, rowData)")
+                                (click)="onRowClicked(rowType.data, rowIndex, rowData)")
