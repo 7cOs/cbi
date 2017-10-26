@@ -1,11 +1,14 @@
 package com.cbrands.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
+import static com.cbrands.helper.SeleniumUtils.isElementPresent;
+import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
 public class HomePage extends TestNGBasePage {
@@ -13,6 +16,9 @@ public class HomePage extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = "//greeting//h1")
   private WebElement greeting;
+
+  @FindBy(how = How.XPATH, using = "//md-select[@aria-label='Saved Filter Dropdown']")
+  private WebElement savedReportsDropdown;
 
   public HomePage(WebDriver driver) {
     this.driver = driver;
@@ -28,5 +34,16 @@ public class HomePage extends TestNGBasePage {
   public boolean isLoaded() {
     waitForVisibleFluentWait(greeting);
     return greeting.isDisplayed();
+  }
+
+  public HomePage clickSavedReportsDropdown() {
+    waitForElementToClickable(savedReportsDropdown, true).click();
+    return this;
+  }
+
+  public boolean doesSavedReportExistWithName(String name) {
+    return isElementPresent(
+      By.xpath("//md-option[contains(@class, 'saved-filter-option')]/div[contains(., '" + name + "')]")
+    );
   }
 }
