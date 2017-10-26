@@ -363,7 +363,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         salesHierarchyViewType: this.salesHierarchyViewType,
         filter: this.filterState,
         brandCode: parameters.row.metadata.brandCode,
-        entityType: this.currentState.selectedEntityType
+        entityType: this.currentState.selectedEntityType,
+        alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId
       }));
     }
   }

@@ -45,6 +45,7 @@ export interface FetchEntityWithPerformanceData {
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
   positionId: string;
+  alternateHierarchyId?: string;
   entityType: EntityType;
   brandCode?: string;
   entityWithPerformance?: Array<EntityWithPerformance>;
@@ -56,24 +57,22 @@ export interface RefreshAllPerformancesData {
   filter: MyPerformanceFilterState;
   brandCode?: string;
   groupedEntities?: GroupedEntities;
+  alternateHierarchyId?: string;
 
-  // For roleGroups only
+  // roleGroups only
   hierarchyGroups?: Array<HierarchyGroup>;
 
-  // For Person, Accounts, Distributors
+  // Person, Accounts, Distributors
   entityType: EntityType;
   salesHierarchyViewType?: SalesHierarchyViewType;
   entities?: HierarchyEntity[];
 
-  // selectedEntityType: EntityType; // TODO: needed?
-  // selectedEntityTypeCode: string; // TODO: needed?
-
   // results:
   entityWithPerformance?: Array<EntityWithPerformance>;
-  entitiesTotalPerformances?: Performance;
+  entitiesTotalPerformances?: Performance; // TODO: I don't need that, right?
 }
 
-export interface RefreshEntitiesTotalPerformancesData {
+export interface RefreshEntitiesTotalPerformancesData { // TODO: Cleanup
   // Common
   positionId?: string;
   filter?: MyPerformanceFilterState;
@@ -87,9 +86,6 @@ export interface RefreshEntitiesTotalPerformancesData {
   entityType: EntityType;
   salesHierarchyViewType?: SalesHierarchyViewType;
   entities?: HierarchyEntity[];
-
-  // selectedEntityType: EntityType; // TODO: needed?
-  // selectedEntityTypeCode: string; // TODO: needed?
 
   // results:
   entityWithPerformance?: Array<EntityWithPerformance>;
@@ -150,7 +146,7 @@ export class ResponsibilitiesService {
     const apiCalls: Observable<EntityWithPerformance>[] = hierarchyGroups.map((group: HierarchyGroup) => {
       const fetchGroupPerformanceCall = group.alternateHierarchyId || alternateHierarchyId
         ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group, positionId,
-            group.alternateHierarchyId || alternateHierarchyId, filter)
+            group.alternateHierarchyId || alternateHierarchyId, filter, brandCode)
         : this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId, brandCode);
 
       return fetchGroupPerformanceCall
@@ -191,7 +187,10 @@ export class ResponsibilitiesService {
     const apiCalls: Observable<EntityWithPerformance>[] =
       positions.map((position: HierarchyEntity) => {
         const performanceCall = alternateHierarchyId
-          ? this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(position.positionId, alternateHierarchyId, filter)
+          ? this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(position.positionId,
+            alternateHierarchyId,
+            filter,
+            brandCode)
           : this.myPerformanceApiService.getPerformance(position.positionId, filter);
 
         return performanceCall.map((response: PerformanceDTO) => {
@@ -213,7 +212,6 @@ export class ResponsibilitiesService {
       });
   }
 
-
   public getDistributorsPerformances(
     distributors: HierarchyEntity[],
     filter: MyPerformanceFilterState,
@@ -222,7 +220,7 @@ export class ResponsibilitiesService {
     const apiCalls: Observable<EntityWithPerformance | Error>[] =
       distributors.map((distributor: HierarchyEntity) => {
         return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId, brandCode)
-          .map(response: PerformanceDTO => this.performanceTransformerService.transformEntityWithPerformance(response, distributor))
+          .map((response: PerformanceDTO) => this.performanceTransformerService.transformEntityWithPerformance(response, distributor))
           .catch(() => {
             this.toastService.showPerformanceDataErrorToast();
             return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, distributor));
@@ -418,9 +416,8 @@ export class ResponsibilitiesService {
         entityWithPerformanceObservable = this.getDistributorsPerformances(
           pipelineData.entities,
           pipelineData.filter,
-          pipelineData.positionId,
           pipelineData.brandCode,
-          pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : payload.selectedPositionId
+          pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : pipelineData.positionId
         );
         break;
       case EntityType.AccountGroup:

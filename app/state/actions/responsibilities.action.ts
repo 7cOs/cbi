@@ -54,6 +54,7 @@ export interface RefreshAllPerformancesPayload {
   filter: MyPerformanceFilterState;
   brandCode?: string;
   entityType?: EntityType;
+  alternateHierarchyId?: string;
 }
 
 export interface RefreshAllPerformancesSuccesPayload {

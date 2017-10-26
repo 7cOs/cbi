@@ -49,10 +49,10 @@ export class MyPerformanceApiService {
   }
 
   public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
-    alternateHierarchyId: string, filter: MyPerformanceFilterState)
+    alternateHierarchyId: string, filter: MyPerformanceFilterState, brandCode?: string)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchy/${ group.type }/performanceTotal`;
-    const params = Object.assign({}, this.getFilterStateParams(filter), {
+    const params = Object.assign({}, this.getParams(filter, brandCode), {
       contextPositionId: alternateHierarchyId
     });
 
@@ -63,10 +63,14 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getAlternateHierarchyPersonPerformance(positionId: string, alternateHierarchyId: string, filter: MyPerformanceFilterState)
+  public getAlternateHierarchyPersonPerformance(
+    positionId: string,
+    alternateHierarchyId: string,
+    filter: MyPerformanceFilterState,
+    brandCode?: string)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchyPerformanceTotal`;
-    const params = Object.assign({}, this.getFilterStateParams(filter), {
+    const params = Object.assign({}, this.getParams(filter, brandCode), {
       contextPositionId: alternateHierarchyId
     });
 
