@@ -12,7 +12,10 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchProductMetrics, SelectBrandValues, SelectSkuValues } from '../../state/actions/product-metrics.action';
+import { FetchProductMetrics,
+         SelectBrandValues,
+         SelectSkuValues,
+         ClearSkuValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -808,7 +811,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when right side data row is clicked', () => {
-    it('should dispatch appropriate actions', () => {
+    it('should dispatch appropriate actions for clearing the selectedSkuCode', () => {
       storeMock.dispatch.calls.reset();
 
       myPerformanceProductMetricsMock = {
@@ -821,6 +824,9 @@ describe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearSkuValues());
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     });
   });
 
