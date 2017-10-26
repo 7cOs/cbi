@@ -36,7 +36,6 @@ import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.en
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { WindowService } from '../../services/window.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { getDateRangeMock } from '../../models/date-range.model.mock';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -107,7 +106,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.dateRanges = dateRanges;
         this.dateRange = dateRanges[DateRangeTimePeriodValue[2]];
         this.tableSubHeaderTimePeriod = this.dateRange.displayCode;
-console.log('this.dateRanges ', this.dateRange);
       }
     });
 
@@ -123,8 +121,10 @@ console.log('this.dateRanges ', this.dateRange);
       this.performanceMetric = currentTypeValue;
       this.tableHeaderRowLeft[1] = currentTypeValue.toUpperCase();
       this.tableHeaderRowRight[1] = currentTypeValue.toUpperCase();
-      this.dateRange = this.dateRanges ? this.dateRanges[DateRangeTimePeriodValue[filterState.dateRangeCode]] : getDateRangeMock();
-      this.tableSubHeaderTimePeriod = this.dateRange.displayCode;
+      if (this.dateRanges) {
+        this.dateRange =  this.dateRanges[DateRangeTimePeriodValue[filterState.dateRangeCode]];
+        this.tableSubHeaderTimePeriod = this.dateRange.displayCode;
+      }
     });
 
     this.productMetricsSubscription = this.store

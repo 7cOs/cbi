@@ -3,7 +3,7 @@ h1 Performance
 beer-loader([showLoader]="productMetricsFetching || responsibilitiesFetching")
 
 my-performance-filter(
-  [dateRanges]="dateRanges$ | async",
+  [dateRanges]="dateRanges",
   [filterState]="filterState",
   (onFilterChange)="filterOptionSelected($event)"
 )
