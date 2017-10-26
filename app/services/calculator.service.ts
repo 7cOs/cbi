@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class UtilService {
+export class CalculatorService {
 
   // generic comparison for sort functions
   public compareObjects(a: any, b: any) {
@@ -17,6 +17,10 @@ export class UtilService {
   }
 
   public getYearAgoPercent(total: number, totalYearAgo: number): number {
-    return parseFloat((((total / totalYearAgo) - 1) * 100).toFixed(1));
+    return (total === 0 && totalYearAgo === 0)
+      ? 0
+      : (total !== 0 && totalYearAgo === 0)
+        ? 100
+        : (((total / totalYearAgo) - 1) * 100);
   }
 }

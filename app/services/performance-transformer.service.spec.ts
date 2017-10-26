@@ -7,25 +7,25 @@ import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { UtilService } from './util.service';
+import { CalculatorService } from './calculator.service';
 
 describe('Service: PerformanceTransformerService', () => {
   let performanceTransformerService: PerformanceTransformerService;
-  let utilService: UtilService;
+  let calculatorService: CalculatorService;
   let entitiesTotalPerformancesDTOMock: PerformanceDTO;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ PerformanceTransformerService, UtilService ]
+      providers: [ PerformanceTransformerService, CalculatorService ]
     });
   });
 
   describe('transformPerformanceDTO', () => {
 
-    beforeEach(inject([ PerformanceTransformerService, UtilService ],
-      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
+    beforeEach(inject([ PerformanceTransformerService, CalculatorService ],
+      (_performanceTransformerService: PerformanceTransformerService, _calculatorService: CalculatorService) => {
         performanceTransformerService = _performanceTransformerService;
-        utilService = _utilService;
+        calculatorService = _calculatorService;
         entitiesTotalPerformancesDTOMock = getPerformanceDTOMock();
     }));
 
@@ -38,10 +38,10 @@ describe('Service: PerformanceTransformerService', () => {
       expect(performance).toBeDefined();
       expect(performance).toEqual({
         total: parseInt((entitiesTotalPerformancesDTOMock.total).toFixed(), 10),
-        totalYearAgo: utilService.getYearAgoDelta(
+        totalYearAgo: calculatorService.getYearAgoDelta(
           entitiesTotalPerformancesDTOMock.total, entitiesTotalPerformancesDTOMock.totalYearAgo
         ),
-        totalYearAgoPercent: utilService.getYearAgoPercent(
+        totalYearAgoPercent: calculatorService.getYearAgoPercent(
           entitiesTotalPerformancesDTOMock.total, entitiesTotalPerformancesDTOMock.totalYearAgo
         ),
         contributionToVolume: 0,
@@ -68,10 +68,10 @@ describe('Service: PerformanceTransformerService', () => {
 
   describe('transformEntityWithPerformancesDTO', () => {
 
-    beforeEach(inject([ PerformanceTransformerService, UtilService ],
-      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
+    beforeEach(inject([ PerformanceTransformerService, CalculatorService ],
+      (_performanceTransformerService: PerformanceTransformerService, _calculatorService: CalculatorService) => {
         performanceTransformerService = _performanceTransformerService;
-        utilService = _utilService;
+        calculatorService = _calculatorService;
     }));
 
     it('should transform data given an entity and performance data', () => {
@@ -114,10 +114,10 @@ describe('Service: PerformanceTransformerService', () => {
     let hierarchyGroupPerformanceMock: Performance;
     let hierarchyGroupPerformanceDTOMock: PerformanceDTO;
 
-    beforeEach(inject([ PerformanceTransformerService, UtilService ],
-      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
+    beforeEach(inject([ PerformanceTransformerService, CalculatorService ],
+      (_performanceTransformerService: PerformanceTransformerService, _calculatorService: CalculatorService) => {
         performanceTransformerService = _performanceTransformerService;
-        utilService = _utilService;
+        calculatorService = _calculatorService;
 
         positionIdMock = chance.string();
         hierarchyGroupMock = {

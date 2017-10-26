@@ -6,18 +6,18 @@ import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entit
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
-import { UtilService } from './util.service';
+import { CalculatorService } from './calculator.service';
 
 @Injectable()
 export class PerformanceTransformerService {
 
-  constructor(private utilService: UtilService) { }
+  constructor(private calculatorService: CalculatorService) { }
 
   public transformPerformanceDTO(performanceDTO: PerformanceDTO): Performance {
     return performanceDTO ? {
       total: Math.round(performanceDTO.total),
-      totalYearAgo: this.utilService.getYearAgoDelta(performanceDTO.total, performanceDTO.totalYearAgo),
-      totalYearAgoPercent: this.utilService.getYearAgoPercent(performanceDTO.total, performanceDTO.totalYearAgo),
+      totalYearAgo: this.calculatorService.getYearAgoDelta(performanceDTO.total, performanceDTO.totalYearAgo),
+      totalYearAgoPercent: this.calculatorService.getYearAgoPercent(performanceDTO.total, performanceDTO.totalYearAgo),
       contributionToVolume: 0,
       error: false
     } : {

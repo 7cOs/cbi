@@ -20,7 +20,7 @@ import { NotificationsComponent } from './shared/components/Notifications/notifi
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
-import { UtilService } from './services/util.service';
+import { CalculatorService } from './services/calculator.service';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
@@ -63,7 +63,7 @@ AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
     DateRangeService,
     DateRangeTransformerService,
     GoogleAnalyticsTrackerService,
-    UtilService
+    CalculatorService
   ]
 })
 export class AppModule {

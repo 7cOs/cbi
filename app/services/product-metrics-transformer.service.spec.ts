@@ -3,25 +3,25 @@ import { inject, TestBed } from '@angular/core/testing';
 import { getProductMetricsSkuValuesDTOMock, getProductMetricsDTOBrandMock } from '../models/product-metrics.model.mock';
 import { ProductMetrics, ProductMetricsValuesDTO, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { UtilService } from './util.service';
+import { CalculatorService } from './calculator.service';
 
 const chance = new Chance();
 
-let utilService: UtilService;
+let calculatorService: CalculatorService;
 let productMetricsTransformerService: ProductMetricsTransformerService;
 
 describe('Service: ProductMetricsTransformerService', () => {
   beforeEach(() => TestBed.configureTestingModule({
 
     providers: [
-      ProductMetricsTransformerService, UtilService ]
+      ProductMetricsTransformerService, CalculatorService ]
   }));
 
   describe('#groupProductsByBrand', () => {
-    beforeEach(inject([ ProductMetricsTransformerService, UtilService ],
-      (_productMetricsTransformerService: ProductMetricsTransformerService, _utilService: UtilService) => {
+    beforeEach(inject([ ProductMetricsTransformerService, CalculatorService ],
+      (_productMetricsTransformerService: ProductMetricsTransformerService, _calculatorService: CalculatorService) => {
         productMetricsTransformerService = _productMetricsTransformerService;
-        utilService = _utilService;
+        calculatorService = _calculatorService;
     }));
 
     it('should return a collection of formatted ProductMetrics from a collection of ProductMetricsDTOs', () => {
@@ -31,22 +31,22 @@ describe('Service: ProductMetricsTransformerService', () => {
         brandValues: [{
           brandDescription: productMetricsBrandDTOMock.brandValues[0].brandDescription,
           current: parseInt((productMetricsBrandDTOMock.brandValues[0].values[0].current).toFixed(), 10),
-          yearAgo: utilService.getYearAgoDelta(
+          yearAgo: calculatorService.getYearAgoDelta(
             productMetricsBrandDTOMock.brandValues[0].values[0].current,
             productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
           collectionMethod: productMetricsBrandDTOMock.brandValues[0].values[0].collectionMethod,
-          yearAgoPercent: utilService.getYearAgoPercent(
+          yearAgoPercent: calculatorService.getYearAgoPercent(
             productMetricsBrandDTOMock.brandValues[0].values[0].current,
             productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
           brandCode: productMetricsBrandDTOMock.brandValues[0].brandCode
         }, {
           brandDescription: productMetricsBrandDTOMock.brandValues[1].brandDescription,
           current: parseInt((productMetricsBrandDTOMock.brandValues[1].values[0].current).toFixed(), 10),
-          yearAgo: utilService.getYearAgoDelta(
+          yearAgo: calculatorService.getYearAgoDelta(
             productMetricsBrandDTOMock.brandValues[1].values[0].current,
             productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
           collectionMethod: productMetricsBrandDTOMock.brandValues[1].values[0].collectionMethod,
-          yearAgoPercent: utilService.getYearAgoPercent(
+          yearAgoPercent: calculatorService.getYearAgoPercent(
             productMetricsBrandDTOMock.brandValues[1].values[0].current,
             productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
             brandCode: productMetricsBrandDTOMock.brandValues[1].brandCode
@@ -65,11 +65,11 @@ describe('Service: ProductMetricsTransformerService', () => {
           brandDescription: productMectricsSkuDTOMock.brandDescription,
           collectionMethod: productMectricsSkuDTOMock.values[0].collectionMethod,
           current: Math.round(productMectricsSkuDTOMock.values[0].current),
-          yearAgo: utilService.getYearAgoDelta(
+          yearAgo: calculatorService.getYearAgoDelta(
             productMectricsSkuDTOMock.values[0].current,
             productMectricsSkuDTOMock.values[0].yearAgo
           ),
-          yearAgoPercent: utilService.getYearAgoPercent(
+          yearAgoPercent: calculatorService.getYearAgoPercent(
             productMectricsSkuDTOMock.values[0].current,
             productMectricsSkuDTOMock.values[0].yearAgo
           ),

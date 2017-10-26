@@ -10,7 +10,7 @@ import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
-import { UtilService } from '../../../services/util.service';
+import { CalculatorService } from '../../../services/calculator.service';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -37,7 +37,7 @@ describe('MyPerformanceTableComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
-        UtilService
+        CalculatorService
       ]
     });
 
