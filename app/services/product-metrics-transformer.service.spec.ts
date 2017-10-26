@@ -1,9 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { CalculatorService } from './calculator.service';
 import { getProductMetricsSkuValuesDTOMock, getProductMetricsDTOBrandMock } from '../models/product-metrics.model.mock';
 import { ProductMetrics, ProductMetricsValuesDTO, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { CalculatorService } from './calculator.service';
 
 const chance = new Chance();
 
@@ -14,7 +14,7 @@ describe('Service: ProductMetricsTransformerService', () => {
   beforeEach(() => TestBed.configureTestingModule({
 
     providers: [
-      ProductMetricsTransformerService, CalculatorService ]
+      CalculatorService, ProductMetricsTransformerService ]
   }));
 
   describe('#groupProductsByBrand', () => {

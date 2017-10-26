@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
+import { CalculatorService } from './calculator.service';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
-import { CalculatorService } from './calculator.service';
 
 @Injectable()
 export class PerformanceTransformerService {

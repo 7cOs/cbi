@@ -1,5 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { CalculatorService } from './calculator.service';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
@@ -7,16 +8,15 @@ import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { CalculatorService } from './calculator.service';
 
 describe('Service: PerformanceTransformerService', () => {
-  let performanceTransformerService: PerformanceTransformerService;
   let calculatorService: CalculatorService;
+  let performanceTransformerService: PerformanceTransformerService;
   let entitiesTotalPerformancesDTOMock: PerformanceDTO;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ PerformanceTransformerService, CalculatorService ]
+      providers: [ CalculatorService, PerformanceTransformerService ]
     });
   });
 

@@ -7,6 +7,7 @@ import { UpgradeAdapter } from '@angular/upgrade';
 import { AnalyticsEventDirective } from './directives/analytics-event.directive';
 import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
+import { CalculatorService } from './services/calculator.service';
 import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
@@ -20,7 +21,6 @@ import { NotificationsComponent } from './shared/components/Notifications/notifi
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
-import { CalculatorService } from './services/calculator.service';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
@@ -59,11 +59,11 @@ AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
   ],
   providers: [
     AnalyticsService,
+    CalculatorService,
     DateRangeApiService,
     DateRangeService,
     DateRangeTransformerService,
-    GoogleAnalyticsTrackerService,
-    CalculatorService
+    GoogleAnalyticsTrackerService
   ]
 })
 export class AppModule {

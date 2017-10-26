@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 
 import { ActionStatus } from '../../enums/action-status.enum';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
+import { CalculatorService } from '../../services/calculator.service';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
@@ -43,7 +44,6 @@ import {
 } from '../../state/actions/my-performance-version.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { CalculatorService } from '../../services/calculator.service';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
 
@@ -185,6 +185,7 @@ describe('MyPerformanceComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
+        CalculatorService,
         MyPerformanceTableDataTransformerService,
         {
           provide: MyPerformanceService,
@@ -205,8 +206,7 @@ describe('MyPerformanceComponent', () => {
         {
           provide: WindowService,
           useValue: windowServiceMock
-        },
-        CalculatorService
+        }
       ]
     });
     fixture = TestBed.createComponent(MyPerformanceComponent);

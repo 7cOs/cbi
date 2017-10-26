@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
+import { CalculatorService } from './calculator.service';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
-import { CalculatorService } from './calculator.service';
 
 @Injectable()
 export class ProductMetricsTransformerService {

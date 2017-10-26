@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
@@ -8,7 +9,6 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { CalculatorService } from '../../../services/calculator.service';
 
 @Component({
   selector: 'my-performance-table',
