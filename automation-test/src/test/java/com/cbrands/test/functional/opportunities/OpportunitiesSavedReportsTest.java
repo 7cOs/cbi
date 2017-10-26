@@ -68,6 +68,36 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
+  @Test(
+    description = "Running an Opportunities Saved Report from the Opportunities page",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "savedReportData"
+  )
+  public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
+    opportunitiesPage
+      .clickSavedReportsDropdown()
+      .selectSavedReportWithName(reportName)
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
+    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
+  @Test(
+    description = "Running an Opportunities Saved Report from the Home page",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "savedReportData"
+  )
+  public void runSavedReportFromHomePage(String reportName, String distributor) {
+    homePage.goToPage();
+    opportunitiesPage = homePage
+      .clickSavedReportsDropdown()
+      .selectSavedReportWithName(reportName)
+      .waitForLoaderToDisappear();
+    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
+    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
   @DataProvider
   public static Object[][] savedReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
