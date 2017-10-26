@@ -83,9 +83,9 @@ export class MyPerformanceTableComponent {
     this.applySortingCriteria(criteria);
   }
 
-  public onRowClicked(clickedType: RowType, clickedIndex: number, clickedRow: MyPerformanceTableRow) {
+  public onRowClicked(type: RowType, index: number, row?: MyPerformanceTableRow) {
     if (this.viewType !== SalesHierarchyViewType.distributors && this.viewType !== SalesHierarchyViewType.subAccounts) {
-      this.onElementClicked.emit({type: clickedType, index: clickedIndex, row: clickedRow});
+      this.onElementClicked.emit({type: type, index: index, row: row});
     }
   }
 
