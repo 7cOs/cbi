@@ -7,6 +7,7 @@ export interface ProductMetricsState extends State {
   status: ActionStatus;
   products: ProductMetrics;
   selectedBrandCodeValues?: ProductMetricsValues;
+  selectedSkuCodeValues?: ProductMetricsValues;
   productMetricsViewType: ProductMetricsViewType;
 }
 
@@ -46,6 +47,7 @@ export function productMetricsReducer(
       });
 
     case ProductMetricsActions.SELECT_SKU_VALUES:
+      initialState.productMetricsViewType = ProductMetricsViewType.skus;
       const selectedSkuCode = state.products.skuValues.find(sku => sku.beerId.masterPackageSKUCode === action.payload);
 
       return Object.assign({}, state, {
@@ -53,6 +55,7 @@ export function productMetricsReducer(
       });
 
     case ProductMetricsActions.CLEAR_SKU_VALUES:
+      initialState.productMetricsViewType = ProductMetricsViewType.skus;
       return Object.assign({}, state, {
         selectedSkuCodeValues: null
       });
