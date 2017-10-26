@@ -1,8 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { CalculatorService } from './calculator.service';
-import { dateRangeCollectionMock } from '../models/date-range-collection.model.mock';
-import { dateRangeDTOsMock } from '../models/date-range-dto-collection.model.mock';
 
 describe('Service: CalculatorService', () => {
   beforeEach(() => TestBed.configureTestingModule({
