@@ -14,7 +14,7 @@ import { salesHierarchyViewTypeReducer, SalesHierarchyViewTypeState } from './sa
 export interface MyPerformanceEntitiesData {
   responsibilities?: ResponsibilitiesState;
   salesHierarchyViewType?: SalesHierarchyViewTypeState;
-  selectedEntity?: string;
+  selectedEntityDescription: string;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
   selectedSkuCode?: string;
@@ -29,6 +29,7 @@ export const initialState: MyPerformanceState = {
   current: {
     responsibilities: initialStateResponsibilities,
     salesHierarchyViewType: initialStateSalesHierarchyViewType,
+    selectedEntityDescription: '',
     selectedEntityType: EntityType.Person
   },
   versions: initialStateVersions
@@ -68,7 +69,7 @@ export function myPerformanceReducer(
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
           salesHierarchyViewType: state.current.salesHierarchyViewType,
-          selectedEntity: state.current.selectedEntity,
+          selectedEntityDescription: action.payload.selectedEntityDescription || state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuCode: state.current.selectedSkuCode
@@ -84,7 +85,7 @@ export function myPerformanceReducer(
             state.current.salesHierarchyViewType,
             action as SalesHierarchyViewTypeActions.Action
           ),
-          selectedEntity: state.current.selectedEntity,
+          selectedEntityDescription: state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuCode: state.current.selectedSkuCode

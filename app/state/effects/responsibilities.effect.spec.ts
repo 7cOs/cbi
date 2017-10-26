@@ -51,6 +51,7 @@ describe('Responsibilities Effects', () => {
   const positionIdMock = chance.string();
   const alternateHierarchyIdMock = chance.string();
   const entityTypeCodeMock = chance.string();
+  const selectedEntityDescriptionMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -91,6 +92,12 @@ describe('Responsibilities Effects', () => {
     },
     getAlternateHierarchyResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
+    },
+    checkEmptyResponsibilitiesResponse(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+      return Observable.of(responsibilitiesData);
+    },
+    checkEmptySubaccountsResponse(subAccountsData: SubAccountData): Observable<SubAccountData> {
+      return Observable.of(subAccountsData);
     }
   };
 
@@ -139,7 +146,8 @@ describe('Responsibilities Effects', () => {
     beforeEach(() => {
       runner.queue(new FetchResponsibilities({
         positionId: positionIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: chance.string()
       }));
     });
 
@@ -221,6 +229,17 @@ describe('Responsibilities Effects', () => {
         expect(getPerformanceSpy.calls.count()).toBe(1);
         expect(getPerformanceSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
       });
+
+      it('should call checkEmptyResponsibilitiesResponse with the right arguments', (done) => {
+        const checkEmptyResponsibilitiesSpy = spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.callThrough();
+
+        responsibilitiesEffects.fetchResponsibilities$().subscribe(() => {
+          done();
+        });
+
+        expect(checkEmptyResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(checkEmptyResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
+      });
     });
 
     describe('when getResponsibilities returns an error', () => {
@@ -296,7 +315,8 @@ describe('Responsibilities Effects', () => {
       entityTypeCode: entityTypeCodeMock,
       entityType: EntityType.RoleGroup,
       entities: [getEntityPeopleResponsibilitiesMock()],
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityDescription: chance.string()
     };
 
     beforeEach(() => {
@@ -414,7 +434,8 @@ describe('Responsibilities Effects', () => {
           contextPositionId: chance.string({pool: '0123456789'}),
           entityTypeAccountName: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-          filter: performanceFilterStateMock
+          filter: performanceFilterStateMock,
+          selectedEntityDescription: chance.string()
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 
@@ -431,6 +452,17 @@ describe('Responsibilities Effects', () => {
 
           expect(getSubAccountsSpy.calls.count()).toBe(1);
           expect(getSubAccountsSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
+        });
+
+        it('should call checkEmptySubaccountsResponse with the right arguments', (done) => {
+          const checkEmptySubaccountsSpy = spyOn(responsibilitiesService, 'checkEmptySubaccountsResponse').and.callThrough();
+
+          responsibilitiesEffects.fetchSubAccounts$().subscribe(() => {
+            done();
+          });
+
+          expect(checkEmptySubaccountsSpy.calls.count()).toBe(1);
+          expect(checkEmptySubaccountsSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
         });
 
         it('should call getSubAccountsPerformances with the right arguments', (done) => {
@@ -488,6 +520,16 @@ describe('Responsibilities Effects', () => {
         });
       });
 
+      describe('when checkEmptySubaccountsResponse returns an error', () => {
+        it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
+          spyOn(responsibilitiesService, 'checkEmptySubaccountsResponse').and.returnValue(Observable.throw(error));
+          responsibilitiesEffects.fetchSubAccounts$().subscribe((result) => {
+            expect(result).toEqual(new FetchResponsibilitiesFailure(error));
+            done();
+          });
+        });
+      });
+
       describe('when getSubAccountsPerformances returns an error', () => {
         it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
           spyOn(responsibilitiesService, 'getSubAccountsPerformances').and.returnValue(Observable.throw(error));
@@ -507,13 +549,15 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchAlternateHierarchyResponsibilities({
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: selectedEntityDescriptionMock
       }));
 
       alternateResponsibilitiesDataMock = {
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        selectedEntityDescription: selectedEntityDescriptionMock
       };
     });
 
@@ -573,6 +617,18 @@ describe('Responsibilities Effects', () => {
         expect(getAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(alternateResponsibilitiesDataMock);
       });
 
+      it('should call checkEmptyResponsibilitiesResponse with the right arguments', (done) => {
+        const checkEmptyResponsibilitiesResponseSpy =
+          spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.callThrough();
+
+        responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe(() => {
+          done();
+        });
+
+        expect(checkEmptyResponsibilitiesResponseSpy.calls.count()).toBe(1);
+        expect(checkEmptyResponsibilitiesResponseSpy.calls.argsFor(0)[0]).toEqual(alternateResponsibilitiesDataMock);
+      });
+
       it('should call getPerformanceForGroupedEntities with the right arguments', (done) => {
         const getPerformanceSpy = spyOn(responsibilitiesService, 'getPerformanceForGroupedEntities').and.callThrough();
 
@@ -598,6 +654,16 @@ describe('Responsibilities Effects', () => {
     describe('when getAccountsDistributors returns an error', () => {
       it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
         spyOn(responsibilitiesService, 'getAccountsDistributors').and.returnValue(Observable.throw(error));
+        responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((result) => {
+          expect(result).toEqual(new FetchResponsibilitiesFailure(error));
+          done();
+        });
+      });
+    });
+
+    describe('when checkEmptyResponsibilitiesResponse returns an error', () => {
+      it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
+        spyOn(responsibilitiesService, 'checkEmptyResponsibilitiesResponse').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();
