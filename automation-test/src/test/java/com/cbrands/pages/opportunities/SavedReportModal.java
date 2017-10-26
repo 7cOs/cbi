@@ -64,7 +64,6 @@ public class SavedReportModal extends TestNGBasePage {
     return this;
   }
 
-
   public SavedReportModal clickSave() {
     waitForElementToClickable(saveButton, true).click();
     return this;
@@ -78,6 +77,10 @@ public class SavedReportModal extends TestNGBasePage {
   public OpportunitiesPage waitForModalToClose() {
     waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH));
     return PageFactory.initElements(driver, OpportunitiesPage.class);
+  }
+
+  public boolean isDuplicateNameErrorDisplayed() {
+    return isElementPresent(By.xpath(MODAL_CONTAINER_XPATH + "//p[contains(@ng-if, 'duplicateName')]"));
   }
 }
 
