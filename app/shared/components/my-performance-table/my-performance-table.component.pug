@@ -2,7 +2,7 @@ div.performance-table-wrapper
   div.performance-table-summary.col-100-pct
     div.summary-header
       span {{ performanceMetric }}
-      span(*ngIf='dateRange') {{ dateRange.displayCode }}
+      span(*ngIf='dateRange')  {{ dateRange.displayCode }}
     div.summary-date-range
       span(*ngIf="dateRange") {{ dateRange.range }}
   table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")

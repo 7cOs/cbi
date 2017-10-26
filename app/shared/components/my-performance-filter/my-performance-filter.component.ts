@@ -27,7 +27,9 @@ export class MyPerformanceFilterComponent {
 
   @Input() filterState: MyPerformanceFilterState;
   @Input() set dateRanges(dateRanges: DateRangesState) {
-    if (dateRanges.status === ActionStatus.Fetched) {
+console.log('Executing....');
+    if (dateRanges && dateRanges.status === ActionStatus.Fetched) {
+console.log('Here we go! ....');
       this.depletionTimePeriodOptions = this.initDateRanges('depletions', dateRanges);
       this.distributionTimePeriodOptions = this.initDateRanges('distribution', dateRanges);
     }
