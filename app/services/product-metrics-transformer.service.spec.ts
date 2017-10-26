@@ -76,7 +76,9 @@ describe('Service: ProductMetricsTransformerService', () => {
           brandCode: productMectricsSkuDTOMock.brandCode,
           beerId: {
             masterPackageSKUDescription: productMectricsSkuDTOMock.beerId.masterPackageSKUDescription,
-            masterSKUDescription: productMectricsSkuDTOMock.beerId.masterSKUDescription
+            masterSKUDescription: productMectricsSkuDTOMock.beerId.masterSKUDescription,
+            masterPackageSKUCode: productMectricsSkuDTOMock.beerId.masterPackageSKUCode,
+            masterSKUCode: productMectricsSkuDTOMock.beerId.masterSKUCode
           }
         }]
       };

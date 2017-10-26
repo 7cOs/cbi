@@ -111,6 +111,26 @@ describe('Responsibilities Actions', () => {
     });
   });
 
+  describe('SetMyPerformanceSelectedSkuCode', () => {
+    let selectedSkuCodeMock: string;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode;
+
+    beforeEach(() => {
+      selectedSkuCodeMock = chance.string();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(selectedSkuCodeMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(selectedSkuCodeMock);
+    });
+  });
+
   describe('ClearMyPerformanceAction', () => {
     let action: MyPerformanceVersionActions.ClearMyPerformanceState;
 
@@ -122,6 +142,20 @@ describe('Responsibilities Actions', () => {
       expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE)
         .toBe('[My Performance] CLEAR_MY_PERFORMANCE_STATE');
       expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE);
+    });
+  });
+
+  describe('ClearMyPerformanceSelectedSku', () => {
+    let action: MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode;
+
+    beforeEach(() => {
+      action = new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode();
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU);
     });
   });
 });

@@ -12,6 +12,7 @@ export interface FetchProductMetricsPayload {
   filter: MyPerformanceFilterState;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
+  selectedSkuCode?: string;
 }
 
 export interface FetchProductMetricsSuccessPayload {
@@ -57,8 +58,6 @@ export class SelectSkuValues implements Action {
 export const CLEAR_SKU_VALUES = '[ProductMetrics] CLEAR_SKU_VALUES';
 export class ClearSkuValues implements Action {
   readonly type = CLEAR_SKU_VALUES;
-
-  constructor() { }
 }
 
 export const SET_PRODUCT_METRICS_VIEW_TYPE = '[View Types] SET_PRODUCT_METRICS_VIEW_TYPE';

@@ -472,5 +472,14 @@ div.ctv {
 }
 
 .selectedSku {
-  border : 2px solid black;
+  border-bottom: 1px solid $gray-10;
+  border-right: 1px solid $gray-10;
+  text-transform: uppercase;
+  background-color: $light-blue-4;
+
+  /deep/.left-col, /deep/.center-col, /deep/.right-col {
+    font-weight: $semibold;
+    color: $gray-1;
+    background-color: $light-blue-4;
+  }
 }

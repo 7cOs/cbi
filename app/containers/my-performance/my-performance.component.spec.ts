@@ -82,6 +82,7 @@ class MyPerformanceTableComponentMock {
   @Input() tableData: Array<MyPerformanceTableRow>;
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
+  @Input() selectedSkuName: string;
   @Input() showBackButton: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
@@ -693,12 +694,12 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should NOT trigger any actions when ProductMetricsViewType is skus and rowType is data', () => {
+    it('should trigger approapriate actions when ProductMetricsViewType is skus and rowType is data', () => {
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(0);
+      expect(storeMock.dispatch.calls.count()).toBe(2);
     });
 
   });
@@ -765,7 +766,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when right side data row is clicked', () => {
-    it('should not dispatch any actions', () => {
+    it('should dispatch appropriate actions', () => {
       storeMock.dispatch.calls.reset();
 
       myPerformanceProductMetricsMock = {
@@ -777,7 +778,7 @@ describe('MyPerformanceComponent', () => {
 
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
-      expect(storeMock.dispatch.calls.count()).toBe(0);
+      expect(storeMock.dispatch.calls.count()).toBe(2);
     });
   });
 

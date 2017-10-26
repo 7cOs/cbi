@@ -103,6 +103,39 @@ describe('ProductMetrics Actions', () => {
     });
   });
 
+  describe('SelectSkuValues', () => {
+    let action: ProductMetricsActions.SelectSkuValues;
+    let actionPayloadMock: string;
+
+    beforeEach(() => {
+      actionPayloadMock = chance.string();
+      action = new ProductMetricsActions.SelectSkuValues(actionPayloadMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(ProductMetricsActions.SELECT_SKU_VALUES).toBe('[ProductMetrics] SELECT_SKU_VALUES');
+      expect(action.type).toBe(ProductMetricsActions.SELECT_SKU_VALUES);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
+  describe('ClearSelectedSkuValues', () => {
+    let action: ProductMetricsActions.ClearSkuValues;
+
+    beforeEach(() => {
+      action = new ProductMetricsActions.ClearSkuValues();
+    });
+
+    it('should have the correct type', () => {
+      expect(ProductMetricsActions.CLEAR_SKU_VALUES).toBe('[ProductMetrics] CLEAR_SKU_VALUES');
+      expect(action.type).toBe(ProductMetricsActions.CLEAR_SKU_VALUES);
+    });
+
+  });
+
   describe('SetProductMetricsViewType', () => {
     let action: ProductMetricsActions.SetProductMetricsViewType;
 

@@ -45,7 +45,7 @@ export class ProductMetricsTransformerService {
         masterPackageSKUDescription: productMetricsDTO.beerId.masterPackageSKUDescription,
         masterSKUDescription: productMetricsDTO.beerId.masterSKUDescription,
         masterPackageSKUCode: productMetricsDTO.beerId.masterPackageSKUCode,
-        masterSKUCode: productMetricsDTO.beerId.masterSKUCode,
+        masterSKUCode: productMetricsDTO.beerId.masterSKUCode
       }
     });
   }

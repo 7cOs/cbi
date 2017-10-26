@@ -69,6 +69,7 @@ describe('My Performance Version Reducer', () => {
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntity: entityNameMock,
         selectedBrandCode: beforeState.current.selectedBrandCode,
+        selectedSkuCode: beforeState.current.selectedSkuCode,
         selectedEntityType: beforeState.current.selectedEntityType
       },
       versions: beforeState.versions
@@ -87,6 +88,7 @@ describe('My Performance Version Reducer', () => {
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntity: beforeState.current.selectedEntity,
         selectedBrandCode: beforeState.current.selectedBrandCode,
+        selectedSkuCode: beforeState.current.selectedSkuCode,
         selectedEntityType: entityTypeMock
       },
       versions: beforeState.versions
@@ -111,6 +113,42 @@ describe('My Performance Version Reducer', () => {
     };
     const actualState =
       myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(selectedBrandCodeMock));
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should set the selected sku when SetMyPerformanceSelectedSkuCode is received', () => {
+    const selectedSkuCodeMock = chance.string();
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntity: beforeState.current.selectedEntity,
+        selectedSkuCode: selectedSkuCodeMock,
+        selectedEntityType: beforeState.current.selectedEntityType
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(selectedSkuCodeMock));
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should clear the selected sku when SetMyPerformanceSelectedSkuCode is received', () => {
+    const selectedSkuCodeMock: string = null;
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntity: beforeState.current.selectedEntity,
+        selectedSkuCode: selectedSkuCodeMock,
+        selectedEntityType: beforeState.current.selectedEntityType
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     expect(actualState).toEqual(expectedState);
   });
 
