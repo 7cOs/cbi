@@ -75,6 +75,8 @@ export class MyPerformanceTableDataTransformerService {
           brandCode: item.brandCode
         }
       };
+    }).filter((row: MyPerformanceTableRow) => {
+      return !(row.metricColumn0 === 0 && row.metricColumn1 === 0);
     });
   }
 
