@@ -49,6 +49,7 @@ export interface FetchEntityWithPerformanceData {
   entityType: EntityType;
   brandCode?: string;
   entityWithPerformance?: Array<EntityWithPerformance>;
+  selectedEntityDescription?: string;
 }
 
 export interface RefreshAllPerformancesData {
