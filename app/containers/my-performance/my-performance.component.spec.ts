@@ -12,12 +12,10 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import {
-  FetchProductMetrics,
-  SelectBrandValues,
-  SelectSkuValues,
-  ClearSkuValues, SkuPackagePayload
-} from '../../state/actions/product-metrics.action';
+import { FetchProductMetrics,
+         SelectBrandValues,
+         SelectSkuValues,
+         ClearSkuValues, SkuPackagePayload } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
