@@ -7,6 +7,7 @@ import { MyPerformanceTableRow } from '../models/my-performance-table-row.model'
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
+import { SubBrandsTypeEnum } from '../enums/sub-brands-type.enum';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -77,7 +78,8 @@ export class MyPerformanceTableDataTransformerService {
       if (item.brandCode) {
         rightTableData.metadata['brandCode'] =  item.brandCode;
       } else {
-        rightTableData.metadata['skuCode'] = item.beerId.masterPackageSKUCode;
+        rightTableData.metadata['subBrandType'] = item.beerId.masterPackageSKUCode ? SubBrandsTypeEnum.package : SubBrandsTypeEnum.sku;
+        rightTableData.metadata['skuCode'] = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
       }
       return rightTableData;
     });

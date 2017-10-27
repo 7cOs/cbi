@@ -12,10 +12,12 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchProductMetrics,
-         SelectBrandValues,
-         SelectSkuValues,
-         ClearSkuValues } from '../../state/actions/product-metrics.action';
+import {
+  FetchProductMetrics,
+  SelectBrandValues,
+  SelectSkuValues,
+  ClearSkuValues, SkuPackagePayload
+} from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -699,11 +701,13 @@ describe('MyPerformanceComponent', () => {
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
+      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
+        subBrandType: rowMock.metadata.subBrandType};
 
       expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(rowMock.metadata.skuCode));
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(payLoad));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
-        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(rowMock.metadata.skuCode)
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
 
@@ -734,12 +738,14 @@ describe('MyPerformanceComponent', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
+        subBrandType: rowMock.metadata.subBrandType};
       componentInstance.handleElementClicked(params);
 
       expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(rowMock.metadata.skuCode));
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(payLoad));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
-        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(rowMock.metadata.skuCode)
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
 
@@ -770,12 +776,14 @@ describe('MyPerformanceComponent', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
+        subBrandType: rowMock.metadata.subBrandType};
       componentInstance.handleElementClicked(params);
 
       expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(rowMock.metadata.skuCode));
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(payLoad));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
-        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(rowMock.metadata.skuCode)
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
 

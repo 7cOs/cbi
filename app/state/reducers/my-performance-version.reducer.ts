@@ -60,7 +60,8 @@ export function myPerformanceVersionReducer(
           responsibilities: state.current.responsibilities,
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntityDescription: state.current.selectedEntityDescription,
-          selectedSkuCode: action.payload,
+          selectedSkuCode: action.payload.skuPackageCode,
+          subBrandType: action.payload.subBrandType,
           selectedEntityType: state.current.selectedEntityType
         },
         versions: state.versions

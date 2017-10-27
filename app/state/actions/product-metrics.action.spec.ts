@@ -7,6 +7,8 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from './product-metrics.action';
+import { SkuPackagePayload } from './product-metrics.action';
+import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
 
 const chance = new Chance();
 
@@ -105,10 +107,13 @@ describe('ProductMetrics Actions', () => {
 
   describe('SelectSkuValues', () => {
     let action: ProductMetricsActions.SelectSkuValues;
-    let actionPayloadMock: string;
+    let actionPayloadMock: SkuPackagePayload;
 
     beforeEach(() => {
-      actionPayloadMock = chance.string();
+      actionPayloadMock  = {
+        skuPackageCode: chance.string(),
+        subBrandType: SubBrandsTypeEnum.sku
+      };
       action = new ProductMetricsActions.SelectSkuValues(actionPayloadMock);
     });
 

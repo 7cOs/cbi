@@ -357,14 +357,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case ProductMetricsViewType.skus:
         if (parameters.row) {
           this.selectedSkuCode = parameters.row.metadata.skuCode;
-          this.store.dispatch(new ProductMetricsActions.SelectSkuValues(parameters.row.metadata.skuCode));
-          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(parameters.row.metadata.skuCode));
+          this.store.dispatch(new ProductMetricsActions.SelectSkuValues({
+            skuPackageCode: parameters.row.metadata.skuCode,
+            subBrandType: parameters.row.metadata.subBrandType
+          }));
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
+            skuPackageCode: parameters.row.metadata.skuCode,
+            subBrandType: parameters.row.metadata.subBrandType
+          }));
           this.selectedSkuName = parameters.row.descriptionRow0;
         } else {
           this.store.dispatch(new ProductMetricsActions.ClearSkuValues());
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
           this.selectedSkuName = null;
-          console.log('else');
         }
         break;
       default:

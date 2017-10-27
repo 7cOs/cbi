@@ -7,6 +7,7 @@ import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
 
 const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
@@ -95,13 +96,16 @@ describe('ProductMetrics Reducer', () => {
   it('should update selectedSkuCodeValues with the first item in product corresponding to the given sku code in payload', () => {
     const products = getProductMetricsWithSkuValuesMock();
     const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.skuValues.length - 1});
-    const chosenSkuCode = chance.string();
+    const chosenSkuCode = {
+      skuPackageCode: chance.string(),
+      subBrandType: SubBrandsTypeEnum.sku
+    };
     const notChosenSkuCode = chosenSkuCode + 'NOT_CHOSEN';
     products.skuValues.forEach(values => {
       values.beerId.masterPackageSKUCode = notChosenSkuCode;
     });
 
-    products.skuValues[chosenProductMetricsValuesIndex].beerId.masterPackageSKUCode = chosenSkuCode;
+    products.skuValues[chosenProductMetricsValuesIndex].beerId.masterPackageSKUCode = chosenSkuCode.skuPackageCode;
 
     initialState.products = products;
 
@@ -109,6 +113,7 @@ describe('ProductMetrics Reducer', () => {
       status: initialState.status,
       products: initialState.products,
       selectedSkuCodeValues: products.skuValues[chosenProductMetricsValuesIndex],
+      subBrandType: chosenSkuCode.subBrandType,
       productMetricsViewType: ProductMetricsViewType.skus
     };
 

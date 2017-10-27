@@ -10,12 +10,14 @@ import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 import { responsibilitiesReducer, ResponsibilitiesState } from './responsibilities.reducer';
 import * as SalesHierarchyViewTypeActions from '../actions/sales-hierarchy-view-type.action';
 import { salesHierarchyViewTypeReducer, SalesHierarchyViewTypeState } from './sales-hierarchy-view-type.reducer';
+import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
 
 export interface MyPerformanceEntitiesData {
   responsibilities?: ResponsibilitiesState;
   salesHierarchyViewType?: SalesHierarchyViewTypeState;
   selectedEntityDescription: string;
   selectedEntityType: EntityType;
+  subBrandType?: SubBrandsTypeEnum;
   selectedBrandCode?: string;
   selectedSkuCode?: string;
 }

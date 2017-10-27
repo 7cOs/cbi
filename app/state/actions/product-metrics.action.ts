@@ -4,6 +4,7 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
 
 export interface FetchProductMetricsPayload {
   positionId: string;
@@ -18,6 +19,11 @@ export interface FetchProductMetricsPayload {
 export interface FetchProductMetricsSuccessPayload {
   positionId: string;
   products: ProductMetrics;
+}
+
+export interface SkuPackagePayload {
+  skuPackageCode: string;
+  subBrandType: SubBrandsTypeEnum;
 }
 
 export const FETCH_PRODUCT_METRICS = '[ProductMetrics] FETCH_PRODUCT_METRICS';
@@ -52,7 +58,7 @@ export const SELECT_SKU_VALUES = '[ProductMetrics] SELECT_SKU_VALUES';
 export class SelectSkuValues implements Action {
   readonly type = SELECT_SKU_VALUES;
 
-  constructor(public payload: string) { }
+  constructor(public payload: SkuPackagePayload) { }
 }
 
 export const CLEAR_SKU_VALUES = '[ProductMetrics] CLEAR_SKU_VALUES';
