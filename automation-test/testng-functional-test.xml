@@ -8,6 +8,7 @@
     <classes>
       <class name="com.cbrands.test.functional.login.LoginTest" />
       <class name="com.cbrands.test.functional.opportunities.OpportunitiesFiltersTest" />
+      <class name="com.cbrands.test.functional.opportunities.OpportunitiesSavedReportsTest" />
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

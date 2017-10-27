@@ -1,9 +1,11 @@
-package com.cbrands.pages;
+package com.cbrands.pages.opportunities;
 
+import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
@@ -12,6 +14,9 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class OpportunitiesPage extends TestNGBasePage {
   private static final String FILTER_FORM_XPATH = "//form[contains(@class, 'filters')]";
+  private static final String NO_SAVED_REPORTS_TEXT = "No saved reports";
+  private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
+  private static final int HOVER_ARROW_ICON_SIZE = 17;
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH)
@@ -34,6 +39,12 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
+
+  @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//a[contains(., 'Save Report')]")
+  private WebElement saveReportButton;
+
+  @FindBy(how = How.XPATH, using = "//md-select[@placeholder='Select Saved Report']")
+  private WebElement savedReportsDropdown;
 
   public OpportunitiesPage(WebDriver driver) {
     this.driver = driver;
@@ -191,6 +202,11 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
+  public SavedReportModal clickSaveReportLink() {
+    waitForElementToClickable(saveReportButton, true).click();
+    return PageFactory.initElements(driver, SavedReportModal.class);
+  }
+
   public OpportunitiesPage waitForLoaderToDisappear() {
     waitForElementToDisappear(By.xpath("//div[contains(@class, 'loader-wrap')]"));
     return this;
@@ -239,6 +255,49 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
+  public OpportunitiesPage clickSavedReportsDropdown() {
+    waitForElementToClickable(savedReportsDropdown, true).click();
+    return this;
+  }
+
+  public OpportunitiesPage deleteAllSavedReports() {
+    WebElement savedReportOption = clickSavedReportsDropdown().getFirstSavedReportOption();
+
+    while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
+      this
+        .clickSavedReportHoverArrow(savedReportOption)
+        .clickDeleteSavedReportLink()
+        .clickSavedReportsDropdown();
+      savedReportOption = getFirstSavedReportOption();
+    }
+
+    waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
+
+    return this;
+  }
+
+  private WebElement getFirstSavedReportOption() {
+    return waitForElementToClickable(
+      findElement(By.xpath(SAVED_FILTER_OPTION_XPATH)),
+      true
+    );
+  }
+
+  private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
+    waitForElementToClickable(savedReport, true);
+    final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
+    final int yPos = savedReport.getSize().getHeight() / 2;
+
+    final Actions action = new Actions(driver);
+    action
+      .moveToElement(savedReport, xPos, yPos)
+      .click()
+      .perform();
+    waitForLoaderToDisappear();
+
+    return PageFactory.initElements(driver, SavedReportModal.class);
+  }
+
   public boolean isMyAccountsOnlySelected() {
     return "true".equalsIgnoreCase(accountScopeFilter.getAttribute("aria-checked"));
   }
@@ -248,6 +307,21 @@ public class OpportunitiesPage extends TestNGBasePage {
     final String delimiter = " ";
     final String displayedCount = displayText.replaceAll(",", "").replaceAll("[^0-9]+", delimiter).split(delimiter)[0];
     return Integer.parseInt(displayedCount);
+  }
+
+  public boolean doesSavedReportExistWithName(String name) {
+    return isElementPresent(By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]"));
+  }
+
+  public OpportunitiesPage selectSavedReportWithName(String reportName) {
+    waitForElementToClickable(
+      savedReportsDropdown.findElement(
+        By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + reportName + "')]")
+      ),
+      true
+    ).click();
+
+    return this;
   }
 
   public enum PremiseType {
