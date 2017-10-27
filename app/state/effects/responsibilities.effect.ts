@@ -100,6 +100,7 @@ export class ResponsibilitiesEffects {
       ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES
     )
     .switchMap((action: Action) => Observable.of(action.payload))
+    // TODO: Extract this function into responsibilities.service
     .switchMap((refreshEntitiesTotalPerformancesData: RefreshEntitiesTotalPerformancesData) => {
       if (refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
         || refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.accounts
@@ -114,7 +115,18 @@ export class ResponsibilitiesEffects {
               entitiesTotalPerformances: response
             });
           });
-      } else {
+      } else if (refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+        return this.responsibilitiesService.getAccountPerformances(
+          refreshEntitiesTotalPerformancesData.accountPositionId,
+          refreshEntitiesTotalPerformancesData.filter,
+          refreshEntitiesTotalPerformancesData.positionId,
+          refreshEntitiesTotalPerformancesData.brandCode)
+          .map((response: Performance) => {
+            return Object.assign({}, refreshEntitiesTotalPerformancesData, {
+              entitiesTotalPerformances: response
+            });
+          });
+    } else {
         return this.responsibilitiesService.getRefreshEntitiesTotalPerformances(refreshEntitiesTotalPerformancesData);
       }
     })
@@ -217,6 +229,7 @@ export class ResponsibilitiesEffects {
         groupedEntities: subAccountsData.groupedEntities,
         entityWithPerformance: subAccountsData.entityWithPerformance
       }),
+      new ResponsibilitiesActions.SetAccountPositionId(subAccountsData.positionId),
       new ViewTypeActions.SetSalesHierarchyViewType(SalesHierarchyViewType.subAccounts)
     ]);
   }

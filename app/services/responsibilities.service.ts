@@ -53,7 +53,7 @@ export interface FetchEntityWithPerformanceData {
 
 export interface RefreshAllPerformancesData {
   // Common
-  positionId?: string;
+  positionId: string;
   filter: MyPerformanceFilterState;
   brandCode?: string;
   groupedEntities?: GroupedEntities;
@@ -86,6 +86,9 @@ export interface RefreshEntitiesTotalPerformancesData { // TODO: Cleanup
   entityType: EntityType;
   salesHierarchyViewType?: SalesHierarchyViewType;
   entities?: HierarchyEntity[];
+
+  // For Subaccounts only
+  accountPositionId?: string;
 
   // results:
   entityWithPerformance?: Array<EntityWithPerformance>;
@@ -217,7 +220,6 @@ export class ResponsibilitiesService {
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
     brandCode?: string) {
-      debugger;
     const apiCalls: Observable<EntityWithPerformance | Error>[] =
       distributors.map((distributor: HierarchyEntity) => {
         return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId, brandCode)
@@ -248,6 +250,15 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
+  public getAccountPerformances(
+    accountsId: string,
+    filter: MyPerformanceFilterState,
+    contextPositionId?: string,
+    brandCode?: string) {
+    return this.myPerformanceApiService.getAccountPerformance(accountsId, filter, contextPositionId, brandCode)
+      .map((response: PerformanceDTO) => this.performanceTransformerService.transformPerformanceDTO(response));
+  }
+
   public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
     const subAccounts = subAccountData.groupedEntities[subAccountData.entityTypeAccountName]
       .map((subAccount: HierarchyEntity) => subAccount);
@@ -276,14 +287,44 @@ export class ResponsibilitiesService {
       });
   }
 
+  public getSubAccountsRefreshedPerformances(subAccountData: RefreshAllPerformancesData): Observable<RefreshAllPerformancesData> {
+    const subAccounts = subAccountData.groupedEntities[Object.keys(subAccountData.groupedEntities)[0]]
+      .map((subAccount: HierarchyEntity) => subAccount);
+    const apiCalls: Observable<EntityWithPerformance | Error>[] =
+      subAccounts.map((subAccount: HierarchyEntity) => {
+        return this.myPerformanceApiService
+          .getSubAccountPerformance(subAccount.positionId,
+            subAccountData.positionId,
+            subAccountData.filter,
+            subAccountData.brandCode)
+          .map((response: PerformanceDTO) => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
+          })
+          .catch(() => {
+            this.toastService.showPerformanceDataErrorToast();
+            return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, subAccount));
+          });
+      });
+
+    return Observable.forkJoin(apiCalls)
+      .map((entityPerformances: EntityWithPerformance[]) => {
+        subAccountData.entityWithPerformance = entityPerformances;
+        return Object.assign({}, subAccountData, {
+          entityWithPerformance: entityPerformances
+        });
+      });
+  }
+
   public getRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData)
     : Observable<ResponsibilitiesData | RefreshAllPerformancesData> {
-      // TODO: Change that for EntityType if possible
+      // TODO: Change that for EntityType if possible -> don't think it will be possible for now, will need a refactoring
     if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
       || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.accounts
       || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
      return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
-    } else {
+   } else if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+     return this.getSubAccountsRefreshedPerformances(refreshAllPerformancesData);
+   } else {
      refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
        entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
      });
@@ -475,11 +516,11 @@ export class ResponsibilitiesService {
       responsibilitiesData.positionId,
       responsibilitiesData.brandCode,
       responsibilitiesData.alternateHierarchyId ? responsibilitiesData.alternateHierarchyId : null)
-        .map((entityPerformances: EntityWithPerformance[]) => {
-          return Object.assign({}, responsibilitiesData, { // TODO: WTF?
-            entityWithPerformance: entityPerformances
-          });
+      .map((entityPerformances: EntityWithPerformance[]) => {
+        return Object.assign({}, responsibilitiesData, { // TODO: Why?
+          entityWithPerformance: entityPerformances
         });
+      });
    }
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
@@ -487,14 +528,13 @@ export class ResponsibilitiesService {
       ? CORPORATE_USER_POSITION_ID
       : responsibilitiesData.positionId;
 
-debugger;
     return this.getDistributorsPerformances(
       responsibilitiesData.groupedEntities[Object.keys(responsibilitiesData.groupedEntities)[0]],
       responsibilitiesData.filter,
       contextPositionId,
       responsibilitiesData.brandCode)
       .map((entityPerformances: EntityWithPerformance[]) => {
-        return Object.assign({}, responsibilitiesData, { // TODO: WTF?
+        return Object.assign({}, responsibilitiesData, { // TODO: Why?
           entityWithPerformance: entityPerformances
         });
       });
@@ -507,7 +547,7 @@ debugger;
       responsibilitiesData.positionId,
       responsibilitiesData.brandCode)
       .map((entityPerformances: EntityWithPerformance[]) => {
-        return Object.assign({}, responsibilitiesData, { // TODO: WTF?
+        return Object.assign({}, responsibilitiesData, { // TODO: Why?
           entityWithPerformance: entityPerformances
         });
       });

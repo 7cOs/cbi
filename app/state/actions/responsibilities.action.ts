@@ -55,6 +55,7 @@ export interface RefreshAllPerformancesPayload {
   brandCode?: string;
   entityType?: EntityType;
   alternateHierarchyId?: string;
+  accountPositionId?: string;
 }
 
 export interface RefreshAllPerformancesSuccesPayload {
@@ -153,6 +154,13 @@ export class FetchSubAccountsSuccess implements Action {
   constructor(public payload: FetchSubAccountsSuccessPayload) { }
 }
 
+export const SET_ACCOUNT_POSITION_ID = '[Responsibilities] SET_ACCOUNT_POSITION_ID';
+export class SetAccountPositionId implements Action {
+  readonly type = SET_ACCOUNT_POSITION_ID;
+
+  constructor(public payload: string) { }
+}
+
 export const SET_ALTERNATE_HIERARCHY_ID = '[Responsibilities] SET_ALTERNATE_HIERARCHY_ID';
 export class SetAlternateHierarchyId implements Action {
   readonly type = SET_ALTERNATE_HIERARCHY_ID;
@@ -211,6 +219,7 @@ export type Action
   | GetPeopleByRoleGroup
   | FetchSubAccounts
   | FetchSubAccountsSuccess
+  | SetAccountPositionId
   | SetAlternateHierarchyId
   | FetchAlternateHierarchyResponsibilities
   | FetchTotalPerformance

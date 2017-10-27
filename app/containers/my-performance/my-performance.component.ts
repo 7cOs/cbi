@@ -367,7 +367,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         filter: this.filterState,
         brandCode: parameters.row.metadata.brandCode,
         entityType: this.currentState.selectedEntityType,
-        alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId
+        alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+        accountPositionId: this.currentState.responsibilities.accountPositionId
       }));
     }
   }
@@ -406,13 +407,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           actionParameters.entityTypeCode = parameters.row.metadata.entityTypeCode;
           actionParameters.selectedEntityType = EntityType.RoleGroup;
           break;
+
         case SalesHierarchyViewType.accounts:
           actionParameters.contextPositionId = this.currentState.responsibilities.positionId;
           actionParameters.selectedEntityType = EntityType.Account;
           break;
+
         case SalesHierarchyViewType.people:
           actionParameters.selectedEntityType = EntityType.Person;
           break;
+
         default:
           break;
         }
@@ -421,9 +425,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         case SalesHierarchyViewType.accounts:
           actionParameters.contextPositionId = this.currentState.responsibilities.positionId;
           break;
+
         case SalesHierarchyViewType.people:
           actionParameters.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
           break;
+
+        case SalesHierarchyViewType.subAccounts:
+          actionParameters.positionId = this.currentState.responsibilities.accountPositionId;
+          break;
+
         case SalesHierarchyViewType.roleGroups:
         default:
           break;
