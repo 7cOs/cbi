@@ -20,6 +20,7 @@ import { FetchAlternateHierarchyResponsibilities,
          FetchSubAccountsSuccess,
          FetchSubAccountsPayload,
          GetPeopleByRoleGroup,
+         SetAccountPositionId,
          SetTotalPerformance,
          SetTotalPerformanceForSelectedRoleGroup } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
@@ -34,7 +35,7 @@ import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
-import { ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
+import { ResponsibilitiesData, SubAccountData, FetchEntityWithPerformanceData } from '../../services/responsibilities.service';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
@@ -52,6 +53,7 @@ describe('Responsibilities Effects', () => {
   const alternateHierarchyIdMock = chance.string();
   const entityTypeCodeMock = chance.string();
   const selectedEntityDescriptionMock = chance.string();
+  const brandCodeMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -84,8 +86,9 @@ describe('Responsibilities Effects', () => {
     getEntityGroupViewType(entityType: EntityType): SalesHierarchyViewType {
       return SalesHierarchyViewType.roleGroups;
     },
-    getEntitiesWithPerformanceForGroup(args: any): Observable<EntityWithPerformance[]> {
-      return Observable.of(entityWithPerformanceMock);
+    getEntitiesWithPerformanceForGroup(fetchEntityWithPerformanceData: FetchEntityWithPerformanceData)
+      : Observable<FetchEntityWithPerformanceData> {
+      return Observable.of(fetchEntityWithPerformanceData);
     },
     groupPeopleResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
@@ -112,7 +115,8 @@ describe('Responsibilities Effects', () => {
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
     filter: performanceFilterStateMock,
-    positionId: positionIdMock
+    positionId: positionIdMock,
+    selectedEntityDescription: selectedEntityDescriptionMock
   };
 
   let runner: EffectsRunner;
@@ -147,7 +151,7 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchResponsibilities({
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
-        selectedEntityDescription: chance.string()
+        selectedEntityDescription: selectedEntityDescriptionMock
       }));
     });
 
@@ -310,7 +314,7 @@ describe('Responsibilities Effects', () => {
 
   describe('when a FetchEntityWithPerformance is received', () => {
     const fetchEntityPerformancePayloadMock: FetchEntityWithPerformancePayload = {
-      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
+      positionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: entityTypeCodeMock,
       entityType: EntityType.RoleGroup,
@@ -336,6 +340,13 @@ describe('Responsibilities Effects', () => {
 
     describe('when getEntitiesWithPerformanceForGroup returns successfully', () => {
       it('should dispatch appropriate actions', (done) => {
+        spyOn(responsibilitiesService, 'getEntitiesWithPerformanceForGroup').and.callFake(
+          (fetchEntityWithPerformanceData: FetchEntityWithPerformanceData) => {
+            return Observable.of(Object.assign({}, fetchEntityWithPerformanceData, {
+              entityWithPerformance: entityWithPerformanceMock
+            }));
+        });
+
         const dispatchedActions: Action[] = [];
 
         responsibilitiesEffects.FetchEntityWithPerformance$().subscribe((dispatchedAction: Action) => {
@@ -373,7 +384,8 @@ describe('Responsibilities Effects', () => {
     beforeEach(() => {
       runner.queue(new FetchTotalPerformance({
         positionId: positionIdMock,
-        filter: performanceFilterStateMock
+        filter: performanceFilterStateMock,
+        brandCode: brandCodeMock
       }));
     });
 
@@ -394,7 +406,8 @@ describe('Responsibilities Effects', () => {
       expect(getResponsibilitiesSpy.calls.count()).toBe(1);
       expect(getResponsibilitiesSpy.calls.argsFor(0)).toEqual([
         positionIdMock,
-        performanceFilterStateMock
+        performanceFilterStateMock,
+        brandCodeMock
       ]);
     });
 
@@ -435,7 +448,8 @@ describe('Responsibilities Effects', () => {
           entityTypeAccountName: chance.string(),
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
           filter: performanceFilterStateMock,
-          selectedEntityDescription: chance.string()
+          selectedEntityDescription: chance.string(),
+          brandCode: chance.string()
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 
@@ -494,13 +508,14 @@ describe('Responsibilities Effects', () => {
           responsibilitiesEffects.fetchSubAccounts$().subscribe((dispatchedAction: Action) => {
             dispatchedActions.push(dispatchedAction);
 
-            if (dispatchedActions.length === 3) {
+            if (dispatchedActions.length === 4) {
               expect(dispatchedActions).toEqual([
                 new SetTotalPerformance(fetchSubAccountsPayloadMock.selectedPositionId),
                 new FetchSubAccountsSuccess({
                   groupedEntities: groupedEntitiesMock,
                   entityWithPerformance: entityWithPerformanceMock
                 }),
+                new SetAccountPositionId(fetchSubAccountsPayloadMock.positionId),
                 new SetSalesHierarchyViewType(SalesHierarchyViewType.subAccounts)
               ]);
 

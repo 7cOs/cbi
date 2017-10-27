@@ -117,7 +117,7 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchEntityWithPerformance', () => {
     const payloadMock: FetchEntityWithPerformancePayload = {
-      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
+      positionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entityTypeCode: chance.string(),
       entityType: getMyPerformanceTableRowMock(1)[0].metadata.entityType,

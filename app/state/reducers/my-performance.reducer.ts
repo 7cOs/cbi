@@ -65,6 +65,7 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE_FOR_SELECTED_ROLE_GROUP:
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS:
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS:
+    case ResponsibilitiesActions.SET_ACCOUNT_POSITION_ID:
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
     case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:
       return {

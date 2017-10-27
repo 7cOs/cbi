@@ -12,6 +12,7 @@ export interface ResponsibilitiesState extends State {
   totalPerformanceStatus: ActionStatus;
   subaccountsStatus: ActionStatus;
   positionId: string;
+  accountPositionId?: string;
   alternateHierarchyId?: string;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
@@ -134,6 +135,11 @@ export function responsibilitiesReducer(
         subaccountsStatus: ActionStatus.Fetched,
         groupedEntities: action.payload.groupedEntities,
         entityWithPerformance: action.payload.entityWithPerformance
+      });
+
+    case ResponsibilitiesActions.SET_ACCOUNT_POSITION_ID:
+      return Object.assign({}, state, {
+        accountPositionId: action.payload
       });
 
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:

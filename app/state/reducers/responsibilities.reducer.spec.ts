@@ -148,7 +148,7 @@ describe('Responsibilities Reducer', () => {
       entityTypeCode: entityTypeCodeMock,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
-      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
+      positionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       entityType: EntityType.Person,
       selectedEntityDescription: chance.string()
     };

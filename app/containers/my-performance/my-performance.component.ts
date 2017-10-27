@@ -8,11 +8,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import { FetchAlternateHierarchyResponsibilities,
-         FetchEntityWithPerformance,
-         FetchResponsibilities,
-         FetchSubAccounts,
-         SetAlternateHierarchyId } from '../../state/actions/responsibilities.action';
+import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
@@ -167,7 +163,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
     this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
-    this.store.dispatch(new FetchResponsibilities({
+    this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
       positionId: currentUserId,
       filter: this.filterState,
       selectedEntityDescription: currentUserFullName
@@ -218,6 +214,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
+    console.log(this.currentState.salesHierarchyViewType);
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {
@@ -292,11 +289,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
         if (parameters.row.metadata.alternateHierarchyId) {
-          this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+          this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
         }
 
-        this.store.dispatch(new FetchEntityWithPerformance({
-          selectedPositionId: parameters.row.metadata.positionId,
+        this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
+          positionId: parameters.row.metadata.positionId,
           alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
           entityTypeGroupName: entityTypeGroupName,
           entityTypeCode: parameters.row.metadata.entityTypeCode,
@@ -313,14 +310,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         break;
       case SalesHierarchyViewType.people:
         if (this.isInsideAlternateHierarchy()) {
-          this.store.dispatch(new FetchAlternateHierarchyResponsibilities({
+          this.store.dispatch(new ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities({
             positionId: parameters.row.metadata.positionId,
             alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
             filter: this.filterState,
-            selectedEntityDescription: parameters.row.descriptionRow0
+            selectedEntityDescription: parameters.row.descriptionRow0,
+            brandCode: this.selectedBrandCode
           }));
         } else {
-          this.store.dispatch(new FetchResponsibilities({
+          this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
             positionId: parameters.row.metadata.positionId,
             filter: this.filterState,
             selectedEntityDescription: parameters.row.descriptionRow0
@@ -329,13 +327,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       case SalesHierarchyViewType.accounts:
-        this.store.dispatch(new FetchSubAccounts({
+        this.store.dispatch(new ResponsibilitiesActions.FetchSubAccounts({
           positionId: parameters.row.metadata.positionId,
           contextPositionId: this.currentState.responsibilities.positionId,
           entityTypeAccountName: parameters.row.descriptionRow0,
           selectedPositionId: parameters.row.metadata.positionId,
           filter: this.filterState,
-          selectedEntityDescription: parameters.row.descriptionRow0
+          selectedEntityDescription: parameters.row.descriptionRow0,
+          brandCode: this.currentState.selectedBrandCode
         }));
         if (!this.isInsideAlternateHierarchy()) {
           this.fetchProductMetricsWhenClick(parameters);
@@ -352,7 +351,25 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.selectedBrandCode = parameters.row.metadata.brandCode;
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
-        this.fetchProductMetricsWhenClick(parameters);
+        if (!this.isInsideAlternateHierarchy()) {
+          this.fetchProductMetricsWhenClick(parameters);
+        }
+
+        if (parameters.row.metadata.brandCode) {
+          this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: this.currentState.responsibilities.positionId,
+            groupedEntities: this.currentState.responsibilities.groupedEntities,
+            hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
+            selectedEntityType: this.currentState.selectedEntityType,
+            selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
+            salesHierarchyViewType: this.salesHierarchyViewType,
+            filter: this.filterState,
+            brandCode: parameters.row.metadata.brandCode,
+            entityType: this.currentState.selectedEntityType,
+            alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+            accountPositionId: this.currentState.responsibilities.accountPositionId
+          }));
+        }
         break;
       case ProductMetricsViewType.skus:
         if (parameters.row) {
@@ -406,13 +423,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           actionParameters.entityTypeCode = parameters.row.metadata.entityTypeCode;
           actionParameters.selectedEntityType = EntityType.RoleGroup;
           break;
+
         case SalesHierarchyViewType.accounts:
           actionParameters.contextPositionId = this.currentState.responsibilities.positionId;
           actionParameters.selectedEntityType = EntityType.Account;
           break;
+
         case SalesHierarchyViewType.people:
           actionParameters.selectedEntityType = EntityType.Person;
           break;
+
         default:
           break;
         }
@@ -421,16 +441,22 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         case SalesHierarchyViewType.accounts:
           actionParameters.contextPositionId = this.currentState.responsibilities.positionId;
           break;
+
         case SalesHierarchyViewType.people:
           actionParameters.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
           break;
+
+        case SalesHierarchyViewType.subAccounts:
+          actionParameters.positionId = this.currentState.responsibilities.accountPositionId;
+          break;
+
         case SalesHierarchyViewType.roleGroups:
         default:
           break;
         }
     }
 
-      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
+    this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
   }
 
   private getShowSalesContributionToVolume(): boolean {
