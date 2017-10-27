@@ -3,7 +3,7 @@ h1 Performance
 beer-loader([showLoader]="productMetricsFetching || responsibilitiesFetching")
 
 my-performance-filter(
-  [dateRanges]="dateRanges",
+  [dateRangeState]="dateRangeState",
   [filterState]="filterState",
   (onFilterChange)="filterOptionSelected($event)"
 )
@@ -21,7 +21,6 @@ div.tables
     [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
-    [tableSubHeaderTimePeriod]="tableSubHeaderTimePeriod",
     [totalRow]="!displayRightTotalRow() ? totalRowData : null",
     [sortingCriteria]="sortingCriteria",
     [viewType]="salesHierarchyViewType",
@@ -33,10 +32,10 @@ div.tables
 
   my-performance-table.right(
     [tableData]="productMetrics",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowRight",
     [totalRow]="displayRightTotalRow() ? totalRowData : null",
     [performanceMetric]="'Product Snapshot'",
-    [tableSubHeaderTimePeriod]="tableSubHeaderTimePeriod",
     [dismissableTotalRow]="productMetricsSelectedBrandRow",
     [sortingCriteria]="sortingCriteria",
     [showContributionToVolume]="showProductMetricsContributionToVolume",

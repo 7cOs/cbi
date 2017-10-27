@@ -13,6 +13,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetrics, SelectBrandValues } from '../../state/actions/product-metrics.action';
+import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -64,7 +65,7 @@ class BeerLoaderComponentMock {
 class MyPerformanceFilterComponentMock {
   @Output() onFilterChange = new EventEmitter<MyPerformanceFilterEvent>();
 
-  @Input() dateRanges: DateRangesState;
+  @Input() dateRangeState: DateRangesState;
   @Input() filterState: MyPerformanceFilterState;
 }
 
@@ -93,7 +94,6 @@ class MyPerformanceTableComponentMock {
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
-  @Input() tableSubHeaderTimePeriod: string;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
@@ -137,7 +137,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetrics: myPerformanceProductMetricsMock,
     myPerformanceProductMetricsViewType: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
-    dateRanges: chance.string(),
+    dateRanges: getDateRangeMock(),
     href: jasmine.createSpy('href')
   };
 
@@ -359,7 +359,6 @@ describe('MyPerformanceComponent', () => {
         .injector
         .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
       expect(myPerformanceFilterMock.filterState).toEqual(stateMock.myPerformanceFilter as any);
-      expect(myPerformanceFilterMock.dateRanges).toBe(stateMock.dateRanges as any);
     });
   });
 

@@ -68,11 +68,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }];
   public totalRowData: MyPerformanceTableRow;
   public dateRange: DateRange;
-  public dateRanges: DateRangesState;
+  public dateRangeState: DateRangesState;
   public performanceMetric: string;
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
-  public tableSubHeaderTimePeriod: string;
 
   private currentState: MyPerformanceEntitiesData;
   private defaultUserPremiseType: PremiseTypeValue;
@@ -101,11 +100,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dateRangeSubscription = this.store
       .select(state => state.dateRanges)
-      .subscribe((dateRanges: DateRangesState)  => {
-      if (dateRanges.status === ActionStatus.Fetched) {
-        this.dateRanges = dateRanges;
-        this.dateRange = dateRanges[DateRangeTimePeriodValue[2]];
-        this.tableSubHeaderTimePeriod = this.dateRange.displayCode;
+      .subscribe((dateRangeState: DateRangesState)  => {
+      if (dateRangeState.status === ActionStatus.Fetched) {
+        this.dateRangeState = dateRangeState;
+        this.dateRange = dateRangeState[DateRangeTimePeriodValue[DateRangeTimePeriodValue.CYTDBDL]];
       }
     });
 
@@ -113,17 +111,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformanceFilter)
       .subscribe((filterState: MyPerformanceFilterState)  => {
       this.filterState = filterState;
-      let currentTypeValue = MetricTypeValue[filterState.metricType] === 'volume'
-        ? 'Depletions' : (MetricTypeValue[filterState.metricType] === 'velocity' ? 'Velocity' : 'Distribution');
+      const currentTypeValue = (filterState.metricType === MetricTypeValue.volume)
+        ? 'Depletions'
+        : (filterState.metricType === MetricTypeValue.velocity ? 'Velocity' : 'Distribution');
 
       this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
       this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
       this.performanceMetric = currentTypeValue;
       this.tableHeaderRowLeft[1] = currentTypeValue.toUpperCase();
       this.tableHeaderRowRight[1] = currentTypeValue.toUpperCase();
-      if (this.dateRanges) {
-        this.dateRange =  this.dateRanges[DateRangeTimePeriodValue[filterState.dateRangeCode]];
-        this.tableSubHeaderTimePeriod = this.dateRange.displayCode;
+      if (this.dateRangeState) {
+        this.dateRange =  this.dateRangeState[DateRangeTimePeriodValue[filterState.dateRangeCode]];
       }
     });
 
