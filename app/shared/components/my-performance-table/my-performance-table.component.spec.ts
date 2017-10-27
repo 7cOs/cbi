@@ -3,7 +3,6 @@ import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { ColumnType } from '../../../enums/column-type.enum';
-import { DateRange } from '../../../models/date-range.model';
 import { getDateRangeMock } from '../../../models/date-range.model.mock';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
@@ -23,7 +22,6 @@ class MockMyPerformanceTableRowComponent {
   @Input() showContributionToVolume: boolean;
   @Input() showOpportunities: boolean;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
-  @Input() dateRange: DateRange;
 }
 
 describe('MyPerformanceTableComponent', () => {
@@ -47,6 +45,7 @@ describe('MyPerformanceTableComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceTableComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
+    componentInstance.dateRange  = getDateRangeMock();
   });
 
   describe('setSortingcriteria', () => {
@@ -55,10 +54,8 @@ describe('MyPerformanceTableComponent', () => {
       const tableData = getMyPerformanceTableRowMock(2);
 
       componentInstance.tableData = tableData;
-
       const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
-      componentInstance.dateRange  = getDateRangeMock();
       const firstSortingCriterion = sortingCriteria[0];
       const firstColumnType = ColumnType[sortingCriteria[0].columnType];
 
@@ -93,7 +90,6 @@ describe('MyPerformanceTableComponent', () => {
       tableData[2].descriptionRow0 = 'b';
       tableData[2].metricColumn0 = 2;
       componentInstance.tableData = tableData.slice();
-      componentInstance.dateRange = getDateRangeMock();
 
       const sortingCriteria = [
         {
@@ -142,7 +138,6 @@ describe('MyPerformanceTableComponent', () => {
 
       const tableData = getMyPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
-      componentInstance.dateRange = getDateRangeMock();
 
       fixture.detectChanges();
 
