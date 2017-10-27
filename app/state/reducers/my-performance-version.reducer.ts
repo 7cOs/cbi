@@ -58,13 +58,6 @@ export function myPerformanceVersionReducer(
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return initialState;
 
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_FILTER_STATE:
-      return Object.assign({}, state, {
-        current: Object.assign({}, state.current, {
-          filter: action.payload
-        })
-      });
-
     default:
       return state;
   }

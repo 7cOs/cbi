@@ -2,12 +2,10 @@ import { Action } from '@ngrx/store';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { MyPerformanceEntitiesData } from '../reducers/my-performance.reducer';
-import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 
 export const SAVE_MY_PERFORMANCE_STATE = '[My Performance] SAVE_MY_PERFORMANCE_STATE';
 export class SaveMyPerformanceState implements Action {
   readonly type = SAVE_MY_PERFORMANCE_STATE;
-
   constructor(public payload: MyPerformanceEntitiesData) { }
 }
 
@@ -44,18 +42,10 @@ export class SetMyPerformanceSelectedBrandCode implements Action {
   constructor(public payload: string) { }
 }
 
-export const SET_MY_PERFORMANCE_FILTER_STATE = '[My Performance Version] SET_MY_PERFORMANCE_FILTER_STATE';
-export class SetMyPerformanceFilterState implements Action {
-  readonly type = SET_MY_PERFORMANCE_FILTER_STATE;
-
-  constructor(public payload: MyPerformanceFilterState) { }
-}
-
 export type Action =
   SaveMyPerformanceState
   | RestoreMyPerformanceState
   | ClearMyPerformanceState
   | SetMyPerformanceSelectedEntity
   | SetMyPerformanceSelectedEntityType
-  | SetMyPerformanceSelectedBrandCode
-  | SetMyPerformanceFilterState;
+  | SetMyPerformanceSelectedBrandCode;

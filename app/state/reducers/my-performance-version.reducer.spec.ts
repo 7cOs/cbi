@@ -6,7 +6,6 @@ import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceStateMock, getMyPerformanceEntitiesDataMock } from './my-performance.state.mock';
 import { initialState, MyPerformanceEntitiesData, MyPerformanceState } from './my-performance.reducer';
-import { MyPerformanceFilterState } from './my-performance-filter.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 
@@ -121,23 +120,5 @@ describe('My Performance Version Reducer', () => {
       initialState,
       { type: 'UNKNOWN_ACTION' } as any
     )).toBe(initialState);
-  });
-
-  describe('When a SetMyPerformanceFilterState action is received', () => {
-    it('should update the current filter state with the action payload', () => {
-      const filterStatePayloadMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
-      const initialMyPerformanceState: MyPerformanceState = getMyPerformanceStateMock();
-
-      const expectedState: MyPerformanceState = Object.assign({}, initialMyPerformanceState, {
-        current: Object.assign({}, initialMyPerformanceState.current, {
-          filter: filterStatePayloadMock
-        })
-      });
-      const actualState: MyPerformanceState = myPerformanceVersionReducer(
-        initialMyPerformanceState,
-        new MyPerformanceVersionActions.SetMyPerformanceFilterState(filterStatePayloadMock));
-
-      expect(actualState).toEqual(expectedState);
-    });
   });
 });

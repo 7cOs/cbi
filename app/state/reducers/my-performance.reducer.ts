@@ -51,7 +51,6 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_FILTER_STATE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES:
