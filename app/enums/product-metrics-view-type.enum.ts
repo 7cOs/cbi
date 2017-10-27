@@ -1,4 +1,4 @@
 export enum ProductMetricsViewType {
-  brands,
-  skus
+  brands = 'brands',
+  skus = 'skus'
 }
