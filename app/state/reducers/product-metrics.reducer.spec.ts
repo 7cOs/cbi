@@ -7,7 +7,7 @@ import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
-import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
@@ -98,7 +98,7 @@ describe('ProductMetrics Reducer', () => {
     const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.skuValues.length - 1});
     const chosenSkuCode = {
       skuPackageCode: chance.string(),
-      subBrandType: SubBrandsTypeEnum.sku
+      skuPackageType: SkuPackageType .sku
     };
     const notChosenSkuCode = chosenSkuCode + 'NOT_CHOSEN';
     products.skuValues.forEach(values => {
@@ -113,7 +113,7 @@ describe('ProductMetrics Reducer', () => {
       status: initialState.status,
       products: initialState.products,
       selectedSkuCodeValues: products.skuValues[chosenProductMetricsValuesIndex],
-      subBrandType: chosenSkuCode.subBrandType,
+      skuPackageType: chosenSkuCode.skuPackageType,
       productMetricsViewType: ProductMetricsViewType.skus
     };
 

@@ -6,7 +6,7 @@ import { getMyPerformanceStateMock, getMyPerformanceEntitiesDataMock } from './m
 import { initialState, MyPerformanceEntitiesData } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
-import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 let chance = new Chance();
 
@@ -106,7 +106,7 @@ describe('My Performance Version Reducer', () => {
   it('should set the selected sku when SetMyPerformanceSelectedSkuCode is received', () => {
     const selectedSkuCodeMock = {
       skuPackageCode: chance.string(),
-      subBrandType: SubBrandsTypeEnum.sku
+      skuPackageType: SkuPackageType .sku
     };
     const beforeState = getMyPerformanceStateMock();
     const expectedState = {
@@ -115,7 +115,7 @@ describe('My Performance Version Reducer', () => {
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedSkuCode: selectedSkuCodeMock.skuPackageCode,
-        subBrandType: selectedSkuCodeMock.subBrandType,
+        skuPackageType: selectedSkuCodeMock.skuPackageType,
         selectedEntityType: beforeState.current.selectedEntityType
       },
       versions: beforeState.versions

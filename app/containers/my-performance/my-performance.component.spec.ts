@@ -700,7 +700,7 @@ describe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
-        subBrandType: rowMock.metadata.subBrandType};
+        skuPackageType: rowMock.metadata.skuPackageType};
 
       expect(storeMock.dispatch.calls.count()).toBe(2);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(payLoad));
@@ -737,7 +737,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
-        subBrandType: rowMock.metadata.subBrandType};
+        skuPackageType: rowMock.metadata.skuPackageType};
       componentInstance.handleElementClicked(params);
 
       expect(storeMock.dispatch.calls.count()).toBe(2);
@@ -775,7 +775,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
-        subBrandType: rowMock.metadata.subBrandType};
+        skuPackageType: rowMock.metadata.skuPackageType};
       componentInstance.handleElementClicked(params);
 
       expect(storeMock.dispatch.calls.count()).toBe(2);

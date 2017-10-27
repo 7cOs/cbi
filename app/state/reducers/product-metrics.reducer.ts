@@ -51,7 +51,7 @@ export function productMetricsReducer(
 
       return Object.assign({}, state, {
         productMetricsViewType: ProductMetricsViewType.skus,
-        subBrandType: action.payload.subBrandType,
+        skuPackageType: action.payload.skuPackageType,
         selectedSkuCodeValues: selectedSkuCode
       });
 

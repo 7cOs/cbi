@@ -8,7 +8,7 @@ import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from './product-metrics.action';
 import { SkuPackagePayload } from './product-metrics.action';
-import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
@@ -112,7 +112,7 @@ describe('ProductMetrics Actions', () => {
     beforeEach(() => {
       actionPayloadMock  = {
         skuPackageCode: chance.string(),
-        subBrandType: SubBrandsTypeEnum.sku
+        skuPackageType: SkuPackageType .sku
       };
       action = new ProductMetricsActions.SelectSkuValues(actionPayloadMock);
     });

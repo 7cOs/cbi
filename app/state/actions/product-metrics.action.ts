@@ -4,7 +4,7 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 export interface FetchProductMetricsPayload {
   positionId: string;
@@ -23,7 +23,7 @@ export interface FetchProductMetricsSuccessPayload {
 
 export interface SkuPackagePayload {
   skuPackageCode: string;
-  subBrandType: SubBrandsTypeEnum;
+  skuPackageType: SkuPackageType ;
 }
 
 export const FETCH_PRODUCT_METRICS = '[ProductMetrics] FETCH_PRODUCT_METRICS';

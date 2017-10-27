@@ -4,7 +4,7 @@ import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import * as MyPerformanceVersionActions from './my-performance-version.action';
 import { SkuPackagePayload } from './product-metrics.action';
-import { SubBrandsTypeEnum } from '../../enums/sub-brands-type.enum';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 let chance = new Chance();
 
@@ -120,7 +120,7 @@ describe('Responsibilities Actions', () => {
     beforeEach(() => {
       selectedSkuCodeMock = {
         skuPackageCode: chance.string(),
-        subBrandType: SubBrandsTypeEnum.sku
+        skuPackageType: SkuPackageType .sku
       };
       action = new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(selectedSkuCodeMock);
     });
