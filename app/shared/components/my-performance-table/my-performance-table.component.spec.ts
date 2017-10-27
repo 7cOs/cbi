@@ -47,7 +47,6 @@ describe('MyPerformanceTableComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceTableComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
-
   });
 
   describe('setSortingcriteria', () => {

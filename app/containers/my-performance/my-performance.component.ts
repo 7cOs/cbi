@@ -118,8 +118,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
       this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
       this.performanceMetric = currentTypeValue;
-      this.tableHeaderRowLeft[1] = currentTypeValue.toUpperCase();
-      this.tableHeaderRowRight[1] = currentTypeValue.toUpperCase();
+      this.tableHeaderRowLeft[1] = currentTypeValue;
+      this.tableHeaderRowRight[1] = currentTypeValue;
       if (this.dateRangeState) {
         this.dateRange =  this.dateRangeState[DateRangeTimePeriodValue[filterState.dateRangeCode]];
       }
