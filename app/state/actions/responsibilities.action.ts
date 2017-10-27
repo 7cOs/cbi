@@ -12,13 +12,8 @@ import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.en
 export interface FetchResponsibilitiesPayload {
   positionId: string;
   filter: MyPerformanceFilterState;
-  brandCode?: string;
-}
-
-export interface FetchResponsibilitiesPayload {
-  positionId: string;
-  filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
+  brandCode?: string;
 }
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -69,6 +64,7 @@ export interface FetchSubAccountsPayload {
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
+  brandCode?: string;
 }
 
 export interface FetchSubAccountsSuccessPayload {
@@ -179,7 +175,7 @@ export const FETCH_TOTAL_PERFORMANCE = '[Performance Total] FETCH_TOTAL_PERFORMA
 export class FetchTotalPerformance implements Action {
   readonly type = FETCH_TOTAL_PERFORMANCE;
 
-  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState, brandCode?: string }) { }
 }
 
 export const FETCH_TOTAL_PERFORMANCE_SUCCESS = '[Performance Total] FETCH_TOTAL_PERFORMANCE_SUCCESS';

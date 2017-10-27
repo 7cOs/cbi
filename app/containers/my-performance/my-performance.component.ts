@@ -331,7 +331,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           entityTypeAccountName: parameters.row.descriptionRow0,
           selectedPositionId: parameters.row.metadata.positionId,
           filter: this.filterState,
-          selectedEntityDescription: parameters.row.descriptionRow0
+          selectedEntityDescription: parameters.row.descriptionRow0,
+          brandCode: this.currentState.selectedBrandCode
         }));
         if (!this.isInsideAlternateHierarchy()) {
           this.fetchProductMetricsWhenClick(parameters);
