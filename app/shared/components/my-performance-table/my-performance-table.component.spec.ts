@@ -11,6 +11,7 @@ import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type
 import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
+import { SortStatus } from '../../../enums/sort-status.enum';
 import { UtilService } from '../../../services/util.service';
 
 @Component({
@@ -230,6 +231,17 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.viewType = SalesHierarchyViewType.subAccounts;
       componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
       expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when a row is clicked', () => {
+    it('should call the event handler onRowClicked', () => {
+      const onRowClickedSpy = spyOn(componentInstance, 'onRowClicked');
+      spyOn(componentInstance, 'getSortStatus').and.callFake(() => SortStatus.ascending);
+      componentInstance.tableData = getMyPerformanceTableRowMock(1);
+      fixture.detectChanges();
+      fixture.nativeElement.querySelector('tbody tr').click();
+      expect(onRowClickedSpy).toHaveBeenCalled();
     });
   });
 });
