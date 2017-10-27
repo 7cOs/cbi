@@ -4,7 +4,6 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 export interface FetchProductMetricsPayload {
   positionId: string;
@@ -19,11 +18,6 @@ export interface FetchProductMetricsPayload {
 export interface FetchProductMetricsSuccessPayload {
   positionId: string;
   products: ProductMetrics;
-}
-
-export interface SkuPackagePayload {
-  skuPackageCode: string;
-  skuPackageType: SkuPackageType ;
 }
 
 export const FETCH_PRODUCT_METRICS = '[ProductMetrics] FETCH_PRODUCT_METRICS';
@@ -54,18 +48,6 @@ export class SelectBrandValues implements Action {
   constructor(public payload: string) { }
 }
 
-export const SELECT_SKU_VALUES = '[ProductMetrics] SELECT_SKU_VALUES';
-export class SelectSkuValues implements Action {
-  readonly type = SELECT_SKU_VALUES;
-
-  constructor(public payload: SkuPackagePayload) { }
-}
-
-export const CLEAR_SKU_VALUES = '[ProductMetrics] CLEAR_SKU_VALUES';
-export class ClearSkuValues implements Action {
-  readonly type = CLEAR_SKU_VALUES;
-}
-
 export const SET_PRODUCT_METRICS_VIEW_TYPE = '[View Types] SET_PRODUCT_METRICS_VIEW_TYPE';
 export class SetProductMetricsViewType implements Action {
   readonly type = SET_PRODUCT_METRICS_VIEW_TYPE;
@@ -78,6 +60,4 @@ export type Action =
   | FetchProductMetricsSuccess
   | FetchProductMetricsFailure
   | SelectBrandValues
-  | SelectSkuValues
-  | ClearSkuValues
   | SetProductMetricsViewType;

@@ -13,9 +13,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetrics,
-         SelectBrandValues,
-         SelectSkuValues,
-         ClearSkuValues, SkuPackagePayload } from '../../state/actions/product-metrics.action';
+         SelectBrandValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -41,9 +39,10 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
 import {
-  SaveMyPerformanceState,
-  SetMyPerformanceSelectedEntityType
-} from '../../state/actions/my-performance-version.action';
+         SaveMyPerformanceState,
+         SetMyPerformanceSelectedEntityType,
+         SkuPackagePayload
+       } from '../../state/actions/my-performance-version.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
@@ -702,9 +701,8 @@ describe('MyPerformanceComponent', () => {
       const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
         skuPackageType: rowMock.metadata.skuPackageType};
 
-      expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(payLoad));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
         new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
@@ -740,9 +738,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: rowMock.metadata.skuPackageType};
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(payLoad));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
         new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
@@ -778,9 +775,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: rowMock.metadata.skuPackageType};
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectSkuValues(payLoad));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
         new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
@@ -790,7 +786,7 @@ describe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.count()).toBe(1);
     });
 
   });
@@ -910,9 +906,8 @@ describe('MyPerformanceComponent', () => {
 
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
-      expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearSkuValues());
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
         new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     });
   });

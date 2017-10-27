@@ -7,8 +7,6 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from './product-metrics.action';
-import { SkuPackagePayload } from './product-metrics.action';
-import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
@@ -103,42 +101,6 @@ describe('ProductMetrics Actions', () => {
     it('should contain the correct payload', () => {
       expect(action.payload).toEqual(actionPayloadMock);
     });
-  });
-
-  describe('SelectSkuValues', () => {
-    let action: ProductMetricsActions.SelectSkuValues;
-    let actionPayloadMock: SkuPackagePayload;
-
-    beforeEach(() => {
-      actionPayloadMock  = {
-        skuPackageCode: chance.string(),
-        skuPackageType: SkuPackageType .sku
-      };
-      action = new ProductMetricsActions.SelectSkuValues(actionPayloadMock);
-    });
-
-    it('should have the correct type', () => {
-      expect(ProductMetricsActions.SELECT_SKU_VALUES).toBe('[ProductMetrics] SELECT_SKU_VALUES');
-      expect(action.type).toBe(ProductMetricsActions.SELECT_SKU_VALUES);
-    });
-
-    it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(actionPayloadMock);
-    });
-  });
-
-  describe('ClearSelectedSkuValues', () => {
-    let action: ProductMetricsActions.ClearSkuValues;
-
-    beforeEach(() => {
-      action = new ProductMetricsActions.ClearSkuValues();
-    });
-
-    it('should have the correct type', () => {
-      expect(ProductMetricsActions.CLEAR_SKU_VALUES).toBe('[ProductMetrics] CLEAR_SKU_VALUES');
-      expect(action.type).toBe(ProductMetricsActions.CLEAR_SKU_VALUES);
-    });
-
   });
 
   describe('SetProductMetricsViewType', () => {

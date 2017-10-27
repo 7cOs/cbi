@@ -1,13 +1,12 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
-import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
@@ -18,7 +17,8 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetching,
-      products: initialState.products
+      products: initialState.products,
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetrics({
@@ -40,7 +40,8 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetched,
-      products: products
+      products: products,
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(
@@ -54,7 +55,8 @@ describe('ProductMetrics Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
-      products: initialState.products
+      products: initialState.products,
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(
@@ -88,62 +90,6 @@ describe('ProductMetrics Reducer', () => {
     const actualState = productMetricsReducer(
       initialState,
       new ProductMetricsActions.SelectBrandValues(chosenBrandCode)
-    );
-
-    expect(actualState).toEqual(expectedState);
-  });
-
-  it('should update selectedSkuCodeValues with the first item in product corresponding to the given sku code in payload', () => {
-    const products = getProductMetricsWithSkuValuesMock();
-    const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.skuValues.length - 1});
-    const chosenSkuCode = {
-      skuPackageCode: chance.string(),
-      skuPackageType: SkuPackageType .sku
-    };
-    const notChosenSkuCode = chosenSkuCode + 'NOT_CHOSEN';
-    products.skuValues.forEach(values => {
-      values.beerId.masterPackageSKUCode = notChosenSkuCode;
-    });
-
-    products.skuValues[chosenProductMetricsValuesIndex].beerId.masterPackageSKUCode = chosenSkuCode.skuPackageCode;
-
-    initialState.products = products;
-
-    const expectedState = {
-      status: initialState.status,
-      products: initialState.products,
-      selectedSkuCodeValues: products.skuValues[chosenProductMetricsValuesIndex],
-      skuPackageType: chosenSkuCode.skuPackageType,
-      productMetricsViewType: ProductMetricsViewType.skus
-    };
-
-    const actualState = productMetricsReducer(
-      initialState,
-      new ProductMetricsActions.SelectSkuValues(chosenSkuCode)
-    );
-
-    expect(actualState).toEqual(expectedState);
-  });
-
-  it('should update clearSkuCodeValues', () => {
-    const products = getProductMetricsWithSkuValuesMock();
-    const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.skuValues.length - 1});
-
-    initialState.products = products;
-    initialState.productMetricsViewType = ProductMetricsViewType.skus;
-
-    products.skuValues[chosenProductMetricsValuesIndex] = null;
-
-    const expectedState = {
-      status: initialState.status,
-      products: initialState.products,
-      selectedSkuCodeValues: products.skuValues[chosenProductMetricsValuesIndex],
-      productMetricsViewType: ProductMetricsViewType.skus
-    };
-
-    const actualState = productMetricsReducer(
-      initialState,
-      new ProductMetricsActions.ClearSkuValues()
     );
 
     expect(actualState).toEqual(expectedState);

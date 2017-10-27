@@ -2,7 +2,12 @@ import { Action } from '@ngrx/store';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { MyPerformanceEntitiesData } from '../reducers/my-performance.reducer';
-import { SkuPackagePayload } from './product-metrics.action';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
+
+export interface SkuPackagePayload {
+  skuPackageCode: string;
+  skuPackageType: SkuPackageType ;
+}
 
 export const SAVE_MY_PERFORMANCE_STATE = '[My Performance] SAVE_MY_PERFORMANCE_STATE';
 export class SaveMyPerformanceState implements Action {

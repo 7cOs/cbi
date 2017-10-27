@@ -3,8 +3,8 @@ import * as Chance from 'chance';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import * as MyPerformanceVersionActions from './my-performance-version.action';
-import { SkuPackagePayload } from './product-metrics.action';
 import { SkuPackageType  } from '../../enums/sku-package-type.enum';
+import { SkuPackagePayload } from './my-performance-version.action';
 
 let chance = new Chance();
 

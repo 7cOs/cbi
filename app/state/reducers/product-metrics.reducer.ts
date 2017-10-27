@@ -13,7 +13,8 @@ export interface ProductMetricsState extends State {
 
 export const initialState: ProductMetricsState = {
   status: ActionStatus.NotFetched,
-  products: {}
+  products: {},
+  productMetricsViewType: ProductMetricsViewType.brands
 };
 
 export function productMetricsReducer(
@@ -42,23 +43,7 @@ export function productMetricsReducer(
       const selectedBrandCode = state.products.brandValues.find(brand => brand.brandCode === action.payload);
 
       return Object.assign({}, state, {
-        productMetricsViewType: ProductMetricsViewType.brands,
         selectedBrandCodeValues: selectedBrandCode
-      });
-
-    case ProductMetricsActions.SELECT_SKU_VALUES:
-      const selectedSkuCode = state.products.skuValues.find(sku => sku.beerId.masterPackageSKUCode === action.payload.skuPackageCode);
-
-      return Object.assign({}, state, {
-        productMetricsViewType: ProductMetricsViewType.skus,
-        skuPackageType: action.payload.skuPackageType,
-        selectedSkuCodeValues: selectedSkuCode
-      });
-
-    case ProductMetricsActions.CLEAR_SKU_VALUES:
-      return Object.assign({}, state, {
-        productMetricsViewType: ProductMetricsViewType.skus,
-        selectedSkuCodeValues: null
       });
 
     case ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE:
