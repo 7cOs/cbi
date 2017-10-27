@@ -311,14 +311,6 @@ div.ctv {
 
     tr.entity-row {
 
-      /deep/td.left-col {
-
-        /deep/span {
-          color: $blue;
-          font-weight: normal;
-        }
-      }
-
       &:hover {
 
         /deep/td {
