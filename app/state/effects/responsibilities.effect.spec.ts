@@ -179,7 +179,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should call getResponsibilities with the right arguments', (done: any) => {
+      it('should call getResponsibilities with the right arguments', (done) => {
         const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getResponsibilities').and.callThrough();
 
         responsibilitiesEffects.fetchResponsibilities$().subscribe(() => {
@@ -339,7 +339,7 @@ describe('Responsibilities Effects', () => {
     });
 
     describe('when getEntitiesWithPerformanceForGroup returns successfully', () => {
-      it('should dispatch appropriate actions', (done: any) => {
+      it('should dispatch appropriate actions', (done) => {
         spyOn(responsibilitiesService, 'getEntitiesWithPerformanceForGroup').and.callFake(
           (fetchEntityWithPerformanceData: FetchEntityWithPerformanceData) => {
             return Observable.of(Object.assign({}, fetchEntityWithPerformanceData, {
@@ -490,7 +490,7 @@ describe('Responsibilities Effects', () => {
           expect(getSubAccountsPerformanceSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
         });
 
-        it('should return a FetchSubAccountsSuccess', (done: any) => {
+        it('should return a FetchSubAccountsSuccess', (done) => {
           spyOn(responsibilitiesService, 'getSubAccounts').and.callFake((subAccountData: SubAccountData) => {
             return Observable.of(Object.assign({}, subAccountData, {
               groupedEntities: groupedEntitiesMock

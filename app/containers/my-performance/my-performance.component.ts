@@ -352,25 +352,25 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (!this.isInsideAlternateHierarchy()) {
           this.fetchProductMetricsWhenClick(parameters);
         }
+
+        if (parameters.row.metadata.brandCode) {
+          this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: this.currentState.responsibilities.positionId,
+            groupedEntities: this.currentState.responsibilities.groupedEntities,
+            hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
+            selectedEntityType: this.currentState.selectedEntityType,
+            selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
+            salesHierarchyViewType: this.salesHierarchyViewType,
+            filter: this.filterState,
+            brandCode: parameters.row.metadata.brandCode,
+            entityType: this.currentState.selectedEntityType,
+            alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+            accountPositionId: this.currentState.responsibilities.accountPositionId
+          }));
+        }
         break;
       default:
         console.log('clicked on right row:', parameters.row);
-    }
-
-    if (parameters.row.metadata.brandCode) {
-      this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
-        positionId: this.currentState.responsibilities.positionId, // TODO: Check if I need another ID depending on the situation
-        groupedEntities: this.currentState.responsibilities.groupedEntities,
-        hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
-        selectedEntityType: this.currentState.selectedEntityType,
-        selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
-        salesHierarchyViewType: this.salesHierarchyViewType,
-        filter: this.filterState,
-        brandCode: parameters.row.metadata.brandCode,
-        entityType: this.currentState.selectedEntityType,
-        alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-        accountPositionId: this.currentState.responsibilities.accountPositionId
-      }));
     }
   }
 
