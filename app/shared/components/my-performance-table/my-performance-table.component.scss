@@ -170,13 +170,6 @@ th {
     color: $blue;
   }
 
-  &:hover {
-
-    /deep/td {
-      background-color: $light-blue-4;
-    }
-  }
-
   &.performance-error {
 
     /deep/td {
@@ -186,13 +179,6 @@ th {
     /deep/span.positive,
     /deep/span.negative {
       color: inherit;
-    }
-
-    &:hover {
-
-      /deep/td {
-        background-color: $light-blue-4;
-      }
     }
   }
 }
@@ -213,7 +199,6 @@ td, th {
   font-family: $work-sans;
   font-size: 12px;
   font-weight: $regular;
-  cursor: pointer;
 }
 
 .top-header {
@@ -281,15 +266,40 @@ div.ctv {
 .view-type {
   &.view-type-brands {
 
+    tr, td, th {
+      cursor: pointer;
+    }
+
     tr.entity-row {
 
       /deep/ td.left-col {
         font-weight: normal;
       }
+
+      &:hover {
+
+        /deep/td {
+          background-color: $light-blue-4;
+        }
+      }
+
+      &.performance-error {
+
+        &:hover {
+
+          /deep/td {
+            background-color: $light-blue-4;
+          }
+        }
+      }
     }
   }
 
   &.view-type-skus {
+
+    tr, td, th {
+      cursor: pointer;
+    }
 
     tr.total-row {
 
@@ -306,13 +316,60 @@ div.ctv {
         /deep/span {
           color: $blue;
           font-weight: normal;
-          padding-left: 12px;
+        }
+      }
+
+      &:hover {
+
+        /deep/td {
+          background-color: $light-blue-4;
+        }
+      }
+
+      &.performance-error {
+
+        &:hover {
+
+          /deep/td {
+            background-color: $light-blue-4;
+          }
+        }
+      }
+    }
+  }
+
+  &.view-type-roleGroups {
+
+    tr, td, th {
+      cursor: pointer;
+    }
+
+    tr.entity-row {
+
+      &:hover {
+
+        /deep/td {
+          background-color: $light-blue-4;
+        }
+      }
+
+      &.performance-error {
+
+        &:hover {
+
+          /deep/td {
+            background-color: $light-blue-4;
+          }
         }
       }
     }
   }
 
   &.view-type-people {
+
+    tr, td, th {
+      cursor: pointer;
+    }
 
     tr.total-row {
 
@@ -353,10 +410,31 @@ div.ctv {
           color: $black;
         }
       }
+
+      &:hover {
+
+        /deep/td {
+          background-color: $light-blue-4;
+        }
+      }
+
+      &.performance-error {
+
+        &:hover {
+
+          /deep/td {
+            background-color: $light-blue-4;
+          }
+        }
+      }
     }
   }
 
   &.view-type-accounts {
+
+    tr, td, th {
+      cursor: pointer;
+    }
 
     tr.total-row {
 
@@ -384,6 +462,23 @@ div.ctv {
         span {
           color: $blue;
           font-weight: normal;
+        }
+      }
+
+      &:hover {
+
+        /deep/td {
+          background-color: $light-blue-4;
+        }
+      }
+
+      &.performance-error {
+
+        &:hover {
+
+          /deep/td {
+            background-color: $light-blue-4;
+          }
         }
       }
     }
