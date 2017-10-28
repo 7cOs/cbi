@@ -1,30 +1,26 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { ActionStatus } from '../enums/action-status.enum';
 import { Performance } from '../models/performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getPerformanceMock } from '../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock } from '../models/entity-with-performance.model.mock';
-import { getProductMetricsWithBrandValuesMock, getProductMetricsBrandMock } from '../models/product-metrics.model.mock';
+import {
+  getProductMetricsBrandMock,
+  getProductMetricsWithBrandValuesMock,
+  getProductMetricsWithSkuValuesMock
+} from '../models/product-metrics.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, MyPerformanceTableRowMetadata } from '../models/my-performance-table-row.model';
-import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
-import { ProductMetricsValues } from '../models/product-metrics.model';
+import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
+import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let performanceMock: Performance;
-  let productMetricsValuesMock: ProductMetricsValues;
   let responsibilityEntitiesPerformanceMock: EntityWithPerformance[];
   let total: number;
-
-  const productMetricsState: ProductMetricsState = {
-    status: ActionStatus.Fetched,
-    products: getProductMetricsWithBrandValuesMock(),
-    productMetricsViewType: ProductMetricsViewType.brands
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -356,39 +352,108 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('getRightTableData', () => {
-    it('should return properly formatted table data for ProductMetrics', () => {
-      const transformedProductMetricsData =
-        myPerformanceTableDataTransformerService.getRightTableData(productMetricsState.products);
+    let products: ProductMetrics;
+    let transformedProductMetricsData: MyPerformanceTableRow[];
 
-      expect(transformedProductMetricsData).toBeDefined();
-      expect(transformedProductMetricsData.length).toBeTruthy();
-      expect(transformedProductMetricsData[0].descriptionRow0).toEqual(productMetricsState.products.brandValues[0].brandDescription);
+    beforeEach(() => {
+      products = Object.assign(
+        getProductMetricsWithBrandValuesMock(),
+        getProductMetricsWithSkuValuesMock(SkuPackageType.sku)
+      );
     });
 
-    it('should calculate ctv based on total of provided rows,', () => {
-      total = 0;
-      productMetricsState.products.brandValues.forEach((metric: ProductMetricsValues) => {
-        total += metric.current;
+    describe('when ProductMetricsViewType is brands', () => {
+      beforeEach(() => {
+        transformedProductMetricsData = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.brands
+        );
       });
 
-      const transformedProductMetricsData =
-        myPerformanceTableDataTransformerService.getRightTableData(productMetricsState.products);
+      it('should return properly formatted table data for ProductMetrics', () => {
+        expect(transformedProductMetricsData).toBeDefined();
+        expect(transformedProductMetricsData.length).toBe(products.brandValues.length);
 
-      expect(transformedProductMetricsData.length).toBe(productMetricsState.products.brandValues.length);
-      for (let i = 0; i < transformedProductMetricsData.length; i++) {
-        const expectedCTV: number = Math.round((productMetricsState.products.brandValues[i].current / total) * 1000) / 10;
-        expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
-      }
+        for (let i = 0; i < products.brandValues.length; i++) {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.brandValues[i].brandDescription);
+          expect(transformedProductMetricsData[i].metadata.brandCode).toEqual(products.brandValues[i].brandCode);
+        }
+      });
+
+      it('should calculate ctv based on total of provided rows,', () => {
+        total = 0;
+        products.brandValues.forEach((metric: ProductMetricsValues) => {
+          total += metric.current;
+        });
+
+        expect(transformedProductMetricsData.length).toBe(products.brandValues.length);
+        for (let i = 0; i < products.brandValues.length; i++) {
+          const expectedCTV: number = Math.round((products.brandValues[i].current / total) * 1000) / 10;
+          expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
+        }
+      });
+    });
+
+    describe('when ProductMetricsViewType is skus and metrics are SKUs', () => {
+      beforeEach(() => {
+        transformedProductMetricsData = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
+      });
+
+      it('should return properly formatted table data for ProductMetrics', () => {
+        expect(transformedProductMetricsData).toBeDefined();
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+
+        for (let i = 0; i < products.skuValues.length; i++) {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i].beerId.masterSKUDescription);
+          expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.sku);
+          expect(transformedProductMetricsData[i].metadata.skuCode).toEqual(products.skuValues[i].beerId.masterSKUCode);
+        }
+      });
+
+      // TODO in US19294
+      // it('should calculate ctv based on total of provided rows,', () => {
+      // });
+    });
+
+    describe('when ProductMetricsViewType is skus and metrics are Packages', () => {
+      beforeEach(() => {
+        products = Object.assign(
+          products,
+          getProductMetricsWithSkuValuesMock(SkuPackageType.package)
+        );
+        transformedProductMetricsData = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
+      });
+
+      it('should return properly formatted table data for ProductMetrics', () => {
+        expect(transformedProductMetricsData).toBeDefined();
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+
+        for (let i = 0; i < products.skuValues.length; i++) {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i].beerId.masterPackageSKUDescription);
+          expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.package);
+          expect(transformedProductMetricsData[i].metadata.skuCode).toEqual(products.skuValues[i].beerId.masterPackageSKUCode);
+        }
+      });
+
+      // TODO in US19294
+      // it('should calculate ctv based on total of provided rows,', () => {
+      // });
     });
   });
 
   describe('getProductMetricsSelectedBrandRow', () => {
+    let productMetricsValuesMock: ProductMetricsValues;
+
     beforeEach(() => {
         productMetricsValuesMock = getProductMetricsBrandMock();
     });
 
     it('should return a formatted total row from brand product metrics values', () => {
-      const rowData = myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock);
+      const rowData: MyPerformanceTableRow =
+        myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock);
 
       expect(rowData.descriptionRow0).toEqual(productMetricsValuesMock.brandDescription);
       expect(rowData.metricColumn0).toEqual(productMetricsValuesMock.current);
