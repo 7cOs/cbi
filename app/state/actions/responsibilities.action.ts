@@ -48,13 +48,9 @@ export interface RefreshAllPerformancesPayload {
   salesHierarchyViewType: SalesHierarchyViewType;
   filter: MyPerformanceFilterState;
   brandCode?: string;
-  entityType?: EntityType;
+  entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;
   accountPositionId?: string;
-}
-
-export interface RefreshAllPerformancesSuccesPayload {
-
 }
 
 export interface FetchSubAccountsPayload {
@@ -120,13 +116,6 @@ export class RefreshAllPerformances implements Action {
   readonly type = REFRESH_ALL_PERFORMANCES;
 
   constructor(public payload: RefreshAllPerformancesPayload) { }
-}
-
-export const REFRESH_ALL_PERFORMANCES_SUCCESS = '[Responsibilities] REFRESH_ALL_PERFORMANCES_SUCCESS';
-export class RefreshAllPerformancesSuccess implements Action {
-  readonly type = REFRESH_ALL_PERFORMANCES;
-
-  constructor(public payload: RefreshAllPerformancesSuccesPayload) { }
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP';

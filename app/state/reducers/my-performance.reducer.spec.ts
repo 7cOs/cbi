@@ -56,9 +56,10 @@ describe('My Performance Reducer', () => {
       new ResponsibilitiesActions.SetTotalPerformanceForSelectedRoleGroup(chance.string())
     );
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailure(new Error()));
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.SetAccountPositionId(chance.string()));
 
     expect(responsibilitiesReducerSpy).toHaveBeenCalled();
-    expect(responsibilitiesReducerSpy.calls.count()).toBe(5);
+    expect(responsibilitiesReducerSpy.calls.count()).toBe(6);
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
     expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
   });
