@@ -16,7 +16,7 @@ import java.util.List;
 
 import com.cbrands.pages.Home;
 import com.cbrands.pages.NotificationContent;
-import com.cbrands.pages.Opportunities;
+import com.cbrands.pages.opportunities.Opportunities;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;

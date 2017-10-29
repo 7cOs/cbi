@@ -4,7 +4,7 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.LogoutPage;
-import com.cbrands.pages.OpportunitiesPage;
+import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
