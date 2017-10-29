@@ -36,7 +36,7 @@ export function myPerformanceVersionReducer(
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntityDescription: state.current.selectedEntityDescription,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedSkuCode: state.current.selectedSkuCode,
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode,
           selectedEntityType: action.payload
         },
         versions: state.versions
@@ -60,7 +60,7 @@ export function myPerformanceVersionReducer(
           responsibilities: state.current.responsibilities,
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntityDescription: state.current.selectedEntityDescription,
-          selectedSkuCode: action.payload.skuPackageCode,
+          selectedSkuPackageCode: action.payload.skuPackageCode,
           selectedSkuPackageType: action.payload.skuPackageType,
           selectedEntityType: state.current.selectedEntityType
         },
@@ -73,7 +73,7 @@ export function myPerformanceVersionReducer(
           responsibilities: state.current.responsibilities,
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntityDescription: state.current.selectedEntityDescription,
-          selectedSkuCode: null,
+          selectedSkuPackageCode: null,
           selectedEntityType: state.current.selectedEntityType
         },
         versions: state.versions

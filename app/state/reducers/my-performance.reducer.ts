@@ -18,7 +18,7 @@ export interface MyPerformanceEntitiesData {
   selectedEntityDescription: string;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
-  selectedSkuCode?: string;
+  selectedSkuPackageCode?: string;
   selectedSkuPackageType?: SkuPackageType;
 }
 
@@ -74,7 +74,7 @@ export function myPerformanceReducer(
           selectedEntityDescription: action.payload.selectedEntityDescription || state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedSkuCode: state.current.selectedSkuCode
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode
         },
         versions: state.versions
       };
@@ -90,7 +90,7 @@ export function myPerformanceReducer(
           selectedEntityDescription: state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedSkuCode: state.current.selectedSkuCode
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode
         },
         versions: state.versions
       };
