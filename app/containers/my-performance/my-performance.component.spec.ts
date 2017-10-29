@@ -91,7 +91,7 @@ class MyPerformanceTableComponentMock {
   @Input() tableData: Array<MyPerformanceTableRow>;
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() selectedSkuName: string;
+  @Input() selectedSkuCode: string;
   @Input() showBackButton: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;

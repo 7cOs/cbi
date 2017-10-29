@@ -244,4 +244,39 @@ describe('MyPerformanceTableComponent', () => {
       expect(onRowClickedSpy).toHaveBeenCalled();
     });
   });
+
+  describe('getEntityRowClasses', () => {
+    let rowData: MyPerformanceTableRow;
+
+    beforeEach(() => {
+      rowData = getMyPerformanceTableRowMock(1)[0];
+      rowData.performanceError = false;
+    });
+
+    it('should disabled classes by default', () => {
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false
+      });
+    });
+
+    it('should return an object with performance-error true when the row has a performanceError', () => {
+      rowData.performanceError = true;
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': true,
+        'selected-sku': false
+      });
+    });
+
+    it('should return an object with selectedSku true when the row matches the selectedSkuCode', () => {
+      componentInstance.selectedSkuCode = rowData.metadata.skuCode;
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': true
+      });
+    });
+  });
 });

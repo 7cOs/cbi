@@ -74,7 +74,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public performanceMetric: string = 'Depletions';
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
-  public selectedSkuName: string;
 
   private currentState: MyPerformanceEntitiesData;
   private dateRanges$: Observable<DateRangesState>;
@@ -364,10 +363,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             skuPackageCode: parameters.row.metadata.skuCode,
             skuPackageType: parameters.row.metadata.skuPackageType
           }));
-          this.selectedSkuName = parameters.row.descriptionRow0;
         } else {
+          this.selectedSkuCode = null;
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-          this.selectedSkuName = null;
         }
         break;
       default:
