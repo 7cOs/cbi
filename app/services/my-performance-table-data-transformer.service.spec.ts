@@ -407,7 +407,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         for (let i = 0; i < products.skuValues.length; i++) {
           expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i].beerId.masterSKUDescription);
           expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.sku);
-          expect(transformedProductMetricsData[i].metadata.skuCode).toEqual(products.skuValues[i].beerId.masterSKUCode);
+          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(products.skuValues[i].beerId.masterSKUCode);
         }
       });
 
@@ -434,7 +434,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         for (let i = 0; i < products.skuValues.length; i++) {
           expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i].beerId.masterPackageSKUDescription);
           expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.package);
-          expect(transformedProductMetricsData[i].metadata.skuCode).toEqual(products.skuValues[i].beerId.masterPackageSKUCode);
+          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(products.skuValues[i].beerId.masterPackageSKUCode);
         }
       });
 

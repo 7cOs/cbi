@@ -91,7 +91,7 @@ class MyPerformanceTableComponentMock {
   @Input() tableData: Array<MyPerformanceTableRow>;
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() selectedSkuCode: string;
+  @Input() selectedSkuPackageCode: string;
   @Input() showBackButton: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
@@ -698,7 +698,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
-      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
+      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuPackageCode,
         skuPackageType: rowMock.metadata.skuPackageType};
 
       expect(storeMock.dispatch.calls.count()).toBe(1);
@@ -734,7 +734,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
-      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
+      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuPackageCode,
         skuPackageType: rowMock.metadata.skuPackageType};
       componentInstance.handleElementClicked(params);
 
@@ -771,7 +771,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
-      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuCode,
+      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuPackageCode,
         skuPackageType: rowMock.metadata.skuPackageType};
       componentInstance.handleElementClicked(params);
 
@@ -894,7 +894,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when right side data row is clicked', () => {
-    it('should dispatch appropriate actions for clearing the selectedSkuCode', () => {
+    it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
       storeMock.dispatch.calls.reset();
 
       myPerformanceProductMetricsMock = {

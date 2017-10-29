@@ -270,8 +270,8 @@ describe('MyPerformanceTableComponent', () => {
       });
     });
 
-    it('should return an object with selectedSku true when the row matches the selectedSkuCode', () => {
-      componentInstance.selectedSkuCode = rowData.metadata.skuCode;
+    it('should return an object with selected-sku true when the row matches the selectedSkuPackageCode', () => {
+      componentInstance.selectedSkuPackageCode = rowData.metadata.skuPackageCode;
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,

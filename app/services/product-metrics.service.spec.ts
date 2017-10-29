@@ -57,18 +57,24 @@ describe('ProductMetrics Service', () => {
     productMetricsSkuDTOMock = getProductMetricsSkuDTOMock();
 
     productMetricsApiServiceMock = {
-      getPositionProductMetrics(id: any, f: any, agg: ProductMetricsAggregationType) {
-        return agg === ProductMetricsAggregationType.brand
+      getPositionProductMetrics(
+        positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
+      ) {
+        return aggregation === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
       },
-      getAccountProductMetrics(id: any, f: any, c: any, agg: ProductMetricsAggregationType) {
-        return agg === ProductMetricsAggregationType.brand
+      getAccountProductMetrics(
+        accountId: string, positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
+      ) {
+        return aggregation === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
       },
-      getRoleGroupProductMetrics(id: any, c: any, f: any, agg: ProductMetricsAggregationType) {
-        return agg === ProductMetricsAggregationType.brand
+      getRoleGroupProductMetrics(
+        positionId: string, entityType: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
+      ) {
+        return aggregation === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
       }

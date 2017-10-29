@@ -7,7 +7,6 @@ export interface ProductMetricsState extends State {
   status: ActionStatus;
   products: ProductMetrics;
   selectedBrandCodeValues?: ProductMetricsValues;
-  selectedSkuCodeValues?: ProductMetricsValues;
   productMetricsViewType: ProductMetricsViewType;
 }
 

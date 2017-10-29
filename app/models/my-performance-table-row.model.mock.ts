@@ -24,7 +24,7 @@ export function getMyPerformanceTableRowMock(length: number) {
         entityTypeCode: chance.string(),
         entityName: chance.string(),
         brandCode: chance.string(),
-        skuCode: chance.string()
+        skuPackageCode: chance.string()
       }
     });
   }

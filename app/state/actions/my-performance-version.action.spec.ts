@@ -120,7 +120,7 @@ describe('Responsibilities Actions', () => {
     beforeEach(() => {
       selectedSkuCodeMock = {
         skuPackageCode: chance.string(),
-        skuPackageType: SkuPackageType .sku
+        skuPackageType: SkuPackageType.sku
       };
       action = new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(selectedSkuCodeMock);
     });

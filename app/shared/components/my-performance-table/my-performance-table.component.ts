@@ -42,7 +42,7 @@ export class MyPerformanceTableComponent {
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
-  @Input() selectedSkuCode: string;
+  @Input() selectedSkuPackageCode: string;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
@@ -93,7 +93,7 @@ export class MyPerformanceTableComponent {
   public getEntityRowClasses(row: MyPerformanceTableRow) {
     return {
       'performance-error': row.performanceError,
-      'selected-sku': (this.selectedSkuCode && row.metadata.skuCode === this.selectedSkuCode) ? true : false
+      'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false
     };
   }
 

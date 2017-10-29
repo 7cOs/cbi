@@ -8,7 +8,7 @@ export interface MyPerformanceTableRowMetadata {
   entityType?: EntityType;
   entityTypeCode?: string;
   brandCode?: string;
-  skuCode?: string;
+  skuPackageCode?: string;
   skuPackageType?: SkuPackageType;
   entityName?: string;
 }

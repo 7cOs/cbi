@@ -88,7 +88,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsSubscription: Subscription;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrandCode: string;
-  private selectedSkuCode: string;
+  private selectedSkuPackageCode: string;
   private versions: MyPerformanceEntitiesData[];
 
   constructor(
@@ -358,13 +358,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         break;
       case ProductMetricsViewType.skus:
         if (parameters.row) {
-          this.selectedSkuCode = parameters.row.metadata.skuCode;
+          this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
-            skuPackageCode: parameters.row.metadata.skuCode,
+            skuPackageCode: parameters.row.metadata.skuPackageCode,
             skuPackageType: parameters.row.metadata.skuPackageType
           }));
         } else {
-          this.selectedSkuCode = null;
+          this.selectedSkuPackageCode = null;
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
         }
         break;

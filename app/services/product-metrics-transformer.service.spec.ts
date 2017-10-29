@@ -24,7 +24,7 @@ describe('Service: ProductMetricsTransformerService', () => {
         utilService = _utilService;
     }));
 
-    it('should return a collection of formatted ProductMetrics with ', () => {
+    it('should return a collection of formatted ProductMetrics with both brandValues and skuValues', () => {
       const productMetricsBrandDTOMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
       const productMetricsSkuDTOMock: ProductMetricsDTO = getProductMetricsSkuDTOMock();
 

@@ -106,7 +106,7 @@ describe('My Performance Version Reducer', () => {
   it('should set the selected sku when SetMyPerformanceSelectedSkuCode is received', () => {
     const selectedSkuCodeMock = {
       skuPackageCode: chance.string(),
-      skuPackageType: SkuPackageType .sku
+      skuPackageType: SkuPackageType.sku
     };
     const beforeState = getMyPerformanceStateMock();
     const expectedState = {

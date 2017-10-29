@@ -80,8 +80,8 @@ export class MyPerformanceTableDataTransformerService {
       if (productMetricsViewType === ProductMetricsViewType.brands) {
         rightTableData.metadata.brandCode = item.brandCode;
       } else {
-        rightTableData.metadata.skuPackageType = item.beerId.masterPackageSKUCode ? SkuPackageType .package : SkuPackageType .sku;
-        rightTableData.metadata.skuCode = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
+        rightTableData.metadata.skuPackageType = item.beerId.masterPackageSKUCode ? SkuPackageType.package : SkuPackageType.sku;
+        rightTableData.metadata.skuPackageCode = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
       }
 
       return rightTableData;
