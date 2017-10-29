@@ -115,7 +115,7 @@ describe('My Performance Version Reducer', () => {
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedSkuCode: selectedSkuCodeMock.skuPackageCode,
-        skuPackageType: selectedSkuCodeMock.skuPackageType,
+        selectedSkuPackageType: selectedSkuCodeMock.skuPackageType,
         selectedEntityType: beforeState.current.selectedEntityType
       },
       versions: beforeState.versions

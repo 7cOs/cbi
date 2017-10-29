@@ -17,9 +17,9 @@ export interface MyPerformanceEntitiesData {
   salesHierarchyViewType?: SalesHierarchyViewTypeState;
   selectedEntityDescription: string;
   selectedEntityType: EntityType;
-  skuPackageType?: SkuPackageType ;
   selectedBrandCode?: string;
   selectedSkuCode?: string;
+  selectedSkuPackageType?: SkuPackageType;
 }
 
 export interface MyPerformanceState {

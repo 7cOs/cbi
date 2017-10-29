@@ -8,7 +8,7 @@ export interface ProductMetricsState extends State {
   products: ProductMetrics;
   selectedBrandCodeValues?: ProductMetricsValues;
   selectedSkuCodeValues?: ProductMetricsValues;
-  productMetricsViewType?: ProductMetricsViewType;
+  productMetricsViewType: ProductMetricsViewType;
 }
 
 export const initialState: ProductMetricsState = {
