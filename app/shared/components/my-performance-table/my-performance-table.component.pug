@@ -40,7 +40,7 @@ div.performance-table-wrapper
 
       tr.dismissable-total-row.col-100-pct(my-performance-table-row,
                               *ngIf="dismissableTotalRow",
-                              [ngClass]="{'brand-total-row': (!selectedSkuCode && dismissableTotalRow)}",
+                              [ngClass]="{'selected': (!selectedSkuCode && dismissableTotalRow)}",
                               [rowData]="dismissableTotalRow",
                               [showContributionToVolume]="showContributionToVolume",
                               [showOpportunities]="showOpportunities",
