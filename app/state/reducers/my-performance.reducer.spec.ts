@@ -83,6 +83,7 @@ describe('My Performance Reducer', () => {
 
     expect(responsibilitiesReducerSpy).not.toHaveBeenCalled();
     expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
+    expect(myPerformanceFilterReducerSpy).not.toHaveBeenCalled();
   });
 
   it('should call the responsibilities reducer and leave selectedEntityDescription unmodified ' +
@@ -140,6 +141,7 @@ describe('My Performance Reducer', () => {
 
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
     expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
+    expect(myPerformanceFilterReducerSpy).not.toHaveBeenCalled();
   });
 
   it('should call the responsibilities reducer and modify selectedEntityDescription ' +
@@ -202,6 +204,7 @@ describe('My Performance Reducer', () => {
 
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
     expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
+    expect(myPerformanceFilterReducerSpy).not.toHaveBeenCalled();
   });
 
   it('should call the salesHierarchyViewType reducer when a salesHierarchyViewType action is received', () => {
@@ -227,6 +230,7 @@ describe('My Performance Reducer', () => {
 
     expect(responsibilitiesReducerSpy).not.toHaveBeenCalled();
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
+    expect(myPerformanceFilterReducerSpy).not.toHaveBeenCalled();
   });
 
   it('should return current state when an unknown action is dispatched', () => {
@@ -245,6 +249,7 @@ describe('My Performance Reducer', () => {
 
       expect(myPerformanceFilterReducerSpy).toHaveBeenCalled();
       expect(myPerformanceFilterReducerSpy.calls.count()).toBe(4);
+
       expect(myPerformanceFilterReducerSpy.calls.argsFor(0)).toEqual([
         MyPerformanceFilterReducer.initialState,
         new MyPerformanceFilterActions.SetMetric(MetricTypeValue.volume)]);
@@ -257,6 +262,7 @@ describe('My Performance Reducer', () => {
       expect(myPerformanceFilterReducerSpy.calls.argsFor(3)).toEqual([
         MyPerformanceFilterReducer.initialState,
         new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.effective)]);
+
       expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
       expect(responsibilitiesReducerSpy).not.toHaveBeenCalled();
       expect(salesHierarchyViewTypeReducerSpy).not.toHaveBeenCalled();
