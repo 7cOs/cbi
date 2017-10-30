@@ -1,9 +1,12 @@
 import { Action } from '@ngrx/store';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { initialState as initialStateMyPerformanceFilter } from './my-performance-filter.reducer';
 import { initialState as initialStateResponsibilities } from './responsibilities.reducer';
 import { initialState as initialStateSalesHierarchyViewType } from './sales-hierarchy-view-type.reducer';
 import { initialStateVersions } from './my-performance-version.reducer';
+import * as MyPerformanceFilterActions from '../actions/my-performance-filter.action';
+import { myPerformanceFilterReducer, MyPerformanceFilterState } from './my-performance-filter.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
@@ -20,6 +23,7 @@ export interface MyPerformanceEntitiesData {
   selectedBrandCode?: string;
   selectedSkuPackageCode?: string;
   selectedSkuPackageType?: SkuPackageType;
+  filter: MyPerformanceFilterState;
 }
 
 export interface MyPerformanceState {
@@ -32,7 +36,8 @@ export const initialState: MyPerformanceState = {
     responsibilities: initialStateResponsibilities,
     salesHierarchyViewType: initialStateSalesHierarchyViewType,
     selectedEntityDescription: '',
-    selectedEntityType: EntityType.Person
+    selectedEntityType: EntityType.Person,
+    filter: initialStateMyPerformanceFilter
   },
   versions: initialStateVersions
 };
@@ -74,7 +79,8 @@ export function myPerformanceReducer(
           selectedEntityDescription: action.payload.selectedEntityDescription || state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedSkuPackageCode: state.current.selectedSkuPackageCode
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode,
+          filter: state.current.filter
         },
         versions: state.versions
       };
@@ -90,10 +96,21 @@ export function myPerformanceReducer(
           selectedEntityDescription: state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedSkuPackageCode: state.current.selectedSkuPackageCode
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode,
+          filter: state.current.filter
         },
         versions: state.versions
       };
+
+    case MyPerformanceFilterActions.SET_METRIC:
+    case MyPerformanceFilterActions.SET_TIME_PERIOD:
+    case MyPerformanceFilterActions.SET_PREMISE_TYPE:
+    case MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE:
+      return Object.assign({}, state, {
+        current: Object.assign({}, state.current, {
+          filter: myPerformanceFilterReducer(state.current.filter, action as MyPerformanceFilterActions.Action)
+        })
+      });
 
     default:
       return state;

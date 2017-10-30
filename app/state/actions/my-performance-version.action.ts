@@ -46,7 +46,7 @@ export const SET_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance] SET_MY_PERFOR
 export class SetMyPerformanceSelectedBrandCode implements Action {
   readonly type = SET_MY_PERFORMANCE_SELECTED_BRAND;
 
-constructor(public payload: string) { }
+  constructor(public payload: string) { }
 }
 
 export const SET_MY_PERFORMANCE_SELECTED_SKU = '[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU';
