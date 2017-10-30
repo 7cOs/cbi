@@ -2,7 +2,7 @@ import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
 describe('Unit: scorecardsController', function() {
-  var scope, ctrl, $state, filtersService, userService;
+  var scope, ctrl, $state, filtersService, userService, title;
   let remodeledDepletion, remodeledDistribution;
 
   const mockDateRangeService = {
@@ -15,6 +15,12 @@ describe('Unit: scorecardsController', function() {
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.scorecards');
+    angular.mock.module(($provide) => {
+      title = {
+        setTitle: () => {}
+      };
+      $provide.value('title', title);
+    });
 
     inject(function($rootScope, $controller, _$state_, _filtersService_, _userService_) {
       // Create scope

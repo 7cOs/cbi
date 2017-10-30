@@ -1,8 +1,8 @@
 export const configState = ($stateProvider: any) => {
   $stateProvider
-  .state('my-performance', {
-    url: '/my-performance',
+  .state('team-performance', {
+    url: '/team-performance',
     component: 'myPerformance',
-    title: 'My Performance'
+    title: 'Team Performance'
   });
 };

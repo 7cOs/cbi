@@ -2,7 +2,7 @@
 const DateRangeTimePeriod = require('../../enums/date-range-time-period.enum').DateRangeTimePeriod;
 
 module.exports = /*  @ngInject */
-  function landingController($rootScope, $state, $filter, $mdSelect, $window, filtersService, chipsService, myperformanceService, userService) {
+  function landingController($rootScope, $state, $filter, $mdSelect, $window, filtersService, chipsService, myperformanceService, userService, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -12,7 +12,7 @@ module.exports = /*  @ngInject */
     var vm = this;
 
     // Set page title for head and nav
-    $rootScope.pageTitle = $state.current.title;
+    title.setTitle($state.current.title);
 
     // Expose services to view
     vm.chipsService = chipsService;

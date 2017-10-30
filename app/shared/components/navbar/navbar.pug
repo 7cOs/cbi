@@ -21,6 +21,8 @@ div.outer-nav-wrapper
             ul.dropdown
               li.sub-menu(ui-sref="scorecards" analytics-event-on="click" category="Navigation" action="Link Click" label="My Scorecards")
                 div.sub-menu-item #[a My Scorecards]
+              li.sub-menu(ui-sref="team-performance" analytics-event-on="click" category="Navigation" action="Link Click" label="Team Performance")
+                div.sub-menu-item #[a Team Performance]
               li.sub-menu(ui-sref="accounts" analytics-event-on="click" category="Navigation" action="Link Click" label="Account Dashboard")
                 div.sub-menu-item #[a Account Dashboard]
               li.sub-menu(ng-click="nb.openIQLink()" target="_blank" analytics-event-on="click" category="Navigation" action="Link Click" label="More Reports")
@@ -52,8 +54,9 @@ div.outer-nav-wrapper
                 .content
                   settings
           a.feedback(href="#" ng-click="nb.sendFeedback()" analytics-event-on="click" category="Navigation" action="Link Click" label="Send Feedback") Send Feedback
-      ul.nav-sub-menu(ng-if="$root.pageTitle === 'Account Dashboard' || $root.pageTitle === 'Scorecards'")
+      ul.nav-sub-menu(ng-if="nb.onAccountDashboardPage() || nb.onMyScorecardsPage() || nb.onTeamPerformancePage()")
         li.accent #[a(ui-sref="scorecards" ui-sref-active="active" analytics-event-on="click" category="Navigation" action="Link Click" label="My Scorecards") My Scorecards]
+        li.accent #[a(ui-sref="team-performance" ui-sref-active="active" analytics-event-on="click" category="Navigation" action="Link Click" label="Team Performance") Team Performance]
         li.accent #[a(ui-sref="accounts" ui-sref-active="active" analytics-event-on="click" category="Navigation" action="Link Click" label="Account Dashboard") Account Dashboard]
         li.accent
           a.external-link(href="{{nb.linkToIQ}}" target="_blank" analytics-event-on="click" category="Navigation" action="Link Click" label="More Reports") More Reports
