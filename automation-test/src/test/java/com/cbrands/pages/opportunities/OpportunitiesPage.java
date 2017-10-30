@@ -266,7 +266,8 @@ public class OpportunitiesPage extends TestNGBasePage {
     while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
       this
         .clickSavedReportHoverArrow(savedReportOption)
-        .clickDeleteSavedReportLink()
+        .clickSavedReportDeleteLink()
+        .waitForModalToClose()
         .clickSavedReportsDropdown();
       savedReportOption = getFirstSavedReportOption();
     }
@@ -281,6 +282,14 @@ public class OpportunitiesPage extends TestNGBasePage {
       findElement(By.xpath(SAVED_FILTER_OPTION_XPATH)),
       true
     );
+  }
+
+  public SavedReportModal openModalForSavedReportWithName(String reportName) {
+    this.clickSavedReportHoverArrow(
+      findElement(getHandleForSavedReportWithName(reportName))
+    );
+
+    return PageFactory.initElements(driver, SavedReportModal.class);
   }
 
   private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
@@ -310,18 +319,20 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public boolean doesSavedReportExistWithName(String name) {
-    return isElementPresent(By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]"));
+    return isElementPresent(getHandleForSavedReportWithName(name));
   }
 
   public OpportunitiesPage selectSavedReportWithName(String reportName) {
     waitForElementToClickable(
-      savedReportsDropdown.findElement(
-        By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + reportName + "')]")
-      ),
+      savedReportsDropdown.findElement(getHandleForSavedReportWithName(reportName)),
       true
     ).click();
 
     return this;
+  }
+
+  private By getHandleForSavedReportWithName(String name) {
+    return By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
   }
 
   public enum PremiseType {
