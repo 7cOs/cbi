@@ -126,4 +126,75 @@ describe('Service: ProductMetricsApiService', () => {
     });
   });
 
+  describe('getAlternateHierarchyProductMetrics', () => {
+
+    it('should call the getAlternateHierarchyProductMetrics endpoint and return all ProductMetrics', (done: any) => {
+      const filterMock = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+      const expectedPositionId = chance.string({pool: '0123456789'});
+      const expectedEntityType = chance.string({pool: '0123456789'});
+      const contextPositionIdMock = chance.string({pool: '0123456789'});
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(productMetricsBrandDTOMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(`/v3/positions/${expectedPositionId}/alternateHierarchy/${expectedEntityType}/productMetrics`
+          + `?type=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand`
+          + `&contextPositionId=${contextPositionIdMock}`);
+      });
+
+      productMetricsApiService
+        .getAlternateHierarchyProductMetrics(
+          expectedPositionId,
+          expectedEntityType,
+          filterMock,
+          ProductMetricsAggregationType.brand,
+          contextPositionIdMock)
+        .subscribe((res) => {
+          expect(res).toEqual(productMetricsBrandDTOMock);
+          done();
+        });
+    });
+  });
+
+  describe('getAlternateHierarchyProductMetricsForPosition', () => {
+
+    it('should call the getAlternateHierarchyProductMetrics endpoint and return all ProductMetrics', (done: any) => {
+      const filterMock = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+      const expectedPositionId = chance.string({pool: '0123456789'});
+      const contextPositionIdMock = chance.string({pool: '0123456789'});
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(productMetricsBrandDTOMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(`/v3/positions/${expectedPositionId}/alternateHierarchyProductMetrics`
+          + `?type=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand`
+          + `&contextPositionId=${contextPositionIdMock}`);
+      });
+
+      productMetricsApiService
+        .getAlternateHierarchyProductMetricsForPosition(
+          expectedPositionId,
+          filterMock,
+          ProductMetricsAggregationType.brand,
+          contextPositionIdMock)
+        .subscribe((res) => {
+          expect(res).toEqual(productMetricsBrandDTOMock);
+          done();
+        });
+    });
+  });
 });
