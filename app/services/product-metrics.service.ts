@@ -8,7 +8,6 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
-import { ProductMetricsData } from '../services/product-metrics.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
@@ -23,6 +22,7 @@ export interface ProductMetricsData {
   selectedBrandCode?: string;
   products?: ProductMetrics;
   productMetricsViewType?: ProductMetricsViewType;
+  alternateHierarchy?: boolean;
 }
 
 @Injectable()
@@ -37,8 +37,26 @@ export class ProductMetricsService {
     let dtos: Observable<ProductMetricsDTO | Error>;
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
+    console.log('getProductMetrics', productMetricsData);
 
-    if (productMetricsData.selectedEntityType === EntityType.Person) {
+    if (productMetricsData.alternateHierarchy) {
+      if (productMetricsData.selectedEntityType === EntityType.Person) {
+        dtos = this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+          productMetricsData.positionId,
+          productMetricsData.filter,
+          aggregationLevel,
+          productMetricsData.contextPositionId
+        );
+      } else {
+        dtos = this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.entityTypeCode,
+          productMetricsData.filter,
+          aggregationLevel,
+          productMetricsData.contextPositionId
+        );
+      }
+    } else if (productMetricsData.selectedEntityType === EntityType.Person) {
       dtos = this.productMetricsApiService.getPositionProductMetrics(
         productMetricsData.positionId,
         productMetricsData.filter,
