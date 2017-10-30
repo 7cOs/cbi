@@ -1,6 +1,7 @@
 import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { IDirectiveFactory } from 'angular';
+import { Title } from '@angular/platform-browser';
 import 'textangular/dist/textAngular-sanitize.min';
 import '@uirouter/angularjs';
 
@@ -41,5 +42,6 @@ export default angular.module('cf', [
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
   .factory('dateRangeService', downgradeInjectable(DateRangeService))
   .factory('analyticsService', downgradeInjectable(AnalyticsService))
+  .factory('title', downgradeInjectable(Title))
   .config(require('./config'))
   .run(require('./run'));

@@ -1,10 +1,16 @@
 describe('Unit: targetListsController', function() {
-  var scope, ctrl;
+  var scope, ctrl, title;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.targetLists');
+    angular.mock.module(($provide) => {
+      title = {
+        setTitle: () => {}
+      };
+      $provide.value('title', title);
+    });
 
     inject(function($rootScope, $controller) {
       scope = $rootScope.$new();

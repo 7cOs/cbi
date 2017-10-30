@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { BeerLoaderComponent } from '../../shared/components/beer-loader/beer-loader.component';
 import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
@@ -22,6 +23,7 @@ import { WindowService } from '../../services/window.service';
 
 @NgModule({
   imports: [
+    BrowserModule,
     CommonModule,
     SharedModule
   ],
@@ -44,6 +46,7 @@ import { WindowService } from '../../services/window.service';
     ProductMetricsTransformerService,
     ResponsibilitiesService,
     ResponsibilitiesTransformerService,
+    Title,
     WindowService
   ]
 })

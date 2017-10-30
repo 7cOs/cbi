@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
+import { Title } from '@angular/platform-browser';
 
 import { AccountDashboardStateParameters } from '../../models/account-dashboard-state-parameters.model';
 import { ActionStatus } from '../../enums/action-status.enum';
@@ -32,10 +33,10 @@ import * as MyPerformanceVersionActions from '../../state/actions/my-performance
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { WindowService } from '../../services/window.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
@@ -97,10 +98,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
+    private titleService: Title,
     private windowService: WindowService
   ) { }
 
   ngOnInit() {
+    this.titleService.setTitle(this.$state.current.title);
     this.dateRanges$ = this.store.select(state => state.dateRanges);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
