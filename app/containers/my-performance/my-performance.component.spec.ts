@@ -11,6 +11,7 @@ import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-cli
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { dateRangeStateMock } from '../../models/date-range-state.model.mock';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetrics,
@@ -66,7 +67,7 @@ class BeerLoaderComponentMock {
 class MyPerformanceFilterComponentMock {
   @Output() onFilterChange = new EventEmitter<MyPerformanceFilterEvent>();
 
-  @Input() dateRanges: DateRangesState;
+  @Input() dateRangeState: DateRangesState;
   @Input() filterState: MyPerformanceFilterState;
 }
 
@@ -90,6 +91,7 @@ class MyPerformanceTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<MyPerformanceTableRow>;
   @Input() dateRange: DateRange;
+  @Input() showDateRange: boolean = false;
   @Input() performanceMetric: string;
   @Input() selectedSkuPackageCode: string;
   @Input() showBackButton: boolean = false;
@@ -143,7 +145,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetrics: myPerformanceProductMetricsMock,
     myPerformanceProductMetricsViewType: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
-    dateRanges: chance.string(),
+    dateRanges: dateRangeStateMock,
     href: jasmine.createSpy('href'),
     current: {title: chance.string()}
   };
@@ -179,6 +181,7 @@ describe('MyPerformanceComponent', () => {
 
     myPerformanceServiceMock = {
       getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType'),
+      getMetricValueName: jasmine.createSpy('getMetricValueName'),
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
     };
 
@@ -374,8 +377,9 @@ describe('MyPerformanceComponent', () => {
       const myPerformanceFilterMock = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
         .injector
         .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
+      myPerformanceFilterMock.dateRangeState = dateRangeStateMock;
       expect(myPerformanceFilterMock.filterState).toEqual(stateMock.myPerformanceFilter as any);
-      expect(myPerformanceFilterMock.dateRanges).toBe(stateMock.dateRanges as any);
+      expect(myPerformanceFilterMock.dateRangeState).toBe(stateMock.dateRanges as any);
     });
   });
 
