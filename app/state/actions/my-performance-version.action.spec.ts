@@ -3,6 +3,8 @@ import * as Chance from 'chance';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import * as MyPerformanceVersionActions from './my-performance-version.action';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
+import { SkuPackagePayload } from './my-performance-version.action';
 
 const chance = new Chance();
 
@@ -111,6 +113,29 @@ describe('My Performance Version Actions', () => {
     });
   });
 
+  describe('SetMyPerformanceSelectedSkuCode', () => {
+    let skuPackagePayload: SkuPackagePayload;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode;
+
+    beforeEach(() => {
+      skuPackagePayload = {
+        skuPackageCode: chance.string(),
+        skuPackageType: SkuPackageType.sku
+      };
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(skuPackagePayload);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(skuPackagePayload);
+    });
+  });
+
   describe('ClearMyPerformanceAction', () => {
     let action: MyPerformanceVersionActions.ClearMyPerformanceState;
 
@@ -122,6 +147,20 @@ describe('My Performance Version Actions', () => {
       expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE)
         .toBe('[My Performance] CLEAR_MY_PERFORMANCE_STATE');
       expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE);
+    });
+  });
+
+  describe('ClearMyPerformanceSelectedSku', () => {
+    let action: MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode;
+
+    beforeEach(() => {
+      action = new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode();
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU);
     });
   });
 });

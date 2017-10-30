@@ -39,10 +39,10 @@ export function productMetricsReducer(
       });
 
     case ProductMetricsActions.SELECT_BRAND_VALUES:
-      const selectedBrandCode = state.products.brandValues.find(brand => brand.brandCode === action.payload);
+      const selectedBrandValues = state.products.brandValues.find(brand => brand.brandCode === action.payload);
 
       return Object.assign({}, state, {
-        selectedBrandCodeValues: selectedBrandCode
+        selectedBrandCodeValues: selectedBrandValues
       });
 
     case ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE:

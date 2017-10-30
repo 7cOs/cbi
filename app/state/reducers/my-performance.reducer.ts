@@ -13,6 +13,7 @@ import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 import { responsibilitiesReducer, ResponsibilitiesState } from './responsibilities.reducer';
 import * as SalesHierarchyViewTypeActions from '../actions/sales-hierarchy-view-type.action';
 import { salesHierarchyViewTypeReducer, SalesHierarchyViewTypeState } from './sales-hierarchy-view-type.reducer';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 
 export interface MyPerformanceEntitiesData {
   responsibilities?: ResponsibilitiesState;
@@ -20,6 +21,8 @@ export interface MyPerformanceEntitiesData {
   selectedEntityDescription: string;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
+  selectedSkuPackageCode?: string;
+  selectedSkuPackageType?: SkuPackageType;
   filter: MyPerformanceFilterState;
 }
 
@@ -50,6 +53,7 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
@@ -75,6 +79,7 @@ export function myPerformanceReducer(
           selectedEntityDescription: action.payload.selectedEntityDescription || state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode,
           filter: state.current.filter
         },
         versions: state.versions
@@ -91,6 +96,7 @@ export function myPerformanceReducer(
           selectedEntityDescription: state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode,
           filter: state.current.filter
         },
         versions: state.versions

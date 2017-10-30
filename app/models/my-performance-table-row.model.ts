@@ -1,4 +1,5 @@
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 export interface MyPerformanceTableRowMetadata {
   positionId?: string;
@@ -7,6 +8,8 @@ export interface MyPerformanceTableRowMetadata {
   entityType?: EntityType;
   entityTypeCode?: string;
   brandCode?: string;
+  skuPackageCode?: string;
+  skuPackageType?: SkuPackageType;
   entityName?: string;
 }
 
