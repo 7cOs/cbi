@@ -9,6 +9,7 @@ import { FetchProductMetricsPayload } from '../../state/actions/product-metrics.
 import { ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 @Injectable()
 export class ProductMetricsEffects {
@@ -41,12 +42,16 @@ export class ProductMetricsEffects {
   }
 
   private constructSuccessAction(productMetricsData: ProductMetricsData): Observable<Action> {
-    return Observable.from([
+    let actions: Action[] = [
       new ProductMetricsActions.SetProductMetricsViewType(productMetricsData.productMetricsViewType),
       new ProductMetricsActions.FetchProductMetricsSuccess({
         positionId: productMetricsData.positionId,
         products: productMetricsData.products
       })
-    ]);
+    ];
+    if (productMetricsData.productMetricsViewType === ProductMetricsViewType.skus) {
+      actions.push(new ProductMetricsActions.SelectBrandValues(productMetricsData.selectedBrandCode));
+    }
+    return Observable.from(actions);
   }
 }

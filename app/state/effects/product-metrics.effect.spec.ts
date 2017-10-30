@@ -1,3 +1,4 @@
+import { Action } from '@ngrx/store';
 import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
@@ -6,13 +7,13 @@ import * as Chance from 'chance';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsService, ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
@@ -50,7 +51,7 @@ describe('ProductMetrics Effects', () => {
     entityTypeCodeMock = chance.string();
     selectedBrandCodeMock = chance.string();
     productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
-    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock();
+    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(SkuPackageType.package);
     performanceFilterStateMock = getMyPerformanceFilterMock();
     error = new Error(chance.string());
 
@@ -121,13 +122,11 @@ describe('ProductMetrics Effects', () => {
       expect(checkEmptyProductMetricsResponseSpy.calls.argsFor(0)[0]).toEqual(productMetricsDataMock);
     });
 
-    describe('when ProductMetricsService returns successfully', () => {
+    describe('when ProductMetricsService returns successfully and productMetricsViewType is brands', () => {
       it('should return a SetProductMetricsViewType and FetchProductMetricsSuccess', (done) => {
-        const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
-
         spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
           productMetricsData.products = productMetricsWithBrandValuesMock;
-          productMetricsData.productMetricsViewType = productMetricsViewTypeMock;
+          productMetricsData.productMetricsViewType = ProductMetricsViewType.brands;
           return Observable.of(productMetricsData);
         });
 
@@ -137,9 +136,40 @@ describe('ProductMetrics Effects', () => {
         };
 
         productMetricsEffects.fetchProductMetrics$().pairwise().subscribe(([action1, action2]) => {
-          expect(action1).toEqual(new ProductMetricsActions.SetProductMetricsViewType(productMetricsViewTypeMock));
+          expect(action1).toEqual(new ProductMetricsActions.SetProductMetricsViewType(ProductMetricsViewType.brands));
           expect(action2).toEqual(new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock));
           done();
+        });
+      });
+    });
+
+    describe('when ProductMetricsService returns successfully and productMetricsViewType is skus', () => {
+      it('should return a SetProductMetricsViewType, FetchProductMetricsSuccess, and SelectBrandValues', (done) => {
+        spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
+          productMetricsData.products = productMetricsWithBrandValuesMock;
+          productMetricsData.productMetricsViewType = ProductMetricsViewType.skus;
+          productMetricsData.selectedBrandCode = selectedBrandCodeMock;
+          return Observable.of(productMetricsData);
+        });
+
+        productMetricsSuccessPayloadMock = {
+          positionId: positionIdMock,
+          products: productMetricsWithBrandValuesMock
+        };
+
+        let dispatchedActions: Action[] = [];
+
+        productMetricsEffects.fetchProductMetrics$().subscribe((action: Action) => {
+          dispatchedActions.push(action);
+
+          if (dispatchedActions.length === 3) {
+            expect(dispatchedActions).toEqual([
+              new ProductMetricsActions.SetProductMetricsViewType(ProductMetricsViewType.skus),
+              new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock),
+              new ProductMetricsActions.SelectBrandValues(selectedBrandCodeMock)
+            ]);
+            done();
+          }
         });
       });
     });

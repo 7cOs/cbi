@@ -1,91 +1,92 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { getProductMetricsSkuValuesDTOMock, getProductMetricsDTOBrandMock } from '../models/product-metrics.model.mock';
-import { ProductMetrics, ProductMetricsValuesDTO, ProductMetricsDTO } from '../models/product-metrics.model';
+import { CalculatorService } from './calculator.service';
+import {
+  getProductMetricsBrandDTOMock,
+  getProductMetricsSkuDTOMock
+} from '../models/product-metrics.model.mock';
+import {
+  ProductMetrics,
+  ProductMetricsValues,
+  ProductMetricsDTO
+} from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { UtilService } from './util.service';
-
-const chance = new Chance();
-
-let utilService: UtilService;
-let productMetricsTransformerService: ProductMetricsTransformerService;
 
 describe('Service: ProductMetricsTransformerService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
+  let calculatorService: CalculatorService;
+  let productMetricsTransformerService: ProductMetricsTransformerService;
 
+  beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      ProductMetricsTransformerService, UtilService ]
+      CalculatorService,
+      ProductMetricsTransformerService
+    ]
   }));
 
-  describe('#groupProductsByBrand', () => {
-    beforeEach(inject([ ProductMetricsTransformerService, UtilService ],
-      (_productMetricsTransformerService: ProductMetricsTransformerService, _utilService: UtilService) => {
+  describe('transformAndCombineProductMetricsDTOs', () => {
+    beforeEach(inject([ ProductMetricsTransformerService, CalculatorService ],
+      (_productMetricsTransformerService: ProductMetricsTransformerService, _calculatorService: CalculatorService) => {
         productMetricsTransformerService = _productMetricsTransformerService;
-        utilService = _utilService;
+        calculatorService = _calculatorService;
     }));
 
-    it('should return a collection of formatted ProductMetrics from a collection of ProductMetricsDTOs', () => {
-      const productMetricsBrandDTOMock: ProductMetricsDTO = getProductMetricsDTOBrandMock(2, 2);
+    it('should return a collection of formatted ProductMetrics with both brandValues and skuValues', () => {
+      const productMetricsBrandDTOMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
+      const productMetricsSkuDTOMock: ProductMetricsDTO = getProductMetricsSkuDTOMock();
 
-      const expectedProductMetrics: ProductMetrics = {
-        brandValues: [{
-          brandDescription: productMetricsBrandDTOMock.brandValues[0].brandDescription,
-          current: parseInt((productMetricsBrandDTOMock.brandValues[0].values[0].current).toFixed(), 10),
-          yearAgo: utilService.getYearAgoDelta(
-            productMetricsBrandDTOMock.brandValues[0].values[0].current,
-            productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
-          collectionMethod: productMetricsBrandDTOMock.brandValues[0].values[0].collectionMethod,
-          yearAgoPercent: utilService.getYearAgoPercent(
-            productMetricsBrandDTOMock.brandValues[0].values[0].current,
-            productMetricsBrandDTOMock.brandValues[0].values[0].yearAgo),
-          brandCode: productMetricsBrandDTOMock.brandValues[0].brandCode
-        }, {
-          brandDescription: productMetricsBrandDTOMock.brandValues[1].brandDescription,
-          current: parseInt((productMetricsBrandDTOMock.brandValues[1].values[0].current).toFixed(), 10),
-          yearAgo: utilService.getYearAgoDelta(
-            productMetricsBrandDTOMock.brandValues[1].values[0].current,
-            productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
-          collectionMethod: productMetricsBrandDTOMock.brandValues[1].values[0].collectionMethod,
-          yearAgoPercent: utilService.getYearAgoPercent(
-            productMetricsBrandDTOMock.brandValues[1].values[0].current,
-            productMetricsBrandDTOMock.brandValues[1].values[0].yearAgo),
-            brandCode: productMetricsBrandDTOMock.brandValues[1].brandCode
-        }]
-      };
-      const transformedProductMetrics =
-        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock);
-      expect(transformedProductMetrics).toEqual(expectedProductMetrics);
-    });
+      const transformedProductMetrics: ProductMetrics =
+        productMetricsTransformerService.transformAndCombineProductMetricsDTOs([
+          productMetricsBrandDTOMock,
+          productMetricsSkuDTOMock
+        ]);
 
-    it('should return a collection of formatted Sku ProductMetrics from a collection of ProductMetricsDTOs containing skus', () => {
-      const productMectricsSkuDTOMock: ProductMetricsValuesDTO = getProductMetricsSkuValuesDTOMock();
+      expect(transformedProductMetrics.brandValues).toBeDefined();
+      expect(transformedProductMetrics.skuValues).toBeDefined();
+      expect(transformedProductMetrics.brandValues.length).toBe(productMetricsBrandDTOMock.brandValues.length);
+      expect(transformedProductMetrics.skuValues.length).toBe(productMetricsSkuDTOMock.skuValues.length);
 
-      const expectedProductMetrics: ProductMetrics = {
-        skuValues: [{
-          brandDescription: productMectricsSkuDTOMock.brandDescription,
-          collectionMethod: productMectricsSkuDTOMock.values[0].collectionMethod,
-          current: Math.round(productMectricsSkuDTOMock.values[0].current),
-          yearAgo: utilService.getYearAgoDelta(
-            productMectricsSkuDTOMock.values[0].current,
-            productMectricsSkuDTOMock.values[0].yearAgo
-          ),
-          yearAgoPercent: utilService.getYearAgoPercent(
-            productMectricsSkuDTOMock.values[0].current,
-            productMectricsSkuDTOMock.values[0].yearAgo
-          ),
-          brandCode: productMectricsSkuDTOMock.brandCode,
-          beerId: {
-            masterPackageSKUDescription: productMectricsSkuDTOMock.beerId.masterPackageSKUDescription,
-            masterSKUDescription: productMectricsSkuDTOMock.beerId.masterSKUDescription
-          }
-        }]
-      };
-      const transformedProductMetrics =
-        productMetricsTransformerService.transformProductMetrics({
-          skuValues: [productMectricsSkuDTOMock],
-          type: chance.string()
-        });
-      expect(transformedProductMetrics).toEqual(expectedProductMetrics);
+      for (let i = 0; i < productMetricsBrandDTOMock.brandValues.length; i++) {
+        const expectedValues: ProductMetricsValues = {
+          brandDescription: productMetricsBrandDTOMock.brandValues[i].brandDescription,
+          current: parseInt((productMetricsBrandDTOMock.brandValues[i].values[0].current).toFixed(), 10),
+          yearAgo: calculatorService.getYearAgoDelta(
+            productMetricsBrandDTOMock.brandValues[i].values[0].current,
+            productMetricsBrandDTOMock.brandValues[i].values[0].yearAgo),
+          collectionMethod: productMetricsBrandDTOMock.brandValues[i].values[0].collectionMethod,
+          yearAgoPercent: calculatorService.getYearAgoPercent(
+            productMetricsBrandDTOMock.brandValues[i].values[0].current,
+            productMetricsBrandDTOMock.brandValues[i].values[0].yearAgo),
+          brandCode: productMetricsBrandDTOMock.brandValues[i].brandCode
+        };
+
+        expect(transformedProductMetrics.brandValues[i]).toEqual(expectedValues);
+      }
+
+      for (let i = 0; i < productMetricsSkuDTOMock.skuValues.length; i++) {
+        let expectedValues: ProductMetricsValues = {
+          brandDescription: productMetricsSkuDTOMock.skuValues[i].brandDescription,
+          current: parseInt((productMetricsSkuDTOMock.skuValues[i].values[0].current).toFixed(), 10),
+          yearAgo: calculatorService.getYearAgoDelta(
+            productMetricsSkuDTOMock.skuValues[i].values[0].current,
+            productMetricsSkuDTOMock.skuValues[i].values[0].yearAgo),
+          collectionMethod: productMetricsSkuDTOMock.skuValues[i].values[0].collectionMethod,
+          yearAgoPercent: calculatorService.getYearAgoPercent(
+            productMetricsSkuDTOMock.skuValues[i].values[0].current,
+            productMetricsSkuDTOMock.skuValues[i].values[0].yearAgo),
+          brandCode: productMetricsSkuDTOMock.skuValues[i].brandCode,
+          beerId: { }
+        };
+
+        if (productMetricsSkuDTOMock.skuValues[i].beerId.masterSKUCode) {
+          expectedValues.beerId.masterSKUCode = productMetricsSkuDTOMock.skuValues[i].beerId.masterSKUCode;
+          expectedValues.beerId.masterSKUDescription = productMetricsSkuDTOMock.skuValues[i].beerId.masterSKUDescription;
+        } else {
+          expectedValues.beerId.masterPackageSKUCode = productMetricsSkuDTOMock.skuValues[i].beerId.masterPackageSKUCode;
+          expectedValues.beerId.masterPackageSKUDescription = productMetricsSkuDTOMock.skuValues[i].beerId.masterPackageSKUDescription;
+        }
+
+        expect(transformedProductMetrics.skuValues[i]).toEqual(expectedValues);
+      }
     });
   });
 });

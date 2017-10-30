@@ -12,7 +12,8 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchProductMetrics, SelectBrandValues } from '../../state/actions/product-metrics.action';
+import { FetchProductMetrics,
+         SelectBrandValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -38,12 +39,12 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
 import {
-  SaveMyPerformanceState,
-  SetMyPerformanceSelectedEntityType
-} from '../../state/actions/my-performance-version.action';
+         SaveMyPerformanceState,
+         SetMyPerformanceSelectedEntityType,
+         SkuPackagePayload
+       } from '../../state/actions/my-performance-version.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { UtilService } from '../../services/util.service';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
 
@@ -89,6 +90,7 @@ class MyPerformanceTableComponentMock {
   @Input() tableData: Array<MyPerformanceTableRow>;
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
+  @Input() selectedSkuPackageCode: string;
   @Input() showBackButton: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
@@ -205,8 +207,7 @@ describe('MyPerformanceComponent', () => {
         {
           provide: WindowService,
           useValue: windowServiceMock
-        },
-        UtilService
+        }
       ]
     });
     fixture = TestBed.createComponent(MyPerformanceComponent);
@@ -716,7 +717,7 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
+    it('should trigger appropriate actions when current salesHierarchyViewType is people and ' +
       'when productMetricsViewType is brands', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
@@ -739,14 +740,22 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should NOT trigger any actions when ProductMetricsViewType is skus and rowType is data', () => {
+    it('should trigger appropriate actions with any salesHierarchyViewType and ' +
+      'when productMetricsViewType is skus', () => {
+      const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
+      componentInstance.salesHierarchyViewType = salesHierarchyViewTypes[chance.integer(
+        {min: 0 , max: salesHierarchyViewTypes.length - 1})];
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuPackageCode,
+        skuPackageType: rowMock.metadata.skuPackageType};
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(0);
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
+      );
     });
-
   });
 
   describe('when left side data row link clicked', () => {
@@ -852,7 +861,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when right side data row is clicked', () => {
-    it('should not dispatch any actions', () => {
+    it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
       storeMock.dispatch.calls.reset();
 
       myPerformanceProductMetricsMock = {
@@ -864,7 +873,9 @@ describe('MyPerformanceComponent', () => {
 
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
-      expect(storeMock.dispatch.calls.count()).toBe(0);
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     });
   });
 

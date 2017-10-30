@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
@@ -34,53 +35,80 @@ export class ProductMetricsService {
   ) { }
 
   public getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
-    let productMetricsDTOs: Observable<ProductMetricsDTO | Error>;
+    let apiCalls: Observable<ProductMetricsDTO>[] = [];
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
 
     if (productMetricsData.alternateHierarchy) {
       if (productMetricsData.selectedEntityType === EntityType.Person) {
-        productMetricsDTOs = this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+        apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
           productMetricsData.positionId,
           productMetricsData.filter,
           aggregationLevel,
           productMetricsData.contextPositionId
-        );
+        ));
       } else {
-        productMetricsDTOs = this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+        apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
           productMetricsData.positionId,
           productMetricsData.entityTypeCode,
           productMetricsData.filter,
           aggregationLevel,
           productMetricsData.contextPositionId
-        );
+        ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.Person) {
-      productMetricsDTOs = this.productMetricsApiService.getPositionProductMetrics(
+      apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
         productMetricsData.positionId,
         productMetricsData.filter,
         aggregationLevel
-      );
+      ));
+      if (aggregationLevel === ProductMetricsAggregationType.sku) {
+        apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.filter,
+          ProductMetricsAggregationType.brand
+        ));
+      }
     } else if (productMetricsData.selectedEntityType === EntityType.Account) {
-      productMetricsDTOs = this.productMetricsApiService.getAccountProductMetrics(
+      apiCalls.push(this.productMetricsApiService.getAccountProductMetrics(
         productMetricsData.positionId,
         productMetricsData.contextPositionId,
         productMetricsData.filter,
         aggregationLevel
-      );
+      ));
+      if (aggregationLevel === ProductMetricsAggregationType.sku) {
+        apiCalls.push(this.productMetricsApiService.getAccountProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.contextPositionId,
+          productMetricsData.filter,
+          ProductMetricsAggregationType.brand
+        ));
+      }
     } else if (productMetricsData.selectedEntityType === EntityType.RoleGroup) {
-      productMetricsDTOs = this.productMetricsApiService.getRoleGroupProductMetrics(
+      apiCalls.push(this.productMetricsApiService.getRoleGroupProductMetrics(
         productMetricsData.positionId,
         productMetricsData.entityTypeCode,
         productMetricsData.filter,
         aggregationLevel
-      );
+      ));
+      if (aggregationLevel === ProductMetricsAggregationType.sku) {
+        apiCalls.push(this.productMetricsApiService.getRoleGroupProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.entityTypeCode,
+          productMetricsData.filter,
+          ProductMetricsAggregationType.brand
+        ));
+      }
     }
 
-    return productMetricsDTOs.map((productMetricsDTO: ProductMetricsDTO) => {
+    const allCalls: Observable<ProductMetricsDTO[]> = Observable.forkJoin(apiCalls);
+
+    return allCalls.map((productMetricsDTOs: ProductMetricsDTO[]) => {
+      const metrics: ProductMetrics = this.productMetricsTransformerService.transformAndCombineProductMetricsDTOs(productMetricsDTOs);
+      const viewType = metrics.skuValues ? ProductMetricsViewType.skus : ProductMetricsViewType.brands;
       return Object.assign({}, productMetricsData, {
-        products: this.productMetricsTransformerService.transformProductMetrics(productMetricsDTO),
-        productMetricsViewType: productMetricsDTO.brandValues ? ProductMetricsViewType.brands : ProductMetricsViewType.skus
+        products: metrics,
+        productMetricsViewType: viewType
       });
     });
   }
@@ -96,6 +124,7 @@ export class ProductMetricsService {
     if (productMetricsData.selectedBrandCode && productMetricsData.products && productMetricsData.products.skuValues) {
       return Observable.of(Object.assign({}, productMetricsData, {
         products: {
+          brandValues: productMetricsData.products.brandValues,
           skuValues: productMetricsData.products.skuValues.filter((productMetricsValues: ProductMetricsValues) => {
             return productMetricsValues.brandCode === productMetricsData.selectedBrandCode;
           })

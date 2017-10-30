@@ -3,18 +3,22 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
+import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilter } from '../models/my-performance-filter.model';
 import { ProductMetricsApiService } from './product-metrics-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { productMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
+import { ProductMetricsDTO } from '../models/product-metrics.model';
 
 describe('Service: ProductMetricsApiService', () => {
   let productMetricsApiService: ProductMetricsApiService;
   let mockBackend: MockBackend;
+  let productMetricsDTOMock: ProductMetricsDTO;
 
   beforeEach(() => {
+    productMetricsDTOMock = getProductMetricsBrandDTOMock();
+
     TestBed.configureTestingModule({
       providers: [
         {
@@ -50,7 +54,7 @@ describe('Service: ProductMetricsApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsBrandDTOMock)
+          body: JSON.stringify(productMetricsDTOMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -61,7 +65,7 @@ describe('Service: ProductMetricsApiService', () => {
       productMetricsApiService
         .getPositionProductMetrics(expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
         .subscribe((res) => {
-          expect(res).toEqual(productMetricsBrandDTOMock);
+          expect(res).toEqual(productMetricsDTOMock);
           done();
         });
     });
@@ -80,7 +84,7 @@ describe('Service: ProductMetricsApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsBrandDTOMock)
+          body: JSON.stringify(productMetricsDTOMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -91,7 +95,7 @@ describe('Service: ProductMetricsApiService', () => {
       productMetricsApiService
         .getAccountProductMetrics(expectedAccountId, expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
         .subscribe((res) => {
-          expect(res).toEqual(productMetricsBrandDTOMock);
+          expect(res).toEqual(productMetricsDTOMock);
           done();
         });
     });
@@ -110,7 +114,7 @@ describe('Service: ProductMetricsApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsBrandDTOMock)
+          body: JSON.stringify(productMetricsDTOMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -121,7 +125,7 @@ describe('Service: ProductMetricsApiService', () => {
       productMetricsApiService
         .getRoleGroupProductMetrics(expectedPositionId, expectedEntityType, filterMock, ProductMetricsAggregationType.brand)
         .subscribe((res) => {
-          expect(res).toEqual(productMetricsBrandDTOMock);
+          expect(res).toEqual(productMetricsDTOMock);
           done();
         });
     });
@@ -141,7 +145,7 @@ describe('Service: ProductMetricsApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsBrandDTOMock)
+          body: JSON.stringify(productMetricsDTOMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -158,7 +162,7 @@ describe('Service: ProductMetricsApiService', () => {
           ProductMetricsAggregationType.brand,
           contextPositionIdMock)
         .subscribe((res) => {
-          expect(res).toEqual(productMetricsBrandDTOMock);
+          expect(res).toEqual(productMetricsDTOMock);
           done();
         });
     });
@@ -177,7 +181,7 @@ describe('Service: ProductMetricsApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsBrandDTOMock)
+          body: JSON.stringify(productMetricsDTOMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -193,7 +197,7 @@ describe('Service: ProductMetricsApiService', () => {
           ProductMetricsAggregationType.brand,
           contextPositionIdMock)
         .subscribe((res) => {
-          expect(res).toEqual(productMetricsBrandDTOMock);
+          expect(res).toEqual(productMetricsDTOMock);
           done();
         });
     });
