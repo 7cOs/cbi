@@ -33,7 +33,7 @@ export interface ResponsibilitiesData {
   alternateHierarchyId?: string;
   entityTypeCode?: string;
   filter?: MyPerformanceFilterState;
-  brandCode?: string;
+  brandSkuCode?: string;
   entityWithPerformance?: Array<EntityWithPerformance>;
   entities?: HierarchyEntity[];
   selectedEntityDescription?: string;
@@ -47,7 +47,7 @@ export interface FetchEntityWithPerformanceData {
   positionId: string;
   alternateHierarchyId?: string;
   entityType: EntityType;
-  brandCode?: string;
+  brandSkuCode?: string;
   entityWithPerformance?: Array<EntityWithPerformance>;
   selectedEntityDescription?: string;
 }
@@ -56,7 +56,7 @@ export interface RefreshAllPerformancesData {
   // Common
   positionId: string;
   filter: MyPerformanceFilterState;
-  brandCode?: string;
+  brandSkuCode?: string;
   groupedEntities?: GroupedEntities;
   alternateHierarchyId?: string;
 
@@ -77,7 +77,7 @@ export interface RefreshTotalPerformanceData { // TODO: Cleanup
   // Common
   positionId?: string;
   filter?: MyPerformanceFilterState;
-  brandCode?: string;
+  brandSkuCode?: string;
   groupedEntities?: GroupedEntities;
 
   // For roleGroups only
@@ -105,7 +105,7 @@ export interface SubAccountData {
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
   premiseType?: PremiseTypeValue;
-  brandCode?: string;
+  brandSkuCode?: string;
 }
 
 @Injectable()
@@ -144,14 +144,14 @@ export class ResponsibilitiesService {
     hierarchyGroups: Array<HierarchyGroup>,
     filter: MyPerformanceFilterState,
     positionId: string,
-    brandCode?: string,
+    brandSkuCode?: string,
     alternateHierarchyId?: string)
   : Observable<EntityWithPerformance[]> {
     const apiCalls: Observable<EntityWithPerformance>[] = hierarchyGroups.map((group: HierarchyGroup) => {
       const fetchGroupPerformanceCall = group.alternateHierarchyId || alternateHierarchyId
         ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group, positionId,
-            group.alternateHierarchyId || alternateHierarchyId, filter, brandCode)
-        : this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId, brandCode);
+            group.alternateHierarchyId || alternateHierarchyId, filter, brandSkuCode)
+        : this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId, brandSkuCode);
 
       return fetchGroupPerformanceCall
         .map((response: PerformanceDTO) => {
@@ -174,7 +174,7 @@ export class ResponsibilitiesService {
         ),
         refreshTotalPerformanceData.filter,
         refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.brandCode
+        refreshTotalPerformanceData.brandSkuCode
       )
       .map((entityWithPerformance: EntityWithPerformance) => {
       return Object.assign({}, refreshTotalPerformanceData, {
@@ -186,7 +186,7 @@ export class ResponsibilitiesService {
   public getPositionsPerformances(
     positions: HierarchyEntity[],
     filter: MyPerformanceFilterState,
-    brandCode?: string,
+    brandSkuCode?: string,
     alternateHierarchyId?: string) {
     const apiCalls: Observable<EntityWithPerformance>[] =
       positions.map((position: HierarchyEntity) => {
@@ -194,7 +194,7 @@ export class ResponsibilitiesService {
           ? this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(position.positionId,
             alternateHierarchyId,
             filter,
-            brandCode)
+            brandSkuCode)
           : this.myPerformanceApiService.getPerformance(position.positionId, filter);
 
         return performanceCall.map((response: PerformanceDTO) => {
@@ -209,8 +209,8 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
-  public getPerformance(positionId: string, filter: MyPerformanceFilterState, brandCode?: string): Observable<Performance> {
-    return this.myPerformanceApiService.getPerformance(positionId, filter, brandCode)
+  public getPerformance(positionId: string, filter: MyPerformanceFilterState, brandSkuCode?: string): Observable<Performance> {
+    return this.myPerformanceApiService.getPerformance(positionId, filter, brandSkuCode)
       .map((response: PerformanceDTO) => {
         return this.performanceTransformerService.transformPerformanceDTO(response);
       });
@@ -220,10 +220,10 @@ export class ResponsibilitiesService {
     distributors: HierarchyEntity[],
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
-    brandCode?: string) {
+    brandSkuCode?: string) {
     const apiCalls: Observable<EntityWithPerformance | Error>[] =
       distributors.map((distributor: HierarchyEntity) => {
-        return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId, brandCode)
+        return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId, brandSkuCode)
           .map((response: PerformanceDTO) => this.performanceTransformerService.transformEntityWithPerformance(response, distributor))
           .catch(() => {
             this.toastService.showPerformanceDataErrorToast();
@@ -238,9 +238,9 @@ export class ResponsibilitiesService {
     accounts: HierarchyEntity[],
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
-    brandCode?: string) {
+    brandSkuCode?: string) {
     const apiCalls: Observable<EntityWithPerformance>[] = accounts.map((account: HierarchyEntity) => {
-        return this.myPerformanceApiService.getAccountPerformance(account.positionId, filter, contextPositionId, brandCode)
+        return this.myPerformanceApiService.getAccountPerformance(account.positionId, filter, contextPositionId, brandSkuCode)
           .map((response: PerformanceDTO) => this.performanceTransformerService.transformEntityWithPerformance(response, account))
           .catch(() => {
             this.toastService.showPerformanceDataErrorToast();
@@ -255,8 +255,8 @@ export class ResponsibilitiesService {
     accountsId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
-    brandCode?: string) {
-    return this.myPerformanceApiService.getAccountPerformance(accountsId, filter, contextPositionId, brandCode)
+    brandSkuCode?: string) {
+    return this.myPerformanceApiService.getAccountPerformance(accountsId, filter, contextPositionId, brandSkuCode)
       .map((response: PerformanceDTO) => this.performanceTransformerService.transformPerformanceDTO(response));
   }
 
@@ -269,7 +269,7 @@ export class ResponsibilitiesService {
           .getSubAccountPerformance(subAccount.positionId,
             subAccountData.contextPositionId,
             subAccountData.filter,
-            subAccountData.brandCode)
+            subAccountData.brandSkuCode)
           .map((response: PerformanceDTO) => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
           })
@@ -298,7 +298,7 @@ export class ResponsibilitiesService {
           .getSubAccountPerformance(subAccount.positionId,
             refreshAllPerformancesData.positionId,
             refreshAllPerformancesData.filter,
-            refreshAllPerformancesData.brandCode)
+            refreshAllPerformancesData.brandSkuCode)
           .map((response: PerformanceDTO) => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
           })
@@ -341,7 +341,7 @@ export class ResponsibilitiesService {
       return this.getPerformance(
         refreshTotalPerformanceData.positionId,
         refreshTotalPerformanceData.filter,
-        refreshTotalPerformanceData.brandCode
+        refreshTotalPerformanceData.brandSkuCode
       )
         .map((response: Performance) => {
           return Object.assign({}, refreshTotalPerformanceData, {
@@ -353,7 +353,7 @@ export class ResponsibilitiesService {
         refreshTotalPerformanceData.accountPositionId,
         refreshTotalPerformanceData.filter,
         refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.brandCode)
+        refreshTotalPerformanceData.brandSkuCode)
         .map((response: Performance) => {
           return Object.assign({}, refreshTotalPerformanceData, {
             entitiesTotalPerformances: response
@@ -482,7 +482,7 @@ export class ResponsibilitiesService {
         entityWithPerformanceObservable = this.getPositionsPerformances(
           pipelineData.entities,
           pipelineData.filter,
-          pipelineData.brandCode,
+          pipelineData.brandSkuCode,
           pipelineData.alternateHierarchyId ? pipelineData.alternateHierarchyId : null
         );
         break;
@@ -491,7 +491,7 @@ export class ResponsibilitiesService {
           pipelineData.entities,
           pipelineData.filter,
           pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : pipelineData.positionId,
-          pipelineData.brandCode
+          pipelineData.brandSkuCode
         );
         break;
       case EntityType.AccountGroup:
@@ -499,7 +499,7 @@ export class ResponsibilitiesService {
           pipelineData.entities,
           pipelineData.filter,
           pipelineData.positionId,
-          pipelineData.brandCode
+          pipelineData.brandSkuCode
         );
         break;
       default:
@@ -546,7 +546,7 @@ export class ResponsibilitiesService {
     return this.getHierarchyGroupsPerformances(responsibilitiesData.hierarchyGroups,
       responsibilitiesData.filter,
       responsibilitiesData.positionId,
-      responsibilitiesData.brandCode,
+      responsibilitiesData.brandSkuCode,
       responsibilitiesData.alternateHierarchyId ? responsibilitiesData.alternateHierarchyId : null)
       .map((entityPerformances: EntityWithPerformance[]) => {
         return Object.assign({}, responsibilitiesData, {
@@ -564,7 +564,7 @@ export class ResponsibilitiesService {
       responsibilitiesData.groupedEntities[Object.keys(responsibilitiesData.groupedEntities)[0]],
       responsibilitiesData.filter,
       contextPositionId,
-      responsibilitiesData.brandCode)
+      responsibilitiesData.brandSkuCode)
       .map((entityPerformances: EntityWithPerformance[]) => {
         return Object.assign({}, responsibilitiesData, {
           entityWithPerformance: entityPerformances
@@ -577,7 +577,7 @@ export class ResponsibilitiesService {
       responsibilitiesData.groupedEntities[Object.keys(responsibilitiesData.groupedEntities)[0]],
       responsibilitiesData.filter,
       responsibilitiesData.positionId,
-      responsibilitiesData.brandCode)
+      responsibilitiesData.brandSkuCode)
       .map((entityPerformances: EntityWithPerformance[]) => {
         return Object.assign({}, responsibilitiesData, {
           entityWithPerformance: entityPerformances

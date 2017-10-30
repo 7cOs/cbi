@@ -13,7 +13,7 @@ export interface FetchResponsibilitiesPayload {
   positionId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
 }
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -47,7 +47,7 @@ export interface RefreshAllPerformancesPayload {
   selectedEntityTypeCode: string;
   salesHierarchyViewType: SalesHierarchyViewType;
   filter: MyPerformanceFilterState;
-  brandCode?: string;
+  brandSkuCode?: string;
   entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;
   accountPositionId?: string;
@@ -60,7 +60,7 @@ export interface FetchSubAccountsPayload {
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
 }
 
 export interface FetchSubAccountsSuccessPayload {
@@ -73,7 +73,7 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   alternateHierarchyId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
@@ -164,7 +164,7 @@ export const FETCH_TOTAL_PERFORMANCE = '[Performance Total] FETCH_TOTAL_PERFORMA
 export class FetchTotalPerformance implements Action {
   readonly type = FETCH_TOTAL_PERFORMANCE;
 
-  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState, brandCode?: string }) { }
+  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState, brandSkuCode?: string }) { }
 }
 
 export const FETCH_TOTAL_PERFORMANCE_SUCCESS = '[Performance Total] FETCH_TOTAL_PERFORMANCE_SUCCESS';
