@@ -130,12 +130,19 @@ th {
   border-bottom: 1px solid $gray-10;
   border-right: 1px solid $gray-10;
   text-transform: uppercase;
-  background-color: $light-blue-4;
 
-  /deep/.left-col, /deep/.center-col, /deep/.right-col {
-    font-weight: $semibold;
-    color: $gray-1;
+  /deep/.left-col {
+    color: $blue;
+  }
+
+  &.selected {
     background-color: $light-blue-4;
+
+    /deep/.left-col, /deep/.center-col, /deep/.right-col {
+      font-weight: $semibold;
+      color: $gray-1;
+      background-color: $light-blue-4;
+    }
   }
 }
 
@@ -303,14 +310,6 @@ div.ctv {
     }
 
     tr.entity-row {
-
-      /deep/td.left-col {
-
-        /deep/span {
-          color: $blue;
-          font-weight: normal;
-        }
-      }
 
       &:hover {
 
@@ -562,5 +561,18 @@ div.ctv {
 
   &:hover, &:active {
     background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
+  }
+}
+
+.selected-sku {
+  border-bottom: 1px solid $gray-10;
+  border-right: 1px solid $gray-10;
+  text-transform: uppercase;
+  background-color: $light-blue-4;
+
+  /deep/.left-col, /deep/.center-col, /deep/.right-col {
+    font-weight: $semibold;
+    color: $gray-1;
+    background-color: $light-blue-4;
   }
 }

@@ -6,8 +6,10 @@ import { getMyPerformanceStateMock, getMyPerformanceEntitiesDataMock } from './m
 import { initialState, MyPerformanceEntitiesData } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
+import { SkuPackagePayload } from '../actions/my-performance-version.action';
 
-let chance = new Chance();
+const chance = new Chance();
 
 describe('My Performance Version Reducer', () => {
 
@@ -74,6 +76,7 @@ describe('My Performance Version Reducer', () => {
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedBrandCode: beforeState.current.selectedBrandCode,
+        selectedSkuPackageCode: beforeState.current.selectedSkuPackageCode,
         selectedEntityType: entityTypeMock
       },
       versions: beforeState.versions
@@ -98,6 +101,46 @@ describe('My Performance Version Reducer', () => {
     };
     const actualState =
       myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(selectedBrandCodeMock));
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should set the selected sku when SetMyPerformanceSelectedSkuCode is received', () => {
+    const skuPackagePayload: SkuPackagePayload = {
+      skuPackageCode: chance.string(),
+      skuPackageType: SkuPackageType.sku
+    };
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedSkuPackageCode: skuPackagePayload.skuPackageCode,
+        selectedSkuPackageType: skuPackagePayload.skuPackageType,
+        selectedEntityType: beforeState.current.selectedEntityType
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(skuPackagePayload));
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should clear the selected sku when ClearMyPerformanceSelectedSkuCode is received', () => {
+    const clearedSkuPackageCode: string = null;
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedSkuPackageCode: clearedSkuPackageCode,
+        selectedEntityType: beforeState.current.selectedEntityType
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     expect(actualState).toEqual(expectedState);
   });
 
