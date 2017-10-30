@@ -44,7 +44,6 @@ import {
 } from '../../state/actions/my-performance-version.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { UtilService } from '../../services/util.service';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
 
@@ -207,8 +206,7 @@ describe('MyPerformanceComponent', () => {
         {
           provide: WindowService,
           useValue: windowServiceMock
-        },
-        UtilService
+        }
       ]
     });
     fixture = TestBed.createComponent(MyPerformanceComponent);

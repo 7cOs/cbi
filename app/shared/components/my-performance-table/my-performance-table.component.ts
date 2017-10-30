@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
@@ -8,7 +9,6 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { UtilService } from '../../../services/util.service';
 
 @Component({
   selector: 'my-performance-table',
@@ -51,7 +51,7 @@ export class MyPerformanceTableComponent {
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
 
-  constructor (private utilService: UtilService) { }
+  constructor (private calculatorService: CalculatorService) { }
 
   public centerColumnsWidth(): string {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
@@ -99,7 +99,7 @@ export class MyPerformanceTableComponent {
         this._sortingCriteria.every((criterion, idx) => {
           i = idx;
           currentColumn = ColumnType[criterion.columnType];
-          currentSortOrder = this.utilService.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
+          currentSortOrder = this.calculatorService.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           return !currentSortOrder;
         });
         return this._sortingCriteria[i].ascending ? currentSortOrder : 0 - currentSortOrder;
