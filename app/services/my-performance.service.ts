@@ -47,7 +47,7 @@ export class MyPerformanceService {
     return defaultPremiseType;
   }
 
-  public getMetricValueName(metricKey: MetricTypeValue) : string {
+  public getMetricValueName(metricKey: MetricTypeValue): string {
 
     let metricName: string;
 
