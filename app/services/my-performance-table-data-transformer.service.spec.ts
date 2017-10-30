@@ -380,6 +380,17 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
       }
     });
+
+    it('should filter out rows with no current nor YA for ProductMetrics', () => {
+      productMetricsState.products.brandValues[6].current = 0;
+      productMetricsState.products.brandValues[6].yearAgo = 0;
+      const transformedProductMetricsData =
+        myPerformanceTableDataTransformerService.getRightTableData(productMetricsState.products);
+
+      expect(transformedProductMetricsData).toBeDefined();
+      expect(transformedProductMetricsData.length).toBe(productMetricsState.products.brandValues.length - 1);
+      expect(transformedProductMetricsData[6].descriptionRow0).toEqual(productMetricsState.products.brandValues[7].brandDescription);
+    });
   });
 
   describe('getProductMetricsSelectedBrandRow', () => {
