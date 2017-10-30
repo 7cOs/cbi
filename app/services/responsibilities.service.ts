@@ -166,23 +166,6 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
-  public getRefreshTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData)
-    : Observable<RefreshTotalPerformanceData> {
-    return this.getHierarchyGroupPerformance(
-        refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
-          hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
-        ),
-        refreshTotalPerformanceData.filter,
-        refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.brandCode
-      )
-      .map((entityWithPerformance: EntityWithPerformance) => {
-      return Object.assign({}, refreshTotalPerformanceData, {
-        entitiesTotalPerformances: entityWithPerformance.performance
-      });
-    });
-  }
-
   public getPositionsPerformances(
     positions: HierarchyEntity[],
     filter: MyPerformanceFilterState,
@@ -249,15 +232,6 @@ export class ResponsibilitiesService {
     });
 
     return Observable.forkJoin(apiCalls);
-  }
-
-  public getAccountPerformances(
-    accountsId: string,
-    filter: MyPerformanceFilterState,
-    contextPositionId?: string,
-    brandCode?: string) {
-    return this.myPerformanceApiService.getAccountPerformance(accountsId, filter, contextPositionId, brandCode)
-      .map((response: PerformanceDTO) => this.performanceTransformerService.transformPerformanceDTO(response));
   }
 
   public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
@@ -360,7 +334,19 @@ export class ResponsibilitiesService {
           });
         });
     } else {
-      return this.getRefreshTotalPerformance(refreshTotalPerformanceData);
+      return this.getHierarchyGroupPerformance(
+          refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
+            hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
+          ),
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.brandCode
+        )
+        .map((entityWithPerformance: EntityWithPerformance) => {
+        return Object.assign({}, refreshTotalPerformanceData, {
+          entitiesTotalPerformances: entityWithPerformance.performance
+        });
+      });
     }
   }
 
@@ -540,6 +526,15 @@ export class ResponsibilitiesService {
       return Observable.throw('Empty SubAccountData Error');
     }
     return Observable.of(subAccountsData);
+  }
+
+  private getAccountPerformances(
+    accountsId: string,
+    filter: MyPerformanceFilterState,
+    contextPositionId?: string,
+    brandCode?: string): Observable<Performance> {
+    return this.myPerformanceApiService.getAccountPerformance(accountsId, filter, contextPositionId, brandCode)
+      .map((response: PerformanceDTO) => this.performanceTransformerService.transformPerformanceDTO(response));
   }
 
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
