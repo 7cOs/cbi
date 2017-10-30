@@ -16,7 +16,7 @@ import {
   SubAccountData,
   RefreshAllPerformancesData,
   FetchEntityWithPerformanceData,
-  RefreshEntitiesTotalPerformancesData
+  RefreshTotalPerformanceData
 } from '../../services/responsibilities.service';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import * as ViewTypeActions from '../../state/actions/sales-hierarchy-view-type.action';
@@ -82,7 +82,7 @@ export class ResponsibilitiesEffects {
   }
 
   @Effect()
-  RefreshAllPerformances(): Observable<Action> {
+  RefreshAllPerformances$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES)
       .switchMap((action: Action): Observable<RefreshAllPerformancesData> => Observable.of(action.payload))
@@ -94,45 +94,17 @@ export class ResponsibilitiesEffects {
   }
 
   @Effect()
-  RefreshEntitiesTotalPerformances(): Observable<Action> {
+  RefreshTotalPerformance$(): Observable<Action> {
   return this.actions$
     .ofType(
       ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES
     )
     .switchMap((action: Action) => Observable.of(action.payload))
-    // TODO: Extract this function into responsibilities.service
-    .switchMap((refreshEntitiesTotalPerformancesData: RefreshEntitiesTotalPerformancesData) => {
-      if (refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
-        || refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.accounts
-        || refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-        return this.responsibilitiesService.getPerformance(
-          refreshEntitiesTotalPerformancesData.positionId,
-          refreshEntitiesTotalPerformancesData.filter,
-          refreshEntitiesTotalPerformancesData.brandCode
-        )
-          .map((response: Performance) => {
-            return Object.assign({}, refreshEntitiesTotalPerformancesData, {
-              entitiesTotalPerformances: response
-            });
-          });
-      } else if (refreshEntitiesTotalPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-        return this.responsibilitiesService.getAccountPerformances(
-          refreshEntitiesTotalPerformancesData.accountPositionId,
-          refreshEntitiesTotalPerformancesData.filter,
-          refreshEntitiesTotalPerformancesData.positionId,
-          refreshEntitiesTotalPerformancesData.brandCode)
-          .map((response: Performance) => {
-            return Object.assign({}, refreshEntitiesTotalPerformancesData, {
-              entitiesTotalPerformances: response
-            });
-          });
-    } else {
-        return this.responsibilitiesService.getRefreshEntitiesTotalPerformances(refreshEntitiesTotalPerformancesData);
-      }
-    })
-    .switchMap((refreshEntitiesTotalPerformancesData: RefreshEntitiesTotalPerformancesData) => {
+    .switchMap((refreshTotalPerformanceData: RefreshTotalPerformanceData) =>
+      this.responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData))
+    .switchMap((refreshTotalPerformanceData: RefreshTotalPerformanceData) => {
       return Observable.of(
-        new ResponsibilitiesActions.FetchTotalPerformanceSuccess(refreshEntitiesTotalPerformancesData.entitiesTotalPerformances)
+        new ResponsibilitiesActions.FetchTotalPerformanceSuccess(refreshTotalPerformanceData.entitiesTotalPerformances)
       );
     })
     .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchTotalPerformanceFailure(err)));

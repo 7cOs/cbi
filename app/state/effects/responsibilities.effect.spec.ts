@@ -22,20 +22,27 @@ import { FetchAlternateHierarchyResponsibilities,
          GetPeopleByRoleGroup,
          SetAccountPositionId,
          SetTotalPerformance,
-         SetTotalPerformanceForSelectedRoleGroup } from '../actions/responsibilities.action';
-import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
-import { getPerformanceMock } from '../../models/performance.model.mock';
+         SetTotalPerformanceForSelectedRoleGroup,
+         RefreshAllPerformancesPayload,
+         RefreshAllPerformances } from '../actions/responsibilities.action';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
+import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { getHierarchyGroupMock } from '../../models/hierarchy-group.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
-import { ResponsibilitiesData, SubAccountData, FetchEntityWithPerformanceData } from '../../services/responsibilities.service';
+import { ResponsibilitiesData,
+  SubAccountData,
+  FetchEntityWithPerformanceData,
+  RefreshAllPerformancesData,
+  RefreshTotalPerformanceData } from '../../services/responsibilities.service';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
@@ -76,6 +83,17 @@ describe('Responsibilities Effects', () => {
     },
     getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
       return Observable.of(subAccountData);
+    },
+    getSubAccountsRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData): Observable<RefreshAllPerformancesData> {
+      return Observable.of(refreshAllPerformancesData);
+    },
+    getRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData)
+      : Observable<ResponsibilitiesData | RefreshAllPerformancesData> {
+      return Observable.of(refreshAllPerformancesData);
+    },
+    getRefreshedTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData)
+      : Observable<RefreshTotalPerformanceData> {
+      return Observable.of(refreshTotalPerformanceData);
     },
     getAlternateHierarchy(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
@@ -375,6 +393,128 @@ describe('Responsibilities Effects', () => {
         responsibilitiesEffects.FetchEntityWithPerformance$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();
+        });
+      });
+    });
+  });
+
+  describe('when a RefreshAllPerformances is received', () => {
+    const refreshAllPerformancesPayloadMock: RefreshAllPerformancesPayload = {
+      positionId: chance.string(),
+      groupedEntities: getGroupedEntitiesMock(),
+      hierarchyGroups: [getHierarchyGroupMock()],
+      selectedEntityType: getEntityTypeMock(),
+      selectedEntityTypeCode: chance.string(),
+      salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
+      filter: performanceFilterStateMock,
+      brandCode: chance.string(),
+      entityType: getEntityTypeMock(),
+      alternateHierarchyId: chance.string(),
+      accountPositionId: chance.string()
+    };
+
+    beforeEach(() => {
+      runner.queue(new RefreshAllPerformances(refreshAllPerformancesPayloadMock));
+    });
+
+    describe('refresh all performances', () => {
+      it('should call getRefreshedPerformances with the payload data', (done) => {
+        const getRefreshedPerformancesSpy = spyOn(responsibilitiesService, 'getRefreshedPerformances').and.callThrough();
+
+        responsibilitiesEffects.RefreshAllPerformances$().subscribe(() => {
+          done();
+        });
+
+        expect(getRefreshedPerformancesSpy.calls.count()).toBe(1);
+        expect(getRefreshedPerformancesSpy.calls.argsFor(0)).toEqual([refreshAllPerformancesPayloadMock]);
+      });
+
+      describe('when getRefreshedPerformances returns successfully', () => {
+        it('should dispatch appropriate actions', (done) => {
+          spyOn(responsibilitiesService, 'getRefreshedPerformances').and.callFake(
+            (refreshAllPerformancesData: RefreshAllPerformancesData) => {
+              return Observable.of(Object.assign({}, refreshAllPerformancesData, {
+                entityWithPerformance: entityWithPerformanceMock
+              }));
+          });
+
+          const dispatchedActions: Action[] = [];
+
+          responsibilitiesEffects.RefreshAllPerformances$().subscribe((dispatchedAction: Action) => {
+            dispatchedActions.push(dispatchedAction);
+
+            if (dispatchedActions.length === 2) {
+              expect(dispatchedActions).toEqual([
+                new SetSalesHierarchyViewType(refreshAllPerformancesPayloadMock.salesHierarchyViewType),
+                new FetchResponsibilitiesSuccess({
+                  positionId: refreshAllPerformancesPayloadMock.positionId,
+                  groupedEntities: refreshAllPerformancesPayloadMock.groupedEntities,
+                  hierarchyGroups: refreshAllPerformancesPayloadMock.hierarchyGroups,
+                  entityWithPerformance: entityWithPerformanceMock
+                })
+              ]);
+
+              done();
+            }
+          });
+        });
+      });
+
+      describe('when getRefreshedPerformances returns an error', () => {
+        it('should return a FetchResponsibilitiesFailure action after catching an error', (done) => {
+          spyOn(responsibilitiesService, 'getRefreshedPerformances').and.returnValue(Observable.throw(error));
+          responsibilitiesEffects.RefreshAllPerformances$().subscribe((result) => {
+            expect(result).toEqual(new FetchResponsibilitiesFailure(error));
+            done();
+          });
+        });
+      });
+    });
+
+    describe('refresh total performance', () => {
+      it('should call getRefreshedTotalPerformance with the payload data', (done) => {
+        const getRefreshedTotalPerformanceSpy = spyOn(responsibilitiesService, 'getRefreshedTotalPerformance').and.callThrough();
+
+        responsibilitiesEffects.RefreshTotalPerformance$().subscribe(() => {
+          done();
+        });
+
+        expect(getRefreshedTotalPerformanceSpy.calls.count()).toBe(1);
+        expect(getRefreshedTotalPerformanceSpy.calls.argsFor(0)).toEqual([refreshAllPerformancesPayloadMock]);
+      });
+
+      describe('when getRefreshedTotalPerformance returns successfully', () => {
+        it('should dispatch appropriate actions', (done) => {
+          spyOn(responsibilitiesService, 'getRefreshedTotalPerformance').and.callFake(
+            (refreshTotalPerformanceData: RefreshTotalPerformanceData) => {
+              return Observable.of(Object.assign({}, refreshTotalPerformanceData, {
+                entitiesTotalPerformances: performanceMock
+              }));
+          });
+
+          const dispatchedActions: Action[] = [];
+
+          responsibilitiesEffects.RefreshTotalPerformance$().subscribe((dispatchedAction: Action) => {
+            dispatchedActions.push(dispatchedAction);
+
+            if (dispatchedActions.length === 1) {
+              expect(dispatchedActions).toEqual([
+                new FetchTotalPerformanceSuccess(performanceMock)
+              ]);
+
+              done();
+            }
+          });
+        });
+      });
+
+      describe('when getRefreshedTotalPerformance returns an error', () => {
+        it('should return a FetchResponsibilitiesFailure action after catching an error', (done) => {
+          spyOn(responsibilitiesService, 'getRefreshedTotalPerformance').and.returnValue(Observable.throw(error));
+          responsibilitiesEffects.RefreshTotalPerformance$().subscribe((result) => {
+            expect(result).toEqual(new FetchTotalPerformanceFailure(error));
+            done();
+          });
         });
       });
     });

@@ -145,7 +145,7 @@ describe('My Performance Reducer', () => {
         entityTypeCode: chance.string(),
         entities: [],
         filter: null,
-        selectedPositionId: chance.string(),
+        positionId: chance.string(),
         entityType: EntityType.RoleGroup,
         selectedEntityDescription: selectedEntityDescriptionMock
       }),

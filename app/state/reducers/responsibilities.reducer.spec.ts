@@ -370,4 +370,26 @@ describe('Responsibilities Reducer', () => {
       expect(actualState).toEqual(expectedState);
     });
   });
+
+  describe('SetAccountPositionId action is received', () => {
+    it('should update the responsibilities state with the given position Id', () => {
+      const payloadMock: string = chance.string();
+      const expectedState: ResponsibilitiesState = {
+        status: initialState.status,
+        responsibilitiesStatus: ActionStatus.NotFetched,
+        entitiesPerformanceStatus: ActionStatus.NotFetched,
+        totalPerformanceStatus: ActionStatus.NotFetched,
+        subaccountsStatus: ActionStatus.NotFetched,
+        positionId: initialState.positionId,
+        groupedEntities: initialState.groupedEntities,
+        hierarchyGroups: initialState.hierarchyGroups,
+        entityWithPerformance: initialState.entityWithPerformance,
+        entitiesTotalPerformances: initialState.entitiesTotalPerformances,
+        accountPositionId: payloadMock
+      };
+      const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.SetAccountPositionId(payloadMock));
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
 });
