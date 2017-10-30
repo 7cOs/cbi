@@ -738,7 +738,6 @@ describe('MyPerformanceComponent', () => {
 
     it('should trigger appropriate actions with any salesHierarchyViewType and ' +
       'when productMetricsViewType is skus', () => {
-
       const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
       componentInstance.salesHierarchyViewType = salesHierarchyViewTypes[chance.integer(
         {min: 0 , max: salesHierarchyViewTypes.length - 1})];
