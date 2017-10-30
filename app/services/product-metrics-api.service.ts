@@ -5,7 +5,6 @@ import 'rxjs/add/operator/map';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
@@ -20,7 +19,6 @@ export class ProductMetricsApiService {
   public getPositionProductMetrics(
     positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
   ): Observable<ProductMetricsDTO> {
-    console.log('getPositionProductMetris');
     const url = `/v3/positions/${ positionId }/productMetrics`;
 
     const params = Object.assign({},
@@ -41,7 +39,6 @@ export class ProductMetricsApiService {
     filter: MyPerformanceFilterState,
     aggregation: ProductMetricsAggregationType
   ): Observable<ProductMetricsDTO> {
-    console.log('getAccountProductMetrics');
     const url = `/v3/accounts/${ accountId }/productMetrics`;
 
     const params = Object.assign({},
@@ -65,15 +62,12 @@ export class ProductMetricsApiService {
     filter: MyPerformanceFilterState,
     aggregation: ProductMetricsAggregationType,
   ): Observable<ProductMetricsDTO> {
-    console.log('getRoleGroupProductMetrics', entityType);
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/productMetrics`;
 
     const params = Object.assign({},
       this.getFilterStateParams(filter),
       { aggregationLevel: aggregation }
     );
-
-    console.log(url, params);
 
     return this.http.get(url, {
       params: params
@@ -99,15 +93,10 @@ export class ProductMetricsApiService {
       }
     );
 
-    console.log(url, params);
-
     return this.http.get(url, {
       params: params
     })
-      .map(res => {
-        console.log(res);
-        return res.json();
-      })
+      .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
   }
 
@@ -128,16 +117,10 @@ export class ProductMetricsApiService {
       }
     );
 
-    console.log('forposition', url, params);
-
     return this.http.get(url, {
       params: params
     })
-      .map(res => {
-        debugger;
-        console.log(res);
-        return res.json();
-      })
+      .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
   }
 

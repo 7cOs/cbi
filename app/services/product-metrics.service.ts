@@ -37,7 +37,6 @@ export class ProductMetricsService {
     let dtos: Observable<ProductMetricsDTO | Error>;
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
-    console.log('getProductMetrics', productMetricsData);
 
     if (productMetricsData.alternateHierarchy) {
       if (productMetricsData.selectedEntityType === EntityType.Person) {

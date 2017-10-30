@@ -386,10 +386,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     if (parameters.leftSide) {
       if (actionPayload.alternateHierarchy) {
-        console.log('is inside alt hier');
         actionPayload.entityTypeCode = parameters.row.metadata.entityTypeCode;
         actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId;
-        console.log(actionPayload.contextPositionId);
       }
 
       switch (this.salesHierarchyViewType) {
