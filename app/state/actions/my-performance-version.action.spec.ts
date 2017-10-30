@@ -114,15 +114,15 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('SetMyPerformanceSelectedSkuCode', () => {
-    let selectedSkuCodeMock: SkuPackagePayload;
+    let skuPackagePayload: SkuPackagePayload;
     let action: MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode;
 
     beforeEach(() => {
-      selectedSkuCodeMock = {
+      skuPackagePayload = {
         skuPackageCode: chance.string(),
-        skuPackageType: SkuPackageType .sku
+        skuPackageType: SkuPackageType.sku
       };
-      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(selectedSkuCodeMock);
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(skuPackagePayload);
     });
 
     it('should have the correct type', () => {
@@ -132,7 +132,7 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(selectedSkuCodeMock);
+      expect(action.payload).toEqual(skuPackagePayload);
     });
   });
 

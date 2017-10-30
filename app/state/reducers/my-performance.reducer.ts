@@ -17,9 +17,9 @@ export interface MyPerformanceEntitiesData {
   salesHierarchyViewType?: SalesHierarchyViewTypeState;
   selectedEntityDescription: string;
   selectedEntityType: EntityType;
-  skuPackageType?: SkuPackageType ;
   selectedBrandCode?: string;
-  selectedSkuCode?: string;
+  selectedSkuPackageCode?: string;
+  selectedSkuPackageType?: SkuPackageType;
 }
 
 export interface MyPerformanceState {
@@ -75,7 +75,7 @@ export function myPerformanceReducer(
           selectedEntityDescription: action.payload.selectedEntityDescription || state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedSkuCode: state.current.selectedSkuCode
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode
         },
         versions: state.versions
       };
@@ -91,7 +91,7 @@ export function myPerformanceReducer(
           selectedEntityDescription: state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
-          selectedSkuCode: state.current.selectedSkuCode
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode
         },
         versions: state.versions
       };

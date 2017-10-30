@@ -70,7 +70,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public performanceMetric: string = 'Depletions';
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
-  public selectedSkuName: string;
 
   private currentState: MyPerformanceEntitiesData;
   private dateRanges$: Observable<DateRangesState>;
@@ -85,7 +84,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsSubscription: Subscription;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrandCode: string;
-  private selectedSkuCode: string;
+  private selectedSkuPackageCode: string;
   private versions: MyPerformanceEntitiesData[];
 
   constructor(
@@ -114,7 +113,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.productMetricsViewType = productMetrics.productMetricsViewType;
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
-          this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(productMetrics.products);
+          this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
+            productMetrics.products,
+            this.productMetricsViewType
+          );
           this.productMetricsSelectedBrandRow = this.productMetricsViewType === ProductMetricsViewType.skus
             ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
             : null;
@@ -373,15 +375,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         break;
       case ProductMetricsViewType.skus:
         if (parameters.row) {
-          this.selectedSkuCode = parameters.row.metadata.skuCode;
+          this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
-            skuPackageCode: parameters.row.metadata.skuCode,
+            skuPackageCode: parameters.row.metadata.skuPackageCode,
             skuPackageType: parameters.row.metadata.skuPackageType
           }));
-          this.selectedSkuName = parameters.row.descriptionRow0;
         } else {
+          this.selectedSkuPackageCode = null;
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-          this.selectedSkuName = null;
         }
         break;
       default:

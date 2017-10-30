@@ -7,6 +7,7 @@ import { MyPerformanceTableRow } from '../models/my-performance-table-row.model'
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
+import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType  } from '../enums/sku-package-type.enum';
 
 @Injectable()
@@ -57,15 +58,16 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
-    const productsValues = productMetrics.brandValues || productMetrics.skuValues;
+  public getRightTableData(productMetrics: ProductMetrics, productMetricsViewType: ProductMetricsViewType): MyPerformanceTableRow[] {
+    const productsValues: ProductMetricsValues[] = productMetricsViewType === ProductMetricsViewType.brands
+      ? productMetrics.brandValues : productMetrics.skuValues;
     const total: number = productsValues.reduce((sum: number, item: ProductMetricsValues): number => {
       return sum + item.current;
     }, 0);
 
     return productsValues.map((item: ProductMetricsValues) => {
-      const rightTableData = {
-        descriptionRow0: productMetrics.brandValues
+      const rightTableData: MyPerformanceTableRow = {
+        descriptionRow0: productMetricsViewType === ProductMetricsViewType.brands
           ? item.brandDescription
           : item.beerId.masterPackageSKUDescription || item.beerId.masterSKUDescription,
         metricColumn0: item.current,
@@ -75,12 +77,13 @@ export class MyPerformanceTableDataTransformerService {
         metadata: {}
       };
 
-      if (item.brandCode) {
-        rightTableData.metadata['brandCode'] =  item.brandCode;
+      if (productMetricsViewType === ProductMetricsViewType.brands) {
+        rightTableData.metadata.brandCode = item.brandCode;
       } else {
-        rightTableData.metadata['skuPackageType'] = item.beerId.masterPackageSKUCode ? SkuPackageType .package : SkuPackageType .sku;
-        rightTableData.metadata['skuCode'] = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
+        rightTableData.metadata.skuPackageType = item.beerId.masterPackageSKUCode ? SkuPackageType.package : SkuPackageType.sku;
+        rightTableData.metadata.skuPackageCode = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
       }
+
       return rightTableData;
     });
   }

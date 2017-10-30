@@ -7,8 +7,7 @@ export interface ProductMetricsState extends State {
   status: ActionStatus;
   products: ProductMetrics;
   selectedBrandCodeValues?: ProductMetricsValues;
-  selectedSkuCodeValues?: ProductMetricsValues;
-  productMetricsViewType?: ProductMetricsViewType;
+  productMetricsViewType: ProductMetricsViewType;
 }
 
 export const initialState: ProductMetricsState = {
@@ -40,10 +39,10 @@ export function productMetricsReducer(
       });
 
     case ProductMetricsActions.SELECT_BRAND_VALUES:
-      const selectedBrandCode = state.products.brandValues.find(brand => brand.brandCode === action.payload);
+      const selectedBrandValues = state.products.brandValues.find(brand => brand.brandCode === action.payload);
 
       return Object.assign({}, state, {
-        selectedBrandCodeValues: selectedBrandCode
+        selectedBrandCodeValues: selectedBrandValues
       });
 
     case ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE:

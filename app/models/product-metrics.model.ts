@@ -27,8 +27,8 @@ export interface ProductMetricsValuesDTO {
     }
   ];
   beerId?: {
-    masterPackageSKUCode: string;
-    masterPackageSKUDescription: string;
+    masterPackageSKUCode?: string;
+    masterPackageSKUDescription?: string;
     masterSKUCode?: string;
     masterSKUDescription?: string;
   };

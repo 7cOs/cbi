@@ -134,15 +134,15 @@ th {
   /deep/.left-col {
     color: $blue;
   }
-}
 
-.brand-total-row {
-  background-color: $light-blue-4;
-
-  /deep/.left-col, /deep/.center-col, /deep/.right-col {
-    font-weight: $semibold;
-    color: $gray-1;
+  &.selected {
     background-color: $light-blue-4;
+
+    /deep/.left-col, /deep/.center-col, /deep/.right-col {
+      font-weight: $semibold;
+      color: $gray-1;
+      background-color: $light-blue-4;
+    }
   }
 }
 
@@ -564,7 +564,7 @@ div.ctv {
   }
 }
 
-.selectedSku {
+.selected-sku {
   border-bottom: 1px solid $gray-10;
   border-right: 1px solid $gray-10;
   text-transform: uppercase;
