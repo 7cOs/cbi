@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { Title } from '@angular/platform-browser';
 
 import { ActionStatus } from '../../enums/action-status.enum';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
@@ -133,6 +134,10 @@ describe('MyPerformanceComponent', () => {
     nativeWindow: jasmine.createSpy('nativeWindow').and.callFake( () => windowMock )
   };
 
+  const titleMock = {
+    setTitle: jasmine.createSpy('setTitle')
+  };
+
   const stateMock = {
     myPerformance: myPerformanceStateMock,
     myPerformanceProductMetrics: myPerformanceProductMetricsMock,
@@ -140,7 +145,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
     href: jasmine.createSpy('href'),
-    current: {}
+    current: {title: chance.string()}
   };
 
   const storeMock = {
@@ -208,6 +213,10 @@ describe('MyPerformanceComponent', () => {
         {
           provide: WindowService,
           useValue: windowServiceMock
+        },
+        {
+          provide: Title,
+          useValue: titleMock
         }
       ]
     });
@@ -282,6 +291,12 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityDescription: expectedCurrentUserFullName
       })]);
+    });
+
+    it('should call setTitle on init', () => {
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      fixture.detectChanges();
+      expect(titleMock.setTitle).toHaveBeenCalled();
     });
 
     it('should trigger appropriate actions when the filter component emits an event', () => {
