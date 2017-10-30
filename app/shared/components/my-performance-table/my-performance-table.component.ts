@@ -42,6 +42,7 @@ export class MyPerformanceTableComponent {
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
+  @Input() selectedSkuPackageCode: string;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
@@ -87,6 +88,13 @@ export class MyPerformanceTableComponent {
     if (this.viewType !== SalesHierarchyViewType.distributors && this.viewType !== SalesHierarchyViewType.subAccounts) {
       this.onElementClicked.emit({type: type, index: index, row: row});
     }
+  }
+
+  public getEntityRowClasses(row: MyPerformanceTableRow) {
+    return {
+      'performance-error': row.performanceError,
+      'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false
+    };
   }
 
   private updateSortingFunction() {

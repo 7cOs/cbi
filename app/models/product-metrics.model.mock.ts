@@ -1,51 +1,23 @@
 import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues, ProductMetricsValuesDTO } from './product-metrics.model';
+import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
-export const productMetricsBrandDTOMock: ProductMetricsDTO = {
-  type: 'volume',
-  brandValues: [
-    {
-      values: [
-        {
-          current: chance.natural(),
-          yearAgo: chance.natural(),
-          collectionMethod: 'RAD'
-        }
-      ],
-      operatingCompanyCode: '101',
-      operatingCompanyDescription: 'CROWN IMPORTS',
-      beverageTypeCode: '101',
-      beverageTypeDescription: 'Beer',
-      brandCode: '994',
-      brandDescription: 'CORONA FAMILIAR',
-      varietalCode: '999',
-      varietalDescription: 'N/A'
-    },
-    {
-      values: [
-        {
-          current: chance.natural(),
-          yearAgo: chance.natural(),
-          collectionMethod: 'RAD'
-        }
-      ],
-      operatingCompanyCode: '101',
-      operatingCompanyDescription: 'CROWN IMPORTS',
-      beverageTypeCode: '101',
-      beverageTypeDescription: 'Beer',
-      brandCode: '700',
-      brandDescription: 'CERVEZAS CLASICAS',
-      varietalCode: '999',
-      varietalDescription: 'N/A'
-    }
-  ]
-};
-
-export function getProductMetricsDTOBrandMock(min: number = 1, max: number = 9): ProductMetricsDTO {
+export function getProductMetricsBrandDTOMock(min: number = 2, max: number = 9): ProductMetricsDTO {
   return {
     type: 'volume',
     brandValues: Array(chance.natural({min: min, max: max})).fill('').map(() => this.getProductMetricsBrandValuesDTOMock())
+  };
+}
+
+export function getProductMetricsSkuDTOMock(min: number = 2, max: number = 9): ProductMetricsDTO {
+  const skuValues: ProductMetricsValuesDTO[] =
+    Array(chance.natural({min: min, max: max})).fill('').map(() => this.getProductMetricsSkuValuesDTOMock(SkuPackageType.package))
+      .concat(Array(chance.natural({min: min, max: max})).fill('').map(() => this.getProductMetricsSkuValuesDTOMock(SkuPackageType.sku)));
+
+  return {
+    type: 'volume',
+    skuValues: skuValues
   };
 }
 
@@ -69,8 +41,8 @@ export function getProductMetricsBrandValuesDTOMock(): ProductMetricsValuesDTO {
   };
 }
 
-export function getProductMetricsSkuValuesDTOMock(): ProductMetricsValuesDTO {
-  return {
+export function getProductMetricsSkuValuesDTOMock(type: SkuPackageType): ProductMetricsValuesDTO {
+  const dto: ProductMetricsValuesDTO = {
     values: [
       {
         current: chance.natural(),
@@ -78,10 +50,7 @@ export function getProductMetricsSkuValuesDTOMock(): ProductMetricsValuesDTO {
         collectionMethod: chance.string()
       }
     ],
-    beerId: {
-      masterPackageSKUCode: chance.string(),
-      masterPackageSKUDescription: chance.string()
-    },
+    beerId: { },
     operatingCompanyCode: chance.string(),
     operatingCompanyDescription: chance.string(),
     beverageTypeCode: chance.string(),
@@ -93,6 +62,16 @@ export function getProductMetricsSkuValuesDTOMock(): ProductMetricsValuesDTO {
     subBrandCode: chance.string(),
     subBrandDescription: chance.string()
   };
+
+  if (type === SkuPackageType.package) {
+    dto.beerId.masterPackageSKUCode = chance.string();
+    dto.beerId.masterPackageSKUDescription = chance.string();
+  } else {
+    dto.beerId.masterSKUCode = chance.string();
+    dto.beerId.masterSKUDescription = chance.string();
+  }
+
+  return dto;
 }
 
 export function getProductMetricsBrandMock(): ProductMetricsValues {
@@ -106,29 +85,36 @@ export function getProductMetricsBrandMock(): ProductMetricsValues {
   };
 }
 
-export function getProductMetricsSkuMock(): ProductMetricsValues {
-  return {
+export function getProductMetricsSkuMock(type: SkuPackageType): ProductMetricsValues {
+  const val: ProductMetricsValues = {
     brandDescription: chance.string(),
     current: chance.natural(),
     yearAgo: chance.natural(),
     collectionMethod: chance.string(),
     yearAgoPercent: chance.natural(),
     brandCode: chance.string(),
-    beerId: {
-      masterPackageSKUDescription: chance.string(),
-      masterSKUDescription: chance.string(),
-    }
+    beerId: { }
   };
+
+  if (type === SkuPackageType.package) {
+    val.beerId.masterPackageSKUCode = chance.string();
+    val.beerId.masterPackageSKUDescription = chance.string();
+  } else {
+    val.beerId.masterSKUCode = chance.string();
+    val.beerId.masterSKUDescription = chance.string();
+  }
+
+  return val;
 }
 
-export function getProductMetricsWithBrandValuesMock(min: number = 9, max: number = 9): ProductMetrics {
+export function getProductMetricsWithBrandValuesMock(min: number = 2, max: number = 9): ProductMetrics {
   return {
     brandValues: Array(chance.natural({min: min, max: max})).fill('').map(() => getProductMetricsBrandMock())
   };
 }
 
-export function getProductMetricsWithSkuValuesMock(min: number = 9, max: number = 9): ProductMetrics {
+export function getProductMetricsWithSkuValuesMock(skuPackageType: SkuPackageType, min: number = 2, max: number = 9): ProductMetrics {
   return {
-    skuValues: Array(chance.natural({min: min, max: max})).fill('').map(() => getProductMetricsSkuMock())
+    skuValues: Array(chance.natural({min: min, max: max})).fill('').map(() => getProductMetricsSkuMock(skuPackageType))
   };
 }
