@@ -89,6 +89,7 @@ class MyPerformanceTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<MyPerformanceTableRow>;
   @Input() dateRange: DateRange;
+  @Input() showDateRange: boolean = false;
   @Input() performanceMetric: string;
   @Input() showBackButton: boolean = false;
   @Input() showContributionToVolume: boolean = false;

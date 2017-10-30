@@ -2,9 +2,9 @@ div.performance-table-wrapper
   div.performance-table-summary.col-100-pct
     div.summary-header
       span {{ performanceMetric }}
-      span(*ngIf='dateRange && performanceMetric !== "Product Snapshot"')  {{ dateRange.displayCode }}
+      span(*ngIf='dateRange && showDateRange')  {{ dateRange.displayCode }}
     div.summary-date-range
-      span(*ngIf='dateRange && performanceMetric !== "Product Snapshot"') {{ dateRange.range }}
+      span(*ngIf='dateRange && showDateRange') {{ dateRange.range }}
   table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
     thead.col-100-pct
       tr.top-header.col-100-pct

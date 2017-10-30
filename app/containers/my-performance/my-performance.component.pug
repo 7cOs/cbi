@@ -19,6 +19,7 @@ div.tables
   my-performance-table.left(
     [tableData]="salesHierarchy",
     [dateRange]="dateRange",
+    [showDateRange]="true",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="!displayRightTotalRow() ? totalRowData : null",

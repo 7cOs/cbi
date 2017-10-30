@@ -103,7 +103,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((dateRangeState: DateRangesState)  => {
       if (dateRangeState.status === ActionStatus.Fetched) {
         this.dateRangeState = dateRangeState;
-        this.dateRange = dateRangeState[DateRangeTimePeriodValue[DateRangeTimePeriodValue.CYTDBDL]];
+        this.setSelectedDateRangeValues();
       }
     });
 
@@ -121,7 +121,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.tableHeaderRowLeft[1] = currentTypeValue;
       this.tableHeaderRowRight[1] = currentTypeValue;
       if (this.dateRangeState) {
-        this.dateRange =  this.dateRangeState[DateRangeTimePeriodValue[filterState.dateRangeCode]];
+        this.setSelectedDateRangeValues();
       }
     });
 
@@ -459,5 +459,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+  }
+
+  private setSelectedDateRangeValues(): void {
+    if (this.dateRangeState && this.filterState) {
+      this.dateRange = this.dateRangeState[DateRangeTimePeriodValue[this.filterState.dateRangeCode]];
+    }
   }
 }
