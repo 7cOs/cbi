@@ -4,24 +4,30 @@ import {
   getProductMetricsBrandDTOMock,
   getProductMetricsSkuDTOMock
 } from '../models/product-metrics.model.mock';
+import { CalculatorService } from './calculator.service';
+import { getProductMetricsSkuValuesDTOMock, getProductMetricsDTOBrandMock } from '../models/product-metrics.model.mock';
 import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
+import { ProductMetrics, ProductMetricsValuesDTO, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-import { UtilService } from './util.service';
+
+const chance = new Chance();
 
 describe('Service: ProductMetricsTransformerService', () => {
-  let utilService: UtilService;
+  let calculatorService: CalculatorService;
   let productMetricsTransformerService: ProductMetricsTransformerService;
 
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      ProductMetricsTransformerService, UtilService ]
+      CalculatorService,
+      ProductMetricsTransformerService
+    ]
   }));
 
   describe('transformAndCombineProductMetricsDTOs', () => {
-    beforeEach(inject([ ProductMetricsTransformerService, UtilService ],
-      (_productMetricsTransformerService: ProductMetricsTransformerService, _utilService: UtilService) => {
+    beforeEach(inject([ ProductMetricsTransformerService, CalculatorService ],
+      (_productMetricsTransformerService: ProductMetricsTransformerService, _calculatorService: CalculatorService) => {
         productMetricsTransformerService = _productMetricsTransformerService;
-        utilService = _utilService;
+        calculatorService = _calculatorService;
     }));
 
     it('should return a collection of formatted ProductMetrics with both brandValues and skuValues', () => {
@@ -43,11 +49,11 @@ describe('Service: ProductMetricsTransformerService', () => {
         const expectedValues: ProductMetricsValues = {
           brandDescription: productMetricsBrandDTOMock.brandValues[i].brandDescription,
           current: parseInt((productMetricsBrandDTOMock.brandValues[i].values[0].current).toFixed(), 10),
-          yearAgo: utilService.getYearAgoDelta(
+          yearAgo: calculatorService.getYearAgoDelta(
             productMetricsBrandDTOMock.brandValues[i].values[0].current,
             productMetricsBrandDTOMock.brandValues[i].values[0].yearAgo),
           collectionMethod: productMetricsBrandDTOMock.brandValues[i].values[0].collectionMethod,
-          yearAgoPercent: utilService.getYearAgoPercent(
+          yearAgoPercent: calculatorService.getYearAgoPercent(
             productMetricsBrandDTOMock.brandValues[i].values[0].current,
             productMetricsBrandDTOMock.brandValues[i].values[0].yearAgo),
           brandCode: productMetricsBrandDTOMock.brandValues[i].brandCode
@@ -60,11 +66,11 @@ describe('Service: ProductMetricsTransformerService', () => {
         let expectedValues: ProductMetricsValues = {
           brandDescription: productMetricsSkuDTOMock.skuValues[i].brandDescription,
           current: parseInt((productMetricsSkuDTOMock.skuValues[i].values[0].current).toFixed(), 10),
-          yearAgo: utilService.getYearAgoDelta(
+          yearAgo: calculatorService.getYearAgoDelta(
             productMetricsSkuDTOMock.skuValues[i].values[0].current,
             productMetricsSkuDTOMock.skuValues[i].values[0].yearAgo),
           collectionMethod: productMetricsSkuDTOMock.skuValues[i].values[0].collectionMethod,
-          yearAgoPercent: utilService.getYearAgoPercent(
+          yearAgoPercent: calculatorService.getYearAgoPercent(
             productMetricsSkuDTOMock.skuValues[i].values[0].current,
             productMetricsSkuDTOMock.skuValues[i].values[0].yearAgo),
           brandCode: productMetricsSkuDTOMock.skuValues[i].brandCode,

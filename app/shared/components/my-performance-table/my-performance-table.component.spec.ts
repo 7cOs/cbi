@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 
+import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
@@ -12,7 +13,6 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { UtilService } from '../../../services/util.service';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -39,7 +39,7 @@ describe('MyPerformanceTableComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
-        UtilService
+        CalculatorService
       ]
     });
 
