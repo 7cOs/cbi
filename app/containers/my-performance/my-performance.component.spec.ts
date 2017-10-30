@@ -136,7 +136,8 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetricsViewType: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
-    href: jasmine.createSpy('href')
+    href: jasmine.createSpy('href'),
+    current: {}
   };
 
   const storeMock = {

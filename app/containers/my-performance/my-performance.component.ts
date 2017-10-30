@@ -102,7 +102,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.titleService.setTitle('Team Performance');
+    this.titleService.setTitle(this.$state.current.title);
     this.dateRanges$ = this.store.select(state => state.dateRanges);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
