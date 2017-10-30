@@ -692,21 +692,6 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
-      'when productMetricsViewType is skus', () => {
-      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
-      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
-      componentInstance.handleElementClicked(params);
-      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuPackageCode,
-        skuPackageType: rowMock.metadata.skuPackageType};
-
-      expect(storeMock.dispatch.calls.count()).toBe(1);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
-      );
-    });
-
     it('should trigger appropriate actions when current salesHierarchyViewType is accounts and ' +
       'when productMetricsViewType is brands', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
@@ -727,21 +712,6 @@ describe('MyPerformanceComponent', () => {
         selectedBrandCode: rowMock.metadata.brandCode,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId
       }));
-    });
-
-    it('should trigger appropriate actions when current salesHierarchyViewType is accounts and ' +
-      'when productMetricsViewType is skus', () => {
-      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
-      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
-      const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuPackageCode,
-        skuPackageType: rowMock.metadata.skuPackageType};
-      componentInstance.handleElementClicked(params);
-
-      expect(storeMock.dispatch.calls.count()).toBe(1);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-        new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
-      );
     });
 
     it('should trigger appropriate actions when current salesHierarchyViewType is people and ' +
@@ -766,9 +736,12 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should trigger appropriate actions when current salesHierarchyViewType is people and ' +
+    it('should trigger appropriate actions with any salesHierarchyViewType and ' +
       'when productMetricsViewType is skus', () => {
-      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
+
+      const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
+      componentInstance.salesHierarchyViewType = salesHierarchyViewTypes[chance.integer(
+        {min: 0 , max: salesHierarchyViewTypes.length - 1})];
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       const payLoad: SkuPackagePayload = {skuPackageCode: rowMock.metadata.skuPackageCode,
