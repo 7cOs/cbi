@@ -115,12 +115,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformanceFilter)
       .subscribe((filterState: MyPerformanceFilterState)  => {
         this.filterState = filterState;
-        const currentTypeValue = this.myPerformanceService.getMetricValueName(filterState.metricType);
+        const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
-        this.performanceMetric = currentTypeValue;
-        this.tableHeaderRowLeft[1] = currentTypeValue;
-        this.tableHeaderRowRight[1] = currentTypeValue;
+        this.performanceMetric = currentMetricName;
+        this.tableHeaderRowLeft[1] = currentMetricName;
+        this.tableHeaderRowRight[1] = currentMetricName;
         this.setSelectedDateRangeValues();
     });
 
