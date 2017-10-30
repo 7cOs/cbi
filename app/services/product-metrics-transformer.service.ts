@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
+import { CalculatorService } from './calculator.service';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
-import { UtilService } from './util.service';
 
 @Injectable()
 export class ProductMetricsTransformerService {
-  constructor(private utilService: UtilService) { }
+  constructor(private calculatorService: CalculatorService) { }
 
   public transformAndCombineProductMetricsDTOs(dtos: ProductMetricsDTO[]): ProductMetrics {
     const metrics: ProductMetrics[] = dtos.map(dto => this.transformProductMetricsDTO(dto));
@@ -40,8 +40,8 @@ export class ProductMetricsTransformerService {
       brandDescription: valuesDTO.brandDescription,
       collectionMethod: valuesDTO.values[0].collectionMethod,
       current: Math.round(valuesDTO.values[0].current),
-      yearAgo: this.utilService.getYearAgoDelta(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
-      yearAgoPercent: this.utilService.getYearAgoPercent(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
+      yearAgo: this.calculatorService.getYearAgoDelta(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
+      yearAgoPercent: this.calculatorService.getYearAgoPercent(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
       brandCode: valuesDTO.brandCode,
     };
   }

@@ -5,6 +5,7 @@ import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
+import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
@@ -53,7 +54,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .waitForLoaderToDisappear()
       .clickSaveReportLink()
       .enterReportName(name)
-      .clickSaveReportButton()
+      .clickSave()
+      .waitForModalToClose()
       .clickSavedReportsDropdown();
 
     Assert.assertTrue(
@@ -96,6 +98,51 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .waitForLoaderToDisappear();
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
     Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
+  @Test(
+    description = "Attempting to edit a Saved Report to an existing name",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "savedReportData"
+  )
+  public void attemptToEditWithExistingName(String reportName, String distributor) {
+    final SavedReportModal savedReportModal = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportName)
+      .enterNewReportName(reportName)
+      .clickSave();
+
+    Assert.assertTrue(
+      savedReportModal.isDuplicateNameErrorDisplayed(),
+      "Failed to display error when attempting to use the name of an existing list."
+    );
+  }
+
+  @Test(
+    description = "Editing a Saved Report",
+    dependsOnMethods = {"createSavedReport", "attemptToEditWithExistingName"},
+    dataProvider = "savedReportData"
+  )
+  public void editSavedReport(String reportName, String distributor) {
+    final String editedReportName = "EDITED " + reportName;
+    opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportName)
+      .enterNewReportName(editedReportName)
+      .clickSave()
+      .waitForModalToClose();
+
+    Assert.assertTrue(
+      opportunitiesPage.doesSavedReportExistWithName(editedReportName),
+      "Saved Report with edited name " + editedReportName +
+        " failed to appear in the dropdown on the Opportunities page."
+    );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+      "Saved Report with edited  name " + editedReportName + " failed to appear in the dropdown on the Home page."
+    );
   }
 
   @DataProvider

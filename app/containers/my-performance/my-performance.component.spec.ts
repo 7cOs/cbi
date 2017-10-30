@@ -45,7 +45,6 @@ import {
        } from '../../state/actions/my-performance-version.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { UtilService } from '../../services/util.service';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
 
@@ -208,8 +207,7 @@ describe('MyPerformanceComponent', () => {
         {
           provide: WindowService,
           useValue: windowServiceMock
-        },
-        UtilService
+        }
       ]
     });
     fixture = TestBed.createComponent(MyPerformanceComponent);
@@ -791,15 +789,6 @@ describe('MyPerformanceComponent', () => {
         new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
-
-    it('should trigger approapriate actions when ProductMetricsViewType is skus and rowType is data', () => {
-      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
-      componentInstance.handleElementClicked(params);
-
-      expect(storeMock.dispatch.calls.count()).toBe(1);
-    });
-
   });
 
   describe('when left side data row link clicked', () => {
