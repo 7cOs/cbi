@@ -23,7 +23,8 @@ export function getMyPerformanceTableRowMock(length: number) {
         entityType: entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})],
         entityTypeCode: chance.string(),
         entityName: chance.string(),
-        brandCode: chance.string()
+        brandCode: chance.string(),
+        skuPackageCode: chance.string()
       }
     });
   }
