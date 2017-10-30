@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
+
+import { isEqual } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
@@ -260,20 +262,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleBackButtonClicked(): void {
     const previousIndex: number = this.versions.length - 1;
-    const previousState = this.versions[previousIndex];
-    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
-    this.fetchProductMetricsForPreviousState(previousState);
+    const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
+
+    this.handlePreviousStateVersion(previousState, 1);
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
     const { trail, entityDescription } = event;
-    const indexOffset = 1;
-    const stepsBack = trail.length - indexOffset - trail.indexOf(entityDescription);
+    const indexOffset: number = 1;
+    const stepsBack: number = trail.length - indexOffset - trail.indexOf(entityDescription);
     const clickedIndex: number = this.versions.length - stepsBack;
-    const clickedState = this.versions[clickedIndex];
+    const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
-    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(stepsBack));
-    this.fetchProductMetricsForPreviousState(clickedState);
+
+    this.handlePreviousStateVersion(clickedState, stepsBack);
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
@@ -305,7 +307,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
-    this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
+    this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
+      filter: this.filterState
+    })));
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
     switch (this.salesHierarchyViewType) {
@@ -450,7 +454,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
     }
 
-      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
+    this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionParameters));
   }
 
   private getShowSalesContributionToVolume(): boolean {
@@ -473,6 +477,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+  }
+
+  private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
+    if (isEqual(this.filterState, previousState.filter)) {
+      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
+    } else {
+      // Todo: dispatch action to trigger data refresh
+      // Todo: This is temporary just to keep things working as they are, remove once actual refresh is do-able
+      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
+    }
+
+    this.fetchProductMetricsForPreviousState(previousState);
   }
 
   private setSelectedDateRangeValues(): void {
