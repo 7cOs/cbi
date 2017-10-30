@@ -750,15 +750,6 @@ describe('MyPerformanceComponent', () => {
         new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode(payLoad)
       );
     });
-
-    it('should trigger approapriate actions when ProductMetricsViewType is skus and rowType is data', () => {
-      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
-      componentInstance.handleElementClicked(params);
-
-      expect(storeMock.dispatch.calls.count()).toBe(1);
-    });
-
   });
 
   describe('when left side data row link clicked', () => {
