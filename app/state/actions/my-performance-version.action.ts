@@ -6,6 +6,7 @@ import { MyPerformanceEntitiesData } from '../reducers/my-performance.reducer';
 export const SAVE_MY_PERFORMANCE_STATE = '[My Performance] SAVE_MY_PERFORMANCE_STATE';
 export class SaveMyPerformanceState implements Action {
   readonly type = SAVE_MY_PERFORMANCE_STATE;
+
   constructor(public payload: MyPerformanceEntitiesData) { }
 }
 
