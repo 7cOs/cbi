@@ -1,16 +1,16 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { CalculatorService } from './calculator.service';
 import {
   getProductMetricsBrandDTOMock,
   getProductMetricsSkuDTOMock
 } from '../models/product-metrics.model.mock';
-import { CalculatorService } from './calculator.service';
-import { getProductMetricsSkuValuesDTOMock, getProductMetricsDTOBrandMock } from '../models/product-metrics.model.mock';
-import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
-import { ProductMetrics, ProductMetricsValuesDTO, ProductMetricsDTO } from '../models/product-metrics.model';
+import {
+  ProductMetrics,
+  ProductMetricsValues,
+  ProductMetricsDTO
+} from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
-
-const chance = new Chance();
 
 describe('Service: ProductMetricsTransformerService', () => {
   let calculatorService: CalculatorService;
