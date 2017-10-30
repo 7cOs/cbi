@@ -34,20 +34,20 @@ export class ProductMetricsService {
   ) { }
 
   public getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
-    let dtos: Observable<ProductMetricsDTO | Error>;
+    let productMetricsDTOs: Observable<ProductMetricsDTO | Error>;
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
 
     if (productMetricsData.alternateHierarchy) {
       if (productMetricsData.selectedEntityType === EntityType.Person) {
-        dtos = this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+        productMetricsDTOs = this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
           productMetricsData.positionId,
           productMetricsData.filter,
           aggregationLevel,
           productMetricsData.contextPositionId
         );
       } else {
-        dtos = this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+        productMetricsDTOs = this.productMetricsApiService.getAlternateHierarchyProductMetrics(
           productMetricsData.positionId,
           productMetricsData.entityTypeCode,
           productMetricsData.filter,
@@ -56,20 +56,20 @@ export class ProductMetricsService {
         );
       }
     } else if (productMetricsData.selectedEntityType === EntityType.Person) {
-      dtos = this.productMetricsApiService.getPositionProductMetrics(
+      productMetricsDTOs = this.productMetricsApiService.getPositionProductMetrics(
         productMetricsData.positionId,
         productMetricsData.filter,
         aggregationLevel
       );
     } else if (productMetricsData.selectedEntityType === EntityType.Account) {
-      dtos = this.productMetricsApiService.getAccountProductMetrics(
+      productMetricsDTOs = this.productMetricsApiService.getAccountProductMetrics(
         productMetricsData.positionId,
         productMetricsData.contextPositionId,
         productMetricsData.filter,
         aggregationLevel
       );
     } else if (productMetricsData.selectedEntityType === EntityType.RoleGroup) {
-      dtos = this.productMetricsApiService.getRoleGroupProductMetrics(
+      productMetricsDTOs = this.productMetricsApiService.getRoleGroupProductMetrics(
         productMetricsData.positionId,
         productMetricsData.entityTypeCode,
         productMetricsData.filter,
@@ -77,7 +77,7 @@ export class ProductMetricsService {
       );
     }
 
-    return dtos.map((productMetricsDTO: ProductMetricsDTO) => {
+    return productMetricsDTOs.map((productMetricsDTO: ProductMetricsDTO) => {
       return Object.assign({}, productMetricsData, {
         products: this.productMetricsTransformerService.transformProductMetrics(productMetricsDTO),
         productMetricsViewType: productMetricsDTO.brandValues ? ProductMetricsViewType.brands : ProductMetricsViewType.skus

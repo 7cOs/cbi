@@ -60,7 +60,7 @@ export class ProductMetricsApiService {
     positionId: string,
     entityType: string,
     filter: MyPerformanceFilterState,
-    aggregation: ProductMetricsAggregationType,
+    aggregation: ProductMetricsAggregationType
   ): Observable<ProductMetricsDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/productMetrics`;
 

@@ -11,7 +11,7 @@ import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntityWithPerformance[], altHierarchyId: string): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[], altHierarchyId?: string): MyPerformanceTableRow[] {
     const total: number = entities.reduce((sum: number, entity: EntityWithPerformance): number => {
       return sum + entity.performance.total;
     }, 0);

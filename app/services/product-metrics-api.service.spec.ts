@@ -4,6 +4,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
+import { MyPerformanceFilter } from '../models/my-performance-filter.model';
 import { ProductMetricsApiService } from './product-metrics-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { productMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
@@ -40,7 +41,7 @@ describe('Service: ProductMetricsApiService', () => {
   describe('getPositionProductMetrics', () => {
 
     it('should call the getPositionProductMetrics endpoint and return all ProductMetrics', (done) => {
-      const filterMock = {
+      const filterMock: MyPerformanceFilter = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
@@ -128,15 +129,15 @@ describe('Service: ProductMetricsApiService', () => {
 
   describe('getAlternateHierarchyProductMetrics', () => {
 
-    it('should call the getAlternateHierarchyProductMetrics endpoint and return all ProductMetrics', (done: any) => {
-      const filterMock = {
+    it('should call the getAlternateHierarchyProductMetrics endpoint and return all ProductMetrics', (done) => {
+      const filterMock: MyPerformanceFilter = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedPositionId = chance.string({pool: '0123456789'});
-      const expectedEntityType = chance.string({pool: '0123456789'});
-      const contextPositionIdMock = chance.string({pool: '0123456789'});
+      const expectedPositionId: string = chance.string({pool: '0123456789'});
+      const expectedEntityType: string = chance.string({pool: '0123456789'});
+      const contextPositionIdMock: string = chance.string({pool: '0123456789'});
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -165,14 +166,14 @@ describe('Service: ProductMetricsApiService', () => {
 
   describe('getAlternateHierarchyProductMetricsForPosition', () => {
 
-    it('should call the getAlternateHierarchyProductMetrics endpoint and return all ProductMetrics', (done: any) => {
-      const filterMock = {
+    it('should call the getAlternateHierarchyProductMetrics endpoint and return all ProductMetrics', (done) => {
+      const filterMock: MyPerformanceFilter = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedPositionId = chance.string({pool: '0123456789'});
-      const contextPositionIdMock = chance.string({pool: '0123456789'});
+      const expectedPositionId: string = chance.string({pool: '0123456789'});
+      const contextPositionIdMock: string = chance.string({pool: '0123456789'});
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
