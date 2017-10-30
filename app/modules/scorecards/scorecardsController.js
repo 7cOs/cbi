@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function scorecardsController(dateRangeService, filtersService, opportunitiesService, userService, $filter, $q, $rootScope, $scope, $state) {
+  function scorecardsController(dateRangeService, filtersService, opportunitiesService, userService, $filter, $q, $rootScope, $scope, $state, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -65,7 +65,7 @@ module.exports = /*  @ngInject */
     vm.calculatingDistributionTotals;
 
     // Set page title for head and nav
-    $rootScope.pageTitle = $state.current.title;
+    title.setTitle($state.current.title);
     vm.filtersService = filtersService;
     vm.userService = userService;
     vm.depletionSelectOpen = false;
