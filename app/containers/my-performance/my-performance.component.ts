@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
+
 import { isEqual } from 'lodash';
-import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
@@ -19,7 +19,6 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -39,6 +38,7 @@ import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -70,18 +70,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     ascending: false
   }];
   public totalRowData: MyPerformanceTableRow;
-
-  // mocks
-  public dateRange: DateRange = getDateRangeMock();
-  public performanceMetric: string = 'Depletions';
+  public dateRange: DateRange;
+  public dateRangeState: DateRangesState;
+  public performanceMetric: string;
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
 
   private currentState: MyPerformanceEntitiesData;
-  private dateRanges$: Observable<DateRangesState>;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: EntityType;
   private filterState: MyPerformanceFilterState;
+  private dateRangeSubscription: Subscription;
   private filterStateSubscription: Subscription;
   private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
@@ -105,12 +104,26 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
-    this.dateRanges$ = this.store.select(state => state.dateRanges);
+    this.dateRangeSubscription = this.store
+      .select(state => state.dateRanges)
+      .subscribe((dateRangeState: DateRangesState)  => {
+        if (dateRangeState.status === ActionStatus.Fetched) {
+          this.dateRangeState = dateRangeState;
+          this.setSelectedDateRangeValues();
+        }
+    });
 
-    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-      this.filterState = filterState;
-      this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
-      this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+    this.filterStateSubscription = this.store
+      .select(state => state.myPerformanceFilter)
+      .subscribe((filterState: MyPerformanceFilterState)  => {
+        this.filterState = filterState;
+        const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
+        this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
+        this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+        this.performanceMetric = currentMetricName;
+        this.tableHeaderRowLeft[1] = currentMetricName;
+        this.tableHeaderRowRight[1] = currentMetricName;
+        this.setSelectedDateRangeValues();
     });
 
     this.productMetricsSubscription = this.store
@@ -169,21 +182,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
     const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
-    this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
-      this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
-    this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
-    this.store.dispatch(new FetchResponsibilities({
-      positionId: currentUserId,
-      filter: this.filterState,
-      selectedEntityDescription: currentUserFullName
-    }));
-    this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-      positionId: currentUserId,
-      filter: this.filterState,
-      selectedEntityType: EntityType.Person,
-      selectedBrandCode: this.selectedBrandCode
-    }));
+    if (this.filterState) {
+      this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+        this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
+
+      this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
+      this.store.dispatch(new FetchResponsibilities({
+        positionId: currentUserId,
+        filter: this.filterState,
+        selectedEntityDescription: currentUserFullName
+      }));
+      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
+        positionId: currentUserId,
+        filter: this.filterState,
+        selectedEntityType: EntityType.Person,
+        selectedBrandCode: this.selectedBrandCode
+      }));
+    }
   }
 
   ngOnDestroy() {
@@ -192,6 +208,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
     this.productMetricsSubscription.unsubscribe();
+    this.dateRangeSubscription.unsubscribe();
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
@@ -472,5 +489,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
 
     this.fetchProductMetricsForPreviousState(previousState);
+  }
+
+  private setSelectedDateRangeValues(): void {
+    if (this.dateRangeState && this.filterState) {
+      this.dateRange = this.dateRangeState[DateRangeTimePeriodValue[this.filterState.dateRangeCode]];
+    }
   }
 }
