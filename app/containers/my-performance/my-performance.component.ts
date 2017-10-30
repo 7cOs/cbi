@@ -102,28 +102,23 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.dateRangeSubscription = this.store
       .select(state => state.dateRanges)
       .subscribe((dateRangeState: DateRangesState)  => {
-      if (dateRangeState.status === ActionStatus.Fetched) {
-        this.dateRangeState = dateRangeState;
-        this.setSelectedDateRangeValues();
-      }
+        if (dateRangeState.status === ActionStatus.Fetched) {
+          this.dateRangeState = dateRangeState;
+          this.setSelectedDateRangeValues();
+        }
     });
 
     this.filterStateSubscription = this.store
       .select(state => state.myPerformanceFilter)
       .subscribe((filterState: MyPerformanceFilterState)  => {
-      this.filterState = filterState;
-      const currentTypeValue = (filterState.metricType === MetricTypeValue.volume)
-        ? 'Depletions'
-        : (filterState.metricType === MetricTypeValue.velocity ? 'Velocity' : 'Distribution');
-
-      this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
-      this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
-      this.performanceMetric = currentTypeValue;
-      this.tableHeaderRowLeft[1] = currentTypeValue;
-      this.tableHeaderRowRight[1] = currentTypeValue;
-      if (this.dateRangeState) {
+        this.filterState = filterState;
+        const currentTypeValue = this.myPerformanceService.getMetricValueName(filterState.metricType);
+        this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
+        this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+        this.performanceMetric = currentTypeValue;
+        this.tableHeaderRowLeft[1] = currentTypeValue;
+        this.tableHeaderRowRight[1] = currentTypeValue;
         this.setSelectedDateRangeValues();
-      }
     });
 
     this.productMetricsSubscription = this.store

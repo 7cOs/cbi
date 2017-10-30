@@ -10,11 +10,11 @@ import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-cli
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { dateRangeStateMock } from '../../models/date-range-state.model.mock';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetrics,
          SelectBrandValues } from '../../state/actions/product-metrics.action';
-import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
@@ -140,7 +140,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetrics: myPerformanceProductMetricsMock,
     myPerformanceProductMetricsViewType: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
-    dateRanges: getDateRangeMock(),
+    dateRanges: dateRangeStateMock,
     href: jasmine.createSpy('href')
   };
 
@@ -175,6 +175,7 @@ describe('MyPerformanceComponent', () => {
 
     myPerformanceServiceMock = {
       getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType'),
+      getMetricValueName: jasmine.createSpy('getMetricValueName'),
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
     };
 
@@ -360,7 +361,9 @@ describe('MyPerformanceComponent', () => {
       const myPerformanceFilterMock = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
         .injector
         .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
+      myPerformanceFilterMock.dateRangeState = dateRangeStateMock;
       expect(myPerformanceFilterMock.filterState).toEqual(stateMock.myPerformanceFilter as any);
+      expect(myPerformanceFilterMock.dateRangeState).toBe(stateMock.dateRanges as any);
     });
   });
 
