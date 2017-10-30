@@ -7,7 +7,6 @@ import { Store } from '@ngrx/store';
 
 import { ActionStatus } from '../../enums/action-status.enum';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
-import { CalculatorService } from '../../services/calculator.service';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
@@ -185,7 +184,6 @@ describe('MyPerformanceComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
-        CalculatorService,
         MyPerformanceTableDataTransformerService,
         {
           provide: MyPerformanceService,

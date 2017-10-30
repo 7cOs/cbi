@@ -19,7 +19,7 @@ export class CalculatorService {
   public getYearAgoPercent(total: number, totalYearAgo: number): number {
     return (total === 0 && totalYearAgo === 0)
       ? 0
-      : (total !== 0 && totalYearAgo === 0)
+      : totalYearAgo === 0
         ? 100
         : (((total / totalYearAgo) - 1) * 100);
   }

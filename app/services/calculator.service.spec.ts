@@ -20,8 +20,8 @@ describe('Service: CalculatorService', () => {
     }));
 
     beforeEach(() => {
-      total = chance.natural({min: 1, max: 1000000});
-      totalYearAgo = chance.natural({min: 1, max: 1000000});
+      total = chance.natural({min: 1, max: Number.MAX_SAFE_INTEGER});
+      totalYearAgo = chance.natural({min: 1, max: Number.MAX_SAFE_INTEGER});
       spyOn(calculatorService, 'getYearAgoPercent').and.callThrough();
     });
 
@@ -38,7 +38,7 @@ describe('Service: CalculatorService', () => {
       expect(yearAgoPercent).toEqual(100);
     });
 
-    it('should return 0 when total and totalYearAgo are 0', () => {
+    it('should return the calculated YA% when total and totalYearAgo are 0', () => {
       const yearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
       const expectedYearAgoPercent = (((total / totalYearAgo) - 1) * 100);
       expect(yearAgoPercent).toEqual(expectedYearAgoPercent);
