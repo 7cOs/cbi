@@ -96,6 +96,9 @@ module.exports = /*  @ngInject */
     vm.goToNote = goToNote;
     vm.sendFeedback = sendFeedback;
     vm.openIQLink = openIQLink;
+    vm.onTeamPerformancePage = onTeamPerformancePage;
+    vm.onAccountDashboardPage = onAccountDashboardPage;
+    vm.onMyScorecardsPage = onMyScorecardsPage;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
       vm.archived = newVal.archived;
@@ -442,6 +445,18 @@ module.exports = /*  @ngInject */
       emailString += 'User Email%3A ' + window.encodeURIComponent(userService.model.currentUser.email) + newline + newline;
 
       $window.location = emailString;
+    }
+
+    function onTeamPerformancePage() {
+      return $state.current.name === 'team-performance';
+    }
+
+    function onAccountDashboardPage() {
+      return $state.current.name === 'accounts';
+    }
+
+    function onMyScorecardsPage() {
+      return $state.current.name === 'scorecards';
     }
 
     // ***************

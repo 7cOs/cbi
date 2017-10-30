@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -34,7 +34,7 @@ module.exports = /*  @ngInject */
     vm.userService = userService;
 
     // Set page title for head and nav
-    $rootScope.pageTitle = $state.current.title;
+    title.setTitle($state.current.title);
 
   // Expose public methods
     vm.addCollaboratorClick = addCollaboratorClick;

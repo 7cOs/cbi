@@ -1,5 +1,5 @@
 describe('Unit: landingController', function() {
-  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q;
+  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q, title;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -8,6 +8,13 @@ describe('Unit: landingController', function() {
     angular.mock.module('cf.common.filters');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.landing');
+
+    angular.mock.module(($provide) => {
+      title = {
+        setTitle: () => {}
+      };
+      $provide.value('title', title);
+    });
 
     inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_, _$state_, _$q_) {
       // Create scope

@@ -1,11 +1,18 @@
 describe('Unit: opportunitiesController', function() {
-  var scope, q, ctrl, userService, filtersService, opportunityFiltersService, $mdDialog;
+  var scope, q, ctrl, userService, filtersService, opportunityFiltersService, $mdDialog, title;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.opportunities');
+
+    angular.mock.module(($provide) => {
+      title = {
+        setTitle: () => {}
+      };
+      $provide.value('title', title);
+    });
 
     inject(function($rootScope, $controller, $q, opportunitiesService, _userService_, _chipsService_, _filtersService_, _opportunityFiltersService_, _$mdDialog_) {
       scope = $rootScope.$new();
