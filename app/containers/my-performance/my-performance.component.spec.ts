@@ -296,7 +296,7 @@ describe('MyPerformanceComponent', () => {
     it('should call setTitle on init', () => {
       fixture = TestBed.createComponent(MyPerformanceComponent);
       fixture.detectChanges();
-      expect(titleMock.setTitle).toHaveBeenCalled();
+      expect(titleMock.setTitle).toHaveBeenCalledWith(stateMock.current.title);
     });
 
     it('should trigger appropriate actions when the filter component emits an event', () => {
