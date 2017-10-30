@@ -212,7 +212,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
-    console.log(this.currentState.salesHierarchyViewType);
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {

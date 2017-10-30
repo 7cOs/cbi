@@ -1144,8 +1144,63 @@ describe('Responsibilities Effects', () => {
     });
   });
 
+  // copy of getSubAccountsPerformances tests until getSubAccountsPerformances and getSubAccountsRefreshedPerformances are merged together
   describe('getSubAccountsRefreshedPerformances', () => {
+    let refreshAllPerformancesDataMock: RefreshAllPerformancesData;
+    let subAccounts: HierarchyEntity[];
+    let numberOfEntities: number;
+    let entityTypeAccountNameMock: string;
 
+    beforeEach(() => {
+      entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
+      entityTypeAccountNameMock = chance.string();
+      subAccounts = groupedSubAccountsMock[Object.keys(groupedSubAccountsMock)[0]];
+      numberOfEntities = subAccounts.length;
+      refreshAllPerformancesDataMock = {
+        positionId: positionIdMock,
+        filter: performanceFilterStateMock,
+        groupedEntities: groupedSubAccountsMock,
+        brandCode: brandCodeMock,
+        entityType: entityTypeMock
+      };
+    });
+
+    it('should call getSubAccountsRefreshedPerformances total with the proper id for each account', (done) => {
+      const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
+      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+        return Observable.of(entitiesTotalPerformancesDTOMock);
+      });
+
+      responsibilitiesService.getSubAccountsRefreshedPerformances(refreshAllPerformancesDataMock).subscribe(() => {
+        expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        subAccounts.map((subAccount) => {
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
+            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock);
+          expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
+        });
+        done();
+      });
+    });
+
+    it('should call show toast and transform null dto when getSubAccountPerformance returns an error', (done) => {
+      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+        return Observable.throw(new Error(chance.string()));
+      });
+      const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
+
+      responsibilitiesService.getSubAccountsRefreshedPerformances(refreshAllPerformancesDataMock).subscribe(() => {
+        expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
+        expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+        subAccounts.map((subAccount) => {
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
+            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock);
+          expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
+        });
+        done();
+      });
+    });
   });
 
   describe('getRefreshedPerformances', () => {
