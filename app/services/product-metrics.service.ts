@@ -47,6 +47,14 @@ export class ProductMetricsService {
           aggregationLevel,
           productMetricsData.contextPositionId
         ));
+        if (aggregationLevel === ProductMetricsAggregationType.sku) {
+          apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+            productMetricsData.positionId,
+            productMetricsData.filter,
+            ProductMetricsAggregationType.brand,
+            productMetricsData.contextPositionId
+          ));
+        }
       } else {
         apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
           productMetricsData.positionId,
@@ -55,6 +63,15 @@ export class ProductMetricsService {
           aggregationLevel,
           productMetricsData.contextPositionId
         ));
+        if (aggregationLevel === ProductMetricsAggregationType.sku) {
+          apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+            productMetricsData.positionId,
+            productMetricsData.entityTypeCode,
+            productMetricsData.filter,
+            ProductMetricsAggregationType.brand,
+            productMetricsData.contextPositionId
+          ));
+        }
       }
     } else if (productMetricsData.selectedEntityType === EntityType.Person) {
       apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
