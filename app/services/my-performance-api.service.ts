@@ -13,6 +13,7 @@ import { MyPerformanceFilterState } from '../state/reducers/my-performance-filte
 import { PerformanceDTO } from '../models/performance.model';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -27,32 +28,34 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getHierarchyGroupPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string, brandSkuCode?: string)
+  public getHierarchyGroupPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState,
+                                      positionId: string, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(url, {
-      params: this.getParams(filter, brandSkuCode)
+      params: this.getParams(filter, brandSkuCode, skuPackageType)
     })
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformance(positionId: string, filter: MyPerformanceFilterState, brandCode?: string): Observable<PerformanceDTO> {
+  public getPerformance(positionId: string, filter: MyPerformanceFilterState,
+                        brandSkuCode?: string, skuPackageType?: SkuPackageType): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
-      params: this.getParams(filter, brandCode)
+      params: this.getParams(filter, brandSkuCode, skuPackageType)
     })
     .map(res => res.json())
     .catch(err => this.handleError(new Error(err)));
   }
 
   public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
-    alternateHierarchyId: string, filter: MyPerformanceFilterState, brandSkuCode?: string)
+    alternateHierarchyId: string, filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchy/${ group.type }/performanceTotal`;
-    const params = Object.assign({}, this.getParams(filter, brandSkuCode), {
+    const params = Object.assign({}, this.getParams(filter, brandSkuCode, skuPackageType), {
       contextPositionId: alternateHierarchyId
     });
 
@@ -67,10 +70,11 @@ export class MyPerformanceApiService {
     positionId: string,
     alternateHierarchyId: string,
     filter: MyPerformanceFilterState,
-    brandSkuCode?: string)
+    brandSkuCode?: string,
+    skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchyPerformanceTotal`;
-    const params = Object.assign({}, this.getParams(filter, brandSkuCode), {
+    const params = Object.assign({}, this.getParams(filter, brandSkuCode, skuPackageType), {
       contextPositionId: alternateHierarchyId
     });
 
@@ -93,12 +97,13 @@ export class MyPerformanceApiService {
     distributorId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
-    brandSkuCode?: string
+    brandSkuCode?: string,
+    skuPackageType?: SkuPackageType
     ): Observable<PerformanceDTO> {
     const url = `/v3/distributors/${ distributorId }/performanceTotal`;
     const params = contextPositionId
-      ? Object.assign({}, this.getParams(filter, brandSkuCode), { positionId: contextPositionId })
-      : this.getParams(filter, brandSkuCode);
+      ? Object.assign({}, this.getParams(filter, brandSkuCode, skuPackageType), { positionId: contextPositionId })
+      : this.getParams(filter, brandSkuCode, skuPackageType);
 
     return this.http.get(url, {
       params: params
@@ -111,12 +116,13 @@ export class MyPerformanceApiService {
     accountId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
-    brandSkuCode?: string
+    brandSkuCode?: string,
+    skuPackageType?: SkuPackageType
     ): Observable<PerformanceDTO> {
     const url = `/v3/accounts/${ accountId }/performanceTotal`;
     const params = contextPositionId
-      ? Object.assign({}, this.getParams(filter, brandSkuCode), { positionId: contextPositionId })
-      : this.getParams(filter, brandSkuCode);
+      ? Object.assign({}, this.getParams(filter, brandSkuCode, skuPackageType), { positionId: contextPositionId })
+      : this.getParams(filter, brandSkuCode, skuPackageType);
 
     return this.http.get(url, {
       params: params
@@ -139,10 +145,11 @@ export class MyPerformanceApiService {
   }
 
   public getSubAccountPerformance(
-    subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState, brandSkuCode?: string)
+    subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState,
+    brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
     const url = `/v3/subAccounts/${ subAccountId }/performanceTotal`;
-    const params = Object.assign({}, this.getParams(filter, brandSkuCode), { positionId: contextPositionId });
+    const params = Object.assign({}, this.getParams(filter, brandSkuCode, skuPackageType), { positionId: contextPositionId });
 
     return this.http.get(url, {
       params: params
@@ -163,15 +170,25 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  private getParams(filter: MyPerformanceFilterState, brandSkuCode?: string): any {
-    return {
+  private getParams(filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType): any {
+    const params = {
       metricType: filter.hasOwnProperty('distributionType')
         ? DistributionTypeValue[filter.distributionType] + MetricTypeValue[filter.metricType]
         : MetricTypeValue[filter.metricType],
       dateRangeCode: DateRangeTimePeriodValue[filter.dateRangeCode],
       premiseType: PremiseTypeValue[filter.premiseType],
-      skuCode: brandSkuCode
     };
+    if (skuPackageType) {
+      if (skuPackageType === SkuPackageType.sku) {
+        params['masterSkuCode'] = brandSkuCode;
+      } else {
+        params['masterPackageSkuCode '] = brandSkuCode;
+      }
+    } else {
+      params['brandCode'] = brandSkuCode;
+    }
+
+    return params;
   }
 
   private handleError(err: Error): Observable<Error> {
