@@ -47,6 +47,25 @@ export class MyPerformanceService {
     return defaultPremiseType;
   }
 
+  public getMetricValueName(metricKey: MetricTypeValue): string {
+
+    let metricName: string;
+
+    switch (metricKey) {
+      case MetricTypeValue.PointsOfDistribution:
+        metricName = 'Distribution';
+        break;
+      case MetricTypeValue.velocity:
+        metricName = 'Velocity';
+        break;
+      case MetricTypeValue.volume:
+      default:
+        metricName = 'Depletions';
+    }
+
+    return metricName;
+  }
+
   public accountDashboardStateParameters(insideAlternateHierarchy: boolean,
                                          filter: MyPerformanceFilterState,
                                         row: MyPerformanceTableRow,

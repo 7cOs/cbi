@@ -7,6 +7,8 @@ import { MyPerformanceTableRow } from '../models/my-performance-table-row.model'
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
+import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
+import { SkuPackageType  } from '../enums/sku-package-type.enum';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -56,25 +58,37 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
-    const productsValues = productMetrics.brandValues || productMetrics.skuValues;
+  public getRightTableData(productMetrics: ProductMetrics, productMetricsViewType: ProductMetricsViewType): MyPerformanceTableRow[] {
+    const productsValues: ProductMetricsValues[] = productMetricsViewType === ProductMetricsViewType.brands
+      ? productMetrics.brandValues : productMetrics.skuValues;
     const total: number = productsValues.reduce((sum: number, item: ProductMetricsValues): number => {
       return sum + item.current;
     }, 0);
 
-    return productsValues.map((item: ProductMetricsValues) => {
-      return {
-        descriptionRow0: productMetrics.brandValues
+    const rowData: MyPerformanceTableRow[] = productsValues.map((item: ProductMetricsValues) => {
+      const rightTableData: MyPerformanceTableRow = {
+        descriptionRow0: productMetricsViewType === ProductMetricsViewType.brands
           ? item.brandDescription
           : item.beerId.masterPackageSKUDescription || item.beerId.masterSKUDescription,
         metricColumn0: item.current,
         metricColumn1: item.yearAgo,
         metricColumn2: item.yearAgoPercent,
         ctv: total ? this.getPercentageOfTotal(item.current, total) : 0,
-        metadata: {
-          brandCode: item.brandCode
-        }
+        metadata: {}
       };
+
+      if (productMetricsViewType === ProductMetricsViewType.brands) {
+        rightTableData.metadata.brandCode = item.brandCode;
+      } else {
+        rightTableData.metadata.skuPackageType = item.beerId.masterPackageSKUCode ? SkuPackageType.package : SkuPackageType.sku;
+        rightTableData.metadata.skuPackageCode = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
+      }
+
+      return rightTableData;
+    });
+
+    return rowData.filter((row: MyPerformanceTableRow) => {
+      return (row.metricColumn0 !== 0 && row.metricColumn1 !== 0);
     });
   }
 
@@ -98,7 +112,7 @@ export class MyPerformanceTableDataTransformerService {
       metricColumn0: productMetricsValues.current,
       metricColumn1: productMetricsValues.yearAgo,
       metricColumn2: productMetricsValues.yearAgoPercent,
-      ctv: chance.natural({max: 100}),
+      ctv: 100,
     };
   }
 

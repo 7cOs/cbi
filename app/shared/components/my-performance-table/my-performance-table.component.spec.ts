@@ -2,7 +2,9 @@ import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 
+import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
+import { getDateRangeMock } from '../../../models/date-range.model.mock';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
@@ -12,7 +14,6 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { UtilService } from '../../../services/util.service';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -39,21 +40,22 @@ describe('MyPerformanceTableComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
-        UtilService
+        CalculatorService
       ]
     });
 
     fixture = TestBed.createComponent(MyPerformanceTableComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
+    componentInstance.dateRange  = getDateRangeMock();
   });
 
   describe('setSortingcriteria', () => {
 
     it('should sort the data with one criterion', () => {
       const tableData = getMyPerformanceTableRowMock(2);
-      componentInstance.tableData = tableData;
 
+      componentInstance.tableData = tableData;
       const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteria[0];
@@ -242,6 +244,41 @@ describe('MyPerformanceTableComponent', () => {
       fixture.detectChanges();
       fixture.nativeElement.querySelector('tbody tr').click();
       expect(onRowClickedSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('getEntityRowClasses', () => {
+    let rowData: MyPerformanceTableRow;
+
+    beforeEach(() => {
+      rowData = getMyPerformanceTableRowMock(1)[0];
+      rowData.performanceError = false;
+    });
+
+    it('should disabled classes by default', () => {
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false
+      });
+    });
+
+    it('should return an object with performance-error true when the row has a performanceError', () => {
+      rowData.performanceError = true;
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': true,
+        'selected-sku': false
+      });
+    });
+
+    it('should return an object with selected-sku true when the row matches the selectedSkuPackageCode', () => {
+      componentInstance.selectedSkuPackageCode = rowData.metadata.skuPackageCode;
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': true
+      });
     });
   });
 });

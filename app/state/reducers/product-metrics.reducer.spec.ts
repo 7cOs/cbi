@@ -41,7 +41,7 @@ describe('ProductMetrics Reducer', () => {
     const expectedState = {
       status: ActionStatus.Fetched,
       products: products,
-      productMetricsViewType: initialState.productMetricsViewType
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(
@@ -56,7 +56,7 @@ describe('ProductMetrics Reducer', () => {
     const expectedState = {
       status: ActionStatus.Error,
       products: initialState.products,
-      productMetricsViewType: initialState.productMetricsViewType
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(
@@ -84,7 +84,7 @@ describe('ProductMetrics Reducer', () => {
       status: initialState.status,
       products: initialState.products,
       selectedBrandCodeValues: products.brandValues[chosenProductMetricsValuesIndex],
-      productMetricsViewType: initialState.productMetricsViewType
+      productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(

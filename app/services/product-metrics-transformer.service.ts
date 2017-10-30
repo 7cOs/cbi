@@ -1,26 +1,33 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
+import { CalculatorService } from './calculator.service';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
-import { UtilService } from './util.service';
 
 @Injectable()
 export class ProductMetricsTransformerService {
-  constructor(private utilService: UtilService) { }
+  constructor(private calculatorService: CalculatorService) { }
 
-  public transformProductMetrics(productMetricsDTOs: ProductMetricsDTO): ProductMetrics {
+  public transformAndCombineProductMetricsDTOs(dtos: ProductMetricsDTO[]): ProductMetrics {
+    const metrics: ProductMetrics[] = dtos.map(dto => this.transformProductMetricsDTO(dto));
+
+    // combine brand and sku metrics into single metrics object via property assignment
+    return Object.assign({}, ...metrics);
+  }
+
+  private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {
     let productMetrics: ProductMetrics;
 
-    if (productMetricsDTOs.brandValues) {
+    if (dto.brandValues) {
       productMetrics = {
-        brandValues: productMetricsDTOs.brandValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) =>
-          this.formatProductMetricsDTO(productMetricsValuesDTO)
+        brandValues: dto.brandValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) =>
+          this.formatProductMetricsValuesDTO(productMetricsValuesDTO)
         )
       };
     } else {
       productMetrics = {
-        skuValues: productMetricsDTOs.skuValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) =>
+        skuValues: dto.skuValues.map((productMetricsValuesDTO: ProductMetricsValuesDTO) =>
           this.formatProductMetricsPackageSkuDTO(productMetricsValuesDTO))
       };
     }
@@ -28,23 +35,32 @@ export class ProductMetricsTransformerService {
     return productMetrics;
   }
 
-  private formatProductMetricsDTO(productMetricsDTO: ProductMetricsValuesDTO): ProductMetricsValues {
+  private formatProductMetricsValuesDTO(valuesDTO: ProductMetricsValuesDTO): ProductMetricsValues {
     return {
-      brandDescription: productMetricsDTO.brandDescription,
-      collectionMethod: productMetricsDTO.values[0].collectionMethod,
-      current: Math.round(productMetricsDTO.values[0].current),
-      yearAgo: this.utilService.getYearAgoDelta(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
-      yearAgoPercent: this.utilService.getYearAgoPercent(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
-      brandCode: productMetricsDTO.brandCode,
+      brandDescription: valuesDTO.brandDescription,
+      collectionMethod: valuesDTO.values[0].collectionMethod,
+      current: Math.round(valuesDTO.values[0].current),
+      yearAgo: this.calculatorService.getYearAgoDelta(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
+      yearAgoPercent: this.calculatorService.getYearAgoPercent(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
+      brandCode: valuesDTO.brandCode,
     };
   }
 
-  private formatProductMetricsPackageSkuDTO(productMetricsDTO: ProductMetricsValuesDTO): ProductMetricsValues {
-    return Object.assign({}, this.formatProductMetricsDTO(productMetricsDTO), {
-      beerId: {
-        masterPackageSKUDescription: productMetricsDTO.beerId.masterPackageSKUDescription,
-        masterSKUDescription: productMetricsDTO.beerId.masterSKUDescription
-      }
-    });
+  private formatProductMetricsPackageSkuDTO(valuesDTO: ProductMetricsValuesDTO): ProductMetricsValues {
+    let beerId;
+
+    if (valuesDTO.beerId.masterSKUCode) {
+      beerId = {
+        masterSKUCode: valuesDTO.beerId.masterSKUCode,
+        masterSKUDescription: valuesDTO.beerId.masterSKUDescription,
+      };
+    } else {
+      beerId = {
+        masterPackageSKUCode: valuesDTO.beerId.masterPackageSKUCode,
+        masterPackageSKUDescription: valuesDTO.beerId.masterPackageSKUDescription
+      };
+    }
+
+    return Object.assign({}, this.formatProductMetricsValuesDTO(valuesDTO), { beerId: beerId });
   }
 }

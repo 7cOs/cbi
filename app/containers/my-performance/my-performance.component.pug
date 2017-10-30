@@ -1,9 +1,9 @@
-h1 Performance
+h1 Team Performance
 
 beer-loader([showLoader]="productMetricsFetching || responsibilitiesFetching")
 
 my-performance-filter(
-  [dateRanges]="dateRanges$ | async",
+  [dateRangeState]="dateRangeState",
   [filterState]="filterState",
   (onFilterChange)="filterOptionSelected($event)"
 )
@@ -19,6 +19,7 @@ div.tables
   my-performance-table.left(
     [tableData]="salesHierarchy",
     [dateRange]="dateRange",
+    [showDateRange]="true",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="!displayRightTotalRow() ? totalRowData : null",
@@ -32,11 +33,13 @@ div.tables
 
   my-performance-table.right(
     [tableData]="productMetrics",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowRight",
     [totalRow]="displayRightTotalRow() ? totalRowData : null",
     [performanceMetric]="'Product Snapshot'",
     [dismissableTotalRow]="productMetricsSelectedBrandRow",
     [sortingCriteria]="sortingCriteria",
+    [selectedSkuPackageCode]="selectedSkuPackageCode",
     [showContributionToVolume]="showProductMetricsContributionToVolume",
     [showOpportunities]="false",
     [viewType]="productMetricsViewType",

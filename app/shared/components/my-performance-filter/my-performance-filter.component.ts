@@ -26,10 +26,10 @@ export class MyPerformanceFilterComponent {
   @Output() onFilterChange = new EventEmitter<MyPerformanceFilterEvent>();
 
   @Input() filterState: MyPerformanceFilterState;
-  @Input() set dateRanges(dateRanges: DateRangesState) {
-    if (dateRanges.status === ActionStatus.Fetched) {
-      this.depletionTimePeriodOptions = this.initDateRanges('depletions', dateRanges);
-      this.distributionTimePeriodOptions = this.initDateRanges('distribution', dateRanges);
+  @Input() set dateRangeState(dateRangeState: DateRangesState) {
+    if (dateRangeState && dateRangeState.status === ActionStatus.Fetched) {
+      this.depletionTimePeriodOptions = this.initDateRanges('depletions', dateRangeState);
+      this.distributionTimePeriodOptions = this.initDateRanges('distribution', dateRangeState);
     }
   }
 
@@ -46,7 +46,7 @@ export class MyPerformanceFilterComponent {
     this.onFilterChange.emit({ filterType, filterValue });
   }
 
-  private initDateRanges(dateType: string, dateRanges: DateRangesState): Array<CompassSelectOption> {
+  private initDateRanges(dateType: string, dateRangeState: DateRangesState): Array<CompassSelectOption> {
     const depletionDateRangeCodes: Array<string> = ['CYTDBDL', 'FYTDBDL', 'CMIPBDL', 'LCM', 'CYTM', 'FYTM'];
     const distributionDateRangeCodes: Array<string> = ['L60BDL', 'L90BDL', 'L120BDL', 'L3CM'];
 
@@ -61,7 +61,7 @@ export class MyPerformanceFilterComponent {
     };
 
     return dateType === 'depletions'
-      ? initDateRangeData(depletionDateRangeCodes, dateRanges)
-      : initDateRangeData(distributionDateRangeCodes, dateRanges);
+      ? initDateRangeData(depletionDateRangeCodes, dateRangeState)
+      : initDateRangeData(distributionDateRangeCodes, dateRangeState);
   }
 }

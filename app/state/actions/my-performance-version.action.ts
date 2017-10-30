@@ -2,6 +2,12 @@ import { Action } from '@ngrx/store';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { MyPerformanceEntitiesData } from '../reducers/my-performance.reducer';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
+
+export interface SkuPackagePayload {
+  skuPackageCode: string;
+  skuPackageType: SkuPackageType ;
+}
 
 export const SAVE_MY_PERFORMANCE_STATE = '[My Performance] SAVE_MY_PERFORMANCE_STATE';
 export class SaveMyPerformanceState implements Action {
@@ -40,7 +46,19 @@ export const SET_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance] SET_MY_PERFOR
 export class SetMyPerformanceSelectedBrandCode implements Action {
   readonly type = SET_MY_PERFORMANCE_SELECTED_BRAND;
 
-constructor(public payload: string) { }
+  constructor(public payload: string) { }
+}
+
+export const SET_MY_PERFORMANCE_SELECTED_SKU = '[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU';
+export class SetMyPerformanceSelectedSkuCode implements Action {
+  readonly type = SET_MY_PERFORMANCE_SELECTED_SKU;
+
+  constructor(public payload: SkuPackagePayload) { }
+}
+
+export const CLEAR_MY_PERFORMANCE_SELECTED_SKU = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU';
+export class ClearMyPerformanceSelectedSkuCode implements Action {
+  readonly type = CLEAR_MY_PERFORMANCE_SELECTED_SKU;
 }
 
 export type Action =
@@ -49,4 +67,6 @@ export type Action =
   | ClearMyPerformanceState
   | SetMyPerformanceSelectedEntity
   | SetMyPerformanceSelectedEntityType
-  | SetMyPerformanceSelectedBrandCode;
+  | ClearMyPerformanceSelectedSkuCode
+  | SetMyPerformanceSelectedBrandCode
+  | SetMyPerformanceSelectedSkuCode;

@@ -2,7 +2,7 @@ import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter, analyticsService;
+  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter, analyticsService, title;
   let promiseGetStores;
 
   var topBottomSnapshotDistributorData = {
@@ -341,6 +341,13 @@ describe('Unit: accountsController', function() {
         trackEvent: () => {}
       };
       $provide.value('analyticsService', analyticsService);
+    });
+
+    angular.mock.module(($provide) => {
+      title = {
+        setTitle: () => {}
+      };
+      $provide.value('title', title);
     });
 
     inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_) {
