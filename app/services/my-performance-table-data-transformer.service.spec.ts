@@ -59,7 +59,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceMock[0].entityType = entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})];
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, undefined);
 
       const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
@@ -86,7 +86,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, undefined);
 
       const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
@@ -114,7 +114,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.SubAccount;
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, undefined);
 
       const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
@@ -143,7 +143,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceMock[0].name = 'ON PREM DIRECTOR';
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, undefined);
 
       const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: 'ON PREM DIRECTORS',
@@ -171,7 +171,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceMock[0].name = 'ACCOUNT';
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, undefined);
 
       const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: 'ACCOUNTS',
@@ -199,7 +199,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceMock[0].performance.error = true;
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, undefined);
 
       const expectedRow: MyPerformanceTableRow = {
         descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
@@ -237,7 +237,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       responsibilityEntitiesPerformanceMock[2].name = 'Open';
 
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, false);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, undefined);
 
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
       for (let i = 0; i < tableData.length; i++) {
@@ -269,9 +269,9 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
       responsibilityEntitiesPerformanceMock[2].entityType = EntityType.Person;
       delete responsibilityEntitiesPerformanceMock[2].positionDescription;
-
+      const alternateHierarchyIdMock = chance.string();
       const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, true);
+        .getLeftTableData(responsibilityEntitiesPerformanceMock, alternateHierarchyIdMock);
 
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
       for (let i = 0; i < tableData.length; i++) {
@@ -288,7 +288,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
             contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
             entityName: responsibilityEntitiesPerformanceMock[i].name,
             entityType: responsibilityEntitiesPerformanceMock[i].entityType,
-            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode
+            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode,
+            alternateHierarchyId: alternateHierarchyIdMock
           },
           performanceError: false
         });
@@ -298,7 +299,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return the correct descriptionRow1 when the property type is entity distributors', () => {
       responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
       const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(
-        responsibilityEntitiesPerformanceMock, false);
+        responsibilityEntitiesPerformanceMock, undefined);
       expect(tableData[0].descriptionRow1).toEqual('GO TO DASHBOARD');
     });
 
@@ -309,7 +310,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
       let actualMetaData: MyPerformanceTableRowMetadata =
         myPerformanceTableDataTransformerService.getLeftTableData(
-          [responsibilityEntitiesPerformanceMock[0]], false)[0].metadata;
+          [responsibilityEntitiesPerformanceMock[0]], undefined)[0].metadata;
       let expectedMetaData: MyPerformanceTableRowMetadata = {
         positionId: responsibilityEntitiesPerformanceMock[0].positionId,
         contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
@@ -324,7 +325,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       delete responsibilityEntitiesPerformanceMock[0].alternateHierarchyId;
 
       actualMetaData = myPerformanceTableDataTransformerService.getLeftTableData(
-        [responsibilityEntitiesPerformanceMock[0]], false)[0].metadata;
+        [responsibilityEntitiesPerformanceMock[0]], undefined)[0].metadata;
       expectedMetaData = {
         positionId: responsibilityEntitiesPerformanceMock[0].positionId,
         contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,

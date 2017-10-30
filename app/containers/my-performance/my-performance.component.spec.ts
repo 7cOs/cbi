@@ -508,7 +508,8 @@ describe('MyPerformanceComponent', () => {
         entityTypeCode: rowMock.metadata.entityTypeCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.RoleGroup,
-        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode
+        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+        alternateHierarchy: false
       }));
     });
 
@@ -521,7 +522,7 @@ describe('MyPerformanceComponent', () => {
       rowMock.metadata.alternateHierarchyId = chance.string();
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(stateMock.myPerformance.current));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
@@ -559,7 +560,8 @@ describe('MyPerformanceComponent', () => {
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.Account,
-        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode
+        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+        alternateHierarchy: false
       }));
     });
 
@@ -581,7 +583,8 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.Person,
-        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode
+        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+        alternateHierarchy: false
       }));
     });
 
@@ -595,7 +598,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(currentMock));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities({
@@ -685,7 +688,8 @@ describe('MyPerformanceComponent', () => {
         positionId: stateMock.myPerformance.current.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-        selectedBrandCode: rowMock.metadata.brandCode
+        selectedBrandCode: rowMock.metadata.brandCode,
+        alternateHierarchy: false
       }));
     });
 
@@ -707,7 +711,8 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
-        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId
+        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
+        alternateHierarchy: false
       }));
     });
 
@@ -729,7 +734,8 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
-        entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode
+        entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
+        alternateHierarchy: false
       }));
     });
 
