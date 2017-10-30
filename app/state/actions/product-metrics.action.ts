@@ -12,6 +12,7 @@ export interface FetchProductMetricsPayload {
   filter: MyPerformanceFilterState;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
+  alternateHierarchy?: boolean;
 }
 
 export interface FetchProductMetricsSuccessPayload {
