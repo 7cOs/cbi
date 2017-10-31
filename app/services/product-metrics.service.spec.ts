@@ -424,28 +424,6 @@ describe('ProductMetrics Service', () => {
     });
   });
 
-  describe('when checkEmptyProductMetricsResponse is called', () => {
-    let productMetricsDataMock: ProductMetricsData;
-
-    beforeEach(() => {
-      productMetricsDataMock = {
-        positionId: positionIdMock,
-        contextPositionId: contextPositionIdMock,
-        entityTypeCode: entityTypeCodeMock,
-        filter: performanceFilterStateMock,
-        selectedEntityType: selectedEntityTypeMock
-      };
-    });
-
-    it('should return an observable of product metrics when product metrics is defined with products', (done) => {
-      productMetricsDataMock.products = {brandValues: []};
-      productMetricsService.checkEmptyProductMetricsResponse(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
-        expect(productMetricsData).toEqual(productMetricsDataMock);
-        done();
-      });
-    });
-  });
-
   describe('when filterProductMetricsBrand is called', () => {
     describe('when skus are passed in', () => {
       let productMetricsDataMock: ProductMetricsData;

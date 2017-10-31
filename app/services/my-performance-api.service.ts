@@ -35,7 +35,7 @@ export class MyPerformanceApiService {
       params: this.getFilterStateParams(filter)
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
@@ -50,7 +50,7 @@ export class MyPerformanceApiService {
       params: params
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {
@@ -59,8 +59,8 @@ export class MyPerformanceApiService {
     return this.http.get(`${ url }`, {
       params: this.getFilterStateParams(filter)
     })
-    .map(res => res.json())
-    .catch(err => this.handleError(new Error(err)));
+      .map(res => res.json())
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getAlternateHierarchyPersonPerformance(positionId: string, alternateHierarchyId: string, filter: MyPerformanceFilterState)
@@ -73,8 +73,8 @@ export class MyPerformanceApiService {
     return this.http.get(url, {
       params: params
     })
-    .map(res => res.json())
-    .catch(err => this.handleError(new Error(err)));
+      .map(res => res.json())
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getAccountsDistributors(entityURI: string): Observable<Array<EntityDTO>> {
@@ -99,7 +99,7 @@ export class MyPerformanceApiService {
       params: params
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getAccountPerformance(
@@ -116,7 +116,7 @@ export class MyPerformanceApiService {
       params: params
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getSubAccounts(accountId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
@@ -128,8 +128,8 @@ export class MyPerformanceApiService {
         premiseType: PremiseTypeValue[premiseType]
       }
     })
-    .map(res => res.json())
-    .catch(err => this.handleError(new Error(err)));
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
   }
 
   public getSubAccountPerformance(
@@ -142,7 +142,7 @@ export class MyPerformanceApiService {
       params: params
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getAlternateHierarchy(positionId: string, contextPositionId: string): Observable<PeopleResponsibilitiesDTO> {
@@ -168,7 +168,17 @@ export class MyPerformanceApiService {
   }
 
   private handleError(err: Error): Observable<Error> {
-    console.log(err.message || 'Unknown Error');
     return Observable.throw(err);
+  }
+
+  private handlePerformanceError(err: any): Observable<PerformanceDTO> {
+    if (err.status === 404) {
+      const emptyDTO: PerformanceDTO = {
+        total: 0,
+        totalYearAgo: 0
+      };
+      return Observable.of(emptyDTO);
+    }
+    return Observable.throw(new Error(err));
   }
 }
