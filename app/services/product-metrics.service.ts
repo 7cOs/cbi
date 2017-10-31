@@ -38,7 +38,7 @@ export class ProductMetricsService {
     let apiCalls: Observable<ProductMetricsDTO>[] = [];
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
-
+    console.log(aggregationLevel);
     if (productMetricsData.selectedEntityType === EntityType.Person) {
       apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
         productMetricsData.positionId,
@@ -97,10 +97,11 @@ export class ProductMetricsService {
   }
 
   public checkEmptyProductMetricsResponse(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
-    if (productMetricsData && Object.keys(productMetricsData.products).length === 0) {
+    if (productMetricsData && Object.keys(productMetricsData.products.brandValues).length === 0 && !productMetricsData.selectedBrandCode) {
       return Observable.throw('Empty Product Metrics Data Error');
+    } else {
+      return Observable.of(productMetricsData);
     }
-    return Observable.of(productMetricsData);
   }
 
   public filterProductMetricsBrand(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {

@@ -1,4 +1,7 @@
 td.left-col(colspan=1, [ngClass]="getHeaderLeftClasses()", (click)="onCellClicked.emit(0)")
+  div.dismissable-row-X-container(*ngIf="showX",
+                        (click)="dismissableRowXClicked()")
+    img.dismissable-row-X(src="../../../assets/img/icons/thin-x.svg")
   div.description-line-0
     span {{rowData.descriptionRow0}}
   div.description-line-1(*ngIf="rowData.descriptionRow1",

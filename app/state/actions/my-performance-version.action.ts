@@ -61,6 +61,11 @@ export class ClearMyPerformanceSelectedSkuCode implements Action {
   readonly type = CLEAR_MY_PERFORMANCE_SELECTED_SKU;
 }
 
+export const REMOVE_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance] REMOVE_MY_PERFORMANCE_SELECTED_BRAND';
+export class RemoveMyPerformanceSelectedBrandCode implements Action {
+  readonly type = REMOVE_MY_PERFORMANCE_SELECTED_BRAND;
+}
+
 export type Action =
   SaveMyPerformanceState
   | RestoreMyPerformanceState
@@ -69,4 +74,5 @@ export type Action =
   | SetMyPerformanceSelectedEntityType
   | ClearMyPerformanceSelectedSkuCode
   | SetMyPerformanceSelectedBrandCode
-  | SetMyPerformanceSelectedSkuCode;
+  | SetMyPerformanceSelectedSkuCode
+  | RemoveMyPerformanceSelectedBrandCode;

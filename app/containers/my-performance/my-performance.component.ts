@@ -134,9 +134,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             productMetrics.products,
             this.productMetricsViewType
           );
-          this.productMetricsSelectedBrandRow = this.productMetricsViewType === ProductMetricsViewType.skus
+          this.productMetricsSelectedBrandRow =
+            (this.productMetricsViewType === ProductMetricsViewType.skus && productMetrics.selectedBrandCodeValues)
             ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
             : null;
+        }
+
+        if (this.selectedBrandCode
+          && productMetrics.productMetricsViewType === ProductMetricsViewType.skus
+          && this.productMetrics.length === 0) {
+          this.deselectBrandValue();
         }
       });
 
@@ -230,6 +237,28 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     const currentWindow = this.windowService.nativeWindow();
     currentWindow.open(accountDashboardUrl, '_blank');
+  }
+
+  public deselectBrandValue(): void {
+    this.selectedBrandCode = null;
+    this.store.dispatch(new MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode());
+    this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
+    if (!this.isInsideAlternateHierarchy()) {
+      this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
+    }
+
+    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({ // TODO: Make so this sets to fetching, so loader appears
+      positionId: this.currentState.responsibilities.positionId,
+      groupedEntities: this.currentState.responsibilities.groupedEntities,
+      hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
+      selectedEntityType: this.currentState.selectedEntityType,
+      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
+      salesHierarchyViewType: this.salesHierarchyViewType,
+      filter: this.filterState,
+      entityType: this.currentState.selectedEntityType,
+      alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+      accountPositionId: this.currentState.responsibilities.accountPositionId
+    }));
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
@@ -434,7 +463,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private fetchProductMetricsWhenClick(parameters: HandleElementClickedParameters) {
     const actionParameters: ProductMetricsActions.FetchProductMetricsPayload = {
-      positionId: parameters.row.metadata.positionId || this.currentState.responsibilities.positionId,
+      positionId: parameters.row
+        ? parameters.row.metadata.positionId || this.currentState.responsibilities.positionId
+        : this.currentState.responsibilities.positionId,
       filter: this.filterState,
       selectedEntityType: this.currentState.selectedEntityType,
       selectedBrandCode: this.selectedBrandCode
