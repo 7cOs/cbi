@@ -236,8 +236,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
-      for (let i = 0; i < tableData.length; i++) {
-        expect(tableData[i]).toEqual({
+      tableData.forEach((row: MyPerformanceTableRow, i: number) => {
+        expect(row).toEqual({
           descriptionRow0: 'Open Position',
           descriptionRow1: responsibilityEntitiesPerformanceMock[i].positionDescription,
           metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
@@ -253,7 +253,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           },
           performanceError: false
         });
-      }
+      });
     });
 
     it('should return formatted ResponsibilityEntityPerformance data when in Alt-Hierarchy and ViewType Person', () => {
@@ -270,8 +270,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         .getLeftTableData(responsibilityEntitiesPerformanceMock, alternateHierarchyIdMock);
 
       expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
-      for (let i = 0; i < tableData.length; i++) {
-        expect(tableData[i]).toEqual({
+      tableData.forEach((row: MyPerformanceTableRow, i: number) => {
+        expect(row).toEqual({
           descriptionRow0: responsibilityEntitiesPerformanceMock[i].positionDescription
             ? responsibilityEntitiesPerformanceMock[i].positionDescription : 'AREA',
           descriptionRow1: responsibilityEntitiesPerformanceMock[i].name,
@@ -289,7 +289,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           },
           performanceError: false
         });
-      }
+      });
     });
 
     it('should return the correct descriptionRow1 when the property type is entity distributors', () => {
@@ -371,10 +371,10 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(transformedProductMetricsData).toBeDefined();
         expect(transformedProductMetricsData.length).toBe(products.brandValues.length);
 
-        for (let i = 0; i < products.brandValues.length; i++) {
-          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.brandValues[i].brandDescription);
-          expect(transformedProductMetricsData[i].metadata.brandCode).toEqual(products.brandValues[i].brandCode);
-        }
+        products.brandValues.forEach((values: ProductMetricsValues, i: number) => {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(values.brandDescription);
+          expect(transformedProductMetricsData[i].metadata.brandCode).toEqual(values.brandCode);
+        });
       });
 
       it('should calculate ctv based on total of provided rows,', () => {
@@ -388,10 +388,10 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
 
         expect(transformedProductMetricsData.length).toBe(products.brandValues.length);
-        for (let i = 0; i < products.brandValues.length; i++) {
-          const expectedCTV: number = Math.round((products.brandValues[i].current / total) * 1000) / 10;
+        products.brandValues.forEach((values: ProductMetricsValues, i: number) => {
+          const expectedCTV: number = Math.round((values.current / total) * 1000) / 10;
           expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
-        }
+        });
       });
 
       it('should filter out rows with no current nor YA for ProductMetrics', () => {
@@ -405,10 +405,29 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(transformedProductMetricsData).toBeDefined();
         expect(transformedProductMetricsData.length).toBe(products.brandValues.length - 1);
 
-        for (let i = 0; i < transformedProductMetricsData.length; i++) {
-          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.brandValues[i + 1].brandDescription);
-          expect(transformedProductMetricsData[i].metadata.brandCode).toEqual(products.brandValues[i + 1].brandCode);
-        }
+        transformedProductMetricsData.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toEqual(products.brandValues[i + 1].brandDescription);
+          expect(row.metadata.brandCode).toEqual(products.brandValues[i + 1].brandCode);
+        });
+      });
+
+      it('should NOT filter out rows with 0 only for current or 0 only for YA', () => {
+        products.brandValues[0].current = chance.floating({min: 0.1});
+        products.brandValues[0].yearAgo = 0;
+        products.brandValues[1].current = 0;
+        products.brandValues[1].yearAgo = chance.floating({min: 0.1});
+
+        const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.brands
+        );
+
+        expect(transformedProductMetricsData).toBeDefined();
+        expect(transformedProductMetricsData.length).toBe(products.brandValues.length);
+
+        products.brandValues.forEach((values: ProductMetricsValues, i: number) => {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(values.brandDescription);
+          expect(transformedProductMetricsData[i].metadata.brandCode).toEqual(values.brandCode);
+        });
       });
     });
 
@@ -421,16 +440,29 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(transformedProductMetricsData).toBeDefined();
         expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
 
-        for (let i = 0; i < products.skuValues.length; i++) {
-          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i].beerId.masterSKUDescription);
+        products.skuValues.forEach((values: ProductMetricsValues, i: number) => {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(values.beerId.masterSKUDescription);
           expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.sku);
-          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(products.skuValues[i].beerId.masterSKUCode);
-        }
+          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(values.beerId.masterSKUCode);
+        });
       });
 
-      // TODO in US19294
-      // it('should calculate ctv based on total of provided rows,', () => {
-      // });
+      it('should calculate ctv based on total of provided rows,', () => {
+        const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
+
+        total = 0;
+        products.skuValues.forEach((metric: ProductMetricsValues) => {
+          total += metric.current;
+        });
+
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+        products.skuValues.forEach((values: ProductMetricsValues, i: number) => {
+          const expectedCTV: number = Math.round((values.current / total) * 1000) / 10;
+          expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
+        });
+      });
 
       it('should filter out rows with no current nor YA for ProductMetrics', () => {
         products.skuValues[0].current = 0;
@@ -443,11 +475,31 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(transformedProductMetricsData).toBeDefined();
         expect(transformedProductMetricsData.length).toBe(products.skuValues.length - 1);
 
-        for (let i = 0; i < transformedProductMetricsData.length; i++) {
-          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i + 1].beerId.masterSKUDescription);
+        transformedProductMetricsData.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toEqual(products.skuValues[i + 1].beerId.masterSKUDescription);
+          expect(row.metadata.skuPackageType).toEqual(SkuPackageType.sku);
+          expect(row.metadata.skuPackageCode).toEqual(products.skuValues[i + 1].beerId.masterSKUCode);
+        });
+      });
+
+      it('should NOT filter out rows with 0 only for current or 0 only for YA', () => {
+        products.skuValues[0].current = chance.floating({min: 0.1});
+        products.skuValues[0].yearAgo = 0;
+        products.skuValues[1].current = 0;
+        products.skuValues[1].yearAgo = chance.floating({min: 0.1});
+
+        const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
+
+        expect(transformedProductMetricsData).toBeDefined();
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+
+        products.skuValues.forEach((values: ProductMetricsValues, i: number) => {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(values.beerId.masterSKUDescription);
           expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.sku);
-          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(products.skuValues[i + 1].beerId.masterSKUCode);
-        }
+          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(values.beerId.masterSKUCode);
+        });
       });
     });
 
@@ -467,18 +519,31 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(transformedProductMetricsData).toBeDefined();
         expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
 
-        for (let i = 0; i < products.skuValues.length; i++) {
-          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i].beerId.masterPackageSKUDescription);
+        products.skuValues.forEach((values: ProductMetricsValues, i: number) => {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(values.beerId.masterPackageSKUDescription);
           expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.package);
-          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(products.skuValues[i].beerId.masterPackageSKUCode);
-        }
+          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(values.beerId.masterPackageSKUCode);
+        });
       });
 
-      // TODO in US19294
-      // it('should calculate ctv based on total of provided rows,', () => {
-      // });
+      it('should calculate ctv based on total of provided rows,', () => {
+        const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
 
-      it('should filter out rows with no current nor YA for ProductMetrics', () => {
+        total = 0;
+        products.skuValues.forEach((metric: ProductMetricsValues) => {
+          total += metric.current;
+        });
+
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+        products.skuValues.forEach((values: ProductMetricsValues, i: number) => {
+          const expectedCTV: number = Math.round((values.current / total) * 1000) / 10;
+          expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
+        });
+      });
+
+      it('should filter out rows with both current and YA equal to 0', () => {
         products.skuValues[0].current = 0;
         products.skuValues[0].yearAgo = 0;
 
@@ -489,11 +554,31 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(transformedProductMetricsData).toBeDefined();
         expect(transformedProductMetricsData.length).toBe(products.skuValues.length - 1);
 
-        for (let i = 0; i < transformedProductMetricsData.length; i++) {
-          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(products.skuValues[i + 1].beerId.masterPackageSKUDescription);
+        transformedProductMetricsData.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toEqual(products.skuValues[i + 1].beerId.masterPackageSKUDescription);
+          expect(row.metadata.skuPackageType).toEqual(SkuPackageType.package);
+          expect(row.metadata.skuPackageCode).toEqual(products.skuValues[i + 1].beerId.masterPackageSKUCode);
+        });
+      });
+
+      it('should NOT filter out rows with 0 only for current or 0 only for YA', () => {
+        products.skuValues[0].current = chance.floating({min: 0.1});
+        products.skuValues[0].yearAgo = 0;
+        products.skuValues[1].current = 0;
+        products.skuValues[1].yearAgo = chance.floating({min: 0.1});
+
+        const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
+
+        expect(transformedProductMetricsData).toBeDefined();
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+
+        products.skuValues.forEach((values: ProductMetricsValues, i: number) => {
+          expect(transformedProductMetricsData[i].descriptionRow0).toEqual(values.beerId.masterPackageSKUDescription);
           expect(transformedProductMetricsData[i].metadata.skuPackageType).toEqual(SkuPackageType.package);
-          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(products.skuValues[i + 1].beerId.masterPackageSKUCode);
-        }
+          expect(transformedProductMetricsData[i].metadata.skuPackageCode).toEqual(values.beerId.masterPackageSKUCode);
+        });
       });
     });
   });
