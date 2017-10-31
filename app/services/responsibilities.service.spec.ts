@@ -38,6 +38,7 @@ import { ResponsibilitiesService,
          RefreshAllPerformancesData,
          RefreshTotalPerformanceData } from './responsibilities.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
+import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
@@ -46,6 +47,7 @@ describe('Responsibilities Effects', () => {
   let alternateHierarchyIdMock: string;
   let contextPositionIdMock: string;
   let brandCodeMock: string;
+  let skuPackageTypeMock: SkuPackageType;
   let groupedEntitiesMock: GroupedEntities;
   let hierarchyGroupsMock: HierarchyGroup[];
   let entityTypeMock: EntityType;
@@ -504,7 +506,7 @@ describe('Responsibilities Effects', () => {
         }],
         groupedEntities: accountsDistributorsMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock
       };
 
       it('returns performances totals for role groups', (done) => {
@@ -519,7 +521,7 @@ describe('Responsibilities Effects', () => {
           filter: responsibilitiesDataMock.filter,
           entityWithPerformance: entityWithPerformanceMock,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
-          brandCode: responsibilitiesDataMock.brandCode
+          brandSkuCode: responsibilitiesDataMock.brandSkuCode
         };
 
         responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesDataMock)
@@ -542,7 +544,7 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.hierarchyGroups,
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId,
-          responsibilitiesDataMock.brandCode,
+          responsibilitiesDataMock.brandSkuCode,
           null
         ]);
       });
@@ -560,7 +562,7 @@ describe('Responsibilities Effects', () => {
         }],
         groupedEntities: { 'DISTRIBUTOR': [ getEntityPeopleResponsibilitiesMock() ]},
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock
       };
 
       it('returns performance entities for distributors', (done) => {
@@ -574,7 +576,7 @@ describe('Responsibilities Effects', () => {
           filter: responsibilitiesDataMock.filter,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
           entityWithPerformance: entityWithPerformanceMock,
-          brandCode: responsibilitiesDataMock.brandCode
+          brandSkuCode: responsibilitiesDataMock.brandSkuCode
         };
 
         responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesDataMock)
@@ -598,7 +600,7 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.groupedEntities.DISTRIBUTOR,
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId,
-          responsibilitiesDataMock.brandCode
+          responsibilitiesDataMock.brandSkuCode
         ]);
       });
 
@@ -617,7 +619,7 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.groupedEntities.DISTRIBUTOR,
           responsibilitiesDataMock.filter,
           '0',
-          responsibilitiesDataMock.brandCode
+          responsibilitiesDataMock.brandSkuCode
         ]);
       });
     });
@@ -670,7 +672,7 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.groupedEntities.ACCOUNT,
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId,
-          responsibilitiesDataMock.brandCode
+          responsibilitiesDataMock.brandSkuCode
         ]);
       });
     });
@@ -933,6 +935,7 @@ describe('Responsibilities Effects', () => {
         entities,
         myPerformanceFilterMock,
         brandCodeMock,
+        skuPackageTypeMock,
         alternateHierarchyIdMock)
         .subscribe(() => {
           expect(getAlternateHierarchyPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
@@ -1102,7 +1105,7 @@ describe('Responsibilities Effects', () => {
         selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock
       };
     });
 
@@ -1160,7 +1163,7 @@ describe('Responsibilities Effects', () => {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock,
-        brandCode: brandCodeMock,
+        brandSkuCode: brandCodeMock,
         entityType: entityTypeMock
       };
     });
@@ -1221,7 +1224,7 @@ describe('Responsibilities Effects', () => {
       refreshAllPerformancesData = {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock,
+        brandSkuCode: brandCodeMock,
         groupedEntities: groupedEntitiesMock,
         alternateHierarchyId: alternateHierarchyIdMock,
         hierarchyGroups: hierarchyGroupsMock,
@@ -1354,7 +1357,7 @@ describe('Responsibilities Effects', () => {
       refreshTotalPerformanceData = {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock,
+        brandSkuCode: brandCodeMock,
         groupedEntities: groupedEntitiesMock,
         hierarchyGroups: hierarchyGroupsMock,
         entityType: entityTypeMock,
@@ -1378,7 +1381,7 @@ describe('Responsibilities Effects', () => {
           expect(getPerformanceSpy).toHaveBeenCalledWith(
             refreshTotalPerformanceData.positionId,
             refreshTotalPerformanceData.filter,
-            refreshTotalPerformanceData.brandCode
+            refreshTotalPerformanceData.brandSkuCode
           );
 
           done();
@@ -1403,7 +1406,7 @@ describe('Responsibilities Effects', () => {
           expect(updatedRefreshTotalPerformanceData).toEqual({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
-            brandCode: brandCodeMock,
+            brandSkuCode: brandCodeMock,
             groupedEntities: groupedEntitiesMock,
             hierarchyGroups: hierarchyGroupsMock,
             entityType: entityTypeMock,
@@ -1427,7 +1430,7 @@ describe('Responsibilities Effects', () => {
             refreshTotalPerformanceData.accountPositionId,
             refreshTotalPerformanceData.filter,
             refreshTotalPerformanceData.positionId,
-            refreshTotalPerformanceData.brandCode
+            refreshTotalPerformanceData.brandSkuCode
           );
 
           done();
@@ -1458,7 +1461,7 @@ describe('Responsibilities Effects', () => {
           expect(updatedRefreshTotalPerformanceData).toEqual({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
-            brandCode: brandCodeMock,
+            brandSkuCode: brandCodeMock,
             groupedEntities: groupedEntitiesMock,
             hierarchyGroups: hierarchyGroupsMock,
             entityType: entityTypeMock,
@@ -1487,7 +1490,7 @@ describe('Responsibilities Effects', () => {
             refreshTotalPerformanceData.hierarchyGroups[randomIndex],
             refreshTotalPerformanceData.filter,
             refreshTotalPerformanceData.positionId,
-            refreshTotalPerformanceData.brandCode
+            refreshTotalPerformanceData.brandSkuCode
           );
 
           done();
@@ -1525,7 +1528,7 @@ describe('Responsibilities Effects', () => {
           expect(updatedRefreshTotalPerformanceData).toEqual({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
-            brandCode: brandCodeMock,
+            brandSkuCode: brandCodeMock,
             groupedEntities: groupedEntitiesMock,
             hierarchyGroups: hierarchyGroupsMock,
             entityType: entityTypeMock,
@@ -1812,7 +1815,7 @@ describe('Responsibilities Effects', () => {
         positionId: chance.string(),
         entityType: EntityType.RoleGroup,
         selectedEntityDescription: chance.string(),
-        brandCode: chance.string()
+        brandSkuCode: chance.string()
       };
     });
 
@@ -1825,7 +1828,7 @@ describe('Responsibilities Effects', () => {
             .toHaveBeenCalledWith(
               fetchEntityWithPerformanceDataMock.entities,
               fetchEntityWithPerformanceDataMock.filter,
-              fetchEntityWithPerformanceDataMock.brandCode,
+              fetchEntityWithPerformanceDataMock.brandSkuCode,
               null
             );
           done();
@@ -1841,7 +1844,7 @@ describe('Responsibilities Effects', () => {
           expect(getPositionsPerformancesSpy)
             .toHaveBeenCalledWith(fetchEntityWithPerformanceDataMock.entities,
               fetchEntityWithPerformanceDataMock.filter,
-              fetchEntityWithPerformanceDataMock.brandCode,
+              fetchEntityWithPerformanceDataMock.brandSkuCode,
               fetchEntityWithPerformanceDataMock.alternateHierarchyId);
           done();
         });
@@ -1861,7 +1864,7 @@ describe('Responsibilities Effects', () => {
             fetchEntityWithPerformanceDataMock.entities,
             fetchEntityWithPerformanceDataMock.filter,
             fetchEntityWithPerformanceDataMock.positionId,
-            fetchEntityWithPerformanceDataMock.brandCode);
+            fetchEntityWithPerformanceDataMock.brandSkuCode);
           done();
         });
       });
@@ -1876,7 +1879,7 @@ describe('Responsibilities Effects', () => {
             fetchEntityWithPerformanceDataMock.entities,
             fetchEntityWithPerformanceDataMock.filter,
             '0',
-            fetchEntityWithPerformanceDataMock.brandCode);
+            fetchEntityWithPerformanceDataMock.brandSkuCode);
           done();
         });
       });
@@ -1895,7 +1898,7 @@ describe('Responsibilities Effects', () => {
             fetchEntityWithPerformanceDataMock.entities,
             fetchEntityWithPerformanceDataMock.filter,
             fetchEntityWithPerformanceDataMock.positionId,
-            fetchEntityWithPerformanceDataMock.brandCode);
+            fetchEntityWithPerformanceDataMock.brandSkuCode);
           done();
         });
       });

@@ -47,6 +47,8 @@ import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 const chance = new Chance();
 
@@ -61,6 +63,8 @@ describe('Responsibilities Effects', () => {
   const entityTypeCodeMock = chance.string();
   const selectedEntityDescriptionMock = chance.string();
   const brandCodeMock = chance.string();
+  const skuPackageTypeMock: SkuPackageType = SkuPackageType.sku;
+  const productMetricsViewTypeMock: ProductMetricsViewType = ProductMetricsViewType.skus;
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -407,7 +411,9 @@ describe('Responsibilities Effects', () => {
       selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
       filter: performanceFilterStateMock,
-      brandCode: chance.string(),
+      brandSkuCode: chance.string(),
+      skuPackageType: skuPackageTypeMock,
+      productMetricsViewType: productMetricsViewTypeMock,
       entityType: getEntityTypeMock(),
       alternateHierarchyId: chance.string(),
       accountPositionId: chance.string()
@@ -525,7 +531,7 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchTotalPerformance({
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock
       }));
     });
 
@@ -589,7 +595,7 @@ describe('Responsibilities Effects', () => {
           selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
           filter: performanceFilterStateMock,
           selectedEntityDescription: chance.string(),
-          brandCode: chance.string()
+          brandSkuCode: chance.string()
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 

@@ -50,7 +50,7 @@ export interface RefreshAllPerformancesPayload {
   salesHierarchyViewType: SalesHierarchyViewType;
   filter: MyPerformanceFilterState;
   brandSkuCode?: string;
-  skuPackageType: SkuPackageType;
+  skuPackageType?: SkuPackageType;
   productMetricsViewType: ProductMetricsViewType;
   entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;

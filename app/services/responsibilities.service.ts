@@ -554,9 +554,9 @@ export class ResponsibilitiesService {
     accountsId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string,
-    brandCode?: string,
+    brandSkuCode?: string,
     skuPackageType?: SkuPackageType): Observable<Performance> {
-    return this.myPerformanceApiService.getAccountPerformance(accountsId, filter, contextPositionId, brandCode, skuPackageType)
+    return this.myPerformanceApiService.getAccountPerformance(accountsId, filter, contextPositionId, brandSkuCode, skuPackageType)
       .map((response: PerformanceDTO) => this.performanceTransformerService.transformPerformanceDTO(response));
   }
 

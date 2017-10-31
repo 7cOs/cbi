@@ -578,7 +578,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedPositionId: rowMock.metadata.positionId,
         selectedEntityDescription: rowMock.descriptionRow0,
-        brandCode: stateMock.myPerformance.current.selectedBrandCode
+        brandSkuCode: stateMock.myPerformance.current.selectedBrandCode
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
         positionId: rowMock.metadata.positionId,
@@ -633,7 +633,7 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: alternateHierarchyIdMock,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityDescription: rowMock.descriptionRow0,
-        brandCode: currentMock.selectedBrandCode
+        brandSkuCode: currentMock.selectedBrandCode
       }));
     });
 
@@ -726,7 +726,9 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: rowMock.metadata.brandCode,
+        brandSkuCode: rowMock.metadata.brandCode,
+        productMetricsViewType: ProductMetricsViewType.brands,
+        skuPackageType: rowMock.metadata.skuPackageType,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
         accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
@@ -760,7 +762,9 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: rowMock.metadata.brandCode,
+        brandSkuCode: rowMock.metadata.brandCode,
+        productMetricsViewType: ProductMetricsViewType.brands,
+        skuPackageType: rowMock.metadata.skuPackageType,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
         accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
@@ -794,7 +798,9 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: rowMock.metadata.brandCode,
+        brandSkuCode: rowMock.metadata.brandCode,
+        productMetricsViewType: ProductMetricsViewType.brands,
+        skuPackageType: rowMock.metadata.skuPackageType,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
         accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
