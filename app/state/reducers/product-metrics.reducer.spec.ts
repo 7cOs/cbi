@@ -1,7 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock, getProductMetricsBrandMock } from '../../models/product-metrics.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';

@@ -142,6 +142,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (this.selectedBrandCode
           && productMetrics.productMetricsViewType === ProductMetricsViewType.skus
+          && this.productMetrics
           && this.productMetrics.length === 0) {
           this.deselectBrandValue();
         }

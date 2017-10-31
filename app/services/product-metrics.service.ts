@@ -38,7 +38,6 @@ export class ProductMetricsService {
     let apiCalls: Observable<ProductMetricsDTO>[] = [];
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
-    console.log(aggregationLevel);
     if (productMetricsData.selectedEntityType === EntityType.Person) {
       apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
         productMetricsData.positionId,
