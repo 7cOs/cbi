@@ -43,7 +43,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
-  @Test(description = "Creating an Opportunities Saved Report", dataProvider = "savedReportData")
+  @Test(description = "Creating an Opportunities Saved Report", dataProvider = "createRunReportData")
   public void createSavedReport(String name, String distributorSearchText) {
     opportunitiesPage
       .deleteAllSavedReports()
@@ -146,10 +146,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @DataProvider
-  public static Object[][] savedReportData() {
+  public static Object[][] createRunReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {testReportName, "Healy Wholesale"}
+      {"Create & Run Me " + testReportName, "Healy Wholesale"}
     };
   }
 
