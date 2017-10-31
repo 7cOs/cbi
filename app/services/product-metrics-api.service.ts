@@ -69,7 +69,55 @@ export class ProductMetricsApiService {
       { aggregationLevel: aggregation }
     );
 
-    return this.http.get(`${ url }`, {
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(err, aggregation, params.type));
+  }
+
+  public getAlternateHierarchyProductMetrics(
+    positionId: string,
+    entityType: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType,
+    contextPositionId: string
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ entityType }/productMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {
+        aggregationLevel: aggregation,
+        contextPositionId: contextPositionId
+      }
+    );
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(err, aggregation, params.type));
+  }
+
+  public getAlternateHierarchyProductMetricsForPosition(
+    positionId: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType,
+    contextPositionId: string
+  ): Observable<ProductMetricsDTO> {
+
+    const url = `/v3/positions/${positionId}/alternateHierarchyProductMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {
+        aggregationLevel: aggregation,
+        contextPositionId: contextPositionId
+      }
+    );
+
+    return this.http.get(url, {
       params: params
     })
       .map(res => res.json())
