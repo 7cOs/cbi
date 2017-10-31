@@ -36,6 +36,7 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
@@ -106,6 +107,7 @@ class MyPerformanceTableComponentMock {
 describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
+  let componentInstanceCopy: any;
   let userServiceMock: any;
   let myPerformanceServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
@@ -230,6 +232,7 @@ describe('MyPerformanceComponent', () => {
     currentSubject.next(myPerformanceStateMock.current);
     productMetricsSubject.next(myPerformanceProductMetricsMock);
     versionsSubject.next(initialVersionsMock);
+    componentInstanceCopy = componentInstance as any;
   });
 
   describe('MyPerformanceComponent various events', () => {
@@ -533,7 +536,8 @@ describe('MyPerformanceComponent', () => {
         entityTypeCode: rowMock.metadata.entityTypeCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.RoleGroup,
-        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode
+        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+        inAlternateHierarchy: false
       }));
     });
 
@@ -546,7 +550,7 @@ describe('MyPerformanceComponent', () => {
       rowMock.metadata.alternateHierarchyId = chance.string();
       componentInstance.handleElementClicked(params);
 
-      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
@@ -561,6 +565,16 @@ describe('MyPerformanceComponent', () => {
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any
       }));
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(
+        new ProductMetricsActions.FetchProductMetrics({
+          inAlternateHierarchy: false,
+          positionId: rowMock.metadata.positionId,
+          entityTypeCode: rowMock.metadata.entityTypeCode,
+          filter: stateMock.myPerformanceFilter,
+          selectedEntityType: rowMock.metadata.entityType,
+          selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode
+        })
+      );
     });
 
     it('should trigger appropriate actions when current salesHierarchyViewType is accounts', () => {
@@ -584,7 +598,8 @@ describe('MyPerformanceComponent', () => {
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.Account,
-        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode
+        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+        inAlternateHierarchy: false
       }));
     });
 
@@ -606,7 +621,8 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.Person,
-        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode
+        selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+        inAlternateHierarchy: false
       }));
     });
 
@@ -616,6 +632,9 @@ describe('MyPerformanceComponent', () => {
       const alternateHierarchyIdMock = chance.string();
 
       currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+      params.row.metadata.alternateHierarchyId = currentMock.responsibilities.alternateHierarchyId;
+      params.row.metadata.entityType = EntityType.Person;
+      params.row.metadata.brandCode = chance.string();
       currentSubject.next(currentMock);
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.handleElementClicked(params);
@@ -624,7 +643,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter
       });
 
-      expect(storeMock.dispatch.calls.count()).toBe(3);
+      expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceState));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities({
@@ -633,6 +652,17 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityDescription: rowMock.descriptionRow0
       }));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(
+        new ProductMetricsActions.FetchProductMetrics({
+          contextPositionId: currentMock.responsibilities.alternateHierarchyId,
+          inAlternateHierarchy: true,
+          positionId: rowMock.metadata.positionId,
+          entityTypeCode: rowMock.metadata.entityTypeCode,
+          filter: stateMock.myPerformanceFilter,
+          selectedEntityType: rowMock.metadata.entityType,
+          selectedBrandCode: componentInstanceCopy.selectedBrandCode
+        })
+      );
     });
 
     it('should dispatch FetchEntityWithPerformance when salesHierarchyViewType is roleGroups', () => {
@@ -712,9 +742,12 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
         positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-        selectedBrandCode: rowMock.metadata.brandCode
+        selectedBrandCode: rowMock.metadata.brandCode,
+        inAlternateHierarchy: false,
+        contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId
       }));
     });
 
@@ -733,10 +766,12 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
         positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
-        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId
+        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
+        inAlternateHierarchy: false
       }));
     });
 
@@ -758,7 +793,8 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
-        entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode
+        entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
+        inAlternateHierarchy: false
       }));
     });
 
