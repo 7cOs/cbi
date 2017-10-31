@@ -171,7 +171,7 @@ export class MyPerformanceApiService {
   }
 
   private getParams(filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType): any {
-    const params = {
+    let params: any = {
       metricType: filter.hasOwnProperty('distributionType')
         ? DistributionTypeValue[filter.distributionType] + MetricTypeValue[filter.metricType]
         : MetricTypeValue[filter.metricType],
@@ -180,10 +180,10 @@ export class MyPerformanceApiService {
     };
     if (skuPackageType) {
       skuPackageType === SkuPackageType.sku
-        ? params['masterSKU'] = brandSkuCode
-        : params['masterPackageSKU'] = brandSkuCode;
+        ? params.masterSKU = brandSkuCode
+        : params.masterPackageSKU = brandSkuCode;
     } else {
-      params['brandCode'] = brandSkuCode;
+      params.brandCode = brandSkuCode;
     }
 
     return params;

@@ -49,6 +49,8 @@ import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { getskuPackageTypeMock } from '../../enums/sku-package-type.enum.mock';
+import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 
 const chance = new Chance();
 
@@ -63,8 +65,8 @@ describe('Responsibilities Effects', () => {
   const entityTypeCodeMock = chance.string();
   const selectedEntityDescriptionMock = chance.string();
   const brandCodeMock = chance.string();
-  const skuPackageTypeMock: SkuPackageType = SkuPackageType.sku;
-  const productMetricsViewTypeMock: ProductMetricsViewType = ProductMetricsViewType.skus;
+  const skuPackageTypeMock = SkuPackageType[getskuPackageTypeMock()];
+  const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -410,9 +412,9 @@ describe('Responsibilities Effects', () => {
       selectedEntityType: getEntityTypeMock(),
       selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
+      skuPackageType: SkuPackageType[getskuPackageTypeMock()],
       filter: performanceFilterStateMock,
       brandSkuCode: chance.string(),
-      skuPackageType: skuPackageTypeMock,
       productMetricsViewType: productMetricsViewTypeMock,
       entityType: getEntityTypeMock(),
       alternateHierarchyId: chance.string(),
@@ -531,7 +533,8 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchTotalPerformance({
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
-        brandSkuCode: brandCodeMock
+        brandSkuCode: brandCodeMock,
+        skuPackageType: skuPackageTypeMock
       }));
     });
 
@@ -553,7 +556,8 @@ describe('Responsibilities Effects', () => {
       expect(getResponsibilitiesSpy.calls.argsFor(0)).toEqual([
         positionIdMock,
         performanceFilterStateMock,
-        brandCodeMock
+        brandCodeMock,
+        skuPackageTypeMock
       ]);
     });
 
