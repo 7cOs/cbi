@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-// tslint:disable-next-line:no-unused-variable
 import { DateRangeDTO } from '../models/date-range-dto.model';
 
 @Injectable()
@@ -18,7 +17,6 @@ export class DateRangeApiService {
   }
 
   private handleError(err: Error): Observable<Error> {
-    console.log(err.message || 'Unkown Error');
     return Observable.throw(err);
   }
 }
