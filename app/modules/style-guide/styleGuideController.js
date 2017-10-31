@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function styleGuideController($rootScope, $scope, $timeout, $state, $mdDialog, notesService) {
+  function styleGuideController($rootScope, $scope, $timeout, $state, $mdDialog, notesService, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
     var vm = this;
 
     // Set page title for head and nav
-    $rootScope.pageTitle = $state.current.title;
+    title.setTitle($state.current.title);
 
     // Services
     notesService.accountNotes().then(function(success) {

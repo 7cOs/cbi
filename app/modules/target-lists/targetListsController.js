@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListsController($rootScope, $state, chipsService, filtersService) {
+  function targetListsController($rootScope, $state, chipsService, filtersService, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
     var vm = this;
 
     // Set page title for head and nav
-    $rootScope.pageTitle = $state.current.title;
+    title.setTitle($state.current.title);
 
     // Services
     vm.chipsService = chipsService;

@@ -513,6 +513,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       expect(rowData.metricColumn0).toEqual(productMetricsValuesMock.current);
       expect(rowData.metricColumn1).toEqual(productMetricsValuesMock.yearAgo);
       expect(rowData.metricColumn2).toEqual(productMetricsValuesMock.yearAgoPercent);
+      expect(rowData.ctv).toEqual(100);
     });
   });
 });

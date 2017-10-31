@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
+function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -11,7 +11,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     var vm = this;
 
     // Set page title for head and nav
-    $rootScope.pageTitle = $state.current.title;
+    title.setTitle($state.current.title);
 
     // Services
     vm.chipsService = chipsService;

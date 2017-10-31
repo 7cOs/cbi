@@ -13,13 +13,13 @@ import { MyPerformanceFilterEvent } from '../../../models/my-performance-filter.
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 
-const initialStateMock: MyPerformanceFilterState = {
+const initialFilterStateMock: MyPerformanceFilterState = {
   metricType: MetricTypeValue.volume,
   dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
   premiseType: PremiseTypeValue.All,
   distributionType: DistributionTypeValue.simple
 };
-const updatedStateMock: MyPerformanceFilterState = {
+const updatedFilterStateMock: MyPerformanceFilterState = {
   metricType: MetricTypeValue.PointsOfDistribution,
   dateRangeCode: DateRangeTimePeriodValue.L90BDL,
   premiseType: PremiseTypeValue.Off,
@@ -41,8 +41,8 @@ describe('My Performance Filter Component', () => {
 
   describe('component input', () => {
     it('should pass input data to its child components', () => {
-      componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangeStateMock;
+      componentInstance.filterState = initialFilterStateMock;
+      componentInstance.dateRangeState = dateRangeStateMock;
       fixture.detectChanges();
 
       let mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
@@ -56,7 +56,7 @@ describe('My Performance Filter Component', () => {
       expect(timePeriodCompassSelect.model).toEqual(DateRangeTimePeriodValue.CYTDBDL);
       expect(premiseTypeRadio.model).toEqual(PremiseTypeValue.All);
 
-      componentInstance.filterState = updatedStateMock;
+      componentInstance.filterState = updatedFilterStateMock;
       fixture.detectChanges();
 
       mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
@@ -76,8 +76,8 @@ describe('My Performance Filter Component', () => {
 
   describe('component output', () => {
     it('should emit value outputed by metric child component select dropdown', () => {
-      componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangeStateMock;
+      componentInstance.filterState = initialFilterStateMock;
+      componentInstance.dateRangeState = dateRangeStateMock;
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
         expect(value).toEqual({ filterType: MyPerformanceFilterActionType.Metric, filterValue: MetricTypeValue.volume });
@@ -90,8 +90,8 @@ describe('My Performance Filter Component', () => {
     });
 
     it('should emit value outputed by time period select dropdown child component', () => {
-      componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangeStateMock;
+      componentInstance.filterState = initialFilterStateMock;
+      componentInstance.dateRangeState = dateRangeStateMock;
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
@@ -105,8 +105,8 @@ describe('My Performance Filter Component', () => {
     });
 
     it('should emit value outputed by premise type child component radio button', () => {
-      componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangeStateMock;
+      componentInstance.filterState = initialFilterStateMock;
+      componentInstance.dateRangeState = dateRangeStateMock;
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
@@ -120,8 +120,8 @@ describe('My Performance Filter Component', () => {
     });
 
     it('should emit value outputed by distribution type child component radio button', () => {
-      componentInstance.filterState = updatedStateMock;
-      componentInstance.dateRanges = dateRangeStateMock;
+      componentInstance.filterState = updatedFilterStateMock;
+      componentInstance.dateRangeState = dateRangeStateMock;
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {

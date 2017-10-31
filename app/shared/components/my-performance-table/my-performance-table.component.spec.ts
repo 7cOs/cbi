@@ -4,6 +4,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
+import { getDateRangeMock } from '../../../models/date-range.model.mock';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
@@ -46,14 +47,15 @@ describe('MyPerformanceTableComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceTableComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
+    componentInstance.dateRange  = getDateRangeMock();
   });
 
   describe('setSortingcriteria', () => {
 
     it('should sort the data with one criterion', () => {
       const tableData = getMyPerformanceTableRowMock(2);
-      componentInstance.tableData = tableData;
 
+      componentInstance.tableData = tableData;
       const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteria[0];

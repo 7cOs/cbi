@@ -6,9 +6,9 @@ import * as MyPerformanceVersionActions from './my-performance-version.action';
 import { SkuPackageType  } from '../../enums/sku-package-type.enum';
 import { SkuPackagePayload } from './my-performance-version.action';
 
-let chance = new Chance();
+const chance = new Chance();
 
-describe('Responsibilities Actions', () => {
+describe('My Performance Version Actions', () => {
 
   describe('SaveMyPerformanceState', () => {
     let action: MyPerformanceVersionActions.SaveMyPerformanceState;
