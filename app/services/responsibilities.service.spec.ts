@@ -674,6 +674,34 @@ describe('Responsibilities Effects', () => {
         ]);
       });
     });
+
+    describe('when called for salesHierarchyViewType.people/subaccounts', () => {
+      const salesHierarchyViewTypePool = [SalesHierarchyViewType.people, SalesHierarchyViewType.subAccounts];
+      const salesHierarchyViewTypeMock = sample(salesHierarchyViewTypePool);
+
+      const responsibilitiesDataMock: ResponsibilitiesData = {
+        positionId: positionIdMock,
+        salesHierarchyViewType: salesHierarchyViewTypeMock,
+        hierarchyGroups: [{
+          type: chance.string(),
+          name: chance.string(),
+          positionDescription: chance.string(),
+          entityType: EntityType.RoleGroup
+        }],
+        groupedEntities: accountsDistributorsMock,
+        filter: performanceFilterStateMock,
+        brandCode: brandCodeMock
+      };
+
+      it('returns the passed-in data object', (done) => {
+        responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesDataMock)
+          .subscribe((responsibilitiesData: ResponsibilitiesData) => {
+            expect(responsibilitiesData).toEqual(responsibilitiesDataMock);
+
+            done();
+          });
+      });
+    });
   });
 
   describe('when getAccountsDistributors is called', () => {
@@ -1532,6 +1560,17 @@ describe('Responsibilities Effects', () => {
             salesHierarchyViewType: salesHierarchyViewType,
             entitiesTotalPerformances: entityWithPerformanceMock[0].performance
           });
+
+          done();
+        });
+      });
+
+      it('should call show toast and transform null dto when getHierarchyGroupPerformance returns an error', (done) => {
+        getHierarchyGroupPerformanceSpy.and.callFake(() => {
+          return Observable.throw(new Error(chance.string()));
+        });
+        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+          expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(1);
 
           done();
         });
