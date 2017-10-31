@@ -6,7 +6,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
-import { MockApiError } from '../models/mock-api-error.model';
+import { ApiErrorMock } from '../models/api-error-mock.model';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { ProductMetricsApiService } from './product-metrics-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
@@ -86,7 +86,7 @@ describe('Service: ProductMetricsApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       productMetricsApiService
@@ -106,7 +106,7 @@ describe('Service: ProductMetricsApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       productMetricsApiService

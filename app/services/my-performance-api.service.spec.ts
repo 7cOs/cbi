@@ -12,7 +12,7 @@ import { getHierarchyGroupMock } from '../models/hierarchy-group.model.mock';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
-import { MockApiError } from '../models/mock-api-error.model';
+import { ApiErrorMock } from '../models/api-error-mock.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
@@ -132,7 +132,7 @@ describe('Service: MyPerformanceApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       myPerformanceApiService.getPerformance('', filterStateMock).subscribe((response: PerformanceDTO) => {
@@ -184,7 +184,7 @@ describe('Service: MyPerformanceApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       myPerformanceApiService.getAlternateHierarchyPersonPerformance('', '', filterStateMock).subscribe((response: PerformanceDTO) => {
@@ -233,7 +233,7 @@ describe('Service: MyPerformanceApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       myPerformanceApiService.getSubAccountPerformance('', '', filterStateMock).subscribe((response: PerformanceDTO) => {
@@ -277,7 +277,7 @@ describe('Service: MyPerformanceApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       myPerformanceApiService.getDistributorPerformance('', filterStateMock, '').subscribe((response: PerformanceDTO) => {
@@ -321,7 +321,7 @@ describe('Service: MyPerformanceApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       myPerformanceApiService.getAccountPerformance('', filterStateMock, '').subscribe((response: PerformanceDTO) => {
@@ -396,7 +396,7 @@ describe('Service: MyPerformanceApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterStateMock, '').subscribe((response: PerformanceDTO) => {
@@ -449,7 +449,7 @@ describe('Service: MyPerformanceApiService', () => {
           status: 404,
           statusText: 'No performance totals found with given parameters'
         });
-        connection.mockError(new MockApiError(options));
+        connection.mockError(new ApiErrorMock(options));
       });
 
       myPerformanceApiService.getAlternateHierarchyGroupPerformance(
