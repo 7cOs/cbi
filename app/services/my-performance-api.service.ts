@@ -180,8 +180,8 @@ export class MyPerformanceApiService {
     };
     if (skuPackageType) {
       skuPackageType === SkuPackageType.sku
-        ? params['masterSkuCode'] = brandSkuCode
-        : params['masterPackageSkuCode'] = brandSkuCode;
+        ? params['masterSKU'] = brandSkuCode
+        : params['masterPackageSKU'] = brandSkuCode;
     } else {
       params['brandCode'] = brandSkuCode;
     }
