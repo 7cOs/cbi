@@ -508,6 +508,18 @@ describe('MyPerformanceComponent', () => {
       });
     });
 
+    it('should dispatch the SaveMyPerformanceState action with the payload containing the "current" state but the filter ' +
+    'from the filter state', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      rowMock.metadata.entityType = EntityType.RoleGroup;
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
+      expect(storeMock.dispatch.calls.argsFor(0)[0].payload.filter).toEqual(stateMock.myPerformanceFilter);
+      expect(storeMock.dispatch.calls.argsFor(0)[0].payload.filter).not.toEqual(stateMock.myPerformance.current.filter);
+    });
+
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
     'does NOT contain alternateHierarchyId', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
