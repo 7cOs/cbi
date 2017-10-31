@@ -410,7 +410,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         }
       });
 
-      it('should NOT filter out rows with only 0 for current or only 0 for YA', () => {
+      it('should NOT filter out rows with 0 only for current or 0 only for YA', () => {
         products.brandValues[0].current = chance.floating({min: 0.1});
         products.brandValues[0].yearAgo = 0;
         products.brandValues[1].current = 0;
@@ -481,7 +481,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         }
       });
 
-      it('should NOT filter out rows with only 0 for current or only 0 for YA', () => {
+      it('should NOT filter out rows with 0 only for current or 0 only for YA', () => {
         products.skuValues[0].current = chance.floating({min: 0.1});
         products.skuValues[0].yearAgo = 0;
         products.skuValues[1].current = 0;
@@ -560,7 +560,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         }
       });
 
-      it('should NOT filter out rows with only 0 for current or only 0 for YA', () => {
+      it('should NOT filter out rows with 0 only for current or 0 only for YA', () => {
         products.skuValues[0].current = chance.floating({min: 0.1});
         products.skuValues[0].yearAgo = 0;
         products.skuValues[1].current = 0;
