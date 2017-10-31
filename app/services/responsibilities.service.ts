@@ -187,7 +187,7 @@ export class ResponsibilitiesService {
             filter,
             brandSkuCode,
             skuPackageType)
-          : this.myPerformanceApiService.getPerformance(position.positionId, filter);
+          : this.myPerformanceApiService.getPerformance(position.positionId, filter, brandSkuCode, skuPackageType);
 
         return performanceCall.map((response: PerformanceDTO) => {
           return this.performanceTransformerService.transformEntityWithPerformance(response, position);

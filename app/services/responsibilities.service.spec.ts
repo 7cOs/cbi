@@ -680,6 +680,34 @@ describe('Responsibilities Effects', () => {
         ]);
       });
     });
+
+    describe('when called for salesHierarchyViewType.people/subaccounts', () => {
+      const salesHierarchyViewTypePool = [SalesHierarchyViewType.people, SalesHierarchyViewType.subAccounts];
+      const salesHierarchyViewTypeMock = sample(salesHierarchyViewTypePool);
+
+      const responsibilitiesDataMock: ResponsibilitiesData = {
+        positionId: positionIdMock,
+        salesHierarchyViewType: salesHierarchyViewTypeMock,
+        hierarchyGroups: [{
+          type: chance.string(),
+          name: chance.string(),
+          positionDescription: chance.string(),
+          entityType: EntityType.RoleGroup
+        }],
+        groupedEntities: accountsDistributorsMock,
+        filter: performanceFilterStateMock,
+        brandCode: brandCodeMock
+      };
+
+      it('returns the passed-in data object', (done) => {
+        responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesDataMock)
+          .subscribe((responsibilitiesData: ResponsibilitiesData) => {
+            expect(responsibilitiesData).toEqual(responsibilitiesDataMock);
+
+            done();
+          });
+      });
+    });
   });
 
   describe('when getAccountsDistributors is called', () => {
@@ -910,12 +938,12 @@ describe('Responsibilities Effects', () => {
       const numberOfEntities: number = chance.natural({min: 1, max: 99});
       const entities: Array<HierarchyEntity> = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
 
-      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState, brandCodeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
 
         entities.forEach((entity: HierarchyEntity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState, brandCodeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
           expect(getAlternateHierarchyPerformanceSpy).not.toHaveBeenCalled();
         });
@@ -972,12 +1000,12 @@ describe('Responsibilities Effects', () => {
 
       const numberOfEntities = chance.natural({min: 2, max: 5});
       const entities = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getPositionsPerformances(entities, mockFilter).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, mockFilter, brandCodeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         entities.map((entity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter, brandCodeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, entity);
         });
         done();
@@ -1551,6 +1579,17 @@ describe('Responsibilities Effects', () => {
             salesHierarchyViewType: salesHierarchyViewType,
             entitiesTotalPerformances: entityWithPerformanceMock[0].performance
           });
+
+          done();
+        });
+      });
+
+      it('should call show toast and transform null dto when getHierarchyGroupPerformance returns an error', (done) => {
+        getHierarchyGroupPerformanceSpy.and.callFake(() => {
+          return Observable.throw(new Error(chance.string()));
+        });
+        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+          expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(1);
 
           done();
         });
