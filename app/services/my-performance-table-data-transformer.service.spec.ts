@@ -446,9 +446,22 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         }
       });
 
-      // TODO in US19294
-      // it('should calculate ctv based on total of provided rows,', () => {
-      // });
+      it('should calculate ctv based on total of provided rows,', () => {
+        const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
+
+        total = 0;
+        products.skuValues.forEach((metric: ProductMetricsValues) => {
+          total += metric.current;
+        });
+
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+        for (let i = 0; i < products.skuValues.length; i++) {
+          const expectedCTV: number = Math.round((products.skuValues[i].current / total) * 1000) / 10;
+          expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
+        }
+      });
 
       it('should filter out rows with no current nor YA for ProductMetrics', () => {
         products.skuValues[0].current = 0;
@@ -512,9 +525,22 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         }
       });
 
-      // TODO in US19294
-      // it('should calculate ctv based on total of provided rows,', () => {
-      // });
+      it('should calculate ctv based on total of provided rows,', () => {
+        const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
+          products, ProductMetricsViewType.skus
+        );
+
+        total = 0;
+        products.skuValues.forEach((metric: ProductMetricsValues) => {
+          total += metric.current;
+        });
+
+        expect(transformedProductMetricsData.length).toBe(products.skuValues.length);
+        for (let i = 0; i < products.skuValues.length; i++) {
+          const expectedCTV: number = Math.round((products.skuValues[i].current / total) * 1000) / 10;
+          expect(transformedProductMetricsData[i].ctv).toBe(expectedCTV);
+        }
+      });
 
       it('should filter out rows with both current and YA equal to 0', () => {
         products.skuValues[0].current = 0;
