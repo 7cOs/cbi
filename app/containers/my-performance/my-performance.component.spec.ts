@@ -107,6 +107,7 @@ class MyPerformanceTableComponentMock {
 describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
+  let componentInstanceCopy: any;
   let userServiceMock: any;
   let myPerformanceServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
@@ -231,6 +232,7 @@ describe('MyPerformanceComponent', () => {
     currentSubject.next(myPerformanceStateMock.current);
     productMetricsSubject.next(myPerformanceProductMetricsMock);
     versionsSubject.next(initialVersionsMock);
+    componentInstanceCopy = componentInstance as any;
   });
 
   describe('MyPerformanceComponent various events', () => {
@@ -658,7 +660,7 @@ describe('MyPerformanceComponent', () => {
           entityTypeCode: rowMock.metadata.entityTypeCode,
           filter: stateMock.myPerformanceFilter,
           selectedEntityType: rowMock.metadata.entityType,
-          selectedBrandCode: componentInstance.selectedBrandCode
+          selectedBrandCode: componentInstanceCopy.selectedBrandCode
         })
       );
     });
@@ -740,10 +742,12 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
         positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
-        alternateHierarchy: false
+        alternateHierarchy: false,
+        contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId
       }));
     });
 
@@ -762,6 +766,7 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
         positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
