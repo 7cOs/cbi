@@ -45,16 +45,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @Test(description = "Creating an Opportunities Saved Report", dataProvider = "createRunReportData")
   public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage
-      .deleteAllSavedReports()
-      .enterDistributorSearchText(distributorSearchText)
-      .clickSearchForDistributor()
-      .clickFirstDistributorResult()
-      .clickApplyFiltersButton()
-      .waitForLoaderToDisappear()
-      .clickSaveReportLink()
-      .enterReportName(name)
-      .clickSave()
+    opportunitiesPage.deleteAllSavedReports();
+    saveNewReport(name, distributorSearchText)
       .waitForModalToClose()
       .clickSavedReportsDropdown();
 
@@ -151,6 +143,18 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     return new Object[][]{
       {"Create & Run " + testReportName, "Healy Wholesale"}
     };
+  }
+
+  private SavedReportModal saveNewReport(String name, String distributorSearchText) {
+    return opportunitiesPage
+      .enterDistributorSearchText(distributorSearchText)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickSaveReportLink()
+      .enterReportName(name)
+      .clickSave();
   }
 
 }
