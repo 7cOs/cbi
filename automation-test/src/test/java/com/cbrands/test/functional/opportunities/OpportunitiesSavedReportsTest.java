@@ -114,14 +114,16 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @Test(
     description = "Editing a Saved Report",
-    dependsOnMethods = {"createSavedReport", "attemptToEditWithExistingName"},
-    dataProvider = "savedReportData"
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "editReportData"
   )
-  public void editSavedReport(String reportName, String distributor) {
-    final String editedReportName = "EDITED " + reportName;
+  public void editSavedReport(String originalReportName, String distributor) {
+    saveNewReport(originalReportName, distributor).waitForModalToClose();
+
+    final String editedReportName = "EDITED " + originalReportName;
     opportunitiesPage
       .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportName)
+      .openModalForSavedReportWithName(originalReportName)
       .enterNewReportName(editedReportName)
       .clickSave()
       .waitForModalToClose();
@@ -152,6 +154,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
       {"Duplicate " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] editReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Edit Me " + testReportName, "Healy Wholesale"}
     };
   }
 
