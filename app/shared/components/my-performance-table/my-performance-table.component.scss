@@ -211,6 +211,7 @@ td, th {
     font-weight: bold;
     letter-spacing: 1px;
     text-align: center;
+    text-transform: uppercase;
     vertical-align: center;
     color: $gray-1;
 
@@ -249,10 +250,10 @@ td, th {
 }
 
 .summary-date-range {
-  font-family: $rajdhani;
+  font-family: $work-sans;
   font-size: 11px;
   font-weight: $semibold;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   text-align: left;
   color: $gray-1;
   padding-left: 16px;

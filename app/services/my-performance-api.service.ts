@@ -179,11 +179,9 @@ export class MyPerformanceApiService {
       premiseType: PremiseTypeValue[filter.premiseType],
     };
     if (skuPackageType) {
-      if (skuPackageType === SkuPackageType.sku) {
-        params['masterSkuCode'] = brandSkuCode;
-      } else {
-        params['masterPackageSkuCode '] = brandSkuCode;
-      }
+      skuPackageType === SkuPackageType.sku
+        ? params['masterSkuCode'] = brandSkuCode
+        : params['masterPackageSkuCode'] = brandSkuCode;
     } else {
       params['brandCode'] = brandSkuCode;
     }

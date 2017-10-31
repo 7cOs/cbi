@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state, analyticsService;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state, analyticsService, title;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,6 +7,12 @@ describe('Unit: targetListDetailController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.filters');
     angular.mock.module('cf.modules.targetListDetail');
+    angular.mock.module(($provide) => {
+      title = {
+        setTitle: () => {}
+      };
+      $provide.value('title', title);
+    });
 
     angular.mock.module(($provide) => {
       analyticsService = {

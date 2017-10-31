@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+
+import { isEqual } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
+import { Title } from '@angular/platform-browser';
 
 import { AccountDashboardStateParameters } from '../../models/account-dashboard-state-parameters.model';
 import { ActionStatus } from '../../enums/action-status.enum';
@@ -13,7 +15,6 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -28,12 +29,13 @@ import * as MyPerformanceVersionActions from '../../state/actions/my-performance
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { WindowService } from '../../services/window.service';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -66,18 +68,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     ascending: false
   }];
   public totalRowData: MyPerformanceTableRow;
-
-  // mocks
-  public dateRange: DateRange = getDateRangeMock();
-  public performanceMetric: string = 'Depletions';
+  public dateRange: DateRange;
+  public dateRangeState: DateRangesState;
+  public performanceMetric: string;
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
 
   private currentState: MyPerformanceEntitiesData;
-  private dateRanges$: Observable<DateRangesState>;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: EntityType;
   private filterState: MyPerformanceFilterState;
+  private dateRangeSubscription: Subscription;
   private filterStateSubscription: Subscription;
   private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
@@ -95,16 +96,32 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
+    private titleService: Title,
     private windowService: WindowService
   ) { }
 
   ngOnInit() {
-    this.dateRanges$ = this.store.select(state => state.dateRanges);
+    this.titleService.setTitle(this.$state.current.title);
+    this.dateRangeSubscription = this.store
+      .select(state => state.dateRanges)
+      .subscribe((dateRangeState: DateRangesState)  => {
+        if (dateRangeState.status === ActionStatus.Fetched) {
+          this.dateRangeState = dateRangeState;
+          this.setSelectedDateRangeValues();
+        }
+    });
 
-    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-      this.filterState = filterState;
-      this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
-      this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+    this.filterStateSubscription = this.store
+      .select(state => state.myPerformanceFilter)
+      .subscribe((filterState: MyPerformanceFilterState)  => {
+        this.filterState = filterState;
+        const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
+        this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
+        this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+        this.performanceMetric = currentMetricName;
+        this.tableHeaderRowLeft[1] = currentMetricName;
+        this.tableHeaderRowRight[1] = currentMetricName;
+        this.setSelectedDateRangeValues();
     });
 
     this.productMetricsSubscription = this.store
@@ -163,21 +180,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
     const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
-    this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
-      this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
 
-    this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
-    this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
-      positionId: currentUserId,
-      filter: this.filterState,
-      selectedEntityDescription: currentUserFullName
-    }));
-    this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-      positionId: currentUserId,
-      filter: this.filterState,
-      selectedEntityType: EntityType.Person,
-      selectedBrandCode: this.selectedBrandCode
-    }));
+    if (this.filterState) {
+      this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+        this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
+
+      this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
+      this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
+        positionId: currentUserId,
+        filter: this.filterState,
+        selectedEntityDescription: currentUserFullName
+      }));
+      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
+        positionId: currentUserId,
+        filter: this.filterState,
+        selectedEntityType: EntityType.Person,
+        selectedBrandCode: this.selectedBrandCode
+      }));
+    }
   }
 
   ngOnDestroy() {
@@ -186,6 +206,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
     this.productMetricsSubscription.unsubscribe();
+    this.dateRangeSubscription.unsubscribe();
   }
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
@@ -218,7 +239,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
-    console.log(this.currentState.salesHierarchyViewType);
     switch (parameters.type) {
       case RowType.total:
         if (parameters.leftSide) {
@@ -240,20 +260,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleBackButtonClicked(): void {
     const previousIndex: number = this.versions.length - 1;
-    const previousState = this.versions[previousIndex];
-    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState());
-    this.fetchProductMetricsForPreviousState(previousState);
+    const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
+
+    this.handlePreviousStateVersion(previousState, 1);
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
     const { trail, entityDescription } = event;
-    const indexOffset = 1;
-    const stepsBack = trail.length - indexOffset - trail.indexOf(entityDescription);
+    const indexOffset: number = 1;
+    const stepsBack: number = trail.length - indexOffset - trail.indexOf(entityDescription);
     const clickedIndex: number = this.versions.length - stepsBack;
-    const clickedState = this.versions[clickedIndex];
+    const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
-    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(stepsBack));
-    this.fetchProductMetricsForPreviousState(clickedState);
+
+    this.handlePreviousStateVersion(clickedState, stepsBack);
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
@@ -285,7 +305,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
-    this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(this.currentState));
+    this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
+      filter: this.filterState
+    })));
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
     switch (this.salesHierarchyViewType) {
@@ -495,5 +517,23 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+  }
+
+  private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
+    if (isEqual(this.filterState, previousState.filter)) {
+      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
+    } else {
+      // Todo: dispatch action to trigger data refresh
+      // Todo: This is temporary just to keep things working as they are, remove once actual refresh is do-able
+      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
+    }
+
+    this.fetchProductMetricsForPreviousState(previousState);
+  }
+
+  private setSelectedDateRangeValues(): void {
+    if (this.dateRangeState && this.filterState) {
+      this.dateRange = this.dateRangeState[DateRangeTimePeriodValue[this.filterState.dateRangeCode]];
+    }
   }
 }

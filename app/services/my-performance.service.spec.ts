@@ -126,6 +126,30 @@ describe('Service: MyPerformanceService', () => {
     });
   });
 
+  describe('getMetricValueName', () => {
+    beforeEach(inject([ MyPerformanceService ],
+      (_myPerformanceService: MyPerformanceService) => {
+        myPerformanceService = _myPerformanceService;
+      }));
+
+    describe('metricKey is Velocity', () => {
+      it('should return Velocity', () => {
+        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.velocity);
+        expect(newPremiseValueState).toEqual('Velocity');
+      });
+
+      it('should return Distribution', () => {
+        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.PointsOfDistribution);
+        expect(newPremiseValueState).toEqual('Distribution');
+      });
+
+      it('should return Volume', () => {
+        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.volume);
+        expect(newPremiseValueState).toEqual('Depletions');
+      });
+    });
+  });
+
   describe('when left side data row distributor link clicked', () => {
     let rowMock: MyPerformanceTableRow;
     let filterMock: MyPerformanceFilter;

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService, loaderService) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService, loaderService, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -17,7 +17,7 @@ module.exports = /*  @ngInject */
     vm.applyFiltersOnLoad = $state.params.applyFiltersOnLoad;
 
     // Set page title for head and nav
-    $rootScope.pageTitle = $state.current.title;
+    title.setTitle($state.current.title);
 
     // Services
     vm.chipsService = chipsService;
