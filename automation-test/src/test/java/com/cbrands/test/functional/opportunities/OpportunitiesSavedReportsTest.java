@@ -95,13 +95,15 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "savedReportData"
+    dataProvider = "duplicateReportData"
   )
-  public void attemptToEditWithExistingName(String reportName, String distributor) {
+  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
+    saveNewReport(existingReportName, distributor).waitForModalToClose();
+
     final SavedReportModal savedReportModal = opportunitiesPage
       .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportName)
-      .enterNewReportName(reportName)
+      .openModalForSavedReportWithName(existingReportName)
+      .enterNewReportName(existingReportName)
       .clickSave();
 
     Assert.assertTrue(
@@ -142,6 +144,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
       {"Create & Run " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] duplicateReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Duplicate " + testReportName, "Healy Wholesale"}
     };
   }
 
