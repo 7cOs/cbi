@@ -178,7 +178,7 @@ export class ResponsibilitiesService {
             alternateHierarchyId,
             filter,
             brandCode)
-          : this.myPerformanceApiService.getPerformance(position.positionId, filter);
+          : this.myPerformanceApiService.getPerformance(position.positionId, filter, brandCode);
 
         return performanceCall.map((response: PerformanceDTO) => {
           return this.performanceTransformerService.transformEntityWithPerformance(response, position);

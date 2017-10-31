@@ -32,6 +32,7 @@ export interface FetchEntityWithPerformancePayload {
   alternateHierarchyId?: string;
   entityType: EntityType;
   selectedEntityDescription: string;
+  brandCode?: string;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
