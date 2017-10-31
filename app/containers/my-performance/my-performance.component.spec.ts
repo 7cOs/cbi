@@ -801,6 +801,39 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
+    it('should trigger appropriate actions when current salesHierarchyViewType is subAccounts and ' +
+      'when productMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SelectBrandValues(rowMock.metadata.brandCode));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+        new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(rowMock.metadata.brandCode)
+      );
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+        positionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+        selectedBrandCode: rowMock.metadata.brandCode
+      }));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+        hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+        selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+        selectedEntityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
+        salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+        filter: stateMock.myPerformanceFilter as any,
+        brandCode: rowMock.metadata.brandCode,
+        entityType: stateMock.myPerformance.current.selectedEntityType,
+        alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
+      }));
+    });
+
     it('should trigger appropriate actions with any salesHierarchyViewType and ' +
       'when productMetricsViewType is skus', () => {
       const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
