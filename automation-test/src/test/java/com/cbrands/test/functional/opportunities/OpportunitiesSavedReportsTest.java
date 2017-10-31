@@ -73,7 +73,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "savedReportData"
+    dataProvider = "createRunReportData"
   )
   public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
     opportunitiesPage
@@ -149,7 +149,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public static Object[][] createRunReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {"Create & Run Me " + testReportName, "Healy Wholesale"}
+      {"Create & Run " + testReportName, "Healy Wholesale"}
     };
   }
 
