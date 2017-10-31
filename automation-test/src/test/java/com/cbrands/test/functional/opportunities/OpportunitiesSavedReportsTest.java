@@ -88,7 +88,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Running an Opportunities Saved Report from the Home page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "savedReportData"
+    dataProvider = "createRunReportData"
   )
   public void runSavedReportFromHomePage(String reportName, String distributor) {
     homePage.goToPage();
