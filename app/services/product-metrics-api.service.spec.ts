@@ -1,14 +1,19 @@
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
+import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType } from '@angular/http';
+import * as Chance from 'chance';
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
+import { MockApiError } from '../models/mock-api-error.model';
+import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { ProductMetricsApiService } from './product-metrics-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../models/product-metrics.model';
+
+const chance = new Chance();
 
 describe('Service: ProductMetricsApiService', () => {
   let productMetricsApiService: ProductMetricsApiService;
@@ -42,15 +47,19 @@ describe('Service: ProductMetricsApiService', () => {
   );
 
   describe('getPositionProductMetrics', () => {
+    let filterMock: MyPerformanceFilterState;
+    let expectedPositionId: string;
 
-    it('should call the getPositionProductMetrics endpoint and return all ProductMetrics', (done) => {
-      const filterMock = {
+    beforeEach(() => {
+      filterMock = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedPositionId = chance.string({pool: '0123456789'});
+      expectedPositionId = chance.string({pool: '0123456789'});
+    });
 
+    it('should call the getPositionProductMetrics endpoint and return all ProductMetrics when response is successful', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(productMetricsDTOMock)
@@ -65,6 +74,47 @@ describe('Service: ProductMetricsApiService', () => {
         .getPositionProductMetrics(expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
         .subscribe((res) => {
           expect(res).toEqual(productMetricsDTOMock);
+          done();
+        });
+    });
+
+    it('should call the getPositionProductMetrics endpoint and return empty brandValues when '
+    + 'brand aggregation response is 404', (done: any) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      productMetricsApiService
+        .getPositionProductMetrics(expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
+        .subscribe((res) => {
+          expect(res).toBeDefined();
+          expect(res.brandValues).toEqual([]);
+          expect(res.type).toEqual('volume');
+          done();
+        });
+    });
+
+    it('should call the getPositionProductMetrics endpoint and return empty skuValues when sku aggregation response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      productMetricsApiService
+        .getPositionProductMetrics(expectedPositionId, filterMock, ProductMetricsAggregationType.sku)
+        .subscribe((res) => {
+          expect(res).toBeDefined();
+          expect(res.skuValues).toEqual([]);
+          expect(res.type).toEqual('volume');
           done();
         });
     });

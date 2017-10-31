@@ -1,4 +1,4 @@
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
+import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType } from '@angular/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
@@ -12,6 +12,7 @@ import { getHierarchyGroupMock } from '../models/hierarchy-group.model.mock';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
 import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
+import { MockApiError } from '../models/mock-api-error.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
@@ -22,6 +23,10 @@ describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
   let mockBackend: MockBackend;
 
+  const emptyPerformanceDTOMock: PerformanceDTO = {
+    total: 0,
+    totalYearAgo: 0
+  };
   const performanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
   const responsibilitiesResponseMock: PeopleResponsibilitiesDTO = {
     positions: [{
@@ -96,13 +101,13 @@ describe('Service: MyPerformanceApiService', () => {
   });
 
   describe('getPerformance', () => {
-    it('should call the performance API and return performance data', (done) => {
-      const filterStateMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
-        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-        premiseType: PremiseTypeValue.On
-      };
+    const filterStateMock: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.volume,
+      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+      premiseType: PremiseTypeValue.On
+    };
 
+    it('should call the performance API and return performance data', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(performanceDTOResponseMock)
@@ -119,19 +124,36 @@ describe('Service: MyPerformanceApiService', () => {
         done();
       });
     });
+
+    it('should call the performance API and return empty performance data when response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      myPerformanceApiService.getPerformance('', filterStateMock).subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(emptyPerformanceDTOMock);
+        done();
+      });
+    });
   });
 
   describe('getAlternateHierarchyPersonPerformance', () => {
+    const filterStateMock: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.volume,
+      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+      premiseType: PremiseTypeValue.On
+    };
+
     it('should call the alternate hierarchy performance API and return performance data', (done) => {
       const positionIdMock: string = chance.string();
       const alternateHierarchyIdMock: string = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
-      const filterStateMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
-        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-        premiseType: PremiseTypeValue.On
-      };
 
       const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchyPerformanceTotal`;
       const expectedUrlParams = `?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&contextPositionId=${ alternateHierarchyIdMock }`;
@@ -154,15 +176,32 @@ describe('Service: MyPerformanceApiService', () => {
         done();
       });
     });
+
+    it('should call the alternate hierarchy performance API and return empty performance data when response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      myPerformanceApiService.getAlternateHierarchyPersonPerformance('', '', filterStateMock).subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(emptyPerformanceDTOMock);
+        done();
+      });
+    });
   });
 
   describe('getSubAccountsPerformance', () => {
-    it('should call the SubAccountsperformance  API and return performance data', (done) => {
-      const filterStateMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
-        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-        premiseType: PremiseTypeValue.On
-      };
+    const filterStateMock: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.volume,
+      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+      premiseType: PremiseTypeValue.On
+    };
+
+    it('should call the SubAccounts performance  API and return performance data', (done) => {
       const subAccountIdMock: string = chance.string();
       const contextPositionIdMock: string = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
@@ -186,16 +225,32 @@ describe('Service: MyPerformanceApiService', () => {
         done();
       });
     });
+
+    it('should call the SubAccounts performance API and return empty performance data when response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      myPerformanceApiService.getSubAccountPerformance('', '', filterStateMock).subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(emptyPerformanceDTOMock);
+        done();
+      });
+    });
   });
 
   describe('getDistributorPerformance', () => {
-    it('should call the distributors performance API and return performance data', (done) => {
-      const filterStateMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
-        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-        premiseType: PremiseTypeValue.On
-      };
+    const filterStateMock: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.volume,
+      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+      premiseType: PremiseTypeValue.On
+    };
 
+    it('should call the distributor performance API and return performance data', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(performanceDTOResponseMock)
@@ -214,16 +269,32 @@ describe('Service: MyPerformanceApiService', () => {
         done();
       });
     });
+
+    it('should call the distributor performance API and return empty performance data when response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      myPerformanceApiService.getDistributorPerformance('', filterStateMock, '').subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(emptyPerformanceDTOMock);
+        done();
+      });
+    });
   });
 
-  describe('getAccountsPerformance', () => {
-    it('should call the accounts performance API and return performance data', (done) => {
-      const filterStateMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
-        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-        premiseType: PremiseTypeValue.On
-      };
+  describe('getAccountPerformance', () => {
+    const filterStateMock: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.volume,
+      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+      premiseType: PremiseTypeValue.On
+    };
 
+    it('should call the account performance API and return performance data', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(performanceDTOResponseMock)
@@ -239,6 +310,22 @@ describe('Service: MyPerformanceApiService', () => {
 
       myPerformanceApiService.getAccountPerformance('1', filterStateMock, '1').subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expected);
+        done();
+      });
+    });
+
+    it('should call the account performance API and return empty performance data when response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      myPerformanceApiService.getAccountPerformance('', filterStateMock, '').subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(emptyPerformanceDTOMock);
         done();
       });
     });
@@ -268,19 +355,19 @@ describe('Service: MyPerformanceApiService', () => {
   });
 
   describe('getHierarchyGroupPerformance', () => {
+    const filterStateMock: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.velocity,
+      dateRangeCode: DateRangeTimePeriodValue.L90BDL,
+      premiseType: PremiseTypeValue.All
+    };
+    const entityMock = {
+      name: chance.string(),
+      type: chance.string(),
+      entityType: EntityType.RoleGroup,
+      positionDescription: chance.string()
+    };
 
     it('should call the responsibility performance endpoint and return performance data for the responsibility', (done) => {
-      const filterStateMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.velocity,
-        dateRangeCode: DateRangeTimePeriodValue.L90BDL,
-        premiseType: PremiseTypeValue.All
-      };
-      const entityMock = {
-        name: chance.string(),
-        type: chance.string(),
-        entityType: EntityType.RoleGroup,
-        positionDescription: chance.string()
-      };
       const positionIdMock = chance.string();
       const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ entityMock.type }/performanceTotal`;
       const expectedUrlParams = '?metricType=velocity&dateRangeCode=L90BDL&premiseType=All';
@@ -301,20 +388,37 @@ describe('Service: MyPerformanceApiService', () => {
           done();
       });
     });
+
+    it('should call the responsibility performance API and return empty performance data when response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterStateMock, '').subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(emptyPerformanceDTOMock);
+        done();
+      });
+    });
   });
 
   describe('getAlternateHierarchyGroupPerformance', () => {
+    const hierarchyGroupMock: HierarchyGroup = getHierarchyGroupMock();
+    const filterStateMock: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.velocity,
+      dateRangeCode: DateRangeTimePeriodValue.L90BDL,
+      premiseType: PremiseTypeValue.All
+    };
+
     it('should call the alternateHierarchy performanceTotal endpoint and return performance data for the group', (done) => {
       const positionIdMock = chance.string();
       const alternateHierarchyIdMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
-      const hierarchyGroupMock: HierarchyGroup = getHierarchyGroupMock();
-      const filterStateMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.velocity,
-        dateRangeCode: DateRangeTimePeriodValue.L90BDL,
-        premiseType: PremiseTypeValue.All
-      };
 
       const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ hierarchyGroupMock.type }/performanceTotal`;
       const expectedUrlParams = `?metricType=velocity&dateRangeCode=L90BDL&premiseType=All&contextPositionId=${alternateHierarchyIdMock}`;
@@ -329,11 +433,30 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getAlternateHierarchyGroupPerformance(hierarchyGroupMock,
-        positionIdMock, alternateHierarchyIdMock, filterStateMock)
+      myPerformanceApiService.getAlternateHierarchyGroupPerformance(
+        hierarchyGroupMock, positionIdMock, alternateHierarchyIdMock, filterStateMock
+      )
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(performanceDTOResponseMock);
           done();
+      });
+    });
+
+    it('should call the alternateHierarchy performance API and return empty performance data when response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new MockApiError(options));
+      });
+
+      myPerformanceApiService.getAlternateHierarchyGroupPerformance(
+        hierarchyGroupMock, '', '', filterStateMock
+      ).subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(emptyPerformanceDTOMock);
+        done();
       });
     });
   });
