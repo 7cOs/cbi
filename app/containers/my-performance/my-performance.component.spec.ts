@@ -496,15 +496,17 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
-      it('should dispatch the RefreshAllPerformances action when the current filter state and previous state`s filter mismatch', () => {
+      it('should dispatch the RefreshAllPerformances action when the filter state and previous state`s filter mismatch', () => {
         const previousVersionMock = versionsMock[versionsMock.length - 1];
 
+        versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
         versionsMock[versionsMock.length - 1].filter = getMyPerformanceFilterMock();
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
 
+        expect(storeMock.dispatch.calls.count()).toBe(3);
         expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
           positionId: previousVersionMock.responsibilities.positionId,
           groupedEntities: previousVersionMock.responsibilities.groupedEntities,
@@ -1026,7 +1028,6 @@ describe('MyPerformanceComponent', () => {
 
       function setupVersionAndBreadcrumbMocks(selectedSalesHierarchyViewType: SalesHierarchyViewType) {
         versionsMock = generateMockVersions(4, 9);
-
         const breadcrumbTrailLength = versionsMock.length + 1;
         breadcrumbTrailMock = Array(breadcrumbTrailLength).fill('').map(() => chance.string());
         breadcrumbSelectionIndex = chance.natural({max: versionsMock.length - 2});
