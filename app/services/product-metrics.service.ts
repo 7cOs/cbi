@@ -73,7 +73,8 @@ export class ProductMetricsService {
           ));
         }
       }
-    } else if (productMetricsData.selectedEntityType === EntityType.Person) {
+    } else if (productMetricsData.selectedEntityType === EntityType.Person
+      || productMetricsData.selectedEntityType === EntityType.AccountGroup) {
       apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
         productMetricsData.positionId,
         productMetricsData.filter,

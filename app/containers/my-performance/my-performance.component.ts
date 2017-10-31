@@ -445,14 +445,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           break;
         }
     } else {
+      if (actionPayload.alternateHierarchy) actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId;
+      actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
       switch (this.salesHierarchyViewType) {
         case SalesHierarchyViewType.accounts:
           actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
           break;
-        case SalesHierarchyViewType.people:
-          actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
-          break;
         case SalesHierarchyViewType.roleGroups:
+          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
+          break;
+        case SalesHierarchyViewType.people:
         default:
           break;
         }
