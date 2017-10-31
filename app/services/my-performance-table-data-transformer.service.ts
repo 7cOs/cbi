@@ -112,7 +112,7 @@ export class MyPerformanceTableDataTransformerService {
       metricColumn0: productMetricsValues.current,
       metricColumn1: productMetricsValues.yearAgo,
       metricColumn2: productMetricsValues.yearAgoPercent,
-      ctv: chance.natural({max: 100}),
+      ctv: 100,
     };
   }
 
