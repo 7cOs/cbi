@@ -18,6 +18,7 @@ export function getResponsibilitesStateMock(): ResponsibilitiesState {
     entityWithPerformance: getEntitiesWithPerformancesMock(),
     entitiesTotalPerformances: getPerformanceMock(),
     positionId: chance.string(),
+    accountPositionId: chance.string(),
     status: ActionStatus.Fetched,
     responsibilitiesStatus: ActionStatus.Fetched,
     entitiesPerformanceStatus: ActionStatus.Fetched,
