@@ -537,7 +537,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.RoleGroup,
         selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
-        alternateHierarchy: false
+        inAlternateHierarchy: false
       }));
     });
 
@@ -567,7 +567,7 @@ describe('MyPerformanceComponent', () => {
       }));
       expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(
         new ProductMetricsActions.FetchProductMetrics({
-          alternateHierarchy: false,
+          inAlternateHierarchy: false,
           positionId: rowMock.metadata.positionId,
           entityTypeCode: rowMock.metadata.entityTypeCode,
           filter: stateMock.myPerformanceFilter,
@@ -599,7 +599,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.Account,
         selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
-        alternateHierarchy: false
+        inAlternateHierarchy: false
       }));
     });
 
@@ -622,7 +622,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: EntityType.Person,
         selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
-        alternateHierarchy: false
+        inAlternateHierarchy: false
       }));
     });
 
@@ -655,7 +655,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(
         new ProductMetricsActions.FetchProductMetrics({
           contextPositionId: currentMock.responsibilities.alternateHierarchyId,
-          alternateHierarchy: true,
+          inAlternateHierarchy: true,
           positionId: rowMock.metadata.positionId,
           entityTypeCode: rowMock.metadata.entityTypeCode,
           filter: stateMock.myPerformanceFilter,
@@ -746,7 +746,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
-        alternateHierarchy: false,
+        inAlternateHierarchy: false,
         contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId
       }));
     });
@@ -771,7 +771,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
         contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
-        alternateHierarchy: false
+        inAlternateHierarchy: false
       }));
     });
 
@@ -794,7 +794,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
         entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
-        alternateHierarchy: false
+        inAlternateHierarchy: false
       }));
     });
 

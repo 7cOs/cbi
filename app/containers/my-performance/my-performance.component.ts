@@ -420,11 +420,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       filter: this.filterState,
       selectedEntityType: this.currentState.selectedEntityType,
       selectedBrandCode: this.selectedBrandCode,
-      alternateHierarchy: this.isInsideAlternateHierarchy()
+      inAlternateHierarchy: this.isInsideAlternateHierarchy()
     };
 
     if (parameters.leftSide) {
-      if (actionPayload.alternateHierarchy) {
+      if (actionPayload.inAlternateHierarchy) {
         actionPayload.entityTypeCode = parameters.row.metadata.entityTypeCode;
         actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId;
       }
@@ -445,7 +445,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           break;
         }
     } else {
-      if (actionPayload.alternateHierarchy) actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId;
+      if (actionPayload.inAlternateHierarchy) actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId;
       actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
       switch (this.salesHierarchyViewType) {
         case SalesHierarchyViewType.accounts:

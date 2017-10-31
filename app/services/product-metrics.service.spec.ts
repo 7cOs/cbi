@@ -458,7 +458,7 @@ describe('ProductMetrics Service', () => {
       });
     });
 
-    describe('when selectedEntityType is Person', () => {
+    describe('when selectedEntityType is AccountGroup', () => {
       beforeEach(() => {
         productMetricsDataMock.selectedEntityType = EntityType.AccountGroup;
       });

@@ -15,6 +15,7 @@ describe('Service: ProductMetricsApiService', () => {
   let productMetricsApiService: ProductMetricsApiService;
   let mockBackend: MockBackend;
   let productMetricsDTOMock: ProductMetricsDTO;
+  let chanceStringOptions: any = {pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'};
 
   beforeEach(() => {
     productMetricsDTOMock = getProductMetricsBrandDTOMock();
@@ -50,7 +51,7 @@ describe('Service: ProductMetricsApiService', () => {
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedPositionId = chance.string({pool: '0123456789'});
+      const expectedPositionId = chance.string(chanceStringOptions);
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -79,8 +80,8 @@ describe('Service: ProductMetricsApiService', () => {
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedAccountId = chance.string({pool: '0123456789'});
-      const expectedPositionId = chance.string({pool: '0123456789'});
+      const expectedAccountId = chance.string(chanceStringOptions);
+      const expectedPositionId = chance.string(chanceStringOptions);
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -109,8 +110,8 @@ describe('Service: ProductMetricsApiService', () => {
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedPositionId = chance.string({pool: '0123456789'});
-      const expectedEntityType = chance.string({pool: '0123456789'});
+      const expectedPositionId = chance.string(chanceStringOptions);
+      const expectedEntityType = chance.string(chanceStringOptions);
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -139,9 +140,9 @@ describe('Service: ProductMetricsApiService', () => {
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedPositionId: string = chance.string({pool: '0123456789'});
-      const expectedEntityType: string = chance.string({pool: '0123456789'});
-      const contextPositionIdMock: string = chance.string({pool: '0123456789'});
+      const expectedPositionId: string = chance.string(chanceStringOptions);
+      const expectedEntityType: string = chance.string(chanceStringOptions);
+      const expectedContextPositionId: string = chance.string(chanceStringOptions);
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -151,7 +152,7 @@ describe('Service: ProductMetricsApiService', () => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(`/v3/positions/${expectedPositionId}/alternateHierarchy/${expectedEntityType}/productMetrics`
           + `?type=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand`
-          + `&contextPositionId=${contextPositionIdMock}`);
+          + `&contextPositionId=${expectedContextPositionId}`);
       });
 
       productMetricsApiService
@@ -160,7 +161,7 @@ describe('Service: ProductMetricsApiService', () => {
           expectedEntityType,
           filterMock,
           ProductMetricsAggregationType.brand,
-          contextPositionIdMock)
+          expectedContextPositionId)
         .subscribe((res) => {
           expect(res).toEqual(productMetricsDTOMock);
           done();
@@ -176,8 +177,8 @@ describe('Service: ProductMetricsApiService', () => {
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
-      const expectedPositionId: string = chance.string({pool: '0123456789'});
-      const contextPositionIdMock: string = chance.string({pool: '0123456789'});
+      const expectedPositionId: string = chance.string(chanceStringOptions);
+      const contextPositionIdMock: string = chance.string(chanceStringOptions);
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
