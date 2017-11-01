@@ -12,7 +12,7 @@ export interface FetchProductMetricsPayload {
   filter: MyPerformanceFilterState;
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
-  selectedSkuCode?: string;
+  inAlternateHierarchy?: boolean;
 }
 
 export interface FetchProductMetricsSuccessPayload {

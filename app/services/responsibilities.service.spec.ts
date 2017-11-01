@@ -929,12 +929,12 @@ describe('Responsibilities Effects', () => {
       const numberOfEntities: number = chance.natural({min: 1, max: 99});
       const entities: Array<HierarchyEntity> = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
 
-      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState, brandCodeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
 
         entities.forEach((entity: HierarchyEntity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState, brandCodeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
           expect(getAlternateHierarchyPerformanceSpy).not.toHaveBeenCalled();
         });
@@ -990,12 +990,12 @@ describe('Responsibilities Effects', () => {
 
       const numberOfEntities = chance.natural({min: 2, max: 5});
       const entities = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getPositionsPerformances(entities, mockFilter).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, mockFilter, brandCodeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         entities.map((entity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter, brandCodeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, entity);
         });
         done();
@@ -1189,7 +1189,8 @@ describe('Responsibilities Effects', () => {
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock,
         brandCode: brandCodeMock,
-        entityType: entityTypeMock
+        entityType: entityTypeMock,
+        salesHierarchyViewType: SalesHierarchyViewType.subAccounts
       };
     });
 
@@ -1276,7 +1277,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT call the other functions', (done) => {
+      it('should NOT fetch performances for subAccounts nor people', (done) => {
         responsibilitiesService.getRefreshedPerformances(refreshAllPerformancesData).subscribe(() => {
           expect(getSubAccountsRefreshedPerformancesSpy).not.toHaveBeenCalled();
           expect(getEntitiesWithPerformanceForGroupSpy).not.toHaveBeenCalled();
@@ -1298,7 +1299,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT call the other functions', (done) => {
+      it('should NOT fetch performances for groups nor people', (done) => {
         responsibilitiesService.getRefreshedPerformances(refreshAllPerformancesData).subscribe(() => {
           expect(getPerformanceForGroupedEntitiesSpy).not.toHaveBeenCalled();
           expect(getEntitiesWithPerformanceForGroupSpy).not.toHaveBeenCalled();
@@ -1331,7 +1332,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT call the other functions', (done) => {
+      it('should NOT fetch performances for subAccounts nor groups', (done) => {
         responsibilitiesService.getRefreshedPerformances(refreshAllPerformancesData).subscribe(() => {
           expect(getPerformanceForGroupedEntitiesSpy).not.toHaveBeenCalled();
           expect(getSubAccountsRefreshedPerformancesSpy).not.toHaveBeenCalled();
@@ -1413,7 +1414,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT call the other functions/services', (done) => {
+      it('should NOT totals for accounts nor totals for people', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
           expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
@@ -1470,7 +1471,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT call the other functions/services', (done) => {
+      it('should NOT totals for groups nor people', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getPerformanceSpy).not.toHaveBeenCalled();
           expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
@@ -1537,7 +1538,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT call the other functions/services', (done) => {
+      it('should NOT fetch totals for groups nor accounts', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getPerformanceSpy).not.toHaveBeenCalled();
           expect(getAccountPerformanceSpy).not.toHaveBeenCalled();

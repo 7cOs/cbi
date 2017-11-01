@@ -61,22 +61,21 @@ export interface RefreshAllPerformancesData {
   alternateHierarchyId?: string;
 
   // roleGroups only
-  hierarchyGroups?: Array<HierarchyGroup>;
+  hierarchyGroups?: Array<HierarchyGroup>; // TODO: check if it's not only for the unit tests (it seems so)
 
   // Person, Accounts, Distributors
   entityType: EntityType;
-  salesHierarchyViewType?: SalesHierarchyViewType;
+  salesHierarchyViewType: SalesHierarchyViewType;
   entities?: HierarchyEntity[];
 
   // results:
   entityWithPerformance?: Array<EntityWithPerformance>;
-  entitiesTotalPerformances?: Performance; // TODO: I don't need that, right?
 }
 
-export interface RefreshTotalPerformanceData { // TODO: Cleanup
+export interface RefreshTotalPerformanceData {
   // Common
-  positionId?: string;
-  filter?: MyPerformanceFilterState;
+  positionId: string;
+  filter: MyPerformanceFilterState;
   brandCode?: string;
   groupedEntities?: GroupedEntities;
 
@@ -85,14 +84,12 @@ export interface RefreshTotalPerformanceData { // TODO: Cleanup
 
   // For Person, Accounts, Distributors
   entityType: EntityType;
-  salesHierarchyViewType?: SalesHierarchyViewType;
-  entities?: HierarchyEntity[];
+  salesHierarchyViewType: SalesHierarchyViewType;
 
   // For Subaccounts only
   accountPositionId?: string;
 
   // results:
-  entityWithPerformance?: Array<EntityWithPerformance>;
   entitiesTotalPerformances?: Performance;
 }
 
@@ -178,7 +175,7 @@ export class ResponsibilitiesService {
             alternateHierarchyId,
             filter,
             brandCode)
-          : this.myPerformanceApiService.getPerformance(position.positionId, filter);
+          : this.myPerformanceApiService.getPerformance(position.positionId, filter, brandCode);
 
         return performanceCall.map((response: PerformanceDTO) => {
           return this.performanceTransformerService.transformEntityWithPerformance(response, position);
@@ -284,7 +281,6 @@ export class ResponsibilitiesService {
 
     return Observable.forkJoin(apiCalls)
       .map((entityPerformances: EntityWithPerformance[]) => {
-        refreshAllPerformancesData.entityWithPerformance = entityPerformances;
         return Object.assign({}, refreshAllPerformancesData, {
           entityWithPerformance: entityPerformances
         });
@@ -293,48 +289,57 @@ export class ResponsibilitiesService {
 
   public getRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData)
     : Observable<ResponsibilitiesData | RefreshAllPerformancesData> {
-    if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
-      || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.accounts
-      || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-     return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
-   } else if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-     return this.getSubAccountsRefreshedPerformances(refreshAllPerformancesData);
-   } else {
-     refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
-       entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
-     });
-     return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
-    }
+      switch (refreshAllPerformancesData.salesHierarchyViewType) {
+        case SalesHierarchyViewType.roleGroups:
+        case SalesHierarchyViewType.accounts:
+        case SalesHierarchyViewType.distributors:
+          return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
+
+        case SalesHierarchyViewType.subAccounts:
+          return this.getSubAccountsRefreshedPerformances(refreshAllPerformancesData);
+
+        case SalesHierarchyViewType.people:
+        default:
+          refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
+            entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
+          });
+          return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
+      }
   }
 
   public getRefreshedTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData)
     : Observable<RefreshTotalPerformanceData> {
-    if (refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
-      || refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.accounts
-      || refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-      return this.getPerformance(
-        refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.filter,
-        refreshTotalPerformanceData.brandCode
-      )
+    switch (refreshTotalPerformanceData.salesHierarchyViewType) {
+      case SalesHierarchyViewType.roleGroups:
+      case SalesHierarchyViewType.accounts:
+      case SalesHierarchyViewType.distributors:
+        return this.getPerformance(
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.brandCode
+        )
         .map((response: Performance) => {
           return Object.assign({}, refreshTotalPerformanceData, {
             entitiesTotalPerformances: response
           });
         });
-    } else if (refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-      return this.getAccountPerformances(
-        refreshTotalPerformanceData.accountPositionId,
-        refreshTotalPerformanceData.filter,
-        refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.brandCode)
+
+      case SalesHierarchyViewType.subAccounts:
+        return this.getAccountPerformances(
+          refreshTotalPerformanceData.accountPositionId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.brandCode
+        )
         .map((response: Performance) => {
           return Object.assign({}, refreshTotalPerformanceData, {
             entitiesTotalPerformances: response
           });
         });
-    } else {
-      return this.getHierarchyGroupPerformance(
+
+      case SalesHierarchyViewType.people:
+      default:
+        return this.getHierarchyGroupPerformance(
           refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
             hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
           ),
@@ -343,10 +348,10 @@ export class ResponsibilitiesService {
           refreshTotalPerformanceData.brandCode
         )
         .map((entityWithPerformance: EntityWithPerformance) => {
-        return Object.assign({}, refreshTotalPerformanceData, {
-          entitiesTotalPerformances: entityWithPerformance.performance
+          return Object.assign({}, refreshTotalPerformanceData, {
+            entitiesTotalPerformances: entityWithPerformance.performance
+          });
         });
-      });
     }
   }
 
