@@ -89,6 +89,13 @@ export function responsibilitiesReducer(
         entityTypeCode: action.payload.entityTypeCode
       });
 
+    case ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetching,
+        responsibilitiesStatus: ActionStatus.Fetching,
+        totalPerformanceStatus: ActionStatus.Fetching
+      });
+
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching,
