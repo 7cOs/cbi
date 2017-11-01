@@ -1127,6 +1127,10 @@ fdescribe('MyPerformanceComponent', () => {
 
   describe('getProductMetricsSelectedBrandRow', () => {
 
+    beforeEach(() => {
+      myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow.calls.reset();
+    });
+
     it('should be called when viewtype is sku and selectedBrandCodeValues is defined', () => {
       myPerformanceProductMetricsMock = {status: ActionStatus.Fetched,
         products: {brandValues: []},
@@ -1232,6 +1236,7 @@ fdescribe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      debugger;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).toHaveBeenCalled();
     });
