@@ -79,8 +79,8 @@ export interface RefreshAllPerformancesData {
 
 export interface RefreshTotalPerformanceData { // TODO: Cleanup
   // Common
-  positionId?: string;
-  filter?: MyPerformanceFilterState;
+  positionId: string;
+  filter: MyPerformanceFilterState;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
   groupedEntities?: GroupedEntities;
@@ -309,63 +309,72 @@ export class ResponsibilitiesService {
 
   public getRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData)
     : Observable<ResponsibilitiesData | RefreshAllPerformancesData> {
-    if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
-      || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.accounts
-      || refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-     return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
-   } else if (refreshAllPerformancesData.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-     return this.getSubAccountsRefreshedPerformances(refreshAllPerformancesData);
-   } else {
-     refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
-       entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
-     });
-     return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
-    }
+      switch (refreshAllPerformancesData.salesHierarchyViewType) {
+        case SalesHierarchyViewType.roleGroups:
+        case SalesHierarchyViewType.accounts:
+        case SalesHierarchyViewType.distributors:
+          return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
+
+        case SalesHierarchyViewType.subAccounts:
+          return this.getSubAccountsRefreshedPerformances(refreshAllPerformancesData);
+
+        case SalesHierarchyViewType.people:
+        default:
+          refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
+            entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
+          });
+          return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
+      }
   }
 
   public getRefreshedTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData)
   : Observable<RefreshTotalPerformanceData> {
-    if (refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
-      || refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.accounts
-      || refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-      return this.getPerformance(
-        refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.filter,
-        refreshTotalPerformanceData.brandSkuCode,
-        refreshTotalPerformanceData.skuPackageType
-      )
-        .map((response: Performance) => {
-          return Object.assign({}, refreshTotalPerformanceData, {
-            entitiesTotalPerformances: response
+    switch (refreshTotalPerformanceData.salesHierarchyViewType) {
+      case SalesHierarchyViewType.roleGroups:
+      case SalesHierarchyViewType.accounts:
+      case SalesHierarchyViewType.distributors:
+        return this.getPerformance(
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.brandSkuCode,
+          refreshTotalPerformanceData.skuPackageType
+        )
+          .map((response: Performance) => {
+            return Object.assign({}, refreshTotalPerformanceData, {
+              entitiesTotalPerformances: response
+            });
           });
-        });
-    } else if (refreshTotalPerformanceData.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-      return this.getAccountPerformances(
-        refreshTotalPerformanceData.accountPositionId,
-        refreshTotalPerformanceData.filter,
-        refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.brandSkuCode,
-        refreshTotalPerformanceData.skuPackageType)
-        .map((response: Performance) => {
-          return Object.assign({}, refreshTotalPerformanceData, {
-            entitiesTotalPerformances: response
+
+      case SalesHierarchyViewType.subAccounts:
+        return this.getAccountPerformances(
+          refreshTotalPerformanceData.accountPositionId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.brandSkuCode,
+          refreshTotalPerformanceData.skuPackageType
+        )
+          .map((response: Performance) => {
+            return Object.assign({}, refreshTotalPerformanceData, {
+              entitiesTotalPerformances: response
+            });
           });
-        });
-    } else {
-      return this.getHierarchyGroupPerformance(
-        refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
-          hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
-        ),
-        refreshTotalPerformanceData.filter,
-        refreshTotalPerformanceData.positionId,
-        refreshTotalPerformanceData.brandSkuCode,
-        refreshTotalPerformanceData.skuPackageType
-      )
-        .map((entityWithPerformance: EntityWithPerformance) => {
-          return Object.assign({}, refreshTotalPerformanceData, {
-            entitiesTotalPerformances: entityWithPerformance.performance
+
+      case SalesHierarchyViewType.people:
+      default:
+        return this.getHierarchyGroupPerformance(
+          refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
+            hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
+          ),
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.brandSkuCode,
+          refreshTotalPerformanceData.skuPackageType
+        )
+          .map((entityWithPerformance: EntityWithPerformance) => {
+            return Object.assign({}, refreshTotalPerformanceData, {
+              entitiesTotalPerformances: entityWithPerformance.performance
+            });
           });
-        });
     }
   }
 
