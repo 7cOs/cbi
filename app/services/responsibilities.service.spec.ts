@@ -1207,7 +1207,8 @@ describe('Responsibilities Effects', () => {
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock,
         brandSkuCode: brandCodeMock,
-        entityType: entityTypeMock
+        entityType: entityTypeMock,
+        salesHierarchyViewType: SalesHierarchyViewType.subAccounts
       };
     });
 

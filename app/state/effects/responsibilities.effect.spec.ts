@@ -90,9 +90,6 @@ describe('Responsibilities Effects', () => {
     getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
       return Observable.of(subAccountData);
     },
-    getSubAccountsRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData): Observable<RefreshAllPerformancesData> {
-      return Observable.of(refreshAllPerformancesData);
-    },
     getRefreshedPerformances(refreshAllPerformancesData: RefreshAllPerformancesData)
       : Observable<ResponsibilitiesData | RefreshAllPerformancesData> {
       return Observable.of(refreshAllPerformancesData);
