@@ -75,8 +75,8 @@ export interface RefreshAllPerformancesData {
 
 export interface RefreshTotalPerformanceData { // TODO: Cleanup
   // Common
-  positionId?: string;
-  filter?: MyPerformanceFilterState;
+  positionId: string;
+  filter: MyPerformanceFilterState;
   brandCode?: string;
   groupedEntities?: GroupedEntities;
 
@@ -300,14 +300,14 @@ export class ResponsibilitiesService {
           return this.getPerformanceForGroupedEntities(refreshAllPerformancesData);
 
         case SalesHierarchyViewType.subAccounts:
-          this.getSubAccountsRefreshedPerformances(refreshAllPerformancesData);
+          return this.getSubAccountsRefreshedPerformances(refreshAllPerformancesData);
 
         case SalesHierarchyViewType.people:
         default:
-        refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
-          entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
-        });
-        return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
+          refreshAllPerformancesData = Object.assign({}, refreshAllPerformancesData, {
+            entities: refreshAllPerformancesData.groupedEntities[Object.keys(refreshAllPerformancesData.groupedEntities)[0]]
+          });
+          return this.getEntitiesWithPerformanceForGroup(refreshAllPerformancesData);
       }
   }
 
