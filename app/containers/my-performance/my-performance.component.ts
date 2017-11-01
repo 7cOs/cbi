@@ -317,7 +317,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case SalesHierarchyViewType.roleGroups:
         const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
-        if (parameters.row.metadata.alternateHierarchyId) {
+        if (!this.isInsideAlternateHierarchy() && parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
         }
 
@@ -425,17 +425,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     if (parameters.leftSide) {
       if (actionPayload.inAlternateHierarchy) {
-        actionPayload.entityTypeCode = parameters.row.metadata.entityTypeCode;
-        actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId;
+        actionPayload.entityTypeCode    = parameters.row.metadata.entityTypeCode;
+        actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId
+                                         || this.currentState.responsibilities.alternateHierarchyId;
       }
 
       switch (this.salesHierarchyViewType) {
         case SalesHierarchyViewType.roleGroups:
-          actionPayload.entityTypeCode = parameters.row.metadata.entityTypeCode;
+          actionPayload.entityTypeCode     = parameters.row.metadata.entityTypeCode;
           actionPayload.selectedEntityType = EntityType.RoleGroup;
           break;
         case SalesHierarchyViewType.accounts:
-          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
+          actionPayload.contextPositionId  = this.currentState.responsibilities.positionId;
           actionPayload.selectedEntityType = EntityType.Account;
           break;
         case SalesHierarchyViewType.people:
@@ -445,19 +446,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           break;
         }
     } else {
-      if (actionPayload.inAlternateHierarchy) actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId;
-      actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
-      switch (this.salesHierarchyViewType) {
-        case SalesHierarchyViewType.accounts:
-          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
-          break;
-        case SalesHierarchyViewType.roleGroups:
-          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
-          break;
-        case SalesHierarchyViewType.people:
-        default:
-          break;
-        }
+      actionPayload.entityTypeCode    = this.currentState.responsibilities.entityTypeCode;
+      actionPayload.contextPositionId = actionPayload.inAlternateHierarchy
+        ? this.currentState.responsibilities.alternateHierarchyId
+        : this.currentState.responsibilities.positionId;
     }
 
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionPayload));
