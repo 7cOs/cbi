@@ -50,7 +50,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { getProductMetricsSkuMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsSkuMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
@@ -1219,6 +1219,21 @@ fdescribe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
 
+    });
+  });
+
+  describe('deselectBrandValue', () => {
+
+    beforeEach(() => {
+      spyOn(componentInstance, 'deselectBrandValue');
+    });
+    it('should be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is defiend', () => {
+      componentInstance.selectedBrandCode = chance.string();
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).toHaveBeenCalled();
     });
   });
 
