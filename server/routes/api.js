@@ -12,7 +12,7 @@ module.exports = function(app) {
 
       // grabbing hard-coded v3 base url from config
       // TODO: remove once api gateway is in place
-      if (req.url.match(/\/v3\/(dateRangeCodes|.+\/productMetrics)/)) {
+      if (req.url.match(/\/v3\/(dateRangeCodes|.+\/productMetrics|.+\/alternateHierarchyProductMetrics)/)) {
         v3BaseURLKey = 'productMetrics';
       } else if (req.url.match(/\/v3\/(accounts|subAccounts)/)) {
         v3BaseURLKey = 'accounts';
