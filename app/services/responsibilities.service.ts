@@ -65,19 +65,18 @@ export interface RefreshAllPerformancesData {
   alternateHierarchyId?: string;
 
   // roleGroups only
-  hierarchyGroups?: Array<HierarchyGroup>;
+  hierarchyGroups?: Array<HierarchyGroup>; // TODO: check if it's not only for the unit tests (it seems so)
 
   // Person, Accounts, Distributors
   entityType: EntityType;
-  salesHierarchyViewType?: SalesHierarchyViewType;
+  salesHierarchyViewType: SalesHierarchyViewType;
   entities?: HierarchyEntity[];
 
   // results:
   entityWithPerformance?: Array<EntityWithPerformance>;
-  entitiesTotalPerformances?: Performance; // TODO: I don't need that, right?
 }
 
-export interface RefreshTotalPerformanceData { // TODO: Cleanup
+export interface RefreshTotalPerformanceData {
   // Common
   positionId: string;
   filter: MyPerformanceFilterState;
@@ -90,14 +89,12 @@ export interface RefreshTotalPerformanceData { // TODO: Cleanup
 
   // For Person, Accounts, Distributors
   entityType: EntityType;
-  salesHierarchyViewType?: SalesHierarchyViewType;
-  entities?: HierarchyEntity[];
+  salesHierarchyViewType: SalesHierarchyViewType;
 
   // For Subaccounts only
   accountPositionId?: string;
 
   // results:
-  entityWithPerformance?: Array<EntityWithPerformance>;
   entitiesTotalPerformances?: Performance;
 }
 
