@@ -418,8 +418,9 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
 
-        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
+        expect(storeMock.dispatch.calls.argsFor(1)[0].type).toBe(ProductMetricsActions.FETCH_PRODUCT_METRICS);
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
