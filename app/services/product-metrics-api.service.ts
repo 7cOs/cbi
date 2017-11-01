@@ -30,7 +30,7 @@ export class ProductMetricsApiService {
       params: params
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handleError(err, aggregation, params.type));
   }
 
   public getAccountProductMetrics(
@@ -53,7 +53,7 @@ export class ProductMetricsApiService {
       params: params
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handleError(err, aggregation, params.type));
   }
 
   public getRoleGroupProductMetrics(
@@ -73,7 +73,7 @@ export class ProductMetricsApiService {
       params: params
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handleError(err, aggregation, params.type));
   }
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
@@ -86,8 +86,13 @@ export class ProductMetricsApiService {
     };
   }
 
-  private handleError(err: Error): Observable<Error> {
-    console.log(err.message || 'Unknown Error');
-    return Observable.throw(err);
+  private handleError(err: any, aggregation: ProductMetricsAggregationType, type: string): Observable<ProductMetricsDTO> {
+    if (err.status === 404) {
+      let empty: ProductMetricsDTO = { type: type };
+      if (aggregation === ProductMetricsAggregationType.brand) empty.brandValues = [];
+      if (aggregation === ProductMetricsAggregationType.sku) empty.skuValues = [];
+      return Observable.of(empty);
+    }
+    return Observable.throw(new Error(err));
   }
 }
