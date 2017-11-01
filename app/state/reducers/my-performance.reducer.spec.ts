@@ -31,7 +31,6 @@ import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-
 const chance = new Chance();
 const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
 
-
 describe('My Performance Reducer', () => {
   let inputMyPerformanceStateMock: MyPerformanceState;
   let myPerformanceFilterStateMock: MyPerformanceFilterState;
