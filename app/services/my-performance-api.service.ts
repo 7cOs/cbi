@@ -86,7 +86,7 @@ export class MyPerformanceApiService {
 
     return this.http.get(`${url}`)
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handleError(err));
   }
 
   public getDistributorPerformance(
