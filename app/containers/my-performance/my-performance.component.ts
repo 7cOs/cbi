@@ -482,7 +482,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (parameters.leftSide) {
       if (actionPayload.inAlternateHierarchy) {
         actionPayload.entityTypeCode = parameters.row.metadata.entityTypeCode;
-        actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId;
+        actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId
+                                          || this.currentState.responsibilities.alternateHierarchyId;
       }
 
       switch (this.salesHierarchyViewType) {
@@ -504,28 +505,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           break;
         }
     } else {
-      if (actionPayload.inAlternateHierarchy) actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId;
       actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
-      switch (this.salesHierarchyViewType) {
-        case SalesHierarchyViewType.accounts:
-          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
-          break;
+      actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId
+                                        || this.currentState.responsibilities.positionId;
 
-        case SalesHierarchyViewType.people:
-          actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
-          break;
-
-        case SalesHierarchyViewType.subAccounts:
-          actionPayload.positionId = this.currentState.responsibilities.accountPositionId;
-          break;
-
-        case SalesHierarchyViewType.roleGroups:
-          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
-          break;
-        case SalesHierarchyViewType.people:
-        default:
-          break;
-        }
+      if (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+        actionPayload.positionId = this.currentState.responsibilities.accountPositionId;
+      }
     }
 
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionPayload));
@@ -554,15 +540,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
-    if (isEqual(this.filterState, previousState.filter)) {
-      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
-    } else {
-      // Todo: dispatch action to trigger data refresh
-      // Todo: This is temporary just to keep things working as they are, remove once actual refresh is do-able
-      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
-    }
-
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
     this.fetchProductMetricsForPreviousState(previousState);
+
+    if (!isEqual(this.filterState, previousState.filter)) {
+      this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: previousState.responsibilities.positionId,
+        groupedEntities: previousState.responsibilities.groupedEntities,
+        hierarchyGroups: previousState.responsibilities.hierarchyGroups,
+        selectedEntityType: previousState.selectedEntityType,
+        selectedEntityTypeCode: previousState.responsibilities.entityTypeCode,
+        salesHierarchyViewType: previousState.salesHierarchyViewType.viewType,
+        filter: this.filterState,
+        brandCode: previousState.selectedBrandCode,
+        entityType: previousState.selectedEntityType,
+        alternateHierarchyId: previousState.responsibilities.alternateHierarchyId,
+        accountPositionId: previousState.responsibilities.accountPositionId
+      }));
+    }
   }
 
   private setSelectedDateRangeValues(): void {
