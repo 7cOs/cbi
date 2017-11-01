@@ -317,7 +317,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case SalesHierarchyViewType.roleGroups:
         const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
-        if (!this.isInsideAlternateHierarchy() && parameters.row.metadata.alternateHierarchyId) {
+        if (parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
         }
 
