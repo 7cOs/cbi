@@ -281,7 +281,6 @@ export class ResponsibilitiesService {
 
     return Observable.forkJoin(apiCalls)
       .map((entityPerformances: EntityWithPerformance[]) => {
-        refreshAllPerformancesData.entityWithPerformance = entityPerformances;
         return Object.assign({}, refreshAllPerformancesData, {
           entityWithPerformance: entityPerformances
         });
