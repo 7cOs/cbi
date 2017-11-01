@@ -27,22 +27,22 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getHierarchyGroupPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string)
+  public getHierarchyGroupPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState, positionId: string, brandCode?: string)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(url, {
-      params: this.getFilterStateParams(filter)
+      params: this.getParams(filter, brandCode)
     })
       .map(res => res.json())
       .catch(err => this.handlePerformanceError(err));
   }
 
   public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
-    alternateHierarchyId: string, filter: MyPerformanceFilterState)
+    alternateHierarchyId: string, filter: MyPerformanceFilterState, brandCode?: string)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchy/${ group.type }/performanceTotal`;
-    const params = Object.assign({}, this.getFilterStateParams(filter), {
+    const params = Object.assign({}, this.getParams(filter, brandCode), {
       contextPositionId: alternateHierarchyId
     });
 
@@ -53,20 +53,24 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {
+  public getPerformance(positionId: string, filter: MyPerformanceFilterState, brandCode?: string): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
-      params: this.getFilterStateParams(filter)
+      params: this.getParams(filter, brandCode)
     })
       .map(res => res.json())
       .catch(err => this.handlePerformanceError(err));
   }
 
-  public getAlternateHierarchyPersonPerformance(positionId: string, alternateHierarchyId: string, filter: MyPerformanceFilterState)
+  public getAlternateHierarchyPersonPerformance(
+    positionId: string,
+    alternateHierarchyId: string,
+    filter: MyPerformanceFilterState,
+    brandCode?: string)
   : Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchyPerformanceTotal`;
-    const params = Object.assign({}, this.getFilterStateParams(filter), {
+    const params = Object.assign({}, this.getParams(filter, brandCode), {
       contextPositionId: alternateHierarchyId
     });
 
@@ -82,18 +86,19 @@ export class MyPerformanceApiService {
 
     return this.http.get(`${url}`)
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handleError(err));
   }
 
   public getDistributorPerformance(
     distributorId: string,
     filter: MyPerformanceFilterState,
-    contextPositionId?: string
+    contextPositionId?: string,
+    brandCode?: string
     ): Observable<PerformanceDTO> {
     const url = `/v3/distributors/${ distributorId }/performanceTotal`;
     const params = contextPositionId
-      ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
-      : this.getFilterStateParams(filter);
+      ? Object.assign({}, this.getParams(filter, brandCode), { positionId: contextPositionId })
+      : this.getParams(filter, brandCode);
 
     return this.http.get(url, {
       params: params
@@ -105,12 +110,13 @@ export class MyPerformanceApiService {
   public getAccountPerformance(
     accountId: string,
     filter: MyPerformanceFilterState,
-    contextPositionId?: string
+    contextPositionId?: string,
+    brandCode?: string
     ): Observable<PerformanceDTO> {
     const url = `/v3/accounts/${ accountId }/performanceTotal`;
     const params = contextPositionId
-      ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
-      : this.getFilterStateParams(filter);
+      ? Object.assign({}, this.getParams(filter, brandCode), { positionId: contextPositionId })
+      : this.getParams(filter, brandCode);
 
     return this.http.get(url, {
       params: params
@@ -133,10 +139,10 @@ export class MyPerformanceApiService {
   }
 
   public getSubAccountPerformance(
-    subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState)
+    subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState, brandCode?: string)
   : Observable<PerformanceDTO> {
     const url = `/v3/subAccounts/${ subAccountId }/performanceTotal`;
-    const params = Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId });
+    const params = Object.assign({}, this.getParams(filter, brandCode), { positionId: contextPositionId });
 
     return this.http.get(url, {
       params: params
@@ -157,13 +163,14 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  private getFilterStateParams(filter: MyPerformanceFilterState): any {
+  private getParams(filter: MyPerformanceFilterState, brandCode?: string): any {
     return {
       metricType: filter.hasOwnProperty('distributionType')
         ? DistributionTypeValue[filter.distributionType] + MetricTypeValue[filter.metricType]
         : MetricTypeValue[filter.metricType],
       dateRangeCode: DateRangeTimePeriodValue[filter.dateRangeCode],
-      premiseType: PremiseTypeValue[filter.premiseType]
+      premiseType: PremiseTypeValue[filter.premiseType],
+      brandCode: brandCode
     };
   }
 

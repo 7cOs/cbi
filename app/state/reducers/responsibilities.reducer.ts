@@ -12,6 +12,7 @@ export interface ResponsibilitiesState extends State {
   totalPerformanceStatus: ActionStatus;
   subaccountsStatus: ActionStatus;
   positionId: string;
+  accountPositionId?: string;
   alternateHierarchyId?: string;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
@@ -88,6 +89,13 @@ export function responsibilitiesReducer(
         entityTypeCode: action.payload.entityTypeCode
       });
 
+    case ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetching,
+        responsibilitiesStatus: ActionStatus.Fetching,
+        totalPerformanceStatus: ActionStatus.Fetching
+      });
+
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching,
@@ -134,6 +142,11 @@ export function responsibilitiesReducer(
         subaccountsStatus: ActionStatus.Fetched,
         groupedEntities: action.payload.groupedEntities,
         entityWithPerformance: action.payload.entityWithPerformance
+      });
+
+    case ResponsibilitiesActions.SET_ACCOUNT_POSITION_ID:
+      return Object.assign({}, state, {
+        accountPositionId: action.payload
       });
 
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
