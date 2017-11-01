@@ -696,7 +696,8 @@ describe('Responsibilities Effects', () => {
         }],
         groupedEntities: accountsDistributorsMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock,
+        skuPackageType: skuPackageTypeMock
       };
 
       it('returns the passed-in data object', (done) => {
@@ -938,12 +939,13 @@ describe('Responsibilities Effects', () => {
       const numberOfEntities: number = chance.natural({min: 1, max: 99});
       const entities: Array<HierarchyEntity> = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
 
-      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState, brandCodeMock,
+        skuPackageTypeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
 
         entities.forEach((entity: HierarchyEntity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState, brandCodeMock);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
           expect(getAlternateHierarchyPerformanceSpy).not.toHaveBeenCalled();
         });
@@ -1000,12 +1002,12 @@ describe('Responsibilities Effects', () => {
 
       const numberOfEntities = chance.natural({min: 2, max: 5});
       const entities = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getPositionsPerformances(entities, mockFilter, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, mockFilter, brandCodeMock, skuPackageTypeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         entities.map((entity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter, brandCodeMock);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, entity);
         });
         done();

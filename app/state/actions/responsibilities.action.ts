@@ -16,6 +16,7 @@ export interface FetchResponsibilitiesPayload {
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
   brandSkuCode?: string;
+  skuPackageType?: SkuPackageType;
 }
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -34,7 +35,8 @@ export interface FetchEntityWithPerformancePayload {
   alternateHierarchyId?: string;
   entityType: EntityType;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
+  skuPackageType?: SkuPackageType;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {

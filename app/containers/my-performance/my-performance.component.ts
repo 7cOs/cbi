@@ -327,7 +327,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
           filter: this.filterState,
           selectedEntityDescription: parameters.row.descriptionRow0,
-          brandCode: this.selectedBrandCode
+          brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
+          skuPackageType: this.selectedSkuPackageType
         }));
 
         // Product metrics call not ready when clicking on accounts group, so second condition can be removed when ready
@@ -350,7 +351,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             positionId: parameters.row.metadata.positionId,
             filter: this.filterState,
             selectedEntityDescription: parameters.row.descriptionRow0,
-            brandCode: this.selectedBrandCode
+            brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
+            skuPackageType: this.selectedSkuPackageType
           }));
           this.fetchProductMetricsWhenClick(parameters);
         }

@@ -527,7 +527,8 @@ describe('MyPerformanceComponent', () => {
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: stateMock.myPerformance.current.selectedBrandCode
+        brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+        skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
         positionId: rowMock.metadata.positionId,
@@ -561,7 +562,8 @@ describe('MyPerformanceComponent', () => {
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: stateMock.myPerformance.current.selectedBrandCode
+        brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+        skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
       }));
     });
 
@@ -605,7 +607,8 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityDescription: rowMock.descriptionRow0,
-        brandCode: stateMock.myPerformance.current.selectedBrandCode
+        brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+        skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
         positionId: rowMock.metadata.positionId,
@@ -664,7 +667,8 @@ describe('MyPerformanceComponent', () => {
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: stateMock.myPerformance.current.selectedBrandCode
+        brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+        skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
       }));
     });
 
@@ -691,7 +695,8 @@ describe('MyPerformanceComponent', () => {
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: currentMock.selectedBrandCode
+        brandSkuCode: currentMock.selectedBrandCode,
+        skuPackageType: currentMock.selectedSkuPackageType
       }));
     });
   });
@@ -840,7 +845,9 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: rowMock.metadata.brandCode,
+        brandSkuCode: rowMock.metadata.brandCode,
+        skuPackageType: null,
+        productMetricsViewType: ProductMetricsViewType.brands,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
         accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
