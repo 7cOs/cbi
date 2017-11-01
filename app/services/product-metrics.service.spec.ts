@@ -168,7 +168,7 @@ describe('ProductMetrics Service', () => {
       describe('when selectedEntityType is Person', () => {
         beforeEach(() => {
           productMetricsDataMock.selectedEntityType = EntityType.Person;
-          productMetricsDataMock.alternateHierarchy = true;
+          productMetricsDataMock.inAlternateHierarchy = true;
         });
 
         describe('when no selectedBrandCode is present', () => {
@@ -213,7 +213,7 @@ describe('ProductMetrics Service', () => {
 
         describe('when selectedBrandCode is present', () => {
           beforeEach(() => {
-            productMetricsDataMock.alternateHierarchy = true;
+            productMetricsDataMock.inAlternateHierarchy = true;
             productMetricsDataMock.selectedEntityType = EntityType.Person;
             productMetricsDataMock.selectedBrandCode = chance.string();
           });
@@ -267,7 +267,7 @@ describe('ProductMetrics Service', () => {
       describe('when selectedEntityType is a Role Group', () => {
         beforeEach(() => {
           productMetricsDataMock.selectedEntityType = EntityType.RoleGroup;
-          productMetricsDataMock.alternateHierarchy = true;
+          productMetricsDataMock.inAlternateHierarchy = true;
         });
 
         describe('when no selectedBrandCode is present', () => {
