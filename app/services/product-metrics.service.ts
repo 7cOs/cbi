@@ -23,7 +23,7 @@ export interface ProductMetricsData {
   selectedBrandCode?: string;
   products?: ProductMetrics;
   productMetricsViewType?: ProductMetricsViewType;
-  alternateHierarchy?: boolean;
+  inAlternateHierarchy?: boolean;
 }
 
 @Injectable()
@@ -39,7 +39,7 @@ export class ProductMetricsService {
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
 
-    if (productMetricsData.alternateHierarchy) {
+    if (productMetricsData.inAlternateHierarchy) {
       if (productMetricsData.selectedEntityType === EntityType.Person) {
         apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
           productMetricsData.positionId,
