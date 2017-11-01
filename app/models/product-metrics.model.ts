@@ -4,7 +4,7 @@ export interface ProductMetricsValues {
   yearAgo: number;
   collectionMethod: string;
   yearAgoPercent: number;
-  brandCode: string;
+  brandCode?: string;
   beerId?: {
     masterPackageSKUDescription?: string;
     masterSKUDescription?: string;
