@@ -147,6 +147,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             this.selectedSkuPackageCode = null;
             this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
           }
+          debugger;
           if (this.selectedBrandCode
             && productMetrics.productMetricsViewType === ProductMetricsViewType.skus
             && this.productMetrics
