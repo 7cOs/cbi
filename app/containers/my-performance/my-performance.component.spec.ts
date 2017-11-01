@@ -539,7 +539,8 @@ fdescribe('MyPerformanceComponent', () => {
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
-        filter: stateMock.myPerformanceFilter as any
+        filter: stateMock.myPerformanceFilter as any,
+        brandCode: stateMock.myPerformance.current.selectedBrandCode
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
         positionId: rowMock.metadata.positionId,
@@ -572,7 +573,8 @@ fdescribe('MyPerformanceComponent', () => {
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
-        filter: stateMock.myPerformanceFilter as any
+        filter: stateMock.myPerformanceFilter as any,
+        brandCode: stateMock.myPerformance.current.selectedBrandCode
       }));
     });
 
@@ -614,7 +616,8 @@ fdescribe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchResponsibilities({
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityDescription: rowMock.descriptionRow0
+        selectedEntityDescription: rowMock.descriptionRow0,
+        brandCode: stateMock.myPerformance.current.selectedBrandCode
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
         positionId: rowMock.metadata.positionId,
@@ -671,7 +674,8 @@ fdescribe('MyPerformanceComponent', () => {
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
-        filter: stateMock.myPerformanceFilter as any
+        filter: stateMock.myPerformanceFilter as any,
+        brandCode: stateMock.myPerformance.current.selectedBrandCode
       }));
     });
 
@@ -697,7 +701,8 @@ fdescribe('MyPerformanceComponent', () => {
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
-        filter: stateMock.myPerformanceFilter as any
+        filter: stateMock.myPerformanceFilter as any,
+        brandCode: currentMock.selectedBrandCode
       }));
     });
   });

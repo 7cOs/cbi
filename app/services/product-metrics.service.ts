@@ -95,14 +95,6 @@ export class ProductMetricsService {
     });
   }
 
-  public checkEmptyProductMetricsResponse(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
-    if (productMetricsData && Object.keys(productMetricsData.products.brandValues).length === 0 && !productMetricsData.selectedBrandCode) {
-      return Observable.throw('Empty Product Metrics Data Error');
-    } else {
-      return Observable.of(productMetricsData);
-    }
-  }
-
   public filterProductMetricsBrand(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
     if (productMetricsData.selectedBrandCode && productMetricsData.products && productMetricsData.products.skuValues) {
       return Observable.of(Object.assign({}, productMetricsData, {

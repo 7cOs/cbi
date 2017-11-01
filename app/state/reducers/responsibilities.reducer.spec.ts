@@ -1,13 +1,15 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchEntityWithPerformancePayload, FetchEntityWithPerformanceSuccessPayload } from '../actions/responsibilities.action';
-import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
+import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
+import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { getHierarchyGroupMock } from '../../models/hierarchy-group.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
-import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
+import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
 import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
@@ -192,6 +194,36 @@ describe('Responsibilities Reducer', () => {
     const actualState = responsibilitiesReducer(
       initialState, new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess(payloadMock)
     );
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should update the status when a refresh action is dispatched', () => {
+    const expectedState = {
+      status: ActionStatus.Fetching,
+      responsibilitiesStatus: ActionStatus.Fetching,
+      entitiesPerformanceStatus: initialState.entitiesPerformanceStatus,
+      totalPerformanceStatus: ActionStatus.Fetching,
+      subaccountsStatus: initialState.subaccountsStatus,
+      positionId: initialState.positionId,
+      groupedEntities: initialState.groupedEntities,
+      hierarchyGroups: initialState.hierarchyGroups,
+      entityWithPerformance: initialState.entityWithPerformance,
+      entitiesTotalPerformances: initialState.entitiesTotalPerformances
+    };
+    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.RefreshAllPerformances({
+      positionId: chance.string(),
+      groupedEntities: getGroupedEntitiesMock(),
+      hierarchyGroups: [getHierarchyGroupMock()],
+      selectedEntityType: getEntityTypeMock(),
+      selectedEntityTypeCode: chance.string(),
+      salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
+      filter: null,
+      brandCode: chance.string(),
+      entityType: getEntityTypeMock(),
+      alternateHierarchyId: chance.string(),
+      accountPositionId: chance.string()
+    }));
 
     expect(actualState).toEqual(expectedState);
   });

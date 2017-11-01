@@ -64,6 +64,7 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP:
     case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES:
     case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES_SUCCESS:
+    case ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES:
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE:
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_SUCCESS:
     case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE:
