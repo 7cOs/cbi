@@ -301,18 +301,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public displayTotalRow(): boolean {
-    return this.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
-        || this.entityType === EntityType.RoleGroup
-        || this.entityType === EntityType.DistributorGroup;
-  }
-
   public displayLeftTotalRow(): boolean {
-    return !this.displayTotalRow() && this.productMetricsViewType === ProductMetricsViewType.brands;
+    return !this.isShowingRoleGroupsTotalRow() && this.productMetricsViewType === ProductMetricsViewType.brands;
   }
 
   public displayRightTotalRow(): boolean {
-    return this.displayTotalRow() && this.productMetricsViewType === ProductMetricsViewType.brands;
+    return this.isShowingRoleGroupsTotalRow() && this.productMetricsViewType === ProductMetricsViewType.brands;
+  }
+
+  private isShowingRoleGroupsTotalRow(): boolean {
+    return this.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
+      || this.entityType === EntityType.RoleGroup
+      || this.entityType === EntityType.DistributorGroup;
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {

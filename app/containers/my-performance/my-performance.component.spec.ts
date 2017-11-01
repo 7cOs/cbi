@@ -511,6 +511,34 @@ describe('MyPerformanceComponent', () => {
       });
     });
 
+    it('displayLeftTotalRow() should be true when current salesHierarchyViewType is accounts and ' +
+      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      rowMock.metadata.entityType = EntityType.RoleGroup;
+      const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+      componentInstance.handleElementClicked(params);
+      expect(componentInstance.displayLeftTotalRow()).toEqual(true);
+    });
+
+    it('displayLeftTotalRow() should be false when current salesHierarchyViewType is roleGroups and ' +
+      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+      componentInstance.handleElementClicked(params);
+      expect(componentInstance.displayLeftTotalRow()).toEqual(false);
+    });
+
+    it('displayLeftTotalRow() should be false when current salesHierarchyViewType is roleGroups and ' +
+      'when productMetricsViewType is skus, and element is clicked while ProductMetricsViewType is skus', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+      componentInstance.handleElementClicked(params);
+      expect(componentInstance.displayLeftTotalRow()).toEqual(false);
+    });
+
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
     'does NOT contain alternateHierarchyId', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
@@ -725,6 +753,34 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
       rowMock = getMyPerformanceTableRowMock(1)[0];
       rowMock.metadata.positionId = undefined;
+    });
+
+    it('displayRightTotalRow() should be false when current salesHierarchyViewType is accounts and ' +
+      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      rowMock.metadata.entityType = EntityType.RoleGroup;
+      const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+      componentInstance.handleElementClicked(params);
+      expect(componentInstance.displayRightTotalRow()).toEqual(false);
+    });
+
+    it('displayRightTotalRow() should be true when current salesHierarchyViewType is roleGroups and ' +
+      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      const params: HandleElementClickedParameters = {leftSide: false, type: RowType.data, index: 0, row: rowMock};
+      componentInstance.handleElementClicked(params);
+      expect(componentInstance.displayRightTotalRow()).toEqual(true);
+    });
+
+    it('displayRightTotalRow() should be false when current salesHierarchyViewType is roleGroups and ' +
+      'when productMetricsViewType is skus, and element is clicked while ProductMetricsViewType is skus', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      const params: HandleElementClickedParameters = {leftSide: false, type: RowType.data, index: 0, row: rowMock};
+      componentInstance.handleElementClicked(params);
+      expect(componentInstance.displayRightTotalRow()).toEqual(false);
     });
 
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
