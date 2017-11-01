@@ -60,7 +60,7 @@ export class MyPerformanceApiService {
       params: this.getParams(filter, brandCode)
     })
       .map(res => res.json())
-      .catch(err => this.handlePerformanceError(new Error(err)));
+      .catch(err => this.handlePerformanceError(err));
   }
 
   public getAlternateHierarchyPersonPerformance(
