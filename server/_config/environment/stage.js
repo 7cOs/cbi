@@ -21,16 +21,16 @@ module.exports = function (config) {
   };
 
   config.api = {
-    url: 'https://internal.api.cbrands.com',
+    url: 'https://cbi-api-internal-qa.herokuapp.com',
     key: process.env.API_SECRET,
     apiKey: 'compass-beer-portal',
 
     // TODO: remove when api gateway is in place
     v3BaseUrls: {
-      accounts: 'https://api-account-internal-prod.herokuapp.com',
-      distributors: 'https://api-distributors-internal-prod.herokuapp.com',
-      positions: 'https://api-position-internal-prod.herokuapp.com',
-      productMetrics: 'https://cbi-product-metrics-api-prod.herokuapp.com'
+      accounts: 'https://api-account-internal-qa.herokuapp.com',
+      distributors: 'https://api-distributors-internal-qa.herokuapp.com',
+      positions: 'https://api-position-internal-qa.herokuapp.com',
+      productMetrics: 'https://cbi-product-metrics-api-qa.herokuapp.com'
     }
   };
 
