@@ -13,7 +13,6 @@ export interface FetchProductMetricsPayload {
   selectedEntityType: EntityType;
   selectedBrandCode?: string;
   inAlternateHierarchy?: boolean;
-  selectedSkuCode?: string;
 }
 
 export interface FetchProductMetricsSuccessPayload {
