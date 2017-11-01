@@ -9,7 +9,6 @@ import { MyPerformanceFilterState } from '../../state/reducers/my-performance-fi
 import { Performance } from '../../models/performance.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 export interface FetchResponsibilitiesPayload {
   positionId: string;
@@ -54,7 +53,6 @@ export interface RefreshAllPerformancesPayload {
   filter: MyPerformanceFilterState;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
-  productMetricsViewType: ProductMetricsViewType;
   entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;
   accountPositionId?: string;

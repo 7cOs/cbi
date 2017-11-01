@@ -1,5 +1,5 @@
 import * as Chance from 'chance';
-let chance = new Chance();
+const chance = new Chance();
 
 import { SkuPackageType } from './sku-package-type.enum';
 

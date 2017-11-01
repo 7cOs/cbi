@@ -15,13 +15,10 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 import { ResponsibilitiesState } from './responsibilities.reducer';
-import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 const positionIdMock = chance.string();
 const entityTypeCodeMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
-const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
 
 describe('Responsibilities Reducer', () => {
   it('updates the status when a fetch is dispatched', () => {
@@ -223,7 +220,6 @@ describe('Responsibilities Reducer', () => {
       salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
       filter: null,
       brandSkuCode: chance.string(),
-      productMetricsViewType: productMetricsViewTypeMock,
       entityType: getEntityTypeMock(),
       alternateHierarchyId: chance.string(),
       accountPositionId: chance.string()

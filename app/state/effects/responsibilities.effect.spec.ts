@@ -48,9 +48,7 @@ import { ResponsibilitiesService } from '../../services/responsibilities.service
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { getskuPackageTypeMock } from '../../enums/sku-package-type.enum.mock';
-import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 
 const chance = new Chance();
 
@@ -66,7 +64,6 @@ describe('Responsibilities Effects', () => {
   const selectedEntityDescriptionMock = chance.string();
   const brandCodeMock = chance.string();
   const skuPackageTypeMock = SkuPackageType[getskuPackageTypeMock()];
-  const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -412,7 +409,6 @@ describe('Responsibilities Effects', () => {
       skuPackageType: SkuPackageType[getskuPackageTypeMock()],
       filter: performanceFilterStateMock,
       brandSkuCode: chance.string(),
-      productMetricsViewType: productMetricsViewTypeMock,
       entityType: getEntityTypeMock(),
       alternateHierarchyId: chance.string(),
       accountPositionId: chance.string()

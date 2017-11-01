@@ -385,7 +385,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.fetchProductMetricsWhenClick(parameters);
         }
         if (parameters.row.metadata.brandCode) {
-          this.dispatchRefreshAllPerformance(parameters.row.metadata.brandCode, null, ProductMetricsViewType.brands);
+          this.dispatchRefreshAllPerformance(parameters.row.metadata.brandCode, null);
         }
         break;
       case ProductMetricsViewType.skus:
@@ -398,13 +398,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           }));
           if (parameters.row.metadata.skuPackageCode) {
             this.dispatchRefreshAllPerformance(parameters.row.metadata.skuPackageCode,
-              parameters.row.metadata.skuPackageType, ProductMetricsViewType.skus);
+              parameters.row.metadata.skuPackageType);
           }
         } else {
           this.selectedSkuPackageCode = null;
           this.selectedSkuPackageType = null;
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-          this.dispatchRefreshAllPerformance(this.selectedBrandCode, null, ProductMetricsViewType.brands);
+          this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
         break;
       default:
@@ -498,7 +498,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
            && this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
-  private dispatchRefreshAllPerformance(brandCode: string, skuPackageType: SkuPackageType, viewType: ProductMetricsViewType) {
+  private dispatchRefreshAllPerformance(brandCode: string, skuPackageType: SkuPackageType) {
     this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
       positionId: this.currentState.responsibilities.positionId,
       groupedEntities: this.currentState.responsibilities.groupedEntities,
@@ -509,7 +509,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       filter: this.filterState,
       brandSkuCode: brandCode,
       skuPackageType: skuPackageType,
-      productMetricsViewType: viewType,
       entityType: this.currentState.selectedEntityType,
       alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
       accountPositionId: this.currentState.responsibilities.accountPositionId
@@ -546,7 +545,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedEntityTypeCode: previousState.responsibilities.entityTypeCode,
         salesHierarchyViewType: previousState.salesHierarchyViewType.viewType,
         filter: this.filterState,
-        brandCode: previousState.selectedBrandCode,
+        brandSkuCode: previousState.selectedBrandCode,
         entityType: previousState.selectedEntityType,
         alternateHierarchyId: previousState.responsibilities.alternateHierarchyId,
         accountPositionId: previousState.responsibilities.accountPositionId

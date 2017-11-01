@@ -25,11 +25,8 @@ import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.en
 import * as SalesHierarchyViewTypeActions from '../actions/sales-hierarchy-view-type.action';
 import * as salesHierarchyViewTypeReducer from './sales-hierarchy-view-type.reducer';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
-import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 
 const chance = new Chance();
-const productMetricsViewTypeMock = ProductMetricsViewType[getProductMetricsViewTypeMock()];
 
 describe('My Performance Reducer', () => {
   let inputMyPerformanceStateMock: MyPerformanceState;
@@ -129,7 +126,6 @@ describe('My Performance Reducer', () => {
         salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
         filter: null,
         brandSkuCode: chance.string(),
-        productMetricsViewType: productMetricsViewTypeMock,
         entityType: getEntityTypeMock(),
         alternateHierarchyId: chance.string(),
         accountPositionId: chance.string()

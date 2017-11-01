@@ -23,11 +23,9 @@ import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from './responsibilities.action';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 const skuPackageTypeMock: SkuPackageType = SkuPackageType.sku;
-const productMetricsViewTypeMock: ProductMetricsViewType = ProductMetricsViewType.skus;
 
 describe('Responsibilities Actions', () => {
 
@@ -184,7 +182,6 @@ describe('Responsibilities Actions', () => {
       filter: performanceFilterStateMock,
       brandSkuCode: chance.string(),
       skuPackageType: skuPackageTypeMock,
-      productMetricsViewType: productMetricsViewTypeMock,
       entityType: getEntityTypeMock(),
       alternateHierarchyId: chance.string(),
       accountPositionId: chance.string(),
