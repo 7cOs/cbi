@@ -540,6 +540,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (this.currentState
       && this.currentState.responsibilities.status === ActionStatus.Fetched
       && this.productMetricsState.status === ActionStatus.Fetched) {
+
         this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
           positionId: this.currentState.responsibilities.positionId,
           groupedEntities: this.currentState.responsibilities.groupedEntities,
