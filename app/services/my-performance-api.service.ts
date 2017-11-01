@@ -38,16 +38,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  public getPerformance(positionId: string, filter: MyPerformanceFilterState, brandCode?: string): Observable<PerformanceDTO> {
-    const url = `/v3/positions/${ positionId }/performanceTotal`;
-
-    return this.http.get(`${ url }`, {
-      params: this.getParams(filter, brandCode)
-    })
-      .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
-  }
-
   public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
     alternateHierarchyId: string, filter: MyPerformanceFilterState, brandCode?: string)
   : Observable<PerformanceDTO> {
@@ -61,6 +51,16 @@ export class MyPerformanceApiService {
     })
       .map(res => res.json())
       .catch(err => this.handlePerformanceError(err));
+  }
+
+  public getPerformance(positionId: string, filter: MyPerformanceFilterState, brandCode?: string): Observable<PerformanceDTO> {
+    const url = `/v3/positions/${ positionId }/performanceTotal`;
+
+    return this.http.get(`${ url }`, {
+      params: this.getParams(filter, brandCode)
+    })
+      .map(res => res.json())
+      .catch(err => this.handlePerformanceError(new Error(err)));
   }
 
   public getAlternateHierarchyPersonPerformance(

@@ -132,7 +132,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
     });
 
-    fit('should call the performance API and return empty performance data when response is 404', (done: any) => {
+    it('should call the performance API and return empty performance data when response is 404', (done: any) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,
@@ -143,7 +143,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService.getPerformance('', filterStateMock).subscribe((response: PerformanceDTO) => {
-        // expect(response).toEqual(emptyPerformanceDTOMock);
+        expect(response).toEqual(emptyPerformanceDTOMock);
         done();
       });
     });
