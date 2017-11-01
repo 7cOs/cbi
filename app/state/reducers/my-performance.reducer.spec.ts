@@ -5,6 +5,8 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
+import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
+import { getHierarchyGroupMock } from '../../models/hierarchy-group.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceStateMock, getResponsibilitesStateMock } from './my-performance.state.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
@@ -114,7 +116,20 @@ describe('My Performance Reducer', () => {
         entityWithPerformance: []
       }),
       new ResponsibilitiesActions.SetAlternateHierarchyId(chance.string()),
-      new ResponsibilitiesActions.SetAccountPositionId(chance.string())
+      new ResponsibilitiesActions.SetAccountPositionId(chance.string()),
+      new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: chance.string(),
+        groupedEntities: getGroupedEntitiesMock(),
+        hierarchyGroups: [getHierarchyGroupMock()],
+        selectedEntityType: getEntityTypeMock(),
+        selectedEntityTypeCode: chance.string(),
+        salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
+        filter: null,
+        brandCode: chance.string(),
+        entityType: getEntityTypeMock(),
+        alternateHierarchyId: chance.string(),
+        accountPositionId: chance.string()
+      })
     ];
 
     const returnedStates: MyPerformanceState[] = actions.map((action: Action) => {

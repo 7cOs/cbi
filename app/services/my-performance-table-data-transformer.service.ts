@@ -13,7 +13,7 @@ import { SkuPackageType  } from '../enums/sku-package-type.enum';
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntityWithPerformance[], inAltHierarchy: boolean): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[], altHierarchyId?: string): MyPerformanceTableRow[] {
     const total: number = entities.reduce((sum: number, entity: EntityWithPerformance): number => {
       return sum + entity.performance.total;
     }, 0);
@@ -37,9 +37,10 @@ export class MyPerformanceTableDataTransformerService {
       };
 
       if (entity.entityType === EntityType.Person) {
-        if (inAltHierarchy) {
+        if (altHierarchyId) {
           transformedEntity.descriptionRow0 = entity.positionDescription ? entity.positionDescription : 'AREA';
           transformedEntity.descriptionRow1 = entity.name;
+          transformedEntity.metadata.alternateHierarchyId = altHierarchyId;
         } else if (entity.name === 'Open') {
           transformedEntity.descriptionRow0 = 'Open Position';
           transformedEntity.descriptionRow1 = entity.positionDescription;
@@ -88,7 +89,7 @@ export class MyPerformanceTableDataTransformerService {
     });
 
     return rowData.filter((row: MyPerformanceTableRow) => {
-      return (row.metricColumn0 !== 0 && row.metricColumn1 !== 0);
+      return (row.metricColumn0 !== 0 || row.metricColumn1 !== 0);
     });
   }
 

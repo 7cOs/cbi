@@ -9,7 +9,6 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
-import { ProductMetricsData } from '../services/product-metrics.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
@@ -24,6 +23,7 @@ export interface ProductMetricsData {
   selectedBrandCode?: string;
   products?: ProductMetrics;
   productMetricsViewType?: ProductMetricsViewType;
+  inAlternateHierarchy?: boolean;
 }
 
 @Injectable()
@@ -39,7 +39,42 @@ export class ProductMetricsService {
 
     const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
 
-    if (productMetricsData.selectedEntityType === EntityType.Person) {
+    if (productMetricsData.inAlternateHierarchy) {
+      if (productMetricsData.selectedEntityType === EntityType.Person) {
+        apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+          productMetricsData.positionId,
+          productMetricsData.filter,
+          aggregationLevel,
+          productMetricsData.contextPositionId
+        ));
+        if (aggregationLevel === ProductMetricsAggregationType.sku) {
+          apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+            productMetricsData.positionId,
+            productMetricsData.filter,
+            ProductMetricsAggregationType.brand,
+            productMetricsData.contextPositionId
+          ));
+        }
+      } else {
+        apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.entityTypeCode,
+          productMetricsData.filter,
+          aggregationLevel,
+          productMetricsData.contextPositionId
+        ));
+        if (aggregationLevel === ProductMetricsAggregationType.sku) {
+          apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+            productMetricsData.positionId,
+            productMetricsData.entityTypeCode,
+            productMetricsData.filter,
+            ProductMetricsAggregationType.brand,
+            productMetricsData.contextPositionId
+          ));
+        }
+      }
+    } else if (productMetricsData.selectedEntityType === EntityType.Person
+      || productMetricsData.selectedEntityType === EntityType.AccountGroup) {
       apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
         productMetricsData.positionId,
         productMetricsData.filter,
@@ -94,13 +129,6 @@ export class ProductMetricsService {
         productMetricsViewType: viewType
       });
     });
-  }
-
-  public checkEmptyProductMetricsResponse(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
-    if (productMetricsData && Object.keys(productMetricsData.products).length === 0) {
-      return Observable.throw('Empty Product Metrics Data Error');
-    }
-    return Observable.of(productMetricsData);
   }
 
   public filterProductMetricsBrand(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
