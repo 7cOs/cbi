@@ -1,7 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getProductMetricsWithBrandValuesMock, getProductMetricsBrandMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
@@ -107,6 +107,26 @@ describe('ProductMetrics Reducer', () => {
     const actualState = productMetricsReducer(
       initialState,
       new ProductMetricsActions.SetProductMetricsViewType(payload)
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should delete the selectedBrandCodeValues from the state when a deselectBrandValues action is dispatched', () => {
+    const products = getProductMetricsWithBrandValuesMock();
+
+    initialState.products = products;
+    initialState.selectedBrandCodeValues = products.brandValues[chance.natural({min: 0, max: products.brandValues.length - 1})];
+
+    const expectedState = {
+      status: initialState.status,
+      products: initialState.products,
+      productMetricsViewType: ProductMetricsViewType.brands
+    };
+
+    const actualState = productMetricsReducer(
+      initialState,
+      new ProductMetricsActions.DeselectBrandValues()
     );
 
     expect(actualState).toEqual(expectedState);
