@@ -1242,21 +1242,10 @@ fdescribe('MyPerformanceComponent', () => {
 
     beforeEach(() => {
       spyOn(componentInstance, 'deselectBrandValue');
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([getMyPerformanceTableRowMock]);
     });
 
     it('should not be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is has values', () => {
-      myPerformanceTableDataTransformerService.getRightTableData = jasmine.createSpy('getRightTableData')
-        .and.returnValues([getMyPerformanceTableRowMock]),
-      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
-      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
-      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
-      productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).toHaveBeenCalled();
-    });
-
-    it('should not be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is empty', () => {
-      myPerformanceTableDataTransformerService.getRightTableData = jasmine.createSpy('getRightTableData').and.returnValues({}),
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
@@ -1265,8 +1254,18 @@ fdescribe('MyPerformanceComponent', () => {
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
 
+    it('should be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is empty', () => {
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([]);
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).toHaveBeenCalled();
+    });
+
     it('should not be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is undefined', () => {
-      myPerformanceTableDataTransformerService.getRightTableData = jasmine.createSpy('getRightTableData').and.returnValues({}),
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue(undefined);
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
@@ -1276,7 +1275,6 @@ fdescribe('MyPerformanceComponent', () => {
     });
 
     it('should not be called when selectedBrandCode is truthy, viewtype is brands, and productMetrics has values', () => {
-      myPerformanceTableDataTransformerService.getRightTableData = jasmine.createSpy('getRightTableData').and.returnValues({}),
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.brands;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
@@ -1286,7 +1284,6 @@ fdescribe('MyPerformanceComponent', () => {
     });
 
     it('should not be called when selectedBrandCode is falsy, viewtype is skus, and productMetrics has values', () => {
-      myPerformanceTableDataTransformerService.getRightTableData = jasmine.createSpy('getRightTableData').and.returnValues({}),
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
