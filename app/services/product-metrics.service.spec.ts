@@ -57,6 +57,27 @@ describe('ProductMetrics Service', () => {
     productMetricsSkuDTOMock = getProductMetricsSkuDTOMock();
 
     productMetricsApiServiceMock = {
+      getAlternateHierarchyProductMetricsForPosition(
+        positionId: string,
+        filter: MyPerformanceFilterState,
+        aggregation: ProductMetricsAggregationType,
+        contextPositionId: string
+      ) {
+        return aggregation === ProductMetricsAggregationType.brand
+          ? Observable.of(productMetricsBrandsDTOMock)
+          : Observable.of(productMetricsSkuDTOMock);
+      },
+      getAlternateHierarchyProductMetrics(
+        positionId: string,
+        entityTypeCode: EntityType,
+        filter: MyPerformanceFilterState,
+        aggregation: ProductMetricsAggregationType,
+        contextPositionId: string
+      ) {
+        return aggregation === ProductMetricsAggregationType.brand
+          ? Observable.of(productMetricsBrandsDTOMock)
+          : Observable.of(productMetricsSkuDTOMock);
+      },
       getPositionProductMetrics(
         positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
       ) {
@@ -122,12 +143,17 @@ describe('ProductMetrics Service', () => {
     let getAccountProductMetricsSpy: jasmine.Spy;
     let getRoleGroupProductMetricsSpy: jasmine.Spy;
     let transformProductMetricsSpy: jasmine.Spy;
+    let getAlternateHierarchyProductMetricsSpy: jasmine.Spy;
+    let getAlternateHierarchyProductMetricsForPositionSpy: jasmine.Spy;
 
     beforeEach(() => {
       getPositionProductMetricsSpy = spyOn(productMetricsApiService, 'getPositionProductMetrics').and.callThrough();
       getAccountProductMetricsSpy = spyOn(productMetricsApiService, 'getAccountProductMetrics').and.callThrough();
       getRoleGroupProductMetricsSpy = spyOn(productMetricsApiService, 'getRoleGroupProductMetrics').and.callThrough();
       transformProductMetricsSpy = spyOn(productMetricsTransformerService, 'transformAndCombineProductMetricsDTOs').and.callThrough();
+      getAlternateHierarchyProductMetricsSpy = spyOn(productMetricsApiService, 'getAlternateHierarchyProductMetrics').and.callThrough();
+      getAlternateHierarchyProductMetricsForPositionSpy =
+        spyOn(productMetricsApiService, 'getAlternateHierarchyProductMetricsForPosition').and.callThrough();
 
       productMetricsDataMock = {
         positionId: positionIdMock,
@@ -136,6 +162,207 @@ describe('ProductMetrics Service', () => {
         filter: performanceFilterStateMock,
         selectedEntityType: selectedEntityTypeMock
       };
+    });
+
+    describe('when in alternateHierarchy', () => {
+      describe('when selectedEntityType is Person', () => {
+        beforeEach(() => {
+          productMetricsDataMock.selectedEntityType = EntityType.Person;
+          productMetricsDataMock.inAlternateHierarchy = true;
+        });
+
+        describe('when no selectedBrandCode is present', () => {
+          it('should call getPositionProductMetrics for brand level aggregation', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.count()).toBe(1);
+              expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.argsFor(0)).toEqual([
+                productMetricsDataMock.positionId,
+                productMetricsDataMock.filter,
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.contextPositionId
+              ]);
+              expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
+              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              done();
+            });
+          });
+
+          it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(transformProductMetricsSpy.calls.count()).toBe(1);
+              expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
+                [ productMetricsBrandsDTOMock ]
+              );
+              done();
+            });
+          });
+
+          it('should respond with transformed product metrics and brands view type', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+              expect(productMetricsData).toEqual(
+                Object.assign({}, productMetricsDataMock, {
+                  selectedEntityType: EntityType.Person,
+                  products: productMetricsWithBrandValuesMock,
+                  productMetricsViewType: ProductMetricsViewType.brands
+                })
+              );
+              done();
+            });
+          });
+        });
+
+        describe('when selectedBrandCode is present', () => {
+          beforeEach(() => {
+            productMetricsDataMock.inAlternateHierarchy = true;
+            productMetricsDataMock.selectedEntityType = EntityType.Person;
+            productMetricsDataMock.selectedBrandCode = chance.string();
+          });
+
+          it('should call getAlternateHierarchyProductMetricsForPosition for brand AND sku level aggregation', (done: any) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.count()).toBe(2);
+              expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.argsFor(0)).toEqual([
+                productMetricsDataMock.positionId,
+                productMetricsDataMock.filter,
+                ProductMetricsAggregationType.sku,
+                productMetricsDataMock.contextPositionId
+              ]);
+              expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.argsFor(1)).toEqual([
+                productMetricsDataMock.positionId,
+                productMetricsDataMock.filter,
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.contextPositionId
+              ]);
+              expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
+              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              done();
+            });
+          });
+
+          it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(transformProductMetricsSpy.calls.count()).toBe(1);
+              expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
+                [ productMetricsSkuDTOMock, productMetricsBrandsDTOMock ]
+              );
+              done();
+            });
+          });
+
+          it('should respond with transformed product metrics and skus view type', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+              expect(productMetricsData).toEqual(
+                Object.assign({}, productMetricsDataMock, {
+                  selectedEntityType: EntityType.Person,
+                  products: productMetricsWithCombinedValuesMock,
+                  productMetricsViewType: ProductMetricsViewType.skus
+                })
+              );
+              done();
+            });
+          });
+        });
+      });
+
+      describe('when selectedEntityType is a Role Group', () => {
+        beforeEach(() => {
+          productMetricsDataMock.selectedEntityType = EntityType.RoleGroup;
+          productMetricsDataMock.inAlternateHierarchy = true;
+        });
+
+        describe('when no selectedBrandCode is present', () => {
+          it('should call getAlternateHierarchyProductMetrics for brand level aggregation', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(getAlternateHierarchyProductMetricsSpy.calls.count()).toBe(1);
+              expect(getAlternateHierarchyProductMetricsSpy.calls.argsFor(0)).toEqual([
+                productMetricsDataMock.positionId,
+                productMetricsDataMock.entityTypeCode,
+                productMetricsDataMock.filter,
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.contextPositionId
+              ]);
+              expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
+              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              done();
+            });
+          });
+
+          it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(transformProductMetricsSpy.calls.count()).toBe(1);
+              expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
+                [ productMetricsBrandsDTOMock ]
+              );
+              done();
+            });
+          });
+
+          it('should respond with transformed product metrics and brands view type', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+              expect(productMetricsData).toEqual(
+                Object.assign({}, productMetricsDataMock, {
+                  selectedEntityType: EntityType.RoleGroup,
+                  products: productMetricsWithBrandValuesMock,
+                  productMetricsViewType: ProductMetricsViewType.brands
+                })
+              );
+              done();
+            });
+          });
+        });
+
+        describe('when selectedBrandCode is present', () => {
+          beforeEach(() => {
+            productMetricsDataMock.selectedBrandCode = chance.string();
+          });
+
+          it('should call getAlternateHierarchyProductMetrics for brand AND sku level aggregation', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(getAlternateHierarchyProductMetricsSpy.calls.count()).toBe(2);
+              expect(getAlternateHierarchyProductMetricsSpy.calls.argsFor(0)).toEqual([
+                productMetricsDataMock.positionId,
+                productMetricsDataMock.entityTypeCode,
+                productMetricsDataMock.filter,
+                ProductMetricsAggregationType.sku,
+                productMetricsDataMock.contextPositionId
+              ]);
+              expect(getAlternateHierarchyProductMetricsSpy.calls.argsFor(1)).toEqual([
+                productMetricsDataMock.positionId,
+                productMetricsDataMock.entityTypeCode,
+                productMetricsDataMock.filter,
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.contextPositionId
+              ]);
+              expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
+              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              done();
+            });
+          });
+
+          it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+              expect(transformProductMetricsSpy.calls.count()).toBe(1);
+              expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
+                [ productMetricsSkuDTOMock, productMetricsBrandsDTOMock ]
+              );
+              done();
+            });
+          });
+
+          it('should respond with transformed product metrics and skus view type', (done) => {
+            productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+              expect(productMetricsData).toEqual(
+                Object.assign({}, productMetricsDataMock, {
+                  selectedEntityType: EntityType.RoleGroup,
+                  products: productMetricsWithCombinedValuesMock,
+                  productMetricsViewType: ProductMetricsViewType.skus
+                })
+              );
+              done();
+            });
+          });
+        });
+      });
     });
 
     describe('when selectedEntityType is Person', () => {
@@ -221,6 +448,99 @@ describe('ProductMetrics Service', () => {
             expect(productMetricsData).toEqual(
               Object.assign({}, productMetricsDataMock, {
                 selectedEntityType: EntityType.Person,
+                products: productMetricsWithCombinedValuesMock,
+                productMetricsViewType: ProductMetricsViewType.skus
+              })
+            );
+            done();
+          });
+        });
+      });
+    });
+
+    describe('when selectedEntityType is AccountGroup', () => {
+      beforeEach(() => {
+        productMetricsDataMock.selectedEntityType = EntityType.AccountGroup;
+      });
+
+      describe('when no selectedBrandCode is present', () => {
+        it('should call getPositionProductMetrics for brand level aggregation', (done) => {
+          productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+            expect(getPositionProductMetricsSpy.calls.count()).toBe(1);
+            expect(getPositionProductMetricsSpy.calls.argsFor(0)).toEqual([
+              productMetricsDataMock.positionId,
+              productMetricsDataMock.filter,
+              ProductMetricsAggregationType.brand
+            ]);
+            expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
+            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            done();
+          });
+        });
+
+        it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
+          productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+            expect(transformProductMetricsSpy.calls.count()).toBe(1);
+            expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
+              [ productMetricsBrandsDTOMock ]
+            );
+            done();
+          });
+        });
+
+        it('should respond with transformed product metrics and brands view type', (done) => {
+          productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+            expect(productMetricsData).toEqual(
+              Object.assign({}, productMetricsDataMock, {
+                selectedEntityType: EntityType.AccountGroup,
+                products: productMetricsWithBrandValuesMock,
+                productMetricsViewType: ProductMetricsViewType.brands
+              })
+            );
+            done();
+          });
+        });
+      });
+
+      describe('when selectedBrandCode is present', () => {
+        beforeEach(() => {
+          productMetricsDataMock.selectedBrandCode = chance.string();
+        });
+
+        it('should call getPositionProductMetrics for brand AND sku level aggregation', (done) => {
+          productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+            expect(getPositionProductMetricsSpy.calls.count()).toBe(2);
+            expect(getPositionProductMetricsSpy.calls.argsFor(0)).toEqual([
+              productMetricsDataMock.positionId,
+              productMetricsDataMock.filter,
+              ProductMetricsAggregationType.sku
+            ]);
+            expect(getPositionProductMetricsSpy.calls.argsFor(1)).toEqual([
+              productMetricsDataMock.positionId,
+              productMetricsDataMock.filter,
+              ProductMetricsAggregationType.brand
+            ]);
+            expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
+            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            done();
+          });
+        });
+
+        it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
+          productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
+            expect(transformProductMetricsSpy.calls.count()).toBe(1);
+            expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
+              [ productMetricsSkuDTOMock, productMetricsBrandsDTOMock ]
+            );
+            done();
+          });
+        });
+
+        it('should respond with transformed product metrics and skus view type', (done) => {
+          productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+            expect(productMetricsData).toEqual(
+              Object.assign({}, productMetricsDataMock, {
+                selectedEntityType: EntityType.AccountGroup,
                 products: productMetricsWithCombinedValuesMock,
                 productMetricsViewType: ProductMetricsViewType.skus
               })
