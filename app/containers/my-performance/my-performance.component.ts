@@ -516,15 +516,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
-    if (isEqual(this.filterState, previousState.filter)) {
-      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
-    } else {
-      // Todo: dispatch action to trigger data refresh
-      // Todo: This is temporary just to keep things working as they are, remove once actual refresh is do-able
-      this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
-    }
-
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
     this.fetchProductMetricsForPreviousState(previousState);
+
+    if (!isEqual(this.filterState, previousState.filter)) {
+      this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: previousState.responsibilities.positionId,
+        groupedEntities: previousState.responsibilities.groupedEntities,
+        hierarchyGroups: previousState.responsibilities.hierarchyGroups,
+        selectedEntityType: previousState.selectedEntityType,
+        selectedEntityTypeCode: previousState.responsibilities.entityTypeCode,
+        salesHierarchyViewType: previousState.salesHierarchyViewType.viewType,
+        filter: this.filterState,
+        brandCode: previousState.selectedBrandCode,
+        entityType: previousState.selectedEntityType,
+        alternateHierarchyId: previousState.responsibilities.alternateHierarchyId,
+        accountPositionId: previousState.responsibilities.accountPositionId
+      }));
+    }
   }
 
   private setSelectedDateRangeValues(): void {
