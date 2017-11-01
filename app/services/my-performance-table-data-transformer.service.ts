@@ -40,7 +40,6 @@ export class MyPerformanceTableDataTransformerService {
         if (altHierarchyId) {
           transformedEntity.descriptionRow0 = entity.positionDescription ? entity.positionDescription : 'AREA';
           transformedEntity.descriptionRow1 = entity.name;
-          transformedEntity.metadata.alternateHierarchyId = altHierarchyId;
         } else if (entity.name === 'Open') {
           transformedEntity.descriptionRow0 = 'Open Position';
           transformedEntity.descriptionRow1 = entity.positionDescription;
