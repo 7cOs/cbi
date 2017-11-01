@@ -211,6 +211,7 @@ export type Action
   | FetchResponsibilitiesFailure
   | FetchEntityWithPerformance
   | FetchEntityWithPerformanceSuccess
+  | RefreshAllPerformances
   | GetPeopleByRoleGroup
   | FetchSubAccounts
   | FetchSubAccountsSuccess
