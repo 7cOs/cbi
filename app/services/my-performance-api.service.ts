@@ -37,7 +37,7 @@ export class MyPerformanceApiService {
       params: this.getParams(filter, brandSkuCode, skuPackageType)
     })
       .map(res => res.json())
-      .catch(err => this.handleError(new Error(err)));
+      .catch(err => this.handlePerformanceError(new Error(err)));
   }
 
   public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
