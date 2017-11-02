@@ -600,11 +600,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.selectedSkuPackageCode
       && this.productMetricsState.productMetricsViewType === ProductMetricsViewType.skus
       && this.productMetrics
-      && this.productMetrics.filter(
-        (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length === 0) {
-      this.selectedSkuPackageCode = null;
-      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-      this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
+      && !this.productMetrics.filter(
+        (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length) {
+        this.selectedSkuPackageCode = null;
+        this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
     } else if (this.productMetricsState
       && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
