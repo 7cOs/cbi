@@ -1350,6 +1350,7 @@ describe('Responsibilities Effects', () => {
     let getAccountPerformanceSpy: jasmine.Spy;
     let transformPerformanceDTOSpy: jasmine.Spy;
     let getHierarchyGroupPerformanceSpy: jasmine.Spy;
+    let getAlternateHierarchyGroupPerformanceSpy: jasmine.Spy;
     let transformHierarchyGroupPerformanceSpy: jasmine.Spy;
 
     beforeEach(() => {
@@ -1371,6 +1372,14 @@ describe('Responsibilities Effects', () => {
         hierarchyGroup: HierarchyGroup,
         filter: MyPerformanceFilterState,
         positionId: string,
+        brandCode?: string)
+        : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
+
+      getAlternateHierarchyGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callFake((
+        hierarchyGroup: HierarchyGroup,
+        positionId: string,
+        alternateHierarchyId: string,
+        filter: MyPerformanceFilterState,
         brandCode?: string)
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
@@ -1501,16 +1510,18 @@ describe('Responsibilities Effects', () => {
     });
 
     describe('when refreshing people', () => {
+      let randomIndex: number;
+
       beforeEach(() => {
         salesHierarchyViewType = SalesHierarchyViewType.people;
         refreshTotalPerformanceData.salesHierarchyViewType = salesHierarchyViewType;
+
+        randomIndex = chance.natural({min: 0, max: refreshTotalPerformanceData.hierarchyGroups.length - 1});
+        refreshTotalPerformanceData.hierarchyGroups[randomIndex].name = Object.keys(refreshTotalPerformanceData.groupedEntities)[0];
       });
 
       it('should call getHierarchyGroupPerformance with the hierarchyGroups that has for name the key of the of groupedEntities,'
         + 'the filter, positionId, brandCode', (done) => {
-        const randomIndex = chance.natural({min: 0, max: refreshTotalPerformanceData.hierarchyGroups.length - 1});
-        refreshTotalPerformanceData.hierarchyGroups[randomIndex].name = Object.keys(refreshTotalPerformanceData.groupedEntities)[0];
-
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
             refreshTotalPerformanceData.hierarchyGroups[randomIndex],
@@ -1523,10 +1534,24 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should call transformHierarchyGroupPerformance with the result from getRefreshedTotalPerformance', (done) => {
-        const randomIndex = chance.natural({min: 0, max: refreshTotalPerformanceData.hierarchyGroups.length - 1});
-        refreshTotalPerformanceData.hierarchyGroups[randomIndex].name = Object.keys(refreshTotalPerformanceData.groupedEntities)[0];
+      it('should call getAlternateHierarchyGroupPerformance when the hierarchyGroup contains an alternateHierarchyId with the ' +
+      'hierarchyGroups that has for name the key of the of groupedEntities, the filter, positionId, brandCode', (done) => {
+        refreshTotalPerformanceData.hierarchyGroups[randomIndex].alternateHierarchyId = alternateHierarchyIdMock;
 
+        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+          expect(getAlternateHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
+            refreshTotalPerformanceData.hierarchyGroups[randomIndex],
+            refreshTotalPerformanceData.positionId,
+            alternateHierarchyIdMock,
+            refreshTotalPerformanceData.filter,
+            refreshTotalPerformanceData.brandCode
+          );
+
+          done();
+        });
+      });
+
+      it('should call transformHierarchyGroupPerformance with the result from getRefreshedTotalPerformance', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(transformHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
             entitiesTotalPerformancesDTOMock,
