@@ -106,7 +106,7 @@ class MyPerformanceTableComponentMock {
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 }
 
-fdescribe('MyPerformanceComponent', () => {
+describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
   let componentInstanceCopy: any;
