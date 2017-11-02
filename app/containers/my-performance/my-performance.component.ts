@@ -247,7 +247,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public deselectBrandValue(): void {
     delete this.selectedBrandCode;
-    this.store.dispatch(new MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode());
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
     this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
     this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
 

@@ -69,7 +69,7 @@ describe('My Performance Reducer', () => {
         skuPackageType: SkuPackageType.package
       }),
       new MyPerformanceVersionActions.ClearMyPerformanceState(),
-      new MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode()
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode()
     ];
 
     const returnedStates: MyPerformanceState[] = actions.map((action: Action) => {
