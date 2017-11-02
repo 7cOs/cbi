@@ -487,7 +487,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
            && this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
-  private dispatchRefreshAllPerformance(brandSkuCode: string, skuPackageType: SkuPackageType) {
+  private dispatchRefreshAllPerformance(brandSkuCode: string, skuPackageType?: SkuPackageType) {
     this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
       positionId: this.currentState.responsibilities.positionId,
       groupedEntities: this.currentState.responsibilities.groupedEntities,
