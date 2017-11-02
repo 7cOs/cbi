@@ -17,6 +17,7 @@ import { MyPerformanceFilterState } from '../state/reducers/my-performance-filte
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PerformanceDTO } from '../models/performance.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
@@ -101,16 +102,18 @@ describe('Service: MyPerformanceApiService', () => {
 
   describe('getPerformance', () => {
     const positionIdMock = chance.string();
-    const brandCodeMock = chance.string({
+    const brandSkuCodeMock = chance.string({
       pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
     });
+    const skuPackageTypeMock = SkuPackageType.sku;
+
     const filterStateMock: MyPerformanceFilterState = {
       metricType: MetricTypeValue.volume,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On
     };
 
-    it('should call the performance API and return performance data', (done) => {
+    it('should call the performance API and return performance data for a sku', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(performanceDTOResponseMock)
@@ -122,11 +125,35 @@ describe('Service: MyPerformanceApiService', () => {
           + `?metricType=volume`
           + `&dateRangeCode=FYTDBDL`
           + `&premiseType=On`
-          + `&brandCode=${brandCodeMock}`
+          + `&masterSKU=${brandSkuCodeMock}`
         );
       });
 
-      myPerformanceApiService.getPerformance(positionIdMock, filterStateMock, brandCodeMock).subscribe((response: PerformanceDTO) => {
+      myPerformanceApiService.getPerformance(positionIdMock,
+        filterStateMock, brandSkuCodeMock, skuPackageTypeMock).subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(performanceDTOResponseMock);
+        done();
+      });
+    });
+
+    it('should call the performance API and return performance data for a brand', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(performanceDTOResponseMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(
+          `/v3/positions/${positionIdMock}/performanceTotal`
+          + `?metricType=volume`
+          + `&dateRangeCode=FYTDBDL`
+          + `&premiseType=On`
+          + `&brandCode=${brandSkuCodeMock}`
+        );
+      });
+
+      myPerformanceApiService.getPerformance(positionIdMock,
+        filterStateMock, brandSkuCodeMock).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
         done();
       });
@@ -156,11 +183,12 @@ describe('Service: MyPerformanceApiService', () => {
       premiseType: PremiseTypeValue.On
     };
 
-    it('should call the alternate hierarchy performance API and return performance data', (done) => {
+    it('should call the alternate hierarchy performance API and return performance data for a package', (done) => {
       const positionIdMock: string = chance.string();
-      const brandCodeMock = chance.string({
+      const brandSkuCodeMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
+      const skuPackageTypeMock = SkuPackageType.package;
       const alternateHierarchyIdMock: string = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
@@ -169,7 +197,7 @@ describe('Service: MyPerformanceApiService', () => {
       const expectedUrlParams = `?metricType=volume`
       + `&dateRangeCode=FYTDBDL`
       + `&premiseType=On`
-      + `&brandCode=${brandCodeMock}`
+      + `&masterPackageSKU=${brandSkuCodeMock}`
       + `&contextPositionId=${ alternateHierarchyIdMock }`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -185,7 +213,8 @@ describe('Service: MyPerformanceApiService', () => {
         positionIdMock,
         alternateHierarchyIdMock,
         filterStateMock,
-        brandCodeMock
+        brandSkuCodeMock,
+        skuPackageTypeMock
       ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
         done();
@@ -216,12 +245,12 @@ describe('Service: MyPerformanceApiService', () => {
       premiseType: PremiseTypeValue.On
     };
 
-    it('should call the SubAccounts performance API and return performance data', (done) => {
+    it('should call the SubAccounts performance API and return performance data for a brand', (done) => {
       const subAccountIdMock: string = chance.string();
       const contextPositionIdMock: string = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
-      const brandCodeMock = chance.string({
+      const brandSkuCodeMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
 
@@ -236,12 +265,12 @@ describe('Service: MyPerformanceApiService', () => {
           + `?metricType=volume`
           + `&dateRangeCode=FYTDBDL`
           + `&premiseType=On`
-          + `&brandCode=${brandCodeMock}`
+          + `&brandCode=${brandSkuCodeMock}`
           + `&positionId=${contextPositionIdMock}`
         );
       });
 
-      myPerformanceApiService.getSubAccountPerformance(subAccountIdMock, contextPositionIdMock, filterStateMock, brandCodeMock)
+      myPerformanceApiService.getSubAccountPerformance(subAccountIdMock, contextPositionIdMock, filterStateMock, brandSkuCodeMock)
         .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
         done();
@@ -272,14 +301,15 @@ describe('Service: MyPerformanceApiService', () => {
       premiseType: PremiseTypeValue.On
     };
 
-    it('should call the distributor performance API and return performance data', (done) => {
+    it('should call the distributor performance API and return performance data for a sku', (done) => {
       const positionIdMock = chance.string();
       const contextPositionIdMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
-      const brandCodeMock = chance.string({
+      const brandSkuCodeMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
+      const skuPackageTypeMock = SkuPackageType.sku;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -292,7 +322,7 @@ describe('Service: MyPerformanceApiService', () => {
           + `?metricType=volume`
           + `&dateRangeCode=FYTDBDL`
           + `&premiseType=On`
-          + `&brandCode=${brandCodeMock}`
+          + `&masterSKU=${brandSkuCodeMock}`
           + `&positionId=${contextPositionIdMock}`
         );
       });
@@ -303,7 +333,8 @@ describe('Service: MyPerformanceApiService', () => {
         positionIdMock,
         filterStateMock,
         contextPositionIdMock,
-        brandCodeMock
+        brandSkuCodeMock,
+        skuPackageTypeMock
       ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expected);
         done();
@@ -334,14 +365,15 @@ describe('Service: MyPerformanceApiService', () => {
       premiseType: PremiseTypeValue.On
     };
 
-    it('should call the account performance API and return performance data', (done) => {
+    it('should call the account performance API and return performance data for a package', (done) => {
       const positionIdMock = chance.string();
       const contextPositionIdMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
-      const brandCodeMock = chance.string({
+      const brandSkuCodeMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
+      const skuPackageTypeMock = SkuPackageType.package;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -354,7 +386,7 @@ describe('Service: MyPerformanceApiService', () => {
           + `?metricType=volume`
           + `&dateRangeCode=FYTDBDL`
           + `&premiseType=On`
-          + `&brandCode=${brandCodeMock}`
+          + `&masterPackageSKU=${brandSkuCodeMock}`
           + `&positionId=${contextPositionIdMock}`
         );
       });
@@ -365,7 +397,8 @@ describe('Service: MyPerformanceApiService', () => {
         positionIdMock,
         filterStateMock,
         contextPositionIdMock,
-        brandCodeMock
+        brandSkuCodeMock,
+        skuPackageTypeMock
       ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expected);
         done();
@@ -424,13 +457,13 @@ describe('Service: MyPerformanceApiService', () => {
       positionDescription: chance.string()
     };
 
-    it('should call the responsibility performance endpoint and return performance data for the responsibility', (done) => {
+    it('should call the responsibility performance endpoint and return performance data for the responsibility for brand', (done) => {
       const positionIdMock = chance.string();
-      const brandCodeMock = chance.string({
+      const brandSkuCodeMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
       const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ entityMock.type }/performanceTotal`;
-      const expectedUrlParams = `?metricType=velocity&dateRangeCode=L90BDL&premiseType=All&brandCode=${brandCodeMock}`;
+      const expectedUrlParams = `?metricType=velocity&dateRangeCode=L90BDL&premiseType=All&brandCode=${brandSkuCodeMock}`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -442,7 +475,7 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterStateMock, positionIdMock, brandCodeMock)
+      myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterStateMock, positionIdMock, brandSkuCodeMock)
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(performanceDTOResponseMock);
           done();
@@ -474,11 +507,12 @@ describe('Service: MyPerformanceApiService', () => {
       premiseType: PremiseTypeValue.All
     };
 
-    it('should call the alternateHierarchy performanceTotal endpoint and return performance data for the group', (done) => {
+    it('should call the alternateHierarchy performanceTotal endpoint and return performance data for the group with a sku', (done) => {
       const positionIdMock = chance.string();
-      const brandCodeMock = chance.string({
+      const brandSkuCodeMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
+      const skuPackageTypeMock = SkuPackageType.sku;
       const alternateHierarchyIdMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
@@ -487,7 +521,7 @@ describe('Service: MyPerformanceApiService', () => {
       const expectedUrlParams = `?metricType=velocity`
         + `&dateRangeCode=L90BDL`
         + `&premiseType=All`
-        + `&brandCode=${brandCodeMock}`
+        + `&masterSKU=${brandSkuCodeMock}`
         + `&contextPositionId=${alternateHierarchyIdMock}`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -501,7 +535,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService.getAlternateHierarchyGroupPerformance(
-        hierarchyGroupMock, positionIdMock, alternateHierarchyIdMock, filterStateMock, brandCodeMock)
+        hierarchyGroupMock, positionIdMock, alternateHierarchyIdMock, filterStateMock, brandSkuCodeMock, skuPackageTypeMock)
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(performanceDTOResponseMock);
           done();
