@@ -605,9 +605,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.selectedSkuPackageCode = null;
       this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
       this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
-    }
-
-    if (this.productMetricsState
+    } else if (this.productMetricsState
       && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedBrandCode
