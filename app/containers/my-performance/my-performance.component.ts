@@ -639,7 +639,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           positionId: this.currentState.responsibilities.positionId,
           filter: this.filterState,
           selectedEntityType: this.currentState.selectedEntityType,
-          selectedBrandCode: this.currentState.selectedBrandCode
+          selectedBrandCode: this.currentState.selectedBrandCode,
+          inAlternateHierarchy: this.isInsideAlternateHierarchy(),
+          entityTypeCode: this.currentState.responsibilities.entityTypeCode,
+          contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
+                              this.currentState.responsibilities.positionId
         }));
     }
   }
