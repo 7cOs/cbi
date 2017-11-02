@@ -256,7 +256,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       groupedEntities: this.currentState.responsibilities.groupedEntities,
       hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
       selectedEntityType: this.currentState.selectedEntityType,
-      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
+      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
       salesHierarchyViewType: this.salesHierarchyViewType,
       filter: this.filterState,
       entityType: this.currentState.selectedEntityType,
@@ -522,7 +522,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       groupedEntities: this.currentState.responsibilities.groupedEntities,
       hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
       selectedEntityType: this.currentState.selectedEntityType,
-      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
+      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
       salesHierarchyViewType: this.salesHierarchyViewType,
       filter: this.filterState,
       brandSkuCode: brandSkuCode,
