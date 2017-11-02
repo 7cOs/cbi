@@ -44,7 +44,9 @@ div.performance-table-wrapper
                               [rowData]="dismissableTotalRow",
                               [showContributionToVolume]="showContributionToVolume",
                               [showOpportunities]="showOpportunities",
-                              (onCellClicked)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event})")
+                              [showX]=true,
+                              (onCellClicked)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event})",
+                              (onDismissableRowXClicked)="onDismissableRowXClicked.emit()")
 
     tbody([ngClass]="getTableHeight()")
       tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let rowIndex = index",

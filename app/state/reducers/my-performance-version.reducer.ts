@@ -83,6 +83,18 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND:
+      return {
+        current: {
+          responsibilities: state.current.responsibilities,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
+          selectedEntityDescription: state.current.selectedEntityDescription,
+          selectedEntityType: state.current.selectedEntityType,
+          filter: state.current.filter
+        },
+        versions: state.versions
+      };
+
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return initialState;
 

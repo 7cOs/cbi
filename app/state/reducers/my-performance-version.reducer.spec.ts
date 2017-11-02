@@ -155,6 +155,23 @@ describe('My Performance Version Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
+  it('should clear the selected brand when ClearMyPerformanceSelectedBrandCode is received', () => {
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedEntityType: beforeState.current.selectedEntityType,
+        filter: beforeState.current.filter
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+    expect(actualState).toEqual(expectedState);
+  });
+
   it('should return the MyPerformanceState to its initial state when ClearMyPerformanceState is received', () => {
     expect(myPerformanceVersionReducer(getMyPerformanceStateMock(), new MyPerformanceVersionActions.ClearMyPerformanceState()))
       .toEqual(initialState);
