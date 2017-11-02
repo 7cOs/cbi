@@ -83,7 +83,7 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
-    case MyPerformanceVersionActions.REMOVE_MY_PERFORMANCE_SELECTED_BRAND:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND:
       return {
         current: {
           responsibilities: state.current.responsibilities,

@@ -138,9 +138,9 @@ export class ResponsibilitiesEffects {
         ResponsibilitiesActions.FETCH_RESPONSIBILITIES
       )
       .switchMap((action: Action) => {
-        const { positionId, filter, brandCode } = action.payload;
+        const { positionId, filter, brandSkuCode, skuPackageType } = action.payload;
 
-        return this.responsibilitiesService.getPerformance(positionId, filter, brandCode)
+        return this.responsibilitiesService.getPerformance(positionId, filter, brandSkuCode, skuPackageType)
           .map((response: Performance) => {
             return new ResponsibilitiesActions.FetchTotalPerformanceSuccess(response);
           })

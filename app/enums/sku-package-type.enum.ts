@@ -1,4 +1,4 @@
 export enum SkuPackageType {
-  package,
-  sku
+  package = 'package',
+  sku = 'sku'
 }

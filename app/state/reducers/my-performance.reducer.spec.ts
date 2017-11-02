@@ -69,7 +69,7 @@ describe('My Performance Reducer', () => {
         skuPackageType: SkuPackageType.package
       }),
       new MyPerformanceVersionActions.ClearMyPerformanceState(),
-      new MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode()
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode()
     ];
 
     const returnedStates: MyPerformanceState[] = actions.map((action: Action) => {
@@ -126,7 +126,7 @@ describe('My Performance Reducer', () => {
         selectedEntityTypeCode: chance.string(),
         salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
         filter: null,
-        brandCode: chance.string(),
+        brandSkuCode: chance.string(),
         entityType: getEntityTypeMock(),
         alternateHierarchyId: chance.string(),
         accountPositionId: chance.string()

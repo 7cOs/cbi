@@ -113,17 +113,17 @@ describe('My Performance Version Actions', () => {
     });
   });
 
-  describe('RemoveMyPerformanceSelectedBrandCode', () => {
-    let action: MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode;
+  describe('ClearMyPerformanceSelectedBrandCode', () => {
+    let action: MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode;
 
     beforeEach(() => {
-      action = new MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode();
+      action = new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode();
     });
 
     it('should have the correct type', () => {
-      expect(MyPerformanceVersionActions.REMOVE_MY_PERFORMANCE_SELECTED_BRAND)
-        .toBe('[My Performance] REMOVE_MY_PERFORMANCE_SELECTED_BRAND');
-      expect(action.type).toBe(MyPerformanceVersionActions.REMOVE_MY_PERFORMANCE_SELECTED_BRAND);
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_BRAND');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND);
     });
   });
 

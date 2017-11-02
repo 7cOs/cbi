@@ -22,8 +22,10 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from './responsibilities.action';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
+const skuPackageTypeMock: SkuPackageType = SkuPackageType.sku;
 
 describe('Responsibilities Actions', () => {
 
@@ -178,7 +180,8 @@ describe('Responsibilities Actions', () => {
       selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
       filter: performanceFilterStateMock,
-      brandCode: chance.string(),
+      brandSkuCode: chance.string(),
+      skuPackageType: skuPackageTypeMock,
       entityType: getEntityTypeMock(),
       alternateHierarchyId: chance.string(),
       accountPositionId: chance.string(),
