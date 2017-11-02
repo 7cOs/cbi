@@ -487,7 +487,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
            && this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
-  private dispatchRefreshAllPerformance(brandCode: string, skuPackageType: SkuPackageType) {
+  private dispatchRefreshAllPerformance(brandSkuCode: string, skuPackageType: SkuPackageType) {
     this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
       positionId: this.currentState.responsibilities.positionId,
       groupedEntities: this.currentState.responsibilities.groupedEntities,
@@ -496,7 +496,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
       salesHierarchyViewType: this.salesHierarchyViewType,
       filter: this.filterState,
-      brandSkuCode: brandCode,
+      brandSkuCode: brandSkuCode,
       skuPackageType: skuPackageType,
       entityType: this.currentState.selectedEntityType,
       alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
