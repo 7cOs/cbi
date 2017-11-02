@@ -88,7 +88,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsState: ProductMetricsState;
   private productMetricsSelectedBrandRow: MyPerformanceTableRow;
   private productMetricsSubscription: Subscription;
-  private productMetricsStatus: ActionStatus = ActionStatus.NotFetched;
   private responsibilitiesStatus: ActionStatus = ActionStatus.NotFetched;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedSkuPackageCode: string;
@@ -136,7 +135,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
-        this.productMetricsStatus = productMetrics.status;
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
@@ -148,7 +146,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
             : null;
 
-          this.refreshAllPerformancesIfNeeded();
+          this.handleDataRefreshAndDeselectionIfNeeded();
         }
       });
 
@@ -180,7 +178,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
 
-        this.refreshAllPerformancesIfNeeded();
+        this.handleDataRefreshAndDeselectionIfNeeded();
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
@@ -590,9 +588,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         : ActionStatus.NotFetched;
   }
 
-  private refreshAllPerformancesIfNeeded(): void {
+  private handleDataRefreshAndDeselectionIfNeeded(): void {
 
-    if (this.productMetricsStatus === ActionStatus.Fetched
+    if (this.productMetricsState
+      && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedSkuPackageCode
       && this.productMetricsState.productMetricsViewType === ProductMetricsViewType.skus
@@ -604,7 +603,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
     }
 
-    if (this.productMetricsStatus === ActionStatus.Fetched
+    if (this.productMetricsState
+      && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedBrandCode
       && this.productMetricsViewType === ProductMetricsViewType.skus
