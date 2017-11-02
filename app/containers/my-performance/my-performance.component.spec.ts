@@ -1237,13 +1237,6 @@ describe('MyPerformanceComponent', () => {
       });
     });
 
-    it('displayLeftTotalRow() should be true when current salesHierarchyViewType is accounts and ' +
-      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
-      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
-      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
-      expect(componentInstance.displayLeftTotalRow()).toEqual(true);
-    });
-
     it('displayLeftTotalRow() should be false when current salesHierarchyViewType is roleGroups and ' +
       'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
@@ -1256,13 +1249,6 @@ describe('MyPerformanceComponent', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
       componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
       expect(componentInstance.displayLeftTotalRow()).toEqual(false);
-    });
-
-    it('displayRightTotalRow() should be false when current salesHierarchyViewType is accounts and ' +
-      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
-      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
-      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
-      expect(componentInstance.displayRightTotalRow()).toEqual(false);
     });
 
     it('displayRightTotalRow() should be true when current salesHierarchyViewType is roleGroups and ' +
