@@ -690,6 +690,7 @@ fdescribe('MyPerformanceComponent', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       const alternateHierarchyIdMock = chance.string();
       componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+      currentMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
       params.row.metadata.alternateHierarchyId = currentMock.responsibilities.alternateHierarchyId;
@@ -757,6 +758,7 @@ fdescribe('MyPerformanceComponent', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
       currentSubject.next(currentMock);
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      currentMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       const entityTypes: EntityType[] = Object.keys(EntityType)
         .filter((key: EntityType) => key !== EntityType.ResponsibilitiesGroup)
