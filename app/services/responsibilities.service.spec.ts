@@ -38,6 +38,7 @@ import { ResponsibilitiesService,
          RefreshAllPerformancesData,
          RefreshTotalPerformanceData } from './responsibilities.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
+import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
@@ -46,6 +47,7 @@ describe('Responsibilities Effects', () => {
   let alternateHierarchyIdMock: string;
   let contextPositionIdMock: string;
   let brandCodeMock: string;
+  let skuPackageTypeMock: SkuPackageType;
   let groupedEntitiesMock: GroupedEntities;
   let hierarchyGroupsMock: HierarchyGroup[];
   let entityTypeMock: EntityType;
@@ -504,7 +506,7 @@ describe('Responsibilities Effects', () => {
         }],
         groupedEntities: accountsDistributorsMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock
       };
 
       it('returns performances totals for role groups', (done) => {
@@ -519,7 +521,7 @@ describe('Responsibilities Effects', () => {
           filter: responsibilitiesDataMock.filter,
           entityWithPerformance: entityWithPerformanceMock,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
-          brandCode: responsibilitiesDataMock.brandCode
+          brandSkuCode: responsibilitiesDataMock.brandSkuCode
         };
 
         responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesDataMock)
@@ -542,7 +544,8 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.hierarchyGroups,
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId,
-          responsibilitiesDataMock.brandCode,
+          responsibilitiesDataMock.brandSkuCode,
+          responsibilitiesDataMock.skuPackageType,
           null
         ]);
       });
@@ -560,7 +563,7 @@ describe('Responsibilities Effects', () => {
         }],
         groupedEntities: { 'DISTRIBUTOR': [ getEntityPeopleResponsibilitiesMock() ]},
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock
       };
 
       it('returns performance entities for distributors', (done) => {
@@ -574,7 +577,7 @@ describe('Responsibilities Effects', () => {
           filter: responsibilitiesDataMock.filter,
           groupedEntities: responsibilitiesDataMock.groupedEntities,
           entityWithPerformance: entityWithPerformanceMock,
-          brandCode: responsibilitiesDataMock.brandCode
+          brandSkuCode: responsibilitiesDataMock.brandSkuCode
         };
 
         responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesDataMock)
@@ -598,7 +601,8 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.groupedEntities.DISTRIBUTOR,
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId,
-          responsibilitiesDataMock.brandCode
+          responsibilitiesDataMock.brandSkuCode,
+          responsibilitiesDataMock.skuPackageType
         ]);
       });
 
@@ -617,7 +621,8 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.groupedEntities.DISTRIBUTOR,
           responsibilitiesDataMock.filter,
           '0',
-          responsibilitiesDataMock.brandCode
+          responsibilitiesDataMock.brandSkuCode,
+          responsibilitiesDataMock.skuPackageType
         ]);
       });
     });
@@ -670,7 +675,8 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.groupedEntities.ACCOUNT,
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId,
-          responsibilitiesDataMock.brandCode
+          responsibilitiesDataMock.brandSkuCode,
+          responsibilitiesDataMock.skuPackageType
         ]);
       });
     });
@@ -690,7 +696,8 @@ describe('Responsibilities Effects', () => {
         }],
         groupedEntities: accountsDistributorsMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock,
+        skuPackageType: skuPackageTypeMock
       };
 
       it('returns the passed-in data object', (done) => {
@@ -818,7 +825,8 @@ describe('Responsibilities Effects', () => {
           hierarchyGroup,
           performanceFilterStateMock,
           positionIdMock,
-          brandCodeMock
+          brandCodeMock,
+          skuPackageTypeMock
         ]);
       });
 
@@ -850,7 +858,8 @@ describe('Responsibilities Effects', () => {
           positionIdMock,
           hierarchyGroups[index].alternateHierarchyId,
           performanceFilterStateMock,
-          brandCodeMock
+          brandCodeMock,
+          skuPackageTypeMock
         ]);
       });
 
@@ -898,7 +907,8 @@ describe('Responsibilities Effects', () => {
       expect(getPerformanceSpy.calls.argsFor(0)).toEqual([
         positionIdMock,
         performanceFilterStateMock,
-        brandCodeMock
+        brandCodeMock,
+        skuPackageTypeMock
       ]);
     });
 
@@ -929,12 +939,13 @@ describe('Responsibilities Effects', () => {
       const numberOfEntities: number = chance.natural({min: 1, max: 99});
       const entities: Array<HierarchyEntity> = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
 
-      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, myPerformanceFilterState, brandCodeMock,
+        skuPackageTypeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
 
         entities.forEach((entity: HierarchyEntity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState, brandCodeMock);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
           expect(getAlternateHierarchyPerformanceSpy).not.toHaveBeenCalled();
         });
@@ -961,6 +972,7 @@ describe('Responsibilities Effects', () => {
         entities,
         myPerformanceFilterMock,
         brandCodeMock,
+        skuPackageTypeMock,
         alternateHierarchyIdMock)
         .subscribe(() => {
           expect(getAlternateHierarchyPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
@@ -968,7 +980,7 @@ describe('Responsibilities Effects', () => {
 
           entities.forEach((entity: HierarchyEntity) => {
             expect(getAlternateHierarchyPerformanceSpy).toHaveBeenCalledWith(entity.positionId,
-              alternateHierarchyIdMock, myPerformanceFilterMock, brandCodeMock);
+              alternateHierarchyIdMock, myPerformanceFilterMock, brandCodeMock, skuPackageTypeMock);
             expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
             expect(getPerformanceSpy).not.toHaveBeenCalled();
           });
@@ -990,12 +1002,12 @@ describe('Responsibilities Effects', () => {
 
       const numberOfEntities = chance.natural({min: 2, max: 5});
       const entities = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getPositionsPerformances(entities, mockFilter, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getPositionsPerformances(entities, mockFilter, brandCodeMock, skuPackageTypeMock).subscribe(() => {
         expect(getPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         entities.map((entity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter, brandCodeMock);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, entity);
         });
         done();
@@ -1018,11 +1030,13 @@ describe('Responsibilities Effects', () => {
       const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 1, max: 99});
       const distributors = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getDistributorsPerformances(distributors, mockFilter, contextId, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getDistributorsPerformances(distributors,
+        mockFilter, contextId, brandCodeMock, skuPackageTypeMock).subscribe(() => {
         expect(getDistributorPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         distributors.map((distributor) => {
-          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId, mockFilter, contextId, brandCodeMock);
+          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId,
+            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, distributor);
         });
         done();
@@ -1043,12 +1057,14 @@ describe('Responsibilities Effects', () => {
       const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 2, max: 5});
       const distributors = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getDistributorsPerformances(distributors, mockFilter, contextId, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getDistributorsPerformances(distributors,
+        mockFilter, contextId, brandCodeMock, skuPackageTypeMock).subscribe(() => {
         expect(getDistributorPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         distributors.map((distributor) => {
-          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId, mockFilter, contextId, brandCodeMock);
+          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId,
+            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, distributor);
         });
         done();
@@ -1071,11 +1087,12 @@ describe('Responsibilities Effects', () => {
       const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 1, max: 99});
       const accounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getAccountsPerformances(accounts, mockFilter, contextId, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getAccountsPerformances(accounts, mockFilter, contextId, brandCodeMock, skuPackageTypeMock).subscribe(() => {
         expect(getAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         accounts.map((account) => {
-          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId, mockFilter, contextId, brandCodeMock);
+          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId,
+            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, account);
         });
         done();
@@ -1096,12 +1113,13 @@ describe('Responsibilities Effects', () => {
       const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 2, max: 5});
       const accounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getAccountsPerformances(accounts, mockFilter, contextId, brandCodeMock).subscribe(() => {
+      responsibilitiesService.getAccountsPerformances(accounts, mockFilter, contextId, brandCodeMock, skuPackageTypeMock).subscribe(() => {
         expect(getAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         accounts.map((account) => {
-          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId, mockFilter, contextId, brandCodeMock);
+          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId,
+            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, account);
         });
         done();
@@ -1130,7 +1148,7 @@ describe('Responsibilities Effects', () => {
         selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock,
-        brandCode: brandCodeMock
+        brandSkuCode: brandCodeMock
       };
     });
 
@@ -1145,7 +1163,7 @@ describe('Responsibilities Effects', () => {
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
           expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            contextPositionIdMock, performanceFilterStateMock, brandCodeMock);
+            contextPositionIdMock, performanceFilterStateMock, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
         });
         done();
@@ -1164,7 +1182,7 @@ describe('Responsibilities Effects', () => {
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
           expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            contextPositionIdMock, performanceFilterStateMock, brandCodeMock);
+            contextPositionIdMock, performanceFilterStateMock, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
         });
         done();
@@ -1188,7 +1206,7 @@ describe('Responsibilities Effects', () => {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
         groupedEntities: groupedSubAccountsMock,
-        brandCode: brandCodeMock,
+        brandSkuCode: brandCodeMock,
         entityType: entityTypeMock,
         salesHierarchyViewType: SalesHierarchyViewType.subAccounts
       };
@@ -1205,7 +1223,7 @@ describe('Responsibilities Effects', () => {
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
           expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock);
+            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
         });
         done();
@@ -1224,7 +1242,7 @@ describe('Responsibilities Effects', () => {
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
           expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock);
+            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock, skuPackageTypeMock);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
         });
         done();
@@ -1250,7 +1268,7 @@ describe('Responsibilities Effects', () => {
       refreshAllPerformancesData = {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock,
+        brandSkuCode: brandCodeMock,
         groupedEntities: groupedEntitiesMock,
         alternateHierarchyId: alternateHierarchyIdMock,
         hierarchyGroups: hierarchyGroupsMock,
@@ -1319,7 +1337,7 @@ describe('Responsibilities Effects', () => {
           expect(getEntitiesWithPerformanceForGroupSpy).toHaveBeenCalledWith({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
-            brandCode: brandCodeMock,
+            brandSkuCode: brandCodeMock,
             groupedEntities: groupedEntitiesMock,
             alternateHierarchyId: alternateHierarchyIdMock,
             hierarchyGroups: hierarchyGroupsMock,
@@ -1392,7 +1410,7 @@ describe('Responsibilities Effects', () => {
       refreshTotalPerformanceData = {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
-        brandCode: brandCodeMock,
+        brandSkuCode: brandCodeMock,
         groupedEntities: groupedEntitiesMock,
         hierarchyGroups: hierarchyGroupsMock,
         entityType: entityTypeMock,
@@ -1411,12 +1429,13 @@ describe('Responsibilities Effects', () => {
         refreshTotalPerformanceData.salesHierarchyViewType = salesHierarchyViewType;
       });
 
-      it('should call getPerformance with the positionId, filter, and brandCode', (done) => {
+      it('should call getPerformance with the positionId, filter, brandCode and skuPackageType', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getPerformanceSpy).toHaveBeenCalledWith(
             refreshTotalPerformanceData.positionId,
             refreshTotalPerformanceData.filter,
-            refreshTotalPerformanceData.brandCode
+            refreshTotalPerformanceData.brandSkuCode,
+            refreshTotalPerformanceData.skuPackageType
           );
 
           done();
@@ -1441,7 +1460,7 @@ describe('Responsibilities Effects', () => {
           expect(updatedRefreshTotalPerformanceData).toEqual({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
-            brandCode: brandCodeMock,
+            brandSkuCode: brandCodeMock,
             groupedEntities: groupedEntitiesMock,
             hierarchyGroups: hierarchyGroupsMock,
             entityType: entityTypeMock,
@@ -1459,13 +1478,14 @@ describe('Responsibilities Effects', () => {
         refreshTotalPerformanceData.salesHierarchyViewType = salesHierarchyViewType;
       });
 
-      it('should call getAccountPerformances with the accountPositionId, filter, positionId and brandCode', (done) => {
+      it('should call getAccountPerformances with the accountPositionId, filter, positionId, brandCode and skuPackageType', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getAccountPerformanceSpy).toHaveBeenCalledWith(
             refreshTotalPerformanceData.accountPositionId,
             refreshTotalPerformanceData.filter,
             refreshTotalPerformanceData.positionId,
-            refreshTotalPerformanceData.brandCode
+            refreshTotalPerformanceData.brandSkuCode,
+            refreshTotalPerformanceData.skuPackageType
           );
 
           done();
@@ -1496,7 +1516,7 @@ describe('Responsibilities Effects', () => {
           expect(updatedRefreshTotalPerformanceData).toEqual({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
-            brandCode: brandCodeMock,
+            brandSkuCode: brandCodeMock,
             groupedEntities: groupedEntitiesMock,
             hierarchyGroups: hierarchyGroupsMock,
             entityType: entityTypeMock,
@@ -1521,13 +1541,14 @@ describe('Responsibilities Effects', () => {
       });
 
       it('should call getHierarchyGroupPerformance with the hierarchyGroups that has for name the key of the of groupedEntities,'
-        + 'the filter, positionId, brandCode', (done) => {
+        + 'the filter, positionId, brandSkuCode and skuPackageType', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
             refreshTotalPerformanceData.hierarchyGroups[randomIndex],
             refreshTotalPerformanceData.filter,
             refreshTotalPerformanceData.positionId,
-            refreshTotalPerformanceData.brandCode
+            refreshTotalPerformanceData.brandSkuCode,
+            refreshTotalPerformanceData.skuPackageType
           );
 
           done();
@@ -1535,7 +1556,7 @@ describe('Responsibilities Effects', () => {
       });
 
       it('should call getAlternateHierarchyGroupPerformance when the hierarchyGroup contains an alternateHierarchyId with the ' +
-      'hierarchyGroups that has for name the key of the of groupedEntities, the filter, positionId, brandCode', (done) => {
+      'hierarchyGroups that has for name the key of the of groupedEntities, the filter, positionId, brandCode, skuPackageCode', (done) => {
         refreshTotalPerformanceData.hierarchyGroups[randomIndex].alternateHierarchyId = alternateHierarchyIdMock;
 
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
@@ -1544,7 +1565,8 @@ describe('Responsibilities Effects', () => {
             refreshTotalPerformanceData.positionId,
             alternateHierarchyIdMock,
             refreshTotalPerformanceData.filter,
-            refreshTotalPerformanceData.brandCode
+            refreshTotalPerformanceData.brandSkuCode,
+            refreshTotalPerformanceData.skuPackageType
           );
 
           done();
@@ -1579,7 +1601,7 @@ describe('Responsibilities Effects', () => {
           expect(updatedRefreshTotalPerformanceData).toEqual({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
-            brandCode: brandCodeMock,
+            brandSkuCode: brandCodeMock,
             groupedEntities: groupedEntitiesMock,
             hierarchyGroups: hierarchyGroupsMock,
             entityType: entityTypeMock,
@@ -1877,7 +1899,7 @@ describe('Responsibilities Effects', () => {
         positionId: chance.string(),
         entityType: EntityType.RoleGroup,
         selectedEntityDescription: chance.string(),
-        brandCode: chance.string()
+        brandSkuCode: chance.string()
       };
     });
 
@@ -1890,7 +1912,8 @@ describe('Responsibilities Effects', () => {
             .toHaveBeenCalledWith(
               fetchEntityWithPerformanceDataMock.entities,
               fetchEntityWithPerformanceDataMock.filter,
-              fetchEntityWithPerformanceDataMock.brandCode,
+              fetchEntityWithPerformanceDataMock.brandSkuCode,
+              fetchEntityWithPerformanceDataMock.skuPackageType,
               null
             );
           done();
@@ -1906,7 +1929,8 @@ describe('Responsibilities Effects', () => {
           expect(getPositionsPerformancesSpy)
             .toHaveBeenCalledWith(fetchEntityWithPerformanceDataMock.entities,
               fetchEntityWithPerformanceDataMock.filter,
-              fetchEntityWithPerformanceDataMock.brandCode,
+              fetchEntityWithPerformanceDataMock.brandSkuCode,
+              fetchEntityWithPerformanceDataMock.skuPackageType,
               fetchEntityWithPerformanceDataMock.alternateHierarchyId);
           done();
         });
@@ -1926,7 +1950,8 @@ describe('Responsibilities Effects', () => {
             fetchEntityWithPerformanceDataMock.entities,
             fetchEntityWithPerformanceDataMock.filter,
             fetchEntityWithPerformanceDataMock.positionId,
-            fetchEntityWithPerformanceDataMock.brandCode);
+            fetchEntityWithPerformanceDataMock.brandSkuCode,
+            fetchEntityWithPerformanceDataMock.skuPackageType);
           done();
         });
       });
@@ -1941,7 +1966,8 @@ describe('Responsibilities Effects', () => {
             fetchEntityWithPerformanceDataMock.entities,
             fetchEntityWithPerformanceDataMock.filter,
             '0',
-            fetchEntityWithPerformanceDataMock.brandCode);
+            fetchEntityWithPerformanceDataMock.brandSkuCode,
+            fetchEntityWithPerformanceDataMock.skuPackageType);
           done();
         });
       });
@@ -1960,7 +1986,8 @@ describe('Responsibilities Effects', () => {
             fetchEntityWithPerformanceDataMock.entities,
             fetchEntityWithPerformanceDataMock.filter,
             fetchEntityWithPerformanceDataMock.positionId,
-            fetchEntityWithPerformanceDataMock.brandCode);
+            fetchEntityWithPerformanceDataMock.brandSkuCode,
+            fetchEntityWithPerformanceDataMock.skuPackageType);
           done();
         });
       });

@@ -8,12 +8,14 @@ import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 export interface FetchResponsibilitiesPayload {
   positionId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
+  skuPackageType?: SkuPackageType;
 }
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -32,7 +34,8 @@ export interface FetchEntityWithPerformancePayload {
   alternateHierarchyId?: string;
   entityType: EntityType;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
+  skuPackageType?: SkuPackageType;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
@@ -48,7 +51,8 @@ export interface RefreshAllPerformancesPayload {
   selectedEntityTypeCode: string;
   salesHierarchyViewType: SalesHierarchyViewType;
   filter: MyPerformanceFilterState;
-  brandCode?: string;
+  brandSkuCode?: string;
+  skuPackageType?: SkuPackageType;
   entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;
   accountPositionId?: string;
@@ -61,7 +65,8 @@ export interface FetchSubAccountsPayload {
   selectedPositionId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
+  skuPackageType?: SkuPackageType;
 }
 
 export interface FetchSubAccountsSuccessPayload {
@@ -74,7 +79,8 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   alternateHierarchyId: string;
   filter: MyPerformanceFilterState;
   selectedEntityDescription: string;
-  brandCode?: string;
+  brandSkuCode?: string;
+  skuPackageType?: SkuPackageType;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
@@ -165,7 +171,8 @@ export const FETCH_TOTAL_PERFORMANCE = '[Performance Total] FETCH_TOTAL_PERFORMA
 export class FetchTotalPerformance implements Action {
   readonly type = FETCH_TOTAL_PERFORMANCE;
 
-  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState, brandCode?: string }) { }
+  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState,
+                                brandSkuCode?: string, skuPackageType?: SkuPackageType }) { }
 }
 
 export const FETCH_TOTAL_PERFORMANCE_SUCCESS = '[Performance Total] FETCH_TOTAL_PERFORMANCE_SUCCESS';

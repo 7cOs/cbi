@@ -219,7 +219,7 @@ describe('Responsibilities Reducer', () => {
       selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
       filter: null,
-      brandCode: chance.string(),
+      brandSkuCode: chance.string(),
       entityType: getEntityTypeMock(),
       alternateHierarchyId: chance.string(),
       accountPositionId: chance.string()
