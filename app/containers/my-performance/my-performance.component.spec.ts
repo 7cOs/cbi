@@ -106,7 +106,7 @@ class MyPerformanceTableComponentMock {
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
 }
 
-describe('MyPerformanceComponent', () => {
+fdescribe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
   let componentInstanceCopy: any;
@@ -439,11 +439,11 @@ describe('MyPerformanceComponent', () => {
         'when last version has a salesHierarchyViewType of people', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.people;
         versionsMock[versionsMock.length - 1].filter = stateMock.myPerformanceFilter;
+        versionsMock[versionsMock.length - 1].selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
-
         const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
@@ -474,11 +474,11 @@ describe('MyPerformanceComponent', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.roleGroups;
         versionsMock[versionsMock.length - 1].filter = stateMock.myPerformanceFilter;
         versionsSubject.next(versionsMock);
+        componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+        const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
-
-        const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
@@ -486,7 +486,7 @@ describe('MyPerformanceComponent', () => {
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: EntityType.Person,
-          selectedBrandCode: expectedSelectedBrandCode
+          selectedBrandCode: undefined
         }));
       });
 
@@ -507,7 +507,7 @@ describe('MyPerformanceComponent', () => {
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: EntityType.Person,
-          selectedBrandCode: expectedSelectedBrandCode
+          selectedBrandCode: undefined
         }));
       });
 

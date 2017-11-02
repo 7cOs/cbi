@@ -256,7 +256,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     console.log(this.currentState);
     this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
 
-    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({ // TODO: Make so this sets to fetching, so loader appears
+    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
       positionId: this.currentState.responsibilities.positionId,
       groupedEntities: this.currentState.responsibilities.groupedEntities,
       hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
