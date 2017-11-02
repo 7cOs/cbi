@@ -285,7 +285,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
             entityName: responsibilityEntitiesPerformanceMock[i].name,
             entityType: responsibilityEntitiesPerformanceMock[i].entityType,
             entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode,
-            alternateHierarchyId: alternateHierarchyIdMock
           },
           performanceError: false
         });
