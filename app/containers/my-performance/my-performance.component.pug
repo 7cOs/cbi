@@ -22,7 +22,7 @@ div.tables
     [showDateRange]="true",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
-    [totalRow]="!displayRightTotalRow() ? totalRowData : null",
+    [totalRow]="displayLeftTotalRow() ? totalRowData : null",
     [sortingCriteria]="sortingCriteria",
     [viewType]="salesHierarchyViewType",
     [showContributionToVolume]="showSalesContributionToVolume",
