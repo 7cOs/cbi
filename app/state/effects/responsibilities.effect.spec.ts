@@ -48,7 +48,7 @@ import { ResponsibilitiesService } from '../../services/responsibilities.service
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { getskuPackageTypeMock } from '../../enums/sku-package-type.enum.mock';
+import { sample } from 'lodash';
 
 const chance = new Chance();
 
@@ -63,7 +63,8 @@ describe('Responsibilities Effects', () => {
   const entityTypeCodeMock = chance.string();
   const selectedEntityDescriptionMock = chance.string();
   const brandCodeMock = chance.string();
-  const skuPackageTypeMock = SkuPackageType[getskuPackageTypeMock()];
+  const skuPackageTypePool = [SkuPackageType.sku, SkuPackageType.package];
+  const skuPackageTypePoolMock = sample(skuPackageTypePool);
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -406,7 +407,7 @@ describe('Responsibilities Effects', () => {
       selectedEntityType: getEntityTypeMock(),
       selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
-      skuPackageType: SkuPackageType[getskuPackageTypeMock()],
+      skuPackageType: SkuPackageType[skuPackageTypePoolMock],
       filter: performanceFilterStateMock,
       brandSkuCode: chance.string(),
       entityType: getEntityTypeMock(),
@@ -527,7 +528,7 @@ describe('Responsibilities Effects', () => {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
         brandSkuCode: brandCodeMock,
-        skuPackageType: skuPackageTypeMock
+        skuPackageType: skuPackageTypePoolMock
       }));
     });
 
@@ -550,7 +551,7 @@ describe('Responsibilities Effects', () => {
         positionIdMock,
         performanceFilterStateMock,
         brandCodeMock,
-        skuPackageTypeMock
+        skuPackageTypePoolMock
       ]);
     });
 
