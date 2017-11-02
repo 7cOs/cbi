@@ -302,10 +302,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  public displayLeftTotalRow(): boolean {
+    return !this.isShowingRoleGroups() && this.productMetricsViewType === ProductMetricsViewType.brands;
+  }
+
   public displayRightTotalRow(): boolean {
+    return this.isShowingRoleGroups() && this.productMetricsViewType === ProductMetricsViewType.brands;
+  }
+
+  private isShowingRoleGroups(): boolean {
     return this.salesHierarchyViewType === SalesHierarchyViewType.roleGroups
-        || this.entityType === EntityType.RoleGroup
-        || this.entityType === EntityType.DistributorGroup;
+      || this.entityType === EntityType.RoleGroup
+      || this.entityType === EntityType.DistributorGroup;
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {

@@ -1319,6 +1319,50 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
+  describe('displayLeftTotalRow() and displayRightTotalRow() functions', () => {
+    let rowMock: MyPerformanceTableRow;
+    let currentMock: MyPerformanceEntitiesData;
+    let expectedSaveMyPerformanceStatePayload: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      storeMock.dispatch.and.callThrough();
+      storeMock.dispatch.calls.reset();
+      rowMock = getMyPerformanceTableRowMock(1)[0];
+      currentMock = getMyPerformanceEntitiesDataMock();
+      expectedSaveMyPerformanceStatePayload = Object.assign({}, stateMock.myPerformance.current, {
+        filter: stateMock.myPerformanceFilter
+      });
+    });
+
+    it('displayLeftTotalRow() should be false when current salesHierarchyViewType is roleGroups and ' +
+      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      expect(componentInstance.displayLeftTotalRow()).toEqual(false);
+    });
+
+    it('displayLeftTotalRow() should be false when current salesHierarchyViewType is roleGroups and ' +
+      'when productMetricsViewType is skus, and element is clicked while ProductMetricsViewType is skus', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      expect(componentInstance.displayLeftTotalRow()).toEqual(false);
+    });
+
+    it('displayRightTotalRow() should be true when current salesHierarchyViewType is roleGroups and ' +
+      'productMetricsViewType is brands, and element is clicked while ProductMetricsViewType is brands', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
+      expect(componentInstance.displayRightTotalRow()).toEqual(true);
+    });
+
+    it('displayRightTotalRow() should be false when current salesHierarchyViewType is roleGroups and ' +
+      'when productMetricsViewType is skus, and element is clicked while ProductMetricsViewType is skus', () => {
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+      expect(componentInstance.displayRightTotalRow()).toEqual(false);
+    });
+  });
+
   describe('when fetching responsibilities returns an error', () => {
     let currentMock: MyPerformanceEntitiesData;
 
