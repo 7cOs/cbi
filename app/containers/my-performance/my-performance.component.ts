@@ -545,7 +545,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
     this.fetchProductMetricsForPreviousState(previousState);
 
-    if (!isEqual(this.filterState, previousState.filter)) {
+    if (!isEqual(this.filterState, previousState.filter) || !isEqual(this.selectedBrandCode, previousState.selectedBrandCode)) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: previousState.responsibilities.positionId,
         groupedEntities: previousState.responsibilities.groupedEntities,
@@ -554,7 +554,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedEntityTypeCode: previousState.responsibilities.entityTypeCode,
         salesHierarchyViewType: previousState.salesHierarchyViewType.viewType,
         filter: this.filterState,
-        brandCode: previousState.selectedBrandCode,
+        brandCode: this.selectedBrandCode,
         entityType: previousState.selectedEntityType,
         alternateHierarchyId: previousState.responsibilities.alternateHierarchyId,
         accountPositionId: previousState.responsibilities.accountPositionId
