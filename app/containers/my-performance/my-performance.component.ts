@@ -10,9 +10,9 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
@@ -31,11 +31,11 @@ import * as ProductMetricsActions from '../../state/actions/product-metrics.acti
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
+import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -83,6 +83,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
   private productMetrics: Array<MyPerformanceTableRow>;
+  private productMetricsState: ProductMetricsState;
   private productMetricsSelectedBrandRow: MyPerformanceTableRow;
   private productMetricsSubscription: Subscription;
   private productMetricsStatus: ActionStatus = ActionStatus.NotFetched;
@@ -123,11 +124,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.tableHeaderRowLeft[1] = currentMetricName;
         this.tableHeaderRowRight[1] = currentMetricName;
         this.setSelectedDateRangeValues();
+        this.handleTeamPerformanceDataRefresh();
     });
 
     this.productMetricsSubscription = this.store
       .select(state => state.myPerformanceProductMetrics)
       .subscribe((productMetrics: ProductMetricsState) => {
+        this.productMetricsState = productMetrics;
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
@@ -412,9 +415,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.selectedBrandCode = parameters.row.metadata.brandCode;
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
-        if (!this.isInsideAlternateHierarchy()) {
-          this.fetchProductMetricsWhenClick(parameters);
-        }
+        this.fetchProductMetricsWhenClick(parameters);
 
         if (parameters.row.metadata.brandCode) {
           this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
@@ -588,6 +589,34 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.productMetrics
       && this.productMetrics.length === 0) {
       this.deselectBrandValue();
+    }
+  }
+
+  private handleTeamPerformanceDataRefresh(): void {
+    if (this.currentState
+      && this.currentState.responsibilities.status === ActionStatus.Fetched
+      && this.productMetricsState
+      && this.productMetricsState.status === ActionStatus.Fetched) {
+
+        this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+          positionId: this.currentState.responsibilities.positionId,
+          groupedEntities: this.currentState.responsibilities.groupedEntities,
+          hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
+          selectedEntityType: this.currentState.selectedEntityType,
+          selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
+          salesHierarchyViewType: this.salesHierarchyViewType,
+          filter: this.filterState,
+          brandCode: this.currentState.selectedBrandCode,
+          entityType: this.currentState.selectedEntityType,
+          alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+          accountPositionId: this.currentState.responsibilities.accountPositionId
+        }));
+        this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
+          positionId: this.currentState.responsibilities.positionId,
+          filter: this.filterState,
+          selectedEntityType: this.currentState.selectedEntityType,
+          selectedBrandCode: this.currentState.selectedBrandCode
+        }));
     }
   }
 }
