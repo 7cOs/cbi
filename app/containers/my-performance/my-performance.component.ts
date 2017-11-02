@@ -148,15 +148,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
             : null;
 
-          if (this.selectedSkuPackageCode
-            && productMetrics.productMetricsViewType === ProductMetricsViewType.skus
-            && this.productMetrics
-            && this.productMetrics.filter(
-              (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length === 0) {
-            this.selectedSkuPackageCode = null;
-            this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-          }
-
           this.refreshAllPerformancesIfNeeded();
         }
       });
@@ -258,7 +249,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     delete this.selectedBrandCode;
     this.store.dispatch(new MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode());
     this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
-    console.log(this.currentState);
     this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
 
     this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
@@ -601,6 +591,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private refreshAllPerformancesIfNeeded(): void {
+
+    if (this.productMetricsStatus === ActionStatus.Fetched
+      && this.responsibilitiesStatus === ActionStatus.Fetched
+      && this.selectedSkuPackageCode
+      && this.productMetricsState.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetrics
+      && this.productMetrics.filter(
+        (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length === 0) {
+      this.selectedSkuPackageCode = null;
+      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+      this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
+    }
+
     if (this.productMetricsStatus === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedBrandCode
