@@ -416,23 +416,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
-    if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.roleGroups
-      || state.salesHierarchyViewType.viewType === SalesHierarchyViewType.accounts) {
-      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: state.responsibilities.positionId,
-        filter: this.filterState,
-        selectedEntityType: EntityType.Person,
-        selectedBrandCode: this.selectedBrandCode
-      }));
-    } else if (state.salesHierarchyViewType.viewType === SalesHierarchyViewType.people) {
-      this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: state.responsibilities.positionId,
-        entityTypeCode: state.responsibilities.entityTypeCode,
-        filter: this.filterState,
-        selectedEntityType: EntityType.RoleGroup,
-        selectedBrandCode: this.selectedBrandCode
-      }));
-    }
+    let actionPayload: ProductMetricsActions.FetchProductMetricsPayload = {
+      positionId: state.responsibilities.positionId,
+      filter: this.filterState,
+      selectedEntityType: state.selectedEntityType,
+      selectedBrandCode: this.selectedBrandCode,
+      inAlternateHierarchy: !!state.responsibilities.alternateHierarchyId,
+      entityTypeCode: state.responsibilities.entityTypeCode,
+      contextPositionId: state.responsibilities.alternateHierarchyId || state.responsibilities.positionId
+    };
+
+    this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionPayload));
   }
 
   private fetchProductMetricsWhenClick(parameters: HandleElementClickedParameters) {
