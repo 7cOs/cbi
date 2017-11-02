@@ -421,6 +421,7 @@ fdescribe('MyPerformanceComponent', () => {
     describe('when back button is displayed', () => {
       beforeEach(() => {
         componentInstance.showLeftBackButton = true;
+        componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
       });
 
       it('should dispatch RestoreMyPerformanceState when last version has a salesHierarchyViewType of distributors', () => {
@@ -439,7 +440,6 @@ fdescribe('MyPerformanceComponent', () => {
         'when last version has a salesHierarchyViewType of people', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.people;
         versionsMock[versionsMock.length - 1].filter = stateMock.myPerformanceFilter;
-        versionsMock[versionsMock.length - 1].selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
@@ -474,7 +474,6 @@ fdescribe('MyPerformanceComponent', () => {
         versionsMock[versionsMock.length - 1].salesHierarchyViewType.viewType = SalesHierarchyViewType.roleGroups;
         versionsMock[versionsMock.length - 1].filter = stateMock.myPerformanceFilter;
         versionsSubject.next(versionsMock);
-        componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
         const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
         storeMock.dispatch.calls.reset();
@@ -486,7 +485,7 @@ fdescribe('MyPerformanceComponent', () => {
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: EntityType.Person,
-          selectedBrandCode: undefined
+          selectedBrandCode: expectedSelectedBrandCode
         }));
       });
 
@@ -507,7 +506,7 @@ fdescribe('MyPerformanceComponent', () => {
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: EntityType.Person,
-          selectedBrandCode: undefined
+          selectedBrandCode: expectedSelectedBrandCode
         }));
       });
 
@@ -552,6 +551,7 @@ fdescribe('MyPerformanceComponent', () => {
       expectedSaveMyPerformanceStatePayload = Object.assign({}, stateMock.myPerformance.current, {
         filter: stateMock.myPerformanceFilter
       });
+      componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
     });
 
     it('should dispatch the SaveMyPerformanceState action with the payload containing the "current" state but the filter ' +
@@ -689,6 +689,7 @@ fdescribe('MyPerformanceComponent', () => {
     'contains an alternateHierarchyId', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       const alternateHierarchyIdMock = chance.string();
+      componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
       params.row.metadata.alternateHierarchyId = currentMock.responsibilities.alternateHierarchyId;
@@ -1100,6 +1101,7 @@ fdescribe('MyPerformanceComponent', () => {
       beforeEach(() => {
         storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
+        componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
       });
 
       it('should dispatch RestoreMyPerformanceState when selected step has distributors SalesHierarchyViewType', () => {
