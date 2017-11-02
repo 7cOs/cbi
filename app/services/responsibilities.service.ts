@@ -623,7 +623,12 @@ export class ResponsibilitiesService {
     positionId: string,
     brandCode?: string)
   : Observable<EntityWithPerformance> {
-    return this.myPerformanceApiService.getHierarchyGroupPerformance(hierarchyGroup, filter, positionId, brandCode)
+    const fetchGroupPerformanceCall = hierarchyGroup.alternateHierarchyId
+      ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(hierarchyGroup, positionId,
+          hierarchyGroup.alternateHierarchyId, filter, brandCode)
+      : this.myPerformanceApiService.getHierarchyGroupPerformance(hierarchyGroup, filter, positionId, brandCode);
+
+    return fetchGroupPerformanceCall
       .map((response: PerformanceDTO) => {
         return this.performanceTransformerService.transformHierarchyGroupPerformance(response, hierarchyGroup, positionId);
       })
