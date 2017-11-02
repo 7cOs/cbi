@@ -1092,6 +1092,7 @@ describe('MyPerformanceComponent', () => {
         productMetricsViewType: ProductMetricsViewType.skus
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
+      componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
