@@ -1319,7 +1319,6 @@ describe('MyPerformanceComponent', () => {
 
     beforeEach(() => {
       currentMock = getMyPerformanceEntitiesDataMock();
-      currentMock.responsibilities = getResponsibilitesStateMock();
       productMetricsStateMock = {
         status: ActionStatus.Fetched,
         products: {brandValues: []},
