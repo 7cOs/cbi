@@ -48,7 +48,7 @@ import { ResponsibilitiesService } from '../../services/responsibilities.service
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { sample } from 'lodash';
+import { getskuPackageTypeMock } from '../../enums/sku-package-type.enum.mock';
 
 const chance = new Chance();
 
@@ -63,8 +63,7 @@ describe('Responsibilities Effects', () => {
   const entityTypeCodeMock = chance.string();
   const selectedEntityDescriptionMock = chance.string();
   const brandCodeMock = chance.string();
-  const skuPackageTypePool = [SkuPackageType.sku, SkuPackageType.package];
-  const skuPackageTypePoolMock = sample(skuPackageTypePool);
+  const skuPackageTypeMock = SkuPackageType[getskuPackageTypeMock()];
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -407,7 +406,7 @@ describe('Responsibilities Effects', () => {
       selectedEntityType: getEntityTypeMock(),
       selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
-      skuPackageType: SkuPackageType[skuPackageTypePoolMock],
+      skuPackageType: SkuPackageType[getskuPackageTypeMock()],
       filter: performanceFilterStateMock,
       brandSkuCode: chance.string(),
       entityType: getEntityTypeMock(),
@@ -528,7 +527,7 @@ describe('Responsibilities Effects', () => {
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
         brandSkuCode: brandCodeMock,
-        skuPackageType: skuPackageTypePoolMock
+        skuPackageType: skuPackageTypeMock
       }));
     });
 
@@ -551,7 +550,7 @@ describe('Responsibilities Effects', () => {
         positionIdMock,
         performanceFilterStateMock,
         brandCodeMock,
-        skuPackageTypePoolMock
+        skuPackageTypeMock
       ]);
     });
 
