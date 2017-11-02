@@ -1385,7 +1385,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandCode: currentMock.selectedBrandCode,
+        brandSkuCode: currentMock.selectedBrandCode,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         accountPositionId: currentMock.responsibilities.accountPositionId
