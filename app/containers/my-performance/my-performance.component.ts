@@ -253,6 +253,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     delete this.selectedBrandCode;
     this.store.dispatch(new MyPerformanceVersionActions.RemoveMyPerformanceSelectedBrandCode());
     this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
+    console.log(this.currentState);
     this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
 
     this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({ // TODO: Make so this sets to fetching, so loader appears
