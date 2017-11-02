@@ -62,6 +62,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public selectedSkuPackageType: SkuPackageType;
   public salesHierarchyViewType: SalesHierarchyViewType;
   public selectedBrandCode: string;
+  public selectedSkuPackageCode: string;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showSalesContributionToVolume: boolean = false;
@@ -91,7 +92,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsStatus: ActionStatus = ActionStatus.NotFetched;
   private responsibilitiesStatus: ActionStatus = ActionStatus.NotFetched;
   private salesHierarchy: Array<MyPerformanceTableRow>;
-  private selectedSkuPackageCode: string;
   private versions: MyPerformanceEntitiesData[];
 
   constructor(
@@ -554,7 +554,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
     this.fetchProductMetricsForPreviousState(previousState);
 
-    if (!isEqual(this.filterState, previousState.filter) || !isEqual(this.selectedBrandCode, previousState.selectedBrandCode)) {
+    if (!isEqual(this.filterState, previousState.filter)
+      || this.selectedBrandCode !== previousState.selectedBrandCode
+      || this.selectedSkuPackageCode !== previousState.selectedSkuPackageCode) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: previousState.responsibilities.positionId,
         groupedEntities: previousState.responsibilities.groupedEntities,
