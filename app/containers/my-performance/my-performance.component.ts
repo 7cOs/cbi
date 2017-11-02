@@ -444,7 +444,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (parameters.leftSide) {
       if (actionPayload.inAlternateHierarchy) {
         actionPayload.entityTypeCode = parameters.row.metadata.entityTypeCode;
-        actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId;
+        actionPayload.contextPositionId = parameters.row.metadata.alternateHierarchyId
+                                          || this.currentState.responsibilities.alternateHierarchyId;
       }
 
       switch (this.salesHierarchyViewType) {
@@ -466,28 +467,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           break;
         }
     } else {
-      if (actionPayload.inAlternateHierarchy) actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId;
       actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
-      switch (this.salesHierarchyViewType) {
-        case SalesHierarchyViewType.accounts:
-          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
-          break;
+      actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId
+                                        || this.currentState.responsibilities.positionId;
 
-        case SalesHierarchyViewType.people:
-          actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
-          break;
-
-        case SalesHierarchyViewType.subAccounts:
-          actionPayload.positionId = this.currentState.responsibilities.accountPositionId;
-          break;
-
-        case SalesHierarchyViewType.roleGroups:
-          actionPayload.contextPositionId = this.currentState.responsibilities.positionId;
-          break;
-        case SalesHierarchyViewType.people:
-        default:
-          break;
-        }
+      if (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+        actionPayload.positionId = this.currentState.responsibilities.accountPositionId;
+      }
     }
 
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionPayload));

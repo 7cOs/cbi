@@ -877,6 +877,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
         entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
+        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         inAlternateHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
@@ -913,6 +914,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
         entityTypeCode: stateMock.myPerformance.current.responsibilities.entityTypeCode,
+        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
         inAlternateHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
