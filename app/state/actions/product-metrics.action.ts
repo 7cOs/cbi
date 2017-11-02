@@ -48,6 +48,11 @@ export class SelectBrandValues implements Action {
   constructor(public payload: string) { }
 }
 
+export const DESELECT_BRAND_VALUES = '[ProductMetrics] DESELECT_BRAND_VALUES';
+export class DeselectBrandValues implements Action {
+  readonly type = DESELECT_BRAND_VALUES;
+}
+
 export const SET_PRODUCT_METRICS_VIEW_TYPE = '[View Types] SET_PRODUCT_METRICS_VIEW_TYPE';
 export class SetProductMetricsViewType implements Action {
   readonly type = SET_PRODUCT_METRICS_VIEW_TYPE;
@@ -60,4 +65,5 @@ export type Action =
   | FetchProductMetricsSuccess
   | FetchProductMetricsFailure
   | SelectBrandValues
+  | DeselectBrandValues
   | SetProductMetricsViewType;
