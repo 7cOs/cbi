@@ -1338,10 +1338,11 @@ describe('MyPerformanceComponent', () => {
       componentInstance.selectedBrandCode = chance.string();
       componentInstance.deselectBrandValue();
       expect(componentInstance.selectedBrandCode).toBe(undefined);
-      expect(storeMock.dispatch.calls.count()).toBe(4);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
-      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
