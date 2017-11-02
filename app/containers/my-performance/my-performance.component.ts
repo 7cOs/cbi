@@ -582,7 +582,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private refreshAllPerformancesIfNeeded(): void {
-    debugger;
     if (this.productMetricsStatus === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedBrandCode
