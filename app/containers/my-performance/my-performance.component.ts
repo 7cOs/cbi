@@ -30,6 +30,7 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
@@ -84,6 +85,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetrics: Array<MyPerformanceTableRow>;
   private productMetricsSelectedBrandRow: MyPerformanceTableRow;
   private productMetricsSubscription: Subscription;
+  private productMetricsStatus: ActionStatus = ActionStatus.NotFetched;
+  private responsibilitiesStatus: ActionStatus = ActionStatus.NotFetched;
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedSkuPackageCode: string;
   private versions: MyPerformanceEntitiesData[];
@@ -128,6 +131,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
+        this.productMetricsStatus = productMetrics.status;
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
@@ -147,12 +151,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             this.selectedSkuPackageCode = null;
             this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
           }
-          if (this.selectedBrandCode
-            && productMetrics.productMetricsViewType === ProductMetricsViewType.skus
-            && this.productMetrics
-            && this.productMetrics.length === 0) {
-            this.deselectBrandValue();
-          }
+
+          this.refreshAllPerformancesIfNeeded();
         }
       });
 
@@ -162,9 +162,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
-
-         // TODO: compare both selected brands to trigger or not a refresh
-        this.selectedBrandCode = current.selectedBrandCode || this.selectedBrandCode;
+        this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
 
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
@@ -185,6 +183,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
+
+        this.refreshAllPerformancesIfNeeded();
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
@@ -563,6 +563,30 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private setSelectedDateRangeValues(): void {
     if (this.dateRangeState && this.filterState) {
       this.dateRange = this.dateRangeState[DateRangeTimePeriodValue[this.filterState.dateRangeCode]];
+    }
+  }
+
+  private getResponsibilityStatus(responsibilitiesState: ResponsibilitiesState): ActionStatus {
+    return ((responsibilitiesState.responsibilitiesStatus === ActionStatus.Fetched
+        || responsibilitiesState.responsibilitiesStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.entitiesPerformanceStatus === ActionStatus.Fetched
+        || responsibilitiesState.entitiesPerformanceStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.totalPerformanceStatus === ActionStatus.Fetched
+        || responsibilitiesState.totalPerformanceStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.subaccountsStatus === ActionStatus.Fetched
+        || responsibilitiesState.subaccountsStatus === ActionStatus.NotFetched))
+        ? ActionStatus.Fetched
+        : ActionStatus.NotFetched;
+  }
+
+  private refreshAllPerformancesIfNeeded(): void {
+    if (this.productMetricsStatus === ActionStatus.Fetched
+      && this.responsibilitiesStatus === ActionStatus.Fetched
+      && this.selectedBrandCode
+      && this.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetrics
+      && this.productMetrics.length === 0) {
+      this.deselectBrandValue();
     }
   }
 }
