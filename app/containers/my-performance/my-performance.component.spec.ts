@@ -1,7 +1,7 @@
 import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
@@ -41,15 +41,16 @@ import { ProductMetricsState } from '../../state/reducers/product-metrics.reduce
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
-import {
-         SaveMyPerformanceState,
+import { SaveMyPerformanceState,
          SetMyPerformanceSelectedEntityType,
-         SkuPackagePayload
-       } from '../../state/actions/my-performance-version.action';
+         SkuPackagePayload } from '../../state/actions/my-performance-version.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
+
+import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../../enums/team-performance-table-header.enum';
+import { getProductMetricsSkuMock } from '../../models/product-metrics.model.mock';
 
 const chance = new Chance();
 
@@ -1497,5 +1498,89 @@ describe('MyPerformanceComponent', () => {
         selectedBrandCode: currentMock.selectedBrandCode
       }));
     });
+  });
+
+  fdescribe('my performance dynamic name table header', () => {
+    let tableComponentsMock: any;
+
+    beforeEach(() => {
+      tableComponentsMock = fixture.debugElement.queryAll(By.directive(MyPerformanceTableComponentMock));
+    });
+
+    describe('sales hierarchy table header', () => {
+      let currentMock: MyPerformanceEntitiesData;
+      let salesHierarchyTableMock: any;
+
+      beforeEach(() => {
+        currentMock = getMyPerformanceEntitiesDataMock();
+        salesHierarchyTableMock = tableComponentsMock[0].injector.get(MyPerformanceTableComponentMock) as MyPerformanceTableComponentMock;
+      });
+
+      it('should be `Group` when the sales hierarchy view type is roleGroups', () => {
+        currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.roleGroups;
+        currentSubject.next(currentMock);
+
+        expect(salesHierarchyTableMock.tableHeaderRow[0]).toBe(SalesHierarchyHeaderEntityType.Group);
+      });
+
+      it('should be `Person` when the sales hierarchy view type is people', () => {
+        currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.people;
+        currentSubject.next(currentMock);
+
+        expect(salesHierarchyTableMock.tableHeaderRow[0]).toBe(SalesHierarchyHeaderEntityType.Person);
+      });
+
+      it('should be `Distributor` when the sales hierarchy view type is distributors', () => {
+        currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.distributors;
+        currentSubject.next(currentMock);
+
+        expect(salesHierarchyTableMock.tableHeaderRow[0]).toBe(SalesHierarchyHeaderEntityType.Distributor);
+      });
+
+      it('should be `Account` when the sales hierarchy view type is accounts', () => {
+        currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
+        currentSubject.next(currentMock);
+
+        expect(salesHierarchyTableMock.tableHeaderRow[0]).toBe(SalesHierarchyHeaderEntityType.Account);
+      });
+
+      it('should be `Sub-Account` when the sales hierarchy view type is subAccounts', () => {
+        currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
+        currentSubject.next(currentMock);
+
+        expect(salesHierarchyTableMock.tableHeaderRow[0]).toBe(SalesHierarchyHeaderEntityType.SubAccount);
+      });
+    });
+
+    // describe('product metrics table header', () => {
+    //   let productMetricsStateMock: ProductMetricsState;
+    //   let productMetricsTableMock: any;
+
+    //   beforeEach(() => {
+    //     productMetricsStateMock = {
+    //       status: ActionStatus.Fetched,
+    //       products: {
+    //         brandValues: [],
+    //         skuValues: []
+    //       },
+    //       productMetricsViewType: ProductMetricsViewType.brands
+    //     };
+    //     productMetricsTableMock = tableComponentsMock[1].injector.get(MyPerformanceTableComponentMock) as MyPerformanceTableComponentMock;
+    //   });
+
+    //   it('should be `Brand` when the product metrics view type is brands irregardless of the premise type filter state', () => {
+    //     productMetricsStateMock.productMetricsViewType = ProductMetricsViewType.brands;
+    //     productMetricsSubject.next(productMetricsStateMock);
+
+    //     expect(productMetricsTableMock.tableHeaderRow[0]).toBe(ProductMetricHeaderProductType.Brand);
+    //   });
+
+    //   it('should be `SKU` when the product metrics view type is skus and the premise type state is All or Off', () => {
+    //     productMetricsStateMock.productMetricsViewType = ProductMetricsViewType.skus;
+    //     productMetricsSubject.next(productMetricsStateMock);
+
+    //     expect(productMetricsTableMock.tableHeaderRow[0]).toBe(ProductMetricHeaderProductType.SKU);
+    //   });
+    // });
   });
 });

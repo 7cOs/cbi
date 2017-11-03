@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-
 import { isEqual } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -71,9 +70,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRange: DateRange;
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
-  public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
-  public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
-
   private currentState: MyPerformanceEntitiesData;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: EntityType;
@@ -89,6 +85,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrandCode: string;
   private selectedSkuPackageCode: string;
+  private tableHeaderRowLeft: Array<string> = [
+    SalesHierarchyViewType.getSingularLabel(SalesHierarchyViewType.people),
+    'DEPLETIONS',
+    'CTV'
+  ];
+  private tableHeaderRowRight: Array<string> = [
+    ProductMetricsViewType.getSingularLabel(ProductMetricsViewType.brands, PremiseTypeValue.All),
+    'DEPLETIONS',
+    'CTV'
+  ];
   private versions: MyPerformanceEntitiesData[];
 
   constructor(
@@ -133,6 +139,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
+        this.tableHeaderRowRight[0] = ProductMetricsViewType.getSingularLabel(productMetrics.productMetricsViewType,
+          this.filterState.premiseType);
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
@@ -151,6 +159,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
+        this.tableHeaderRowLeft[0] = SalesHierarchyViewType.getSingularLabel(current.salesHierarchyViewType.viewType);
 
          // TODO: compare both selected brands to trigger or not a refresh
         this.selectedBrandCode = current.selectedBrandCode || this.selectedBrandCode;
