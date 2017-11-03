@@ -271,21 +271,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
     switch (parameters.type) {
-      case RowType.total:
-        if (parameters.leftSide) {
-          console.log(`clicked on cell ${parameters.index} from the left side`);
-        } else {
-          console.log(`clicked on cell ${parameters.index} from the right side`);
-        }
-        break;
-
       case RowType.data:
-      default:
+      case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
           this.handleRightRowDataElementClicked(parameters);
         }
+        break;
+      case RowType.total:
+      default:
+        break;
     }
   }
 
@@ -409,7 +405,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       default:
-        console.log('clicked on left row:', parameters.row);
+        break;
     }
   }
 
@@ -446,7 +442,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       default:
-        console.log('clicked on right row:', parameters.row);
+        break;
     }
   }
 
