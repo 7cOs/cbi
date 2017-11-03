@@ -103,6 +103,19 @@ describe('ProductMetrics Actions', () => {
     });
   });
 
+  describe('DeselectBrandValues', () => {
+    let action: ProductMetricsActions.DeselectBrandValues;
+
+    beforeEach(() => {
+      action = new ProductMetricsActions.DeselectBrandValues();
+    });
+
+    it('should have the correct type', () => {
+      expect(ProductMetricsActions.DESELECT_BRAND_VALUES).toBe('[ProductMetrics] DESELECT_BRAND_VALUES');
+      expect(action.type).toBe(ProductMetricsActions.DESELECT_BRAND_VALUES);
+    });
+  });
+
   describe('SetProductMetricsViewType', () => {
     let action: ProductMetricsActions.SetProductMetricsViewType;
 

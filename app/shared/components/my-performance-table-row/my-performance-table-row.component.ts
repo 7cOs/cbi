@@ -15,10 +15,12 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
 export class MyPerformanceTableRowComponent {
   @Output() onCellClicked = new EventEmitter<number>();
   @Output() onSublineClicked = new EventEmitter<any>();
+  @Output() onDismissableRowXClicked = new EventEmitter<any>();
 
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
+  @Input() showX: boolean = false;
   @Input()
   set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
     this.isSubAcountsOrDistributors = viewType === SalesHierarchyViewType.distributors
@@ -59,5 +61,8 @@ export class MyPerformanceTableRowComponent {
     if (this.isSubAcountsOrDistributors) {
       this.onSublineClicked.emit();
     }
+  }
+  public dismissableRowXClicked(): void {
+    this.onDismissableRowXClicked.emit();
   }
 }

@@ -38,21 +38,24 @@ div.performance-table-wrapper
                               [showOpportunities]="showOpportunities",
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")
 
-      tr.dismissable-total-row.col-100-pct(my-performance-table-row,
+      tr.dismissable-total-row.col-100-pct(
                               *ngIf="dismissableTotalRow",
                               [ngClass]="{'selected': (!selectedSkuPackageCode && dismissableTotalRow)}",
+                              (click)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event})",
+                              my-performance-table-row,
                               [rowData]="dismissableTotalRow",
                               [showContributionToVolume]="showContributionToVolume",
                               [showOpportunities]="showOpportunities",
-                              (onCellClicked)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event})")
+                              [showX]=true,
+                              (onDismissableRowXClicked)="onDismissableRowXClicked.emit()")
 
     tbody([ngClass]="getTableHeight()")
       tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let rowIndex = index",
                                 [ngClass]="getEntityRowClasses(rowData)",
+                                (click)="onRowClicked(rowType.data, rowIndex, rowData)",
                                 my-performance-table-row,
                                 [rowData]="rowData",
                                 [showContributionToVolume]="showContributionToVolume",
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
-                                (onSublineClicked)="onSublineClicked.emit(rowData);",
-                                (click)="onRowClicked(rowType.data, rowIndex, rowData)")
+                                (onSublineClicked)="onSublineClicked.emit(rowData);")

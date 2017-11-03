@@ -30,6 +30,7 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -60,6 +61,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public responsibilitiesFetching: boolean;
   public selectedSkuPackageType: SkuPackageType;
   public salesHierarchyViewType: SalesHierarchyViewType;
+  public selectedBrandCode: string;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showSalesContributionToVolume: boolean = false;
@@ -86,8 +88,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsState: ProductMetricsState;
   private productMetricsSelectedBrandRow: MyPerformanceTableRow;
   private productMetricsSubscription: Subscription;
+  private responsibilitiesStatus: ActionStatus = ActionStatus.NotFetched;
   private salesHierarchy: Array<MyPerformanceTableRow>;
-  private selectedBrandCode: string;
   private selectedSkuPackageCode: string;
   private versions: MyPerformanceEntitiesData[];
 
@@ -139,9 +141,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             productMetrics.products,
             this.productMetricsViewType
           );
-          this.productMetricsSelectedBrandRow = this.productMetricsViewType === ProductMetricsViewType.skus
+          this.productMetricsSelectedBrandRow =
+            (this.productMetricsViewType === ProductMetricsViewType.skus && productMetrics.selectedBrandCodeValues)
             ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
             : null;
+
+          this.handleDataRefreshAndDeselectionIfNeeded();
         }
       });
 
@@ -151,9 +156,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
-
-         // TODO: compare both selected brands to trigger or not a refresh
-        this.selectedBrandCode = current.selectedBrandCode || this.selectedBrandCode;
+        this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
 
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
@@ -174,6 +177,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.totalRowData = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
+
+        this.handleDataRefreshAndDeselectionIfNeeded();
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
@@ -238,27 +243,45 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     currentWindow.open(accountDashboardUrl, '_blank');
   }
 
+  public deselectBrandValue(): void {
+    delete this.selectedBrandCode;
+    this.selectedSkuPackageCode = null;
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+    this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
+    this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
+
+    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+      positionId: this.currentState.responsibilities.positionId,
+      groupedEntities: this.currentState.responsibilities.groupedEntities,
+      hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
+      selectedEntityType: this.currentState.selectedEntityType,
+      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
+      salesHierarchyViewType: this.salesHierarchyViewType,
+      filter: this.filterState,
+      entityType: this.currentState.selectedEntityType,
+      alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+      accountPositionId: this.currentState.responsibilities.accountPositionId
+    }));
+  }
+
   public handleSortRows(criteria: SortingCriteria[]): void {
     this.sortingCriteria = criteria;
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
     switch (parameters.type) {
-      case RowType.total:
-        if (parameters.leftSide) {
-          console.log(`clicked on cell ${parameters.index} from the left side`);
-        } else {
-          console.log(`clicked on cell ${parameters.index} from the right side`);
-        }
-        break;
-
       case RowType.data:
-      default:
+      case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
           this.handleRightRowDataElementClicked(parameters);
         }
+        break;
+      case RowType.total:
+      default:
+        break;
     }
   }
 
@@ -382,7 +405,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       default:
-        console.log('clicked on left row:', parameters.row);
+        break;
     }
   }
 
@@ -419,7 +442,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       default:
-        console.log('clicked on right row:', parameters.row);
+        break;
     }
   }
 
@@ -439,7 +462,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private fetchProductMetricsWhenClick(parameters: HandleElementClickedParameters) {
     const actionPayload: ProductMetricsActions.FetchProductMetricsPayload = {
-      positionId: parameters.row.metadata.positionId || this.currentState.responsibilities.positionId,
+      positionId: parameters.row
+        ? parameters.row.metadata.positionId || this.currentState.responsibilities.positionId
+        : this.currentState.responsibilities.positionId,
       filter: this.filterState,
       selectedEntityType: this.currentState.selectedEntityType,
       selectedBrandCode: this.selectedBrandCode,
@@ -495,7 +520,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       groupedEntities: this.currentState.responsibilities.groupedEntities,
       hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
       selectedEntityType: this.currentState.selectedEntityType,
-      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode, // TODO: Is this correct?
+      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
       salesHierarchyViewType: this.salesHierarchyViewType,
       filter: this.filterState,
       brandSkuCode: brandSkuCode,
@@ -550,6 +575,43 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  private getResponsibilityStatus(responsibilitiesState: ResponsibilitiesState): ActionStatus {
+    return ((responsibilitiesState.responsibilitiesStatus === ActionStatus.Fetched
+        || responsibilitiesState.responsibilitiesStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.entitiesPerformanceStatus === ActionStatus.Fetched
+        || responsibilitiesState.entitiesPerformanceStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.totalPerformanceStatus === ActionStatus.Fetched
+        || responsibilitiesState.totalPerformanceStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.subaccountsStatus === ActionStatus.Fetched
+        || responsibilitiesState.subaccountsStatus === ActionStatus.NotFetched))
+        ? ActionStatus.Fetched
+        : ActionStatus.NotFetched;
+  }
+
+  private handleDataRefreshAndDeselectionIfNeeded(): void {
+
+    if (this.productMetricsState
+      && this.productMetricsState.status === ActionStatus.Fetched
+      && this.responsibilitiesStatus === ActionStatus.Fetched
+      && this.selectedSkuPackageCode
+      && this.productMetricsState.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetrics
+      && !this.productMetrics.filter(
+        (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length) {
+        this.selectedSkuPackageCode = null;
+        this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
+    } else if (this.productMetricsState
+      && this.productMetricsState.status === ActionStatus.Fetched
+      && this.responsibilitiesStatus === ActionStatus.Fetched
+      && this.selectedBrandCode
+      && this.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetrics
+      && this.productMetrics.length === 0) {
+      this.deselectBrandValue();
+    }
+  }
+
   private handleTeamPerformanceDataRefresh(): void {
     if (this.currentState
       && this.currentState.responsibilities.status === ActionStatus.Fetched
@@ -573,7 +635,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           positionId: this.currentState.responsibilities.positionId,
           filter: this.filterState,
           selectedEntityType: this.currentState.selectedEntityType,
-          selectedBrandCode: this.currentState.selectedBrandCode
+          selectedBrandCode: this.currentState.selectedBrandCode,
+          inAlternateHierarchy: this.isInsideAlternateHierarchy(),
+          entityTypeCode: this.currentState.responsibilities.entityTypeCode,
+          contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
+                              this.currentState.responsibilities.positionId
         }));
     }
   }

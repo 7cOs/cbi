@@ -45,6 +45,13 @@ export function productMetricsReducer(
         selectedBrandCodeValues: selectedBrandValues
       });
 
+    case ProductMetricsActions.DESELECT_BRAND_VALUES:
+      return {
+        status: state.status,
+        products: state.products,
+        productMetricsViewType: state.productMetricsViewType
+      };
+
     case ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE:
       return Object.assign({}, state, {
         productMetricsViewType: action.payload
