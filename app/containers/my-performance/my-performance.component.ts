@@ -567,7 +567,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedEntityTypeCode: previousState.responsibilities.entityTypeCode,
         salesHierarchyViewType: previousState.salesHierarchyViewType.viewType,
         filter: this.filterState,
-        brandSkuCode: this.selectedBrandCode,
+        brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
         skuPackageType: this.selectedSkuPackageType,
         entityType: previousState.selectedEntityType,
         alternateHierarchyId: previousState.responsibilities.alternateHierarchyId,
@@ -596,7 +596,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleDataRefreshAndDeselectionIfNeeded(): void {
-
     if (this.productMetricsState
       && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
@@ -633,7 +632,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
         salesHierarchyViewType: this.salesHierarchyViewType,
         filter: this.filterState,
-        brandSkuCode: this.selectedBrandCode,
+        brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
         skuPackageType: this.selectedSkuPackageType,
         entityType: this.currentState.selectedEntityType,
         alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
