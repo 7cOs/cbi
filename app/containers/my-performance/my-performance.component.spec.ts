@@ -621,6 +621,45 @@ describe('MyPerformanceComponent', () => {
           accountPositionId: previousVersionMock.responsibilities.accountPositionId
         }));
       });
+
+      it('should dispatch RestoreMyPerformance and FetchProductMetrics ' +
+        'when the filter state and previous state`s filter mismatch and salesHierarchyViewType is subAccounts', () => {
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
+        previousVersionMock.filter = getMyPerformanceFilterMock();
+        versionsSubject.next(versionsMock);
+
+        storeMock.dispatch.calls.reset();
+        componentInstance.handleBackButtonClicked();
+        const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+
+        expect(storeMock.dispatch.calls.count()).toBe(3);
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+          positionId: previousVersionMock.responsibilities.positionId,
+          groupedEntities: previousVersionMock.responsibilities.groupedEntities,
+          hierarchyGroups: previousVersionMock.responsibilities.hierarchyGroups,
+          selectedEntityType: previousVersionMock.selectedEntityType,
+          selectedEntityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
+          filter: stateMock.myPerformanceFilter,
+          brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
+          skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+          entityType: previousVersionMock.selectedEntityType,
+          alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+        }));
+console.log('accountPositionId ', previousVersionMock.responsibilities.accountPositionId,
+  '\npositionId ', previousVersionMock.responsibilities.positionId);
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+          positionId: previousVersionMock.salesHierarchyViewType.viewType === SalesHierarchyViewType.subAccounts
+            ? previousVersionMock.responsibilities.accountPositionId : previousVersionMock.responsibilities.positionId,
+          filter: stateMock.myPerformanceFilter as any,
+          selectedEntityType: previousVersionMock.selectedEntityType,
+          selectedBrandCode: expectedSelectedBrandCode,
+          inAlternateHierarchy: false,
+          entityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          contextPositionId: previousVersionMock.responsibilities.positionId
+        }));
+      });
     });
   });
 
