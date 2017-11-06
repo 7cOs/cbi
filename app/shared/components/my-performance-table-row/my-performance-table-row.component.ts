@@ -59,6 +59,14 @@ export class MyPerformanceTableRowComponent {
     };
   }
 
+  public getRolegroupIconClass(): CssClasses {
+    return {
+      ['geography-group']: this.rowData.descriptionRow0 === 'GEOGRAPHY',
+      ['account-group']: this.rowData.descriptionRow0 === 'ACCOUNTS',
+      ['rolegroup']: this.rowData.descriptionRow0 !== 'GEOGRAPHY' && this.rowData.descriptionRow0 !== 'ACCOUNTS'
+    };
+  }
+
   public sublineClicked(): void {
     if (this.isSubAcountsOrDistributors) {
       this.onSublineClicked.emit();
