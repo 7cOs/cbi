@@ -135,6 +135,12 @@ th {
     color: $blue;
   }
 
+  &:hover {
+    /deep/td {
+      background-color: $light-blue-4;
+    }
+  }
+
   &.selected {
     background-color: $light-blue-4;
 

@@ -1801,7 +1801,8 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
     });
 
-    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions to refresh all performance data', () => {
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy', () => {
+      currentMock.responsibilities.alternateHierarchyId = chance.string();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
 
@@ -1826,7 +1827,43 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode
+        selectedBrandCode: currentMock.selectedBrandCode,
+        inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
+        entityTypeCode: currentMock.responsibilities.entityTypeCode,
+        contextPositionId: currentMock.responsibilities.alternateHierarchyId
+      }));
+    });
+
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when NOT in alternate hierarchy', () => {
+      currentMock.responsibilities.alternateHierarchyId = null;
+      productMetricsSubject.next(productMetricsStateMock);
+      currentSubject.next(currentMock);
+
+      componentInstance.ngOnInit();
+
+      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: currentMock.responsibilities.positionId,
+        groupedEntities: currentMock.responsibilities.groupedEntities,
+        hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
+        salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+        filter: stateMock.myPerformanceFilter as any,
+        brandSkuCode: undefined,
+        skuPackageType: undefined,
+        entityType: currentMock.selectedEntityType,
+        alternateHierarchyId: null,
+        accountPositionId: currentMock.responsibilities.accountPositionId
+      }));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+        positionId: currentMock.responsibilities.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedBrandCode: currentMock.selectedBrandCode,
+        inAlternateHierarchy: false,
+        entityTypeCode: currentMock.responsibilities.entityTypeCode,
+        contextPositionId: currentMock.responsibilities.positionId
       }));
     });
   });

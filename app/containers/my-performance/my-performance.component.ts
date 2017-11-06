@@ -271,21 +271,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
     switch (parameters.type) {
-      case RowType.total:
-        if (parameters.leftSide) {
-          console.log(`clicked on cell ${parameters.index} from the left side`);
-        } else {
-          console.log(`clicked on cell ${parameters.index} from the right side`);
-        }
-        break;
-
       case RowType.data:
-      default:
+      case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
           this.handleRightRowDataElementClicked(parameters);
         }
+        break;
+      case RowType.total:
+      default:
+        break;
     }
   }
 
@@ -409,7 +405,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       default:
-        console.log('clicked on left row:', parameters.row);
+        break;
     }
   }
 
@@ -446,7 +442,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       default:
-        console.log('clicked on right row:', parameters.row);
+        break;
     }
   }
 
@@ -623,7 +619,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.currentState.responsibilities.status === ActionStatus.Fetched
       && this.productMetricsState
       && this.productMetricsState.status === ActionStatus.Fetched) {
-
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: this.currentState.responsibilities.positionId,
         groupedEntities: this.currentState.responsibilities.groupedEntities,
@@ -642,7 +637,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         positionId: this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
-        selectedBrandCode: this.currentState.selectedBrandCode
+        selectedBrandCode: this.currentState.selectedBrandCode,
+        inAlternateHierarchy: this.isInsideAlternateHierarchy(),
+        entityTypeCode: this.currentState.responsibilities.entityTypeCode,
+        contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
+                            this.currentState.responsibilities.positionId
       }));
     }
   }
