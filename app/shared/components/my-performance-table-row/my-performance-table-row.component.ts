@@ -25,7 +25,7 @@ export class MyPerformanceTableRowComponent {
   set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
     this.isSubAcountsOrDistributors = viewType === SalesHierarchyViewType.distributors
       || viewType === SalesHierarchyViewType.subAccounts;
-      this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
+    this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
   }
 
   public sortStatus = SortStatus;
