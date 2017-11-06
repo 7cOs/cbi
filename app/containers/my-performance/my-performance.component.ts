@@ -61,8 +61,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public responsibilitiesFetching: boolean;
   public selectedSkuPackageType: SkuPackageType;
   public salesHierarchyViewType: SalesHierarchyViewType;
-  public selectedBrandCode: string;
-  public selectedSkuPackageCode: string;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showSalesContributionToVolume: boolean = false;
@@ -91,6 +89,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private productMetricsSubscription: Subscription;
   private responsibilitiesStatus: ActionStatus = ActionStatus.NotFetched;
   private salesHierarchy: Array<MyPerformanceTableRow>;
+  private selectedBrandCode: string;
+  private selectedSkuPackageCode: string;
   private versions: MyPerformanceEntitiesData[];
 
   constructor(

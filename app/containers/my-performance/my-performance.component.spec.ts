@@ -420,9 +420,9 @@ describe('MyPerformanceComponent', () => {
 
       beforeEach(() => {
         componentInstance.showLeftBackButton = true;
-        componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
-        componentInstance.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
-        componentInstance.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+        componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+        componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+        componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
         versionsMock = generateMockVersions(4, 9);
         previousVersionMock = versionsMock[versionsMock.length - 1];
         previousVersionMock.filter = stateMock.myPerformanceFilter;
@@ -575,7 +575,7 @@ describe('MyPerformanceComponent', () => {
         previousVersionMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode + 'NOMATCH';
         versionsSubject.next(versionsMock);
 
-        componentInstance.selectedSkuPackageCode = null;
+        componentInstanceCopy.selectedSkuPackageCode = null;
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
 
@@ -637,8 +637,8 @@ describe('MyPerformanceComponent', () => {
       expectedSaveMyPerformanceStatePayload = Object.assign({}, stateMock.myPerformance.current, {
         filter: stateMock.myPerformanceFilter
       });
-      componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
-      componentInstance.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+      componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+      componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
     });
 
     it('should dispatch the SaveMyPerformanceState action with the payload containing the "current" state but the filter ' +
@@ -855,9 +855,9 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
       currentSubject.next(currentMock);
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
-      componentInstance.selectedBrandCode = currentMock.selectedBrandCode;
-      componentInstance.selectedSkuPackageCode = currentMock.selectedSkuPackageCode;
-      componentInstance.selectedSkuPackageType = currentMock.selectedSkuPackageType;
+      componentInstanceCopy.selectedBrandCode = currentMock.selectedBrandCode;
+      componentInstanceCopy.selectedSkuPackageCode = currentMock.selectedSkuPackageCode;
+      componentInstanceCopy.selectedSkuPackageType = currentMock.selectedSkuPackageType;
       currentMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       const entityTypes: EntityType[] = Object.keys(EntityType)
@@ -1186,7 +1186,7 @@ describe('MyPerformanceComponent', () => {
         productMetricsViewType: ProductMetricsViewType.skus
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+      componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
@@ -1244,9 +1244,9 @@ describe('MyPerformanceComponent', () => {
       beforeEach(() => {
         storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
-        componentInstance.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
-        componentInstance.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
-        componentInstance.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+        componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+        componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+        componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
@@ -1390,8 +1390,8 @@ describe('MyPerformanceComponent', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.people);
 
         const previousVersionMock = versionsMock[breadcrumbSelectionIndex];
-        componentInstance.selectedSkuPackageCode = null;
-        componentInstance.selectedSkuPackageType = null;
+        componentInstanceCopy.selectedSkuPackageCode = null;
+        componentInstanceCopy.selectedSkuPackageType = null;
 
         versionsMock[breadcrumbSelectionIndex].selectedBrandCode = versionsMock[breadcrumbSelectionIndex].selectedBrandCode + 'NOMATCH';
         versionsSubject.next(versionsMock);
@@ -1522,9 +1522,9 @@ describe('MyPerformanceComponent', () => {
       currentMock = getMyPerformanceEntitiesDataMock();
       currentMock.responsibilities.alternateHierarchyId = null;
       currentSubject.next(currentMock);
-      componentInstance.selectedBrandCode = chance.string();
+      componentInstanceCopy.selectedBrandCode = chance.string();
       componentInstance.deselectBrandValue();
-      expect(componentInstance.selectedBrandCode).toBe(undefined);
+      expect(componentInstanceCopy.selectedBrandCode).toBe(undefined);
       expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
@@ -1558,7 +1558,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
@@ -1568,7 +1568,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).toHaveBeenCalled();
     });
@@ -1578,7 +1578,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
@@ -1587,7 +1587,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.brands;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
@@ -1596,7 +1596,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = null;
+      componentInstanceCopy.selectedBrandCode = null;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
@@ -1608,7 +1608,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
@@ -1620,7 +1620,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
@@ -1632,7 +1632,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
@@ -1644,7 +1644,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
       myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
-      componentInstance.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
