@@ -1,9 +1,10 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
-import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
+
 import { CssClasses } from '../../../models/css-classes.model';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
+import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 
 describe('MyPerformanceTableComponent', () => {
 
