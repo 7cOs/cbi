@@ -6,6 +6,7 @@ import { getHierarchyGroupMock } from '../../models/hierarchy-group.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
+import { getSkuPackageTypeMock } from '../../enums/sku-package-type.enum.mock';
 import { MyPerformanceEntitiesData, MyPerformanceState } from './my-performance.reducer';
 import { ResponsibilitiesState } from './responsibilities.reducer';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
@@ -40,6 +41,8 @@ export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
     selectedEntityDescription: chance.string(),
     selectedEntityType: getEntityTypeMock(),
     selectedBrandCode: chance.string(),
+    selectedSkuPackageCode: chance.string(),
+    selectedSkuPackageType: getSkuPackageTypeMock(),
     filter: getMyPerformanceFilterMock()
   };
 }
