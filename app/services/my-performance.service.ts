@@ -102,6 +102,7 @@ export class MyPerformanceService {
   public getSalesHierarchyViewTypeLabel(viewType: SalesHierarchyViewType): SalesHierarchyHeaderEntityType {
     switch (viewType) {
       case SalesHierarchyViewType.roleGroups:
+      default:
         return SalesHierarchyHeaderEntityType.Group;
       case SalesHierarchyViewType.people:
         return SalesHierarchyHeaderEntityType.Person;
@@ -111,21 +112,18 @@ export class MyPerformanceService {
         return SalesHierarchyHeaderEntityType.Account;
       case SalesHierarchyViewType.subAccounts:
         return SalesHierarchyHeaderEntityType.SubAccount;
-      default:
-        throw new Error(`getSalesHierarchyViewTypeLabel: SalesHierarchyViewType of ${ viewType } not supported.`);
     }
   }
 
   public getProductMetricsViewTypeLabel(viewType: ProductMetricsViewType): ProductMetricHeaderProductType {
     switch (viewType) {
       case ProductMetricsViewType.brands:
+      default:
         return ProductMetricHeaderProductType.Brand;
       case ProductMetricsViewType.skus:
         return ProductMetricHeaderProductType.SKU;
       case ProductMetricsViewType.packages:
         return ProductMetricHeaderProductType.Package;
-      default:
-        throw new Error(`getProductMetricsViewTypeLabel: ProductMetricsViewType of ${ viewType } not supported.`);
     }
   }
 }

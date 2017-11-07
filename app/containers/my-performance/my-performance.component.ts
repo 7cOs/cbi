@@ -164,8 +164,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
-        this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType ||
-          SalesHierarchyViewType.roleGroups);
+        this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType);
 
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
 
