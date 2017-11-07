@@ -75,4 +75,34 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
+  describe('when getSublineClass is called', () => {
+
+    beforeEach(() => {
+      spyOn(componentInstance, 'getSublineClass').and.callThrough();
+    });
+
+    describe('when viewtype is subAccounts', () => {
+      it('should return the link and forward arrow CSS class', () => {
+        componentInstance.viewType = SalesHierarchyViewType.subAccounts;
+        let dashboardLinkCss: CssClasses = componentInstance.getSublineClass();
+        expect(dashboardLinkCss).toEqual({'link': true, 'forward-arrow': true});
+      });
+    });
+
+    describe('when viewtype is distributors', () => {
+      it('should return the link and forward arrow CSS class', () => {
+        componentInstance.viewType = SalesHierarchyViewType.distributors;
+        let dashboardLinkCss: CssClasses = componentInstance.getSublineClass();
+        expect(dashboardLinkCss).toEqual({'link': true, 'forward-arrow': true});
+      });
+    });
+
+    describe('when viewtype is accounts', () => {
+      it('should not return the link and forward arrow CSS class', () => {
+        componentInstance.viewType = SalesHierarchyViewType.accounts;
+        let dashboardLinkCss: CssClasses = componentInstance.getSublineClass();
+        expect(dashboardLinkCss).toEqual({'link': false, 'forward-arrow': false});
+      });
+    });
+  });
 });
