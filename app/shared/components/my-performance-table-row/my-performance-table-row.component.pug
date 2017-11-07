@@ -2,7 +2,7 @@ td.left-col(colspan=1, [ngClass]="getHeaderLeftClasses()")
   div.dismissable-row-X-container(*ngIf="showX", (click)="dismissableRowXClicked()")
     img.dismissable-row-X(src="../../../assets/img/icons/thin-x.svg")
   div.rolegroup-icon-container(*ngIf="isRolegroups")
-    div([ngClass]="getRolegroupIconClass()")
+    div.rolegroup-icon-background([ngClass]="getRolegroupIconClass()")
   div.description-line-0
     span {{rowData.descriptionRow0}}
   div.description-line-1(*ngIf="rowData.descriptionRow1",

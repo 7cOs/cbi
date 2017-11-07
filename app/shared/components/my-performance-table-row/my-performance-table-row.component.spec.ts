@@ -45,7 +45,7 @@ describe('MyPerformanceTableComponent', () => {
           componentInstance.viewType = SalesHierarchyViewType.roleGroups;
           componentInstance.rowData = rowData;
           let iconCSS: CssClasses = componentInstance.getRolegroupIconClass();
-          expect(iconCSS).toEqual({'geography-group': true, 'rolegroup': false, 'account-group': false});
+          expect(iconCSS).toEqual({'geography-group-icon': true, 'rolegroup-icon': false, 'account-group-icon': false});
         });
       });
 
@@ -57,7 +57,7 @@ describe('MyPerformanceTableComponent', () => {
           componentInstance.viewType = SalesHierarchyViewType.roleGroups;
           componentInstance.rowData = rowData;
           let iconCSS: CssClasses = componentInstance.getRolegroupIconClass();
-          expect(iconCSS).toEqual({'geography-group': false, 'rolegroup': true, 'account-group': false});
+          expect(iconCSS).toEqual({'geography-group-icon': false, 'rolegroup-icon': true, 'account-group-icon': false});
         });
       });
 
@@ -69,7 +69,7 @@ describe('MyPerformanceTableComponent', () => {
           componentInstance.viewType = SalesHierarchyViewType.roleGroups;
           componentInstance.rowData = rowData;
           let iconCSS: CssClasses = componentInstance.getRolegroupIconClass();
-          expect(iconCSS).toEqual({'geography-group': false, 'rolegroup': false, 'account-group': true});
+          expect(iconCSS).toEqual({'geography-group-icon': false, 'rolegroup-icon': false, 'account-group-icon': true});
         });
       });
     });

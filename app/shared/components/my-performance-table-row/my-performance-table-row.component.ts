@@ -61,9 +61,9 @@ export class MyPerformanceTableRowComponent {
 
   public getRolegroupIconClass(): CssClasses {
     return {
-      ['geography-group']: this.rowData.descriptionRow0 === 'GEOGRAPHY',
-      ['account-group']: this.rowData.descriptionRow0 === 'ACCOUNTS',
-      ['rolegroup']: this.rowData.descriptionRow0 !== 'GEOGRAPHY' && this.rowData.descriptionRow0 !== 'ACCOUNTS'
+      ['geography-group-icon']: this.rowData.descriptionRow0 === 'GEOGRAPHY',
+      ['account-group-icon']: this.rowData.descriptionRow0 === 'ACCOUNTS',
+      ['rolegroup-icon']: this.rowData.descriptionRow0 !== 'GEOGRAPHY' && this.rowData.descriptionRow0 !== 'ACCOUNTS'
     };
   }
 
