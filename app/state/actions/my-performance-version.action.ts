@@ -42,28 +42,28 @@ export class SetMyPerformanceSelectedEntityType implements Action {
   constructor(public payload: EntityType) { }
 }
 
-export const SET_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance] SET_MY_PERFORMANCE_SELECTED_BRAND';
+export const SET_MY_PERFORMANCE_SELECTED_BRAND_CODE = '[My Performance] SET_MY_PERFORMANCE_SELECTED_BRAND_CODE';
 export class SetMyPerformanceSelectedBrandCode implements Action {
-  readonly type = SET_MY_PERFORMANCE_SELECTED_BRAND;
+  readonly type = SET_MY_PERFORMANCE_SELECTED_BRAND_CODE;
 
   constructor(public payload: string) { }
 }
 
-export const SET_MY_PERFORMANCE_SELECTED_SKU = '[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU';
+export const SET_MY_PERFORMANCE_SELECTED_SKU_CODE = '[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU_CODE';
 export class SetMyPerformanceSelectedSkuCode implements Action {
-  readonly type = SET_MY_PERFORMANCE_SELECTED_SKU;
+  readonly type = SET_MY_PERFORMANCE_SELECTED_SKU_CODE;
 
   constructor(public payload: SkuPackagePayload) { }
 }
 
-export const CLEAR_MY_PERFORMANCE_SELECTED_SKU = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU';
+export const CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE';
 export class ClearMyPerformanceSelectedSkuCode implements Action {
-  readonly type = CLEAR_MY_PERFORMANCE_SELECTED_SKU;
+  readonly type = CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE;
 }
 
-export const CLEAR_MY_PERFORMANCE_SELECTED_BRAND = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_BRAND';
+export const CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE';
 export class ClearMyPerformanceSelectedBrandCode implements Action {
-  readonly type = CLEAR_MY_PERFORMANCE_SELECTED_BRAND;
+  readonly type = CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE;
 }
 
 export type Action =
