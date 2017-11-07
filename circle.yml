@@ -46,6 +46,11 @@ deployment:
     commands:
       - git push git@heroku.com:app-compass-stage.git $CIRCLE_SHA1:master -f
 
+  preprod:
+    branch: preprod
+    commands:
+      - git push git@heroku.com:app-compass-preprod.git $CIRCLE_SHA1:master -f
+
   production:
     branch: master
     commands:
