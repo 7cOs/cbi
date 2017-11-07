@@ -218,7 +218,7 @@ describe('ProductMetrics Service', () => {
             productMetricsDataMock.selectedBrandCode = chance.string();
           });
 
-          it('should call getAlternateHierarchyProductMetricsForPosition for brand AND sku level aggregation', (done: any) => {
+          it('should call getAlternateHierarchyProductMetricsForPosition for brand AND sku level aggregation', (done) => {
             productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
               expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.count()).toBe(2);
               expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.argsFor(0)).toEqual([

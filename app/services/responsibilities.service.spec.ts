@@ -1656,7 +1656,7 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should update entitiesTotalPerformances', (done: any) => {
+      it('should update entitiesTotalPerformances', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
           updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
           expect(updatedRefreshTotalPerformanceData).toEqual({
