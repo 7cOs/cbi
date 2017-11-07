@@ -114,6 +114,26 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .clickRemoveDistributorFilter();
 
     Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
+
+    accountDashboardPage
+      .clickApplyFilters()
+      .waitForBrandsLoaderToDisappear()
+      .waitForMarketLoaderToDisappear();
+    Assert.assertEquals(
+      accountDashboardPage.getOverviewMarketLabel(),
+      "Distributors",
+      "Market Overview label failed to match expected default."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      testUser.fullName().toUpperCase(),
+      "The 'for' label for the right panel selector header failed to match expected default."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.getRightPanelHeader(),
+      "DISTRIBUTORS",
+      "Right panel header text failed to match expected default."
+    );
   }
 
   @DataProvider
