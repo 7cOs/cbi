@@ -3,10 +3,12 @@ import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
+import { sample } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 
 import { ActionStatus } from '../../enums/action-status.enum';
+import { AnalyticsService } from '../../services/analytics.service';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -46,12 +48,12 @@ import {
          SetMyPerformanceSelectedEntityType,
          SkuPackagePayload
        } from '../../state/actions/my-performance-version.action';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
 import { getProductMetricsSkuMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
@@ -113,6 +115,7 @@ describe('MyPerformanceComponent', () => {
   let userServiceMock: any;
   let myPerformanceTableDataTransformerService: any;
   let myPerformanceServiceMock: any;
+  let analyticsServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
   let myPerformanceProductMetricsMock: ProductMetricsState = {
     status: ActionStatus.Fetching,
@@ -196,6 +199,8 @@ describe('MyPerformanceComponent', () => {
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
     };
 
+    analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
+
     TestBed.configureTestingModule({
       declarations: [
         BeerLoaderComponentMock,
@@ -210,6 +215,10 @@ describe('MyPerformanceComponent', () => {
         {
           provide: MyPerformanceTableDataTransformerService,
           useValue: myPerformanceTableDataTransformerService
+        },
+        {
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
         },
         {
           provide: MyPerformanceService,
@@ -398,7 +407,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when left side total row is clicked', () => {
+  describe('Perform various events when back button is clicked', () => {
     beforeEach(() => {
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
@@ -429,6 +438,15 @@ describe('MyPerformanceComponent', () => {
         previousVersionMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
         previousVersionMock.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
         previousVersionMock.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+      });
+
+      it('should send analytics event', () => {
+        componentInstance.handleBackButtonClicked();
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Snapshot',
+          'Link Click',
+          'Back Button'
+        ]);
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
@@ -622,6 +640,7 @@ describe('MyPerformanceComponent', () => {
         }));
       });
     });
+
   });
 
   describe('when left side data row is clicked', () => {
@@ -880,6 +899,16 @@ describe('MyPerformanceComponent', () => {
         brandSkuCode: currentMock.selectedSkuPackageCode,
         skuPackageType: currentMock.selectedSkuPackageType
       }));
+    });
+
+    it('should send analytics event', () => {
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+        'Team Snapshot',
+        'Link Click',
+        rowMock.descriptionRow0
+      ]);
     });
   });
 
@@ -1354,6 +1383,21 @@ describe('MyPerformanceComponent', () => {
           contextPositionId: selectedVersion.responsibilities.positionId,
           selectedBrandCode: expectedSelectedBrandCode
         }));
+      });
+
+      it('should send analytics event for any salesHierarchyViewType', () => {
+        const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
+        componentInstance.salesHierarchyViewType = sample(salesHierarchyViewTypes);
+        setupVersionAndBreadcrumbMocks(componentInstance.salesHierarchyViewType);
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Snapshot',
+          'Link Click',
+          'Breadcrumb'
+        ]);
       });
 
       it('should dispatch the RefreshAllPerformances action when the current filter state and previous state`s filter mismatch', () => {

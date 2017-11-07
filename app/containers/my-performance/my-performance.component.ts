@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 
 import { AccountDashboardStateParameters } from '../../models/account-dashboard-state-parameters.model';
 import { ActionStatus } from '../../enums/action-status.enum';
+import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
@@ -33,10 +34,10 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
-import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
-import { WindowService } from '../../services/window.service';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { WindowService } from '../../services/window.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -100,7 +101,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
     private titleService: Title,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
@@ -286,6 +288,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
     const previousIndex: number = this.versions.length - 1;
     const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
 
@@ -293,6 +296,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Breadcrumb');
     const { trail, entityDescription } = event;
     const indexOffset: number = 1;
     const stepsBack: number = trail.length - indexOffset - trail.indexOf(entityDescription);
@@ -340,6 +344,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
       filter: this.filterState
     })));
