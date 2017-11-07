@@ -332,8 +332,9 @@ export class ResponsibilitiesService {
       case SalesHierarchyViewType.distributors:
         let performanceObservable: Observable<Performance> = refreshTotalPerformanceData.alternateHierarchyId
         ? this.getHierarchyGroupPerformance(
-          refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
-            hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
+          this.findHierarchyGroupFromGroupedEntities(
+            refreshTotalPerformanceData.hierarchyGroups,
+            refreshTotalPerformanceData.groupedEntities
           ),
           refreshTotalPerformanceData.filter,
           refreshTotalPerformanceData.positionId,
@@ -367,10 +368,12 @@ export class ResponsibilitiesService {
 
       case SalesHierarchyViewType.people:
       default:
+        const hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
+          refreshTotalPerformanceData.hierarchyGroups,
+          refreshTotalPerformanceData.groupedEntities
+        );
         return this.getHierarchyGroupPerformance(
-          refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
-            hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
-          ),
+          hierarchyGroup,
           refreshTotalPerformanceData.filter,
           refreshTotalPerformanceData.positionId,
           refreshTotalPerformanceData.brandSkuCode,
@@ -673,5 +676,13 @@ export class ResponsibilitiesService {
         this.toastService.showPerformanceDataErrorToast();
         return Observable.of(this.performanceTransformerService.transformPerformanceDTO(null));
       });
+  }
+
+  private findHierarchyGroupFromGroupedEntities(hierarchyGroups: Array<HierarchyGroup>, groupedEntities: GroupedEntities): HierarchyGroup {
+    const groupEntityKey = Object.keys(groupedEntities)[0];
+
+    return hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
+      hierarchyGroup.name === groupEntityKey
+    );
   }
 }
