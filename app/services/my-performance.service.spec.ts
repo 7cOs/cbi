@@ -226,10 +226,6 @@ describe('Service: MyPerformanceService', () => {
 
   describe('getSalesHierarchyViewTypeLabel', () => {
 
-    beforeEach(() => {
-      spyOn(myPerformanceService, 'getSalesHierarchyViewTypeLabel').and.callThrough();
-    });
-
     it('should return the SalesHierarchyHeaderEntityType associated with the passed in SalesHierarchyViewType', () => {
       const actualRoleGroupLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.roleGroups);
       const actualPeopleLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.people);
@@ -246,10 +242,6 @@ describe('Service: MyPerformanceService', () => {
   });
 
   describe('getProductMetricsViewTypeLabel', () => {
-
-    beforeEach(() => {
-      spyOn(myPerformanceService, 'getProductMetricsViewTypeLabel').and.callThrough();
-    });
 
     it('should return the ProductMetricHeaderProductType associated with the passed in ProductMetricsViewType', () => {
       const actualBrandsLabel = myPerformanceService.getProductMetricsViewTypeLabel(ProductMetricsViewType.brands);
