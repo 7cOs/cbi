@@ -25,10 +25,12 @@ export class MyPerformanceTableRowComponent {
   set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
     this.isSubAcountsOrDistributors = viewType === SalesHierarchyViewType.distributors
       || viewType === SalesHierarchyViewType.subAccounts;
+    this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
   }
 
   public sortStatus = SortStatus;
 
+  private isRolegroups: boolean;
   private isSubAcountsOrDistributors: boolean;
 
   constructor(
@@ -54,6 +56,14 @@ export class MyPerformanceTableRowComponent {
     return {
       ['link']: this.isSubAcountsOrDistributors,
       ['forward-arrow']: this.isSubAcountsOrDistributors
+    };
+  }
+
+  public getRolegroupIconClass(): CssClasses {
+    return {
+      ['geography-group-icon']: this.rowData.descriptionRow0 === 'GEOGRAPHY',
+      ['account-group-icon']: this.rowData.descriptionRow0 === 'ACCOUNTS',
+      ['rolegroup-icon']: this.rowData.descriptionRow0 !== 'GEOGRAPHY' && this.rowData.descriptionRow0 !== 'ACCOUNTS'
     };
   }
 
