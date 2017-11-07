@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class AccountDashboardDistributorFilterTest extends BaseTestCase {
@@ -55,6 +56,50 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       "DISTRIBUTORS",
       "Right panel header text failed to match expected default."
     );
+  }
+
+  @Test(description = "Filter by Distributor", dataProvider = "distributorData")
+  public void filterByDistributor(String distributorName, String shortenedDistributorName) {
+    accountDashboardPage
+      .enterDistributorSearchText(distributorName)
+      .clickSearchForDistributor()
+      .selectDistributorFilterByName(distributorName)
+      .clickApplyFilters()
+      .waitForBrandsLoaderToDisappear()
+      .waitForMarketLoaderToDisappear();
+
+    assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
+
+    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsLoaderToDisappear();
+    assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
+
+    accountDashboardPage.drillUpLeftPanel().waitForBrandsLoaderToDisappear();
+    assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
+  }
+
+  private void assertDistributorLabelsMatch(String distributorName, String shortenedDistributorName) {
+    Assert.assertEquals(
+      accountDashboardPage.getOverviewMarketLabel(),
+      distributorName,
+      "Market Overview label failed to match applied Distributor filter."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      distributorName,
+      "The 'for' label for the right panel selector header failed to match applied Distributor filter."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.getRightPanelHeader(),
+      shortenedDistributorName,
+      "Right panel header text failed to match applied Distributor filter."
+    );
+  }
+
+  @DataProvider
+  public static Object[][] distributorData() {
+    return new Object[][]{
+      {"HEALY WHOLESALE CO INC - NC", "HEALY WHOLESALE C..."}
+    };
   }
 
 }
