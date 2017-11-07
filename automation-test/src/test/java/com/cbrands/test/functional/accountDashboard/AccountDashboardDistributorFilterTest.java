@@ -63,8 +63,15 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     accountDashboardPage
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName)
-      .clickApplyFilters()
+      .selectDistributorFilterByName(distributorName);
+
+    Assert.assertEquals(
+      accountDashboardPage.getDistributorFieldText(),
+      distributorName,
+      "Failed to select Distributor"
+    );
+
+    accountDashboardPage.clickApplyFilters()
       .waitForBrandsLoaderToDisappear()
       .waitForMarketLoaderToDisappear();
 
@@ -93,6 +100,20 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       shortenedDistributorName,
       "Right panel header text failed to match applied Distributor filter."
     );
+  }
+
+  @Test(description = "Remove Distributor filter", dataProvider = "distributorData")
+  public void removeDistributorFilter(String distributorName, String shortenedDistributorName) {
+    accountDashboardPage
+      .enterDistributorSearchText(distributorName)
+      .clickSearchForDistributor()
+      .selectDistributorFilterByName(distributorName)
+      .clickApplyFilters()
+      .waitForBrandsLoaderToDisappear()
+      .waitForMarketLoaderToDisappear()
+      .clickRemoveDistributorFilter();
+
+    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
   }
 
   @DataProvider
