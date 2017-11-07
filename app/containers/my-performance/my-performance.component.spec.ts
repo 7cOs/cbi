@@ -1899,7 +1899,6 @@ describe('MyPerformanceComponent', () => {
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
       }));
-
     });
   });
 });
