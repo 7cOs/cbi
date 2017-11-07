@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 
 import { AccountDashboardStateParameters } from '../../models/account-dashboard-state-parameters.model';
 import { ActionStatus } from '../../enums/action-status.enum';
+import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
@@ -100,7 +101,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
     private titleService: Title,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
@@ -410,8 +412,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleRightRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    console.log(parameters.row.descriptionRow0);
+    this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
     switch (this.productMetricsViewType) {
       case ProductMetricsViewType.brands:
+        console.log('row clicked');
         this.selectedBrandCode = parameters.row.metadata.brandCode;
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
@@ -423,7 +428,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       case ProductMetricsViewType.skus:
-        if (parameters.row) {
+        if (parameters.type === RowType.data) {
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({

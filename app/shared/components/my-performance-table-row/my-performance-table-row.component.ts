@@ -1,6 +1,7 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Inject } from '@angular/core';
 
+import { AnalyticsService } from '../../../services/analytics.service';
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -32,6 +33,7 @@ export class MyPerformanceTableRowComponent {
   private isSubAcountsOrDistributors: boolean;
 
   constructor(
+    private analyticsService: AnalyticsService,
     @Inject('ieHackService') private ieHackService: any
   ) { }
 
@@ -63,6 +65,7 @@ export class MyPerformanceTableRowComponent {
     }
   }
   public dismissableRowXClicked(): void {
+    this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
     this.onDismissableRowXClicked.emit();
   }
 }
