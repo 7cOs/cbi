@@ -49,6 +49,9 @@ public class AccountDashboardPage extends TestNGBasePage {
     ".btn-action")
   private WebElement applyFilters;
 
+  @FindBy(how = How.XPATH, using = "//a[contains(@class, 'reset-icon')]")
+  private WebElement resetFilters;
+
   @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
   private WebElement leftPanel;
 
@@ -274,6 +277,12 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   public String getDistributorFieldText() {
     return distributorFilter.findElement(By.xpath("//input[@type='text']")).getAttribute("value");
+  }
+
+  public AccountDashboardPage clickResetFilters() {
+    waitForElementToClickable(resetFilters, true).click();
+
+    return this;
   }
 
   public enum RightPanelLevel {

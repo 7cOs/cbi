@@ -41,21 +41,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
 
   @Test(description = "Filter by Distributor - default values")
   public void distributorFilterDefaults() {
-    Assert.assertEquals(
-      accountDashboardPage.getOverviewMarketLabel(),
-      "Distributors",
-      "Market Overview label failed to match expected default."
-    );
-    Assert.assertEquals(
-      accountDashboardPage.getRightPanelSelectorContextLabel(),
-      testUser.fullName().toUpperCase(),
-      "The 'for' label for the right panel selector header failed to match expected default."
-    );
-    Assert.assertEquals(
-      accountDashboardPage.getRightPanelHeader(),
-      "DISTRIBUTORS",
-      "Right panel header text failed to match expected default."
-    );
+    assertDefaultDistributorLabels();
   }
 
   @Test(description = "Filter by Distributor", dataProvider = "distributorData")
@@ -119,6 +105,29 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .clickApplyFilters()
       .waitForBrandsLoaderToDisappear()
       .waitForMarketLoaderToDisappear();
+    assertDefaultDistributorLabels();
+  }
+
+  @Test(
+    dependsOnMethods = {"distributorFilterDefaults", "filterByDistributor"},
+    description = "Reset filters when Distributor filter is applied",
+    dataProvider = "distributorData"
+  )
+  public void resetFilters(String distributorName, String shortenedDistributorName) {
+    accountDashboardPage
+      .enterDistributorSearchText(distributorName)
+      .clickSearchForDistributor()
+      .selectDistributorFilterByName(distributorName)
+      .clickApplyFilters()
+      .waitForBrandsLoaderToDisappear()
+      .waitForMarketLoaderToDisappear()
+      .clickResetFilters();
+
+    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
+    assertDefaultDistributorLabels();
+  }
+
+  private void assertDefaultDistributorLabels() {
     Assert.assertEquals(
       accountDashboardPage.getOverviewMarketLabel(),
       "Distributors",
