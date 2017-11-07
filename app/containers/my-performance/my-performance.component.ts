@@ -645,8 +645,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedBrandCode: this.currentState.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-        contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
-        this.currentState.responsibilities.positionId
+        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
       }));
     }
   }
