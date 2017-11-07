@@ -1868,7 +1868,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when the filter state is changed, left side data row is clicked and filter mismatch', () => {
+  describe('when the filter state is mismatched and AND viewType is subAccounts', () => {
     let versionsMock: MyPerformanceEntitiesData[];
     let currentMock: MyPerformanceEntitiesData;
     let productMetricsStateMock: ProductMetricsState;
