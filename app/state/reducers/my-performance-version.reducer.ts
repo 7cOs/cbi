@@ -43,7 +43,7 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND_CODE:
       return {
         current: {
           responsibilities: state.current.responsibilities,
@@ -56,7 +56,7 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU_CODE:
       return {
         current: {
           responsibilities: state.current.responsibilities,
@@ -70,7 +70,7 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
-    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE:
       return {
         current: {
           responsibilities: state.current.responsibilities,
@@ -83,7 +83,7 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
-    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE:
       return {
         current: {
           responsibilities: state.current.responsibilities,
