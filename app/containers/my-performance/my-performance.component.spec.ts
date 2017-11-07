@@ -3,8 +3,8 @@ import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { sample } from 'lodash';
+import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 
 import { ActionStatus } from '../../enums/action-status.enum';
