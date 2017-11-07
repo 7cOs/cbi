@@ -4,6 +4,6 @@ import { SkuPackageType } from './sku-package-type.enum';
 
 const skuPackageTypeValues = Object.keys(SkuPackageType).map(key => SkuPackageType[key]);
 
-export function getskuPackageTypeMock(): SkuPackageType {
+export function getSkuPackageTypeMock(): SkuPackageType {
   return sample(skuPackageTypeValues);
 }

@@ -50,6 +50,8 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
+import { getProductMetricsSkuMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
@@ -109,6 +111,7 @@ describe('MyPerformanceComponent', () => {
   let componentInstance: MyPerformanceComponent;
   let componentInstanceCopy: any;
   let userServiceMock: any;
+  let myPerformanceTableDataTransformerService: any;
   let myPerformanceServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
   let myPerformanceProductMetricsMock: ProductMetricsState = {
@@ -170,6 +173,12 @@ describe('MyPerformanceComponent', () => {
   };
 
   beforeEach(() => {
+    myPerformanceTableDataTransformerService = {
+      getLeftTableData: jasmine.createSpy('getLeftTableData').and.callThrough(),
+      getRightTableData: jasmine.createSpy('getRightTableData').and.callThrough(),
+      getTotalRowData: jasmine.createSpy('getTotalRowData').and.callThrough(),
+      getProductMetricsSelectedBrandRow: jasmine.createSpy('getProductMetricsSelectedBrandRow').and.callThrough()
+    };
     userServiceMock = {
       model: {
         currentUser: {
@@ -200,7 +209,10 @@ describe('MyPerformanceComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
-        MyPerformanceTableDataTransformerService,
+        {
+          provide: MyPerformanceTableDataTransformerService,
+          useValue: myPerformanceTableDataTransformerService
+        },
         {
           provide: MyPerformanceService,
           useValue: myPerformanceServiceMock
@@ -389,15 +401,9 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when left side total row is clicked', () => {
-    let versionsMock: MyPerformanceEntitiesData[];
-    let previousVersion: MyPerformanceEntitiesData;
-
     beforeEach(() => {
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
-
-      versionsMock = generateMockVersions(4, 9);
-      previousVersion = versionsMock[versionsMock.length - 1];
     });
 
     describe('when back button is NOT displayed', () => {
@@ -411,14 +417,25 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when back button is displayed', () => {
+      let versionsMock: MyPerformanceEntitiesData[];
+      let previousVersionMock: MyPerformanceEntitiesData;
+
       beforeEach(() => {
         componentInstance.showLeftBackButton = true;
+        componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+        componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+        componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+        versionsMock = generateMockVersions(4, 9);
+        previousVersionMock = versionsMock[versionsMock.length - 1];
+        previousVersionMock.filter = stateMock.myPerformanceFilter;
+        previousVersionMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+        previousVersionMock.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+        previousVersionMock.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
          'when last version has a salesHierarchyViewType of distributors', () => {
-        previousVersion.salesHierarchyViewType.viewType = SalesHierarchyViewType.distributors;
-        previousVersion.filter = stateMock.myPerformanceFilter;
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.distributors;
         versionsSubject.next(versionsMock);
 
         const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
@@ -429,44 +446,41 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
-          positionId: previousVersion.responsibilities.positionId,
+          positionId: previousVersionMock.responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: previousVersion.selectedEntityType,
+          selectedEntityType: previousVersionMock.selectedEntityType,
           inAlternateHierarchy: false,
           selectedBrandCode: expectedSelectedBrandCode,
-          entityTypeCode: previousVersion.responsibilities.entityTypeCode,
-          contextPositionId: previousVersion.responsibilities.positionId
+          entityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          contextPositionId: previousVersionMock.responsibilities.positionId
         }));
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
          'when last version has a salesHierarchyViewType of people', () => {
-        previousVersion.salesHierarchyViewType.viewType = SalesHierarchyViewType.people;
-        previousVersion.filter = stateMock.myPerformanceFilter;
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.people;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
-
         const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
-          positionId: previousVersion.responsibilities.positionId,
-          entityTypeCode: previousVersion.responsibilities.entityTypeCode,
+          positionId: previousVersionMock.responsibilities.positionId,
+          entityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: previousVersion.selectedEntityType,
+          selectedEntityType: previousVersionMock.selectedEntityType,
           selectedBrandCode: expectedSelectedBrandCode,
           inAlternateHierarchy: false,
-          contextPositionId: previousVersion.responsibilities.positionId
+          contextPositionId: previousVersionMock.responsibilities.positionId
         }));
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
          'when last version has a salesHierarchyViewType of subAccounts', () => {
-        previousVersion.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
-        previousVersion.filter = stateMock.myPerformanceFilter;
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
         versionsSubject.next(versionsMock);
 
         const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
@@ -477,44 +491,41 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
-          positionId: previousVersion.responsibilities.positionId,
+          positionId: previousVersionMock.responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: previousVersion.selectedEntityType,
+          selectedEntityType: previousVersionMock.selectedEntityType,
           selectedBrandCode: expectedSelectedBrandCode,
           inAlternateHierarchy: false,
-          entityTypeCode: previousVersion.responsibilities.entityTypeCode,
-          contextPositionId: previousVersion.responsibilities.positionId
+          entityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          contextPositionId: previousVersionMock.responsibilities.positionId
         }));
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
          'when last version has a salesHierarchyViewType of roleGroups', () => {
-        previousVersion.salesHierarchyViewType.viewType = SalesHierarchyViewType.roleGroups;
-        previousVersion.filter = stateMock.myPerformanceFilter;
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.roleGroups;
         versionsSubject.next(versionsMock);
+        const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
         storeMock.dispatch.calls.reset();
         componentInstance.handleBackButtonClicked();
 
-        const expectedSelectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
-
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
-          positionId: previousVersion.responsibilities.positionId,
+          positionId: previousVersionMock.responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: previousVersion.selectedEntityType,
+          selectedEntityType: previousVersionMock.selectedEntityType,
           inAlternateHierarchy: false,
-          entityTypeCode: previousVersion.responsibilities.entityTypeCode,
-          contextPositionId: previousVersion.responsibilities.positionId,
+          entityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          contextPositionId: previousVersionMock.responsibilities.positionId,
           selectedBrandCode: expectedSelectedBrandCode
         }));
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
          'when last version has a salesHierarchyViewType of accounts', () => {
-        previousVersion.salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
-        previousVersion.filter = stateMock.myPerformanceFilter;
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
@@ -525,19 +536,19 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
-          positionId: previousVersion.responsibilities.positionId,
+          positionId: previousVersionMock.responsibilities.positionId,
           filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: previousVersion.selectedEntityType,
+          selectedEntityType: previousVersionMock.selectedEntityType,
           selectedBrandCode: expectedSelectedBrandCode,
           inAlternateHierarchy: false,
-          entityTypeCode: previousVersion.responsibilities.entityTypeCode,
-          contextPositionId: previousVersion.responsibilities.positionId
+          entityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          contextPositionId: previousVersionMock.responsibilities.positionId
         }));
       });
 
       it('should dispatch the RefreshAllPerformances action when the filter state and previous state`s filter mismatch', () => {
-        previousVersion.salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
-        previousVersion.filter = getMyPerformanceFilterMock();
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
+        previousVersionMock.filter = getMyPerformanceFilterMock();
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
@@ -545,17 +556,71 @@ describe('MyPerformanceComponent', () => {
 
         expect(storeMock.dispatch.calls.count()).toBe(3);
         expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: previousVersion.responsibilities.positionId,
-          groupedEntities: previousVersion.responsibilities.groupedEntities,
-          hierarchyGroups: previousVersion.responsibilities.hierarchyGroups,
-          selectedEntityType: previousVersion.selectedEntityType,
-          selectedEntityTypeCode: previousVersion.responsibilities.entityTypeCode,
-          salesHierarchyViewType: previousVersion.salesHierarchyViewType.viewType,
+          positionId: previousVersionMock.responsibilities.positionId,
+          groupedEntities: previousVersionMock.responsibilities.groupedEntities,
+          hierarchyGroups: previousVersionMock.responsibilities.hierarchyGroups,
+          selectedEntityType: previousVersionMock.selectedEntityType,
+          selectedEntityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
           filter: stateMock.myPerformanceFilter,
-          brandSkuCode: previousVersion.selectedBrandCode,
-          entityType: previousVersion.selectedEntityType,
-          alternateHierarchyId: previousVersion.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersion.responsibilities.accountPositionId
+          brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
+          skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+          entityType: previousVersionMock.selectedEntityType,
+          alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+        }));
+      });
+
+      it('should dispatch the RefreshAllPerformances action'
+        + ' when the selectedBrandCode and previous state`s selectedBrandCode mismatch', () => {
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
+        previousVersionMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode + 'NOMATCH';
+        versionsSubject.next(versionsMock);
+
+        componentInstanceCopy.selectedSkuPackageCode = null;
+        storeMock.dispatch.calls.reset();
+        componentInstance.handleBackButtonClicked();
+
+        expect(storeMock.dispatch.calls.count()).toBe(3);
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+          positionId: previousVersionMock.responsibilities.positionId,
+          groupedEntities: previousVersionMock.responsibilities.groupedEntities,
+          hierarchyGroups: previousVersionMock.responsibilities.hierarchyGroups,
+          selectedEntityType: previousVersionMock.selectedEntityType,
+          selectedEntityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
+          filter: stateMock.myPerformanceFilter,
+          brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+          skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+          entityType: previousVersionMock.selectedEntityType,
+          alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+        }));
+      });
+
+      it('should dispatch the RefreshAllPerformances action'
+        + ' when the selectedSkuPackageCode and previous state`s selectedSkuPackageCode mismatch', () => {
+        previousVersionMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.accounts;
+        previousVersionMock.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode + 'NOMATCH';
+        versionsSubject.next(versionsMock);
+
+        storeMock.dispatch.calls.reset();
+        componentInstance.handleBackButtonClicked();
+
+        expect(storeMock.dispatch.calls.count()).toBe(3);
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+          positionId: previousVersionMock.responsibilities.positionId,
+          groupedEntities: previousVersionMock.responsibilities.groupedEntities,
+          hierarchyGroups: previousVersionMock.responsibilities.hierarchyGroups,
+          selectedEntityType: previousVersionMock.selectedEntityType,
+          selectedEntityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
+          filter: stateMock.myPerformanceFilter,
+          brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
+          entityType: previousVersionMock.selectedEntityType,
+          skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+          alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId
         }));
       });
     });
@@ -574,6 +639,8 @@ describe('MyPerformanceComponent', () => {
       expectedSaveMyPerformanceStatePayload = Object.assign({}, stateMock.myPerformance.current, {
         filter: stateMock.myPerformanceFilter
       });
+      componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+      componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
     });
 
     it('should dispatch the SaveMyPerformanceState action with the payload containing the "current" state but the filter ' +
@@ -673,7 +740,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedPositionId: rowMock.metadata.positionId,
         selectedEntityDescription: rowMock.descriptionRow0,
-        brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+        brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
         skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
@@ -715,6 +782,12 @@ describe('MyPerformanceComponent', () => {
     'contains an alternateHierarchyId', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       const alternateHierarchyIdMock = chance.string();
+      componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+      componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+      componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+      currentMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+      currentMock.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+      currentMock.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
 
       currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
       params.row.metadata.alternateHierarchyId = currentMock.responsibilities.alternateHierarchyId;
@@ -736,7 +809,7 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: alternateHierarchyIdMock,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityDescription: rowMock.descriptionRow0,
-        brandSkuCode: currentMock.selectedBrandCode,
+        brandSkuCode: currentMock.selectedSkuPackageCode,
         skuPackageType: currentMock.selectedSkuPackageType
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(
@@ -784,6 +857,10 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
       currentSubject.next(currentMock);
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      componentInstanceCopy.selectedBrandCode = currentMock.selectedBrandCode;
+      componentInstanceCopy.selectedSkuPackageCode = currentMock.selectedSkuPackageCode;
+      componentInstanceCopy.selectedSkuPackageType = currentMock.selectedSkuPackageType;
+      currentMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       const entityTypes: EntityType[] = Object.keys(EntityType)
         .filter((key: EntityType) => key !== EntityType.ResponsibilitiesGroup)
@@ -802,7 +879,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityDescription: rowMock.descriptionRow0,
         entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: currentMock.selectedBrandCode,
+        brandSkuCode: currentMock.selectedSkuPackageCode,
         skuPackageType: currentMock.selectedSkuPackageType
       }));
     });
@@ -1111,6 +1188,7 @@ describe('MyPerformanceComponent', () => {
         productMetricsViewType: ProductMetricsViewType.skus
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
+      componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
       componentInstance.handleElementClicked(params);
@@ -1155,6 +1233,9 @@ describe('MyPerformanceComponent', () => {
         expectedStepsBack = breadcrumbTrailMock.length - breadcrumbSelectionIndex - 1;
         versionsMock[breadcrumbSelectionIndex].salesHierarchyViewType.viewType = selectedSalesHierarchyViewType;
         versionsMock[breadcrumbSelectionIndex].filter = stateMock.myPerformanceFilter;
+        versionsMock[breadcrumbSelectionIndex].selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+        versionsMock[breadcrumbSelectionIndex].selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+        versionsMock[breadcrumbSelectionIndex].selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
         selectedVersion = versionsMock[breadcrumbSelectionIndex];
         expectedPositionId = versionsMock[breadcrumbSelectionIndex].responsibilities.positionId;
         expectedEntityTypeCode = versionsMock[breadcrumbSelectionIndex].responsibilities.entityTypeCode;
@@ -1165,6 +1246,9 @@ describe('MyPerformanceComponent', () => {
       beforeEach(() => {
         storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
+        componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
+        componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+        componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
@@ -1295,7 +1379,71 @@ describe('MyPerformanceComponent', () => {
           selectedEntityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
           salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
           filter: stateMock.myPerformanceFilter,
-          brandSkuCode: previousVersionMock.selectedBrandCode,
+          brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
+          skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+          entityType: previousVersionMock.selectedEntityType,
+          alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+        }));
+      });
+
+      it('should dispatch the RefreshAllPerformances action'
+        + ' when the current selectedBrandCode and previous state`s selectedBrandCode mismatch', () => {
+        setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.people);
+
+        const previousVersionMock = versionsMock[breadcrumbSelectionIndex];
+        componentInstanceCopy.selectedSkuPackageCode = null;
+        componentInstanceCopy.selectedSkuPackageType = null;
+
+        versionsMock[breadcrumbSelectionIndex].selectedBrandCode = versionsMock[breadcrumbSelectionIndex].selectedBrandCode + 'NOMATCH';
+        versionsSubject.next(versionsMock);
+
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+          positionId: previousVersionMock.responsibilities.positionId,
+          groupedEntities: previousVersionMock.responsibilities.groupedEntities,
+          hierarchyGroups: previousVersionMock.responsibilities.hierarchyGroups,
+          selectedEntityType: previousVersionMock.selectedEntityType,
+          selectedEntityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
+          filter: stateMock.myPerformanceFilter,
+          brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+          skuPackageType: null,
+          entityType: previousVersionMock.selectedEntityType,
+          alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+        }));
+      });
+
+      it('should dispatch the RefreshAllPerformances action'
+        + 'when the current selectedSkuPackageCode and previous state`s selectedSkuPackageCode mismatch', () => {
+        setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.people);
+
+        const previousVersionMock = versionsMock[breadcrumbSelectionIndex];
+
+        versionsMock[breadcrumbSelectionIndex].selectedSkuPackageCode
+          = versionsMock[breadcrumbSelectionIndex].selectedSkuPackageCode + 'NOMATCH';
+        versionsSubject.next(versionsMock);
+
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+          positionId: previousVersionMock.responsibilities.positionId,
+          groupedEntities: previousVersionMock.responsibilities.groupedEntities,
+          hierarchyGroups: previousVersionMock.responsibilities.hierarchyGroups,
+          selectedEntityType: previousVersionMock.selectedEntityType,
+          selectedEntityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
+          salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
+          filter: stateMock.myPerformanceFilter,
+          brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
+          skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
           entityType: previousVersionMock.selectedEntityType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
           accountPositionId: previousVersionMock.responsibilities.accountPositionId
@@ -1318,6 +1466,189 @@ describe('MyPerformanceComponent', () => {
       });
 
       expect(storeMock.dispatch.calls.count()).toBe(0);
+    });
+  });
+
+  describe('getProductMetricsSelectedBrandRow', () => {
+
+    beforeEach(() => {
+      myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow.calls.reset();
+    });
+
+    it('should be called when viewtype is sku and selectedBrandCodeValues is defined', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched,
+        products: {brandValues: []},
+        selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
+        productMetricsViewType: ProductMetricsViewType.skus};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).toHaveBeenCalledWith(
+        myPerformanceProductMetricsMock.selectedBrandCodeValues);
+    });
+
+    it('should not be called product metrics are still fetching', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetching,
+        products: {brandValues: []},
+        selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
+        productMetricsViewType: ProductMetricsViewType.skus};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when viewtype is sku and selectedBrandCodeValues is undefined', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.skus};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when viewtype is brand and selectedBrandCodeValues is defined', () => {
+      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched,
+        products: {brandValues: []},
+        selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
+        productMetricsViewType: ProductMetricsViewType.brands};
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('deselectBrandRow', () => {
+    let currentMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      storeMock.dispatch.and.callThrough();
+      storeMock.dispatch.calls.reset();
+    });
+
+    it('should dispatch all actions correctly and assign variables correctly and call 4 actions', () => {
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities.alternateHierarchyId = null;
+      currentSubject.next(currentMock);
+      componentInstanceCopy.selectedBrandCode = chance.string();
+      componentInstance.deselectBrandValue();
+      expect(componentInstanceCopy.selectedBrandCode).toBe(undefined);
+      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: currentMock.responsibilities.positionId,
+        groupedEntities: currentMock.responsibilities.groupedEntities,
+        hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
+        salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+        filter: stateMock.myPerformanceFilter,
+        entityType: currentMock.selectedEntityType,
+        alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
+        accountPositionId: currentMock.responsibilities.accountPositionId
+      }));
+    });
+  });
+
+  describe('deselectBrandValue', () => {
+    let currentMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
+      spyOn(componentInstance, 'deselectBrandValue');
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([getMyPerformanceTableRowMock]);
+    });
+
+    it('should not be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is has values', () => {
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+    });
+
+    it('should be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is empty', () => {
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([]);
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).toHaveBeenCalled();
+    });
+
+    it('should not be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is undefined', () => {
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue(undefined);
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when selectedBrandCode is truthy, viewtype is brands, and productMetrics has values', () => {
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.brands;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when selectedBrandCode is falsy, viewtype is skus, and productMetrics has values', () => {
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = null;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when all variables are good but responsibilities is fetching with responsibilitiesStatus is error', () => {
+      currentMock.responsibilities.responsibilitiesStatus = ActionStatus.Error;
+      currentSubject.next(currentMock);
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([]);
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when all variables are good but responsibilities is fetching with totalPerformanceStatus is error', () => {
+      currentMock.responsibilities.totalPerformanceStatus = ActionStatus.Error;
+      currentSubject.next(currentMock);
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([]);
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when all variables are good but responsibilities is fetching with entitiesPerformanceStatus is error', () => {
+      currentMock.responsibilities.entitiesPerformanceStatus = ActionStatus.Error;
+      currentSubject.next(currentMock);
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([]);
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+    });
+
+    it('should not be called when all variables are good but responsibilities is fetching with subaccountsStatus is error', () => {
+      currentMock.responsibilities.subaccountsStatus = ActionStatus.Error;
+      currentSubject.next(currentMock);
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([]);
+      myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
+      myPerformanceProductMetricsMock.productMetricsViewType = ProductMetricsViewType.skus;
+      myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
+      componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
     });
   });
 
@@ -1472,7 +1803,8 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
     });
 
-    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions to refresh all performance data', () => {
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy', () => {
+      currentMock.responsibilities.alternateHierarchyId = chance.string();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
 
@@ -1487,7 +1819,8 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: currentMock.selectedBrandCode,
+        brandSkuCode: undefined,
+        skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         accountPositionId: currentMock.responsibilities.accountPositionId
@@ -1496,7 +1829,43 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode
+        selectedBrandCode: currentMock.selectedBrandCode,
+        inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
+        entityTypeCode: currentMock.responsibilities.entityTypeCode,
+        contextPositionId: currentMock.responsibilities.alternateHierarchyId
+      }));
+    });
+
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when NOT in alternate hierarchy', () => {
+      currentMock.responsibilities.alternateHierarchyId = null;
+      productMetricsSubject.next(productMetricsStateMock);
+      currentSubject.next(currentMock);
+
+      componentInstance.ngOnInit();
+
+      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: currentMock.responsibilities.positionId,
+        groupedEntities: currentMock.responsibilities.groupedEntities,
+        hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
+        salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+        filter: stateMock.myPerformanceFilter as any,
+        brandSkuCode: undefined,
+        skuPackageType: undefined,
+        entityType: currentMock.selectedEntityType,
+        alternateHierarchyId: null,
+        accountPositionId: currentMock.responsibilities.accountPositionId
+      }));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+        positionId: currentMock.responsibilities.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedBrandCode: currentMock.selectedBrandCode,
+        inAlternateHierarchy: false,
+        entityTypeCode: currentMock.responsibilities.entityTypeCode,
+        contextPositionId: currentMock.responsibilities.positionId
       }));
     });
   });

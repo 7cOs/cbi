@@ -135,6 +135,12 @@ th {
     color: $blue;
   }
 
+  &:hover {
+    /deep/td {
+      background-color: $light-blue-4;
+    }
+  }
+
   &.selected {
     background-color: $light-blue-4;
 
@@ -575,5 +581,18 @@ div.ctv {
     font-weight: $semibold;
     color: $gray-1;
     background-color: $light-blue-4;
+  }
+}
+
+.dismissable-row-X-container {
+  width: 15px;
+  height: 15px;
+  box-sizing: border-box;
+  float: left;
+  margin-right: 10px;
+
+  .dismissable-row-X {
+    width: 100%;
+    height: 100%;
   }
 }

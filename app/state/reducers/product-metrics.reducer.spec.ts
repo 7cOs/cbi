@@ -112,6 +112,26 @@ describe('ProductMetrics Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
+  it('should delete the selectedBrandCodeValues from the state when a deselectBrandValues action is dispatched', () => {
+    const products = getProductMetricsWithBrandValuesMock();
+
+    initialState.products = products;
+    initialState.selectedBrandCodeValues = products.brandValues[chance.natural({min: 0, max: products.brandValues.length - 1})];
+
+    const expectedState = {
+      status: initialState.status,
+      products: initialState.products,
+      productMetricsViewType: ProductMetricsViewType.brands
+    };
+
+    const actualState = productMetricsReducer(
+      initialState,
+      new ProductMetricsActions.DeselectBrandValues()
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
+
   it('should return current state when an unknown action is dispatched', () => {
     expect(productMetricsReducer(
       initialState,

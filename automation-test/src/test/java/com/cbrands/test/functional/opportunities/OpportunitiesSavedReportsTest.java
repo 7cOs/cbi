@@ -43,18 +43,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
-  @Test(description = "Creating an Opportunities Saved Report", dataProvider = "savedReportData")
+  @Test(description = "Creating an Opportunities Saved Report", dataProvider = "createRunReportData")
   public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage
-      .deleteAllSavedReports()
-      .enterDistributorSearchText(distributorSearchText)
-      .clickSearchForDistributor()
-      .clickFirstDistributorResult()
-      .clickApplyFiltersButton()
-      .waitForLoaderToDisappear()
-      .clickSaveReportLink()
-      .enterReportName(name)
-      .clickSave()
+    opportunitiesPage.deleteAllSavedReports();
+    saveNewReport(name, distributorSearchText)
       .waitForModalToClose()
       .clickSavedReportsDropdown();
 
@@ -73,7 +65,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "savedReportData"
+    dataProvider = "createRunReportData"
   )
   public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
     opportunitiesPage
@@ -88,7 +80,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Running an Opportunities Saved Report from the Home page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "savedReportData"
+    dataProvider = "createRunReportData"
   )
   public void runSavedReportFromHomePage(String reportName, String distributor) {
     homePage.goToPage();
@@ -103,13 +95,15 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "savedReportData"
+    dataProvider = "duplicateReportData"
   )
-  public void attemptToEditWithExistingName(String reportName, String distributor) {
+  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
+    saveNewReport(existingReportName, distributor).waitForModalToClose();
+
     final SavedReportModal savedReportModal = opportunitiesPage
       .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportName)
-      .enterNewReportName(reportName)
+      .openModalForSavedReportWithName(existingReportName)
+      .enterNewReportName(existingReportName)
       .clickSave();
 
     Assert.assertTrue(
@@ -120,14 +114,16 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @Test(
     description = "Editing a Saved Report",
-    dependsOnMethods = {"createSavedReport", "attemptToEditWithExistingName"},
-    dataProvider = "savedReportData"
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "editReportData"
   )
-  public void editSavedReport(String reportName, String distributor) {
-    final String editedReportName = "EDITED " + reportName;
+  public void editSavedReport(String originalReportName, String distributor) {
+    saveNewReport(originalReportName, distributor).waitForModalToClose();
+
+    final String editedReportName = "EDITED " + originalReportName;
     opportunitiesPage
       .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportName)
+      .openModalForSavedReportWithName(originalReportName)
       .enterNewReportName(editedReportName)
       .clickSave()
       .waitForModalToClose();
@@ -145,12 +141,75 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
+  @Test(
+    description = "Deleting a Saved Report",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "deleteReportData"
+  )
+  public void deleteSavedReport(String reportNameToDelete, String distributor) {
+    saveNewReport(reportNameToDelete, distributor).waitForModalToClose();
+    opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportNameToDelete)
+      .clickSavedReportDeleteLink()
+      .waitForModalToClose();
+
+    Assert.assertFalse(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Opportunities page."
+    );
+
+    homePage.goToPage();
+    Assert.assertFalse(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Home page."
+    );
+  }
+
   @DataProvider
-  public static Object[][] savedReportData() {
+  public static Object[][] createRunReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {testReportName, "Healy Wholesale"}
+      {"Create & Run " + testReportName, "Healy Wholesale"}
     };
+  }
+
+  @DataProvider
+  public static Object[][] duplicateReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Duplicate " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] editReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Edit Me " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] deleteReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Delete Me " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  private SavedReportModal saveNewReport(String name, String distributorSearchText) {
+    return opportunitiesPage
+      .enterDistributorSearchText(distributorSearchText)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickSaveReportLink()
+      .enterReportName(name)
+      .clickSave();
   }
 
 }
