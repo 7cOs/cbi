@@ -240,6 +240,19 @@ public class AccountDashboardPage extends TestNGBasePage {
       .selectRetailerStoreByState(stateLocation, address);
   }
 
+  public String getOverviewMarketLabel() {
+    final WebElement marketTab = findElement(By.xpath("//div[@class='market-overview clearfix']/div[@class='market']"));
+    return marketTab.getText();
+  }
+
+  public String getRightPanelSelectorContextLabel() {
+    return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
+  }
+
+  public String getRightPanelHeader() {
+    return findElement(By.xpath("//p[contains(@class, 'market')]")).getText();
+  }
+
   public enum RightPanelLevel {
     Distributors,
     Accounts,

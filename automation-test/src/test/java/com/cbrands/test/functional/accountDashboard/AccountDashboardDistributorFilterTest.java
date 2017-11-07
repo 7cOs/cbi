@@ -10,7 +10,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class AccountDashboardDistributorFilterTest extends BaseTestCase {
@@ -39,5 +38,23 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
+  @Test(description = "Filter by Distributor - default values")
+  public void distributorFilterDefaults() {
+    Assert.assertEquals(
+      accountDashboardPage.getOverviewMarketLabel(),
+      "Distributors",
+      "Market Overview label failed to match expected default."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      testUser.fullName().toUpperCase(),
+      "The 'for' label for the right panel selector header failed to match expected default."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.getRightPanelHeader(),
+      "DISTRIBUTORS",
+      "Right panel header text failed to match expected default."
+    );
+  }
 
 }
