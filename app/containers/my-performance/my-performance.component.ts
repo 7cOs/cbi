@@ -288,11 +288,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
-    this.analyticsService.trackEvent(
-      'Team Snapshot',
-      'Link Click',
-      'Back Button'
-    );
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
     const previousIndex: number = this.versions.length - 1;
     const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
 
