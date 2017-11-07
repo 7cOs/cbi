@@ -1,5 +1,6 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 
+import { AnalyticsService } from '../../../services/analytics.service';
 import { CssClasses } from '../../../models/css-classes.model';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
@@ -12,16 +13,22 @@ describe('MyPerformanceTableComponent', () => {
   let componentInstance: MyPerformanceTableRowComponent;
 
   let ieHackServiceMock: any;
+  let analyticsServiceMock: any;
 
   beforeEach(() => {
+    analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
     TestBed.configureTestingModule({
       declarations: [
         MyPerformanceTableRowComponent
       ],
       providers: [
         {
-        provide: 'ieHackService',
-        useValue: ieHackServiceMock
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
+        },
+        {
+          provide: 'ieHackService',
+          useValue: ieHackServiceMock
         }
       ]
     });
@@ -103,6 +110,14 @@ describe('MyPerformanceTableComponent', () => {
         let dashboardLinkCss: CssClasses = componentInstance.getSublineClass();
         expect(dashboardLinkCss).toEqual({'link': false, 'forward-arrow': false});
       });
+    });
+  });
+
+  describe('when dismissableRowXClicked is called', () => {
+
+    it('should call trackEvent from the AnalyticsService', () => {
+      componentInstance.dismissableRowXClicked();
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', 'All Brands']);
     });
   });
 });
