@@ -1804,7 +1804,6 @@ describe('MyPerformanceComponent', () => {
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
-      currentMock.filter = getMyPerformanceFilterMock();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
       componentInstance.ngOnInit();
@@ -1837,7 +1836,6 @@ describe('MyPerformanceComponent', () => {
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when NOT in alternate hierarchy', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
-      currentMock.filter = getMyPerformanceFilterMock();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
       componentInstance.ngOnInit();
@@ -1870,7 +1868,6 @@ describe('MyPerformanceComponent', () => {
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics when viewType is subAccounts', () => {
       currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
-      currentMock.filter = getMyPerformanceFilterMock();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
       componentInstance.ngOnInit();
@@ -1891,7 +1888,7 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
-        positionId: currentMock.responsibilities.accountPositionId || currentMock.responsibilities.positionId,
+        positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
         selectedBrandCode: currentMock.selectedBrandCode,
