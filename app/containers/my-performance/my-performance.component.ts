@@ -98,6 +98,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any,
+    @Inject('analyticsService') private analyticsService: any,
     private myPerformanceService: MyPerformanceService,
     private titleService: Title,
     private windowService: WindowService
@@ -220,6 +221,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
     let accountDashboardStateParams: AccountDashboardStateParameters;
+
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams =
         this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(), this.filterState, row);
@@ -641,7 +643,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
         contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
-                            this.currentState.responsibilities.positionId
+        this.currentState.responsibilities.positionId
       }));
     }
   }

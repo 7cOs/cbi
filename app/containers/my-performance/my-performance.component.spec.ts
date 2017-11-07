@@ -111,6 +111,7 @@ describe('MyPerformanceComponent', () => {
   let componentInstance: MyPerformanceComponent;
   let componentInstanceCopy: any;
   let userServiceMock: any;
+  let analyticsServiceMock: any;
   let myPerformanceTableDataTransformerService: any;
   let myPerformanceServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
@@ -189,11 +190,13 @@ describe('MyPerformanceComponent', () => {
         }
       }
     };
-
     myPerformanceServiceMock = {
       getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType'),
       getMetricValueName: jasmine.createSpy('getMetricValueName'),
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
+    };
+    analyticsServiceMock = {
+      trackEvent: jasmine.createSpy('trackEvent').and.callThrough()
     };
 
     TestBed.configureTestingModule({
@@ -226,6 +229,10 @@ describe('MyPerformanceComponent', () => {
         {
           provide: '$state',
           useValue: stateMock
+        },
+        {
+          provide: 'analyticsService',
+          useValue: analyticsServiceMock
         },
         {
           provide: WindowService,
@@ -1092,6 +1099,15 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when distributor subline link clicked', () => {
+      it('should correctly call functions to go to accountDashboard when distributor clicked with GA recording ' +
+        'params within alternate hierarchy', () => {
+        rowMock.metadata.entityType = EntityType.Distributor;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
+        componentInstance.handleSublineClicked(rowMock);
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Team Performance', 'Go to Account Dashboard', rowMock.metadata.entityName);
+      });
       it('should correctly call functions to go to account dashboard when distributor clicked with correct ' +
         'params within alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
@@ -1105,10 +1121,23 @@ describe('MyPerformanceComponent', () => {
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Team Performance', 'Go to Account Dashboard', rowMock.metadata.entityName);
       });
     });
 
     describe('when subaccount subline link clicked', () => {
+      it('should correctly call functions for accountDashboard when subAccount clicked with GA recording ', () => {
+        rowMock.metadata.entityType = EntityType.SubAccount;
+        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentSubject.next(currentMock);
+        hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
+        myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
+        currentSubject.next(currentMock);
+        componentInstance.handleSublineClicked(rowMock);
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Team Performance', 'Go to Account Dashboard', rowMock.metadata.entityName);
+      });
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity within ' +
         'alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.SubAccount;
