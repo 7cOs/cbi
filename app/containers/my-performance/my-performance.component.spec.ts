@@ -1868,7 +1868,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when the filter state is changed, left side data row is clicked', () => {
+  describe('when the filter state is changed, left side data row is clicked and filter mismatch', () => {
     let versionsMock: MyPerformanceEntitiesData[];
     let currentMock: MyPerformanceEntitiesData;
     let productMetricsStateMock: ProductMetricsState;
@@ -1883,20 +1883,20 @@ describe('MyPerformanceComponent', () => {
         productMetricsViewType: ProductMetricsViewType.brands
       };
       currentMock = versionsMock[versionsMock.length - 1];
-      // currentMock.filter = stateMock.myPerformanceFilter;
-      currentMock.filter = getMyPerformanceFilterMock();
-      versionsSubject.next(versionsMock);
+      currentMock.filter = stateMock.myPerformanceFilter;
 
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
     });
 
-    it('should dispatch RefreshAllPerformances and FetchProductMetrics when filter changes AND viewType is subAccounts', () => {
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics when filter mismatch AND viewType is subAccounts', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
       currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
 
+      currentMock.filter = getMyPerformanceFilterMock();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
+      versionsSubject.next(versionsMock);
 
       componentInstance.ngOnInit();
 
