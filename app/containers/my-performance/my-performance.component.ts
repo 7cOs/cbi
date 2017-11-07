@@ -634,15 +634,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         accountPositionId: this.currentState.responsibilities.accountPositionId
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: this.currentState.salesHierarchyViewType.viewType === SalesHierarchyViewType.subAccounts
-          ? this.currentState.responsibilities.accountPositionId : this.currentState.responsibilities.positionId,
+        positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
         selectedBrandCode: this.currentState.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-        contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
-                            this.currentState.responsibilities.positionId
+        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
       }));
     }
   }
