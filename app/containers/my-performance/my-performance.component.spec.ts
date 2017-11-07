@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 
 import { ActionStatus } from '../../enums/action-status.enum';
+import { AnalyticsService } from '../../services/analytics.service';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -46,13 +47,12 @@ import {
          SetMyPerformanceSelectedEntityType,
          SkuPackagePayload
        } from '../../state/actions/my-performance-version.action';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
 import { getProductMetricsSkuMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { AnalyticsService } from '../../services/analytics.service';
 
 const chance = new Chance();
 
