@@ -52,9 +52,10 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_TYPE:
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND:
-    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU:
-    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND_CODE:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU_CODE:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
