@@ -149,8 +149,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             this.productMetricsViewType
           );
 
-          this.productMetricsSelectedBrandRow = this.productMetricsViewType === (ProductMetricsViewType.skus
-            || this.productMetricsViewType === ProductMetricsViewType.packages) && productMetrics.selectedBrandCodeValues
+          this.productMetricsSelectedBrandRow = this.productMetricsViewType !== ProductMetricsViewType.brands
+            && productMetrics.selectedBrandCodeValues
               ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
               : null;
 
@@ -608,7 +608,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedSkuPackageCode
-      && this.productMetricsState.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetricsState.productMetricsViewType !== ProductMetricsViewType.brands
       && this.productMetrics
       && !this.productMetrics.filter(
         (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length) {
@@ -619,7 +619,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedBrandCode
-      && this.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetricsViewType !== ProductMetricsViewType.brands
       && this.productMetrics
       && this.productMetrics.length === 0) {
       this.deselectBrandValue();

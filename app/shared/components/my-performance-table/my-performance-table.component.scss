@@ -302,7 +302,8 @@ div.ctv {
     }
   }
 
-  &.view-type-skus {
+  &.view-type-skus,
+  &.view-type-packages {
 
     tr, td, th {
       cursor: pointer;
