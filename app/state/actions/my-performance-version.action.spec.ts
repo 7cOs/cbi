@@ -103,9 +103,9 @@ describe('My Performance Version Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND)
-        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_BRAND');
-      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND);
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND_CODE)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_BRAND_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND_CODE);
     });
 
     it('should contain the correct payload', () => {
@@ -121,9 +121,9 @@ describe('My Performance Version Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND)
-        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_BRAND');
-      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND);
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE);
     });
   });
 
@@ -140,9 +140,9 @@ describe('My Performance Version Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU)
-        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU');
-      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU);
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU_CODE)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_SKU_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU_CODE);
     });
 
     it('should contain the correct payload', () => {
@@ -172,9 +172,9 @@ describe('My Performance Version Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU)
-        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU');
-      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU);
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE);
     });
   });
 });
