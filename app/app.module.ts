@@ -37,7 +37,6 @@ AppUpgradeAdapter.upgradeNg1Provider('toastService');
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
 AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
-AppUpgradeAdapter.upgradeNg1Provider('analyticsService');
 
 @NgModule({
   imports: [

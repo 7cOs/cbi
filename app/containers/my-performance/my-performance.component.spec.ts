@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 
 import { ActionStatus } from '../../enums/action-status.enum';
+import { AnalyticsService } from '../../services/analytics.service';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -231,7 +232,7 @@ describe('MyPerformanceComponent', () => {
           useValue: stateMock
         },
         {
-          provide: 'analyticsService',
+          provide: AnalyticsService,
           useValue: analyticsServiceMock
         },
         {
