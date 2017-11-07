@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { sample } from 'lodash';
 import { Title } from '@angular/platform-browser';
 
 import { ActionStatus } from '../../enums/action-status.enum';
@@ -406,7 +407,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when left side total row is clicked', () => {
+  describe('Perform various events when back button is clicked', () => {
     beforeEach(() => {
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
@@ -437,6 +438,15 @@ describe('MyPerformanceComponent', () => {
         previousVersionMock.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
         previousVersionMock.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
         previousVersionMock.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+      });
+
+      it('should send analytics event', () => {
+        componentInstance.handleBackButtonClicked();
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Snapshot',
+          'Link Click',
+          'Back Button'
+        ]);
       });
 
       it('should dispatch RestoreMyPerformanceState and FetchProductMetrics ' +
@@ -631,14 +641,6 @@ describe('MyPerformanceComponent', () => {
       });
     });
 
-    it('should send analytics event when back button is clicked', () => {
-      componentInstance.handleBackButtonClicked();
-      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
-        'Team Snapshot',
-        'Link Click',
-        'Back Button'
-      ]);
-    });
   });
 
   describe('when left side data row is clicked', () => {
@@ -899,7 +901,7 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should send analytics event when left row element is clicked', () => {
+    it('should send analytics event', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
@@ -1383,10 +1385,9 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
-      it('should send analytics event when bread crumb entities is clicked for any salesHierarchyViewType', () => {
+      it('should send analytics event for any salesHierarchyViewType', () => {
         const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
-        componentInstance.salesHierarchyViewType = salesHierarchyViewTypes[chance.integer(
-          {min: 0 , max: salesHierarchyViewTypes.length - 1})];
+        componentInstance.salesHierarchyViewType = sample(salesHierarchyViewTypes);
         setupVersionAndBreadcrumbMocks(componentInstance.salesHierarchyViewType);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
