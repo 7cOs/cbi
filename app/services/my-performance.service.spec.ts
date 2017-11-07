@@ -4,11 +4,14 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
-import { MyPerformanceService } from './my-performance.service';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilter } from '../models/my-performance-filter.model';
+import { MyPerformanceService } from './my-performance.service';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../enums/team-performance-table-header.enum';
+import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
+import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
 describe('Service: MyPerformanceService', () => {
   let myPerformanceService: MyPerformanceService;
@@ -23,11 +26,12 @@ describe('Service: MyPerformanceService', () => {
     });
   });
 
+  beforeEach(inject([ MyPerformanceService ],
+    (_myPerformanceService: MyPerformanceService) => {
+      myPerformanceService = _myPerformanceService;
+  }));
+
   describe('getUserDefaultFilterState', () => {
-    beforeEach(inject([ MyPerformanceService ],
-      (_myPerformanceService: MyPerformanceService) => {
-        myPerformanceService = _myPerformanceService;
-    }));
 
     describe('when userType is OFF_SPEC and Metric is velocity', () => {
       it('should return PremiseTypeValue Off when OFF_SPEC', () => {
@@ -127,10 +131,6 @@ describe('Service: MyPerformanceService', () => {
   });
 
   describe('getMetricValueName', () => {
-    beforeEach(inject([ MyPerformanceService ],
-      (_myPerformanceService: MyPerformanceService) => {
-        myPerformanceService = _myPerformanceService;
-      }));
 
     describe('metricKey is Velocity', () => {
       it('should return Velocity', () => {
@@ -224,4 +224,41 @@ describe('Service: MyPerformanceService', () => {
     });
   });
 
+  describe('getSalesHierarchyViewTypeLabel', () => {
+
+    beforeEach(() => {
+      spyOn(myPerformanceService, 'getSalesHierarchyViewTypeLabel').and.callThrough();
+    });
+
+    it('should return the SalesHierarchyHeaderEntityType associated with the passed in SalesHierarchyViewType', () => {
+      const actualRoleGroupLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.roleGroups);
+      const actualPeopleLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.people);
+      const actualDistributorsLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.distributors);
+      const actualAccountsLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.accounts);
+      const actualSubAccountsLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.subAccounts);
+
+      expect(actualRoleGroupLabel).toBe(SalesHierarchyHeaderEntityType.Group);
+      expect(actualPeopleLabel).toBe(SalesHierarchyHeaderEntityType.Person);
+      expect(actualDistributorsLabel).toBe(SalesHierarchyHeaderEntityType.Distributor);
+      expect(actualAccountsLabel).toBe(SalesHierarchyHeaderEntityType.Account);
+      expect(actualSubAccountsLabel).toBe(SalesHierarchyHeaderEntityType.SubAccount);
+    });
+  });
+
+  describe('getProductMetricsViewTypeLabel', () => {
+
+    beforeEach(() => {
+      spyOn(myPerformanceService, 'getProductMetricsViewTypeLabel').and.callThrough();
+    });
+
+    it('should return the ProductMetricHeaderProductType associated with the passed in ProductMetricsViewType', () => {
+      const actualBrandsLabel = myPerformanceService.getProductMetricsViewTypeLabel(ProductMetricsViewType.brands);
+      const actualSkusLabel = myPerformanceService.getProductMetricsViewTypeLabel(ProductMetricsViewType.skus);
+      const actualPackagesLabel = myPerformanceService.getProductMetricsViewTypeLabel(ProductMetricsViewType.packages);
+
+      expect(actualBrandsLabel).toBe(ProductMetricHeaderProductType.Brand);
+      expect(actualSkusLabel).toBe(ProductMetricHeaderProductType.SKU);
+      expect(actualPackagesLabel).toBe(ProductMetricHeaderProductType.Package);
+    });
+  });
 });

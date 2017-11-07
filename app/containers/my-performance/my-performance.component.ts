@@ -86,12 +86,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private selectedBrandCode: string;
   private selectedSkuPackageCode: string;
   private tableHeaderRowLeft: Array<string> = [
-    SalesHierarchyViewType.getSingularLabel(SalesHierarchyViewType.people),
+    this.myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.roleGroups),
     'DEPLETIONS',
     'CTV'
   ];
   private tableHeaderRowRight: Array<string> = [
-    ProductMetricsViewType.getSingularLabel(ProductMetricsViewType.brands, PremiseTypeValue.All),
+    this.myPerformanceService.getProductMetricsViewTypeLabel(ProductMetricsViewType.brands),
     'DEPLETIONS',
     'CTV'
   ];
@@ -139,8 +139,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
-        this.tableHeaderRowRight[0] = ProductMetricsViewType.getSingularLabel(productMetrics.productMetricsViewType,
-          this.filterState.premiseType);
+        this.tableHeaderRowRight[0] = this.myPerformanceService.getProductMetricsViewTypeLabel(productMetrics.productMetricsViewType);
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
@@ -148,8 +147,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             this.productMetricsViewType
           );
           this.productMetricsSelectedBrandRow = this.productMetricsViewType === ProductMetricsViewType.skus
-            ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
-            : null;
+            || this.productMetricsViewType === ProductMetricsViewType.packages
+              ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
+              : null;
         }
       });
 
@@ -159,7 +159,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
-        this.tableHeaderRowLeft[0] = SalesHierarchyViewType.getSingularLabel(current.salesHierarchyViewType.viewType);
+        this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType ||
+          SalesHierarchyViewType.roleGroups);
 
          // TODO: compare both selected brands to trigger or not a refresh
         this.selectedBrandCode = current.selectedBrandCode || this.selectedBrandCode;
@@ -409,6 +410,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       case ProductMetricsViewType.skus:
+      case ProductMetricsViewType.packages:
         if (parameters.row) {
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;

@@ -6,13 +6,11 @@ import * as Chance from 'chance';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getEntityTypeMock } from '../enums/entity-responsibilities.enum.mock';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
-import {
-  getProductMetricsBrandDTOMock,
-  getProductMetricsSkuDTOMock
-} from '../models/product-metrics.model.mock';
+import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
 import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
@@ -162,6 +160,7 @@ describe('ProductMetrics Service', () => {
         filter: performanceFilterStateMock,
         selectedEntityType: selectedEntityTypeMock
       };
+      productMetricsDataMock.filter.premiseType = PremiseTypeValue.All;
     });
 
     describe('when in alternateHierarchy', () => {
@@ -739,6 +738,48 @@ describe('ProductMetrics Service', () => {
             );
             done();
           });
+        });
+      });
+    });
+
+    describe('getProductMetrics view type', () => {
+      beforeEach(() => {
+        productMetricsDataMock.selectedEntityType = EntityType.Person;
+      });
+
+      it('should return a view type of brands when brand values are returned', (done) => {
+        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+          expect(productMetricsData.productMetricsViewType).toBe(ProductMetricsViewType.brands);
+          done();
+        });
+      });
+
+      it('should return a view type of packages when sku values are returned, a selected brand code is present ' +
+      'and product metrics are filtered for On Premise', (done) => {
+        productMetricsDataMock.selectedBrandCode = chance.string();
+        productMetricsDataMock.filter.premiseType = PremiseTypeValue.On;
+
+        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+          expect(productMetricsData.productMetricsViewType).toBe(ProductMetricsViewType.packages);
+          done();
+        });
+      });
+
+      it('should return a view type of skus when sku values are returned, a selected brand code is present ' +
+      'and product metrics are filtered for All or Off Premise', (done) => {
+        productMetricsDataMock.selectedBrandCode = chance.string();
+        productMetricsDataMock.filter.premiseType = PremiseTypeValue.All;
+
+        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+          expect(productMetricsData.productMetricsViewType).toBe(ProductMetricsViewType.skus);
+          done();
+        });
+
+        productMetricsDataMock.filter.premiseType = PremiseTypeValue.Off;
+
+        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+          expect(productMetricsData.productMetricsViewType).toBe(ProductMetricsViewType.skus);
+          done();
         });
       });
     });
