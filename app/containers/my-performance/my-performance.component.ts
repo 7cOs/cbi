@@ -412,7 +412,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleRightRowDataElementClicked(parameters: HandleElementClickedParameters): void {
-    console.log(parameters.row.descriptionRow0);
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
     switch (this.productMetricsViewType) {
       case ProductMetricsViewType.brands:

@@ -1079,6 +1079,18 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
       }));
     });
+
+    it('should call the analytics service with the correct params and the description of the row when rowtype is data', () => {
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
+    });
+
+    it('should call the analytics service with the correct params and the description of the row when rowtype is data', () => {
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
+    });
   });
 
   describe('when left side data row link clicked', () => {
@@ -1196,7 +1208,7 @@ describe('MyPerformanceComponent', () => {
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(2);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
