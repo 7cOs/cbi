@@ -1187,6 +1187,7 @@ describe('MyPerformanceComponent', () => {
     it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
       storeMock.dispatch.calls.reset();
 
+      let rowMock = getMyPerformanceTableRowMock(1)[0];
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Fetching,
         products: {brandValues: []},
@@ -1195,7 +1196,7 @@ describe('MyPerformanceComponent', () => {
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(2);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
