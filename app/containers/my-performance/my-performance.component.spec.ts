@@ -1797,15 +1797,16 @@ describe('MyPerformanceComponent', () => {
         productMetricsViewType: ProductMetricsViewType.brands
       };
 
+      currentMock.filter = getMyPerformanceFilterMock();
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
     });
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
+      currentMock.filter = getMyPerformanceFilterMock();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
-
       componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(5);
@@ -1836,68 +1837,9 @@ describe('MyPerformanceComponent', () => {
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when NOT in alternate hierarchy', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
-      productMetricsSubject.next(productMetricsStateMock);
-      currentSubject.next(currentMock);
-
-      componentInstance.ngOnInit();
-
-      expect(storeMock.dispatch.calls.count()).toBe(5);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-        positionId: currentMock.responsibilities.positionId,
-        groupedEntities: currentMock.responsibilities.groupedEntities,
-        hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
-        selectedEntityType: currentMock.selectedEntityType,
-        selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
-        salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-        filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: undefined,
-        skuPackageType: undefined,
-        entityType: currentMock.selectedEntityType,
-        alternateHierarchyId: null,
-        accountPositionId: currentMock.responsibilities.accountPositionId
-      }));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
-        positionId: currentMock.responsibilities.accountPositionId || currentMock.responsibilities.positionId,
-        filter: stateMock.myPerformanceFilter as any,
-        selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
-        inAlternateHierarchy: false,
-        entityTypeCode: currentMock.responsibilities.entityTypeCode,
-        contextPositionId: currentMock.responsibilities.positionId
-      }));
-    });
-  });
-
-  describe('when the filter state is mismatched and AND viewType is subAccounts', () => {
-    let versionsMock: MyPerformanceEntitiesData[];
-    let currentMock: MyPerformanceEntitiesData;
-    let productMetricsStateMock: ProductMetricsState;
-
-    beforeEach(() => {
-      componentInstance.showLeftBackButton = true;
-      currentMock = getMyPerformanceEntitiesDataMock();
-      versionsMock = generateMockVersions(4, 9);
-      productMetricsStateMock = {
-        status: ActionStatus.Fetched,
-        products: {brandValues: []},
-        productMetricsViewType: ProductMetricsViewType.brands
-      };
-      currentMock = versionsMock[versionsMock.length - 1];
-      currentMock.filter = stateMock.myPerformanceFilter;
-
-      storeMock.dispatch.and.callThrough();
-      storeMock.dispatch.calls.reset();
-    });
-
-    it('should dispatch RefreshAllPerformances and FetchProductMetrics when filter mismatch AND viewType is subAccounts', () => {
-      currentMock.responsibilities.alternateHierarchyId = null;
-      currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
-
       currentMock.filter = getMyPerformanceFilterMock();
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
-      versionsSubject.next(versionsMock);
-
       componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(5);
@@ -1924,6 +1866,40 @@ describe('MyPerformanceComponent', () => {
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
       }));
+    });
+
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics when viewType is subAccounts', () => {
+      currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
+      currentMock.filter = getMyPerformanceFilterMock();
+      productMetricsSubject.next(productMetricsStateMock);
+      currentSubject.next(currentMock);
+      componentInstance.ngOnInit();
+
+      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: currentMock.responsibilities.positionId,
+        groupedEntities: currentMock.responsibilities.groupedEntities,
+        hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
+        salesHierarchyViewType: currentMock.salesHierarchyViewType.viewType,
+        filter: stateMock.myPerformanceFilter,
+        brandSkuCode: undefined,
+        skuPackageType: undefined,
+        entityType: currentMock.selectedEntityType,
+        alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
+        accountPositionId: currentMock.responsibilities.accountPositionId
+      }));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+        positionId: currentMock.responsibilities.accountPositionId || currentMock.responsibilities.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedBrandCode: currentMock.selectedBrandCode,
+        inAlternateHierarchy: false,
+        entityTypeCode: currentMock.responsibilities.entityTypeCode,
+        contextPositionId: currentMock.responsibilities.positionId
+      }));
+
     });
   });
 });
