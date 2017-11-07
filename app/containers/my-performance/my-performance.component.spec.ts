@@ -52,6 +52,7 @@ import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.en
 import { WindowService } from '../../services/window.service';
 import { getProductMetricsSkuMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { AnalyticsService } from '../../services/analytics.service';
 
 const chance = new Chance();
 
@@ -113,6 +114,7 @@ describe('MyPerformanceComponent', () => {
   let userServiceMock: any;
   let myPerformanceTableDataTransformerService: any;
   let myPerformanceServiceMock: any;
+  let analyticsServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
   let myPerformanceProductMetricsMock: ProductMetricsState = {
     status: ActionStatus.Fetching,
@@ -196,6 +198,8 @@ describe('MyPerformanceComponent', () => {
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
     };
 
+    analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
+
     TestBed.configureTestingModule({
       declarations: [
         BeerLoaderComponentMock,
@@ -210,6 +214,10 @@ describe('MyPerformanceComponent', () => {
         {
           provide: MyPerformanceTableDataTransformerService,
           useValue: myPerformanceTableDataTransformerService
+        },
+        {
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
         },
         {
           provide: MyPerformanceService,
@@ -568,6 +576,15 @@ describe('MyPerformanceComponent', () => {
         }));
       });
     });
+
+    it('should send analytics event when back button is clicked', () => {
+      componentInstance.handleBackButtonClicked();
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+        'Team Snapshot',
+        'Link Click',
+        'Back Button'
+      ]);
+    });
   });
 
   describe('when left side data row is clicked', () => {
@@ -818,6 +835,16 @@ describe('MyPerformanceComponent', () => {
         brandSkuCode: currentMock.selectedBrandCode,
         skuPackageType: currentMock.selectedSkuPackageType
       }));
+    });
+
+    it('should send analytics event when left row element is clicked', () => {
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+        'Team Snapshot',
+        'Link Click',
+        rowMock.descriptionRow0
+      ]);
     });
   });
 
@@ -1287,6 +1314,22 @@ describe('MyPerformanceComponent', () => {
           contextPositionId: selectedVersion.responsibilities.positionId,
           selectedBrandCode: expectedSelectedBrandCode
         }));
+      });
+
+      it('should send analytics event when bread crumb entities is clicked for any salesHierarchyViewType', () => {
+        const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
+        componentInstance.salesHierarchyViewType = salesHierarchyViewTypes[chance.integer(
+          {min: 0 , max: salesHierarchyViewTypes.length - 1})];
+        setupVersionAndBreadcrumbMocks(componentInstance.salesHierarchyViewType);
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Snapshot',
+          'Link Click',
+          'Breadcrumb'
+        ]);
       });
 
       it('should dispatch the RefreshAllPerformances action when the current filter state and previous state`s filter mismatch', () => {
