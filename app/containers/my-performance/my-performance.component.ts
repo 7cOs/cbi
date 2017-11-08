@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 
 import { AccountDashboardStateParameters } from '../../models/account-dashboard-state-parameters.model';
 import { ActionStatus } from '../../enums/action-status.enum';
+import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
@@ -33,10 +34,10 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
-import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
-import { WindowService } from '../../services/window.service';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { WindowService } from '../../services/window.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -100,7 +101,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
     private titleService: Title,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
@@ -243,28 +245,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     currentWindow.open(accountDashboardUrl, '_blank');
   }
 
-  public deselectBrandValue(): void {
-    delete this.selectedBrandCode;
-    this.selectedSkuPackageCode = null;
-    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-    this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
-    this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
-
-    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
-      positionId: this.currentState.responsibilities.positionId,
-      groupedEntities: this.currentState.responsibilities.groupedEntities,
-      hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
-      selectedEntityType: this.currentState.selectedEntityType,
-      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
-      salesHierarchyViewType: this.salesHierarchyViewType,
-      filter: this.filterState,
-      entityType: this.currentState.selectedEntityType,
-      alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-      accountPositionId: this.currentState.responsibilities.accountPositionId
-    }));
-  }
-
   public handleSortRows(criteria: SortingCriteria[]): void {
     this.sortingCriteria = criteria;
   }
@@ -276,7 +256,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
-          this.handleRightRowDataElementClicked(parameters);
+          this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
@@ -286,6 +266,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
     const previousIndex: number = this.versions.length - 1;
     const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
 
@@ -293,6 +274,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Breadcrumb');
     const { trail, entityDescription } = event;
     const indexOffset: number = 1;
     const stepsBack: number = trail.length - indexOffset - trail.indexOf(entityDescription);
@@ -301,6 +283,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (stepsBack < 1) return;
 
     this.handlePreviousStateVersion(clickedState, stepsBack);
+  }
+
+  public handleDismissableRowXClicked(): void {
+    this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
+    this.deselectBrandValue();
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
@@ -340,6 +327,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
       filter: this.filterState
     })));
@@ -409,7 +397,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleRightRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+  private handleRightRowElementClicked(parameters: HandleElementClickedParameters): void {
+    this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
     switch (this.productMetricsViewType) {
       case ProductMetricsViewType.brands:
         this.selectedBrandCode = parameters.row.metadata.brandCode;
@@ -423,7 +412,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       case ProductMetricsViewType.skus:
-        if (parameters.row) {
+        if (parameters.type === RowType.data) {
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
@@ -591,6 +580,28 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         : ActionStatus.NotFetched;
   }
 
+  private deselectBrandValue(): void {
+    delete this.selectedBrandCode;
+    this.selectedSkuPackageCode = null;
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+    this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
+    this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
+
+    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+      positionId: this.currentState.responsibilities.positionId,
+      groupedEntities: this.currentState.responsibilities.groupedEntities,
+      hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
+      selectedEntityType: this.currentState.selectedEntityType,
+      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
+      salesHierarchyViewType: this.salesHierarchyViewType,
+      filter: this.filterState,
+      entityType: this.currentState.selectedEntityType,
+      alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+      accountPositionId: this.currentState.responsibilities.accountPositionId
+    }));
+  }
+
   private handleDataRefreshAndDeselectionIfNeeded(): void {
     if (this.productMetricsState
       && this.productMetricsState.status === ActionStatus.Fetched
@@ -634,14 +645,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         accountPositionId: this.currentState.responsibilities.accountPositionId
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: this.currentState.responsibilities.positionId,
+        positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
         selectedBrandCode: this.currentState.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-        contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
-                            this.currentState.responsibilities.positionId
+        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
       }));
     }
   }
