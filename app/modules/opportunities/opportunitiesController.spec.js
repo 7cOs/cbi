@@ -1,3 +1,7 @@
+import * as Chance from 'chance';
+
+const chance = new Chance();
+
 describe('Unit: opportunitiesController', function() {
   var scope, q, ctrl, userService, filtersService, opportunityFiltersService, $mdDialog, title;
 
@@ -162,19 +166,24 @@ describe('Unit: opportunitiesController', function() {
     expect(ctrl.currentFilter).toEqual([{id: '1234'}]);
   });
 
-  it('edit report name', function() {
-    ctrl.currentFilter = [{
-      name: undefined,
-      id: '123'
+  // TODO: Fix this test!
+  it('should update the name of the saved report after a successful API call', () => {
+    const currentFilterMock = [{
+      id: chance.natural(),
+      name: chance.string()
     }];
-    ctrl.editedFilterName = 'a good name';
+    const newReportNameMock = chance.string();
+
+    ctrl.currentFilter = currentFilterMock;
+    ctrl.editedFilterName = newReportNameMock;
 
     spyOn(opportunityFiltersService, 'updateOpportunityFilter').and.callFake(function() {
       return {
         then: function(callback) { return callback({}); }
       };
     });
+
     ctrl.editReportName();
-    expect(ctrl.currentFilter[0].name).toEqual('a good name');
+    expect(ctrl.currentFilter[0].name).toEqual(newReportNameMock);
   });
 });

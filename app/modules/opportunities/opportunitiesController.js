@@ -151,12 +151,14 @@ module.exports = /*  @ngInject */
     }
 
     function editReportName() {
-      vm.currentFilter[0].name = vm.editedFilterName;
-      opportunityFiltersService.updateOpportunityFilter(vm.currentFilter[0].id, 'name', vm.currentFilter[0].name).then(function(data) {
-        closeModal();
-      }, function(err) {
-        console.warn(err);
-      });
+      opportunityFiltersService.updateOpportunityFilter(vm.currentFilter[0].id, 'name', vm.editedFilterName)
+        .then(() => {
+          vm.currentFilter[0].name = vm.editedFilterName;
+          closeModal();
+        })
+        .catch(error => {
+          console.warn(error);
+        });
     }
 
     // ***************
