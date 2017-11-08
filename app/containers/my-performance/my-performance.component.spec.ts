@@ -113,7 +113,6 @@ describe('MyPerformanceComponent', () => {
   let componentInstance: MyPerformanceComponent;
   let componentInstanceCopy: any;
   let userServiceMock: any;
-  let analyticsServiceMock: any;
   let myPerformanceTableDataTransformerService: any;
   let myPerformanceServiceMock: any;
   let analyticsServiceMock: any;
@@ -197,9 +196,6 @@ describe('MyPerformanceComponent', () => {
       getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType'),
       getMetricValueName: jasmine.createSpy('getMetricValueName'),
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
-    };
-    analyticsServiceMock = {
-      trackEvent: jasmine.createSpy('trackEvent').and.callThrough()
     };
 
     analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);

@@ -9,7 +9,6 @@ import { AccountDashboardStateParameters } from '../../models/account-dashboard-
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
-import { AnalyticsService } from '../../services/analytics.service';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
@@ -100,7 +99,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any,
-    private analyticsService: AnalyticsService,
     private myPerformanceService: MyPerformanceService,
     private titleService: Title,
     private windowService: WindowService,
