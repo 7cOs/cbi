@@ -72,7 +72,4 @@ export class MyPerformanceTableRowComponent {
       this.onSublineClicked.emit();
     }
   }
-  public dismissableRowXClicked(): void {
-    this.onDismissableRowXClicked.emit();
-  }
 }
