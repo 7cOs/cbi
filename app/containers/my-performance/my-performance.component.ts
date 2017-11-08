@@ -241,7 +241,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.analyticsService.trackEvent('Team Performance', 'Go to Account Dashboard', row.metadata.entityName);
+    this.analyticsService.trackEvent('Team Performance', 'Go to Account Dashboard',
+      accountDashboardStateParams.distributorid || accountDashboardStateParams.subaccountid);
 
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     const currentWindow = this.windowService.nativeWindow();

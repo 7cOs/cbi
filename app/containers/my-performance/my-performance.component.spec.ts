@@ -144,6 +144,11 @@ describe('MyPerformanceComponent', () => {
     nativeWindow: jasmine.createSpy('nativeWindow').and.callFake( () => windowMock )
   };
 
+  const accountDashboardStateParamMock = {
+    distributorid: chance.string(),
+    subaccountid: chance.string()
+  };
+
   const titleMock = {
     setTitle: jasmine.createSpy('setTitle')
   };
@@ -195,7 +200,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceServiceMock = {
       getUserDefaultPremiseType: jasmine.createSpy('getUserDefaultPremiseType'),
       getMetricValueName: jasmine.createSpy('getMetricValueName'),
-      accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.callThrough()
+      accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.returnValue(accountDashboardStateParamMock)
     };
 
     analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
@@ -212,10 +217,6 @@ describe('MyPerformanceComponent', () => {
       ],
       providers: [
         {
-          provide: MyPerformanceTableDataTransformerService,
-          useValue: myPerformanceTableDataTransformerService
-        },
-        {
           provide: AnalyticsService,
           useValue: analyticsServiceMock
         },
@@ -224,28 +225,28 @@ describe('MyPerformanceComponent', () => {
           useValue: myPerformanceServiceMock
         },
         {
+          provide: MyPerformanceTableDataTransformerService,
+          useValue: myPerformanceTableDataTransformerService
+        },
+        {
           provide: Store,
           useValue: storeMock
         },
         {
-          provide: 'userService',
-          useValue: userServiceMock
-        },
-        {
-          provide: '$state',
-          useValue: stateMock
-        },
-        {
-          provide: AnalyticsService,
-          useValue: analyticsServiceMock
+          provide: Title,
+          useValue: titleMock
         },
         {
           provide: WindowService,
           useValue: windowServiceMock
         },
         {
-          provide: Title,
-          useValue: titleMock
+          provide: '$state',
+          useValue: stateMock
+        },
+        {
+          provide: 'userService',
+          useValue: userServiceMock
         }
       ]
     });
@@ -1124,16 +1125,7 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when distributor subline link clicked', () => {
-      it('should correctly call functions to go to accountDashboard when distributor clicked with GA recording ' +
-        'params within alternate hierarchy', () => {
-        rowMock.metadata.entityType = EntityType.Distributor;
-        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
-        currentSubject.next(currentMock);
-        componentInstance.handleSublineClicked(rowMock);
-        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
-          'Team Performance', 'Go to Account Dashboard', rowMock.metadata.entityName);
-      });
-      it('should correctly call functions to go to account dashboard when distributor clicked with correct ' +
+      it('should correctly call functions to go to accountDashboard when distributor clicked with correct ' +
         'params within alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
@@ -1147,24 +1139,14 @@ describe('MyPerformanceComponent', () => {
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
-          'Team Performance', 'Go to Account Dashboard', rowMock.metadata.entityName);
+          'Team Performance', 'Go to Account Dashboard', accountDashboardStateParamMock.distributorid);
       });
     });
 
     describe('when subaccount subline link clicked', () => {
-      it('should correctly call functions for accountDashboard when subAccount clicked with GA recording ', () => {
-        rowMock.metadata.entityType = EntityType.SubAccount;
-        currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
-        currentSubject.next(currentMock);
-        hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
-        myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
-        currentSubject.next(currentMock);
-        componentInstance.handleSublineClicked(rowMock);
-        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
-          'Team Performance', 'Go to Account Dashboard', rowMock.metadata.entityName);
-      });
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity within ' +
         'alternate hierarchy', () => {
+        delete accountDashboardStateParamMock.distributorid;
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
@@ -1184,10 +1166,13 @@ describe('MyPerformanceComponent', () => {
             rowMock, hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Team Performance', 'Go to Account Dashboard', accountDashboardStateParamMock.subaccountid);
       });
 
       it('should correctly call functions for accountDashboard when subAccount clicked but no matching ' +
         'hierarchy entity within alternate hierarchy', () => {
+        delete accountDashboardStateParamMock.distributorid;
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
         currentSubject.next(currentMock);
@@ -1202,10 +1187,13 @@ describe('MyPerformanceComponent', () => {
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Team Performance', 'Go to Account Dashboard', accountDashboardStateParamMock.subaccountid);
       });
 
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity outside ' +
         'alternate hierarchy', () => {
+        delete accountDashboardStateParamMock.distributorid;
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = null;
         currentSubject.next(currentMock);
@@ -1226,6 +1214,8 @@ describe('MyPerformanceComponent', () => {
             rowMock, hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Team Performance', 'Go to Account Dashboard', accountDashboardStateParamMock.subaccountid);
       });
     });
   });
