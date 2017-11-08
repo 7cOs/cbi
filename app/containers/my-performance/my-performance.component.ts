@@ -34,10 +34,10 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
-import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
-import { WindowService } from '../../services/window.service';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { WindowService } from '../../services/window.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -288,6 +288,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
     const previousIndex: number = this.versions.length - 1;
     const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
 
@@ -295,6 +296,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Breadcrumb');
     const { trail, entityDescription } = event;
     const indexOffset: number = 1;
     const stepsBack: number = trail.length - indexOffset - trail.indexOf(entityDescription);
@@ -342,6 +344,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
       filter: this.filterState
     })));
@@ -638,14 +641,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         accountPositionId: this.currentState.responsibilities.accountPositionId
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: this.currentState.responsibilities.positionId,
+        positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
         selectedBrandCode: this.currentState.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-        contextPositionId: this.currentState.responsibilities.alternateHierarchyId ||
-                            this.currentState.responsibilities.positionId
+        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
       }));
     }
   }
