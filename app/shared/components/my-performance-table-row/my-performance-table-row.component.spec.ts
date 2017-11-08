@@ -20,8 +20,8 @@ describe('MyPerformanceTableComponent', () => {
       ],
       providers: [
         {
-        provide: 'ieHackService',
-        useValue: ieHackServiceMock
+          provide: 'ieHackService',
+          useValue: ieHackServiceMock
         }
       ]
     });
