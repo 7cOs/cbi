@@ -754,6 +754,17 @@ describe('ProductMetrics Service', () => {
         });
       });
 
+      it('should return a view type of skus when sku values are returned, a selected brand code is present ' +
+      'and product metrics are filtered for a premise type of All', (done) => {
+        productMetricsDataMock.selectedBrandCode = chance.string();
+        productMetricsDataMock.filter.premiseType = PremiseTypeValue.All;
+
+        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
+          expect(productMetricsData.productMetricsViewType).toBe(ProductMetricsViewType.skus);
+          done();
+        });
+      });
+
       it('should return a view type of packages when sku values are returned, a selected brand code is present ' +
       'and product metrics are filtered for On Premise', (done) => {
         productMetricsDataMock.selectedBrandCode = chance.string();
@@ -766,15 +777,8 @@ describe('ProductMetrics Service', () => {
       });
 
       it('should return a view type of skus when sku values are returned, a selected brand code is present ' +
-      'and product metrics are filtered for All or Off Premise', (done) => {
+      'and product metrics are filtered for Off Premise', (done) => {
         productMetricsDataMock.selectedBrandCode = chance.string();
-        productMetricsDataMock.filter.premiseType = PremiseTypeValue.All;
-
-        productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
-          expect(productMetricsData.productMetricsViewType).toBe(ProductMetricsViewType.skus);
-          done();
-        });
-
         productMetricsDataMock.filter.premiseType = PremiseTypeValue.Off;
 
         productMetricsService.getProductMetrics(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
