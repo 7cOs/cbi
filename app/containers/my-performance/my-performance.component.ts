@@ -245,28 +245,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     currentWindow.open(accountDashboardUrl, '_blank');
   }
 
-  private deselectBrandValue(): void {
-    delete this.selectedBrandCode;
-    this.selectedSkuPackageCode = null;
-    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-    this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
-    this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
-
-    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
-      positionId: this.currentState.responsibilities.positionId,
-      groupedEntities: this.currentState.responsibilities.groupedEntities,
-      hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
-      selectedEntityType: this.currentState.selectedEntityType,
-      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
-      salesHierarchyViewType: this.salesHierarchyViewType,
-      filter: this.filterState,
-      entityType: this.currentState.selectedEntityType,
-      alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-      accountPositionId: this.currentState.responsibilities.accountPositionId
-    }));
-  }
-
   public handleSortRows(criteria: SortingCriteria[]): void {
     this.sortingCriteria = criteria;
   }
@@ -600,6 +578,28 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         || responsibilitiesState.subaccountsStatus === ActionStatus.NotFetched))
         ? ActionStatus.Fetched
         : ActionStatus.NotFetched;
+  }
+
+  private deselectBrandValue(): void {
+    delete this.selectedBrandCode;
+    this.selectedSkuPackageCode = null;
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+    this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
+    this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
+
+    this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
+      positionId: this.currentState.responsibilities.positionId,
+      groupedEntities: this.currentState.responsibilities.groupedEntities,
+      hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
+      selectedEntityType: this.currentState.selectedEntityType,
+      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
+      salesHierarchyViewType: this.salesHierarchyViewType,
+      filter: this.filterState,
+      entityType: this.currentState.selectedEntityType,
+      alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+      accountPositionId: this.currentState.responsibilities.accountPositionId
+    }));
   }
 
   private handleDataRefreshAndDeselectionIfNeeded(): void {
