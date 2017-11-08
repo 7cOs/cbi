@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (config) {
-  console.log('Using server config for STAGE environment.');
+  console.log('Using server config for PREPROD environment.');
 
   // global settings
   config.domain = 'app-compass-preprod.herokuapp.com';
@@ -37,7 +37,7 @@ module.exports = function (config) {
   config.saml = {
     entryPoint: 'https://sso.cbrands.com/oamfed/idp/samlv20',
     logoutBase: 'https://sso.cbrands.com/oam/server/logout',
-    issuer: 'https://compass-stage.cbrands.com',
+    issuer: 'https://app-compass-preprod.herokuapp.com',
     cert: process.env.SSO_CERT,
     privateCert: '',
     signatureAlgorithm: 'sha1'

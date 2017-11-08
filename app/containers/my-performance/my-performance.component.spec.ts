@@ -1105,6 +1105,18 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
       }));
     });
+
+    it('should call the analytics service with the correct params when the rowtype is data', () => {
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
+    });
+
+    it('should call the analytics service with the correct params when the rowtype is dismissableTotal', () => {
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
+    });
   });
 
   describe('when left side data row link clicked', () => {
@@ -1224,6 +1236,7 @@ describe('MyPerformanceComponent', () => {
     it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
       storeMock.dispatch.calls.reset();
 
+      let rowMock = getMyPerformanceTableRowMock(1)[0];
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Fetching,
         products: {brandValues: []},
@@ -1232,7 +1245,7 @@ describe('MyPerformanceComponent', () => {
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
 
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(2);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
@@ -1569,12 +1582,15 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('deselectBrandRow', () => {
+  describe('handleDismissableRowXClicked', () => {
     let currentMock: MyPerformanceEntitiesData;
 
     beforeEach(() => {
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
+      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([getMyPerformanceTableRowMock]);
     });
 
     it('should dispatch all actions correctly and assign variables correctly and call 4 actions', () => {
@@ -1582,7 +1598,12 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
       currentSubject.next(currentMock);
       componentInstanceCopy.selectedBrandCode = chance.string();
-      componentInstance.deselectBrandValue();
+      componentInstance.handleDismissableRowXClicked();
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+        'Product Snapshot',
+        'Link Click',
+        'All Brands'
+      ]);
       expect(componentInstanceCopy.selectedBrandCode).toBe(undefined);
       expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
@@ -1601,17 +1622,6 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
     });
-  });
-
-  describe('deselectBrandValue', () => {
-    let currentMock: MyPerformanceEntitiesData;
-
-    beforeEach(() => {
-      currentMock = getMyPerformanceEntitiesDataMock();
-      currentMock.responsibilities = getResponsibilitesStateMock();
-      spyOn(componentInstance, 'deselectBrandValue');
-      myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([getMyPerformanceTableRowMock]);
-    });
 
     it('should not be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is has values', () => {
       myPerformanceProductMetricsMock.status = ActionStatus.Fetched;
@@ -1619,7 +1629,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
 
     it('should be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is empty', () => {
@@ -1629,7 +1639,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(5);
     });
 
     it('should not be called when selectedBrandCode is truthy, viewtype is skus, and productMetrics is undefined', () => {
@@ -1639,7 +1649,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
 
     it('should not be called when selectedBrandCode is truthy, viewtype is brands, and productMetrics has values', () => {
@@ -1648,7 +1658,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
 
     it('should not be called when selectedBrandCode is falsy, viewtype is skus, and productMetrics has values', () => {
@@ -1657,7 +1667,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = null;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
 
     it('should not be called when all variables are good but responsibilities is fetching with responsibilitiesStatus is error', () => {
@@ -1669,7 +1679,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
 
     it('should not be called when all variables are good but responsibilities is fetching with totalPerformanceStatus is error', () => {
@@ -1681,7 +1691,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
 
     it('should not be called when all variables are good but responsibilities is fetching with entitiesPerformanceStatus is error', () => {
@@ -1693,7 +1703,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
 
     it('should not be called when all variables are good but responsibilities is fetching with subaccountsStatus is error', () => {
@@ -1705,7 +1715,7 @@ describe('MyPerformanceComponent', () => {
       myPerformanceProductMetricsMock.products = {skuValues: getProductMetricsWithSkuValuesMock(SkuPackageType.sku).skuValues};
       componentInstanceCopy.selectedBrandCode = myPerformanceProductMetricsMock.products.skuValues[0].brandCode;
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.deselectBrandValue).not.toHaveBeenCalled();
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
   });
 
