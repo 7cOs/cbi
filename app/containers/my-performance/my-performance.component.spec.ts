@@ -1080,13 +1080,13 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should call the analytics service with the correct params and the description of the row when rowtype is data', () => {
+    it('should call the analytics service with the correct params when the rowtype is data', () => {
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
     });
 
-    it('should call the analytics service with the correct params and the description of the row when rowtype is data', () => {
+    it('should call the analytics service with the correct params when the rowtype is dismissableTotal', () => {
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
