@@ -7,6 +7,7 @@
   <test name="Functional Test">
     <classes>
       <class name="com.cbrands.test.functional.login.LoginTest" />
+      <class name="com.cbrands.test.functional.accountDashboard.AccountDashboardDistributorFilterTest" />
       <class name="com.cbrands.test.functional.opportunities.OpportunitiesFiltersTest" />
       <class name="com.cbrands.test.functional.opportunities.OpportunitiesSavedReportsTest" />
     </classes>
