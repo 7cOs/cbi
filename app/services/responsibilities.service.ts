@@ -326,25 +326,33 @@ export class ResponsibilitiesService {
 
   public getRefreshedTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData)
   : Observable<RefreshTotalPerformanceData> {
+    let hierarchyGroup: HierarchyGroup;
+
     switch (refreshTotalPerformanceData.salesHierarchyViewType) {
       case SalesHierarchyViewType.roleGroups:
       case SalesHierarchyViewType.accounts:
       case SalesHierarchyViewType.distributors:
-        let performanceObservable: Observable<Performance> = refreshTotalPerformanceData.alternateHierarchyId
-        ? this.getHierarchyGroupPerformance(
-          this.findHierarchyGroupFromGroupedEntities(
+        let performanceObservable: Observable<Performance>;
+
+        if (refreshTotalPerformanceData.alternateHierarchyId) {
+          hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
             refreshTotalPerformanceData.hierarchyGroups,
             refreshTotalPerformanceData.groupedEntities
-          ),
-          refreshTotalPerformanceData.filter,
-          refreshTotalPerformanceData.positionId,
-          refreshTotalPerformanceData.brandSkuCode,
-          refreshTotalPerformanceData.skuPackageType)
-        : this.getPerformance(
-          refreshTotalPerformanceData.positionId,
-          refreshTotalPerformanceData.filter,
-          refreshTotalPerformanceData.brandSkuCode,
-          refreshTotalPerformanceData.skuPackageType);
+          );
+
+          performanceObservable = this.getHierarchyGroupPerformance(
+            hierarchyGroup,
+            refreshTotalPerformanceData.filter,
+            refreshTotalPerformanceData.positionId,
+            refreshTotalPerformanceData.brandSkuCode,
+            refreshTotalPerformanceData.skuPackageType);
+        } else {
+          performanceObservable = this.getPerformance(
+            refreshTotalPerformanceData.positionId,
+            refreshTotalPerformanceData.filter,
+            refreshTotalPerformanceData.brandSkuCode,
+            refreshTotalPerformanceData.skuPackageType);
+        }
 
         return performanceObservable.map((performance: Performance) => {
           return Object.assign({}, refreshTotalPerformanceData, {
@@ -368,7 +376,7 @@ export class ResponsibilitiesService {
 
       case SalesHierarchyViewType.people:
       default:
-        const hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
+        hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
           refreshTotalPerformanceData.hierarchyGroups,
           refreshTotalPerformanceData.groupedEntities
         );
