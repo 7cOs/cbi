@@ -141,6 +141,33 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
+  @Test(
+    description = "Deleting a Saved Report",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "deleteReportData"
+  )
+  public void deleteSavedReport(String reportNameToDelete, String distributor) {
+    saveNewReport(reportNameToDelete, distributor).waitForModalToClose();
+    opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportNameToDelete)
+      .clickSavedReportDeleteLink()
+      .waitForModalToClose();
+
+    Assert.assertFalse(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Opportunities page."
+    );
+
+    homePage.goToPage();
+    Assert.assertFalse(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Home page."
+    );
+  }
+
   @DataProvider
   public static Object[][] createRunReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
@@ -162,6 +189,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
       {"Edit Me " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] deleteReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Delete Me " + testReportName, "Healy Wholesale"}
     };
   }
 

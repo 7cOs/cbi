@@ -596,3 +596,29 @@ div.ctv {
     height: 100%;
   }
 }
+
+.rolegroup-icon-container {
+  width: 24px;
+  height: 18px;
+  float: left;
+  object-fit: contain;
+
+  .rolegroup-icon-background {
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+  }
+
+  .geography-group-icon {
+    background-image: url('../../../assets/img/icons/geography-group.svg');
+  }
+
+  .account-group-icon {
+    background-image: url('../../../assets/img/icons/account-group.svg');
+  }
+
+  .rolegroup-icon {
+    background-image: url('../../../assets/img/icons/rolegroup.svg');
+  }
+}
