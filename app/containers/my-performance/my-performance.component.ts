@@ -278,7 +278,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
-          this.handleRightRowDataElementClicked(parameters);
+          this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
@@ -419,7 +419,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleRightRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+  private handleRightRowElementClicked(parameters: HandleElementClickedParameters): void {
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
     switch (this.productMetricsViewType) {
       case ProductMetricsViewType.brands:
