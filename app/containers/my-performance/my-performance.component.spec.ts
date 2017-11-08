@@ -116,7 +116,6 @@ describe('MyPerformanceComponent', () => {
   let analyticsServiceMock: any;
   let myPerformanceTableDataTransformerService: any;
   let myPerformanceServiceMock: any;
-  let analyticsServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
   let myPerformanceProductMetricsMock: ProductMetricsState = {
     status: ActionStatus.Fetching,
