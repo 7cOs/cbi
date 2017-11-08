@@ -245,7 +245,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     currentWindow.open(accountDashboardUrl, '_blank');
   }
 
-  public deselectBrandValue(): void {
+  private deselectBrandValue(): void {
     delete this.selectedBrandCode;
     this.selectedSkuPackageCode = null;
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
@@ -305,6 +305,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (stepsBack < 1) return;
 
     this.handlePreviousStateVersion(clickedState, stepsBack);
+  }
+
+  public handleDismissableRowXClicked(): void {
+    this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
+    this.deselectBrandValue();
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
