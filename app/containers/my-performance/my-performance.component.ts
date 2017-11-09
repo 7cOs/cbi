@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-
 import { isEqual } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -73,9 +72,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRange: DateRange;
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
-  public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
-  public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
-
   private currentState: MyPerformanceEntitiesData;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: EntityType;
@@ -92,6 +88,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrandCode: string;
   private selectedSkuPackageCode: string;
+  private tableHeaderRowLeft: Array<string> = [
+    this.myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.roleGroups),
+    'DEPLETIONS',
+    'CTV'
+  ];
+  private tableHeaderRowRight: Array<string> = [
+    this.myPerformanceService.getProductMetricsViewTypeLabel(ProductMetricsViewType.brands),
+    'DEPLETIONS',
+    'CTV'
+  ];
   private versions: MyPerformanceEntitiesData[];
 
   constructor(
@@ -137,16 +143,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
         this.productMetricsViewType = productMetrics.productMetricsViewType;
+        this.tableHeaderRowRight[0] = this.myPerformanceService.getProductMetricsViewTypeLabel(productMetrics.productMetricsViewType);
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
             productMetrics.products,
             this.productMetricsViewType
           );
-          this.productMetricsSelectedBrandRow =
-            (this.productMetricsViewType === ProductMetricsViewType.skus && productMetrics.selectedBrandCodeValues)
-            ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
-            : null;
+
+          this.productMetricsSelectedBrandRow = this.productMetricsViewType !== ProductMetricsViewType.brands
+            && productMetrics.selectedBrandCodeValues
+              ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
+              : null;
 
           this.handleDataRefreshAndDeselectionIfNeeded();
         }
@@ -158,6 +166,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
+        this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType);
+
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
 
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
@@ -412,6 +422,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       case ProductMetricsViewType.skus:
+      case ProductMetricsViewType.packages:
         if (parameters.type === RowType.data) {
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
@@ -607,7 +618,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedSkuPackageCode
-      && this.productMetricsState.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetricsState.productMetricsViewType !== ProductMetricsViewType.brands
       && this.productMetrics
       && !this.productMetrics.filter(
         (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length) {
@@ -618,7 +629,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.productMetricsState.status === ActionStatus.Fetched
       && this.responsibilitiesStatus === ActionStatus.Fetched
       && this.selectedBrandCode
-      && this.productMetricsViewType === ProductMetricsViewType.skus
+      && this.productMetricsViewType !== ProductMetricsViewType.brands
       && this.productMetrics
       && this.productMetrics.length === 0) {
       this.deselectBrandValue();
