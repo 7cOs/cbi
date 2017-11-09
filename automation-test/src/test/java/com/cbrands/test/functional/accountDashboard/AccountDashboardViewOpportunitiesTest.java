@@ -43,7 +43,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
   }
 
   @Test(
-    description = "Enabling the View Opportunities link from Account Dashboard page",
+    description = "Enabling/Disabling the View Opportunities link from Account Dashboard page",
     dataProvider = "filterData"
   )
   public void enableOpportunitiesLink(PremiseType premiseType, String distributorName) {
