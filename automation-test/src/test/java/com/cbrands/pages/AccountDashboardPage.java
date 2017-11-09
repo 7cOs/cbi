@@ -1,6 +1,7 @@
 package com.cbrands.pages;
 
 import com.cbrands.PremiseType;
+import com.cbrands.pages.opportunities.OpportunitiesPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -58,6 +59,9 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
   private WebElement rightPanel;
+
+  @FindBy(how = How.XPATH, using = "//a[contains(., 'See All Opportunities')]")
+  private WebElement seeAllOpportunitiesLink;
 
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
@@ -295,10 +299,13 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public boolean isOpportunitiesLinkEnabled() {
-    final WebElement opportunitiesLink = findElement(By.xpath("//a[contains(., 'See All Opportunities')]"));
-    return !"true".equalsIgnoreCase(opportunitiesLink.getAttribute("disabled"));
+    return !"true".equalsIgnoreCase(seeAllOpportunitiesLink.getAttribute("disabled"));
   }
 
+  public OpportunitiesPage clickSeeAllOpportunitiesLink() {
+    waitForElementToClickable(seeAllOpportunitiesLink, true).click();
+    return PageFactory.initElements(driver, OpportunitiesPage.class);
+  }
 
   public enum RightPanelLevel {
     Distributors,

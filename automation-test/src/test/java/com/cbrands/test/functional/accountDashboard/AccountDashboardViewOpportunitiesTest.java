@@ -7,6 +7,7 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.LogoutPage;
+import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
@@ -70,6 +71,32 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage.isOpportunitiesLinkEnabled(),
       "Opportunities link failed to be enabled after valid Premise Type and Distributor filters are applied."
+    );
+  }
+
+  @Test(
+    description = "View Opportunities using the current Account Dashboard filters",
+    dataProvider = "filterData"
+  )
+  public void viewOpportunities(PremiseType premiseType, String distributorName) {
+    final OpportunitiesPage opportunitiesPage = accountDashboardPage
+      .selectPremiseType(premiseType)
+      .enterDistributorSearchText(distributorName)
+      .clickSearchForDistributor()
+      .selectDistributorFilterByName(distributorName)
+      .clickApplyFilters()
+      .waitForBrandsLoaderToDisappear()
+      .waitForMarketLoaderToDisappear()
+      .clickSeeAllOpportunitiesLink()
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(
+      opportunitiesPage.isQueryChipPresent(distributorName),
+      "The following distributor filter failed to be applied to Opportunities: " + distributorName
+    );
+    Assert.assertTrue(
+      opportunitiesPage.doesPremiseTypeChipMatch(premiseType),
+      "The following Premise Type filter failed to be applied to Opportunities: " + premiseType.name()
     );
   }
 
