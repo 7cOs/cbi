@@ -156,9 +156,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
-        this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
-        this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
+        this.responsibilitiesStatus = this.getResponsibilityStatus(this.currentState.responsibilities);
+        this.responsibilitiesFetching = this.responsibilitiesStatus === ActionStatus.Fetching;
 
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
@@ -568,16 +568,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private getResponsibilityStatus(responsibilitiesState: ResponsibilitiesState): ActionStatus {
-    return ((responsibilitiesState.responsibilitiesStatus === ActionStatus.Fetched
-        || responsibilitiesState.responsibilitiesStatus === ActionStatus.NotFetched)
-      && (responsibilitiesState.entitiesPerformanceStatus === ActionStatus.Fetched
-        || responsibilitiesState.entitiesPerformanceStatus === ActionStatus.NotFetched)
-      && (responsibilitiesState.totalPerformanceStatus === ActionStatus.Fetched
-        || responsibilitiesState.totalPerformanceStatus === ActionStatus.NotFetched)
-      && (responsibilitiesState.subaccountsStatus === ActionStatus.Fetched
-        || responsibilitiesState.subaccountsStatus === ActionStatus.NotFetched))
-        ? ActionStatus.Fetched
-        : ActionStatus.NotFetched;
+    return ((responsibilitiesState.responsibilitiesStatus === ActionStatus.Fetching)
+      || (responsibilitiesState.entitiesPerformanceStatus === ActionStatus.Fetching)
+      || (responsibilitiesState.totalPerformanceStatus === ActionStatus.Fetching)
+      || (responsibilitiesState.subaccountsStatus === ActionStatus.Fetching))
+        ? ActionStatus.Fetching
+        : ActionStatus.Fetched;
   }
 
   private deselectBrandValue(): void {
@@ -650,7 +646,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
-        selectedBrandCode: this.currentState.selectedBrandCode,
+        selectedBrandCode: this.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
         contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
