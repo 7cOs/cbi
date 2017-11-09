@@ -33,6 +33,9 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
 
+  @FindBy(how = How.XPATH, using = "//md-radio-button[@aria-label='Off-Premise']")
+  private WebElement offPremise;
+
   @FindBy(how = How.XPATH, using = "//inline-search[@type='distributor']")
   private WebElement distributorFilter;
 
@@ -71,6 +74,11 @@ public class AccountDashboardPage extends TestNGBasePage {
   @Override
   protected void load() {
     driver.get(webAppBaseUrl + "/accounts");
+  }
+
+  public AccountDashboardPage selectOffPremiseType() {
+    waitForElementToClickable(offPremise, true).click();
+    return this;
   }
 
   public AccountDashboardPage enterDistributorSearchText(String text) {
@@ -283,6 +291,11 @@ public class AccountDashboardPage extends TestNGBasePage {
     waitForElementToClickable(resetFilters, true).click();
 
     return this;
+  }
+
+  public boolean isOpportunitiesLinkEnabled() {
+    final WebElement opportunitiesLink = findElement(By.xpath("//a[contains(., 'See All Opportunities')]"));
+    return !"true".equalsIgnoreCase(opportunitiesLink.getAttribute("disabled"));
   }
 
   public enum RightPanelLevel {

@@ -40,17 +40,36 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
-  @Test(description = "View Opportunities from Account Dashboard page", dataProvider = "distributorData")
-  public void viewOpportunities(String distributorName) {
+  @Test(
+    description = "Enabling the View Opportunities link from Account Dashboard page",
+    dataProvider = "distributorData"
+  )
+  public void enableOpportunitiesLink(String distributorName) {
+    Assert.assertFalse(
+      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      "Opportunities link failed to be disabled by default."
+    );
+
     accountDashboardPage
+      .selectOffPremiseType()
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName)
+      .selectDistributorFilterByName(distributorName);
+
+    Assert.assertFalse(
+      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      "Opportunities link enabled pre-maturely. Should not be enabled until after filters are applied."
+    );
+
+    accountDashboardPage
       .clickApplyFilters()
       .waitForBrandsLoaderToDisappear()
       .waitForMarketLoaderToDisappear();
 
-    Assert.fail("Test not implemented");
+    Assert.assertTrue(
+      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      "Opportunities link failed to be enabled after Premise Type and Distributor filters are applied."
+    );
   }
 
   @DataProvider
