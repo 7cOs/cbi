@@ -13,11 +13,12 @@ export interface EntityWithPerformanceDTO {
 
 export interface EntityWithPerformance {
   positionId: string;
-  contextPositionId?: string;
-  alternateHierarchyId?: string;
   name: string;
-  entityTypeCode?: string;
   entityType: EntityType;
   positionDescription?: string;
   performance: Performance;
+  contextPositionId?: string;
+  alternateHierarchyId?: string;
+  entityTypeCode?: string;
+  exceptionHierarchy?: boolean;
 }

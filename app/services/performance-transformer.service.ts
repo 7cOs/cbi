@@ -44,7 +44,8 @@ export class PerformanceTransformerService {
       name: entity.name,
       positionDescription: entity.positionDescription,
       entityType: EntityType[entity.entityType],
-      performance: this.transformPerformanceDTO(performanceDTO)
+      performance: this.transformPerformanceDTO(performanceDTO),
+      exceptionHierarchy: entity.hierarchyType === 'EXCPN_HIER'
     };
   }
 

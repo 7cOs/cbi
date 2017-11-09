@@ -345,6 +345,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     })));
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
+    if (parameters.row.metadata.exceptionHierarchy) {
+      this.store.dispatch(new ResponsibilitiesActions.SetExceptionHierarchy());
+    }
+
     switch (this.salesHierarchyViewType) {
       case SalesHierarchyViewType.roleGroups:
         const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];

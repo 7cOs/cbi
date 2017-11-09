@@ -31,7 +31,8 @@ export class MyPerformanceTableDataTransformerService {
         metadata: {
           positionId: entity.positionId,
           entityType: entity.entityType,
-          entityName: entity.name
+          entityName: entity.name,
+          exceptionHierarchy: entity.exceptionHierarchy
         },
         performanceError: entity.performance.error
       };

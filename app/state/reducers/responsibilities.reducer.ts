@@ -14,6 +14,7 @@ export interface ResponsibilitiesState extends State {
   positionId: string;
   accountPositionId?: string;
   alternateHierarchyId?: string;
+  exceptionHierarchy?: boolean;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
   hierarchyGroups: Array<HierarchyGroup>;
@@ -152,6 +153,12 @@ export function responsibilitiesReducer(
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
       return Object.assign({}, state, {
         alternateHierarchyId: action.payload
+      });
+
+    case ResponsibilitiesActions.SET_EXCEPTION_HIERARCHY:
+      debugger;
+      return Object.assign({}, state, {
+        exceptionHierarchy: true
       });
 
     case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:

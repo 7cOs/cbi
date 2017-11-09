@@ -160,6 +160,11 @@ export class SetAlternateHierarchyId implements Action {
   constructor(public payload: string) { }
 }
 
+export const SET_EXCEPTION_HIERARCHY = '[Responsibilities] SET_EXCEPTION_HIERARCHY';
+export class SetExceptionHierarchy implements Action {
+  readonly type = SET_EXCEPTION_HIERARCHY;
+}
+
 export const FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES = '[Responsibilities] FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES';
 export class FetchAlternateHierarchyResponsibilities implements Action {
   readonly type = FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES;
@@ -219,5 +224,6 @@ export type Action
   | FetchTotalPerformance
   | FetchTotalPerformanceSuccess
   | FetchTotalPerformanceFailure
+  | SetExceptionHierarchy
   | SetTotalPerformance
   | SetTotalPerformanceForSelectedRoleGroup;
