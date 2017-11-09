@@ -11,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
@@ -39,9 +40,24 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
-  @Test(description = "View Opportunities from Account Dashboard page")
-  public void viewOpportunities() {
+  @Test(description = "View Opportunities from Account Dashboard page", dataProvider = "distributorData")
+  public void viewOpportunities(String distributorName) {
+    accountDashboardPage
+      .enterDistributorSearchText(distributorName)
+      .clickSearchForDistributor()
+      .selectDistributorFilterByName(distributorName)
+      .clickApplyFilters()
+      .waitForBrandsLoaderToDisappear()
+      .waitForMarketLoaderToDisappear();
+
     Assert.fail("Test not implemented");
+  }
+
+  @DataProvider
+  public static Object[][] distributorData() {
+    return new Object[][]{
+      new Object[]{"Healy Wholesale"}
+    };
   }
 
 }
