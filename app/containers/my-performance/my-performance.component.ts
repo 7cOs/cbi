@@ -313,7 +313,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public displayLeftTotalRow(): boolean {
-    return !this.isShowingRoleGroups() && this.productMetricsViewType === ProductMetricsViewType.brands;
+    return !this.isShowingRoleGroups();
   }
 
   public displayRightTotalRow(): boolean {
