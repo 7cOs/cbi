@@ -42,6 +42,9 @@ public enum TestUser {
     return role;
   }
 
+  public String fullName() {
+    return firstName + " " + lastName;
+  }
 
   public enum UserRole {
     Corporate,
