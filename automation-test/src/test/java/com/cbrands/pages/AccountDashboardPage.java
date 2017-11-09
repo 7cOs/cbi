@@ -1,5 +1,6 @@
 package com.cbrands.pages;
 
+import com.cbrands.PremiseType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -75,7 +76,7 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   public AccountDashboardPage selectPremiseType(PremiseType premiseType) {
     waitForElementToClickable(
-      findElement(By.xpath("//md-radio-button[@aria-label='" + premiseType.label + "']")),
+      findElement(By.xpath("//md-radio-button[@aria-label='" + premiseType.label() + "']")),
       true
     ).click();
     return this;
@@ -298,17 +299,6 @@ public class AccountDashboardPage extends TestNGBasePage {
     return !"true".equalsIgnoreCase(opportunitiesLink.getAttribute("disabled"));
   }
 
-  public enum PremiseType {
-    All("All"),
-    Off("Off-Premise"),
-    On("On-Premise");
-
-    private final String label;
-
-    PremiseType(String label) {
-      this.label = label;
-    }
-  }
 
   public enum RightPanelLevel {
     Distributors,

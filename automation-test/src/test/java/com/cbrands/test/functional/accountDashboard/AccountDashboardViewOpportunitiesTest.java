@@ -1,7 +1,7 @@
 package com.cbrands.test.functional.accountDashboard;
 
+import com.cbrands.PremiseType;
 import com.cbrands.pages.AccountDashboardPage;
-import com.cbrands.pages.AccountDashboardPage.PremiseType;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
