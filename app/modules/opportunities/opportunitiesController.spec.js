@@ -116,14 +116,16 @@ describe('Unit: opportunitiesController', function() {
     }, {
       id: '99999'
     }];
+    scope.$digest();
 
-    spyOn(opportunityFiltersService, 'deleteOpportunityFilter').and.callFake(function() {
-      return {
-        then: function(callback) { return callback({}); }
-      };
+    spyOn(opportunityFiltersService, 'deleteOpportunityFilter').and.callFake(() => {
+      const defer = q.defer();
+      defer.resolve();
+      return defer.promise;
     });
 
     ctrl.deleteSavedFilter('1234');
+    scope.$digest();
     expect(userService.model.opportunityFilters).toEqual([{
       id: '45678'
     }, {
@@ -166,24 +168,146 @@ describe('Unit: opportunitiesController', function() {
     expect(ctrl.currentFilter).toEqual([{id: '1234'}]);
   });
 
-  // TODO: Fix this test!
-  it('should update the name of the saved report after a successful API call', () => {
-    const currentFilterMock = [{
-      id: chance.natural(),
-      name: chance.string()
-    }];
-    const newReportNameMock = chance.string();
+  describe('editReportName', () => {
+    let updateOpportunityFilterPromise;
+    let currentFilterMock;
+    let newReportNameMock;
 
-    ctrl.currentFilter = currentFilterMock;
-    ctrl.editedFilterName = newReportNameMock;
+    beforeEach(() => {
+      updateOpportunityFilterPromise = q.defer();
+      currentFilterMock = [{
+        id: chance.natural(),
+        name: chance.string()
+      }];
+      newReportNameMock = chance.string();
 
-    spyOn(opportunityFiltersService, 'updateOpportunityFilter').and.callFake(function() {
-      return {
-        then: function(callback) { return callback({}); }
-      };
+      ctrl.currentFilter = currentFilterMock;
+      ctrl.editedFilterName = newReportNameMock;
+
+      spyOn(opportunityFiltersService, 'updateOpportunityFilter').and.callFake(() => {
+        return updateOpportunityFilterPromise.promise;
+      });
     });
 
-    ctrl.editReportName();
-    expect(ctrl.currentFilter[0].name).toEqual(newReportNameMock);
+    it('should call opportunityFilterService.updateOpportunityFilter', () => {
+      ctrl.editReportName();
+      updateOpportunityFilterPromise.resolve();
+
+      expect(opportunityFiltersService.updateOpportunityFilter.calls.count()).toEqual(1);
+      expect(opportunityFiltersService.updateOpportunityFilter).toHaveBeenCalledWith(currentFilterMock[0].id, 'name', newReportNameMock);
+    });
+
+    it('should update the name of the saved report after opportunityFilterService.updateOpportunityFilter is successful', () => {
+      ctrl.editReportName();
+      updateOpportunityFilterPromise.resolve();
+      scope.$digest();
+
+      expect(ctrl.currentFilter[0].name).toBe(newReportNameMock);
+    });
+
+    it('should set the update report error flag to false when updating the report is successful', () => {
+      ctrl.updateReportError = false;
+      ctrl.editReportName();
+      updateOpportunityFilterPromise.resolve();
+      scope.$digest();
+
+      expect(ctrl.updateReportError).toBe(false);
+
+      ctrl.updateReportError = true;
+      ctrl.editReportName();
+      updateOpportunityFilterPromise.resolve();
+      scope.$digest();
+
+      expect(ctrl.updateReportError).toBe(false);
+    });
+
+    it('should NOT opportunistically update the name of the saved when opportunityFilterService.updateOpportunityFilter fails', () => {
+      ctrl.editReportName();
+      updateOpportunityFilterPromise.reject(chance.string());
+      scope.$digest();
+
+      expect(ctrl.currentFilter[0].name).not.toBe(newReportNameMock);
+      expect(ctrl.currentFilter[0].name).toBe(currentFilterMock[0].name);
+    });
+
+    it('should set the update report error flag to true when updating the report is un-successful', () => {
+      ctrl.updateReportError = false;
+      ctrl.editReportName();
+      updateOpportunityFilterPromise.reject();
+      scope.$digest();
+
+      expect(ctrl.updateReportError).toBe(true);
+
+      ctrl.updateReportError = true;
+      ctrl.editReportName();
+      updateOpportunityFilterPromise.reject();
+      scope.$digest();
+
+      expect(ctrl.updateReportError).toBe(true);
+    });
+  });
+
+  describe('deleteSavedFilter', () => {
+    let deleteOpportunityFilterPromise;
+
+    beforeEach(() => {
+      deleteOpportunityFilterPromise = q.defer();
+
+      spyOn(opportunityFiltersService, 'deleteOpportunityFilter').and.callFake(() => {
+        return deleteOpportunityFilterPromise.promise;
+      });
+    });
+
+    it('should set the delete report error flag to false when updating the report is successful', () => {
+      ctrl.deleteReportError = false;
+      ctrl.deleteSavedFilter();
+      deleteOpportunityFilterPromise.resolve();
+      scope.$digest();
+
+      expect(ctrl.deleteReportError).toBe(false);
+
+      ctrl.deleteReportError = false;
+      ctrl.deleteSavedFilter();
+      deleteOpportunityFilterPromise.resolve();
+      scope.$digest();
+
+      expect(ctrl.deleteReportError).toBe(false);
+    });
+
+    it('should set the delete report error flag to true when updating the report is un-successful', () => {
+      ctrl.deleteReportError = false;
+      ctrl.deleteSavedFilter();
+      deleteOpportunityFilterPromise.reject();
+      scope.$digest();
+
+      expect(ctrl.deleteReportError).toBe(true);
+
+      ctrl.deleteReportError = true;
+      ctrl.deleteSavedFilter();
+      deleteOpportunityFilterPromise.reject();
+      scope.$digest();
+
+      expect(ctrl.deleteReportError).toBe(true);
+    });
+  });
+
+  describe('closeEditModal', () => {
+    it('should set error flags for editing and deleting reports to false', () => {
+      ctrl.deleteReportError = false;
+      ctrl.updateReportError = false;
+      ctrl.closeEditModal();
+      scope.$digest();
+
+      expect(ctrl.deleteReportError).toBe(false);
+      expect(ctrl.updateReportError).toBe(false);
+
+      ctrl.deleteReportError = true;
+      ctrl.updateReportError = true;
+      ctrl.closeEditModal();
+      scope.$digest();
+
+      expect(ctrl.deleteReportError).toBe(false);
+      expect(ctrl.updateReportError).toBe(false);
+    });
   });
 });

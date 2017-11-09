@@ -15,6 +15,8 @@ module.exports = /*  @ngInject */
     vm.isHoveringReset = false;
     vm.resetFiltersOnLoad = $state.params.resetFiltersOnLoad;
     vm.applyFiltersOnLoad = $state.params.applyFiltersOnLoad;
+    vm.updateReportError = false;
+    vm.deleteReportError = false;
 
     // Set page title for head and nav
     title.setTitle($state.current.title);
@@ -100,7 +102,10 @@ module.exports = /*  @ngInject */
     }
 
     function closeEditModal() {
+      vm.updateReportError = false;
+      vm.deleteReportError = false;
       vm.currentFilter = {};
+
       closeModal();
     }
 
@@ -119,14 +124,17 @@ module.exports = /*  @ngInject */
     }
 
     function deleteSavedFilter(filterId) {
-      opportunityFiltersService.deleteOpportunityFilter(filterId).then(function(data) {
-        // remove from user model and UI
-        angular.forEach(userService.model.opportunityFilters, function(item, key) {
-          if (item.id === filterId) userService.model.opportunityFilters.splice(userService.model.opportunityFilters.indexOf(item), 1);
+      opportunityFiltersService.deleteOpportunityFilter(filterId)
+        .then(() => {
+          vm.deleteReportError = false;
+          angular.forEach(userService.model.opportunityFilters, (item, key) => {
+            if (item.id === filterId) userService.model.opportunityFilters.splice(userService.model.opportunityFilters.indexOf(item), 1);
+            closeModal();
+          });
+        })
+        .catch(() => {
+          vm.deleteReportError = true;
         });
-
-        closeModal();
-      });
     }
 
     function placeholderSelect(data) {
@@ -153,11 +161,12 @@ module.exports = /*  @ngInject */
     function editReportName() {
       opportunityFiltersService.updateOpportunityFilter(vm.currentFilter[0].id, 'name', vm.editedFilterName)
         .then(() => {
+          vm.updateReportError = false;
           vm.currentFilter[0].name = vm.editedFilterName;
           closeModal();
         })
-        .catch(error => {
-          console.warn(error);
+        .catch(() => {
+          vm.updateReportError = true;
         });
     }
 
