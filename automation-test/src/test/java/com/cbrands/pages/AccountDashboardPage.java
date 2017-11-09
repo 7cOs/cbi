@@ -33,9 +33,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
 
-  @FindBy(how = How.XPATH, using = "//md-radio-button[@aria-label='Off-Premise']")
-  private WebElement offPremise;
-
   @FindBy(how = How.XPATH, using = "//inline-search[@type='distributor']")
   private WebElement distributorFilter;
 
@@ -76,8 +73,11 @@ public class AccountDashboardPage extends TestNGBasePage {
     driver.get(webAppBaseUrl + "/accounts");
   }
 
-  public AccountDashboardPage selectOffPremiseType() {
-    waitForElementToClickable(offPremise, true).click();
+  public AccountDashboardPage selectPremiseType(PremiseType premiseType) {
+    waitForElementToClickable(
+      findElement(By.xpath("//md-radio-button[@aria-label='" + premiseType.label + "']")),
+      true
+    ).click();
     return this;
   }
 
@@ -296,6 +296,18 @@ public class AccountDashboardPage extends TestNGBasePage {
   public boolean isOpportunitiesLinkEnabled() {
     final WebElement opportunitiesLink = findElement(By.xpath("//a[contains(., 'See All Opportunities')]"));
     return !"true".equalsIgnoreCase(opportunitiesLink.getAttribute("disabled"));
+  }
+
+  public enum PremiseType {
+    All("All"),
+    Off("Off-Premise"),
+    On("On-Premise");
+
+    private final String label;
+
+    PremiseType(String label) {
+      this.label = label;
+    }
   }
 
   public enum RightPanelLevel {

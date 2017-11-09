@@ -1,6 +1,7 @@
 package com.cbrands.test.functional.accountDashboard;
 
 import com.cbrands.pages.AccountDashboardPage;
+import com.cbrands.pages.AccountDashboardPage.PremiseType;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
@@ -42,16 +43,16 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
 
   @Test(
     description = "Enabling the View Opportunities link from Account Dashboard page",
-    dataProvider = "distributorData"
+    dataProvider = "filterData"
   )
-  public void enableOpportunitiesLink(String distributorName) {
+  public void enableOpportunitiesLink(PremiseType premiseType, String distributorName) {
     Assert.assertFalse(
       accountDashboardPage.isOpportunitiesLinkEnabled(),
-      "Opportunities link failed to be disabled by default."
+      "Opportunities link failed to be disabled by default, when no filters are applied."
     );
 
     accountDashboardPage
-      .selectOffPremiseType()
+      .selectPremiseType(premiseType)
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
       .selectDistributorFilterByName(distributorName);
@@ -68,14 +69,15 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
 
     Assert.assertTrue(
       accountDashboardPage.isOpportunitiesLinkEnabled(),
-      "Opportunities link failed to be enabled after Premise Type and Distributor filters are applied."
+      "Opportunities link failed to be enabled after valid Premise Type and Distributor filters are applied."
     );
   }
 
   @DataProvider
-  public static Object[][] distributorData() {
+  public static Object[][] filterData() {
     return new Object[][]{
-      new Object[]{"Healy Wholesale"}
+      new Object[]{PremiseType.Off, "Healy Wholesale"},
+      new Object[]{PremiseType.On, "Healy Wholesale"}
     };
   }
 
