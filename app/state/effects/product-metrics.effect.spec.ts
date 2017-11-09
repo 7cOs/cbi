@@ -160,6 +160,37 @@ describe('ProductMetrics Effects', () => {
       });
     });
 
+    describe('when ProductMetricsService returns successfully and productMetricsViewType is packages', () => {
+      it('should return a SetProductMetricsViewType, FetchProductMetricsSuccess, and SelectBrandValues', (done) => {
+        spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
+          productMetricsData.products = productMetricsWithBrandValuesMock;
+          productMetricsData.productMetricsViewType = ProductMetricsViewType.packages;
+          productMetricsData.selectedBrandCode = selectedBrandCodeMock;
+          return Observable.of(productMetricsData);
+        });
+
+        productMetricsSuccessPayloadMock = {
+          positionId: positionIdMock,
+          products: productMetricsWithBrandValuesMock
+        };
+
+        let dispatchedActions: Action[] = [];
+
+        productMetricsEffects.fetchProductMetrics$().subscribe((action: Action) => {
+          dispatchedActions.push(action);
+
+          if (dispatchedActions.length === 3) {
+            expect(dispatchedActions).toEqual([
+              new ProductMetricsActions.SetProductMetricsViewType(ProductMetricsViewType.packages),
+              new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock),
+              new ProductMetricsActions.SelectBrandValues(selectedBrandCodeMock)
+            ]);
+            done();
+          }
+        });
+      });
+    });
+
     describe('when ProductMetricsApiService returns an error', () => {
       it('should return a FetchProductMetricsFailure after catching an error', (done) => {
         spyOn(productMetricsService, 'getProductMetrics').and.returnValue(Observable.throw(error));
