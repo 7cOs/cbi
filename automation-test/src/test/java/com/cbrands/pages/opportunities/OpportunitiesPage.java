@@ -263,23 +263,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     return new SavedReportDropdown();
   }
 
-  public OpportunitiesPage deleteAllSavedReports() {
-    WebElement savedReportOption = getFirstSavedReportOption();
-
-    while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
-      this
-        .clickSavedReportHoverArrow(savedReportOption)
-        .clickSavedReportDeleteLink()
-        .waitForModalToClose()
-        .clickSavedReportsDropdown();
-      savedReportOption = getFirstSavedReportOption();
-    }
-
-    waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
-
-    return this;
-  }
-
   private WebElement getFirstSavedReportOption() {
     final String withSavedReports = "[." + SAVED_FILTER_OPTION_XPATH + "]";
     final String visibleSavedReportsDropdown = VISIBLE_DROPDOWN_XPATH + withSavedReports;
@@ -333,6 +316,22 @@ public class OpportunitiesPage extends TestNGBasePage {
       );
 
       return PageFactory.initElements(driver, SavedReportModal.class);
+    }
+
+    public OpportunitiesPage deleteAllSavedReports() {
+      WebElement savedReportOption = getFirstSavedReportOption();
+
+      while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
+        clickSavedReportHoverArrow(savedReportOption)
+          .clickSavedReportDeleteLink()
+          .waitForModalToClose()
+          .clickSavedReportsDropdown();
+        savedReportOption = getFirstSavedReportOption();
+      }
+
+      waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
+
+      return PageFactory.initElements(driver, OpportunitiesPage.class);
     }
 
     public boolean doesSavedReportExistWithName(String name) {
