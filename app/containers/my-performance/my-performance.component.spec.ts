@@ -1842,6 +1842,8 @@ describe('MyPerformanceComponent', () => {
   describe('when the filter state is changed', () => {
     let currentMock: MyPerformanceEntitiesData;
     let productMetricsStateMock: ProductMetricsState;
+    let rowMock: MyPerformanceTableRow;
+    let selectedBrandCode: string;
 
     beforeEach(() => {
       currentMock = getMyPerformanceEntitiesDataMock();
@@ -1883,7 +1885,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId
@@ -1917,7 +1919,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId
@@ -1951,7 +1953,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
@@ -1984,7 +1986,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
@@ -2016,7 +2018,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId

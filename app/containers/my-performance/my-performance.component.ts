@@ -158,7 +158,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentState = current;
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
         this.responsibilitiesStatus = this.getResponsibilityStatus(this.currentState.responsibilities);
-        this.responsibilitiesFetching = this.responsibilitiesStatus === ActionStatus.Fetching;
+        this.responsibilitiesFetching = this.responsibilitiesFetching = this.isFetchingResponsibilities();
 
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
 
@@ -568,12 +568,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private getResponsibilityStatus(responsibilitiesState: ResponsibilitiesState): ActionStatus {
-    return ((responsibilitiesState.responsibilitiesStatus === ActionStatus.Fetching)
-      || (responsibilitiesState.entitiesPerformanceStatus === ActionStatus.Fetching)
-      || (responsibilitiesState.totalPerformanceStatus === ActionStatus.Fetching)
-      || (responsibilitiesState.subaccountsStatus === ActionStatus.Fetching))
-        ? ActionStatus.Fetching
-        : ActionStatus.Fetched;
+    return ((responsibilitiesState.responsibilitiesStatus === ActionStatus.Fetched
+        || responsibilitiesState.responsibilitiesStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.entitiesPerformanceStatus === ActionStatus.Fetched
+        || responsibilitiesState.entitiesPerformanceStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.totalPerformanceStatus === ActionStatus.Fetched
+        || responsibilitiesState.totalPerformanceStatus === ActionStatus.NotFetched)
+      && (responsibilitiesState.subaccountsStatus === ActionStatus.Fetched
+        || responsibilitiesState.subaccountsStatus === ActionStatus.NotFetched))
+        ? ActionStatus.Fetched
+        : ActionStatus.NotFetched;
   }
 
   private deselectBrandValue(): void {
