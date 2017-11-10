@@ -273,21 +273,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     );
   }
 
-  private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
-    waitForElementToClickable(savedReport, true);
-    final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
-    final int yPos = savedReport.getSize().getHeight() / 2;
-
-    final Actions action = new Actions(driver);
-    action
-      .moveToElement(savedReport, xPos, yPos)
-      .click()
-      .perform();
-    waitForLoaderToDisappear();
-
-    return PageFactory.initElements(driver, SavedReportModal.class);
-  }
-
   public boolean isMyAccountsOnlySelected() {
     return "true".equalsIgnoreCase(accountScopeFilter.getAttribute("aria-checked"));
   }
@@ -311,7 +296,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
 
     public SavedReportModal openModalForSavedReportWithName(String reportName) {
-      clickSavedReportHoverArrow(
+      this.clickSavedReportHoverArrow(
         findElement(this.getHandleForSavedReportWithName(reportName))
       );
 
@@ -322,7 +307,7 @@ public class OpportunitiesPage extends TestNGBasePage {
       WebElement savedReportOption = getFirstSavedReportOption();
 
       while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
-        clickSavedReportHoverArrow(savedReportOption)
+        this.clickSavedReportHoverArrow(savedReportOption)
           .clickSavedReportDeleteLink()
           .waitForModalToClose()
           .clickSavedReportsDropdown();
@@ -340,6 +325,21 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     private By getHandleForSavedReportWithName(String name) {
       return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
+    }
+
+    private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
+      waitForElementToClickable(savedReport, true);
+      final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
+      final int yPos = savedReport.getSize().getHeight() / 2;
+
+      final Actions action = new Actions(driver);
+      action
+        .moveToElement(savedReport, xPos, yPos)
+        .click()
+        .perform();
+      waitForLoaderToDisappear();
+
+      return PageFactory.initElements(driver, SavedReportModal.class);
     }
 
   }
