@@ -324,20 +324,20 @@ public class OpportunitiesPage extends TestNGBasePage {
     return Integer.parseInt(displayedCount);
   }
 
-  public OpportunitiesPage selectSavedReportWithName(String reportName) {
-    waitForElementToClickable(
-      savedReportsDropdown.findElement(getHandleForSavedReportWithName(reportName)),
-      true
-    ).click();
-
-    return this;
-  }
-
   private By getHandleForSavedReportWithName(String name) {
     return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
   }
 
   public class SavedReportDropdown {
+
+    public OpportunitiesPage selectSavedReportWithName(String reportName) {
+      waitForElementToClickable(
+        savedReportsDropdown.findElement(getHandleForSavedReportWithName(reportName)),
+        true
+      ).click();
+
+      return PageFactory.initElements(driver, OpportunitiesPage.class);
+    }
 
     public boolean doesSavedReportExistWithName(String name) {
       return isElementPresent(getHandleForSavedReportWithName(name));
