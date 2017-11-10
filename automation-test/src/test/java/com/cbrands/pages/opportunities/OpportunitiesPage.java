@@ -290,14 +290,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     );
   }
 
-  public SavedReportModal openModalForSavedReportWithName(String reportName) {
-    this.clickSavedReportHoverArrow(
-      findElement(getHandleForSavedReportWithName(reportName))
-    );
-
-    return PageFactory.initElements(driver, SavedReportModal.class);
-  }
-
   private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
     waitForElementToClickable(savedReport, true);
     final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
@@ -324,10 +316,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     return Integer.parseInt(displayedCount);
   }
 
-  private By getHandleForSavedReportWithName(String name) {
-    return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
-  }
-
   public class SavedReportDropdown {
 
     public OpportunitiesPage selectSavedReportWithName(String reportName) {
@@ -339,8 +327,20 @@ public class OpportunitiesPage extends TestNGBasePage {
       return PageFactory.initElements(driver, OpportunitiesPage.class);
     }
 
+    public SavedReportModal openModalForSavedReportWithName(String reportName) {
+      clickSavedReportHoverArrow(
+        findElement(getHandleForSavedReportWithName(reportName))
+      );
+
+      return PageFactory.initElements(driver, SavedReportModal.class);
+    }
+
     public boolean doesSavedReportExistWithName(String name) {
       return isElementPresent(getHandleForSavedReportWithName(name));
+    }
+
+    private By getHandleForSavedReportWithName(String name) {
+      return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
     }
 
   }
