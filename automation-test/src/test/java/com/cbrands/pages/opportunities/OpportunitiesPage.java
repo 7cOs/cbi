@@ -258,9 +258,9 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage clickSavedReportsDropdown() {
+  public SavedReportDropdown clickSavedReportsDropdown() {
     waitForElementToClickable(savedReportsDropdown, true).click();
-    return this;
+    return new SavedReportDropdown();
   }
 
   public OpportunitiesPage deleteAllSavedReports() {
@@ -341,4 +341,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
   }
 
+  public class SavedReportDropdown {
+
+  }
 }
