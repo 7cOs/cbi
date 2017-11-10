@@ -327,7 +327,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public displayLeftTotalRow(): boolean {
-    return !this.isShowingRoleGroups() && this.productMetricsViewType === ProductMetricsViewType.brands;
+    return !this.isShowingRoleGroups();
   }
 
   public displayRightTotalRow(): boolean {
@@ -598,6 +598,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private deselectBrandValue(): void {
     delete this.selectedBrandCode;
     this.selectedSkuPackageCode = null;
+    this.selectedSkuPackageType = null;
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
     this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
@@ -627,6 +628,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && !this.productMetrics.filter(
         (row: MyPerformanceTableRow) => row.metadata.skuPackageCode === this.selectedSkuPackageCode).length) {
         this.selectedSkuPackageCode = null;
+        this.selectedSkuPackageType = null;
         this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
         this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
     } else if (this.productMetricsState
