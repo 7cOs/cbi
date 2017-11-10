@@ -327,25 +327,49 @@ export class ResponsibilitiesService {
   public getRefreshedTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData)
   : Observable<RefreshTotalPerformanceData> {
     let hierarchyGroup: HierarchyGroup;
-
     switch (refreshTotalPerformanceData.salesHierarchyViewType) {
       case SalesHierarchyViewType.roleGroups:
       case SalesHierarchyViewType.accounts:
+          return this.getPerformance(
+            refreshTotalPerformanceData.positionId,
+            refreshTotalPerformanceData.filter,
+            refreshTotalPerformanceData.brandSkuCode,
+            refreshTotalPerformanceData.skuPackageType
+          )
+          .map((performance: Performance) => {
+            return Object.assign({}, refreshTotalPerformanceData, { entitiesTotalPerformances: performance });
+          });
+
       case SalesHierarchyViewType.distributors:
         let performanceObservable: Observable<Performance>;
-
         if (refreshTotalPerformanceData.alternateHierarchyId) {
-          hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
-            refreshTotalPerformanceData.hierarchyGroups,
-            refreshTotalPerformanceData.groupedEntities
-          );
+          if (refreshTotalPerformanceData.entityType === EntityType.Person) {
+            performanceObservable = this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(
+              refreshTotalPerformanceData.positionId,
+              refreshTotalPerformanceData.alternateHierarchyId,
+              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.brandSkuCode,
+              refreshTotalPerformanceData.skuPackageType)
+              .map((performanceDTO: PerformanceDTO) => {
+                return this.performanceTransformerService.transformPerformanceDTO(performanceDTO);
+              })
+              .catch(() => {
+                this.toastService.showPerformanceDataErrorToast();
+                return Observable.of(this.performanceTransformerService.transformPerformanceDTO(null)); // TODO: necessary?
+              });
+          } else {
+            hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
+              refreshTotalPerformanceData.hierarchyGroups,
+              refreshTotalPerformanceData.groupedEntities
+            );
 
-          performanceObservable = this.getHierarchyGroupPerformance(
-            hierarchyGroup,
-            refreshTotalPerformanceData.filter,
-            refreshTotalPerformanceData.positionId,
-            refreshTotalPerformanceData.brandSkuCode,
-            refreshTotalPerformanceData.skuPackageType);
+            performanceObservable = this.getHierarchyGroupPerformance(
+              hierarchyGroup,
+              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.positionId,
+              refreshTotalPerformanceData.brandSkuCode,
+              refreshTotalPerformanceData.skuPackageType);
+          }
         } else {
           performanceObservable = this.getPerformance(
             refreshTotalPerformanceData.positionId,
