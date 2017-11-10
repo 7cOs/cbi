@@ -264,7 +264,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage deleteAllSavedReports() {
-    WebElement savedReportOption = clickSavedReportsDropdown().getFirstSavedReportOption();
+    WebElement savedReportOption = getFirstSavedReportOption();
 
     while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
       this

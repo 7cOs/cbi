@@ -45,13 +45,13 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @Test(description = "Creating an Opportunities Saved Report", dataProvider = "createRunReportData")
   public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage.deleteAllSavedReports();
+    opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
     saveNewReport(name, distributorSearchText)
       .waitForModalToClose()
       .clickSavedReportsDropdown();
 
     Assert.assertTrue(
-      opportunitiesPage.doesSavedReportExistWithName(name),
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(name),
       "Saved Report with name " + name + " failed to appear in the dropdown on the Opportunities page."
     );
 
@@ -129,7 +129,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .waitForModalToClose();
 
     Assert.assertTrue(
-      opportunitiesPage.doesSavedReportExistWithName(editedReportName),
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
       "Saved Report with edited name " + editedReportName +
         " failed to appear in the dropdown on the Opportunities page."
     );
