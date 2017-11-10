@@ -324,10 +324,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     return Integer.parseInt(displayedCount);
   }
 
-  public boolean doesSavedReportExistWithName(String name) {
-    return isElementPresent(getHandleForSavedReportWithName(name));
-  }
-
   public OpportunitiesPage selectSavedReportWithName(String reportName) {
     waitForElementToClickable(
       savedReportsDropdown.findElement(getHandleForSavedReportWithName(reportName)),
@@ -342,6 +338,10 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public class SavedReportDropdown {
+
+    public boolean doesSavedReportExistWithName(String name) {
+      return isElementPresent(getHandleForSavedReportWithName(name));
+    }
 
   }
 }
