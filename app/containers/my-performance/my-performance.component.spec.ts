@@ -1853,6 +1853,10 @@ describe('MyPerformanceComponent', () => {
         productMetricsViewType: ProductMetricsViewType.brands
       };
 
+      rowMock = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0, row: rowMock});
+      selectedBrandCode = rowMock.metadata.brandCode;
+
       currentMock.filter = getMyPerformanceFilterMock();
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
@@ -1875,7 +1879,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: undefined,
+        brandSkuCode: selectedBrandCode,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
@@ -1909,7 +1913,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: undefined,
+        brandSkuCode: selectedBrandCode,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
@@ -1943,7 +1947,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: undefined,
+        brandSkuCode: selectedBrandCode,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: null,
@@ -1976,7 +1980,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: undefined,
+        brandSkuCode: selectedBrandCode,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: null,
@@ -2008,7 +2012,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityTypeCode: currentMock.responsibilities.entityTypeCode,
         salesHierarchyViewType: currentMock.salesHierarchyViewType.viewType,
         filter: stateMock.myPerformanceFilter,
-        brandSkuCode: undefined,
+        brandSkuCode: selectedBrandCode,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
