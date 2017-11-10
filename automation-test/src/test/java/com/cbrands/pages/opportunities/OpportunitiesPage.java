@@ -320,7 +320,7 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     public OpportunitiesPage selectSavedReportWithName(String reportName) {
       waitForElementToClickable(
-        savedReportsDropdown.findElement(getHandleForSavedReportWithName(reportName)),
+        savedReportsDropdown.findElement(this.getHandleForSavedReportWithName(reportName)),
         true
       ).click();
 
@@ -329,14 +329,14 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     public SavedReportModal openModalForSavedReportWithName(String reportName) {
       clickSavedReportHoverArrow(
-        findElement(getHandleForSavedReportWithName(reportName))
+        findElement(this.getHandleForSavedReportWithName(reportName))
       );
 
       return PageFactory.initElements(driver, SavedReportModal.class);
     }
 
     public boolean doesSavedReportExistWithName(String name) {
-      return isElementPresent(getHandleForSavedReportWithName(name));
+      return isElementPresent(this.getHandleForSavedReportWithName(name));
     }
 
     private By getHandleForSavedReportWithName(String name) {
