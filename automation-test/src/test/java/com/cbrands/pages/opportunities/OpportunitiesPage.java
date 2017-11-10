@@ -296,10 +296,9 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
 
     public SavedReportModal openModalForSavedReportWithName(String reportName) {
-      this.clickSavedReportHoverArrow(
-        findElement(this.getHandleForSavedReportWithName(reportName))
-      );
+      final WebElement savedReportOption = findElement(this.getHandleForSavedReportWithName(reportName));
 
+      this.clickSavedReportHoverArrow(savedReportOption);
       return PageFactory.initElements(driver, SavedReportModal.class);
     }
 
@@ -328,6 +327,12 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
 
     private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
+      this.clickHoverArrowFor(savedReport).waitForLoaderToDisappear();
+
+      return PageFactory.initElements(driver, SavedReportModal.class);
+    }
+
+    private OpportunitiesPage clickHoverArrowFor(WebElement savedReport) {
       waitForElementToClickable(savedReport, true);
       final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
       final int yPos = savedReport.getSize().getHeight() / 2;
@@ -337,9 +342,8 @@ public class OpportunitiesPage extends TestNGBasePage {
         .moveToElement(savedReport, xPos, yPos)
         .click()
         .perform();
-      waitForLoaderToDisappear();
 
-      return PageFactory.initElements(driver, SavedReportModal.class);
+      return PageFactory.initElements(driver, OpportunitiesPage.class);
     }
 
   }
