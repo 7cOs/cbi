@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
@@ -45,8 +44,7 @@ AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
     EffectsModule,
     HttpModule,
     MyPerformanceModule,
-    StoreModule.provideStore(rootReducer),
-    StoreDevtoolsModule.instrumentOnlyWithExtension({maxAge: 5})
+    StoreModule.provideStore(rootReducer)
   ],
   declarations: [
     AnalyticsEventDirective,
