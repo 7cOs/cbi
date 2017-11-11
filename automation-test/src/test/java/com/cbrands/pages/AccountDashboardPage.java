@@ -24,6 +24,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   private static final String PANEL_LOADER_XPATH = "//div[contains(@class, 'loader-wrap')]";
   private static final String RIGHT_PANEL_LOADER_XPATH = RIGHT_PANEL_XPATH + PANEL_LOADER_XPATH;
   private static final String LEFT_PANEL_LOADER_XPATH = LEFT_PANEL_XPATH + PANEL_LOADER_XPATH;
+  private static final String REMOVE_BUTTON_XPATH = "//input[contains(@class, 'remove-btn visible')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -47,6 +48,9 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button" +
     ".btn-action")
   private WebElement applyFilters;
+
+  @FindBy(how = How.XPATH, using = "//a[contains(@class, 'reset-icon')]")
+  private WebElement resetFilters;
 
   @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
   private WebElement leftPanel;
@@ -262,6 +266,22 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   public AccountDashboardPage waitForMarketLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
+    return this;
+  }
+
+  public AccountDashboardPage clickRemoveDistributorFilter() {
+    final WebElement removeDistributorButton = distributorFilter.findElement(By.xpath(REMOVE_BUTTON_XPATH));
+    waitForElementToClickable(removeDistributorButton, true).click();
+    return this;
+  }
+
+  public String getDistributorFieldText() {
+    return distributorFilter.findElement(By.xpath("//input[@type='text']")).getAttribute("value");
+  }
+
+  public AccountDashboardPage clickResetFilters() {
+    waitForElementToClickable(resetFilters, true).click();
+
     return this;
   }
 
