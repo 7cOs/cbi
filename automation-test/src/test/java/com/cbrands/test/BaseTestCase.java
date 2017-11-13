@@ -36,7 +36,7 @@ public abstract class BaseTestCase {
   protected void startUpBrowser() throws MalformedURLException {
     log.info("\n Browser opening...");
 
-    driver = WebDriverFactory.createDriver();
+    driver = WebDriverFactory.createDriver("Automated Test Run");
     driver.get(webAppBaseUrl);
     driver.manage().window().maximize();
     SeleniumUtils.setDriver(driver);
