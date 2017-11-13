@@ -1404,7 +1404,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
           vm.currentBoundTopBottomIndexes =  result;
           stopTopBottomLoadingIcon();
         } else {
-          vm.loadingTopBottom = 'error';
+          vm.loadingTopBottom = false;
           vm.currentBoundTopBottomIndexes = [];
           vm.currentChartData = formatChartData(myperformanceService.initChartData());
         }

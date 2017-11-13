@@ -11,6 +11,6 @@ export function getHierarchyGroupMock(): HierarchyGroup {
     type: chance.string(),
     entityType: getEntityTypeMock(),
     positionId: chance.string(),
-    positionDescription: chance.string(),
+    positionDescription: chance.string()
   };
 }
