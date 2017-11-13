@@ -294,14 +294,14 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
 
     public OpportunitiesPage deleteAllSavedReports() {
-      WebElement savedReportOption = getFirstSavedReportOption();
+      WebElement savedReportOption = this.getFirstSavedReportOption();
 
       while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
         this.clickSavedReportHoverArrow(savedReportOption)
           .clickSavedReportDeleteLink()
           .waitForModalToClose()
           .clickSavedReportsDropdown();
-        savedReportOption = getFirstSavedReportOption();
+        savedReportOption = this.getFirstSavedReportOption();
       }
 
       waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
