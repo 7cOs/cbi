@@ -2082,9 +2082,9 @@ describe('MyPerformanceComponent', () => {
       it('should deselect the Pacakge and trigger the correct actions', () => {
         previousFilterMock.premiseType = PremiseTypeValue.On;
         filterSubject.next(previousFilterMock);
+        componentInstance.selectedSkuPackageType = SkuPackageType.package;
         storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
-        componentInstance.selectedSkuPackageType = SkuPackageType.package;
         currentFilterMock.premiseType = PremiseTypeValue.Off;
         filterSubject.next(currentFilterMock);
         expect(storeMock.dispatch.calls.count()).toBe(1);
