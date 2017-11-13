@@ -29,10 +29,18 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
 
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
-  private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
-  private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
+  private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
+  private static ThreadLocal<String> sessionId = new ThreadLocal<>();
 
+	/**
+   * @deprecated Please use {@link #createDriver(String) createDriver} and supply a test case name instead
+   */
+  @Deprecated
   public static WebDriver createDriver() throws MalformedURLException {
+    return createDriver("Old Selenium Test");
+  }
+
+  public static WebDriver createDriver(String testName) throws MalformedURLException {
     final WebDriver driver;
 
     final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
