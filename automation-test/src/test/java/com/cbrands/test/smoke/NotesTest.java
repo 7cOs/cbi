@@ -19,7 +19,7 @@ public class NotesTest extends BaseTestCase {
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
-    startUpBrowser();
+    super.startUpBrowser("NotesTest");
 
     logoutPage = new LogoutPage(driver);
     log.info("\nLoading webpage...");
