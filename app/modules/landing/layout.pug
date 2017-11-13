@@ -82,7 +82,8 @@ section.landing-page
         .filter-container.first
           .dropdown-filter
             .dropdown
-              md-select(ng-model="l.filtersService.model.selected.savedFilters" aria-label="Saved Filter Dropdown"  placeholder="Select Saved Report")
-                md-option(ng-if="!l.savedFilters.length" class="saved-filter-option" value="" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false") No saved reports
-                md-option(ng-click="l.goToSavedFilter($event, savedFilter)" class="saved-filter-option" ng-repeat="savedFilter in l.savedFilters | orderBy: 'name'" value="{{::savedFilter.id}}" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false" analytics-event-on="click" category="Home" action="Select Saved Report" label="{{savedFilter.id}}") {{::savedFilter.name}}
-                  span.go-arrow(ng-if="hover" ng-click="")
+              md-select(ng-model="l.filtersService.model.selected.savedFilters" aria-label="Saved Filter Dropdown"  placeholder="Select Saved Report" md-on-open="savedReportsOpen = true" md-on-close="savedReportsOpen = false")
+                md-option(ng-if="!l.savedFilters.length" class="saved-filter-option" value="" ng-mouseenter="hover = true" ng-mouseleave="hover = false") No saved reports
+                md-option(ng-click="l.goToSavedFilter($event, savedFilter)" class="saved-filter-option" ng-repeat="savedFilter in l.savedFilters | orderBy: 'name'" value="{{::savedFilter.id}}" ng-mouseenter="hover = true" ng-mouseleave="hover = false" analytics-event-on="click" category="Home" action="Select Saved Report" label="{{savedFilter.id}}") {{::savedFilter.name}}
+                  .saved-reports-arrow-container(ng-if="savedReportsOpen")
+                    .saved-reports-arrow(ng-if="hover" ng-click="")
