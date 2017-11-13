@@ -2066,9 +2066,9 @@ describe('MyPerformanceComponent', () => {
 
     describe('when going from All premise type to On with a selected SKU', () => {
       it('should deselect the SKU and trigger the correct actions', () => {
-        componentInstance.selectedSkuPackageType = SkuPackageType.sku;
         previousFilterMock.premiseType = PremiseTypeValue.All;
         filterSubject.next(previousFilterMock);
+        componentInstance.selectedSkuPackageType = SkuPackageType.sku;
         storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
         currentFilterMock.premiseType = PremiseTypeValue.On;
