@@ -232,6 +232,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
     let accountDashboardStateParams: AccountDashboardStateParameters;
+
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams =
         this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(), this.filterState, row);
@@ -249,6 +250,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.filterState, row);
       }
     }
+
+    this.analyticsService.trackEvent('Team Performance', 'Go to Account Dashboard',
+      accountDashboardStateParams.distributorid || accountDashboardStateParams.subaccountid);
 
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     const currentWindow = this.windowService.nativeWindow();
