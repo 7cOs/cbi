@@ -1,5 +1,7 @@
 package com.cbrands.pages;
 
+import com.cbrands.PremiseType;
+import com.cbrands.pages.opportunities.OpportunitiesPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -58,6 +60,9 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
   private WebElement rightPanel;
 
+  @FindBy(how = How.XPATH, using = "//a[contains(., 'See All Opportunities')]")
+  private WebElement seeAllOpportunitiesLink;
+
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
   }
@@ -71,6 +76,14 @@ public class AccountDashboardPage extends TestNGBasePage {
   @Override
   protected void load() {
     driver.get(webAppBaseUrl + "/accounts");
+  }
+
+  public AccountDashboardPage selectPremiseType(PremiseType premiseType) {
+    waitForElementToClickable(
+      findElement(By.xpath("//md-radio-button[@aria-label='" + premiseType.label() + "']")),
+      true
+    ).click();
+    return this;
   }
 
   public AccountDashboardPage enterDistributorSearchText(String text) {
@@ -283,6 +296,15 @@ public class AccountDashboardPage extends TestNGBasePage {
     waitForElementToClickable(resetFilters, true).click();
 
     return this;
+  }
+
+  public boolean isOpportunitiesLinkEnabled() {
+    return !"true".equalsIgnoreCase(seeAllOpportunitiesLink.getAttribute("disabled"));
+  }
+
+  public OpportunitiesPage clickSeeAllOpportunitiesLink() {
+    waitForElementToClickable(seeAllOpportunitiesLink, true).click();
+    return PageFactory.initElements(driver, OpportunitiesPage.class);
   }
 
   public enum RightPanelLevel {
