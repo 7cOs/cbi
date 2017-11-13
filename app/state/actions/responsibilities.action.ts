@@ -36,6 +36,7 @@ export interface FetchEntityWithPerformancePayload {
   selectedEntityDescription: string;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
+  inExceptionHierarchy?: boolean;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {

@@ -349,7 +349,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.store.dispatch(new ResponsibilitiesActions.SetExceptionHierarchy());
     }
 
+    const inExceptionHierarchy = this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy;
+
     switch (this.salesHierarchyViewType) {
+
       case SalesHierarchyViewType.roleGroups:
         const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
@@ -367,7 +370,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           filter: this.filterState,
           selectedEntityDescription: parameters.row.descriptionRow0,
           brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-          skuPackageType: this.selectedSkuPackageType
+          skuPackageType: this.selectedSkuPackageType,
+          inExceptionHierarchy: inExceptionHierarchy
         }));
 
         this.fetchProductMetricsWhenClick(parameters);

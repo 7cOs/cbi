@@ -53,6 +53,7 @@ export interface FetchEntityWithPerformanceData {
   skuPackageType?: SkuPackageType;
   entityWithPerformance?: Array<EntityWithPerformance>;
   selectedEntityDescription?: string;
+  inExceptionHierarchy?: boolean;
 }
 
 export interface RefreshAllPerformancesData {
@@ -63,6 +64,7 @@ export interface RefreshAllPerformancesData {
   skuPackageType?: SkuPackageType;
   groupedEntities?: GroupedEntities;
   alternateHierarchyId?: string;
+  inExceptionHierarchy?: boolean;
 
   // roleGroups only
   hierarchyGroups?: Array<HierarchyGroup>; // TODO: check if it's not only for the unit tests (it seems so)
@@ -498,10 +500,18 @@ export class ResponsibilitiesService {
         );
         break;
       case EntityType.DistributorGroup:
+        const contextPositionId =
+          pipelineData.alternateHierarchyId
+          ? pipelineData.inExceptionHierarchy
+            ? pipelineData.alternateHierarchyId
+            : CORPORATE_USER_POSITION_ID
+          : pipelineData.positionId;
+
+        debugger;
         entityWithPerformanceObservable = this.getDistributorsPerformances(
           pipelineData.entities,
           pipelineData.filter,
-          pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : pipelineData.positionId,
+          contextPositionId,
           pipelineData.brandSkuCode,
           pipelineData.skuPackageType
         );

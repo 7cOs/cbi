@@ -156,7 +156,6 @@ export function responsibilitiesReducer(
       });
 
     case ResponsibilitiesActions.SET_EXCEPTION_HIERARCHY:
-      debugger;
       return Object.assign({}, state, {
         exceptionHierarchy: true
       });
