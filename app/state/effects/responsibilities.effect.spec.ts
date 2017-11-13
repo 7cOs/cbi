@@ -404,7 +404,6 @@ describe('Responsibilities Effects', () => {
       groupedEntities: getGroupedEntitiesMock(),
       hierarchyGroups: [getHierarchyGroupMock()],
       selectedEntityType: getEntityTypeMock(),
-      selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
       skuPackageType: SkuPackageType[getSkuPackageTypeMock()],
       filter: performanceFilterStateMock,
