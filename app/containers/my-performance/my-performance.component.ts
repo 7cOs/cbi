@@ -232,6 +232,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleSublineClicked(row: MyPerformanceTableRow): void {
     let accountDashboardStateParams: AccountDashboardStateParameters;
+
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams =
         this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(), this.filterState, row);
@@ -249,6 +250,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.filterState, row);
       }
     }
+
+    this.analyticsService.trackEvent('Team Performance', 'Go to Account Dashboard',
+      accountDashboardStateParams.distributorid || accountDashboardStateParams.subaccountid);
 
     const accountDashboardUrl = this.$state.href('accounts', accountDashboardStateParams);
     const currentWindow = this.windowService.nativeWindow();
@@ -520,7 +524,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       groupedEntities: this.currentState.responsibilities.groupedEntities,
       hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
       selectedEntityType: this.currentState.selectedEntityType,
-      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
       salesHierarchyViewType: this.salesHierarchyViewType,
       filter: this.filterState,
       brandSkuCode: brandSkuCode,
@@ -560,7 +563,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         groupedEntities: previousState.responsibilities.groupedEntities,
         hierarchyGroups: previousState.responsibilities.hierarchyGroups,
         selectedEntityType: previousState.selectedEntityType,
-        selectedEntityTypeCode: previousState.responsibilities.entityTypeCode,
         salesHierarchyViewType: previousState.salesHierarchyViewType.viewType,
         filter: this.filterState,
         brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
@@ -605,7 +607,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       groupedEntities: this.currentState.responsibilities.groupedEntities,
       hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
       selectedEntityType: this.currentState.selectedEntityType,
-      selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
       salesHierarchyViewType: this.salesHierarchyViewType,
       filter: this.filterState,
       entityType: this.currentState.selectedEntityType,
@@ -648,7 +649,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         groupedEntities: this.currentState.responsibilities.groupedEntities,
         hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
         selectedEntityType: this.currentState.selectedEntityType,
-        selectedEntityTypeCode: this.currentState.responsibilities.entityTypeCode,
         salesHierarchyViewType: this.salesHierarchyViewType,
         filter: this.filterState,
         brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,

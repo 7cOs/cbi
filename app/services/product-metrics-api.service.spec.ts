@@ -78,7 +78,7 @@ describe('Service: ProductMetricsApiService', () => {
     });
 
     it('should call the getPositionProductMetrics endpoint and return empty brandValues when '
-    + 'brand aggregation response is 404', (done: any) => {
+    + 'brand aggregation response is 404', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,
@@ -154,7 +154,7 @@ describe('Service: ProductMetricsApiService', () => {
     });
 
     it('should call the getAccountProductMetrics endpoint and return empty brandValues when '
-      + 'brand aggregation response is 404', (done: any) => {
+      + 'brand aggregation response is 404', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,
@@ -231,7 +231,7 @@ describe('Service: ProductMetricsApiService', () => {
     });
 
     it('should call the getRoleGroupProductMetrics endpoint and return empty brandValues when '
-      + 'brand aggregation response is 404', (done: any) => {
+      + 'brand aggregation response is 404', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,
@@ -315,7 +315,7 @@ describe('Service: ProductMetricsApiService', () => {
     });
 
     it('should call the getAlternateHierarchyProductMetrics endpoint and return empty brandValues when '
-      + 'brand aggregation response is 404', (done: any) => {
+      + 'brand aggregation response is 404', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,
@@ -407,7 +407,7 @@ describe('Service: ProductMetricsApiService', () => {
     });
 
     it('should call the getAlternateHierarchyProductMetricsForPosition endpoint and return empty brandValues when '
-      + 'brand aggregation response is 404', (done: any) => {
+      + 'brand aggregation response is 404', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,
