@@ -25,18 +25,26 @@ public abstract class BaseTestCase {
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
-    startUpBrowser();
+    this.startUpBrowser();
   }
 
   @AfterClass
   public void tearDownClass() {
-    shutDownBrowser();
+    this.shutDownBrowser();
   }
 
+  /**
+   * @deprecated Please use {@link #startUpBrowser(String) startUpBrowser(String)} and supply a test case name instead
+   */
+  @Deprecated
   protected void startUpBrowser() throws MalformedURLException {
+    this.startUpBrowser("Automated Test Run");
+  }
+
+  protected void startUpBrowser(String testName) throws MalformedURLException {
     log.info("\n Browser opening...");
 
-    driver = WebDriverFactory.createDriver("Automated Test Run");
+    driver = WebDriverFactory.createDriver(testName);
     driver.get(webAppBaseUrl);
     driver.manage().window().maximize();
     SeleniumUtils.setDriver(driver);
