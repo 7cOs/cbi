@@ -164,8 +164,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
+        this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
-        this.responsibilitiesFetching = this.responsibilitiesFetching = this.isFetchingResponsibilities();
         this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType);
 
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
