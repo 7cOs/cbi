@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
@@ -123,7 +124,12 @@ export class ProductMetricsService {
 
     return allCalls.map((productMetricsDTOs: ProductMetricsDTO[]) => {
       const metrics: ProductMetrics = this.productMetricsTransformerService.transformAndCombineProductMetricsDTOs(productMetricsDTOs);
-      const viewType = metrics.skuValues ? ProductMetricsViewType.skus : ProductMetricsViewType.brands;
+      const viewType: ProductMetricsViewType = !metrics.skuValues
+        ? ProductMetricsViewType.brands
+        : productMetricsData.filter.premiseType === PremiseTypeValue.On
+          ? ProductMetricsViewType.packages
+          : ProductMetricsViewType.skus;
+
       return Object.assign({}, productMetricsData, {
         products: metrics,
         productMetricsViewType: viewType
