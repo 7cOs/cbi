@@ -37,7 +37,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
    */
   @Deprecated
   public static WebDriver createDriver() throws MalformedURLException {
-    return createDriver("Old Selenium Test");
+    return createDriver("Automated Test");
   }
 
   public static WebDriver createDriver(String testName) throws MalformedURLException {
@@ -124,8 +124,9 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static String getTestRunName(String testCaseName, String browserName) {
-    return "Automated Functional Test - " + browserName.toUpperCase() + " - " + PropertiesCache.getInstance().getProperty
-      ("origin");
+    return browserName.toUpperCase() + " - "
+      + PropertiesCache.getInstance().getProperty("origin")  + " - "
+      + testCaseName;
   }
 
   private static WebDriver getRemoteWebDriver() {
