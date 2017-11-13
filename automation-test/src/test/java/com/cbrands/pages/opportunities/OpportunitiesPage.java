@@ -15,11 +15,7 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class OpportunitiesPage extends TestNGBasePage {
   private static final String FILTER_FORM_XPATH = "//form[contains(@class, 'filters')]";
-  private static final String NO_SAVED_REPORTS_TEXT = "No saved reports";
-  private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
-  private static final int HOVER_ARROW_ICON_SIZE = 17;
-  private static final String VISIBLE_DROPDOWN_XPATH = "//div" + "[@aria-hidden='false']" +
-    "[contains(@class, 'md-select-menu-container')]";
+
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH)
@@ -263,16 +259,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     return new SavedReportDropdown();
   }
 
-  private WebElement getFirstSavedReportOption() {
-    final String withSavedReports = "[." + SAVED_FILTER_OPTION_XPATH + "]";
-    final String visibleSavedReportsDropdown = VISIBLE_DROPDOWN_XPATH + withSavedReports;
-
-    return waitForElementToClickable(
-      findElement(By.xpath(visibleSavedReportsDropdown + SAVED_FILTER_OPTION_XPATH)),
-      true
-    );
-  }
-
   public boolean isMyAccountsOnlySelected() {
     return "true".equalsIgnoreCase(accountScopeFilter.getAttribute("aria-checked"));
   }
@@ -285,6 +271,11 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public class SavedReportDropdown {
+    private static final String NO_SAVED_REPORTS_TEXT = "No saved reports";
+    private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
+    private static final int HOVER_ARROW_ICON_SIZE = 17;
+    private static final String VISIBLE_DROPDOWN_XPATH = "//div" + "[@aria-hidden='false']" +
+      "[contains(@class, 'md-select-menu-container')]";
 
     public OpportunitiesPage selectSavedReportWithName(String reportName) {
       waitForElementToClickable(
@@ -324,6 +315,16 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     private By getHandleForSavedReportWithName(String name) {
       return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
+    }
+
+    private WebElement getFirstSavedReportOption() {
+      final String withSavedReports = "[." + SAVED_FILTER_OPTION_XPATH + "]";
+      final String visibleSavedReportsDropdown = VISIBLE_DROPDOWN_XPATH + withSavedReports;
+
+      return waitForElementToClickable(
+        findElement(By.xpath(visibleSavedReportsDropdown + SAVED_FILTER_OPTION_XPATH)),
+        true
+      );
     }
 
     private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
