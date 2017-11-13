@@ -65,6 +65,10 @@ th {
   width: 50%;
 }
 
+.col-45-pct {
+  width: 45%;
+}
+
 .col-30-pct {
   width: 30%;
 }
@@ -73,12 +77,37 @@ th {
   width: 20%;
 }
 
+.col-18-pct {
+  width: 18%;
+}
+
 .col-17-pct {
   width: 17%;
 }
 
 .col-16-pct {
-  width: 16.66669%;
+  //width: 16.66669%;
+  width: 16%;
+}
+
+.col-15-pct {
+  width: 15%;
+}
+
+.col-14-pct {
+  width: 14%;
+}
+
+.col-13-pct {
+  width: 13%;
+}
+
+.col-12-pct {
+  width: 12%;
+}
+
+.col-11-pct {
+  width: 11%;
 }
 
 .col-10-pct {
@@ -91,13 +120,19 @@ th {
 
 .left-col {
   text-align: left;
-  min-width: 120px;
+  min-width: 200px;
+  max-width: 200px;
   padding-left: 16px;
   font-weight: $regular;
 }
 
 .right-col {
   text-align: center;
+  width: 13%;
+
+  &.opportunities {
+    width: 13%;
+  }
 }
 
 .performance-table-wrapper {
@@ -205,6 +240,7 @@ td, th {
   font-family: $work-sans;
   font-size: 12px;
   font-weight: $regular;
+  box-sizing: border-box;
 }
 
 .top-header {

@@ -56,7 +56,7 @@ export class MyPerformanceTableComponent {
   constructor (private calculatorService: CalculatorService) { }
 
   public centerColumnsWidth(): string {
-    return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
+    return 'col-45-pct';
   }
 
   public getTableHeight(): string {
@@ -66,7 +66,7 @@ export class MyPerformanceTableComponent {
   }
 
   public columnWidth(): string {
-    return this.showOpportunities ? 'col-17-pct' : 'col-20-pct';
+    return 'col-15-pct';
   }
 
   public getSortStatus(columnType: ColumnType): SortStatus {

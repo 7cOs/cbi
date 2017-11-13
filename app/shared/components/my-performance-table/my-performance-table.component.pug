@@ -12,10 +12,10 @@ div.performance-table-wrapper
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
         th.center-col.sort-indicator(colspan=3, [ngClass]="centerColumnsWidth()") {{ tableHeaderRow[1] }}
-        th.right-col.sort-indicator(*ngIf="showContributionToVolume", colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)")
+        th.right-col.sort-indicator(*ngIf="showContributionToVolume", colspan=1, (click)="sortRows(columnType.ctv)")
           span {{ tableHeaderRow[2] }}
             sort-indicator([status]="getSortStatus(columnType.ctv)")
-        th.right-col.sort-indicator(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
+        th.right-col.sort-indicator(*ngIf="showOpportunities", colspan=1)
           span OPPS
       tr.sub-header.col-100-pct
         th(colspan=1, [ngClass]="columnWidth()")
@@ -28,8 +28,8 @@ div.performance-table-wrapper
         th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn2)")
           span VS YA %
             sort-indicator([status]='getSortStatus(columnType.metricColumn2)')
-        th.right-col(*ngIf="showContributionToVolume", colspan=1, [ngClass]="columnWidth()")
-        th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
+        th.right-col(*ngIf="showContributionToVolume", colspan=1)
+        th.right-col(*ngIf="showOpportunities", colspan=1)
 
       tr.total-row.col-100-pct(my-performance-table-row,
                               *ngIf="totalRow",

@@ -42,8 +42,7 @@ export class MyPerformanceTableRowComponent {
   }
 
   public columnWidth(): string {
-    return this.showOpportunities
-      ? ((this.ieHackService.isIE || this.ieHackService.isEdge) ? 'col-17-pct' : 'col-16-pct') : 'col-20-pct';
+    return 'col-15-pct';
   }
 
   public getHeaderLeftClasses(): CssClasses {
