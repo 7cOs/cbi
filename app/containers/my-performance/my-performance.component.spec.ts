@@ -171,7 +171,7 @@ describe('MyPerformanceComponent', () => {
       } else if (selectedValue === stateMock.myPerformanceProductMetrics) {
         return productMetricsSubject;
       } else if (selectedValue === stateMock.myPerformanceFilter) {
-          return filterSubject;
+        return filterSubject;
       } else {
         return Observable.of(selectedValue);
       }
