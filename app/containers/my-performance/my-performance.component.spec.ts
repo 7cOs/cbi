@@ -1848,9 +1848,6 @@ describe('MyPerformanceComponent', () => {
   describe('when the filter state is changed', () => {
     let currentMock: MyPerformanceEntitiesData;
     let productMetricsStateMock: ProductMetricsState;
-    let rowMock: MyPerformanceTableRow;
-    let selectedBrandCode: string;
-    let filterMock: MyPerformanceFilter;
 
     beforeEach(() => {
       currentMock = getMyPerformanceEntitiesDataMock();
@@ -1859,11 +1856,6 @@ describe('MyPerformanceComponent', () => {
         products: {brandValues: []},
         productMetricsViewType: ProductMetricsViewType.brands
       };
-
-      rowMock = getMyPerformanceTableRowMock(1)[0];
-      componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0, row: rowMock});
-      selectedBrandCode = rowMock.metadata.brandCode;
-      filterMock = getMyPerformanceFilterMock();
 
       currentMock.filter = getMyPerformanceFilterMock();
       currentMock.responsibilities.status = ActionStatus.Fetched;
@@ -1889,7 +1881,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: currentMock.selectedEntityType,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: selectedBrandCode,
+        brandSkuCode: undefined,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
@@ -1899,7 +1891,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: selectedBrandCode,
+        selectedBrandCode: currentMock.selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId
@@ -1922,7 +1914,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: currentMock.selectedEntityType,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: selectedBrandCode,
+        brandSkuCode: undefined,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
@@ -1932,7 +1924,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: selectedBrandCode,
+        selectedBrandCode: currentMock.selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId
@@ -1955,7 +1947,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: currentMock.selectedEntityType,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: selectedBrandCode,
+        brandSkuCode: undefined,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: null,
@@ -1965,7 +1957,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: selectedBrandCode,
+        selectedBrandCode: currentMock.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
@@ -1987,7 +1979,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: currentMock.selectedEntityType,
         salesHierarchyViewType: componentInstance.salesHierarchyViewType,
         filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: selectedBrandCode,
+        brandSkuCode: undefined,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: null,
@@ -1997,7 +1989,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: selectedBrandCode,
+        selectedBrandCode: currentMock.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
@@ -2018,7 +2010,7 @@ describe('MyPerformanceComponent', () => {
         selectedEntityType: currentMock.selectedEntityType,
         salesHierarchyViewType: currentMock.salesHierarchyViewType.viewType,
         filter: stateMock.myPerformanceFilter,
-        brandSkuCode: selectedBrandCode,
+        brandSkuCode: undefined,
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
@@ -2028,7 +2020,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: selectedBrandCode,
+        selectedBrandCode: currentMock.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
