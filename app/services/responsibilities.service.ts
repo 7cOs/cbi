@@ -507,7 +507,6 @@ export class ResponsibilitiesService {
             : CORPORATE_USER_POSITION_ID
           : pipelineData.positionId;
 
-        debugger;
         entityWithPerformanceObservable = this.getDistributorsPerformances(
           pipelineData.entities,
           pipelineData.filter,
