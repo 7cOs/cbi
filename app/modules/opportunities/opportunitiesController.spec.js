@@ -197,53 +197,59 @@ describe('Unit: opportunitiesController', function() {
       expect(opportunityFiltersService.updateOpportunityFilter).toHaveBeenCalledWith(currentFilterMock[0].id, 'name', newReportNameMock);
     });
 
-    it('should update the name of the saved report after opportunityFilterService.updateOpportunityFilter is successful', () => {
-      ctrl.editReportName();
-      updateOpportunityFilterPromise.resolve();
-      scope.$digest();
+    describe('when the opportunityFilterService.updateOpportunityFilter call is successful', () => {
 
-      expect(ctrl.currentFilter[0].name).toBe(newReportNameMock);
+      it('should update the name of the saved report', () => {
+        ctrl.editReportName();
+        updateOpportunityFilterPromise.resolve();
+        scope.$digest();
+
+        expect(ctrl.currentFilter[0].name).toBe(newReportNameMock);
+      });
+
+      it('should set the update report error flag to false', () => {
+        ctrl.updateReportError = false;
+        ctrl.editReportName();
+        updateOpportunityFilterPromise.resolve();
+        scope.$digest();
+
+        expect(ctrl.updateReportError).toBe(false);
+
+        ctrl.updateReportError = true;
+        ctrl.editReportName();
+        updateOpportunityFilterPromise.resolve();
+        scope.$digest();
+
+        expect(ctrl.updateReportError).toBe(false);
+      });
     });
 
-    it('should set the update report error flag to false when updating the report is successful', () => {
-      ctrl.updateReportError = false;
-      ctrl.editReportName();
-      updateOpportunityFilterPromise.resolve();
-      scope.$digest();
+    describe('when the opportunityFilterService.updateOpportunityFilter call is un-successful', () => {
 
-      expect(ctrl.updateReportError).toBe(false);
+      it('should NOT opportunistically update the name of the saved report', () => {
+        ctrl.editReportName();
+        updateOpportunityFilterPromise.reject(chance.string());
+        scope.$digest();
 
-      ctrl.updateReportError = true;
-      ctrl.editReportName();
-      updateOpportunityFilterPromise.resolve();
-      scope.$digest();
+        expect(ctrl.currentFilter[0].name).not.toBe(newReportNameMock);
+        expect(ctrl.currentFilter[0].name).toBe(currentFilterMock[0].name);
+      });
 
-      expect(ctrl.updateReportError).toBe(false);
-    });
+      it('should set the update report error flag to true', () => {
+        ctrl.updateReportError = false;
+        ctrl.editReportName();
+        updateOpportunityFilterPromise.reject();
+        scope.$digest();
 
-    it('should NOT opportunistically update the name of the saved when opportunityFilterService.updateOpportunityFilter fails', () => {
-      ctrl.editReportName();
-      updateOpportunityFilterPromise.reject(chance.string());
-      scope.$digest();
+        expect(ctrl.updateReportError).toBe(true);
 
-      expect(ctrl.currentFilter[0].name).not.toBe(newReportNameMock);
-      expect(ctrl.currentFilter[0].name).toBe(currentFilterMock[0].name);
-    });
+        ctrl.updateReportError = true;
+        ctrl.editReportName();
+        updateOpportunityFilterPromise.reject();
+        scope.$digest();
 
-    it('should set the update report error flag to true when updating the report is un-successful', () => {
-      ctrl.updateReportError = false;
-      ctrl.editReportName();
-      updateOpportunityFilterPromise.reject();
-      scope.$digest();
-
-      expect(ctrl.updateReportError).toBe(true);
-
-      ctrl.updateReportError = true;
-      ctrl.editReportName();
-      updateOpportunityFilterPromise.reject();
-      scope.$digest();
-
-      expect(ctrl.updateReportError).toBe(true);
+        expect(ctrl.updateReportError).toBe(true);
+      });
     });
   });
 
