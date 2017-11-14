@@ -18,15 +18,14 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function deleteOpportunityFilter(filterId) {
-      var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/v2/opportunityFilters/' + filterId);
+      const opportunityFilterPromise = $q.defer();
+      const url = apiHelperService.request('/v2/opportunityFilters/' + filterId);
 
       $http.delete(url)
         .then(deleteOpportunityFilterSuccess)
         .catch(deleteOpportunityFilterFail);
 
       function deleteOpportunityFilterSuccess(response) {
-        console.log('[notificationsService.deleteOpportunityFilter] response: ', response);
         opportunityFilterPromise.resolve(response.data);
       }
 

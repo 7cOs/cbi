@@ -4,7 +4,9 @@ div.modal.edit-report
   div.modal-form
     div.modal-input
       input(ng-model="o.editedFilterName" placeholder="Report Name")
-    p.error-message.accent(ng-if="o.duplicateName") <img src="../../assets/img/icons/error.svg"> A report with this name already exists. Please update the existing report or create a new one.
+    p.error-message.accent.saved-report-error(ng-if="o.duplicateName") <img src="../../assets/img/icons/error.svg"> A report with this name already exists. Please update the existing report or create a new one.
+    p.error-message.accent.saved-report-error(ng-if="o.updateReportError") <img src="../../assets/img/icons/error.svg"> There was an error updating this report. Please try again.
+    p.error-message.accent.saved-report-error(ng-if="o.deleteReportError") <img src="../../assets/img/icons/error.svg"> There was an error deleting this report. Please try again.
     button.btn-action(ng-click="o.duplicateNameCheck()") Save
     p.cancel.accent(ng-click="o.closeEditModal()") X Cancel
   div.modal-footer.clearfix
