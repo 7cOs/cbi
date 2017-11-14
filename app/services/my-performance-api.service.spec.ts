@@ -159,7 +159,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
     });
 
-    it('should call the performance API and return empty performance data when response is 404', (done: any) => {
+    it('should call the performance API and return empty performance data when response is 404', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,

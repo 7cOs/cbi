@@ -69,7 +69,8 @@ describe('My Performance Reducer', () => {
         skuPackageType: SkuPackageType.package
       }),
       new MyPerformanceVersionActions.ClearMyPerformanceState(),
-      new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode()
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode(),
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode()
     ];
 
     const returnedStates: MyPerformanceState[] = actions.map((action: Action) => {
@@ -123,7 +124,6 @@ describe('My Performance Reducer', () => {
         groupedEntities: getGroupedEntitiesMock(),
         hierarchyGroups: [getHierarchyGroupMock()],
         selectedEntityType: getEntityTypeMock(),
-        selectedEntityTypeCode: chance.string(),
         salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
         filter: null,
         brandSkuCode: chance.string(),

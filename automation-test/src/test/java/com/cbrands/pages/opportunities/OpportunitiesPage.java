@@ -1,5 +1,6 @@
 package com.cbrands.pages.opportunities;
 
+import com.cbrands.PremiseType;
 import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,6 +18,8 @@ public class OpportunitiesPage extends TestNGBasePage {
   private static final String NO_SAVED_REPORTS_TEXT = "No saved reports";
   private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
   private static final int HOVER_ARROW_ICON_SIZE = 17;
+  private static final String VISIBLE_DROPDOWN_XPATH = "//div" + "[@aria-hidden='false']" +
+    "[contains(@class, 'md-select-menu-container')]";
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH)
@@ -278,8 +281,11 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   private WebElement getFirstSavedReportOption() {
+    final String withSavedReports = "[." + SAVED_FILTER_OPTION_XPATH + "]";
+    final String visibleSavedReportsDropdown = VISIBLE_DROPDOWN_XPATH + withSavedReports;
+
     return waitForElementToClickable(
-      findElement(By.xpath(SAVED_FILTER_OPTION_XPATH)),
+      findElement(By.xpath(visibleSavedReportsDropdown + SAVED_FILTER_OPTION_XPATH)),
       true
     );
   }
@@ -332,12 +338,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   private By getHandleForSavedReportWithName(String name) {
-    return By.xpath(SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
-  }
-
-  public enum PremiseType {
-    On,
-    Off
+    return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
   }
 
 }

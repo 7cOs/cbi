@@ -177,7 +177,6 @@ describe('Responsibilities Actions', () => {
       groupedEntities: getGroupedEntitiesMock(),
       hierarchyGroups: [getHierarchyGroupMock()],
       selectedEntityType: getEntityTypeMock(),
-      selectedEntityTypeCode: chance.string(),
       salesHierarchyViewType: SalesHierarchyViewType[getSalesHierarchyViewTypeMock()],
       filter: performanceFilterStateMock,
       brandSkuCode: chance.string(),

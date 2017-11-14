@@ -1,5 +1,7 @@
 package com.cbrands.pages;
 
+import com.cbrands.PremiseType;
+import com.cbrands.pages.opportunities.OpportunitiesPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -22,6 +24,9 @@ public class AccountDashboardPage extends TestNGBasePage {
   private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
   private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
   private static final String PANEL_LOADER_XPATH = "//div[contains(@class, 'loader-wrap')]";
+  private static final String RIGHT_PANEL_LOADER_XPATH = RIGHT_PANEL_XPATH + PANEL_LOADER_XPATH;
+  private static final String LEFT_PANEL_LOADER_XPATH = LEFT_PANEL_XPATH + PANEL_LOADER_XPATH;
+  private static final String REMOVE_BUTTON_XPATH = "//input[contains(@class, 'remove-btn visible')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -46,11 +51,17 @@ public class AccountDashboardPage extends TestNGBasePage {
     ".btn-action")
   private WebElement applyFilters;
 
+  @FindBy(how = How.XPATH, using = "//a[contains(@class, 'reset-icon')]")
+  private WebElement resetFilters;
+
   @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
   private WebElement leftPanel;
 
   @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
   private WebElement rightPanel;
+
+  @FindBy(how = How.XPATH, using = "//a[contains(., 'See All Opportunities')]")
+  private WebElement seeAllOpportunitiesLink;
 
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
@@ -65,6 +76,14 @@ public class AccountDashboardPage extends TestNGBasePage {
   @Override
   protected void load() {
     driver.get(webAppBaseUrl + "/accounts");
+  }
+
+  public AccountDashboardPage selectPremiseType(PremiseType premiseType) {
+    waitForElementToClickable(
+      findElement(By.xpath("//md-radio-button[@aria-label='" + premiseType.label() + "']")),
+      true
+    ).click();
+    return this;
   }
 
   public AccountDashboardPage enterDistributorSearchText(String text) {
@@ -194,7 +213,7 @@ public class AccountDashboardPage extends TestNGBasePage {
     boolean resultsAreLoaded;
 
     try {
-      waitForElementToDisappear(By.xpath(LEFT_PANEL_XPATH + PANEL_LOADER_XPATH));
+      waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
       waitForVisibleFluentWait(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
       final WebElement panelHeader = leftPanel.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
       resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
@@ -209,7 +228,7 @@ public class AccountDashboardPage extends TestNGBasePage {
     boolean resultsAreLoaded;
 
     try {
-      waitForElementToDisappear(By.xpath(RIGHT_PANEL_XPATH + PANEL_LOADER_XPATH));
+      waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
       waitForVisibleFluentWait(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
 
       final WebElement panelHeader = rightPanel.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
@@ -238,6 +257,54 @@ public class AccountDashboardPage extends TestNGBasePage {
       .clickSearchForRetailerStore()
       .waitForStoreLoaderToDisappear()
       .selectRetailerStoreByState(stateLocation, address);
+  }
+
+  public String getRightPanelHeader() {
+    return findElement(By.xpath("//p[contains(@class, 'market')]")).getText();
+  }
+
+  public String getOverviewMarketLabel() {
+    final WebElement marketTab = findElement(By.xpath("//div[@class='market-overview clearfix']/div[@class='market']"));
+    return marketTab.getText();
+  }
+
+  public String getRightPanelSelectorContextLabel() {
+    return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
+  }
+
+  public AccountDashboardPage waitForBrandsLoaderToDisappear() {
+    waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
+    return this;
+  }
+
+  public AccountDashboardPage waitForMarketLoaderToDisappear() {
+    waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
+    return this;
+  }
+
+  public AccountDashboardPage clickRemoveDistributorFilter() {
+    final WebElement removeDistributorButton = distributorFilter.findElement(By.xpath(REMOVE_BUTTON_XPATH));
+    waitForElementToClickable(removeDistributorButton, true).click();
+    return this;
+  }
+
+  public String getDistributorFieldText() {
+    return distributorFilter.findElement(By.xpath("//input[@type='text']")).getAttribute("value");
+  }
+
+  public AccountDashboardPage clickResetFilters() {
+    waitForElementToClickable(resetFilters, true).click();
+
+    return this;
+  }
+
+  public boolean isOpportunitiesLinkEnabled() {
+    return !"true".equalsIgnoreCase(seeAllOpportunitiesLink.getAttribute("disabled"));
+  }
+
+  public OpportunitiesPage clickSeeAllOpportunitiesLink() {
+    waitForElementToClickable(seeAllOpportunitiesLink, true).click();
+    return PageFactory.initElements(driver, OpportunitiesPage.class);
   }
 
   public enum RightPanelLevel {

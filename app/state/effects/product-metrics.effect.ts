@@ -46,7 +46,7 @@ export class ProductMetricsEffects {
         products: productMetricsData.products
       })
     ];
-    if (productMetricsData.productMetricsViewType === ProductMetricsViewType.skus) {
+    if (productMetricsData.productMetricsViewType !== ProductMetricsViewType.brands) {
       actions.push(new ProductMetricsActions.SelectBrandValues(productMetricsData.selectedBrandCode));
     }
     return Observable.from(actions);

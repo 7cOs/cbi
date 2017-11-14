@@ -49,7 +49,6 @@ export interface RefreshAllPerformancesPayload {
   groupedEntities: GroupedEntities;
   hierarchyGroups: Array<HierarchyGroup>;
   selectedEntityType: EntityType;
-  selectedEntityTypeCode: string;
   salesHierarchyViewType: SalesHierarchyViewType;
   filter: MyPerformanceFilterState;
   brandSkuCode?: string;

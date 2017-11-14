@@ -3,10 +3,13 @@ import { Injectable } from '@angular/core';
 import { AccountDashboardStateParameters } from '../models/account-dashboard-state-parameters.model';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityType } from '../enums/entity-responsibilities.enum';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../enums/team-performance-table-header.enum';
+import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
+import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 
 @Injectable()
 export class MyPerformanceService {
@@ -99,5 +102,33 @@ export class MyPerformanceService {
         return {};
     }
     return accountDashboardStateParams;
+  }
+
+  public getSalesHierarchyViewTypeLabel(viewType: SalesHierarchyViewType): SalesHierarchyHeaderEntityType {
+    switch (viewType) {
+      case SalesHierarchyViewType.roleGroups:
+      default:
+        return SalesHierarchyHeaderEntityType.Group;
+      case SalesHierarchyViewType.people:
+        return SalesHierarchyHeaderEntityType.Person;
+      case SalesHierarchyViewType.distributors:
+        return SalesHierarchyHeaderEntityType.Distributor;
+      case SalesHierarchyViewType.accounts:
+        return SalesHierarchyHeaderEntityType.Account;
+      case SalesHierarchyViewType.subAccounts:
+        return SalesHierarchyHeaderEntityType.SubAccount;
+    }
+  }
+
+  public getProductMetricsViewTypeLabel(viewType: ProductMetricsViewType): ProductMetricHeaderProductType {
+    switch (viewType) {
+      case ProductMetricsViewType.brands:
+      default:
+        return ProductMetricHeaderProductType.Brand;
+      case ProductMetricsViewType.skus:
+        return ProductMetricHeaderProductType.SKU;
+      case ProductMetricsViewType.packages:
+        return ProductMetricHeaderProductType.Package;
+    }
   }
 }
