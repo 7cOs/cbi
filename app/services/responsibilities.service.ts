@@ -83,6 +83,7 @@ export interface RefreshTotalPerformanceData {
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
   groupedEntities?: GroupedEntities;
+  alternateHierarchyId?: string;
 
   // For roleGroups only
   hierarchyGroups?: Array<HierarchyGroup>;
@@ -153,9 +154,9 @@ export class ResponsibilitiesService {
   : Observable<EntityWithPerformance[]> {
     const apiCalls: Observable<EntityWithPerformance>[] = hierarchyGroups.map((group: HierarchyGroup) => {
       const fetchGroupPerformanceCall = group.alternateHierarchyId || alternateHierarchyId
-        ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group, positionId,
+        ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(group.type, positionId,
             group.alternateHierarchyId || alternateHierarchyId, filter, brandSkuCode, skuPackageType)
-        : this.myPerformanceApiService.getHierarchyGroupPerformance(group, filter, positionId, brandSkuCode, skuPackageType);
+        : this.myPerformanceApiService.getHierarchyGroupPerformance(group.type, filter, positionId, brandSkuCode, skuPackageType);
 
       return fetchGroupPerformanceCall
         .map((response: PerformanceDTO) => {
@@ -325,53 +326,59 @@ export class ResponsibilitiesService {
 
   public getRefreshedTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData)
   : Observable<RefreshTotalPerformanceData> {
+    let performanceObservable: Observable<Performance>;
+
     switch (refreshTotalPerformanceData.salesHierarchyViewType) {
-      case SalesHierarchyViewType.roleGroups:
       case SalesHierarchyViewType.accounts:
-      case SalesHierarchyViewType.distributors:
-        return this.getPerformance(
+        performanceObservable = this.getPerformance(
           refreshTotalPerformanceData.positionId,
           refreshTotalPerformanceData.filter,
           refreshTotalPerformanceData.brandSkuCode,
           refreshTotalPerformanceData.skuPackageType
-        )
-          .map((response: Performance) => {
-            return Object.assign({}, refreshTotalPerformanceData, {
-              entitiesTotalPerformances: response
-            });
-          });
+        );
+        break;
+
+      case SalesHierarchyViewType.roleGroups:
+        performanceObservable = this.getRefreshedRoleGroupsTotalPerformance(refreshTotalPerformanceData);
+        break;
+
+      case SalesHierarchyViewType.distributors:
+        performanceObservable = this.getRefreshedDistributorTotalPerformance(refreshTotalPerformanceData);
+        break;
 
       case SalesHierarchyViewType.subAccounts:
-        return this.getAccountPerformances(
+        performanceObservable = this.getAccountPerformances(
           refreshTotalPerformanceData.accountPositionId,
           refreshTotalPerformanceData.filter,
           refreshTotalPerformanceData.positionId,
           refreshTotalPerformanceData.brandSkuCode,
           refreshTotalPerformanceData.skuPackageType
-        )
-          .map((response: Performance) => {
-            return Object.assign({}, refreshTotalPerformanceData, {
-              entitiesTotalPerformances: response
-            });
-          });
+        );
+        break;
 
       case SalesHierarchyViewType.people:
       default:
-        return this.getHierarchyGroupPerformance(
-          refreshTotalPerformanceData.hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
-            hierarchyGroup.name === Object.keys(refreshTotalPerformanceData.groupedEntities)[0]
-          ),
+        const hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
+          refreshTotalPerformanceData.hierarchyGroups,
+          refreshTotalPerformanceData.groupedEntities
+        );
+
+        performanceObservable = this.getHierarchyGroupPerformance(
+          hierarchyGroup.type,
+          refreshTotalPerformanceData.alternateHierarchyId,
           refreshTotalPerformanceData.filter,
           refreshTotalPerformanceData.positionId,
           refreshTotalPerformanceData.brandSkuCode,
           refreshTotalPerformanceData.skuPackageType
-        )
-          .map((entityWithPerformance: EntityWithPerformance) => {
-            return Object.assign({}, refreshTotalPerformanceData, {
-              entitiesTotalPerformances: entityWithPerformance.performance
-            });
-          });
+        );
+        break;
     }
+
+    return performanceObservable.map((response: Performance) => {
+      return Object.assign({}, refreshTotalPerformanceData, {
+        entitiesTotalPerformances: response
+      });
+    });
   }
 
   public getPerformanceForGroupedEntities(pipelineData: ResponsibilitiesData | RefreshAllPerformancesData)
@@ -644,24 +651,97 @@ export class ResponsibilitiesService {
     };
   }
 
-  private getHierarchyGroupPerformance(hierarchyGroup: HierarchyGroup,
+  private getHierarchyGroupPerformance(
+    hierarchyGroupType: string,
+    alternateHierarchyId: string,
     filter: MyPerformanceFilterState,
     positionId: string,
     brandSkuCode?: string,
     skuPackageType?: SkuPackageType)
-  : Observable<EntityWithPerformance> {
-    const fetchGroupPerformanceCall = hierarchyGroup.alternateHierarchyId
-      ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(hierarchyGroup, positionId,
-          hierarchyGroup.alternateHierarchyId, filter, brandSkuCode, skuPackageType)
-      : this.myPerformanceApiService.getHierarchyGroupPerformance(hierarchyGroup, filter, positionId, brandSkuCode, skuPackageType);
+  : Observable<Performance> {
+    const fetchGroupPerformanceCall = alternateHierarchyId
+      ? this.myPerformanceApiService.getAlternateHierarchyGroupPerformance(hierarchyGroupType, positionId,
+          alternateHierarchyId, filter, brandSkuCode, skuPackageType)
+      : this.myPerformanceApiService.getHierarchyGroupPerformance(hierarchyGroupType, filter, positionId, brandSkuCode, skuPackageType);
 
     return fetchGroupPerformanceCall
       .map((response: PerformanceDTO) => {
-        return this.performanceTransformerService.transformHierarchyGroupPerformance(response, hierarchyGroup, positionId);
+        return this.performanceTransformerService.transformPerformanceDTO(response);
       })
       .catch(() => {
         this.toastService.showPerformanceDataErrorToast();
-        return Observable.of(this.performanceTransformerService.transformHierarchyGroupPerformance(null, hierarchyGroup, positionId));
+        return Observable.of(this.performanceTransformerService.transformPerformanceDTO(null));
       });
+  }
+
+  private findHierarchyGroupFromGroupedEntities(hierarchyGroups: Array<HierarchyGroup>, groupedEntities: GroupedEntities): HierarchyGroup {
+    const groupEntityKey = Object.keys(groupedEntities)[0];
+
+    return hierarchyGroups.find((hierarchyGroup: HierarchyGroup) =>
+      hierarchyGroup.name === groupEntityKey
+    );
+  }
+
+  private getRefreshedDistributorTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData): Observable<Performance> {
+    let performanceObservable: Observable<Performance>;
+
+    if (refreshTotalPerformanceData.alternateHierarchyId) {
+      if (refreshTotalPerformanceData.entityType === EntityType.Person) {
+        performanceObservable = this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.alternateHierarchyId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.brandSkuCode,
+          refreshTotalPerformanceData.skuPackageType)
+          .map((performanceDTO: PerformanceDTO) => {
+            return this.performanceTransformerService.transformPerformanceDTO(performanceDTO);
+          });
+      } else {
+        const hierarchyGroup = this.findHierarchyGroupFromGroupedEntities(
+          refreshTotalPerformanceData.hierarchyGroups,
+          refreshTotalPerformanceData.groupedEntities
+        );
+
+        performanceObservable = this.getHierarchyGroupPerformance(
+          hierarchyGroup.type,
+          refreshTotalPerformanceData.alternateHierarchyId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.brandSkuCode,
+          refreshTotalPerformanceData.skuPackageType);
+      }
+    } else {
+      performanceObservable = this.getPerformance(
+        refreshTotalPerformanceData.positionId,
+        refreshTotalPerformanceData.filter,
+        refreshTotalPerformanceData.brandSkuCode,
+        refreshTotalPerformanceData.skuPackageType);
+    }
+
+    return performanceObservable;
+  }
+
+    private getRefreshedRoleGroupsTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData): Observable<Performance> {
+      let performanceObservable: Observable<Performance>;
+
+      if (refreshTotalPerformanceData.alternateHierarchyId) {
+        performanceObservable = this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.alternateHierarchyId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.brandSkuCode,
+          refreshTotalPerformanceData.skuPackageType)
+          .map((performanceDTO: PerformanceDTO) => {
+            return this.performanceTransformerService.transformPerformanceDTO(performanceDTO);
+          });
+      } else {
+        performanceObservable = this.getPerformance(
+          refreshTotalPerformanceData.positionId,
+          refreshTotalPerformanceData.filter,
+          refreshTotalPerformanceData.brandSkuCode,
+          refreshTotalPerformanceData.skuPackageType);
+      }
+
+    return performanceObservable;
   }
 }

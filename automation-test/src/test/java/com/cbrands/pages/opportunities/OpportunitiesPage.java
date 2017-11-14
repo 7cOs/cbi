@@ -1,5 +1,6 @@
 package com.cbrands.pages.opportunities;
 
+import com.cbrands.PremiseType;
 import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -338,11 +339,6 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private By getHandleForSavedReportWithName(String name) {
     return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
-  }
-
-  public enum PremiseType {
-    On,
-    Off
   }
 
 }

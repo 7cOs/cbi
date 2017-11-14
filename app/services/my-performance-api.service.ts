@@ -7,7 +7,6 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../models/performance.model';
@@ -28,10 +27,10 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getHierarchyGroupPerformance(entity: HierarchyGroup, filter: MyPerformanceFilterState,
+  public getHierarchyGroupPerformance(groupType: string, filter: MyPerformanceFilterState,
                                       positionId: string, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
-    const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
+    const url = `/v3/positions/${ positionId }/responsibilities/${ groupType }/performanceTotal`;
 
     return this.http.get(url, {
       params: this.getParams(filter, brandSkuCode, skuPackageType)
@@ -40,10 +39,10 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  public getAlternateHierarchyGroupPerformance(group: HierarchyGroup, positionId: string,
+  public getAlternateHierarchyGroupPerformance(groupType: string, positionId: string,
     alternateHierarchyId: string, filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
-    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ group.type }/performanceTotal`;
+    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ groupType }/performanceTotal`;
     const params = Object.assign({}, this.getParams(filter, brandSkuCode, skuPackageType), {
       contextPositionId: alternateHierarchyId
     });

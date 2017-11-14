@@ -124,7 +124,6 @@ describe('My Performance Reducer', () => {
         groupedEntities: getGroupedEntitiesMock(),
         hierarchyGroups: [getHierarchyGroupMock()],
         selectedEntityType: getEntityTypeMock(),
-        selectedEntityTypeCode: chance.string(),
         salesHierarchyViewType: getSalesHierarchyViewTypeMock(),
         filter: null,
         brandSkuCode: chance.string(),
