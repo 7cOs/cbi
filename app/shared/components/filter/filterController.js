@@ -20,7 +20,6 @@ module.exports = /*  @ngInject */
     vm.opportunities = true;
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.showSaveButton = true;
-    vm.tempId = 0;
 
     // Expose Needed Services
     vm.chipsService = chipsService;
@@ -302,7 +301,6 @@ module.exports = /*  @ngInject */
       vm.duplicateName = false;
       loaderService.openLoader(true);
       const chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
-      vm.tempId++;
 
       userService.saveOpportunityFilter(chipsDescription).then(response => {
         analyticsService.trackEvent(
@@ -315,7 +313,7 @@ module.exports = /*  @ngInject */
           filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
           name: filtersService.model.newServiceName,
           description: response.description,
-          id: vm.tempId
+          id: response.id
         });
 
         filtersService.model.newServiceName = null;
