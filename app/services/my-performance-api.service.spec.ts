@@ -5,12 +5,9 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
-import { getHierarchyGroupMock } from '../models/hierarchy-group.model.mock';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
-import { HierarchyGroup } from '../models/hierarchy-group.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
@@ -450,19 +447,14 @@ describe('Service: MyPerformanceApiService', () => {
       dateRangeCode: DateRangeTimePeriodValue.L90BDL,
       premiseType: PremiseTypeValue.All
     };
-    const entityMock = {
-      name: chance.string(),
-      type: chance.string(),
-      entityType: EntityType.RoleGroup,
-      positionDescription: chance.string()
-    };
+    const hierarchyGroupTypeMock = chance.string();
 
     it('should call the responsibility performance endpoint and return performance data for the responsibility for brand', (done) => {
       const positionIdMock = chance.string();
       const brandSkuCodeMock = chance.string({
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
-      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ entityMock.type }/performanceTotal`;
+      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ hierarchyGroupTypeMock }/performanceTotal`;
       const expectedUrlParams = `?metricType=velocity&dateRangeCode=L90BDL&premiseType=All&brandCode=${brandSkuCodeMock}`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -475,7 +467,7 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterStateMock, positionIdMock, brandSkuCodeMock)
+      myPerformanceApiService.getHierarchyGroupPerformance(hierarchyGroupTypeMock, filterStateMock, positionIdMock, brandSkuCodeMock)
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(performanceDTOResponseMock);
           done();
@@ -492,7 +484,11 @@ describe('Service: MyPerformanceApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      myPerformanceApiService.getHierarchyGroupPerformance(entityMock, filterStateMock, '').subscribe((response: PerformanceDTO) => {
+      myPerformanceApiService.getHierarchyGroupPerformance(
+        hierarchyGroupTypeMock,
+        filterStateMock,
+        ''
+      ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(emptyPerformanceDTOMock);
         done();
       });
@@ -500,7 +496,7 @@ describe('Service: MyPerformanceApiService', () => {
   });
 
   describe('getAlternateHierarchyGroupPerformance', () => {
-    const hierarchyGroupMock: HierarchyGroup = getHierarchyGroupMock();
+    const hierarchyGroupTypeMock: string = chance.string();
     const filterStateMock: MyPerformanceFilterState = {
       metricType: MetricTypeValue.velocity,
       dateRangeCode: DateRangeTimePeriodValue.L90BDL,
@@ -517,7 +513,7 @@ describe('Service: MyPerformanceApiService', () => {
         pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
       });
 
-      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ hierarchyGroupMock.type }/performanceTotal`;
+      const expectedBaseUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ hierarchyGroupTypeMock }/performanceTotal`;
       const expectedUrlParams = `?metricType=velocity`
         + `&dateRangeCode=L90BDL`
         + `&premiseType=All`
@@ -535,7 +531,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService.getAlternateHierarchyGroupPerformance(
-        hierarchyGroupMock, positionIdMock, alternateHierarchyIdMock, filterStateMock, brandSkuCodeMock, skuPackageTypeMock)
+        hierarchyGroupTypeMock, positionIdMock, alternateHierarchyIdMock, filterStateMock, brandSkuCodeMock, skuPackageTypeMock)
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(performanceDTOResponseMock);
           done();
@@ -553,7 +549,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService.getAlternateHierarchyGroupPerformance(
-        hierarchyGroupMock, '', '', filterStateMock
+        hierarchyGroupTypeMock, '', '', filterStateMock
       ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(emptyPerformanceDTOMock);
         done();
