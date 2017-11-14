@@ -154,15 +154,30 @@ button {
 }
 
 .go-arrow:after {
+  background-image: url('../../img/icons/go-arrow.svg');
   background-position: 0 center;
   background-repeat: no-repeat;
-  background-image: url('../../img/icons/go-arrow.svg');
   background-size: 12px 12px;
+  bottom: 0;
   content: '';
   display: block;
+  height: 14px;
   position: absolute;
   right: -21px;
-  bottom: 0;
+  width: 14px;
+}
+
+.saved-reports-arrow-container {
+  float: right;
   height: 14px;
   width: 14px;
+
+  .saved-reports-arrow {
+    background-image: url('../../img/icons/go-arrow.svg');
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+    height: 14px;
+    width: 14px;
+  }
 }
