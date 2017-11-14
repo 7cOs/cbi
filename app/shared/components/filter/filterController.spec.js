@@ -1,3 +1,7 @@
+import * as Chance from 'chance';
+
+const chance = new Chance();
+
 describe('Unit: filter controller (opportunities)', function() {
   var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService, analyticsService;
 
@@ -732,23 +736,31 @@ describe('Unit: filter controller (opportunities)', function() {
     expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE FORMAT', 'GENERAL MARKET');
   });
 
-  describe('[method.saveFilter]', function() {
-    beforeEach(function() {
-      spyOn(loaderService, 'openLoader').and.callFake(function() {
+  describe('[method.saveFilter]', () => {
+    let saveOpportunityFilterResponseMock;
+
+    beforeEach(() => {
+      saveOpportunityFilterResponseMock = {
+        id: chance.string(),
+        description: chance.string()
+      };
+
+      spyOn(loaderService, 'openLoader').and.callFake(() => {
         return true;
       });
-      spyOn(userService, 'saveOpportunityFilter').and.callFake(function() {
-        var deferred = q.defer();
-        return deferred.promise;
+
+      spyOn(userService, 'saveOpportunityFilter').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve(saveOpportunityFilterResponseMock);
+        return defer.promise;
       });
     });
 
-    it('should call loaderService.openLoader and userService.saveOpportunityFilter', function() {
+    it('should call loaderService.openLoader and userService.saveOpportunityFilter', () => {
       expect(loaderService.openLoader).not.toHaveBeenCalled();
       expect(loaderService.openLoader.calls.count()).toEqual(0);
       expect(userService.saveOpportunityFilter).not.toHaveBeenCalled();
       expect(userService.saveOpportunityFilter.calls.count()).toEqual(0);
-      expect(ctrl.tempId).toEqual(0);
 
       ctrl.saveFilter();
 
@@ -756,10 +768,29 @@ describe('Unit: filter controller (opportunities)', function() {
       expect(loaderService.openLoader.calls.count()).toEqual(1);
       expect(userService.saveOpportunityFilter).toHaveBeenCalled();
       expect(userService.saveOpportunityFilter.calls.count()).toEqual(1);
-      expect(ctrl.tempId).toEqual(1);
     });
 
-    it('should call userService.saveOpportunityFilter', function() {});
+    it('should add the new opportunity report to the userService.model.opportunityFilters using the name ' +
+    'in filtersService.model.newServiceName', () => {
+      const newOpportunityReportNameMock = chance.string();
+      const appliedFilterStringMock = chance.string();
+
+      filtersService.model.newServiceName = newOpportunityReportNameMock;
+      filtersService.model.appliedFilter.appliedFilter = appliedFilterStringMock;
+      userService.model.opportunityFilters = [];
+
+      const expectedOpportunityFiltersModel = [{
+        name: newOpportunityReportNameMock,
+        id: saveOpportunityFilterResponseMock.id,
+        description: saveOpportunityFilterResponseMock.description,
+        filterString: encodeURIComponent(appliedFilterStringMock)
+      }];
+
+      ctrl.saveFilter();
+      scope.$apply();
+
+      expect(userService.model.opportunityFilters).toEqual(expectedOpportunityFiltersModel);
+    });
   });
 
   describe('[method.updateFilter]', function() {

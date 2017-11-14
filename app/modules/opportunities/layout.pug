@@ -5,10 +5,11 @@
       .filter-container
         .dropdown-filter
           .dropdown
-            md-select(ng-init="o.filtersService.model.selected.currentFilter.id" ng-model="o.filtersService.model.selected.currentFilter" placeholder="Select Saved Report")
-              md-option(ng-if="!o.userService.model.opportunityFilters.length || o.userService.model.opportunityFilters.length == 0 " class="saved-filter-option" value="" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false") No saved reports
-              md-option(class="saved-filter-option" ng-repeat="savedFilter in o.userService.model.opportunityFilters | orderBy: 'name' track by savedFilter.id" value="{{::savedFilter.id}}" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false" ng-click="o.applySavedFilter($event, savedFilter)" analytics-event-on="click" category="Opportunities" action="Select Saved Report" label="{{savedFilter.id}}") {{savedFilter.name}}
-                span.go-arrow(ng-if="hover" ng-click="o.editFilterModal(savedFilter.id)")
+            md-select(ng-init="o.filtersService.model.selected.currentFilter.id" ng-model="o.filtersService.model.selected.currentFilter" placeholder="Select Saved Report" md-on-open="savedReportsOpen = true" md-on-close="savedReportsOpen = false")
+              md-option(ng-if="!o.userService.model.opportunityFilters.length || o.userService.model.opportunityFilters.length == 0 " class="saved-filter-option" value="" ng-mouseenter="hover = true" ng-mouseleave="hover = false") No saved reports
+              md-option(class="saved-filter-option" ng-repeat="savedFilter in o.userService.model.opportunityFilters | orderBy: 'name' track by savedFilter.id" value="{{::savedFilter.id}}" ng-mouseenter="hover = true" ng-mouseleave="hover = false" ng-click="o.applySavedFilter($event, savedFilter)" analytics-event-on="click" category="Opportunities" action="Select Saved Report" label="{{savedFilter.id}}") {{savedFilter.name}}
+                .saved-reports-arrow-container(ng-if="savedReportsOpen")
+                  .saved-reports-arrow(ng-if="hover" ng-click="o.editFilterModal(savedFilter.id)")
 
 .loader-wrap(ng-if="o.loaderService.model.loadingFilters" ng-class="{'active': o.loaderService.model.loadingFilters}")
   loader
