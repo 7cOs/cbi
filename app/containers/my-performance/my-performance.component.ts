@@ -657,11 +657,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
         accountPositionId: this.currentState.responsibilities.accountPositionId
       }));
+        debugger;
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
         positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
-        selectedBrandCode: this.selectedBrandCode,
+        selectedBrandCode: this.currentState.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
         contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
