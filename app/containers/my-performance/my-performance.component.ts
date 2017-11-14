@@ -595,13 +595,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private deselectSkuPackageIfNeeded(previousFilter: MyPerformanceFilterState, currentFilter: MyPerformanceFilterState) {
-    if (currentFilter && previousFilter && this.selectedSkuPackageType) {
-      if ((currentFilter.premiseType === PremiseTypeValue.On && currentFilter.premiseType !== previousFilter.premiseType)
-        || (previousFilter.premiseType === PremiseTypeValue.On && currentFilter.premiseType !== previousFilter.premiseType)) {
-          this.selectedSkuPackageCode = null;
-          this.selectedSkuPackageType = null;
-          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-        }
+    if ((currentFilter && previousFilter && this.selectedSkuPackageType && currentFilter.premiseType !== previousFilter.premiseType)
+      && (currentFilter.premiseType === PremiseTypeValue.On || previousFilter.premiseType === PremiseTypeValue.On)) {
+      this.selectedSkuPackageCode = null;
+      this.selectedSkuPackageType = null;
+      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     }
   }
 
