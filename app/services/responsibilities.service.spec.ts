@@ -42,7 +42,7 @@ import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
-describe('Responsibilities Effects', () => {
+describe('Responsibilities Service', () => {
   let positionIdMock: string;
   let alternateHierarchyIdMock: string;
   let contextPositionIdMock: string;
@@ -807,8 +807,7 @@ describe('Responsibilities Effects', () => {
         });
     });
 
-    it('calls getHierarchyGroupPerformance with the given positionId when the given HierarchyGroup has ' +
-    'no alternateHierarchyId', (done) => {
+    it('calls getHierarchyGroupPerformance with the given positionId when the given HierarchyGroup has no alternateHierarchyId', (done) => {
       const getGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callThrough();
       const getAlternateGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
 
@@ -822,7 +821,7 @@ describe('Responsibilities Effects', () => {
 
       hierarchyGroups.forEach((hierarchyGroup: HierarchyGroup, index: number) => {
         expect(getGroupPerformanceSpy.calls.argsFor(index)).toEqual([
-          hierarchyGroup,
+          hierarchyGroup.type,
           performanceFilterStateMock,
           positionIdMock,
           brandCodeMock,
@@ -854,7 +853,7 @@ describe('Responsibilities Effects', () => {
 
       hierarchyGroups.forEach((hierarchyGroup: HierarchyGroup, index: number) => {
         expect(getAlternateGroupPerformanceSpy.calls.argsFor(index)).toEqual([
-          hierarchyGroup,
+          hierarchyGroup.type,
           positionIdMock,
           hierarchyGroups[index].alternateHierarchyId,
           performanceFilterStateMock,
@@ -1299,6 +1298,7 @@ describe('Responsibilities Effects', () => {
         responsibilitiesService.getRefreshedPerformances(refreshAllPerformancesData).subscribe(() => {
           expect(getSubAccountsRefreshedPerformancesSpy).not.toHaveBeenCalled();
           expect(getEntitiesWithPerformanceForGroupSpy).not.toHaveBeenCalled();
+
           done();
         });
       });
@@ -1321,6 +1321,7 @@ describe('Responsibilities Effects', () => {
         responsibilitiesService.getRefreshedPerformances(refreshAllPerformancesData).subscribe(() => {
           expect(getPerformanceForGroupedEntitiesSpy).not.toHaveBeenCalled();
           expect(getEntitiesWithPerformanceForGroupSpy).not.toHaveBeenCalled();
+
           done();
         });
       });
@@ -1369,43 +1370,26 @@ describe('Responsibilities Effects', () => {
     let transformPerformanceDTOSpy: jasmine.Spy;
     let getHierarchyGroupPerformanceSpy: jasmine.Spy;
     let getAlternateHierarchyGroupPerformanceSpy: jasmine.Spy;
-    let transformHierarchyGroupPerformanceSpy: jasmine.Spy;
+    let getAlternateHierarchyPersonPerformanceSpy: jasmine.Spy;
 
     beforeEach(() => {
-      getPerformanceSpy = spyOn(responsibilitiesService, 'getPerformance').and.callFake(
-        (positionId: string, filter: MyPerformanceFilterState, brandCode?: string): Observable<Performance> =>
-        Observable.of(entitiesTotalPerformancesMock));
+      getPerformanceSpy = spyOn(responsibilitiesService, 'getPerformance').and.callFake(()
+      : Observable<Performance> => Observable.of(entitiesTotalPerformancesMock));
 
-      getAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getAccountPerformance').and.callFake((performanceDTO: PerformanceDTO)
+      getAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getAccountPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
-      transformPerformanceDTOSpy = spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callFake((
-        accountId: string,
-        filter: MyPerformanceFilterState,
-        contextPositionId?: string,
-        brandCode?: string
-        ): Performance => entitiesTotalPerformancesMock);
+      transformPerformanceDTOSpy = spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callFake(()
+        : Performance => entitiesTotalPerformancesMock);
 
-      getHierarchyGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callFake((
-        hierarchyGroup: HierarchyGroup,
-        filter: MyPerformanceFilterState,
-        positionId: string,
-        brandCode?: string)
+      getHierarchyGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
-      getAlternateHierarchyGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callFake((
-        hierarchyGroup: HierarchyGroup,
-        positionId: string,
-        alternateHierarchyId: string,
-        filter: MyPerformanceFilterState,
-        brandCode?: string)
+      getAlternateHierarchyGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
-      transformHierarchyGroupPerformanceSpy = spyOn(performanceTransformerService, 'transformHierarchyGroupPerformance').and.callFake((
-        performanceDTO: PerformanceDTO,
-        group: HierarchyGroup,
-        positionId: string
-      ): EntityWithPerformance => entityWithPerformanceMock[0]);
+      getAlternateHierarchyPersonPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyPersonPerformance').and.callFake(()
+        : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
       refreshTotalPerformanceData = {
         positionId: positionIdMock,
@@ -1418,14 +1402,9 @@ describe('Responsibilities Effects', () => {
       };
     });
 
-    describe('when refreshing groupedEntities (salesHierarchyViewType is one of roleGroups, accounts or distributors)', () => {
+    describe('when refreshing accounts', () => {
       beforeEach(() => {
-        const salesHierarchyViewTypePossibilities: Array<SalesHierarchyViewType> = [
-          SalesHierarchyViewType.roleGroups,
-          SalesHierarchyViewType.accounts,
-          SalesHierarchyViewType.distributors
-        ];
-        salesHierarchyViewType = sample(salesHierarchyViewTypePossibilities);
+        salesHierarchyViewType = SalesHierarchyViewType.accounts;
         refreshTotalPerformanceData.salesHierarchyViewType = salesHierarchyViewType;
       });
 
@@ -1442,12 +1421,13 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT totals for accounts nor totals for people', (done) => {
+      it('should NOT get totals for accounts nor totals for people nor alternate hierarchy totals', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
           expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
           expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
-          expect(transformHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+          expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+          expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
 
           done();
         });
@@ -1468,6 +1448,314 @@ describe('Responsibilities Effects', () => {
             entitiesTotalPerformances: entitiesTotalPerformancesMock
           });
           done();
+        });
+      });
+    });
+
+    describe('when refreshing roleGroups', () => {
+      beforeEach(() => {
+        salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+        refreshTotalPerformanceData.salesHierarchyViewType = salesHierarchyViewType;
+      });
+
+      describe('when outside of alternate hierarchy', () => {
+        it('should call getPerformance with the positionId, filter, brandCode and skuPackageType', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getPerformanceSpy).toHaveBeenCalledWith(
+              refreshTotalPerformanceData.positionId,
+              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.brandSkuCode,
+              refreshTotalPerformanceData.skuPackageType
+            );
+
+            done();
+          });
+        });
+
+        it('should NOT get totals for accounts nor totals for people nor alternate hierarchy totals', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
+            expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
+            expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
+
+            done();
+          });
+        });
+
+        it('should update entitiesTotalPerformances', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
+            updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
+
+            expect(updatedRefreshTotalPerformanceData).toEqual({
+              positionId: positionIdMock,
+              filter: performanceFilterStateMock,
+              brandSkuCode: brandCodeMock,
+              groupedEntities: groupedEntitiesMock,
+              hierarchyGroups: hierarchyGroupsMock,
+              entityType: entityTypeMock,
+              salesHierarchyViewType: salesHierarchyViewType,
+              entitiesTotalPerformances: entitiesTotalPerformancesMock
+            });
+            done();
+          });
+        });
+      });
+
+      describe('when inside of alternate hierarchy', () => {
+        beforeEach(() => {
+          refreshTotalPerformanceData.alternateHierarchyId = chance.string();
+          refreshTotalPerformanceData.entityType = EntityType.Person;
+        });
+
+        it('should call getAlternateHierarchyPersonPerformance with the positionId, alternateHierarchyId, filter,'
+          + 'brandSkuCode, and skuPackageType', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getAlternateHierarchyPersonPerformanceSpy).toHaveBeenCalledWith(
+              refreshTotalPerformanceData.positionId,
+              refreshTotalPerformanceData.alternateHierarchyId,
+              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.brandSkuCode,
+              refreshTotalPerformanceData.skuPackageType
+            );
+
+            done();
+          });
+        });
+
+        it('should call transformPerformanceDTOSpy with the result from getAlternateHierarchyGroupPerformance', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
+              entitiesTotalPerformancesDTOMock
+            );
+
+            done();
+          });
+        });
+
+        it('should NOT get totals for accounts nor totals for people nor totals for standard hierarchy'
+          + ' nor alternate hierarchy totals for group', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
+            expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+
+            done();
+          });
+        });
+
+        it('should update entitiesTotalPerformances', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
+            updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
+
+            expect(updatedRefreshTotalPerformanceData).toEqual({
+              positionId: positionIdMock,
+              filter: performanceFilterStateMock,
+              brandSkuCode: brandCodeMock,
+              groupedEntities: groupedEntitiesMock,
+              hierarchyGroups: hierarchyGroupsMock,
+              entityType: EntityType.Person,
+              salesHierarchyViewType: salesHierarchyViewType,
+              entitiesTotalPerformances: entitiesTotalPerformancesMock,
+              alternateHierarchyId: refreshTotalPerformanceData.alternateHierarchyId
+            });
+            done();
+          });
+        });
+      });
+    });
+
+    describe('when refreshing distributors', () => {
+      beforeEach(() => {
+        salesHierarchyViewType = SalesHierarchyViewType.distributors;
+        refreshTotalPerformanceData.salesHierarchyViewType = salesHierarchyViewType;
+      });
+
+      describe('when outside of alternate hierarchy', () => {
+        it('should call getPerformance with the positionId, filter, brandCode and skuPackageType', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getPerformanceSpy).toHaveBeenCalledWith(
+              refreshTotalPerformanceData.positionId,
+              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.brandSkuCode,
+              refreshTotalPerformanceData.skuPackageType
+            );
+
+            done();
+          });
+        });
+
+        it('should NOT get totals for accounts nor totals for people nor alternate hierarchy totals', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
+            expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
+            expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
+
+            done();
+          });
+        });
+
+        it('should update entitiesTotalPerformances', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
+            updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
+
+            expect(updatedRefreshTotalPerformanceData).toEqual({
+              positionId: positionIdMock,
+              filter: performanceFilterStateMock,
+              brandSkuCode: brandCodeMock,
+              groupedEntities: groupedEntitiesMock,
+              hierarchyGroups: hierarchyGroupsMock,
+              entityType: entityTypeMock,
+              salesHierarchyViewType: salesHierarchyViewType,
+              entitiesTotalPerformances: entitiesTotalPerformancesMock
+            });
+            done();
+          });
+        });
+      });
+
+      describe('when inside of alternate hierarchy', () => {
+        beforeEach(() => {
+          refreshTotalPerformanceData.alternateHierarchyId = chance.string();
+        });
+
+        describe('when coming from a geography group', () => {
+          let randomIndex: number;
+
+          beforeEach(() => {
+            refreshTotalPerformanceData.entityType = EntityType.RoleGroup;
+
+            hierarchyGroupsMock = hierarchyGroupsMock.map((hierarchyGroup) => {
+              hierarchyGroup.alternateHierarchyId = chance.string();
+
+              return hierarchyGroup;
+            });
+
+            randomIndex = chance.natural({min: 0, max: refreshTotalPerformanceData.hierarchyGroups.length - 1});
+            refreshTotalPerformanceData.hierarchyGroups[randomIndex].name = Object.keys(refreshTotalPerformanceData.groupedEntities)[0];
+          });
+
+          it('should call getAlternateHierarchyGroupPerformance with the hierarchyGroup, positionId, alternateHierarchyId,'
+            + ' filter, brandSkuCode, and skuPackageType', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+              expect(getAlternateHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
+                refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
+                refreshTotalPerformanceData.positionId,
+                refreshTotalPerformanceData.alternateHierarchyId,
+                refreshTotalPerformanceData.filter,
+                refreshTotalPerformanceData.brandSkuCode,
+                refreshTotalPerformanceData.skuPackageType
+              );
+
+              done();
+            });
+          });
+
+          it('should call transformPerformanceDTOSpy with the result from getAlternateHierarchyGroupPerformance', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+              expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
+                entitiesTotalPerformancesDTOMock
+              );
+
+              done();
+            });
+          });
+
+          it('should NOT get totals for accounts nor totals for people nor totals for standard hierarchy', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+              expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
+              expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+              expect(getPerformanceSpy).not.toHaveBeenCalled();
+              expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
+
+              done();
+            });
+          });
+
+          it('should update entitiesTotalPerformances', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
+              updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
+
+              expect(updatedRefreshTotalPerformanceData).toEqual({
+                positionId: positionIdMock,
+                filter: performanceFilterStateMock,
+                brandSkuCode: brandCodeMock,
+                groupedEntities: groupedEntitiesMock,
+                hierarchyGroups: hierarchyGroupsMock,
+                entityType: EntityType.RoleGroup,
+                salesHierarchyViewType: salesHierarchyViewType,
+                entitiesTotalPerformances: entitiesTotalPerformancesMock,
+                alternateHierarchyId: refreshTotalPerformanceData.alternateHierarchyId
+              });
+              done();
+            });
+          });
+        });
+
+        describe('when coming from a person', () => {
+          beforeEach(() => {
+            refreshTotalPerformanceData.entityType = EntityType.Person;
+          });
+
+          it('should call getAlternateHierarchyPersonPerformance with the positionId, alternateHierarchyId, filter ,'
+            + 'brandSkuCode, and skuPackageType', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+              expect(getAlternateHierarchyPersonPerformanceSpy).toHaveBeenCalledWith(
+                refreshTotalPerformanceData.positionId,
+                refreshTotalPerformanceData.alternateHierarchyId,
+                refreshTotalPerformanceData.filter,
+                refreshTotalPerformanceData.brandSkuCode,
+                refreshTotalPerformanceData.skuPackageType
+              );
+
+              done();
+            });
+          });
+
+          it('should call transformPerformanceDTOSpy with the result from getAlternateHierarchyGroupPerformance', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+              expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
+                entitiesTotalPerformancesDTOMock
+              );
+
+              done();
+            });
+          });
+
+          it('should NOT get totals for accounts nor totals for people nor totals for standard hierarchy'
+            + ' nor alternate hierarchy totals for group', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+              expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
+              expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+              expect(getPerformanceSpy).not.toHaveBeenCalled();
+              expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+
+              done();
+            });
+          });
+
+          it('should update entitiesTotalPerformances', (done) => {
+            responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
+              updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
+
+              expect(updatedRefreshTotalPerformanceData).toEqual({
+                positionId: positionIdMock,
+                filter: performanceFilterStateMock,
+                brandSkuCode: brandCodeMock,
+                groupedEntities: groupedEntitiesMock,
+                hierarchyGroups: hierarchyGroupsMock,
+                entityType: EntityType.Person,
+                salesHierarchyViewType: salesHierarchyViewType,
+                entitiesTotalPerformances: entitiesTotalPerformancesMock,
+                alternateHierarchyId: refreshTotalPerformanceData.alternateHierarchyId
+              });
+              done();
+            });
+          });
         });
       });
     });
@@ -1500,11 +1788,12 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      it('should NOT totals for groups nor people', (done) => {
+      it('should NOT get totals for groups nor people nor alternate hierarchy totals', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getPerformanceSpy).not.toHaveBeenCalled();
           expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
-          expect(transformHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+          expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+          expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
 
           done();
         });
@@ -1540,87 +1829,93 @@ describe('Responsibilities Effects', () => {
         refreshTotalPerformanceData.hierarchyGroups[randomIndex].name = Object.keys(refreshTotalPerformanceData.groupedEntities)[0];
       });
 
-      it('should call getHierarchyGroupPerformance with the hierarchyGroups that has for name the key of the of groupedEntities,'
-        + 'the filter, positionId, brandSkuCode and skuPackageType', (done) => {
-        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-          expect(getHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
-            refreshTotalPerformanceData.hierarchyGroups[randomIndex],
-            refreshTotalPerformanceData.filter,
-            refreshTotalPerformanceData.positionId,
-            refreshTotalPerformanceData.brandSkuCode,
-            refreshTotalPerformanceData.skuPackageType
-          );
+      describe('when refreshTotalPerformanceData DOES NOT contain an alternateHierarchyId', () => {
+        it('should call getHierarchyGroupPerformance with '
+          + 'the hierarchyGroup.type of the group that has for name the key of the first of groupedEntities, '
+          + 'the filter, positionId, brandSkuCode and skuPackageType', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
+              refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
+              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.positionId,
+              refreshTotalPerformanceData.brandSkuCode,
+              refreshTotalPerformanceData.skuPackageType
+            );
 
-          done();
-        });
-      });
-
-      it('should call getAlternateHierarchyGroupPerformance when the hierarchyGroup contains an alternateHierarchyId with the ' +
-      'hierarchyGroups that has for name the key of the of groupedEntities, the filter, positionId, brandCode, skuPackageCode', (done) => {
-        refreshTotalPerformanceData.hierarchyGroups[randomIndex].alternateHierarchyId = alternateHierarchyIdMock;
-
-        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-          expect(getAlternateHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
-            refreshTotalPerformanceData.hierarchyGroups[randomIndex],
-            refreshTotalPerformanceData.positionId,
-            alternateHierarchyIdMock,
-            refreshTotalPerformanceData.filter,
-            refreshTotalPerformanceData.brandSkuCode,
-            refreshTotalPerformanceData.skuPackageType
-          );
-
-          done();
-        });
-      });
-
-      it('should call transformHierarchyGroupPerformance with the result from getRefreshedTotalPerformance', (done) => {
-        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-          expect(transformHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
-            entitiesTotalPerformancesDTOMock,
-            refreshTotalPerformanceData.hierarchyGroups[randomIndex],
-            refreshTotalPerformanceData.positionId
-          );
-
-          done();
-        });
-      });
-
-      it('should NOT fetch totals for groups nor accounts', (done) => {
-        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-          expect(getPerformanceSpy).not.toHaveBeenCalled();
-          expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
-          expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
-
-          done();
-        });
-      });
-
-      it('should update entitiesTotalPerformances', (done) => {
-        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
-          updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
-          expect(updatedRefreshTotalPerformanceData).toEqual({
-            positionId: positionIdMock,
-            filter: performanceFilterStateMock,
-            brandSkuCode: brandCodeMock,
-            groupedEntities: groupedEntitiesMock,
-            hierarchyGroups: hierarchyGroupsMock,
-            entityType: entityTypeMock,
-            salesHierarchyViewType: salesHierarchyViewType,
-            entitiesTotalPerformances: entityWithPerformanceMock[0].performance
+            done();
           });
+        });
 
-          done();
+        it('should call transformPerformanceDTOSpy with the result from getRefreshedTotalPerformance', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
+              entitiesTotalPerformancesDTOMock
+            );
+
+            done();
+          });
+        });
+
+        it('should NOT fetch totals for groups nor accounts nor alternate hierarchy totals', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
+
+            done();
+          });
+        });
+
+        it('should update entitiesTotalPerformances', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe((
+            updatedRefreshTotalPerformanceData: RefreshTotalPerformanceData) => {
+            expect(updatedRefreshTotalPerformanceData).toEqual({
+              positionId: positionIdMock,
+              filter: performanceFilterStateMock,
+              brandSkuCode: brandCodeMock,
+              groupedEntities: groupedEntitiesMock,
+              hierarchyGroups: hierarchyGroupsMock,
+              entityType: entityTypeMock,
+              salesHierarchyViewType: salesHierarchyViewType,
+              entitiesTotalPerformances: entitiesTotalPerformancesMock
+            });
+
+            done();
+          });
+        });
+
+        it('should call show toast and transform null dto when getHierarchyGroupPerformance returns an error', (done) => {
+          getHierarchyGroupPerformanceSpy.and.callFake(() => {
+            return Observable.throw(new Error(chance.string()));
+          });
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(1);
+
+            done();
+          });
         });
       });
 
-      it('should call show toast and transform null dto when getHierarchyGroupPerformance returns an error', (done) => {
-        getHierarchyGroupPerformanceSpy.and.callFake(() => {
-          return Observable.throw(new Error(chance.string()));
+      describe('when refreshTotalPerformanceData contains an alternateHierarchyId', () => {
+        beforeEach(() => {
+          refreshTotalPerformanceData.alternateHierarchyId = alternateHierarchyIdMock;
         });
-        responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-          expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(1);
 
-          done();
+        it('should call getAlternateHierarchyGroupPerformance with the hierarchyGroups\' type,'
+          + 'the filter, positionId, brandCode, skuPackageCode', (done) => {
+          responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
+            expect(getAlternateHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
+              refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
+              refreshTotalPerformanceData.positionId,
+              alternateHierarchyIdMock,
+              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.brandSkuCode,
+              refreshTotalPerformanceData.skuPackageType
+            );
+
+            done();
+          });
         });
       });
     });
