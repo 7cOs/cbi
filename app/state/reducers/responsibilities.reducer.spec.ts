@@ -403,6 +403,27 @@ describe('Responsibilities Reducer', () => {
     });
   });
 
+  describe('SetExceptionHierarchy action is received', () => {
+    it('should update the responsibilities state with a flag for exception hierarchy', () => {
+      const expectedState: ResponsibilitiesState = {
+        status: initialState.status,
+        responsibilitiesStatus: ActionStatus.NotFetched,
+        entitiesPerformanceStatus: ActionStatus.NotFetched,
+        exceptionHierarchy: true,
+        totalPerformanceStatus: ActionStatus.NotFetched,
+        subaccountsStatus: ActionStatus.NotFetched,
+        positionId: initialState.positionId,
+        groupedEntities: initialState.groupedEntities,
+        hierarchyGroups: initialState.hierarchyGroups,
+        entityWithPerformance: initialState.entityWithPerformance,
+        entitiesTotalPerformances: initialState.entitiesTotalPerformances
+      };
+      const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.SetExceptionHierarchy());
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
   describe('SetAccountPositionId action is received', () => {
     it('should update the responsibilities state with the given position Id', () => {
       const payloadMock: string = chance.string();
