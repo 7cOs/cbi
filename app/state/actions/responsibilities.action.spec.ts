@@ -385,7 +385,6 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('SetExceptionHierarchy Action', () => {
-    let payloadMock: string;
     let action: ResponsibilitiesActions.SetExceptionHierarchy;
 
     beforeEach(() => {
