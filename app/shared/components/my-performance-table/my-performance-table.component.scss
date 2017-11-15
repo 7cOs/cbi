@@ -1,11 +1,19 @@
 @import '../../../assets/styles/base/variables';
 
+$table-height: 660px;
+$table-width: 565px;
+$row-height: 60px;
+$row-height-header: $row-height / 2;
+$table-body-height: $table-height - $row-height;
+$table-body-height-offset: 3px;
+$left-col-icon-width: 24px;
+
 table {
   border: 1px 1px 1px 0 solid $gray-4;
+  border-bottom: 2px solid $gray-8;
   border-collapse: collapse;
+  height: $table-height;
   width: 100%;
-  height: 660px;
-  border-bottom: 2px solid #b4b4b4;
 }
 
 thead {
@@ -22,30 +30,31 @@ thead {
 
 tbody {
   display: block;
-  max-height: 600px;
-  overflow-y: overlay;
-  text-overflow: ellipsis;
-
-  -ms-overflow-style: -ms-autohiding-scrollbar;
   float: left;
   width: 100%;
+  max-height: $table-body-height;
+
+  /* Chrome and Safari support this non-standard overflow type */
+  overflow-y: overlay;
 
   tr {
     display: table-row;
     width: 100%;
   }
+
+  &.total-row-absent {
+    height: $table-body-height - $table-body-height-offset;
+  }
+
+  &.total-row-present {
+    height: $table-body-height - $row-height - $table-body-height-offset;
+  }
 }
 
-:host-context(.ie) tbody {
-  overflow-y: auto;
-}
-
+:host-context(.ie) tbody,
 :host-context(.edge) tbody {
   overflow-y: auto;
-}
-
-my-performance-table-row {
-  width: 100%;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 th {
@@ -57,52 +66,99 @@ th {
   width: 100%;
 }
 
-.col-60-pct {
-  width: 60%;
-}
+/deep/.left-col {
+  width: 40%;
+  min-width: $table-width * 0.4;
 
-.col-50-pct {
-  width: 50%;
-}
-
-.col-30-pct {
-  width: 30%;
-}
-
-.col-20-pct {
-  width: 20%;
-}
-
-.col-17-pct {
-  width: 17%;
-}
-
-.col-16-pct {
-  width: 16.66669%;
-}
-
-.col-10-pct {
-  width: 10%;
-}
-
-.col-0-width {
-  width: 0;
-}
-
-.left-col {
-  text-align: left;
-  min-width: 120px;
   padding-left: 16px;
+  padding-right: 8px;
+  text-align: left;
   font-weight: $regular;
+
+  div.left-col-content {
+    div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .left-col-text-content {
+      width: 100%;
+
+      div {
+        display: block;
+      }
+    }
+
+    &.showing-image {
+      .left-col-text-content {
+        margin-left: 5px;
+        width: calc(100% - #{$left-col-icon-width} - 5px);
+      }
+    }
+  }
 }
 
-.right-col {
+/deep/.center-col {
   text-align: center;
+  background-color: $gray-4;
+
+  width: 20%;
+
+  &.spanned {
+    width: 60%;
+  }
+}
+
+/deep/.right-col {
+  text-align: center;
+  width: 14%;
+
+  &.opportunities {
+    width: 12%;
+  }
+}
+
+tr.one-right-column-present {
+  /deep/.left-col {
+    width: 35%;
+    min-width: $table-width * 0.35;
+  }
+
+  /deep/.center-col {
+    width: 17%;
+
+    &.spanned {
+      width: 51%;
+    }
+  }
+}
+
+tr.two-right-columns-present {
+  /deep/.left-col {
+    width: 31%;
+    min-width: $table-width * 0.31;
+  }
+
+  /deep/.center-col {
+    width: 15%;
+
+    &.spanned {
+      width: 45%;
+    }
+  }
+
+  /deep/.right-col {
+    width: 12%;
+
+    &.opportunities {
+      width: 12%;
+    }
+  }
 }
 
 .performance-table-wrapper {
   width: 50%;
-  min-width: 565px;
+  min-width: $table-width;
   display: inline-block;
 }
 
@@ -111,22 +167,24 @@ th {
   border-bottom: 2px solid $gray-8;
   font-family: $rajdhani;
   height: 70px;
-  min-width: 565px;
+  min-width: $table-width;
   padding-top: 10px;
 }
 
 .total-row {
-  height: 60px;
+  height: $row-height;
   border-bottom: 1px solid $gray-10;
   text-transform: uppercase;
 
-  /deep/.left-col, /deep/.center-col, /deep/.right-col {
+  /deep/.left-col,
+  /deep/.center-col,
+  /deep/.right-col {
     font-weight: $semibold;
   }
 }
 
 .dismissable-total-row {
-  height: 60px;
+  height: $row-height;
   border-bottom: 1px solid $gray-10;
   border-right: 1px solid $gray-10;
   text-transform: uppercase;
@@ -144,7 +202,9 @@ th {
   &.selected {
     background-color: $light-blue-4;
 
-    /deep/.left-col, /deep/.center-col, /deep/.right-col {
+    /deep/.left-col,
+    /deep/.center-col,
+    /deep/.right-col {
       font-weight: $semibold;
       color: $gray-1;
       background-color: $light-blue-4;
@@ -152,13 +212,8 @@ th {
   }
 }
 
-.center-col {
-  text-align: center;
-  background-color: $gray-4;
-}
-
 .entity-row {
-  height: 60px;
+  height: $row-height;
   border-bottom: 1px solid $gray-10;
 
   /deep/.center-col {
@@ -205,11 +260,12 @@ td, th {
   font-family: $work-sans;
   font-size: 12px;
   font-weight: $regular;
+  box-sizing: border-box;
 }
 
 .top-header {
   margin-top: 0.5em;
-  height: 30px;
+  height: $row-height-header;
 
   th {
     font-family: $rajdhani;
@@ -221,7 +277,8 @@ td, th {
     vertical-align: center;
     color: $gray-1;
 
-    &.right-col, &.center-col {
+    &.right-col,
+    &.center-col {
       vertical-align: center;
     }
 
@@ -233,7 +290,7 @@ td, th {
 }
 
 .sub-header {
-  height: 30px;
+  height: $row-height-header;
   border-bottom: 1px solid $gray-10;
 
   th {
@@ -242,6 +299,7 @@ td, th {
     font-weight: $semibold;
     letter-spacing: 0.9px;
     text-align: center;
+    text-transform: uppercase;
     color: $gray-1;
   }
 }
@@ -542,18 +600,6 @@ div.ctv {
   }
 }
 
-.two-total-rows-present {
-  height: 477px;
-}
-
-.total-row-present {
-  height: 537px;
-}
-
-.total-row-absent {
-  height: 597px;
-}
-
 .link {
   &:hover {
     cursor: pointer;
@@ -563,9 +609,9 @@ div.ctv {
 .forward-arrow {
   background-image: url('../../../assets/img/icons/arrow-right-blue.svg');
   background-repeat: no-repeat;
-  background-position: right 13px center;
-  padding-right: 24px;
+  background-position: right 0 center;
   box-sizing: border-box;
+  padding-right: 12px;
 
   &:hover, &:active {
     background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
@@ -578,7 +624,9 @@ div.ctv {
   text-transform: uppercase;
   background-color: $light-blue-4;
 
-  /deep/.left-col, /deep/.center-col, /deep/.right-col {
+  /deep/.left-col,
+  /deep/.center-col,
+  /deep/.right-col {
     font-weight: $semibold;
     color: $gray-1;
     background-color: $light-blue-4;
@@ -586,11 +634,9 @@ div.ctv {
 }
 
 .dismissable-row-X-container {
-  width: 15px;
-  height: 15px;
+  width: $left-col-icon-width;
+  height: 18px;
   box-sizing: border-box;
-  float: left;
-  margin-right: 10px;
 
   .dismissable-row-X {
     width: 100%;
@@ -599,10 +645,9 @@ div.ctv {
 }
 
 .rolegroup-icon-container {
-  width: 24px;
+  width: $left-col-icon-width;
   height: 18px;
-  float: left;
-  object-fit: contain;
+  box-sizing: border-box;
 
   .rolegroup-icon-background {
     background-repeat: no-repeat;
