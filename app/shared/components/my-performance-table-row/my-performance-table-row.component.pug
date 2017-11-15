@@ -1,19 +1,24 @@
-td.left-col(colspan=1, [ngClass]="getHeaderLeftClasses()")
-  div.dismissable-row-X-container(*ngIf="showX", (click)="onDismissableRowXClicked.emit()")
-    img.dismissable-row-X(src="../../../assets/img/icons/thin-x.svg")
-  div.rolegroup-icon-container(*ngIf="isRolegroups")
-    div.rolegroup-icon-background([ngClass]="getRolegroupIconClass()")
-  div.description-line-0
-    span {{rowData.descriptionRow0}}
-  div.description-line-1(*ngIf="rowData.descriptionRow1",
-                        [ngClass]="getSublineClass()",
-                        (click)="sublineClicked()")
-    span.description-line-1 {{rowData.descriptionRow1}}
-td.center-col(colspan=1, [ngClass]="columnWidth()") {{rowData.metricColumn0 | number}}
-td.center-col(colspan=1, [ngClass]="columnWidth()")
+td.left-col(colspan=1)
+  div.left-col-content([ngClass]="{'showing-image': showX || isRolegroups}")
+
+    div.dismissable-row-X-container(*ngIf="showX", (click)="onDismissableRowXClicked.emit()")
+      img.dismissable-row-X(src="../../../assets/img/icons/thin-x.svg")
+    div.rolegroup-icon-container(*ngIf="isRolegroups")
+      div.rolegroup-icon-background([ngClass]="getRolegroupIconClass()")
+
+    div.left-col-text-content
+      div.description-line-0
+        span {{rowData.descriptionRow0}}
+      div.description-line-1(*ngIf="rowData.descriptionRow1",
+                            [ngClass]="getSublineClass()",
+                            (click)="sublineClicked()")
+        span.description-line-1 {{rowData.descriptionRow1}}
+
+td.center-col(colspan=1) {{rowData.metricColumn0 | number}}
+td.center-col(colspan=1)
   span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn1 | number}}
-td.center-col(colspan=1, [ngClass]="columnWidth()")
+td.center-col(colspan=1)
   span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn2 | number:'1.1-1'}}%
-td.right-col(*ngIf="showContributionToVolume", colspan=1, [ngClass]="columnWidth()")
+td.right-col(*ngIf="showContributionToVolume", colspan=1)
   span.ctv {{rowData.ctv | number:'1.1-1'}}%
-td.right-col.opportunities(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()") {{rowData.opportunities || 0}}
+td.right-col.opportunities(*ngIf="showOpportunities", colspan=1) {{rowData.opportunities || 0}}
