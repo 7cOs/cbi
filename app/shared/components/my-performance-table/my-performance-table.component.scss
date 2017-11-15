@@ -49,10 +49,6 @@ tbody {
   &.total-row-present {
     height: $table-body-height - $row-height - $table-body-height-offset;
   }
-
-  &.two-total-rows-present {
-    height: $table-body-height - ($row-height * 2) - $table-body-height-offset;
-  }
 }
 
 :host-context(.ie) tbody,

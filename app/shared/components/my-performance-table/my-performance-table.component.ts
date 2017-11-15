@@ -57,9 +57,7 @@ export class MyPerformanceTableComponent {
   constructor (private calculatorService: CalculatorService) { }
 
   public getTableHeightClass(): string {
-    return this.totalRow
-      ? this.dismissableTotalRow ? 'two-total-rows-present' : 'total-row-present'
-      : this.dismissableTotalRow ? 'total-row-present' : 'total-row-absent';
+    return (this.totalRow || this.dismissableTotalRow) ? 'total-row-present' : 'total-row-absent';
   }
 
   public getSortStatus(columnType: ColumnType): SortStatus {
