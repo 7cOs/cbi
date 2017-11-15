@@ -74,8 +74,9 @@ th {
   width: 40%;
   min-width: $table-width * 0.4;
 
-  text-align: left;
   padding-left: 16px;
+  padding-right: 8px;
+  text-align: left;
   font-weight: $regular;
 
   div.left-col-content {
@@ -84,8 +85,12 @@ th {
       vertical-align: middle;
     }
 
-    .left-col-text-content div {
-      display: block;
+    .left-col-text-content {
+      width: 100%;
+
+      div {
+        display: block;
+      }
     }
 
     &.showing-image {
@@ -608,8 +613,7 @@ div.ctv {
 .forward-arrow {
   background-image: url('../../../assets/img/icons/arrow-right-blue.svg');
   background-repeat: no-repeat;
-  background-position: right 13px center;
-  padding-right: 24px;
+  background-position: right 0 center;
   box-sizing: border-box;
 
   &:hover, &:active {
