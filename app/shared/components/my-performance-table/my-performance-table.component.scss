@@ -9,10 +9,10 @@ $table-body-height-offset: 3px;
 
 table {
   border: 1px 1px 1px 0 solid $gray-4;
-  border-collapse: collapse;
-  width: 100%;
-  height: $table-height;
   border-bottom: 2px solid $gray-8;
+  border-collapse: collapse;
+  height: $table-height;
+  width: 100%;
 }
 
 thead {
@@ -279,6 +279,7 @@ td, th {
     font-weight: $semibold;
     letter-spacing: 0.9px;
     text-align: center;
+    text-transform: uppercase;
     color: $gray-1;
   }
 }
@@ -629,7 +630,6 @@ div.ctv {
   width: 24px;
   height: 18px;
   float: left;
-  object-fit: contain;
 
   .rolegroup-icon-background {
     background-repeat: no-repeat;
