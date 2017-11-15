@@ -1,38 +1,45 @@
 div.performance-table-wrapper
+
   div.performance-table-summary.col-100-pct
     div.summary-header
       span {{ performanceMetric }}
       span(*ngIf='dateRange && showDateRange')  {{ dateRange.displayCode }}
     div.summary-date-range
       span(*ngIf='dateRange && showDateRange') {{ dateRange.range }}
+
   table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
+
     thead.col-100-pct
-      tr.top-header.col-100-pct
-        th.left-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.descriptionRow0)")
+
+      tr.top-header.col-100-pct([ngClass]="getColumnWidthClass()")
+        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
-        th.center-col.sort-indicator(colspan=3, [ngClass]="centerColumnsWidth()") {{ tableHeaderRow[1] }}
-        th.right-col.sort-indicator(*ngIf="showContributionToVolume", colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)")
+        th.center-col.spanned.sort-indicator(colspan=3) {{ tableHeaderRow[1] }}
+        th.right-col.sort-indicator(*ngIf="showContributionToVolume", colspan=1, (click)="sortRows(columnType.ctv)")
           span {{ tableHeaderRow[2] }}
             sort-indicator([status]="getSortStatus(columnType.ctv)")
-        th.right-col.sort-indicator(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
+        th.right-col.opportunities.sort-indicator(*ngIf="showOpportunities", colspan=1)
           span OPPS
-      tr.sub-header.col-100-pct
-        th(colspan=1, [ngClass]="columnWidth()")
-        th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn0)")
+
+      tr.sub-header.col-100-pct([ngClass]="getColumnWidthClass()")
+        th(colspan=1)
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn0)")
           span(*ngIf='dateRange') {{ dateRange.displayCode }}
             sort-indicator([status]='getSortStatus(columnType.metricColumn0)')
-        th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn1)")
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn1)")
           span VS YA
             sort-indicator([status]='getSortStatus(columnType.metricColumn1)')
-        th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn2)")
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn2)")
           span VS YA %
             sort-indicator([status]='getSortStatus(columnType.metricColumn2)')
-        th.right-col(*ngIf="showContributionToVolume", colspan=1, [ngClass]="columnWidth()")
-        th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
+        th.right-col(*ngIf="showContributionToVolume", colspan=1)
+        th.right-col.opportunities(*ngIf="showOpportunities", colspan=1)
 
-      tr.total-row.col-100-pct(my-performance-table-row,
+      tr.total-row.col-100-pct(
                               *ngIf="totalRow",
+                              [ngClass]="getColumnWidthClass()",
+                              my-performance-table-row,
                               [rowData]="totalRow",
                               [showContributionToVolume]="showContributionToVolume",
                               [showOpportunities]="showOpportunities",
@@ -40,7 +47,7 @@ div.performance-table-wrapper
 
       tr.dismissable-total-row.col-100-pct(
                               *ngIf="dismissableTotalRow",
-                              [ngClass]="{'selected': (!selectedSkuPackageCode && dismissableTotalRow)}",
+                              [ngClass]="getDismissableTotalRowClasses()",
                               (click)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event, row: dismissableTotalRow})",
                               my-performance-table-row,
                               [rowData]="dismissableTotalRow",
@@ -49,7 +56,8 @@ div.performance-table-wrapper
                               [showX]=true,
                               (onDismissableRowXClicked)="onDismissableRowXClicked.emit()")
 
-    tbody([ngClass]="getTableHeight()")
+    tbody([ngClass]="getTableHeightClass()")
+
       tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let rowIndex = index",
                                 [ngClass]="getEntityRowClasses(rowData)",
                                 (click)="onRowClicked(rowType.data, rowIndex, rowData)",

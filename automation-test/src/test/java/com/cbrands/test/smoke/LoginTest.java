@@ -14,33 +14,33 @@ import java.net.MalformedURLException;
  * Automated test for logging in and out of the web app.
  */
 public class LoginTest extends BaseTestCase {
-
   private Login loginPage;
   private LogoutPage logoutPage;
 
-  @BeforeMethod
-  public void setUp() {
+  @AfterMethod
+  public void tearDown() {
+    logoutPage.goToPage();
+
+    shutDownBrowser();
+  }
+
+  @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
+  public void testLogin(TestUser testUser) throws MalformedURLException {
+    this.setUpTestWith(testUser);
+
+    final HomePage homePage = loginPage.loginAs(testUser);
+    Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
+
+    log.info("Logged in successfully as: " + testUser.userName());
+  }
+
+  private void setUpTestWith(TestUser testUser) throws MalformedURLException {
+    super.startUpBrowser("Smoke - LoginTest: " + testUser.fullName());
     loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-  }
-
-  @AfterMethod
-  public void tearDown() throws MalformedURLException {
-    logoutPage.goToPage();
-
-    shutDownBrowser();
-    startUpBrowser();
-  }
-
-  @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
-  public void testLogin(TestUser testUser) {
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
-
-    log.info("Logged in successfully as: " + testUser.userName());
   }
 
   @DataProvider(name = "userCredentials")

@@ -124,6 +124,7 @@ describe('My Performance Version Reducer', () => {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedSkuPackageCode: skuPackagePayload.skuPackageCode,
         selectedSkuPackageType: skuPackagePayload.skuPackageType,
         selectedEntityType: beforeState.current.selectedEntityType,
@@ -144,6 +145,7 @@ describe('My Performance Version Reducer', () => {
         responsibilities: beforeState.current.responsibilities,
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedSkuPackageCode: clearedSkuPackageCode,
         selectedEntityType: beforeState.current.selectedEntityType,
         filter: beforeState.current.filter
