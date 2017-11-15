@@ -615,6 +615,7 @@ div.ctv {
   background-repeat: no-repeat;
   background-position: right 0 center;
   box-sizing: border-box;
+  padding-right: 12px;
 
   &:hover, &:active {
     background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
