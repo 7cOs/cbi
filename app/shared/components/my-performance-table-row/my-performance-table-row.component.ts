@@ -1,10 +1,8 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { Inject } from '@angular/core';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
-import { SortStatus } from '../../../enums/sort-status.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 
 @Component({
@@ -28,28 +26,11 @@ export class MyPerformanceTableRowComponent {
     this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
   }
 
-  public sortStatus = SortStatus;
-
   private isRolegroups: boolean;
   private isSubAcountsOrDistributors: boolean;
 
-  constructor(
-    @Inject('ieHackService') private ieHackService: any
-  ) { }
-
   public getTrendClass(num: number): string {
     return num >= 0 ? 'positive' : 'negative';
-  }
-
-  public columnWidth(): string {
-    return this.showOpportunities
-      ? ((this.ieHackService.isIE || this.ieHackService.isEdge) ? 'col-17-pct' : 'col-16-pct') : 'col-20-pct';
-  }
-
-  public getHeaderLeftClasses(): CssClasses {
-    return {
-      [this.columnWidth()]: true,
-    };
   }
 
   public getSublineClass(): CssClasses {
