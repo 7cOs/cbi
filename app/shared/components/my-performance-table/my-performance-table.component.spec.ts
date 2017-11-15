@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import * as Chance from 'chance';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
@@ -14,6 +15,8 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
+
+const chance = new Chance();
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -166,20 +169,20 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
-  describe('getTableHeight', () => {
+  describe('getTableHeightClass', () => {
 
     it('should set the proper class to set the table height when 2 total rows are present', () => {
       const totalRowsMock: Array<MyPerformanceTableRow> = getMyPerformanceTableRowMock(2);
       componentInstance.totalRow = totalRowsMock[0];
       componentInstance.dismissableTotalRow = totalRowsMock[1];
-      const tableClass = componentInstance.getTableHeight();
+      const tableClass = componentInstance.getTableHeightClass();
       expect(tableClass).toBe('two-total-rows-present');
     });
 
     it('should set the proper class to set the table height when total row is present', () => {
       const totalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
       componentInstance.totalRow = totalRowMock;
-      const tableClass = componentInstance.getTableHeight();
+      const tableClass = componentInstance.getTableHeightClass();
       expect(tableClass).toBe('total-row-present');
     });
 
@@ -187,8 +190,38 @@ describe('MyPerformanceTableComponent', () => {
       let totalRowMock: MyPerformanceTableRow = null;
 
       componentInstance.totalRow = totalRowMock;
-      const tableClass = componentInstance.getTableHeight();
+      const tableClass = componentInstance.getTableHeightClass();
       expect(tableClass).toBe('total-row-absent');
+    });
+  });
+
+  describe('getColumnWidthClass', () => {
+    it('should return two-right-columns-present when showing both CTV and Opps', () => {
+      componentInstance.showContributionToVolume = true;
+      componentInstance.showOpportunities = true;
+      const cls = componentInstance.getColumnWidthClass();
+      expect(cls).toEqual('two-right-columns-present');
+    });
+
+    it('should return one-right-column-present when showing only CTV', () => {
+      componentInstance.showContributionToVolume = true;
+      componentInstance.showOpportunities = false;
+      const cls = componentInstance.getColumnWidthClass();
+      expect(cls).toEqual('one-right-column-present');
+    });
+
+    it('should return one-right-column-present when showing only Opps', () => {
+      componentInstance.showContributionToVolume = false;
+      componentInstance.showOpportunities = true;
+      const cls = componentInstance.getColumnWidthClass();
+      expect(cls).toEqual('one-right-column-present');
+    });
+
+    it('should return empty string when showing neither CTV nor Opps', () => {
+      componentInstance.showContributionToVolume = false;
+      componentInstance.showOpportunities = false;
+      const cls = componentInstance.getColumnWidthClass();
+      expect(cls).toEqual('');
     });
   });
 
@@ -250,17 +283,30 @@ describe('MyPerformanceTableComponent', () => {
 
   describe('getEntityRowClasses', () => {
     let rowData: MyPerformanceTableRow;
+    let getColumnWidthClassSpy: jasmine.Spy;
 
     beforeEach(() => {
       rowData = getMyPerformanceTableRowMock(1)[0];
       rowData.performanceError = false;
+      getColumnWidthClassSpy = spyOn(componentInstance, 'getColumnWidthClass').and.returnValue('');
     });
 
-    it('should disabled classes by default', () => {
+    it('should disable classes by default', () => {
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': false
+      });
+    });
+
+    it('should include column width class when value is returned from getColumnWidthClass', () => {
+      const columnWidthClassMock = chance.string();
+      getColumnWidthClassSpy.and.returnValue(columnWidthClassMock);
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false,
+        [columnWidthClassMock]: true
       });
     });
 
@@ -279,6 +325,50 @@ describe('MyPerformanceTableComponent', () => {
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': true
+      });
+    });
+  });
+
+  describe('getDismissableTotalRowClasses', () => {
+    let getColumnWidthClassSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      getColumnWidthClassSpy = spyOn(componentInstance, 'getColumnWidthClass').and.returnValue('');
+    });
+
+    it('should return selected true if there is a dismissableTotalRow but no selectedSkuPackageCode', () => {
+      componentInstance.dismissableTotalRow = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.selectedSkuPackageCode = null;
+      const classObject = componentInstance.getDismissableTotalRowClasses();
+      expect(classObject).toEqual({
+        'selected': true
+      });
+    });
+
+    it('should return selected false if there is a dismissableTotalRow but there is also a selectedSkuPackageCode', () => {
+      componentInstance.dismissableTotalRow = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.selectedSkuPackageCode = chance.string();
+      const classObject = componentInstance.getDismissableTotalRowClasses();
+      expect(classObject).toEqual({
+        'selected': false
+      });
+    });
+
+    it('should return selected false if there is no dismissableTotalRow', () => {
+      componentInstance.selectedSkuPackageCode = chance.string();
+      const classObject = componentInstance.getDismissableTotalRowClasses();
+      expect(classObject).toEqual({
+        'selected': false
+      });
+    });
+
+    it('should include column width class when value is returned from getColumnWidthClass', () => {
+      const columnWidthClassMock = chance.string();
+      getColumnWidthClassSpy.and.returnValue(columnWidthClassMock);
+      const classObject = componentInstance.getDismissableTotalRowClasses();
+      expect(classObject).toEqual({
+        'selected': false,
+        [columnWidthClassMock]: true
       });
     });
   });

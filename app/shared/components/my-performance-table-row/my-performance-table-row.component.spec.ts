@@ -1,4 +1,5 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import * as Chance from 'chance';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
@@ -6,24 +7,19 @@ import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.
 import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 
+const chance = new Chance();
+
 describe('MyPerformanceTableComponent', () => {
 
   let fixture: ComponentFixture<MyPerformanceTableRowComponent>;
   let componentInstance: MyPerformanceTableRowComponent;
-
-  let ieHackServiceMock: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         MyPerformanceTableRowComponent
       ],
-      providers: [
-        {
-          provide: 'ieHackService',
-          useValue: ieHackServiceMock
-        }
-      ]
+      providers: [ ]
     });
 
     fixture = TestBed.createComponent(MyPerformanceTableRowComponent);
@@ -103,6 +99,23 @@ describe('MyPerformanceTableComponent', () => {
         let dashboardLinkCss: CssClasses = componentInstance.getSublineClass();
         expect(dashboardLinkCss).toEqual({'link': false, 'forward-arrow': false});
       });
+    });
+  });
+
+  describe('getTrendClass', () => {
+    it('should return positive if given a positive number', () => {
+      const cls = componentInstance.getTrendClass(chance.floating({min: 1.0}));
+      expect(cls).toEqual('positive');
+    });
+
+    it('should return positive if given 0', () => {
+      const cls = componentInstance.getTrendClass(0);
+      expect(cls).toEqual('positive');
+    });
+
+    it('should return negative if given a negative number', () => {
+      const cls = componentInstance.getTrendClass(chance.floating({max: -0.1}));
+      expect(cls).toEqual('negative');
     });
   });
 });

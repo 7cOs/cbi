@@ -1,4 +1,4 @@
-td.left-col(colspan=1, [ngClass]="getHeaderLeftClasses()")
+td.left-col(colspan=1)
   div.dismissable-row-X-container(*ngIf="showX", (click)="onDismissableRowXClicked.emit()")
     img.dismissable-row-X(src="../../../assets/img/icons/thin-x.svg")
   div.rolegroup-icon-container(*ngIf="isRolegroups")
@@ -9,10 +9,10 @@ td.left-col(colspan=1, [ngClass]="getHeaderLeftClasses()")
                         [ngClass]="getSublineClass()",
                         (click)="sublineClicked()")
     span.description-line-1 {{rowData.descriptionRow1}}
-td.center-col(colspan=1, [ngClass]="columnWidth()") {{rowData.metricColumn0 | number}}
-td.center-col(colspan=1, [ngClass]="columnWidth()")
+td.center-col(colspan=1) {{rowData.metricColumn0 | number}}
+td.center-col(colspan=1)
   span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn1 | number}}
-td.center-col(colspan=1, [ngClass]="columnWidth()")
+td.center-col(colspan=1)
   span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn2 | number:'1.1-1'}}%
 td.right-col(*ngIf="showContributionToVolume", colspan=1)
   span.ctv {{rowData.ctv | number:'1.1-1'}}%
