@@ -31,7 +31,7 @@ import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
-import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
+import { MyPerformanceFilterEvent, MyPerformanceFilter } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
@@ -136,6 +136,7 @@ describe('MyPerformanceComponent', () => {
   const versionsSubject: Subject<MyPerformanceEntitiesData[]> = new Subject<MyPerformanceEntitiesData[]>();
   const currentSubject: Subject<MyPerformanceEntitiesData> = new Subject<MyPerformanceEntitiesData>();
   const productMetricsSubject: Subject<ProductMetricsState> = new Subject<ProductMetricsState>();
+  const filterSubject: Subject<MyPerformanceFilter> = new Subject<MyPerformanceFilter>();
 
   const windowMock = {
     open: jasmine.createSpy('open')
@@ -169,6 +170,8 @@ describe('MyPerformanceComponent', () => {
         return currentSubject;
       } else if (selectedValue === stateMock.myPerformanceProductMetrics) {
         return productMetricsSubject;
+      } else if (selectedValue === stateMock.myPerformanceFilter) {
+        return filterSubject;
       } else {
         return Observable.of(selectedValue);
       }
@@ -258,6 +261,7 @@ describe('MyPerformanceComponent', () => {
     currentSubject.next(myPerformanceStateMock.current);
     productMetricsSubject.next(myPerformanceProductMetricsMock);
     versionsSubject.next(initialVersionsMock);
+    filterSubject.next(stateMock.myPerformanceFilter);
     componentInstanceCopy = componentInstance as any;
   });
 
@@ -275,8 +279,8 @@ describe('MyPerformanceComponent', () => {
 
     it('should dispatch actions on init', () => {
       myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
-      fixture = TestBed.createComponent(MyPerformanceComponent);
-      fixture.detectChanges();
+      filterSubject.next(stateMock.myPerformanceFilter);
+      componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
@@ -301,8 +305,8 @@ describe('MyPerformanceComponent', () => {
 
     it('should dispatch actions on init and handle empty positionId', () => {
       userService.model.currentUser.positionId = '';
-      fixture = TestBed.createComponent(MyPerformanceComponent);
-      fixture.detectChanges();
+      filterSubject.next(stateMock.myPerformanceFilter);
+      componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
       expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new ResponsibilitiesActions.FetchResponsibilities({
@@ -314,8 +318,8 @@ describe('MyPerformanceComponent', () => {
 
     it('should dispatch actions on init and handle undefined positionId', () => {
       delete userService.model.currentUser.positionId;
-      fixture = TestBed.createComponent(MyPerformanceComponent);
-      fixture.detectChanges();
+      filterSubject.next(stateMock.myPerformanceFilter);
+      componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
       expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new ResponsibilitiesActions.FetchResponsibilities({
@@ -383,8 +387,8 @@ describe('MyPerformanceComponent', () => {
     it('should call select with the right arguments', () => {
       storeMock.dispatch.calls.reset();
       storeMock.select.calls.reset();
-      fixture = TestBed.createComponent(MyPerformanceComponent);
-      fixture.detectChanges();
+      filterSubject.next(stateMock.myPerformanceFilter);
+      componentInstance.ngOnInit();
 
       expect(storeMock.select.calls.count()).toBe(5);
       const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
@@ -1854,20 +1858,23 @@ describe('MyPerformanceComponent', () => {
       };
 
       currentMock.filter = getMyPerformanceFilterMock();
+      currentMock.responsibilities.status = ActionStatus.Fetched;
+      currentSubject.next(currentMock);
+      productMetricsStateMock.status = ActionStatus.Fetched;
+      productMetricsSubject.next(productMetricsStateMock);
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
     });
 
-    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy' +
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy ' +
       'and salesHierarchyViewType.viewType is subAccounts ', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
       currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
-      productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
-      componentInstance.ngOnInit();
+      filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -1880,7 +1887,7 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -1897,10 +1904,10 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities.accountPositionId = null;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
-      componentInstance.ngOnInit();
+      filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -1913,7 +1920,7 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -1930,10 +1937,10 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities.accountPositionId = null;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
-      componentInstance.ngOnInit();
+      filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -1946,7 +1953,7 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: null,
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -1962,10 +1969,10 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
-      componentInstance.ngOnInit();
+      filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -1978,7 +1985,7 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: null,
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -1993,10 +2000,10 @@ describe('MyPerformanceComponent', () => {
       currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
-      componentInstance.ngOnInit();
+      filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -2009,7 +2016,7 @@ describe('MyPerformanceComponent', () => {
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         accountPositionId: currentMock.responsibilities.accountPositionId
       }));
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.accountPositionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -2018,6 +2025,71 @@ describe('MyPerformanceComponent', () => {
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId
       }));
+    });
+  });
+
+  describe('when the filter is updated', () => {
+    let previousFilterMock: MyPerformanceFilter;
+    let currentFilterMock: MyPerformanceFilter;
+
+    beforeEach(() => {
+      previousFilterMock = getMyPerformanceFilterMock();
+      currentFilterMock = getMyPerformanceFilterMock();
+      componentInstance.selectedSkuPackageType = SkuPackageType.package;
+    });
+
+    describe('when going from All premise type to On with a selected SKU', () => {
+      it('should deselect the SKU and trigger the correct actions', () => {
+        previousFilterMock.premiseType = PremiseTypeValue.All;
+        filterSubject.next(previousFilterMock);
+        componentInstance.selectedSkuPackageType = SkuPackageType.sku;
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+        currentFilterMock.premiseType = PremiseTypeValue.On;
+        filterSubject.next(currentFilterMock);
+        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+      });
+    });
+
+    describe('when going from On premise type to Off with a selected Package', () => {
+      it('should deselect the Pacakge and trigger the correct actions', () => {
+        previousFilterMock.premiseType = PremiseTypeValue.On;
+        filterSubject.next(previousFilterMock);
+        componentInstance.selectedSkuPackageType = SkuPackageType.package;
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+        currentFilterMock.premiseType = PremiseTypeValue.Off;
+        filterSubject.next(currentFilterMock);
+        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+      });
+    });
+
+    describe('when going from On premise type to On with a selected Package', () => {
+      it('should not deselect the Pacakge or trigger any actions', () => {
+        componentInstance.selectedSkuPackageType = SkuPackageType.package;
+        previousFilterMock.premiseType = PremiseTypeValue.On;
+        filterSubject.next(previousFilterMock);
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+        currentFilterMock.premiseType = PremiseTypeValue.On;
+        filterSubject.next(currentFilterMock);
+        expect(storeMock.dispatch.calls.count()).toBe(0);
+      });
+    });
+
+    describe('when going from On premise type to Off with no selected Package', () => {
+      it('should not deselect the Pacakge or trigger any actions', () => {
+        componentInstance.selectedSkuPackageType = null;
+        previousFilterMock.premiseType = PremiseTypeValue.On;
+        filterSubject.next(previousFilterMock);
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+        currentFilterMock.premiseType = PremiseTypeValue.Off;
+        filterSubject.next(currentFilterMock);
+        expect(storeMock.dispatch.calls.count()).toBe(0);
+      });
     });
   });
 
