@@ -125,6 +125,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.filterStateSubscription = this.store
       .select(state => state.myPerformanceFilter)
       .subscribe((filterState: MyPerformanceFilterState)  => {
+        this.deselectSkuPackageIfNeeded(this.filterState, filterState);
         this.filterState = filterState;
         const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
@@ -591,6 +592,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         || responsibilitiesState.subaccountsStatus === ActionStatus.NotFetched))
         ? ActionStatus.Fetched
         : ActionStatus.NotFetched;
+  }
+
+  private deselectSkuPackageIfNeeded(previousFilter: MyPerformanceFilterState, currentFilter: MyPerformanceFilterState) {
+    if ((currentFilter && previousFilter && this.selectedSkuPackageType && currentFilter.premiseType !== previousFilter.premiseType)
+      && (currentFilter.premiseType === PremiseTypeValue.On || previousFilter.premiseType === PremiseTypeValue.On)) {
+      this.selectedSkuPackageCode = null;
+      this.selectedSkuPackageType = null;
+      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+    }
   }
 
   private deselectBrandValue(): void {
