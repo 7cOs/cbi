@@ -6,6 +6,7 @@ $row-height: 60px;
 $row-height-header: $row-height / 2;
 $table-body-height: $table-height - $row-height;
 $table-body-height-offset: 3px;
+$left-col-icon-width: 24px;
 
 table {
   border: 1px 1px 1px 0 solid $gray-4;
@@ -76,6 +77,24 @@ th {
   text-align: left;
   padding-left: 16px;
   font-weight: $regular;
+
+  div.left-col-content {
+    div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .left-col-text-content div {
+      display: block;
+    }
+
+    &.showing-image {
+      .left-col-text-content {
+        margin-left: 5px;
+        width: calc(100% - #{$left-col-icon-width} - 5px);
+      }
+    }
+  }
 }
 
 /deep/.center-col {
@@ -614,11 +633,9 @@ div.ctv {
 }
 
 .dismissable-row-X-container {
-  width: 15px;
-  height: 15px;
+  width: $left-col-icon-width;
+  height: 18px;
   box-sizing: border-box;
-  float: left;
-  margin-right: 10px;
 
   .dismissable-row-X {
     width: 100%;
@@ -627,9 +644,9 @@ div.ctv {
 }
 
 .rolegroup-icon-container {
-  width: 24px;
+  width: $left-col-icon-width;
   height: 18px;
-  float: left;
+  box-sizing: border-box;
 
   .rolegroup-icon-background {
     background-repeat: no-repeat;
