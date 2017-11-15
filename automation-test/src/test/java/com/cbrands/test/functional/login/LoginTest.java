@@ -21,25 +21,15 @@ public class LoginTest extends BaseTestCase {
   private Login loginPage;
   private LogoutPage logoutPage;
 
-  @BeforeMethod
-  public void setUp() {
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
-  }
-
   @AfterMethod
-  public void tearDown()  throws MalformedURLException{
+  public void tearDown() {
     logoutPage.goToPage();
-
-    shutDownBrowser();
-    startUpBrowser();
+    super.shutDownBrowser();
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing login and logout for a valid user")
-  public void testUserLogin(TestUser testUser) {
+  public void testUserLogin(TestUser testUser) throws MalformedURLException {
+    this.setUpFor(testUser);
     final HomePage homePage = loginPage.loginAs(testUser);
     Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
 
@@ -49,13 +39,22 @@ public class LoginTest extends BaseTestCase {
   @DataProvider(name = "userCredentials")
   public static Object[][] userCredentials() {
     final List<Object[]> allTestUsers = getTestUsersAsObjects(TestUser.values());
-    return allTestUsers.toArray(new Object[][] {});
+    return allTestUsers.toArray(new Object[][]{});
   }
 
   private static List<Object[]> getTestUsersAsObjects(TestUser[] testUsers) {
-    final List<Object[]> usersParams =  new ArrayList<>();
+    final List<Object[]> usersParams = new ArrayList<>();
     Arrays.asList(testUsers).stream().forEach(u -> usersParams.add(new Object[]{u}));
     return usersParams;
+  }
+
+  private void setUpFor(TestUser testUser) throws MalformedURLException {
+    super.startUpBrowser("Functional - Login: " + testUser.fullName());
+    loginPage = new Login(driver);
+    logoutPage = new LogoutPage(driver);
+
+    log.info("\nLoading webpage...");
+    driver.get(webAppBaseUrl);
   }
 
 }
