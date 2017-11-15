@@ -1,6 +1,8 @@
 .toast-header {
   background-color: $red;
   color: $white;
+  opacity: 1;
+  transition: opacity linear 200ms;
   width: 100%;
   font-size: 14px;
   font-weight: bold;
@@ -11,10 +13,6 @@
   text-align: center;
   left: 0;
   z-index: 2;
-
-  &.visible {
-    opacity: 1;
-  }
 
   &.success {
     background-color: $green;
