@@ -45,7 +45,9 @@ public class AccountDashboardTest extends BaseTestCase {
     accountDashboardPage.enterDistributorSearchText("Coastal")
       .clickSearchForDistributor()
       .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
-      .clickApplyFilters();
+      .clickApplyFilters()
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear();
 
     Assert.assertTrue(accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand), "Left brands panel failed to load " +
       "results");
