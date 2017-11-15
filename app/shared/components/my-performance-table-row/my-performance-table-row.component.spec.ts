@@ -18,8 +18,7 @@ describe('MyPerformanceTableComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         MyPerformanceTableRowComponent
-      ],
-      providers: [ ]
+      ]
     });
 
     fixture = TestBed.createComponent(MyPerformanceTableRowComponent);
