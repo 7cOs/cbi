@@ -180,7 +180,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      debugger;
       if (chip.type === 'myAccountsOnly') {
         filtersService.model.selected['myAccountsOnly'] = false;
       } else if (chip.type === 'simpleDistributionType') {
