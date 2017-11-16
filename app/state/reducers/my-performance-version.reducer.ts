@@ -97,6 +97,37 @@ export function myPerformanceVersionReducer(
         versions: state.versions
       };
 
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE:
+      return {
+        current: {
+          responsibilities: state.current.responsibilities,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
+          selectedEntityDescription: state.current.selectedEntityDescription,
+          selectedEntityType: state.current.selectedEntityType,
+          selectedBrandCode: state.current.selectedBrandCode,
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode,
+          selectedSkuPackageType: state.current.selectedSkuPackageType,
+          selectedSubaccountCode: action.payload,
+          filter: state.current.filter
+        },
+        versions: state.versions
+      };
+
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE:
+      return {
+        current: {
+          responsibilities: state.current.responsibilities,
+          salesHierarchyViewType: state.current.salesHierarchyViewType,
+          selectedEntityDescription: state.current.selectedEntityDescription,
+          selectedEntityType: state.current.selectedEntityType,
+          selectedBrandCode: state.current.selectedBrandCode,
+          selectedSkuPackageCode: state.current.selectedSkuPackageCode,
+          selectedSkuPackageType: state.current.selectedSkuPackageType,
+          filter: state.current.filter
+        },
+        versions: state.versions
+      };
+
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
       return initialState;
 

@@ -56,6 +56,29 @@ export class ProductMetricsApiService {
       .catch(err => this.handleError(err, aggregation, params.type));
   }
 
+  public getSubAccountProductMetrics(
+    subAccountId: string,
+    positionId: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/subAccounts/${ subAccountId }/productMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {
+        aggregationLevel: aggregation,
+        positionId: positionId
+      }
+    );
+
+    return this.http.get(`${ url }`, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(err, aggregation, params.type));
+  }
+
   public getRoleGroupProductMetrics(
     positionId: string,
     entityType: string,

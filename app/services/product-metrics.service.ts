@@ -118,6 +118,22 @@ export class ProductMetricsService {
           ProductMetricsAggregationType.brand
         ));
       }
+    } else if (productMetricsData.selectedEntityType === EntityType.SubAccount) {
+      console.log('Creating API calls for subaccounts');
+      apiCalls.push(this.productMetricsApiService.getSubAccountProductMetrics(
+        productMetricsData.positionId,
+        productMetricsData.contextPositionId,
+        productMetricsData.filter,
+        aggregationLevel
+      ));
+      if (aggregationLevel === ProductMetricsAggregationType.sku) {
+        apiCalls.push(this.productMetricsApiService.getSubAccountProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.contextPositionId,
+          productMetricsData.filter,
+          ProductMetricsAggregationType.brand
+        ));
+      }
     }
 
     const allCalls: Observable<ProductMetricsDTO[]> = Observable.forkJoin(apiCalls);

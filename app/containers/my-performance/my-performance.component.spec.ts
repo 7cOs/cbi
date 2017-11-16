@@ -106,6 +106,7 @@ class MyPerformanceTableComponentMock {
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
+  @Input() selectedSubaccountCode: string;
 }
 
 describe('MyPerformanceComponent', () => {
@@ -421,6 +422,7 @@ describe('MyPerformanceComponent', () => {
     describe('when back button is NOT displayed', () => {
       it('should NOT dispatch any actions', () => {
         componentInstance.showLeftBackButton = false;
+        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
         componentInstance.handleElementClicked(params);
 

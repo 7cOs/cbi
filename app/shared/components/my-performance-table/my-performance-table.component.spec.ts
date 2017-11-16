@@ -230,10 +230,11 @@ describe('MyPerformanceTableComponent', () => {
       expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
     });
 
-    it('should not emit an event when the viewtype is subaccounts', () => {
+    it('should emit an event when the viewtype is subaccounts', () => {
       componentInstance.viewType = SalesHierarchyViewType.subAccounts;
       componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
-      expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalledWith(
+        {type: rowTypeMock, index: indexMock, row: myPerformanceTableRowMock});
     });
   });
 
@@ -260,7 +261,8 @@ describe('MyPerformanceTableComponent', () => {
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,
-        'selected-sku': false
+        'selected-sku': false,
+        'selected-subaccount': false,
       });
     });
 
@@ -269,7 +271,8 @@ describe('MyPerformanceTableComponent', () => {
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': true,
-        'selected-sku': false
+        'selected-sku': false,
+        'selected-subaccount': false,
       });
     });
 
@@ -278,7 +281,8 @@ describe('MyPerformanceTableComponent', () => {
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,
-        'selected-sku': true
+        'selected-sku': true,
+        'selected-subaccount': false,
       });
     });
   });

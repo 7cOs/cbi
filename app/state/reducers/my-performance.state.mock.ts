@@ -43,6 +43,7 @@ export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
     selectedBrandCode: chance.string(),
     selectedSkuPackageCode: chance.string(),
     selectedSkuPackageType: getSkuPackageTypeMock(),
+    selectedSubaccountCode: chance.string(),
     filter: getMyPerformanceFilterMock()
   };
 }

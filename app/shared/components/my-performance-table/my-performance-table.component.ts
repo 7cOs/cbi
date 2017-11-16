@@ -45,6 +45,7 @@ export class MyPerformanceTableComponent {
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSkuPackageCode: string;
+  @Input() selectedSubaccountCode: string;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
@@ -87,7 +88,8 @@ export class MyPerformanceTableComponent {
   }
 
   public onRowClicked(type: RowType, index: number, row?: MyPerformanceTableRow) {
-    if (this.viewType !== SalesHierarchyViewType.distributors && this.viewType !== SalesHierarchyViewType.subAccounts) {
+    if (this.viewType !== SalesHierarchyViewType.distributors) {
+      console.log(this.selectedSubaccountCode);
       this.onElementClicked.emit({type: type, index: index, row: row});
     }
   }
@@ -95,7 +97,13 @@ export class MyPerformanceTableComponent {
   public getEntityRowClasses(row: MyPerformanceTableRow) {
     return {
       'performance-error': row.performanceError,
-      'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false
+      'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
+      'selected-subaccount':
+        (this.viewType === SalesHierarchyViewType.subAccounts
+          && this.selectedSubaccountCode
+          && row.metadata.positionId === this.selectedSubaccountCode)
+          ? true
+          : false
     };
   }
 

@@ -13,7 +13,6 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
   styles: [ require('../my-performance-table/my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableRowComponent {
-  @Output() onCellClicked = new EventEmitter<number>();
   @Output() onSublineClicked = new EventEmitter<any>();
   @Output() onDismissableRowXClicked = new EventEmitter<any>();
 

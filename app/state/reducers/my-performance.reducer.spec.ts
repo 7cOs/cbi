@@ -68,9 +68,11 @@ describe('My Performance Reducer', () => {
         skuPackageCode: chance.string(),
         skuPackageType: SkuPackageType.package
       }),
+      new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(chance.string()),
       new MyPerformanceVersionActions.ClearMyPerformanceState(),
       new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode(),
-      new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode()
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode(),
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode(),
     ];
 
     const returnedStates: MyPerformanceState[] = actions.map((action: Action) => {
