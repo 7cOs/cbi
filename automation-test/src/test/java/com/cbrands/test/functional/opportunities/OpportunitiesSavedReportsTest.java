@@ -23,7 +23,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Functional - Opportunities- Saved Reports Test");
+    this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
   }
 
   @AfterClass
