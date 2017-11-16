@@ -8,10 +8,9 @@ import com.cbrands.pages.targetList.TargetListListingsPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+
+import java.net.MalformedURLException;
 
 public class TargetListTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
@@ -19,6 +18,16 @@ public class TargetListTest extends BaseTestCase {
   private Login loginPage;
   private LogoutPage logoutPage;
   private TargetListListingsPage targetListListingPage;
+
+  @BeforeClass
+  public void setUpClass() throws MalformedURLException {
+    this.startUpBrowser("Smoke - TargetList Test");
+  }
+
+  @AfterClass
+  public void tearDownClass() {
+    this.shutDownBrowser();
+  }
 
   @BeforeMethod
   public void setUp() {
