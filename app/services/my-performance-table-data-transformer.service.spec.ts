@@ -94,7 +94,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with a entityTypeCode in the metadataONLY when the entity has one', () => {
+      it('should return a transformed table row with a entityTypeCode in the metadata ONLY when the entity has one', () => {
         delete responsibilityEntitiesPerformanceMock[randomIndex].entityTypeCode;
 
         const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
@@ -107,7 +107,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with a alternateHierarchyId in the metadataONLY when the entity has one', () => {
+      it('should return a transformed table row with a alternateHierarchyId in the metadata ONLY when the entity has one', () => {
         responsibilityEntitiesPerformanceMock[randomIndex].alternateHierarchyId = chance.string();
 
         const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
@@ -117,6 +117,20 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           i === randomIndex
             ? expect(row.metadata.alternateHierarchyId).toBe(responsibilityEntitiesPerformanceMock[randomIndex].alternateHierarchyId)
             : expect(row.metadata.alternateHierarchyId).toBe(undefined);
+        });
+      });
+
+      it('should return a transformed table row with exceptionHierarchy in the metadata ONLY when the entity ' +
+      'has isMemberOfExceptionHierarchy', () => {
+        responsibilityEntitiesPerformanceMock[randomIndex].isMemberOfExceptionHierarchy = true;
+
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          i === randomIndex
+            ? expect(row.metadata.exceptionHierarchy).toBe(responsibilityEntitiesPerformanceMock[randomIndex].isMemberOfExceptionHierarchy)
+            : expect(row.metadata.exceptionHierarchy).toBe(undefined);
         });
       });
     });
