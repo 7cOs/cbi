@@ -33,6 +33,7 @@ div.performance-table-wrapper
 
       tr.total-row.col-100-pct(my-performance-table-row,
                               *ngIf="totalRow",
+                              [ngClass]="getTotalRowClasses()",
                               [rowData]="totalRow",
                               [showContributionToVolume]="showContributionToVolume",
                               [showOpportunities]="showOpportunities",

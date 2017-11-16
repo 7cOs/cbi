@@ -671,6 +671,30 @@ div.ctv {
   }
 }
 
+.selected-total-row {
+  background-color: $dark-blue-2;
+
+  /deep/.left-col,
+  /deep/.center-col,
+  /deep/.right-col {
+    background-color: $dark-blue-2;
+  }
+}
+
+.deselected-total-row {
+  background-color: $light-blue-4;
+
+  /deep/.left-col, /deep/.right-col {
+    background-color: $light-blue-4;
+    color: $blue;
+  }
+
+  /deep/.center-col {
+    background-color: $light-blue-4;
+    color: $black;
+  }
+}
+
 .dismissable-row-X-container {
   width: 15px;
   height: 15px;

@@ -89,15 +89,22 @@ export class MyPerformanceTableComponent {
 
   public onRowClicked(type: RowType, index: number, row?: MyPerformanceTableRow) {
     if (this.viewType !== SalesHierarchyViewType.distributors) {
-      console.log(this.selectedSubaccountCode);
       this.onElementClicked.emit({type: type, index: index, row: row});
     }
+  }
+
+  getTotalRowClasses() {
+    return {
+      'deselected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode) ? true : false,
+      'selected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode === null) ? true : false
+    };
   }
 
   public getEntityRowClasses(row: MyPerformanceTableRow) {
     return {
       'performance-error': row.performanceError,
-      'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
+      'selected-sku':
+        (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
       'selected-subaccount':
         (this.viewType === SalesHierarchyViewType.subAccounts
           && this.selectedSubaccountCode
