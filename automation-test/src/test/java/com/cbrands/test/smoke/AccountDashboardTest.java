@@ -45,12 +45,18 @@ public class AccountDashboardTest extends BaseTestCase {
     accountDashboardPage.enterDistributorSearchText("Coastal")
       .clickSearchForDistributor()
       .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
-      .clickApplyFilters();
+      .clickApplyFilters()
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear();
 
-    Assert.assertTrue(accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand), "Left brands panel failed to load " +
-      "results");
-    Assert.assertTrue(accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts), "Right accounts panel failed to " +
-      "load results");
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      "Left brands panel failed to load results"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
+      "Right accounts panel failed to load results"
+    );
   }
 
   @Test(description = "Drill all the way down the account hierarchy and drill back up")
@@ -124,7 +130,7 @@ public class AccountDashboardTest extends BaseTestCase {
   }
 
   @Test(description = "Drill all the way down the brands hierarchy and drill back up")
-  public void drillDownDrillUpBrands () {
+  public void drillDownDrillUpBrands() {
     accountDashboardPage.drillIntoFirstRowInLeftPanel();
     Assert.assertTrue(
       accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.SkuPackage),
