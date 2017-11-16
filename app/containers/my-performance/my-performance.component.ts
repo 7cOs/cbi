@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-import { isEqual } from 'lodash';
+import { includes, isEqual } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
@@ -202,6 +202,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
     const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
+    const currentUserIsMemberOfExceptionHierarchy: boolean =
+      includes(this.userService.model.currentUser.srcTypeCd, 'EXCPN_HIER');
 
     if (this.filterState) {
       this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
@@ -211,7 +213,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
         positionId: currentUserId,
         filter: this.filterState,
-        selectedEntityDescription: currentUserFullName
+        selectedEntityDescription: currentUserFullName,
+        isMemberOfExceptionHierarchy: currentUserIsMemberOfExceptionHierarchy
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
         positionId: currentUserId,
@@ -236,7 +239,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     if (row.metadata.entityType === EntityType.Distributor) {
       accountDashboardStateParams =
-        this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(), this.filterState, row);
+        this.myPerformanceService.accountDashboardStateParameters(
+          this.isInsideAlternateHierarchy(),
+          this.currentState.responsibilities.exceptionHierarchy,
+          this.filterState,
+          row);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
@@ -244,11 +251,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       let premiseType: PremiseTypeValue;
       if (hierarchyEntity) {
         premiseType = hierarchyEntity.premiseType;
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
-          this.filterState, row, premiseType);
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(
+          this.isInsideAlternateHierarchy(),
+          this.currentState.responsibilities.exceptionHierarchy,
+          this.filterState,
+          row,
+          premiseType);
       } else {
-        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(this.isInsideAlternateHierarchy(),
-          this.filterState, row);
+        accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(
+          this.isInsideAlternateHierarchy(),
+          this.currentState.responsibilities.exceptionHierarchy,
+          this.filterState,
+          row);
       }
     }
 
@@ -348,12 +362,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     })));
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
+    const isMemberOfExceptionHierarchy: boolean =
+      !!(this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy);
+
     switch (this.salesHierarchyViewType) {
+
       case SalesHierarchyViewType.roleGroups:
         const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
         if (parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+
+          if (parameters.row.metadata.exceptionHierarchy) {
+            this.store.dispatch(new ResponsibilitiesActions.SetExceptionHierarchy());
+          }
         }
 
         this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
@@ -366,7 +388,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           filter: this.filterState,
           selectedEntityDescription: parameters.row.descriptionRow0,
           brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-          skuPackageType: this.selectedSkuPackageType
+          skuPackageType: this.selectedSkuPackageType,
+          isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
         }));
 
         this.fetchProductMetricsWhenClick(parameters);
@@ -379,7 +402,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             filter: this.filterState,
             selectedEntityDescription: parameters.row.descriptionRow0,
             brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-            skuPackageType: this.selectedSkuPackageType
+            skuPackageType: this.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
           }));
         } else {
           this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
@@ -387,7 +411,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             filter: this.filterState,
             selectedEntityDescription: parameters.row.descriptionRow0,
             brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-            skuPackageType: this.selectedSkuPackageType
+            skuPackageType: this.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
           }));
         }
         this.fetchProductMetricsWhenClick(parameters);
@@ -531,7 +556,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       skuPackageType: skuPackageType,
       entityType: this.currentState.selectedEntityType,
       alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-      accountPositionId: this.currentState.responsibilities.accountPositionId
+      accountPositionId: this.currentState.responsibilities.accountPositionId,
+      isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
     }));
   }
 
@@ -570,7 +596,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         skuPackageType: this.selectedSkuPackageType,
         entityType: previousState.selectedEntityType,
         alternateHierarchyId: previousState.responsibilities.alternateHierarchyId,
-        accountPositionId: previousState.responsibilities.accountPositionId
+        accountPositionId: previousState.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
       }));
     }
   }
@@ -621,7 +648,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       filter: this.filterState,
       entityType: this.currentState.selectedEntityType,
       alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-      accountPositionId: this.currentState.responsibilities.accountPositionId
+      accountPositionId: this.currentState.responsibilities.accountPositionId,
+      isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
     }));
   }
 
@@ -665,7 +693,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         skuPackageType: this.selectedSkuPackageType,
         entityType: this.currentState.selectedEntityType,
         alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-        accountPositionId: this.currentState.responsibilities.accountPositionId
+        accountPositionId: this.currentState.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
         positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,

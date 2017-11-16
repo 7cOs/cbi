@@ -2,24 +2,25 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 export interface MyPerformanceTableRowMetadata {
-  positionId?: string;
-  contextPositionId?: string;
   alternateHierarchyId?: string;
+  brandCode?: string;
+  contextPositionId?: string;
+  entityName?: string;
   entityType?: EntityType;
   entityTypeCode?: string;
-  brandCode?: string;
+  exceptionHierarchy?: boolean;
+  positionId?: string;
   skuPackageCode?: string;
   skuPackageType?: SkuPackageType;
-  entityName?: string;
 }
 
 export interface MyPerformanceTableRow {
+  ctv: number;
   descriptionRow0: string;
   descriptionRow1?: string;
   metricColumn0: number;
   metricColumn1: number;
   metricColumn2: number;
-  ctv: number;
   metadata?: MyPerformanceTableRowMetadata;
   performanceError?: boolean;
 }
