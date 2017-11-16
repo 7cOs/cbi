@@ -270,6 +270,9 @@ module.exports = /*  @ngInject */
                 for (var l = 0; l < tradeChannelValue.length; l++) {
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
+              } else if (key2 === 'priorityPackage') {
+                const priorityPackage = filtersService.model.priorityPackages.find((priority) => priority.name === obj[key2][k]);
+                queryParams += priorityPackage.value;
               } else {
                 queryParams += obj[key2][k];
               }
