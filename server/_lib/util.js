@@ -18,8 +18,9 @@ module.exports = function(app) {
     signApiUrl: function(uri, v3URLKey) {
       const uriSplit = uri.split('?');
       const urlPath = uriSplit[0];
+      const decodedUrlPath = decodeURIComponent(urlPath);
       const params = uriSplit[1];
-      const signature = encodeURIComponent(crypto.enc.Base64.stringify(crypto.HmacSHA256(urlPath + apiKey, apiSecret)));
+      const signature = encodeURIComponent(crypto.enc.Base64.stringify(crypto.HmacSHA256(decodedUrlPath + apiKey, apiSecret)));
 
       // TODO: remove ternary expression & update base url when api gateway is in place
       const signedUrl = `${v3URLKey ? v3BaseUrls[v3URLKey] : apiBase}${urlPath}?signature=${signature}&apiKey=${apiKey}`;

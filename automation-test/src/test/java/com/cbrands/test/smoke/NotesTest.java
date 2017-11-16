@@ -19,7 +19,7 @@ public class NotesTest extends BaseTestCase {
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
-    startUpBrowser();
+    super.startUpBrowser("Smoke - NotesTest");
 
     logoutPage = new LogoutPage(driver);
     log.info("\nLoading webpage...");
@@ -45,7 +45,7 @@ public class NotesTest extends BaseTestCase {
     shutDownBrowser();
   }
 
-  @Test(enabled = false, description = "Create a new Note", dataProvider = "NoteData")
+  @Test(description = "Create a new Note", dataProvider = "NoteData")
   public void createNote(String noteTopic, String noteText) {
     notesModal
       .clickAddNoteButton()
@@ -71,7 +71,7 @@ public class NotesTest extends BaseTestCase {
     );
   }
 
-  @Test(enabled = false, dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
+  @Test(dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
   public void deleteNote(String noteTopic, String noteText) {
     final WebElement deleteMe = notesModal.findNoteWithText(noteText);
     notesModal
