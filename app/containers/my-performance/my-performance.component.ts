@@ -426,7 +426,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               filter: this.filterState,
               selectedEntityDescription: parameters.row.descriptionRow0,
               brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-              skuPackageType: this.selectedSkuPackageType
+              skuPackageType: this.selectedSkuPackageType,
+              isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
             }));
           }
           this.fetchProductMetricsWhenClick(parameters);
