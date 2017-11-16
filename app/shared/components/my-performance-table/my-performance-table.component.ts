@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
+import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -56,18 +57,8 @@ export class MyPerformanceTableComponent {
 
   constructor (private calculatorService: CalculatorService) { }
 
-  public centerColumnsWidth(): string {
-    return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
-  }
-
-  public getTableHeight(): string {
-    return this.totalRow
-      ? this.dismissableTotalRow ? 'two-total-rows-present' : 'total-row-present'
-      : this.dismissableTotalRow ? 'total-row-present' : 'total-row-absent';
-  }
-
-  public columnWidth(): string {
-    return this.showOpportunities ? 'col-17-pct' : 'col-20-pct';
+  public getTableHeightClass(): string {
+    return (this.totalRow || this.dismissableTotalRow) ? 'total-row-present' : 'total-row-absent';
   }
 
   public getSortStatus(columnType: ColumnType): SortStatus {
@@ -100,8 +91,22 @@ export class MyPerformanceTableComponent {
     };
   }
 
-  public getEntityRowClasses(row: MyPerformanceTableRow) {
-    return {
+  public getColumnWidthClass(): string {
+    let style = '';
+
+    if (this.showContributionToVolume && this.showOpportunities) {
+      style = 'two-right-columns-present';
+    } else if (this.showContributionToVolume || this.showOpportunities) {
+      style = 'one-right-column-present';
+    }
+
+    return style;
+  }
+
+  public getEntityRowClasses(row: MyPerformanceTableRow): CssClasses {
+    const columnWidthClass = this.getColumnWidthClass();
+
+    let classes: CssClasses = {
       'performance-error': row.performanceError,
       'selected-sku':
         (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
@@ -112,6 +117,26 @@ export class MyPerformanceTableComponent {
           ? true
           : false
     };
+
+    if (columnWidthClass) {
+      classes[columnWidthClass] = true;
+    }
+
+    return classes;
+  }
+
+  public getDismissableTotalRowClasses(): CssClasses {
+    const columnWidthClass = this.getColumnWidthClass();
+
+    let classes: CssClasses = {
+      'selected': (!this.selectedSkuPackageCode && this.dismissableTotalRow) ? true : false
+    };
+
+    if (columnWidthClass) {
+      classes[columnWidthClass] = true;
+    }
+
+    return classes;
   }
 
   private updateSortingFunction() {

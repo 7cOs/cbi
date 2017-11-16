@@ -69,13 +69,18 @@ export class MyPerformanceService {
     return metricName;
   }
 
-  public accountDashboardStateParameters(insideAlternateHierarchy: boolean,
-                                         filter: MyPerformanceFilterState,
-                                        row: MyPerformanceTableRow,
-                                        premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
+  public accountDashboardStateParameters(
+    insideAlternateHierarchy: boolean,
+    insideExceptionHierarchy: boolean,
+    filter: MyPerformanceFilterState,
+    row: MyPerformanceTableRow,
+    premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
 
     let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: !insideAlternateHierarchy};
     if (row.metadata.entityType === EntityType.Distributor) {
+      if (insideExceptionHierarchy) {
+        accountDashboardStateParams.myaccountsonly = true;
+      }
       accountDashboardStateParams.distributorname = row.descriptionRow0;
       accountDashboardStateParams.distributorid = row.metadata.positionId;
       accountDashboardStateParams.premisetype = PremiseTypeValue[filter.premiseType];

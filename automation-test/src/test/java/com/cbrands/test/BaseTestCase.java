@@ -23,24 +23,6 @@ public abstract class BaseTestCase {
     webAppBaseUrl = PropertiesCache.getInstance().getProperty("host.address");
   }
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser();
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
-  }
-
-  /**
-   * @deprecated Please use {@link #startUpBrowser(String) startUpBrowser(String)} and supply a test case name instead
-   */
-  @Deprecated
-  protected void startUpBrowser() throws MalformedURLException {
-    this.startUpBrowser("Automated Test Run");
-  }
-
   protected void startUpBrowser(String testName) throws MalformedURLException {
     log.info("\n Browser opening...");
 

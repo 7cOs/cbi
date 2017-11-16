@@ -157,7 +157,8 @@ public class AccountDashboardPage extends TestNGBasePage {
       .findElement(By.xpath(".//div[contains(@class, 'results-container')]"))
       .findElement(By.xpath(".//label[contains(@class, 'state-group')][contains(., '" + stateLocation + "')]"))
       .findElement(By.xpath("./following-sibling::li[contains(., '" + address + "')]"));
-    waitForElementToClickable(selectMe, true).click();
+
+    scrollToAndClick(selectMe);
 
     return this;
   }
@@ -251,7 +252,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public AccountDashboardPage filterForStore(String storeAccountName, String stateLocation, String address) {
-    return clickRetailerType()
+    return this.clickRetailerType()
       .chooseStoreRetailerType()
       .enterRetailerStoreSearchText(storeAccountName)
       .clickSearchForRetailerStore()
@@ -272,12 +273,12 @@ public class AccountDashboardPage extends TestNGBasePage {
     return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
   }
 
-  public AccountDashboardPage waitForBrandsLoaderToDisappear() {
+  public AccountDashboardPage waitForBrandsPanelLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
     return this;
   }
 
-  public AccountDashboardPage waitForMarketLoaderToDisappear() {
+  public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
     return this;
   }

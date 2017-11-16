@@ -145,7 +145,8 @@ describe('Service: PerformanceTransformerService', () => {
         entityType: EntityType.RoleGroup,
         positionDescription: hierarchyGroupMock.positionDescription,
         entityTypeCode: hierarchyGroupMock.type,
-        performance: hierarchyGroupPerformanceMock
+        performance: hierarchyGroupPerformanceMock,
+        isMemberOfExceptionHierarchy: hierarchyGroupMock.isMemberOfExceptionHierarchy
       };
 
       expect(actualTransformedEntity).toEqual(expectedTransformedEntity);
@@ -168,7 +169,8 @@ describe('Service: PerformanceTransformerService', () => {
         entityType: EntityType.RoleGroup,
         positionDescription: '',
         entityTypeCode: hierarchyGroupMock.type,
-        performance: hierarchyGroupPerformanceMock
+        performance: hierarchyGroupPerformanceMock,
+        isMemberOfExceptionHierarchy: hierarchyGroupMock.isMemberOfExceptionHierarchy
       };
 
       expect(actualTransformedEntity).toEqual(expectedTransformedEntity);
@@ -192,7 +194,8 @@ describe('Service: PerformanceTransformerService', () => {
         positionDescription: hierarchyGroupMock.positionDescription,
         entityTypeCode: hierarchyGroupMock.type,
         alternateHierarchyId: hierarchyGroupMock.alternateHierarchyId,
-        performance: hierarchyGroupPerformanceMock
+        performance: hierarchyGroupPerformanceMock,
+        isMemberOfExceptionHierarchy: hierarchyGroupMock.isMemberOfExceptionHierarchy
       };
 
       expect(actualTransformedEntity).toEqual(expectedTransformedEntity);

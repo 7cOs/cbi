@@ -8,15 +8,24 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+
+import java.net.MalformedURLException;
 
 public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   private static TestUser testUser;
   private LogoutPage logoutPage;
   private AccountDashboardPage accountDashboardPage;
+
+  @BeforeClass
+  public void setUpClass() throws MalformedURLException {
+    this.startUpBrowser("Functional - AccountDashboard - Distributor Filter Test");
+  }
+
+  @AfterClass
+  public void tearDownClass() {
+    this.shutDownBrowser();
+  }
 
   @BeforeMethod
   public void setUp() {
@@ -58,15 +67,15 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     );
 
     accountDashboardPage.clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear();
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear();
 
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsLoaderToDisappear();
+    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsPanelLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillUpLeftPanel().waitForBrandsLoaderToDisappear();
+    accountDashboardPage.drillUpLeftPanel().waitForBrandsPanelLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
   }
 
@@ -95,16 +104,16 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .clickSearchForDistributor()
       .selectDistributorFilterByName(distributorName)
       .clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear()
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear()
       .clickRemoveDistributorFilter();
 
     Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
 
     accountDashboardPage
       .clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear();
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear();
     assertDefaultDistributorLabels();
   }
 
@@ -119,8 +128,8 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .clickSearchForDistributor()
       .selectDistributorFilterByName(distributorName)
       .clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear()
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear()
       .clickResetFilters();
 
     Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
