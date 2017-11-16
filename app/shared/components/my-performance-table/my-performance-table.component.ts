@@ -84,10 +84,12 @@ export class MyPerformanceTableComponent {
     }
   }
 
-  getTotalRowClasses() {
+  public getTotalRowClasses() {
     return {
       'deselected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode) ? true : false,
-      'selected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode === null) ? true : false
+      'selected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode === null) ? true : false,
+      'two-right-clumns-present': this.getColumnWidthClass() === 'two-right-clumns-present',
+      'one-right-column-present': this.getColumnWidthClass() === 'one-right-column-present'
     };
   }
 
