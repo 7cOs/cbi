@@ -39,6 +39,7 @@ export interface ResponsibilitiesData {
   entityWithPerformance?: Array<EntityWithPerformance>;
   entities?: HierarchyEntity[];
   selectedEntityDescription?: string;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface FetchEntityWithPerformanceData {
@@ -53,6 +54,7 @@ export interface FetchEntityWithPerformanceData {
   skuPackageType?: SkuPackageType;
   entityWithPerformance?: Array<EntityWithPerformance>;
   selectedEntityDescription?: string;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface RefreshAllPerformancesData {
@@ -63,6 +65,7 @@ export interface RefreshAllPerformancesData {
   skuPackageType?: SkuPackageType;
   groupedEntities?: GroupedEntities;
   alternateHierarchyId?: string;
+  isMemberOfExceptionHierarchy?: boolean;
 
   // roleGroups only
   hierarchyGroups?: Array<HierarchyGroup>; // TODO: check if it's not only for the unit tests (it seems so)
@@ -443,7 +446,8 @@ export class ResponsibilitiesService {
             name: EntityPeopleType.GEOGRAPHY,
             type: response.positions[0].type,
             entityType: EntityType.RoleGroup,
-            alternateHierarchyId: responsibilitiesData.positionId
+            alternateHierarchyId: responsibilitiesData.positionId,
+            isMemberOfExceptionHierarchy: responsibilitiesData.isMemberOfExceptionHierarchy
           };
           const hierarchyGroups: Array<HierarchyGroup> = responsibilitiesData.hierarchyGroups.concat([alternateHierarchyGroup]);
           const transformedPositions: HierarchyEntity[] =
@@ -476,7 +480,8 @@ export class ResponsibilitiesService {
             name: EntityPeopleType.GEOGRAPHY,
             type: response[0].type === EntityType.Distributor ? HierarchyGroupTypeCode.distributors : HierarchyGroupTypeCode.accounts,
             entityType: response[0].type === EntityType.Distributor ? EntityType.DistributorGroup : EntityType.AccountGroup,
-            alternateHierarchyId: responsibilitiesData.positionId
+            alternateHierarchyId: responsibilitiesData.positionId,
+            isMemberOfExceptionHierarchy: responsibilitiesData.isMemberOfExceptionHierarchy
           };
           const hierarchyGroups: Array<HierarchyGroup> = responsibilitiesData.hierarchyGroups.concat([alternateHierarchyGroup]);
 
@@ -505,10 +510,11 @@ export class ResponsibilitiesService {
         );
         break;
       case EntityType.DistributorGroup:
+        const contextPositionId: string = this.getContextPositionId(pipelineData);
         entityWithPerformanceObservable = this.getDistributorsPerformances(
           pipelineData.entities,
           pipelineData.filter,
-          pipelineData.alternateHierarchyId ? CORPORATE_USER_POSITION_ID : pipelineData.positionId,
+          contextPositionId,
           pipelineData.brandSkuCode,
           pipelineData.skuPackageType
         );
@@ -587,10 +593,7 @@ export class ResponsibilitiesService {
    }
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData | RefreshAllPerformancesData) {
-    const contextPositionId: string = responsibilitiesData.alternateHierarchyId
-      ? CORPORATE_USER_POSITION_ID
-      : responsibilitiesData.positionId;
-
+    const contextPositionId = this.getContextPositionId(responsibilitiesData);
     return this.getDistributorsPerformances(
       responsibilitiesData.groupedEntities[Object.keys(responsibilitiesData.groupedEntities)[0]],
       responsibilitiesData.filter,
@@ -721,26 +724,34 @@ export class ResponsibilitiesService {
     return performanceObservable;
   }
 
-    private getRefreshedRoleGroupsTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData): Observable<Performance> {
-      let performanceObservable: Observable<Performance>;
+  private getContextPositionId(pipelineData: FetchEntityWithPerformanceData | RefreshAllPerformancesData | ResponsibilitiesData) {
+    return pipelineData.alternateHierarchyId
+      ? pipelineData.isMemberOfExceptionHierarchy
+        ? pipelineData.alternateHierarchyId
+        : CORPORATE_USER_POSITION_ID
+      : pipelineData.positionId;
+  }
 
-      if (refreshTotalPerformanceData.alternateHierarchyId) {
-        performanceObservable = this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(
-          refreshTotalPerformanceData.positionId,
-          refreshTotalPerformanceData.alternateHierarchyId,
-          refreshTotalPerformanceData.filter,
-          refreshTotalPerformanceData.brandSkuCode,
-          refreshTotalPerformanceData.skuPackageType)
-          .map((performanceDTO: PerformanceDTO) => {
-            return this.performanceTransformerService.transformPerformanceDTO(performanceDTO);
-          });
-      } else {
-        performanceObservable = this.getPerformance(
-          refreshTotalPerformanceData.positionId,
-          refreshTotalPerformanceData.filter,
-          refreshTotalPerformanceData.brandSkuCode,
-          refreshTotalPerformanceData.skuPackageType);
-      }
+  private getRefreshedRoleGroupsTotalPerformance(refreshTotalPerformanceData: RefreshTotalPerformanceData): Observable<Performance> {
+    let performanceObservable: Observable<Performance>;
+
+    if (refreshTotalPerformanceData.alternateHierarchyId) {
+      performanceObservable = this.myPerformanceApiService.getAlternateHierarchyPersonPerformance(
+        refreshTotalPerformanceData.positionId,
+        refreshTotalPerformanceData.alternateHierarchyId,
+        refreshTotalPerformanceData.filter,
+        refreshTotalPerformanceData.brandSkuCode,
+        refreshTotalPerformanceData.skuPackageType)
+        .map((performanceDTO: PerformanceDTO) => {
+          return this.performanceTransformerService.transformPerformanceDTO(performanceDTO);
+        });
+    } else {
+      performanceObservable = this.getPerformance(
+        refreshTotalPerformanceData.positionId,
+        refreshTotalPerformanceData.filter,
+        refreshTotalPerformanceData.brandSkuCode,
+        refreshTotalPerformanceData.skuPackageType);
+    }
 
     return performanceObservable;
   }
