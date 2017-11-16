@@ -13,6 +13,7 @@ import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
@@ -308,19 +309,31 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
     switch (event.filterType) {
       case MyPerformanceFilterActionType.Metric:
-        this.store.dispatch(new MyPerformanceFilterActions.SetMetric(event.filterValue));
-        this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
-          this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
-        this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType(this.defaultUserPremiseType));
+        if (event.filterValue !== this.filterState.metricType) {
+          this.store.dispatch(new MyPerformanceFilterActions.SetMetric(event.filterValue));
+          this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+            event.filterValue, this.userService.model.currentUser.srcTypeCd[0]);
+          this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType(this.defaultUserPremiseType));
+          this.sendFilterAnalyticsEvent();
+        }
         break;
       case MyPerformanceFilterActionType.TimePeriod:
-        this.store.dispatch(new MyPerformanceFilterActions.SetTimePeriod(event.filterValue));
+        if (event.filterValue !== this.filterState.dateRangeCode) {
+          this.store.dispatch(new MyPerformanceFilterActions.SetTimePeriod(event.filterValue));
+          this.sendFilterAnalyticsEvent();
+        }
         break;
       case MyPerformanceFilterActionType.PremiseType:
-        this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType(event.filterValue));
+        if (event.filterValue !== this.filterState.premiseType) {
+          this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType(event.filterValue));
+          this.sendFilterAnalyticsEvent();
+        }
         break;
       case MyPerformanceFilterActionType.DistributionType:
-        this.store.dispatch(new MyPerformanceFilterActions.SetDistributionType(event.filterValue));
+        if (event.filterValue !== this.filterState.distributionType) {
+          this.store.dispatch(new MyPerformanceFilterActions.SetDistributionType(event.filterValue));
+          this.sendFilterAnalyticsEvent();
+        }
         break;
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);
@@ -333,6 +346,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public displayRightTotalRow(): boolean {
     return this.isShowingRoleGroups() && this.productMetricsViewType === ProductMetricsViewType.brands;
+  }
+
+  private sendFilterAnalyticsEvent(): void {
+    const category = 'Team Performance Filters';
+    this.analyticsService.trackEvent(category, 'Metric', this.performanceMetric);
+    this.analyticsService.trackEvent(category, 'Time Period', this.dateRange.displayCode);
+    this.analyticsService.trackEvent(category, 'Premise Type', PremiseTypeValue[this.filterState.premiseType]);
+    if (this.filterState.metricType === MetricTypeValue.PointsOfDistribution) {
+      this.analyticsService.trackEvent(category, 'Distribution Type',
+        DistributionTypeValue[this.filterState.distributionType]);
+    }
   }
 
   private isShowingRoleGroups(): boolean {
