@@ -716,6 +716,10 @@ describe('Unit: filter controller (opportunities)', function() {
       type: 'storeFormat',
       applied: true,
       removable: true
+    },
+    {
+      name: 'Priority Package Chip',
+      type: 'priorityPackage'
     }];
 
     spyOn(analyticsService, 'trackEvent');
@@ -734,6 +738,7 @@ describe('Unit: filter controller (opportunities)', function() {
     expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE FORMAT', 'ALL FORMATS');
     expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE FORMAT', 'HISPANIC');
     expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE FORMAT', 'GENERAL MARKET');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'PRIORITY PACKAGE', 'PRIORITY PACKAGE CHIP');
   });
 
   describe('[method.saveFilter]', () => {
