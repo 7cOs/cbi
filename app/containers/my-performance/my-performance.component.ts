@@ -363,7 +363,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
     const isMemberOfExceptionHierarchy: boolean =
-      this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy;
+      !!(this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy);
 
     switch (this.salesHierarchyViewType) {
 

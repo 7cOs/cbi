@@ -28,6 +28,7 @@ export const initialState: ResponsibilitiesState = {
   entitiesPerformanceStatus: ActionStatus.NotFetched,
   totalPerformanceStatus: ActionStatus.NotFetched,
   subaccountsStatus: ActionStatus.NotFetched,
+  exceptionHierarchy: false,
   positionId: '0',
   groupedEntities: {},
   hierarchyGroups: [],
