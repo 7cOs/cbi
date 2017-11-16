@@ -180,6 +180,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
+      debugger;
       if (chip.type === 'myAccountsOnly') {
         filtersService.model.selected['myAccountsOnly'] = false;
       } else if (chip.type === 'simpleDistributionType') {
@@ -210,10 +211,6 @@ module.exports = /*  @ngInject */
           } else if (chip.type === 'opportunityStatus' && $filter('titlecase')(arr[i]) === chip.name) {
             arr.splice(i, 1);
             filtersService.model['opportunityStatus' + chip.name] = false;
-            break;
-          } else if (chip.type === 'productType' && $filter('titlecase')(arr[i]) === chip.name.split(' ')[0]) {
-            arr.splice(i, 1);
-            filtersService.model['productType' + chip.name.split(' ')[0]] = false;
             break;
           } else if (chip.type === 'tradeChannel' && $filter('titlecase')(arr[i]) === chip.name) {
             arr.splice(i, 1);
