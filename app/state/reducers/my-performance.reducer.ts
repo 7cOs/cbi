@@ -75,7 +75,9 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS:
     case ResponsibilitiesActions.SET_ACCOUNT_POSITION_ID:
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
+    case ResponsibilitiesActions.SET_EXCEPTION_HIERARCHY:
     case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:
+      action.payload = action.payload || {};
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
