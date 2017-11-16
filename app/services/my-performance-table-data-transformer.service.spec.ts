@@ -120,8 +120,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with exceptionHierarchy in the metadata ONLY when the entity ' +
-      'has isMemberOfExceptionHierarchy', () => {
+      it('should return a transformed table row with exceptionHierarchy in the metadata ONLY when the entity '
+      + 'has isMemberOfExceptionHierarchy', () => {
         responsibilityEntitiesPerformanceMock[randomIndex].isMemberOfExceptionHierarchy = true;
 
         const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
@@ -151,8 +151,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with `Open Position` in the descriptionrow0 and the entity`s position description in the ' +
-      'descriptionRow1 when the entity`s name is `Open`', () => {
+      it('should return a transformed table row with `Open Position` in the descriptionrow0 and the entity`s position description in the '
+      + 'descriptionRow1 when the entity`s name is `Open`', () => {
         responsibilityEntitiesPerformanceMock[randomIndex].name = 'Open';
         responsibilityEntitiesPerformanceMock[randomIndex].positionDescription = chance.string();
 
@@ -170,8 +170,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with the entity`s name in the descriptionRow1 and positionDescription in the ' +
-      'descriptionRow0 or `AREA` if the positionDescription is missing when an alternate hierarchy id is also passed in', () => {
+      it('should return a transformed table row with the entity`s name in the descriptionRow1 and positionDescription in the '
+      + 'descriptionRow0 or `AREA` if the positionDescription is missing when an alternate hierarchy id is also passed in', () => {
         responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
           entityWithPerformance.positionDescription = chance.string();
         });
@@ -241,8 +241,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with the entity`s name in the descriptionRow0 and ' +
-      '`GO TO DASHBOARD` in the descriptionRow1', () => {
+      it('should return a transformed table row with the entity`s name in the descriptionRow0 and '
+      + '`GO TO DASHBOARD` in the descriptionRow1', () => {
         const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
           .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
@@ -260,8 +260,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with the entity`s regular name in the descriptionRow0 unless ' +
-      'when the entity has an edge case name', () => {
+      it('should return a transformed table row with the entity`s regular name in the descriptionRow0 unless '
+      + 'when the entity has an edge case name', () => {
         responsibilityEntitiesPerformanceMock[randomIndex].name = 'ALL OTHER';
 
         const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
@@ -282,8 +282,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with the entity`s specialized name in the descriptionRow0 and ' +
-      '`GO TO DASHBOARD` in the descriptionRow1 when the entity has an edge case name', () => {
+      it('should return a transformed table row with the entity`s specialized name in the descriptionRow0 and '
+      + '`GO TO DASHBOARD` in the descriptionRow1 when the entity has an edge case name', () => {
         responsibilityEntitiesPerformanceMock[randomIndex].name = 'ALL OTHER';
 
         const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
@@ -298,8 +298,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
       });
 
-      it('should return a transformed table row with the entity`s name in the descriptionRow0 and ' +
-      '`GO TO DASHBOARD` in the descriptionRow1', () => {
+      it('should return a transformed table row with the entity`s name in the descriptionRow0 and '
+      + '`GO TO DASHBOARD` in the descriptionRow1', () => {
         const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
           .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
