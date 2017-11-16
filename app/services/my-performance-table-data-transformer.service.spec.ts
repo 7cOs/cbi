@@ -1,24 +1,27 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { sample } from 'lodash';
 
-import { Performance } from '../models/performance.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
+import { getEntityPeopleTypeMock } from '../enums/entity-responsibilities.enum.mock';
 import { getPerformanceMock } from '../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock } from '../models/entity-with-performance.model.mock';
-import {
-  getProductMetricsBrandMock,
-  getProductMetricsWithBrandValuesMock,
-  getProductMetricsWithSkuValuesMock
-} from '../models/product-metrics.model.mock';
+import { getProductMetricsBrandMock,
+         getProductMetricsWithBrandValuesMock,
+         getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
-import { MyPerformanceTableRow, MyPerformanceTableRowMetadata } from '../models/my-performance-table-row.model';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { Performance } from '../models/performance.model';
+import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
+import { SpecializedAccountName } from '../enums/specialized-account-name.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let performanceMock: Performance;
+  let randomIndex: number;
   let responsibilityEntitiesPerformanceMock: EntityWithPerformance[];
   let total: number;
 
@@ -42,294 +45,269 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         responsibilityEntitiesPerformanceMock.forEach((entity: EntityWithPerformance) => {
           total += entity.performance.total;
         });
+        randomIndex = chance.integer({min: 0, max: responsibilityEntitiesPerformanceMock.length - 1});
     });
 
-    it('should return formatted ResponsibilityEntityPerformance data for all type excepting roleGroup/distributor/subaccount', () => {
-      const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
+    describe('when given any EntityWithPerformance', () => {
+      it('should return a transformed table row with the entity`s performance data in the metric and ctv columns', () => {
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.RoleGroup), 1);
-      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.Distributor), 1);
-      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.SubAccount), 1);
-      entityTypeValues.splice(entityTypeValues.indexOf(EntityType.AccountGroup), 1);
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.metricColumn0).toBe(responsibilityEntitiesPerformanceMock[i].performance.total);
+          expect(row.metricColumn1).toBe(responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo);
+          expect(row.metricColumn2).toBe(responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent);
+          expect(row.ctv).toBe(Math.round((responsibilityEntitiesPerformanceMock[i].performance.total / total) * 1000) / 10);
+        });
+      });
 
-      responsibilityEntitiesPerformanceMock[0].entityType = entityTypeValues[chance.integer({min: 0 , max: entityTypeValues.length - 1})];
+      it('should return a transformed table row with the entity`s performance error flag', () => {
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.performanceError).toBe(responsibilityEntitiesPerformanceMock[i].performance.error);
+        });
+      });
 
-      const expectedRow: MyPerformanceTableRow = {
-        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
-        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
-        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
-        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
-        metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
-        },
-        performanceError: false
-      };
+      it('should return a transformed table row with the entity`s positionId, entityType, and name in the metadata', () => {
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual(expectedRow);
-    });
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.metadata.positionId).toBe(responsibilityEntitiesPerformanceMock[i].positionId);
+          expect(row.metadata.entityType).toBe(responsibilityEntitiesPerformanceMock[i].entityType);
+          expect(row.metadata.entityName).toBe(responsibilityEntitiesPerformanceMock[i].name);
+        });
+      });
 
-    it('should return formatted ResponsibilityEntityPerformance data for distributor', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
+      it('should return a transformed table row with a contextPositionId in the metadata ONLY when the entity has one', () => {
+        delete responsibilityEntitiesPerformanceMock[randomIndex].contextPositionId;
 
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      const expectedRow: MyPerformanceTableRow = {
-        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
-        descriptionRow1: 'GO TO DASHBOARD',
-        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
-        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
-        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
-        metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
-        },
-        performanceError: false
-      };
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          i === randomIndex
+            ? expect(row.metadata.contextPositionId).toBe(undefined)
+            : expect(row.metadata.contextPositionId).toBe(responsibilityEntitiesPerformanceMock[i].contextPositionId);
+        });
+      });
 
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual(expectedRow);
-    });
+      it('should return a transformed table row with a entityTypeCode in the metadata ONLY when the entity has one', () => {
+        delete responsibilityEntitiesPerformanceMock[randomIndex].entityTypeCode;
 
-    it('should return formatted ResponsibilityEntityPerformance data for subAccount', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.SubAccount;
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          i === randomIndex
+            ? expect(row.metadata.entityTypeCode).toBe(undefined)
+            : expect(row.metadata.entityTypeCode).toBe(responsibilityEntitiesPerformanceMock[i].entityTypeCode);
+        });
+      });
 
-      const expectedRow: MyPerformanceTableRow = {
-        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
-        descriptionRow1: 'GO TO DASHBOARD',
-        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
-        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
-        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
-        metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
-        },
-        performanceError: false
-      };
+      it('should return a transformed table row with a alternateHierarchyId in the metadata ONLY when the entity has one', () => {
+        responsibilityEntitiesPerformanceMock[randomIndex].alternateHierarchyId = chance.string();
 
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual(expectedRow);
-    });
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-    it('should return formatted ResponsibilityEntityPerformance data for RoleGroup', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.RoleGroup;
-      responsibilityEntitiesPerformanceMock[0].name = 'ON PREM DIRECTOR';
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          i === randomIndex
+            ? expect(row.metadata.alternateHierarchyId).toBe(responsibilityEntitiesPerformanceMock[randomIndex].alternateHierarchyId)
+            : expect(row.metadata.alternateHierarchyId).toBe(undefined);
+        });
+      });
 
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
+      it('should return a transformed table row with exceptionHierarchy in the metadata ONLY when the entity '
+      + 'has isMemberOfExceptionHierarchy', () => {
+        responsibilityEntitiesPerformanceMock[randomIndex].isMemberOfExceptionHierarchy = true;
 
-      const expectedRow: MyPerformanceTableRow = {
-        descriptionRow0: 'ON PREM DIRECTORS',
-        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
-        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
-        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
-        metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
-        },
-        performanceError: false
-      };
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual(expectedRow);
-    });
-
-    it('should return formatted ResponsibilityEntityPerformance data for AccountGroup', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.AccountGroup;
-      responsibilityEntitiesPerformanceMock[0].name = 'ACCOUNT';
-
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
-
-      const expectedRow: MyPerformanceTableRow = {
-        descriptionRow0: 'ACCOUNTS',
-        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
-        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
-        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
-        metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
-        },
-        performanceError: false
-      };
-
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual(expectedRow);
-    });
-
-    it('should return formatted ResponsibilityEntityPerformance data with performanceError value', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
-      responsibilityEntitiesPerformanceMock[0].performance.error = true;
-
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
-
-      const expectedRow: MyPerformanceTableRow = {
-        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
-        descriptionRow1: 'GO TO DASHBOARD',
-        metricColumn0: responsibilityEntitiesPerformanceMock[0].performance.total,
-        metricColumn1: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgo,
-        metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
-        ctv: Math.round((responsibilityEntitiesPerformanceMock[0].performance.total / total) * 1000) / 10,
-        metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-          contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-          entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-          entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
-        },
-        performanceError: true
-      };
-
-      expect(tableData).toBeDefined();
-      expect(tableData.length).toBeTruthy();
-      expect(tableData[0]).toEqual(expectedRow);
-    });
-
-    it('should return formatted ResponsibilityEntityPerformance data with Open Position', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Person;
-      responsibilityEntitiesPerformanceMock[0].positionDescription = chance.string();
-      responsibilityEntitiesPerformanceMock[0].name = 'Open';
-
-      responsibilityEntitiesPerformanceMock[1].entityType = EntityType.Person;
-      responsibilityEntitiesPerformanceMock[1].positionDescription = chance.string();
-      responsibilityEntitiesPerformanceMock[1].name = 'Open';
-
-      responsibilityEntitiesPerformanceMock[2].entityType = EntityType.Person;
-      delete responsibilityEntitiesPerformanceMock[2].positionDescription;
-      responsibilityEntitiesPerformanceMock[2].name = 'Open';
-
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock);
-
-      expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
-      tableData.forEach((row: MyPerformanceTableRow, i: number) => {
-        expect(row).toEqual({
-          descriptionRow0: 'Open Position',
-          descriptionRow1: responsibilityEntitiesPerformanceMock[i].positionDescription,
-          metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
-          metricColumn1: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo,
-          metricColumn2: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent,
-          ctv: Math.round((responsibilityEntitiesPerformanceMock[i].performance.total / total) * 1000) / 10,
-          metadata: {
-            positionId: responsibilityEntitiesPerformanceMock[i].positionId,
-            contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
-            entityName: responsibilityEntitiesPerformanceMock[i].name,
-            entityType: responsibilityEntitiesPerformanceMock[i].entityType,
-            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode
-          },
-          performanceError: false
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          i === randomIndex
+            ? expect(row.metadata.exceptionHierarchy).toBe(responsibilityEntitiesPerformanceMock[randomIndex].isMemberOfExceptionHierarchy)
+            : expect(row.metadata.exceptionHierarchy).toBe(undefined);
         });
       });
     });
 
-    it('should return formatted ResponsibilityEntityPerformance data when in Alt-Hierarchy and ViewType Person', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Person;
-      responsibilityEntitiesPerformanceMock[0].positionDescription = chance.string();
+    describe('when given an EntityWithPerformance of an entityType of Person', () => {
+      beforeEach(() => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.entityType = EntityType.Person;
+        });
+      });
 
-      responsibilityEntitiesPerformanceMock[1].entityType = EntityType.Person;
-      responsibilityEntitiesPerformanceMock[1].positionDescription = chance.string();
+      it('should return a transformed table row with the person entity`s name in the descriptionRow0', () => {
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      responsibilityEntitiesPerformanceMock[2].entityType = EntityType.Person;
-      delete responsibilityEntitiesPerformanceMock[2].positionDescription;
-      const alternateHierarchyIdMock = chance.string();
-      const tableData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService
-        .getLeftTableData(responsibilityEntitiesPerformanceMock, alternateHierarchyIdMock);
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toBe(responsibilityEntitiesPerformanceMock[i].name);
+        });
+      });
 
-      expect(tableData.length).toBe(responsibilityEntitiesPerformanceMock.length);
-      tableData.forEach((row: MyPerformanceTableRow, i: number) => {
-        expect(row).toEqual({
-          descriptionRow0: responsibilityEntitiesPerformanceMock[i].positionDescription
-            ? responsibilityEntitiesPerformanceMock[i].positionDescription : 'AREA',
-          descriptionRow1: responsibilityEntitiesPerformanceMock[i].name,
-          metricColumn0: responsibilityEntitiesPerformanceMock[i].performance.total,
-          metricColumn1: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgo,
-          metricColumn2: responsibilityEntitiesPerformanceMock[i].performance.totalYearAgoPercent,
-          ctv: Math.round((responsibilityEntitiesPerformanceMock[i].performance.total / total) * 1000) / 10,
-          metadata: {
-            positionId: responsibilityEntitiesPerformanceMock[i].positionId,
-            contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
-            entityName: responsibilityEntitiesPerformanceMock[i].name,
-            entityType: responsibilityEntitiesPerformanceMock[i].entityType,
-            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode,
-          },
-          performanceError: false
+      it('should return a transformed table row with `Open Position` in the descriptionrow0 and the entity`s position description in the '
+      + 'descriptionRow1 when the entity`s name is `Open`', () => {
+        responsibilityEntitiesPerformanceMock[randomIndex].name = 'Open';
+        responsibilityEntitiesPerformanceMock[randomIndex].positionDescription = chance.string();
+
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          if (i === randomIndex) {
+            expect(row.descriptionRow0).toBe('Open Position');
+            expect(row.descriptionRow1).toBe(responsibilityEntitiesPerformanceMock[randomIndex].positionDescription);
+          } else {
+            expect(row.descriptionRow0).toBe(responsibilityEntitiesPerformanceMock[i].name);
+            expect(row.descriptionRow1).toBe(undefined);
+          }
+        });
+      });
+
+      it('should return a transformed table row with the entity`s name in the descriptionRow1 and positionDescription in the '
+      + 'descriptionRow0 or `AREA` if the positionDescription is missing when an alternate hierarchy id is also passed in', () => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.positionDescription = chance.string();
+        });
+        delete responsibilityEntitiesPerformanceMock[randomIndex].positionDescription;
+
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock, chance.string());
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          if (i === randomIndex) {
+            expect(row.descriptionRow0).toBe('AREA');
+            expect(row.descriptionRow1).toBe(responsibilityEntitiesPerformanceMock[i].name);
+          } else {
+            expect(row.descriptionRow0).toBe(responsibilityEntitiesPerformanceMock[i].positionDescription);
+            expect(row.descriptionRow1).toBe(responsibilityEntitiesPerformanceMock[i].name);
+          }
         });
       });
     });
 
-    it('should return the correct descriptionRow1 when the property type is entity distributors', () => {
-      responsibilityEntitiesPerformanceMock[0].entityType = EntityType.Distributor;
-      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(
-        responsibilityEntitiesPerformanceMock);
-      expect(tableData[0].descriptionRow1).toEqual('GO TO DASHBOARD');
+    describe('when given an EntityWithPerformance of an entityType of RoleGroup', () => {
+      beforeEach(() => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.entityType = EntityType.RoleGroup;
+        });
+      });
+
+      it('should return a transformed table row with the pluralized version of the entity`s name in the descriptionRow0', () => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.name = getEntityPeopleTypeMock();
+        });
+
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toBe(PluralizedRoleGroup[responsibilityEntitiesPerformanceMock[i].name]);
+        });
+      });
     });
 
-    it('returned table entities should contain alternateHierarchyId in their metadata if the EntityWithPerformance' +
-    'contained a alternateHierarchyId', () => {
-      const alternateHierarchyIdMock = chance.string();
-      responsibilityEntitiesPerformanceMock[0].alternateHierarchyId = alternateHierarchyIdMock;
+    describe('when given an EntityWithPerformance of an entityType of AccountGroup', () => {
+      beforeEach(() => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.entityType = EntityType.AccountGroup;
+        });
+      });
 
-      let actualMetaData: MyPerformanceTableRowMetadata =
-        myPerformanceTableDataTransformerService.getLeftTableData(
-          [responsibilityEntitiesPerformanceMock[0]])[0].metadata;
-      let expectedMetaData: MyPerformanceTableRowMetadata = {
-        positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-        contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-        entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-        entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-        entityName: responsibilityEntitiesPerformanceMock[0].name,
-        alternateHierarchyId: alternateHierarchyIdMock
-      };
+      it('should return a transformed table row with the pluralized version of the entity`s name in the descriptionRow0', () => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.name = sample([EntityPeopleType.ACCOUNT, EntityPeopleType.GEOGRAPHY]);
+        });
 
-      expect(actualMetaData).toEqual(expectedMetaData);
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
 
-      delete responsibilityEntitiesPerformanceMock[0].alternateHierarchyId;
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toBe(PluralizedRoleGroup[responsibilityEntitiesPerformanceMock[i].name]);
+        });
+      });
+    });
 
-      actualMetaData = myPerformanceTableDataTransformerService.getLeftTableData(
-        [responsibilityEntitiesPerformanceMock[0]])[0].metadata;
-      expectedMetaData = {
-        positionId: responsibilityEntitiesPerformanceMock[0].positionId,
-        contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
-        entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
-        entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-        entityName: responsibilityEntitiesPerformanceMock[0].name
-      };
+    describe('when given an EntityWithPerformance of an entityType of Distributor', () => {
+      beforeEach(() => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.entityType = EntityType.Distributor;
+        });
+      });
 
-      expect(actualMetaData).toEqual(expectedMetaData);
+      it('should return a transformed table row with the entity`s name in the descriptionRow0 and '
+      + '`GO TO DASHBOARD` in the descriptionRow1', () => {
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toBe(responsibilityEntitiesPerformanceMock[i].name);
+          expect(row.descriptionRow1).toBe('GO TO DASHBOARD');
+        });
+      });
+    });
+
+    describe('when given an EntityWithPerformance of an entityType of Account', () => {
+      beforeEach(() => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.entityType = EntityType.Account;
+        });
+      });
+
+      it('should return a transformed table row with the entity`s regular name in the descriptionRow0 unless '
+      + 'when the entity has an edge case name', () => {
+        responsibilityEntitiesPerformanceMock[randomIndex].name = 'ALL OTHER';
+
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          i === randomIndex
+            ? expect(row.descriptionRow0).toBe(SpecializedAccountName[responsibilityEntitiesPerformanceMock[i].name])
+            : expect(row.descriptionRow0).toBe(responsibilityEntitiesPerformanceMock[i].name);
+        });
+      });
+    });
+
+    describe('when given an EntityWithPerformance of an entityType of SubAccount', () => {
+      beforeEach(() => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.entityType = EntityType.SubAccount;
+        });
+      });
+
+      it('should return a transformed table row with the entity`s specialized name in the descriptionRow0 and '
+      + '`GO TO DASHBOARD` in the descriptionRow1 when the entity has an edge case name', () => {
+        responsibilityEntitiesPerformanceMock[randomIndex].name = 'ALL OTHER';
+
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          i === randomIndex
+            ? expect(row.descriptionRow0).toBe(SpecializedAccountName[responsibilityEntitiesPerformanceMock[i].name])
+            : expect(row.descriptionRow0).toBe(responsibilityEntitiesPerformanceMock[i].name);
+
+          expect(row.descriptionRow1).toBe('GO TO DASHBOARD');
+        });
+      });
+
+      it('should return a transformed table row with the entity`s name in the descriptionRow0 and '
+      + '`GO TO DASHBOARD` in the descriptionRow1', () => {
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow, i: number) => {
+          expect(row.descriptionRow0).toBe(responsibilityEntitiesPerformanceMock[i].name);
+          expect(row.descriptionRow1).toBe('GO TO DASHBOARD');
+        });
+      });
     });
   });
 

@@ -44,7 +44,8 @@ export class PerformanceTransformerService {
       name: entity.name,
       positionDescription: entity.positionDescription,
       entityType: EntityType[entity.entityType],
-      performance: this.transformPerformanceDTO(performanceDTO)
+      performance: this.transformPerformanceDTO(performanceDTO),
+      isMemberOfExceptionHierarchy: entity.hierarchyType === 'EXCPN_HIER'
     };
   }
 
@@ -56,7 +57,8 @@ export class PerformanceTransformerService {
       entityType: group.entityType,
       positionDescription: group.positionDescription || '',
       entityTypeCode: group.type,
-      performance: this.transformPerformanceDTO(performanceDTO)
+      performance: this.transformPerformanceDTO(performanceDTO),
+      isMemberOfExceptionHierarchy: group.isMemberOfExceptionHierarchy
     };
 
     if (group.alternateHierarchyId) entityWithPerformance.alternateHierarchyId = group.alternateHierarchyId;

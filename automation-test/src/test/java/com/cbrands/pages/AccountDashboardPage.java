@@ -273,12 +273,12 @@ public class AccountDashboardPage extends TestNGBasePage {
     return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
   }
 
-  public AccountDashboardPage waitForBrandsLoaderToDisappear() {
+  public AccountDashboardPage waitForBrandsPanelLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
     return this;
   }
 
-  public AccountDashboardPage waitForMarketLoaderToDisappear() {
+  public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
     return this;
   }

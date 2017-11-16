@@ -2001,7 +2001,8 @@ describe('Responsibilities Service', () => {
           positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
           entityType: EntityType.RoleGroup
         }],
-        salesHierarchyViewType: SalesHierarchyViewType.roleGroups
+        salesHierarchyViewType: SalesHierarchyViewType.roleGroups,
+        isMemberOfExceptionHierarchy: chance.bool()
       };
     });
 
@@ -2041,7 +2042,8 @@ describe('Responsibilities Service', () => {
           name: EntityPeopleType.GEOGRAPHY,
           type: peopleResponsibilitiesDTOMock.positions[0].type,
           entityType: EntityType.RoleGroup,
-          alternateHierarchyId: positionIdMock
+          alternateHierarchyId: positionIdMock,
+          isMemberOfExceptionHierarchy: responsibilitiesDataMock.isMemberOfExceptionHierarchy
         };
         const expectedHierarchyGroups: Array<HierarchyGroup> = responsibilitiesDataMock.hierarchyGroups.concat([expectedGeographyGroup]);
         const expectedResponsibilitiesData: ResponsibilitiesData = Object.assign({}, responsibilitiesDataMock, {
@@ -2104,7 +2106,8 @@ describe('Responsibilities Service', () => {
           entityType: EntityType.RoleGroup
         }],
         salesHierarchyViewType: SalesHierarchyViewType.roleGroups,
-        alternateEntitiesURL: chance.string()
+        alternateEntitiesURL: chance.string(),
+        isMemberOfExceptionHierarchy: chance.bool()
       };
     });
 
@@ -2165,7 +2168,8 @@ describe('Responsibilities Service', () => {
           name: EntityPeopleType.GEOGRAPHY,
           type: HierarchyGroupTypeCode.distributors,
           entityType: EntityType.DistributorGroup,
-          alternateHierarchyId: positionIdMock
+          alternateHierarchyId: positionIdMock,
+          isMemberOfExceptionHierarchy: responsibilitiesDataMock.isMemberOfExceptionHierarchy
         };
         const expectedHierarchyGroups: Array<HierarchyGroup> = responsibilitiesDataMock.hierarchyGroups.concat([expectedGeographyGroup]);
         const expectedResponsibilities = Object.assign({}, responsibilitiesDataMock, {
