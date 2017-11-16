@@ -14,6 +14,7 @@ export interface ResponsibilitiesState extends State {
   positionId: string;
   accountPositionId?: string;
   alternateHierarchyId?: string;
+  exceptionHierarchy?: boolean;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
   hierarchyGroups: Array<HierarchyGroup>;
@@ -27,6 +28,7 @@ export const initialState: ResponsibilitiesState = {
   entitiesPerformanceStatus: ActionStatus.NotFetched,
   totalPerformanceStatus: ActionStatus.NotFetched,
   subaccountsStatus: ActionStatus.NotFetched,
+  exceptionHierarchy: false,
   positionId: '0',
   groupedEntities: {},
   hierarchyGroups: [],
@@ -152,6 +154,11 @@ export function responsibilitiesReducer(
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
       return Object.assign({}, state, {
         alternateHierarchyId: action.payload
+      });
+
+    case ResponsibilitiesActions.SET_EXCEPTION_HIERARCHY:
+      return Object.assign({}, state, {
+        exceptionHierarchy: true
       });
 
     case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:

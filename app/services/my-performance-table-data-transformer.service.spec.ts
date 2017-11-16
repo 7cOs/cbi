@@ -21,6 +21,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   let performanceMock: Performance;
   let responsibilityEntitiesPerformanceMock: EntityWithPerformance[];
   let total: number;
+  let exceptionHierarchyMock: boolean;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -68,7 +69,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name,
+          exceptionHierarchy: exceptionHierarchyMock
         },
         performanceError: false
       };
@@ -96,7 +98,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name,
+          exceptionHierarchy: exceptionHierarchyMock
         },
         performanceError: false
       };
@@ -124,7 +127,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name,
+          exceptionHierarchy: exceptionHierarchyMock
         },
         performanceError: false
       };
@@ -152,7 +156,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name,
+          exceptionHierarchy: exceptionHierarchyMock
         },
         performanceError: false
       };
@@ -180,7 +185,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name,
+          exceptionHierarchy: exceptionHierarchyMock
         },
         performanceError: false
       };
@@ -209,7 +215,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
           entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
           entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-          entityName: responsibilityEntitiesPerformanceMock[0].name
+          entityName: responsibilityEntitiesPerformanceMock[0].name,
+          exceptionHierarchy: exceptionHierarchyMock
         },
         performanceError: true
       };
@@ -249,7 +256,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
             contextPositionId: responsibilityEntitiesPerformanceMock[i].contextPositionId,
             entityName: responsibilityEntitiesPerformanceMock[i].name,
             entityType: responsibilityEntitiesPerformanceMock[i].entityType,
-            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode
+            entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode,
+            exceptionHierarchy: exceptionHierarchyMock
           },
           performanceError: false
         });
@@ -285,6 +293,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
             entityName: responsibilityEntitiesPerformanceMock[i].name,
             entityType: responsibilityEntitiesPerformanceMock[i].entityType,
             entityTypeCode: responsibilityEntitiesPerformanceMock[i].entityTypeCode,
+            exceptionHierarchy: exceptionHierarchyMock
           },
           performanceError: false
         });
@@ -312,7 +321,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
         entityType: responsibilityEntitiesPerformanceMock[0].entityType,
         entityName: responsibilityEntitiesPerformanceMock[0].name,
-        alternateHierarchyId: alternateHierarchyIdMock
+        alternateHierarchyId: alternateHierarchyIdMock,
+        exceptionHierarchy: exceptionHierarchyMock
       };
 
       expect(actualMetaData).toEqual(expectedMetaData);
@@ -326,7 +336,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         contextPositionId: responsibilityEntitiesPerformanceMock[0].contextPositionId,
         entityTypeCode: responsibilityEntitiesPerformanceMock[0].entityTypeCode,
         entityType: responsibilityEntitiesPerformanceMock[0].entityType,
-        entityName: responsibilityEntitiesPerformanceMock[0].name
+        entityName: responsibilityEntitiesPerformanceMock[0].name,
+        exceptionHierarchy: exceptionHierarchyMock
       };
 
       expect(actualMetaData).toEqual(expectedMetaData);

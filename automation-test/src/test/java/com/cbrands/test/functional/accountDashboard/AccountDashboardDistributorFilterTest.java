@@ -67,15 +67,15 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     );
 
     accountDashboardPage.clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear();
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear();
 
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsLoaderToDisappear();
+    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsPanelLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillUpLeftPanel().waitForBrandsLoaderToDisappear();
+    accountDashboardPage.drillUpLeftPanel().waitForBrandsPanelLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
   }
 
@@ -104,16 +104,16 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .clickSearchForDistributor()
       .selectDistributorFilterByName(distributorName)
       .clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear()
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear()
       .clickRemoveDistributorFilter();
 
     Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
 
     accountDashboardPage
       .clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear();
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear();
     assertDefaultDistributorLabels();
   }
 
@@ -128,8 +128,8 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .clickSearchForDistributor()
       .selectDistributorFilterByName(distributorName)
       .clickApplyFilters()
-      .waitForBrandsLoaderToDisappear()
-      .waitForMarketLoaderToDisappear()
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear()
       .clickResetFilters();
 
     Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
