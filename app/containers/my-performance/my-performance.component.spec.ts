@@ -157,7 +157,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: dateRangeStateMock,
     href: jasmine.createSpy('href'),
-    current: {title: chance.string()}
+    current: {title: chance.string(), exceptionHierarchy: false}
   };
 
   const storeMock = {
@@ -263,9 +263,12 @@ describe('MyPerformanceComponent', () => {
     versionsSubject.next(initialVersionsMock);
     filterSubject.next(stateMock.myPerformanceFilter);
     componentInstanceCopy = componentInstance as any;
+
+    storeMock.dispatch.and.callThrough();
+    storeMock.dispatch.calls.reset();
   });
 
-  describe('MyPerformanceComponent various events', () => {
+  describe('MyPerformanceComponent initialization', () => {
     let userService: any;
     let expectedCurrentUserFullName: string;
 
@@ -277,7 +280,7 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
     }));
 
-    it('should dispatch actions on init', () => {
+    it('should dispatch actions to fetch data for the current user', () => {
       myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
       filterSubject.next(stateMock.myPerformanceFilter);
       componentInstance.ngOnInit();
@@ -293,7 +296,8 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.FetchResponsibilities({
         positionId: userServiceMock.model.currentUser.positionId,
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityDescription: expectedCurrentUserFullName
+        selectedEntityDescription: expectedCurrentUserFullName,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
         positionId: userServiceMock.model.currentUser.positionId,
@@ -303,7 +307,7 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should dispatch actions on init and handle empty positionId', () => {
+    it('should dispatch actions actions to appropriately handle empty positionId', () => {
       userService.model.currentUser.positionId = '';
       filterSubject.next(stateMock.myPerformanceFilter);
       componentInstance.ngOnInit();
@@ -312,11 +316,12 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new ResponsibilitiesActions.FetchResponsibilities({
         positionId: '0',
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityDescription: expectedCurrentUserFullName
+        selectedEntityDescription: expectedCurrentUserFullName,
+        isMemberOfExceptionHierarchy: false
       })]);
     });
 
-    it('should dispatch actions on init and handle undefined positionId', () => {
+    it('should dispatch actions actions to appropriately handle undefined positionId', () => {
       delete userService.model.currentUser.positionId;
       filterSubject.next(stateMock.myPerformanceFilter);
       componentInstance.ngOnInit();
@@ -325,63 +330,15 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new ResponsibilitiesActions.FetchResponsibilities({
         positionId: '0',
         filter: stateMock.myPerformanceFilter as any,
-        selectedEntityDescription: expectedCurrentUserFullName
+        selectedEntityDescription: expectedCurrentUserFullName,
+        isMemberOfExceptionHierarchy: false
       })]);
     });
 
-    it('should call setTitle on init', () => {
+    it('should call setTitle', () => {
       fixture = TestBed.createComponent(MyPerformanceComponent);
       fixture.detectChanges();
       expect(titleMock.setTitle).toHaveBeenCalledWith(stateMock.current.title);
-    });
-
-    it('should trigger appropriate actions when the filter component emits an event', () => {
-      userService.model.currentUser.srcTypeCd = Array(chance.natural({max: 2})).fill('').map(() => chance.string());
-      myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
-
-      const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock));
-      const mockFilterElement = mockMyPerformanceFilter
-        .injector
-        .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
-
-      mockFilterElement.onFilterChange.emit({
-        filterType: MyPerformanceFilterActionType.Metric,
-        filterValue: MetricTypeValue.volume
-      });
-      mockFilterElement.onFilterChange.emit({
-        filterType: MyPerformanceFilterActionType.TimePeriod,
-        filterValue: DateRangeTimePeriodValue.L90BDL
-      });
-      mockFilterElement.onFilterChange.emit({
-        filterType: MyPerformanceFilterActionType.PremiseType,
-        filterValue: PremiseTypeValue.Off
-      });
-      mockFilterElement.onFilterChange.emit({
-        filterType: MyPerformanceFilterActionType.DistributionType,
-        filterValue: DistributionTypeValue.simple
-      });
-
-      expect(storeMock.dispatch.calls.count()).toBe(5);
-
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-        new MyPerformanceFilterActions.SetMetric(MetricTypeValue.volume)
-      );
-      expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
-        stateMock.myPerformanceFilter.metricType,
-        userService.model.currentUser.srcTypeCd[0]
-      );
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
-        new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.On)
-      );
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
-        new MyPerformanceFilterActions.SetTimePeriod(DateRangeTimePeriodValue.L90BDL)
-      );
-      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(
-        new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.Off)
-      );
-      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(
-        new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.simple)
-      );
     });
 
     it('should call select with the right arguments', () => {
@@ -591,7 +548,8 @@ describe('MyPerformanceComponent', () => {
           skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
           entityType: previousVersionMock.selectedEntityType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId,
+          isMemberOfExceptionHierarchy: false
         }));
       });
 
@@ -617,7 +575,8 @@ describe('MyPerformanceComponent', () => {
           skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
           entityType: previousVersionMock.selectedEntityType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId,
+          isMemberOfExceptionHierarchy: false
         }));
       });
 
@@ -642,7 +601,8 @@ describe('MyPerformanceComponent', () => {
           entityType: previousVersionMock.selectedEntityType,
           skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId,
+          isMemberOfExceptionHierarchy: false
         }));
       });
     });
@@ -682,6 +642,7 @@ describe('MyPerformanceComponent', () => {
     'does NOT contain alternateHierarchyId', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
       rowMock.metadata.entityType = EntityType.RoleGroup;
+      rowMock.metadata.exceptionHierarchy = false;
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
 
@@ -691,6 +652,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: undefined,
+        isMemberOfExceptionHierarchy: false,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -711,12 +673,13 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
-    'contains a alternateHierarchyId', () => {
+    'contains an alternateHierarchyId', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
 
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
       rowMock.metadata.entityType = EntityType.RoleGroup;
       rowMock.metadata.alternateHierarchyId = chance.string();
+      rowMock.metadata.exceptionHierarchy = false;
       componentInstance.handleElementClicked(params);
 
       expect(storeMock.dispatch.calls.count()).toBe(5);
@@ -727,6 +690,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: undefined,
+        isMemberOfExceptionHierarchy: false,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -778,10 +742,12 @@ describe('MyPerformanceComponent', () => {
 
     it('should trigger appropriate actions when current salesHierarchyViewType is people and the responsibilitiesState ' +
     'does NOT contain a alternateHierarchyId', () => {
+      rowMock.metadata.exceptionHierarchy = false;
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
 
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.handleElementClicked(params);
+
       expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
@@ -790,7 +756,8 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityDescription: rowMock.descriptionRow0,
         brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
-        skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
+        skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
         positionId: rowMock.metadata.positionId,
@@ -816,6 +783,7 @@ describe('MyPerformanceComponent', () => {
       params.row.metadata.alternateHierarchyId = currentMock.responsibilities.alternateHierarchyId;
       params.row.metadata.entityType = EntityType.Person;
       params.row.metadata.brandCode = chance.string();
+      rowMock.metadata.exceptionHierarchy = false;
       currentSubject.next(currentMock);
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
       componentInstance.handleElementClicked(params);
@@ -833,7 +801,8 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityDescription: rowMock.descriptionRow0,
         brandSkuCode: currentMock.selectedSkuPackageCode,
-        skuPackageType: currentMock.selectedSkuPackageType
+        skuPackageType: currentMock.selectedSkuPackageType,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(
         new ProductMetricsActions.FetchProductMetrics({
@@ -864,6 +833,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: undefined,
+        isMemberOfExceptionHierarchy: false,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -896,6 +866,7 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
+        isMemberOfExceptionHierarchy: false,
         entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
@@ -961,7 +932,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: null,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
+        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
 
@@ -997,7 +969,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: null,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
+        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
 
@@ -1033,7 +1006,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: null,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
+        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
 
@@ -1069,7 +1043,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: null,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
+        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
 
@@ -1099,7 +1074,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: rowMock.metadata.skuPackageType,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
+        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
 
@@ -1122,6 +1098,7 @@ describe('MyPerformanceComponent', () => {
     let hierarchyEntityMock: HierarchyEntity;
     let currentMock: MyPerformanceEntitiesData;
     let insideAlternateHierarchyMock: boolean;
+    let insideExceptionHierarchyMock: boolean;
     let alternateHierarchyIdMock: string;
 
     beforeEach(() => {
@@ -1130,6 +1107,7 @@ describe('MyPerformanceComponent', () => {
       hierarchyEntityMock = getEntityPropertyResponsibilitiesMock();
       currentMock = getMyPerformanceEntitiesDataMock();
       alternateHierarchyIdMock = chance.string();
+      insideExceptionHierarchyMock = chance.bool();
       insideAlternateHierarchyMock = !!alternateHierarchyIdMock;
     });
 
@@ -1138,10 +1116,11 @@ describe('MyPerformanceComponent', () => {
         'params within alternate hierarchy', () => {
         rowMock.metadata.entityType = EntityType.Distributor;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentMock.responsibilities.exceptionHierarchy = insideExceptionHierarchyMock;
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
+        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
@@ -1158,6 +1137,7 @@ describe('MyPerformanceComponent', () => {
         delete accountDashboardStateParamMock.distributorid;
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentMock.responsibilities.exceptionHierarchy = insideExceptionHierarchyMock;
         currentSubject.next(currentMock);
         hierarchyEntityMock.positionId = rowMock.metadata.positionId;
         currentMock.responsibilities.groupedEntities = {[accountNameMock]: [hierarchyEntityMock]};
@@ -1165,6 +1145,7 @@ describe('MyPerformanceComponent', () => {
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
           insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
           stateMock.myPerformanceFilter,
           rowMock,
           hierarchyEntityMock.premiseType
@@ -1184,13 +1165,14 @@ describe('MyPerformanceComponent', () => {
         delete accountDashboardStateParamMock.distributorid;
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = alternateHierarchyIdMock;
+        currentMock.responsibilities.exceptionHierarchy = insideExceptionHierarchyMock;
         currentSubject.next(currentMock);
         hierarchyEntityMock.positionId = rowMock.metadata.positionId + chance.character();
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock);
+        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter, rowMock);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
@@ -1205,6 +1187,7 @@ describe('MyPerformanceComponent', () => {
         delete accountDashboardStateParamMock.distributorid;
         rowMock.metadata.entityType = EntityType.SubAccount;
         currentMock.responsibilities.alternateHierarchyId = null;
+        currentMock.responsibilities.exceptionHierarchy = insideExceptionHierarchyMock;
         currentSubject.next(currentMock);
         insideAlternateHierarchyMock = false;
         hierarchyEntityMock.positionId = rowMock.metadata.positionId;
@@ -1213,6 +1196,7 @@ describe('MyPerformanceComponent', () => {
         componentInstance.handleSublineClicked(rowMock);
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
           insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
           stateMock.myPerformanceFilter,
           rowMock,
           hierarchyEntityMock.premiseType
@@ -1258,7 +1242,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: null,
         entityType: stateMock.myPerformance.current.selectedEntityType,
         alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId
+        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
   });
@@ -1448,7 +1433,8 @@ describe('MyPerformanceComponent', () => {
           skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
           entityType: previousVersionMock.selectedEntityType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId,
+          isMemberOfExceptionHierarchy: false
         }));
       });
 
@@ -1479,7 +1465,8 @@ describe('MyPerformanceComponent', () => {
           skuPackageType: null,
           entityType: previousVersionMock.selectedEntityType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId,
+          isMemberOfExceptionHierarchy: false
         }));
       });
 
@@ -1509,7 +1496,8 @@ describe('MyPerformanceComponent', () => {
           skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
           entityType: previousVersionMock.selectedEntityType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersionMock.responsibilities.accountPositionId
+          accountPositionId: previousVersionMock.responsibilities.accountPositionId,
+          isMemberOfExceptionHierarchy: false
         }));
       });
     });
@@ -1529,6 +1517,285 @@ describe('MyPerformanceComponent', () => {
       });
 
       expect(storeMock.dispatch.calls.count()).toBe(0);
+    });
+  });
+
+  describe('when filter option is selected (filterOptionSelected)', () => {
+    let userService: any;
+    let defaultPremiseTypeMock: PremiseTypeValue = PremiseTypeValue.On;
+    let currentFilterMock: MyPerformanceFilter;
+
+    beforeEach(inject(['userService'], (_userService: any) => {
+      userService = _userService;
+      userService.model.currentUser.srcTypeCd = [chance.string()];
+      myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(defaultPremiseTypeMock);
+      currentFilterMock = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
+        premiseType: PremiseTypeValue.All
+      };
+      filterSubject.next(currentFilterMock);
+
+      // simulate store updating due to dispatches, because analytics event relies on it being up-to-date
+      storeMock.dispatch.and.callFake((action: MyPerformanceFilterActions.Action) => {
+        switch (action.type) {
+          case MyPerformanceFilterActions.SET_METRIC:
+            currentFilterMock.metricType = action.payload;
+            if (action.payload === MetricTypeValue.PointsOfDistribution) {
+              currentFilterMock.distributionType = DistributionTypeValue.simple;
+            }
+            break;
+          case MyPerformanceFilterActions.SET_PREMISE_TYPE:
+            currentFilterMock.premiseType = action.payload;
+            break;
+          case MyPerformanceFilterActions.SET_TIME_PERIOD:
+            currentFilterMock.dateRangeCode = action.payload;
+            break;
+          case MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE:
+            currentFilterMock.distributionType = action.payload;
+            break;
+          default:
+            break;
+        }
+        filterSubject.next(currentFilterMock);
+      });
+      storeMock.dispatch.calls.reset();
+    }));
+
+    afterEach(() => {
+      storeMock.dispatch.and.callThrough();
+    });
+
+    describe('when Metric Type filter is changed', () => {
+      it('should dispatch appropriate actions and send analytics events', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.Metric,
+          filterValue: MetricTypeValue.velocity
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+
+        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceFilterActions.SetMetric(filterEventMock.filterValue)
+        );
+        expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
+          filterEventMock.filterValue,
+          userService.model.currentUser.srcTypeCd[0]
+        );
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+          new MyPerformanceFilterActions.SetPremiseType(defaultPremiseTypeMock)
+        );
+
+        expect(analyticsServiceMock.trackEvent.calls.count()).toBe(3);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Performance Filters',
+          'Metric',
+          componentInstance.performanceMetric
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(1)).toEqual([
+          'Team Performance Filters',
+          'Time Period',
+          componentInstance.dateRange.displayCode
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
+          'Team Performance Filters',
+          'Premise Type',
+          PremiseTypeValue[defaultPremiseTypeMock]
+        ]);
+      });
+
+      it('should dispatch appropriate actions and send 4 analytics events when Metric Type is changed to distribution', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.Metric,
+          filterValue: MetricTypeValue.PointsOfDistribution
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+
+        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceFilterActions.SetMetric(filterEventMock.filterValue)
+        );
+        expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
+          filterEventMock.filterValue,
+          userService.model.currentUser.srcTypeCd[0]
+        );
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+          new MyPerformanceFilterActions.SetPremiseType(defaultPremiseTypeMock)
+        );
+
+        expect(analyticsServiceMock.trackEvent.calls.count()).toBe(4);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Performance Filters',
+          'Metric',
+          componentInstance.performanceMetric
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(1)).toEqual([
+          'Team Performance Filters',
+          'Time Period',
+          componentInstance.dateRange.displayCode
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
+          'Team Performance Filters',
+          'Premise Type',
+          PremiseTypeValue[currentFilterMock.premiseType]
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(3)).toEqual([
+          'Team Performance Filters',
+          'Distribution Type',
+          DistributionTypeValue[currentFilterMock.distributionType]
+        ]);
+      });
+
+      it('should not dispatch actions or send analytics when change matches current Metric Type', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.Metric,
+          filterValue: currentFilterMock.metricType
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+        expect(storeMock.dispatch).not.toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when Time Period filter is changed', () => {
+      it('should dispatch appropriate actions and send analytics events', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.TimePeriod,
+          filterValue: DateRangeTimePeriodValue.FYTM
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+
+        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceFilterActions.SetTimePeriod(filterEventMock.filterValue)
+        );
+
+        expect(analyticsServiceMock.trackEvent.calls.count()).toBe(3);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Performance Filters',
+          'Metric',
+          componentInstance.performanceMetric
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(1)).toEqual([
+          'Team Performance Filters',
+          'Time Period',
+          componentInstance.dateRange.displayCode
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
+          'Team Performance Filters',
+          'Premise Type',
+          PremiseTypeValue[currentFilterMock.premiseType]
+        ]);
+      });
+
+      it('should not dispatch actions or send analytics when change matches current Time Period', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.TimePeriod,
+          filterValue: currentFilterMock.dateRangeCode
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+        expect(storeMock.dispatch).not.toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when Premise Type filter is changed', () => {
+      it('should dispatch appropriate actions and send analytics events', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.PremiseType,
+          filterValue: PremiseTypeValue.Off
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+
+        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceFilterActions.SetPremiseType(filterEventMock.filterValue)
+        );
+
+        expect(analyticsServiceMock.trackEvent.calls.count()).toBe(3);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Performance Filters',
+          'Metric',
+          componentInstance.performanceMetric
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(1)).toEqual([
+          'Team Performance Filters',
+          'Time Period',
+          componentInstance.dateRange.displayCode
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
+          'Team Performance Filters',
+          'Premise Type',
+          PremiseTypeValue[currentFilterMock.premiseType]
+        ]);
+      });
+
+      it('should not dispatch actions or send analytics when change matches current Premise Type', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.PremiseType,
+          filterValue: currentFilterMock.premiseType
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+        expect(storeMock.dispatch).not.toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when Distribution Type filter is changed', () => {
+      beforeEach(() => {
+        currentFilterMock = {
+          metricType: MetricTypeValue.PointsOfDistribution,
+          dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
+          premiseType: PremiseTypeValue.All,
+          distributionType: DistributionTypeValue.simple
+        };
+        filterSubject.next(currentFilterMock);
+      });
+
+      it('should dispatch appropriate actions and send analytics events', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.DistributionType,
+          filterValue: DistributionTypeValue.effective
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+
+        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceFilterActions.SetDistributionType(filterEventMock.filterValue)
+        );
+
+        expect(analyticsServiceMock.trackEvent.calls.count()).toBe(4);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Performance Filters',
+          'Metric',
+          componentInstance.performanceMetric
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(1)).toEqual([
+          'Team Performance Filters',
+          'Time Period',
+          componentInstance.dateRange.displayCode
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
+          'Team Performance Filters',
+          'Premise Type',
+          PremiseTypeValue[currentFilterMock.premiseType]
+        ]);
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(3)).toEqual([
+          'Team Performance Filters',
+          'Distribution Type',
+          DistributionTypeValue[currentFilterMock.distributionType]
+        ]);
+      });
+
+      it('should not dispatch actions or send analytics when change matches current Distribution Type', () => {
+        const filterEventMock = {
+          filterType: MyPerformanceFilterActionType.DistributionType,
+          filterValue: currentFilterMock.distributionType
+        };
+        componentInstance.filterOptionSelected(filterEventMock);
+        expect(storeMock.dispatch).not.toHaveBeenCalled();
+        expect(analyticsServiceMock.trackEvent).not.toHaveBeenCalled();
+      });
     });
   });
 
@@ -1611,7 +1878,8 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
 
@@ -1885,7 +2153,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.accountPositionId,
@@ -1918,7 +2187,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.positionId,
@@ -1951,7 +2221,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: null,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.positionId,
@@ -1983,7 +2254,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: null,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.accountPositionId,
@@ -2014,7 +2286,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: undefined,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.accountPositionId,
@@ -2257,7 +2530,8 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
 
@@ -2298,7 +2572,8 @@ describe('MyPerformanceComponent', () => {
         skuPackageType: null,
         entityType: currentMock.selectedEntityType,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
-        accountPositionId: currentMock.responsibilities.accountPositionId
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
       }));
     });
   });

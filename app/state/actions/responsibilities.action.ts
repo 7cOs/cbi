@@ -16,6 +16,7 @@ export interface FetchResponsibilitiesPayload {
   selectedEntityDescription: string;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -36,6 +37,7 @@ export interface FetchEntityWithPerformancePayload {
   selectedEntityDescription: string;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
@@ -55,6 +57,7 @@ export interface RefreshAllPerformancesPayload {
   entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;
   accountPositionId?: string;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface FetchSubAccountsPayload {
@@ -80,6 +83,7 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   selectedEntityDescription: string;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
@@ -159,6 +163,11 @@ export class SetAlternateHierarchyId implements Action {
   constructor(public payload: string) { }
 }
 
+export const SET_EXCEPTION_HIERARCHY = '[Responsibilities] SET_EXCEPTION_HIERARCHY';
+export class SetExceptionHierarchy implements Action {
+  readonly type = SET_EXCEPTION_HIERARCHY;
+}
+
 export const FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES = '[Responsibilities] FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES';
 export class FetchAlternateHierarchyResponsibilities implements Action {
   readonly type = FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES;
@@ -218,5 +227,6 @@ export type Action
   | FetchTotalPerformance
   | FetchTotalPerformanceSuccess
   | FetchTotalPerformanceFailure
+  | SetExceptionHierarchy
   | SetTotalPerformance
   | SetTotalPerformanceForSelectedRoleGroup;

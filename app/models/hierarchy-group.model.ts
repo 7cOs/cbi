@@ -6,5 +6,7 @@ export interface HierarchyGroup {
   entityType: EntityType;
   positionId?: string;
   alternateHierarchyId?: string;
+  hierarchyType?: string;
   positionDescription?: string;
+  isMemberOfExceptionHierarchy?: boolean;
 }

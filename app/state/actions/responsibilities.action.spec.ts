@@ -383,4 +383,17 @@ describe('Responsibilities Actions', () => {
       expect(action.payload).toEqual(payloadMock);
     });
   });
+
+  describe('SetExceptionHierarchy Action', () => {
+    let action: ResponsibilitiesActions.SetExceptionHierarchy;
+
+    beforeEach(() => {
+      action = new ResponsibilitiesActions.SetExceptionHierarchy();
+    });
+
+    it('should be the correct type', () => {
+      expect(ResponsibilitiesActions.SET_EXCEPTION_HIERARCHY).toBe('[Responsibilities] SET_EXCEPTION_HIERARCHY');
+      expect(action.type).toBe(ResponsibilitiesActions.SET_EXCEPTION_HIERARCHY);
+    });
+  });
 });
