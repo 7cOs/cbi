@@ -9,6 +9,7 @@ import { Performance } from '../models/performance.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType  } from '../enums/sku-package-type.enum';
+import { SpecializedAccountName } from '../enums/specialized-account-name.enum';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -19,11 +20,8 @@ export class MyPerformanceTableDataTransformerService {
     }, 0);
 
     return entities.map((entity: EntityWithPerformance) => {
-      const descriptionRow0 = entity.entityType === EntityType.RoleGroup || entity.entityType === EntityType.AccountGroup
-        ? PluralizedRoleGroup[entity.name]
-        : entity.name;
       const transformedEntity: MyPerformanceTableRow = {
-        descriptionRow0: descriptionRow0,
+        descriptionRow0: this.getDisplayName(entity.name, entity.entityType),
         metricColumn0: entity.performance.total,
         metricColumn1: entity.performance.totalYearAgo,
         metricColumn2: entity.performance.totalYearAgoPercent,
@@ -120,5 +118,18 @@ export class MyPerformanceTableDataTransformerService {
     return contribution && total
       ? Math.round((contribution / total) * 1000) / 10
       : 0;
+  }
+
+  private getDisplayName(name: string, entityType: EntityType): string {
+    switch (entityType) {
+      case EntityType.RoleGroup:
+      case EntityType.AccountGroup:
+        return PluralizedRoleGroup[name];
+      case EntityType.Account:
+      case EntityType.SubAccount:
+        return SpecializedAccountName[name] || name;
+      default:
+        return name;
+    }
   }
 }
