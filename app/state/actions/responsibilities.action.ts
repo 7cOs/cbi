@@ -16,6 +16,7 @@ export interface FetchResponsibilitiesPayload {
   selectedEntityDescription: string;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -36,7 +37,7 @@ export interface FetchEntityWithPerformancePayload {
   selectedEntityDescription: string;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
-  inExceptionHierarchy?: boolean;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface FetchEntityWithPerformanceSuccessPayload {
@@ -56,6 +57,7 @@ export interface RefreshAllPerformancesPayload {
   entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;
   accountPositionId?: string;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export interface FetchSubAccountsPayload {
@@ -81,6 +83,7 @@ export interface FetchAlternateHierarchyResponsibilitiesPayload {
   selectedEntityDescription: string;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';

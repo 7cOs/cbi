@@ -32,7 +32,7 @@ export class MyPerformanceTableDataTransformerService {
           positionId: entity.positionId,
           entityType: entity.entityType,
           entityName: entity.name,
-          exceptionHierarchy: entity.exceptionHierarchy
+          exceptionHierarchy: entity.isMemberOfExceptionHierarchy
         },
         performanceError: entity.performance.error
       };

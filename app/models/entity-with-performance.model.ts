@@ -20,5 +20,5 @@ export interface EntityWithPerformance {
   contextPositionId?: string;
   alternateHierarchyId?: string;
   entityTypeCode?: string;
-  exceptionHierarchy?: boolean;
+  isMemberOfExceptionHierarchy?: boolean;
 }
