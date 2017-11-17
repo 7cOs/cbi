@@ -24,7 +24,9 @@ import { getMyPerformanceEntitiesDataMock,
          getMyPerformanceStateMock,
          getResponsibilitesStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-import { getProductMetricsBrandMock } from '../../models/product-metrics.model.mock';
+import { getProductMetricsBrandMock,
+         getProductMetricsSkuMock,
+         getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -45,15 +47,16 @@ import { ProductMetricsState } from '../../state/reducers/product-metrics.reduce
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
-import { SaveMyPerformanceState,
+import { ClearMyPerformanceSelectedSubaccountCode,
+         SaveMyPerformanceState,
          SetMyPerformanceSelectedEntityType,
+         SetMyPerformanceSelectedSubaccountCode,
          SkuPackagePayload } from '../../state/actions/my-performance-version.action';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { getProductMetricsSkuMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
 
 const chance = new Chance();
 
@@ -380,7 +383,7 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
     });
 
-    describe('when back button is NOT displayed', () => {
+    describe('when back button is NOT displayed and not viewing subaccounts', () => {
       it('should NOT dispatch any actions', () => {
         componentInstance.showLeftBackButton = false;
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
@@ -889,6 +892,37 @@ describe('MyPerformanceComponent', () => {
         rowMock.descriptionRow0
       ]);
     });
+
+    describe('when viewing subacounts', () => {
+
+      beforeEach(() => {
+        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+      });
+
+      it('should set the subaccount code in the state and refetch product metrics', () => {
+        currentSubject.next(currentMock);
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock};
+        componentInstance.handleElementClicked(params);
+
+        expect(storeMock.dispatch.calls.count()).toBe(3);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedSubaccountCode(rowMock.metadata.positionId));
+        debugger;
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
+          positionId: rowMock.metadata.positionId,
+          filter: stateMock.myPerformanceFilter,
+          selectedEntityType: currentMock.selectedEntityType,
+          selectedBrandCode: currentMock.selectedBrandCode,
+          inAlternateHierarchy: false,
+          entityTypeCode: currentMock.responsibilities.entityTypeCode,
+          contextPositionId: currentMock.responsibilities.positionId
+        }));
+      });
+    });
   });
 
   describe('when right side data row is clicked', () => {
@@ -1211,6 +1245,19 @@ describe('MyPerformanceComponent', () => {
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
           'Team Performance', 'Go to Account Dashboard', accountDashboardStateParamMock.subaccountid);
+      });
+    });
+  });
+
+  describe('when left side total row is clicked', () => {
+    describe('when viewtype is subaccounts', () => {
+      it('should clear the selected subaccount, set the entitytype to account, and refresh performances', () => {
+        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0};
+        componentInstance.handleElementClicked(params);
+        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearMyPerformanceSelectedSubaccountCode());
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(EntityType.Account));
       });
     });
   });
