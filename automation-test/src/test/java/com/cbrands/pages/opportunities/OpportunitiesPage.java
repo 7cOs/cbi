@@ -323,13 +323,13 @@ public class OpportunitiesPage extends TestNGBasePage {
             .getFirstSavedReportOption();
       }
 
-      this.closeDropdown();
-
-      return PageFactory.initElements(driver, OpportunitiesPage.class);
+      return this.closeDropdown().clickResetFilters();
     }
 
-    private void closeDropdown() {
+    public OpportunitiesPage closeDropdown() {
       waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
+
+      return PageFactory.initElements(driver, OpportunitiesPage.class);
     }
 
     public boolean doesSavedReportExistWithName(String name) {

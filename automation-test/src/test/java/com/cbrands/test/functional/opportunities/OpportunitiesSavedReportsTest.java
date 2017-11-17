@@ -233,7 +233,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   private OpportunitiesPage setUpNewSavedReport(String reportName, String distributorSearchText) {
     return opportunitiesPage
-      .clickResetFilters()
       .enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
       .clickFirstDistributorResult()
@@ -242,7 +241,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .clickSaveReportLink()
       .enterReportName(reportName)
       .clickSave()
-      .waitForModalToClose();
+      .waitForModalToClose()
+      .clickResetFilters();
   }
 
 }
