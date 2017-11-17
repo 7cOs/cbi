@@ -88,8 +88,7 @@ export class MyPerformanceTableComponent {
     const columnWidthClass = this.getColumnWidthClass();
 
     let classes: CssClasses = {
-      'deselected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode) ? true : false,
-      'selected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode === null) ? true : false,
+      'deselected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode) ? true : false
     };
 
     if (columnWidthClass) {

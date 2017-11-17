@@ -615,7 +615,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
-    delete this.selectedSubaccountCode;
+    this.selectedSubaccountCode = null;
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
     this.fetchProductMetricsForPreviousState(previousState);
 

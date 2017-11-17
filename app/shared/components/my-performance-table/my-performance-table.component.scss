@@ -758,16 +758,6 @@ div.ctv {
   }
 }
 
-.selected-total-row {
-  background-color: $dark-blue-2;
-
-  /deep/.left-col,
-  /deep/.center-col,
-  /deep/.right-col {
-    background-color: $dark-blue-2;
-  }
-}
-
 .deselected-total-row {
   background-color: $light-blue-4;
 

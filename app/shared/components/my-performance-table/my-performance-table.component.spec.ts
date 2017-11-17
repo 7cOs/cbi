@@ -422,19 +422,6 @@ describe('MyPerformanceTableComponent', () => {
           const classObject = componentInstance.getTotalRowClasses();
           expect(classObject).toEqual({
             'deselected-total-row': true,
-            'selected-total-row': false,
-            [columnWidthClassMock]: true
-          });
-        });
-      });
-
-      describe('when selectedsubaccount has null value', () => {
-        it('should return true for selected-total-row', () => {
-          componentInstance.selectedSubaccountCode = null;
-          const classObject = componentInstance.getTotalRowClasses();
-          expect(classObject).toEqual({
-            'deselected-total-row': false,
-            'selected-total-row': true,
             [columnWidthClassMock]: true
           });
         });
@@ -448,7 +435,6 @@ describe('MyPerformanceTableComponent', () => {
         const classObject = componentInstance.getTotalRowClasses();
         expect(classObject).toEqual({
           'deselected-total-row': false,
-          'selected-total-row': false,
           [columnWidthClassMock]: true
         });
       });
@@ -460,7 +446,6 @@ describe('MyPerformanceTableComponent', () => {
         const classObject = componentInstance.getTotalRowClasses();
         expect(classObject).toEqual({
           'deselected-total-row': false,
-          'selected-total-row': false,
           [columnWidthClassMock]: true
         });
       });
