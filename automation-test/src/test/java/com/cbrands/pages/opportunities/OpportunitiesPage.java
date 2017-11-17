@@ -39,6 +39,9 @@ public class OpportunitiesPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
 
+  @FindBy(how = How.XPATH, using = "//a[contains(., 'Reset')]")
+  private WebElement resetFiltersButton;
+
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//a[contains(., 'Save Report')]")
   private WebElement saveReportButton;
 
@@ -204,6 +207,11 @@ public class OpportunitiesPage extends TestNGBasePage {
   public SavedReportModal clickSaveReportLink() {
     waitForElementToClickable(saveReportButton, true).click();
     return PageFactory.initElements(driver, SavedReportModal.class);
+  }
+
+  public OpportunitiesPage clickResetFilters() {
+    waitForElementToClickable(resetFiltersButton, true).click();
+    return this;
   }
 
   public OpportunitiesPage waitForLoaderToDisappear() {

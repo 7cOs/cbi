@@ -234,6 +234,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   private OpportunitiesPage setUpNewSavedReport(String reportName, String distributorSearchText) {
     return opportunitiesPage
+      .clickResetFilters()
       .enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
       .clickFirstDistributorResult()
