@@ -265,8 +265,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   public SavedReportDropdown clickSavedReportsDropdown() {
     scrollToAndClick(savedReportsDropdown);
 
-    final SavedReportDropdown savedReportDropdown = new SavedReportDropdown();
-    return savedReportDropdown.waitUntilOpen();
+    return new SavedReportDropdown();
   }
 
   public boolean isMyAccountsOnlySelected() {
@@ -286,13 +285,14 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   public class SavedReportDropdown {
     private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
-    private static final String OPEN_DROPDOWN_XPATH = "//div[@aria-hidden='false']" +
-        "[contains(@class, 'md-select-menu-container')]" + "[." + SAVED_FILTER_OPTION_XPATH + "]";
+    private static final String OPEN_DROPDOWN_XPATH =
+      "//div[@aria-hidden='false']" +
+        "[contains(@class, 'md-select-menu-container')]" +
+        "[." + SAVED_FILTER_OPTION_XPATH + "]";
     private static final String SAVED_REPORT_OPTION_XPATH = OPEN_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH;
 
-    public SavedReportDropdown waitUntilOpen() {
+    public SavedReportDropdown() {
       waitForElementToClickable(findElement(By.xpath(OPEN_DROPDOWN_XPATH)), true);
-      return this;
     }
 
     public OpportunitiesPage selectSavedReportWithName(String reportName) {
@@ -315,16 +315,21 @@ public class OpportunitiesPage extends TestNGBasePage {
       WebElement savedReportOption = this.getFirstSavedReportOption();
 
       while (!"No saved reports".equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
-        this.clickSavedReportHoverArrow(savedReportOption)
-          .clickSavedReportDeleteLink()
-          .waitForModalToClose()
-          .clickSavedReportsDropdown();
-        savedReportOption = this.getFirstSavedReportOption();
+        savedReportOption =
+          this.clickSavedReportHoverArrow(savedReportOption)
+            .clickSavedReportDeleteLink()
+            .waitForModalToClose()
+            .clickSavedReportsDropdown()
+            .getFirstSavedReportOption();
       }
 
-      waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
+      this.closeDropdown();
 
       return PageFactory.initElements(driver, OpportunitiesPage.class);
+    }
+
+    private void closeDropdown() {
+      waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
     }
 
     public boolean doesSavedReportExistWithName(String name) {
