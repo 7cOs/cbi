@@ -911,7 +911,6 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
           new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedSubaccountCode(rowMock.metadata.positionId));
-        debugger;
         expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
           positionId: rowMock.metadata.positionId,
           filter: stateMock.myPerformanceFilter,
