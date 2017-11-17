@@ -107,7 +107,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "duplicateReportData"
   )
   public void attemptToEditWithExistingName(String existingReportName, String distributor) {
-    saveNewReport(existingReportName, distributor).waitForModalToClose();
+    this.saveNewReport(existingReportName, distributor).waitForModalToClose();
 
     final SavedReportModal savedReportModal = opportunitiesPage
       .clickSavedReportsDropdown()
