@@ -100,6 +100,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     'CTV'
   ];
   private versions: MyPerformanceEntitiesData[];
+  private isOpportunityTableExtended: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -360,6 +361,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public displayRightTotalRow(): boolean {
     return this.isShowingRoleGroups() && this.productMetricsViewType === ProductMetricsViewType.brands;
+  }
+
+  public toggleOpportunityTable(): void {
+    this.isOpportunityTableExtended = !this.isOpportunityTableExtended;
   }
 
   private sendFilterAnalyticsEvent(): void {
