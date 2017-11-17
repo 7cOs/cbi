@@ -59,7 +59,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Save Report link failed to be disabled when no filters applied."
     );
 
-    opportunitiesPage
+    opportunitiesPage= opportunitiesPage
       .enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
       .clickFirstDistributorResult()
@@ -78,8 +78,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "createRunReportData"
   )
   public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
-
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
     opportunitiesPage = this.setUpNewSavedReport(name, distributorSearchText);
 
     Assert.assertTrue(
@@ -100,7 +99,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "createRunReportData"
   )
   public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
-    opportunitiesPage
+    opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .selectSavedReportWithName(reportName)
       .waitForLoaderToDisappear();
@@ -130,7 +129,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "duplicateReportData"
   )
   public void attemptToEditWithExistingName(String existingReportName, String distributor) {
-    this.setUpNewSavedReport(existingReportName, distributor);
+    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
       .clickSavedReportsDropdown()
@@ -150,10 +149,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "editReportData"
   )
   public void editSavedReport(String originalReportName, String distributor) {
-    this.setUpNewSavedReport(originalReportName, distributor);
+    opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
 
     final String editedReportName = "EDITED " + originalReportName;
-    opportunitiesPage
+    opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .openModalForSavedReportWithName(originalReportName)
       .enterNewReportName(editedReportName)
@@ -179,8 +178,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "deleteReportData"
   )
   public void deleteSavedReport(String reportNameToDelete, String distributor) {
-    this.setUpNewSavedReport(reportNameToDelete, distributor);
-    opportunitiesPage
+    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
+    opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .openModalForSavedReportWithName(reportNameToDelete)
       .clickSavedReportDeleteLink()
