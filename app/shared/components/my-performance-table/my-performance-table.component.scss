@@ -584,7 +584,8 @@ div.ctv {
     tr.total-row.deselected-total-row {
       background-color: $light-blue-4;
 
-      /deep/.left-col, /deep/.right-col {
+      /deep/.left-col,
+      /deep/.right-col {
         background-color: $body-bg;
         color: $blue;
       }
@@ -749,7 +750,9 @@ div.ctv {
   font-weight: $semibold;
   background-color: $light-blue-4;
 
-  /deep/.left-col, /deep/.center-col, /deep/.right-col {
+  /deep/.left-col,
+  /deep/.center-col,
+  /deep/.right-col {
     font-weight: $semibold;
     background-color: $light-blue-4;
   }
@@ -768,7 +771,8 @@ div.ctv {
 .deselected-total-row {
   background-color: $light-blue-4;
 
-  /deep/.left-col, /deep/.right-col {
+  /deep/.left-col,
+  /deep/.right-col {
     background-color: $body-bg;
     color: $blue;
   }

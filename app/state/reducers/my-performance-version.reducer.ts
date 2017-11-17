@@ -38,6 +38,7 @@ export function myPerformanceVersionReducer(
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuPackageCode: state.current.selectedSkuPackageCode,
           selectedEntityType: action.payload,
+          selectedSubaccountCode: state.current.selectedSubaccountCode,
           filter: state.current.filter
         },
         versions: state.versions
@@ -51,6 +52,7 @@ export function myPerformanceVersionReducer(
           selectedEntityDescription: state.current.selectedEntityDescription,
           selectedBrandCode: action.payload,
           selectedEntityType: state.current.selectedEntityType,
+          selectedSubaccountCode: state.current.selectedSubaccountCode,
           filter: state.current.filter
         },
         versions: state.versions
@@ -66,6 +68,7 @@ export function myPerformanceVersionReducer(
           selectedSkuPackageCode: action.payload.skuPackageCode,
           selectedSkuPackageType: action.payload.skuPackageType,
           selectedEntityType: state.current.selectedEntityType,
+          selectedSubaccountCode: state.current.selectedSubaccountCode,
           filter: state.current.filter
         },
         versions: state.versions
@@ -80,6 +83,7 @@ export function myPerformanceVersionReducer(
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuPackageCode: null,
           selectedEntityType: state.current.selectedEntityType,
+          selectedSubaccountCode: state.current.selectedSubaccountCode,
           filter: state.current.filter
         },
         versions: state.versions
@@ -92,6 +96,7 @@ export function myPerformanceVersionReducer(
           salesHierarchyViewType: state.current.salesHierarchyViewType,
           selectedEntityDescription: state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
+          selectedSubaccountCode: state.current.selectedSubaccountCode,
           filter: state.current.filter
         },
         versions: state.versions

@@ -85,12 +85,18 @@ export class MyPerformanceTableComponent {
   }
 
   public getTotalRowClasses() {
-    return {
+    const columnWidthClass = this.getColumnWidthClass();
+
+    let classes: CssClasses = {
       'deselected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode) ? true : false,
       'selected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode === null) ? true : false,
-      'two-right-clumns-present': this.getColumnWidthClass() === 'two-right-clumns-present',
-      'one-right-column-present': this.getColumnWidthClass() === 'one-right-column-present'
     };
+
+    if (columnWidthClass) {
+      classes[columnWidthClass] = true;
+    }
+
+    return classes;
   }
 
   public getColumnWidthClass(): string {
@@ -110,14 +116,8 @@ export class MyPerformanceTableComponent {
 
     let classes: CssClasses = {
       'performance-error': row.performanceError,
-      'selected-sku':
-        (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
-      'selected-subaccount':
-        (this.viewType === SalesHierarchyViewType.subAccounts
-          && this.selectedSubaccountCode
-          && row.metadata.positionId === this.selectedSubaccountCode)
-          ? true
-          : false
+      'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
+      'selected-subaccount': (this.selectedSubaccountCode && row.metadata.positionId === this.selectedSubaccountCode) ? true : false
     };
 
     if (columnWidthClass) {

@@ -85,6 +85,7 @@ describe('My Performance Version Reducer', () => {
         selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedSkuPackageCode: beforeState.current.selectedSkuPackageCode,
         selectedEntityType: entityTypeMock,
+        selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -104,6 +105,7 @@ describe('My Performance Version Reducer', () => {
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedBrandCode: selectedBrandCodeMock,
         selectedEntityType: beforeState.current.selectedEntityType,
+        selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -128,6 +130,7 @@ describe('My Performance Version Reducer', () => {
         selectedSkuPackageCode: skuPackagePayload.skuPackageCode,
         selectedSkuPackageType: skuPackagePayload.skuPackageType,
         selectedEntityType: beforeState.current.selectedEntityType,
+        selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -148,6 +151,7 @@ describe('My Performance Version Reducer', () => {
         selectedBrandCode: beforeState.current.selectedBrandCode,
         selectedSkuPackageCode: clearedSkuPackageCode,
         selectedEntityType: beforeState.current.selectedEntityType,
+        selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -165,6 +169,7 @@ describe('My Performance Version Reducer', () => {
         salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedEntityType: beforeState.current.selectedEntityType,
+        selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions

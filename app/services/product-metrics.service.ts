@@ -119,7 +119,6 @@ export class ProductMetricsService {
         ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.SubAccount) {
-      console.log('Creating API calls for subaccounts');
       apiCalls.push(this.productMetricsApiService.getSubAccountProductMetrics(
         productMetricsData.positionId,
         productMetricsData.contextPositionId,
