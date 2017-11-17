@@ -52,7 +52,31 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
-  @Test(description = "Creating an Opportunities Saved Report", dataProvider = "createRunReportData")
+  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "createRunReportData")
+  public void enableSavedReport(String name, String distributorSearchText) {
+    Assert.assertFalse(
+      opportunitiesPage.isSaveReportButtonEnabled(),
+      "Save Report link failed to be disabled when no filters applied."
+    );
+
+    opportunitiesPage
+      .enterDistributorSearchText(distributorSearchText)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(
+      opportunitiesPage.isSaveReportButtonEnabled(),
+      "Save Report link failed to be enabled after filters applied."
+    );
+  }
+
+  @Test(
+    description = "Creating an Opportunities Saved Report",
+    dependsOnMethods = "enableSavedReport",
+    dataProvider = "createRunReportData"
+  )
   public void createSavedReport(String name, String distributorSearchText) {
     opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
     saveNewReport(name, distributorSearchText)

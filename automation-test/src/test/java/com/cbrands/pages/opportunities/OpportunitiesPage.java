@@ -265,6 +265,10 @@ public class OpportunitiesPage extends TestNGBasePage {
     return "true".equalsIgnoreCase(accountScopeFilter.getAttribute("aria-checked"));
   }
 
+  public boolean isSaveReportButtonEnabled() {
+    return !"true".equalsIgnoreCase(saveReportButton.getAttribute("disabled"));
+  }
+
   public int getDisplayedOpportunitiesCount() {
     final String displayText = findElement(By.xpath("//h4[contains(@class,'opportunities-count')]")).getText();
     final String delimiter = " ";
