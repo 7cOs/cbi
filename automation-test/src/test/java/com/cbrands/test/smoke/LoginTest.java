@@ -21,7 +21,7 @@ public class LoginTest extends BaseTestCase {
   public void tearDown() {
     logoutPage.goToPage();
 
-    shutDownBrowser();
+    this.shutDownBrowser();
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
@@ -35,7 +35,7 @@ public class LoginTest extends BaseTestCase {
   }
 
   private void setUpTestWith(TestUser testUser) throws MalformedURLException {
-    super.startUpBrowser("Smoke - LoginTest: " + testUser.fullName());
+    this.startUpBrowser("Smoke - LoginTest: " + testUser.fullName());
     loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
 

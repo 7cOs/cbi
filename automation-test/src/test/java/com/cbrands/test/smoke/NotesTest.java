@@ -19,7 +19,7 @@ public class NotesTest extends BaseTestCase {
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
-    super.startUpBrowser("Smoke - NotesTest");
+    this.startUpBrowser("Smoke - NotesTest");
 
     logoutPage = new LogoutPage(driver);
     log.info("\nLoading webpage...");
@@ -42,7 +42,7 @@ public class NotesTest extends BaseTestCase {
   @AfterClass
   public void tearDownClass() {
     logoutPage.goToPage();
-    shutDownBrowser();
+    this.shutDownBrowser();
   }
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")

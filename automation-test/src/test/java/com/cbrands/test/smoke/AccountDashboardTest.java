@@ -10,14 +10,24 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+
+import java.net.MalformedURLException;
 
 public class AccountDashboardTest extends BaseTestCase {
   private Login loginPage;
   private LogoutPage logoutPage;
   private AccountDashboardPage accountDashboardPage;
+
+  @BeforeClass
+  public void setUpClass() throws MalformedURLException {
+    this.startUpBrowser("Smoke - AccountDashboard Test");
+  }
+
+  @AfterClass
+  public void tearDownClass() {
+    this.shutDownBrowser();
+  }
 
   @BeforeMethod
   public void setUp() {
@@ -45,12 +55,18 @@ public class AccountDashboardTest extends BaseTestCase {
     accountDashboardPage.enterDistributorSearchText("Coastal")
       .clickSearchForDistributor()
       .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
-      .clickApplyFilters();
+      .clickApplyFilters()
+      .waitForBrandsPanelLoaderToDisappear()
+      .waitForMarketPanelLoaderToDisappear();
 
-    Assert.assertTrue(accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand), "Left brands panel failed to load " +
-      "results");
-    Assert.assertTrue(accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts), "Right accounts panel failed to " +
-      "load results");
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      "Left brands panel failed to load results"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
+      "Right accounts panel failed to load results"
+    );
   }
 
   @Test(description = "Drill all the way down the account hierarchy and drill back up")
@@ -124,7 +140,7 @@ public class AccountDashboardTest extends BaseTestCase {
   }
 
   @Test(description = "Drill all the way down the brands hierarchy and drill back up")
-  public void drillDownDrillUpBrands () {
+  public void drillDownDrillUpBrands() {
     accountDashboardPage.drillIntoFirstRowInLeftPanel();
     Assert.assertTrue(
       accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.SkuPackage),
