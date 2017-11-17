@@ -273,7 +273,6 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public class SavedReportDropdown {
-    private static final int HOVER_ARROW_ICON_SIZE = 17;
     private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
     private static final String OPEN_DROPDOWN_XPATH = "//div[@aria-hidden='false']" +
         "[contains(@class, 'md-select-menu-container')]" + "[." + SAVED_FILTER_OPTION_XPATH + "]";
@@ -338,14 +337,12 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     private OpportunitiesPage clickHoverArrowFor(WebElement savedReport) {
       waitForElementToClickable(savedReport, true);
-      final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
-      final int yPos = savedReport.getSize().getHeight() / 2;
-
       final Actions action = new Actions(driver);
-      action
-        .moveToElement(savedReport, xPos, yPos)
-        .click()
-        .perform();
+      action.moveToElement(savedReport).perform();
+
+      scrollToAndClick(
+        findElement(By.xpath("//div[contains(@class, 'saved-reports-arrow')][@role='button']"))
+      );
 
       return PageFactory.initElements(driver, OpportunitiesPage.class);
     }
