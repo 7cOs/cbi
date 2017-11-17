@@ -567,20 +567,6 @@ div.ctv {
       }
     }
 
-
-    tr.total-row.selected-total-row {
-      background-color: $dark-blue-2;
-
-      /deep/.left-col,
-      /deep/.right-col {
-        background-color: $dark-blue-2;
-      }
-
-      /deep/.center-col {
-        background-color: $dark-blue-7;
-      }
-    }
-
     tr.total-row.deselected-total-row {
       background-color: $light-blue-4;
 
@@ -755,29 +741,6 @@ div.ctv {
   /deep/.right-col {
     font-weight: $semibold;
     background-color: $light-blue-4;
-  }
-}
-
-.deselected-total-row {
-  background-color: $light-blue-4;
-
-  /deep/.left-col,
-  /deep/.right-col {
-    background-color: $body-bg;
-    color: $blue;
-  }
-
-  /deep/.center-col {
-    background-color: $gray-4;
-    color: $black;
-  }
-
-  &:hover {
-    /deep/.left-col,
-    /deep/.center-col,
-    /deep/.right-col {
-      background-color: $light-blue-4;
-    }
   }
 }
 
