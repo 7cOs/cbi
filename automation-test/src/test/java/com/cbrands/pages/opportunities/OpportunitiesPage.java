@@ -255,8 +255,10 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public SavedReportDropdown clickSavedReportsDropdown() {
-    waitForElementToClickable(savedReportsDropdown, true).click();
-    return new SavedReportDropdown();
+    scrollToAndClick(savedReportsDropdown);
+
+    final SavedReportDropdown savedReportDropdown = new SavedReportDropdown();
+    return savedReportDropdown.waitUntilOpen();
   }
 
   public boolean isMyAccountsOnlySelected() {
@@ -276,6 +278,11 @@ public class OpportunitiesPage extends TestNGBasePage {
     private static final String OPEN_DROPDOWN_XPATH = "//div[@aria-hidden='false']" +
         "[contains(@class, 'md-select-menu-container')]" + "[." + SAVED_FILTER_OPTION_XPATH + "]";
     private static final String SAVED_REPORT_OPTION_XPATH = OPEN_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH;
+
+    public SavedReportDropdown waitUntilOpen() {
+      waitForElementToClickable(findElement(By.xpath(OPEN_DROPDOWN_XPATH)), true);
+      return this;
+    }
 
     public OpportunitiesPage selectSavedReportWithName(String reportName) {
       waitForElementToClickable(
