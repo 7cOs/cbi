@@ -55,7 +55,8 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
         p.error-cover-message Sorry, something went wrong. Try refreshing the page or navigate back to a previous view.
 
   md-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
-    p Side Nav Original Content
+    team-performance-opportunities(
+      [header]="'Opportunities Container'")
     p((click)="toggleOpportunityTable()") TOGGLE THIS STUFF
 
 div((click)="toggleOpportunityTable()") TOGGLE OPPORTUNITY TABLE

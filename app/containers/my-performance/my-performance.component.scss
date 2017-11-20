@@ -31,6 +31,14 @@ my-performance-table {
   height: 742px;
   margin-top: 30px;
 
+  /deep/.mat-sidenav-backdrop {
+    background-color: rgba(225, 225, 227, 0.5);
+  }
+
+  .opportunities-container {
+    left: auto;
+  }
+
   .tables {
     display: inline-block;
     position: relative;
@@ -71,9 +79,5 @@ my-performance-table {
         }
       }
     }
-  }
-
-  .opportunities-container {
-    left: auto;
   }
 }

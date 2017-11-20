@@ -135,6 +135,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.performanceMetric = currentMetricName;
         this.tableHeaderRowLeft[1] = currentMetricName;
         this.tableHeaderRowRight[1] = currentMetricName;
+        this.isOpportunityTableExtended = false;
         this.setSelectedDateRangeValues();
         this.handleTeamPerformanceDataRefresh();
     });
@@ -297,7 +298,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
+
     const previousIndex: number = this.versions.length - 1;
     const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
 
@@ -313,6 +316,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
 
+    this.isOpportunityTableExtended = false;
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
 
