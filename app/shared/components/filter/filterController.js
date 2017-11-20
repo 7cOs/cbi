@@ -431,7 +431,8 @@ module.exports = /*  @ngInject */
           case 'zipCode':
           case 'city':
           case 'state':
-          case 'productType':
+          case 'featureType':
+          case 'itemAuthorizationType':
           case 'tradeChannel':
           case 'priorityPackage':
           default:
