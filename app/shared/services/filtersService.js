@@ -270,7 +270,7 @@ module.exports = /*  @ngInject */
         { label: 'Gaintain', name: 'Gaintain', value: 'GAINTAIN' },
         { label: 'Impact', name: 'Impact', value: 'IMPACT' },
         { label: 'Innovation', name: 'Innovation', value: 'INNOVATION' },
-        { label: 'Additional', name: 'Additional', value: 'ADDL_CA' }
+        { label: 'Additional CA', name: 'Additional', value: 'ADDL_CA' }
       ]
     };
 
