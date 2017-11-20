@@ -42,6 +42,7 @@ module.exports = /*  @ngInject */
         const simpleQuery = applySimpleDist(obj);
         const salesStoreStatus = applySalesStoreStatus(obj);
         const storeFormatQuery = applyStoreFormatQuery(obj);
+        const priorityPackagesQuery = applyPriorityPackageQuery(obj);
         let queryStr = '';
 
         queryParams += '';
@@ -56,7 +57,7 @@ module.exports = /*  @ngInject */
         const bulkifiedLimitSortPage = `${model.bulkQuery ? 'limit=1000' : 'limit=20' + sortQuery + pageQuery}`;
         model.bulkQuery = false;
 
-        queryStr = `?${bulkifiedLimitSortPage}&ignoreDismissed=true${simpleQuery}${salesStoreStatus}${storeFormatQuery}&filter=${encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)}`;
+        queryStr = `?${bulkifiedLimitSortPage}&ignoreDismissed=true${simpleQuery}${salesStoreStatus}${storeFormatQuery}${priorityPackagesQuery}&filter=${encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)}`;
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetListOpportunities') {
@@ -238,7 +239,7 @@ module.exports = /*  @ngInject */
           } else {
             // iterate over arrays
             for (var k = 0; k < obj[key2].length; k++) {
-              if (obj[key2][k] && key2 === 'opportunityType' && obj[key2][k].toUpperCase() === 'ALL TYPES') break;
+              if (obj[key2][k] && (key2 === 'opportunityType' && obj[key2][k].toUpperCase() === 'ALL TYPES') || key2 === 'priorityPackage') break;
               if (k === 0) queryParams += key2 + ':';
 
               // transform opp types to db format
@@ -269,9 +270,6 @@ module.exports = /*  @ngInject */
                 for (var l = 0; l < tradeChannelValue.length; l++) {
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
-              } else if (key2 === 'priorityPackage') {
-                const priorityPackage = filtersService.model.priorityPackages.find((priority) => priority.name === obj[key2][k]);
-                queryParams += priorityPackage.value;
               } else {
                 queryParams += obj[key2][k];
               }
@@ -303,5 +301,21 @@ module.exports = /*  @ngInject */
 
     function applyStoreFormatQuery(queries) {
       return (queries.storeFormat) ? `&hispanicMarketType=${queries.storeFormat}` : '';
+    }
+
+    function applyPriorityPackageQuery(queries) {
+      let priorityPackageParameters = '';
+
+      if (queries.priorityPackage) {
+        priorityPackageParameters = '&priorityPackage=';
+        const nbSelectedPriorityPackages = queries.priorityPackage.length;
+
+        queries.priorityPackage.forEach((selectedPriority, index) => {
+          const selectedPriorityValue = filtersService.model.priorityPackages.find((priority) => priority.name === selectedPriority).value;
+          priorityPackageParameters = `${priorityPackageParameters}${selectedPriorityValue}${index < nbSelectedPriorityPackages - 1 ? '|' : ''}`;
+        });
+      }
+
+      return priorityPackageParameters;
     }
   };
