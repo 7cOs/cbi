@@ -33,10 +33,13 @@ my-performance-table {
 
   /deep/.mat-sidenav-backdrop {
     background-color: rgba(225, 225, 227, 0.5);
+    cursor: pointer;
   }
 
   .opportunities-container {
+    border-bottom: 2px solid $gray-8;
     left: auto;
+    width: auto;
   }
 
   .tables {

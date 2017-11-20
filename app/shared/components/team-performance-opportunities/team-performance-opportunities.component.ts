@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'team-performance-opportunities',
@@ -7,5 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 
 export class TeamPerformanceOpportunitiesComponent {
-  @Input() header: string;
+  @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+
+  @Input() subTitle: string;
 }

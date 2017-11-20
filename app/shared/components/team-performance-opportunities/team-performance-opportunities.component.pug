@@ -1,2 +1,17 @@
 section.opportunities-component-section
-  p {{ header }}
+
+  .opportunities-header
+    .header-summary
+      .header-title
+        span Opportunities
+      .header-sub-title
+        span {{ subTitle }}
+    .close-indicator-container((click)="onCloseIndicatorClicked.emit()")
+      img.close-indicator(src="../../../assets/img/icons/thin-x.svg")
+
+  .opportunities-summary
+    .product-name
+      span Corona Extra
+    .product-premise-type
+      span Off-Premise Opportunities
+

@@ -1,0 +1,68 @@
+@import '../../../assets/styles/base/variables';
+
+.opportunities-component-section {
+  padding: 0;
+  width: 375px;
+
+  .opportunities-header {
+    background-color: $gray-4;
+    border-bottom: 2px solid $gray-8;
+    color: $gray-1;
+    display: inline-block;
+    height: 80px;
+    width: 100%;
+
+    .header-summary {
+      float: left;
+      font-family: WorkSans;
+      height: 100%;
+      text-align: left;
+      width: 90%;
+
+      .header-title {
+        font-size: 24px;
+        font-weight: 300;
+        margin-left: 25px;
+        margin-top: 20px;
+      }
+
+      .header-sub-title {
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 25px;
+      }
+    }
+
+    .close-indicator-container {
+      float: right;
+      height: 100%;
+      padding-top: 30px;
+      width: 10%;
+
+      .close-indicator {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .opportunities-summary {
+    width: 100%;
+
+    .product-name {
+      font-family: WorkSans;
+      font-size: 18px;
+      font-weight: 500;
+      margin-left: 25px;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .product-premise-type {
+      font-family: WorkSans;
+      font-size: 16px;
+      margin-left: 25px;
+      margin-top: 20px;
+      text-align: left;
+    }
+  }
+}
