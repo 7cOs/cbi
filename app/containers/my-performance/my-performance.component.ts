@@ -568,7 +568,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                                         || this.currentState.responsibilities.positionId;
 
       if (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-        actionPayload.positionId = this.currentState.responsibilities.accountPositionId;
+        actionPayload.positionId = this.currentState.selectedSubaccountCode || this.currentState.responsibilities.accountPositionId;
       }
     }
 
@@ -734,7 +734,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,
+        positionId: this.currentState.selectedSubaccountCode
+          || this.currentState.responsibilities.accountPositionId
+          || this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
         selectedBrandCode: this.currentState.selectedBrandCode,

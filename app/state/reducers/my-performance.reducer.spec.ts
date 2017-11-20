@@ -152,6 +152,7 @@ describe('My Performance Reducer', () => {
           selectedEntityType: inputMyPerformanceStateMock.current.selectedEntityType,
           selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
           selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
+          selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
           filter: inputMyPerformanceStateMock.current.filter
         },
         versions: inputMyPerformanceStateMock.versions
@@ -215,6 +216,7 @@ describe('My Performance Reducer', () => {
           selectedEntityType: inputMyPerformanceStateMock.current.selectedEntityType,
           selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
           selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
+          selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
           filter: inputMyPerformanceStateMock.current.filter
         },
         versions: inputMyPerformanceStateMock.versions
@@ -242,6 +244,7 @@ describe('My Performance Reducer', () => {
         selectedEntityType: inputMyPerformanceStateMock.current.selectedEntityType,
         selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
         selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
+        selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
         filter: inputMyPerformanceStateMock.current.filter
       },
       versions: inputMyPerformanceStateMock.versions

@@ -89,6 +89,7 @@ export function myPerformanceReducer(
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuPackageCode: state.current.selectedSkuPackageCode,
+          selectedSubaccountCode: state.current.selectedSubaccountCode,
           filter: state.current.filter
         },
         versions: state.versions
@@ -106,6 +107,7 @@ export function myPerformanceReducer(
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuPackageCode: state.current.selectedSkuPackageCode,
+          selectedSubaccountCode: state.current.selectedSubaccountCode,
           filter: state.current.filter
         },
         versions: state.versions

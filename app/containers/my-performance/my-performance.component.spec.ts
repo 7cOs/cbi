@@ -1059,7 +1059,7 @@ describe('MyPerformanceComponent', () => {
         new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(rowMock.metadata.brandCode)
       );
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-        positionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+        positionId: stateMock.myPerformance.current.selectedSubaccountCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
@@ -2183,9 +2183,10 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy ' +
-      'and salesHierarchyViewType.viewType is subAccounts ', () => {
+      'and salesHierarchyViewType.viewType is subAccounts with no selected subaccount', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
       currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
+      currentMock.selectedSubaccountCode = null;
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
@@ -2216,9 +2217,10 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when in alternate hierarchy' +
-      'and salesHierarchyViewType.viewType is not subAccounts ', () => {
+      'and salesHierarchyViewType.viewType is not subAccounts', () => {
       currentMock.responsibilities.alternateHierarchyId = chance.string();
       currentMock.responsibilities.accountPositionId = null;
+      currentMock.selectedSubaccountCode = null;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
@@ -2253,6 +2255,7 @@ describe('MyPerformanceComponent', () => {
       'and salesHierarchyViewType.viewType is NOT subAccounts', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
       currentMock.responsibilities.accountPositionId = null;
+      currentMock.selectedSubaccountCode = null;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
@@ -2284,8 +2287,9 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should dispatch RefreshAllPerformances and FetchProductMetrics actions when NOT in alternate hierarchy' +
-      ' and salesHierarchyViewType.viewType is subAccounts', () => {
+      ' and salesHierarchyViewType.viewType is subAccounts with no selectedsubaccount', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
+      currentMock.selectedSubaccountCode = null;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
@@ -2316,8 +2320,9 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should dispatch RefreshAllPerformances and FetchProductMetrics when viewType is subAccounts', () => {
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics when viewType is subAccounts with no selectedsubaccount', () => {
       currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
+      currentMock.selectedSubaccountCode = null;
       productMetricsSubject.next(productMetricsStateMock);
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
@@ -2339,6 +2344,38 @@ describe('MyPerformanceComponent', () => {
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.responsibilities.accountPositionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: currentMock.selectedEntityType,
+        selectedBrandCode: currentMock.selectedBrandCode,
+        inAlternateHierarchy: false,
+        entityTypeCode: currentMock.responsibilities.entityTypeCode,
+        contextPositionId: currentMock.responsibilities.positionId
+      }));
+    });
+
+    it('should dispatch RefreshAllPerformances and FetchProductMetrics when viewType is subAccounts with a selectedsubaccount', () => {
+      currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
+      productMetricsSubject.next(productMetricsStateMock);
+      currentSubject.next(currentMock);
+      filterSubject.next(stateMock.myPerformanceFilter);
+
+      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+        positionId: currentMock.responsibilities.positionId,
+        groupedEntities: currentMock.responsibilities.groupedEntities,
+        hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
+        selectedEntityType: currentMock.selectedEntityType,
+        salesHierarchyViewType: currentMock.salesHierarchyViewType.viewType,
+        filter: stateMock.myPerformanceFilter,
+        brandSkuCode: undefined,
+        skuPackageType: undefined,
+        entityType: currentMock.selectedEntityType,
+        alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
+        accountPositionId: currentMock.responsibilities.accountPositionId,
+        isMemberOfExceptionHierarchy: false
+      }));
+      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
+        positionId: currentMock.selectedSubaccountCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
         selectedBrandCode: currentMock.selectedBrandCode,
