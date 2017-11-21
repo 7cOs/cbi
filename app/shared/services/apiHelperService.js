@@ -307,7 +307,7 @@ module.exports = /*  @ngInject */
       let priorityPackageParameters = '';
 
       if (queries.priorityPackage) {
-        priorityPackageParameters = '&priorityPackage=';
+        priorityPackageParameters = '&priorityPackageGroups=';
         const nbSelectedPriorityPackages = queries.priorityPackage.length;
 
         queries.priorityPackage.forEach((selectedPriority, index) => {
