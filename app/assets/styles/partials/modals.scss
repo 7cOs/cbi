@@ -540,6 +540,61 @@ md-dialog {
       cursor: pointer;
     }
   }
+
+  &.download-opportunity {
+    width: 400px;
+    height: 402px;
+    font-family: $work-sans;
+
+    .modal-form {
+      font-family: $work-sans;
+      padding-left: 20px;
+      padding-right: 20px;
+
+      .top {
+        margin-bottom: 10px;
+        font-size: 16px;
+        text-align: left;
+      }
+
+      .opportunities {
+        font-weight: $semibold;
+        font-size: 18px;
+      }
+
+      .across-stores {
+        font-weight: $light;
+        font-size: 15px;
+      }
+
+      label {
+        font-family: $work-sans;
+        font-size: 16px;
+        font-weight: $regular;
+
+        .bottom {
+          margin: 5px 0;
+        }
+
+        md-radio-group {
+
+          md-radio-button {
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
+
+          .md-checked {
+
+            .md-label span {
+              font-weight: $semibold;
+              color: $gray-1;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .opportunity-memo {
