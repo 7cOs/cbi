@@ -1,22 +1,17 @@
 @import '../../../assets/styles/base/variables';
 
 .opportunities-component-section {
+  color: $gray-1;
   padding: 0;
   width: 375px;
 
   .opportunities-header {
     background-color: $gray-4;
     border-bottom: 2px solid $gray-8;
-    color: $gray-1;
-    display: inline-block;
     height: 80px;
-    width: 100%;
 
     .header-summary {
       float: left;
-      font-family: WorkSans;
-      height: 100%;
-      text-align: left;
       width: 90%;
 
       .header-title {
@@ -27,15 +22,15 @@
       }
 
       .header-sub-title {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 600;
         margin-left: 25px;
+        text-transform: uppercase;
       }
     }
 
     .close-indicator-container {
       float: right;
-      height: 100%;
       padding-top: 30px;
       width: 10%;
 
@@ -46,23 +41,85 @@
   }
 
   .opportunities-summary {
-    width: 100%;
 
     .product-name {
-      font-family: WorkSans;
       font-size: 18px;
-      font-weight: 500;
-      margin-left: 25px;
+      font-weight: 600;
+      margin-left: 20px;
       margin-top: 20px;
-      text-align: left;
     }
 
     .product-premise-type {
-      font-family: WorkSans;
       font-size: 16px;
-      margin-left: 25px;
-      margin-top: 20px;
-      text-align: left;
+      margin-left: 20px;
+      margin-top: 15px;
+    }
+  }
+
+  .opportunities-table {
+
+    .label-row {
+      display: inline-block;
+      font-family: $rajdhani;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      margin-top: 15px;
+      text-transform: uppercase;
+      width: 100%;
+
+      .type-label {
+        float: left;
+        margin-left: 20px;
+      }
+
+      .count-label {
+        float: right;
+        margin-right: 10px;
+      }
+    }
+
+    .opportunity-row {
+      border-top: solid 1px $border-gray;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+      height: 50px;
+      width: 100%;
+
+      div:first-child {
+        float: left;
+        margin-left: 20px;
+        padding-top: 18px;
+      }
+
+      div:last-child {
+        background-color: $body-bg;
+        color: $water-blue;
+        float: right;
+        font-weight: 600;
+        height: 100%;
+        padding-top: 18px;
+        text-align: center;
+        width: 35%;
+      }
+    }
+
+    .total-row {
+      height: 35px;
+
+      .total-column-label {
+        font-weight: 600;
+        margin-left: 0;
+        text-align: right;
+        text-transform: uppercase;
+        width: 50%;
+      }
+
+      .total-column-value {
+        color: $gray-1;
+      }
     }
   }
 }

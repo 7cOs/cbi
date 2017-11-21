@@ -2,16 +2,32 @@ section.opportunities-component-section
 
   .opportunities-header
     .header-summary
-      .header-title
-        span Opportunities
-      .header-sub-title
-        span {{ subTitle }}
+      .header-title Opportunities
+      .header-sub-title {{ subTitle }}
     .close-indicator-container((click)="onCloseIndicatorClicked.emit()")
       img.close-indicator(src="../../../assets/img/icons/thin-x.svg")
 
   .opportunities-summary
-    .product-name
-      span Corona Extra
-    .product-premise-type
-      span Off-Premise Opportunities
+    .product-name Corona Extra
+    .product-premise-type Off-Premise Opportunities
 
+  .opportunities-table
+    .label-row
+      .type-label Opportunity Type
+      .count-label # Of Opportunities
+
+    .opportunity-row
+      div Non-Buy
+      div 9
+
+    .opportunity-row
+      div Low-Velocity
+      div 999
+
+    .opportunity-row
+      div At Risk
+      div 999999
+
+    .opportunity-row.total-row
+      .total-column-label Total
+      .total-column-value 999999999999
