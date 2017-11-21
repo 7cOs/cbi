@@ -545,6 +545,7 @@ md-dialog {
     width: 400px;
     height: 402px;
     font-family: $work-sans;
+    text-transform: none;
 
     .modal-form {
       font-family: $work-sans;
@@ -559,18 +560,19 @@ md-dialog {
 
       .opportunities {
         font-weight: $semibold;
-        font-size: 18px;
+        font-size: 19px;
       }
 
       .across-stores {
         font-weight: $light;
-        font-size: 15px;
+        font-size: 17px;
       }
 
       label {
         font-family: $work-sans;
         font-size: 16px;
         font-weight: $regular;
+        letter-spacing: normal;
 
         .bottom {
           margin: 5px 0;
