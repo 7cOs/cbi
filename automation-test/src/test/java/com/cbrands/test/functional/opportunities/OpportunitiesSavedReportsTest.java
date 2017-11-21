@@ -126,7 +126,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "duplicateReportData"
+    dataProvider = "editDuplicateReportData"
   )
   public void attemptToEditWithExistingName(String existingReportName, String distributor) {
     opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
@@ -208,10 +208,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @DataProvider
-  public static Object[][] duplicateReportData() {
+  public static Object[][] editDuplicateReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {"Duplicate " + testReportName, "Healy Wholesale"}
+      {"Edit Duplicate " + testReportName, "Healy Wholesale"}
     };
   }
 
