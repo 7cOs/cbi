@@ -59,7 +59,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Save Report link failed to be disabled when no filters applied."
     );
 
-    opportunitiesPage= opportunitiesPage
+    opportunitiesPage = opportunitiesPage
       .enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
       .clickFirstDistributorResult()
