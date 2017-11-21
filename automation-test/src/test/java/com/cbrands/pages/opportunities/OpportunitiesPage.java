@@ -263,8 +263,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public SavedReportDropdown clickSavedReportsDropdown() {
-    scrollToAndClick(savedReportsDropdown);
-
+	waitForElementToClickable(savedReportsDropdown, true).click();
     return new SavedReportDropdown();
   }
 
