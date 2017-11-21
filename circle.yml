@@ -8,6 +8,8 @@ dependencies:
   pre:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
     - cd automation-test && mvn install -DskipTests=true
+    - echo $runTestSuite
+    - echo $skipDeployment
 
 test:
   override:
@@ -28,31 +30,30 @@ deployment:
   develop:
     branch: develop
     commands:
-      - git push git@heroku.com:app-orion-dev.git $CIRCLE_SHA1:master -f
+      - bash bin/deploy.sh app-orion-dev.git
 
   qa:
     branch: test
     commands:
-      - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
-      - cd automation-test && mvn test -DargLine="-Denv=qa -Dbrowser=ie"
-      - cd automation-test && mvn test -DargLine="-Denv=qa -Dbrowser=chrome"
+      - bash bin/deploy.sh app-orion-qa.git
+      - bash bin/automation-test.sh
 
   ga-automation:
     branch: ga-automation
     commands:
-      - git push git@heroku.com:app-compass-ga-automation.git $CIRCLE_SHA1:master -f
+      - bash bin/deploy.sh app-compass-ga-automation.git
 
   stage:
     branch: stage
     commands:
-      - git push git@heroku.com:app-compass-stage.git $CIRCLE_SHA1:master -f
+      - bash bin/deploy.sh app-compass-stage.git
 
   preprod:
     branch: preprod
     commands:
-      - git push git@heroku.com:app-compass-preprod.git $CIRCLE_SHA1:master -f
+      - bash bin/deploy.sh app-compass-preprod.git
 
   production:
     branch: master
     commands:
-      - git push git@heroku.com:app-orion-prod.git $CIRCLE_SHA1:master -f
+      - bash bin/deploy.sh app-orion-prod.git

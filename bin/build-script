@@ -1,0 +1,85 @@
+#!/usr/bin/env node
+
+const rp = require('request-promise');
+
+const functionalTest = 'functional-test';
+const smokeTest = 'smoke-test';
+
+const projectArgName = 'project:';
+const branchArgName = 'branch:';
+const tokenArgName = 'token:';
+const runTestSuiteArgName = 'runTestSuite:';
+const skipDeploymentArgName = 'skipDeployment:';
+
+const username = 'ConstellationBrands';
+
+let project = 'app-orion';
+let branchName = 'test';
+let token = process.env.CIRCLE_CI_API_TOKEN;
+let runTestSuite = 'smoke-test';
+let skipDeployment = true;
+
+function buildBranch(project, branchName, token, runTestSuite, skipDeployment) {
+  const url = `https://circleci.com/api/v1.1/project/github/${username}/${project}/tree/${encodeURIComponent(branchName)}?circle-token=${token}`;
+  const options = {
+    method: 'POST',
+    uri: url,
+    body: {
+      build_parameters: {
+        runTestSuite: runTestSuite,
+        skipDeployment: skipDeployment
+      }
+    },
+    json: true
+  };
+
+  rp(options)
+    .then((parsedBody) => {
+        console.log('Build created with success!');
+        console.log(parsedBody);
+      })
+      .catch((err) => {
+        console.log('error');
+        console.log(err);
+    });
+
+}
+
+process.argv.forEach((value, index, array) => {
+  if (value.indexOf(projectArgName) !== -1) {
+    project = value.slice(projectArgName.length);
+  }
+
+  if (value.indexOf(branchArgName) !== -1) {
+    branchName = value.slice(branchArgName.length);
+  }
+
+  if (value.indexOf(tokenArgName) !== -1) {
+    token = value.slice(tokenArgName.length);
+    if (!token || !token.length) {
+      console.log('Please enter a valid token');
+    }
+  }
+
+  if (value.indexOf(runTestSuiteArgName) !== -1) {
+    runTestSuite = value.slice(runTestSuiteArgName.length);
+    if (runTestSuite !== functionalTest && runTestSuite !== smokeTest) {
+      console.log(`Please enter either ${functionalTest} or ${smokeTest} for the "runTestSuite" argument`);
+      runTestSuite = '';
+    }
+  }
+
+  if (value.indexOf(skipDeploymentArgName) !== -1) {
+    skipDeployment = value.slice(skipDeploymentArgName.length);
+  }
+});
+
+if (project && project.length &&
+  branchName && branchName.length &&
+  token && token.length &&
+  runTestSuite && runTestSuite.length &&
+  skipDeployment !== undefined) {
+    buildBranch(project, branchName, token, runTestSuite, skipDeployment);
+} else {
+  console.log('Please provide the arguments according to documentation.');
+}
