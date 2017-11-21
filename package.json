@@ -7,7 +7,7 @@
   },
   "license": "UNLICENSED",
   "private": true,
-  "repository": "git@github.com:ConstellationBrands/app-orion.git",
+  "repository": "git@github.com:ConstellationBrands/compass-portal.git",
   "scripts": {
     "heroku-postbuild": "npm run build:prod",
     "start": "node server",

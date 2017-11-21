@@ -52,12 +52,34 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     logoutPage.goToPage();
   }
 
-  @Test(description = "Creating an Opportunities Saved Report", dataProvider = "createRunReportData")
+  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "createRunReportData")
+  public void enableSavedReport(String name, String distributorSearchText) {
+    Assert.assertFalse(
+      opportunitiesPage.isSaveReportButtonEnabled(),
+      "Save Report link failed to be disabled when no filters applied."
+    );
+
+    opportunitiesPage= opportunitiesPage
+      .enterDistributorSearchText(distributorSearchText)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(
+      opportunitiesPage.isSaveReportButtonEnabled(),
+      "Save Report link failed to be enabled after filters applied."
+    );
+  }
+
+  @Test(
+    description = "Creating an Opportunities Saved Report",
+    dependsOnMethods = "enableSavedReport",
+    dataProvider = "createRunReportData"
+  )
   public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
-    saveNewReport(name, distributorSearchText)
-      .waitForModalToClose()
-      .clickSavedReportsDropdown();
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
+    opportunitiesPage = this.setUpNewSavedReport(name, distributorSearchText);
 
     Assert.assertTrue(
       opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(name),
@@ -77,7 +99,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "createRunReportData"
   )
   public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
-    opportunitiesPage
+    opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .selectSavedReportWithName(reportName)
       .waitForLoaderToDisappear();
@@ -107,7 +129,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "duplicateReportData"
   )
   public void attemptToEditWithExistingName(String existingReportName, String distributor) {
-    saveNewReport(existingReportName, distributor).waitForModalToClose();
+    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
       .clickSavedReportsDropdown()
@@ -127,10 +149,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "editReportData"
   )
   public void editSavedReport(String originalReportName, String distributor) {
-    saveNewReport(originalReportName, distributor).waitForModalToClose();
+    opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
 
     final String editedReportName = "EDITED " + originalReportName;
-    opportunitiesPage
+    opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .openModalForSavedReportWithName(originalReportName)
       .enterNewReportName(editedReportName)
@@ -156,8 +178,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "deleteReportData"
   )
   public void deleteSavedReport(String reportNameToDelete, String distributor) {
-    saveNewReport(reportNameToDelete, distributor).waitForModalToClose();
-    opportunitiesPage
+    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
+    opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .openModalForSavedReportWithName(reportNameToDelete)
       .clickSavedReportDeleteLink()
@@ -209,7 +231,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     };
   }
 
-  private SavedReportModal saveNewReport(String name, String distributorSearchText) {
+  private OpportunitiesPage setUpNewSavedReport(String reportName, String distributorSearchText) {
     return opportunitiesPage
       .enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
@@ -217,8 +239,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .clickApplyFiltersButton()
       .waitForLoaderToDisappear()
       .clickSaveReportLink()
-      .enterReportName(name)
-      .clickSave();
+      .enterReportName(reportName)
+      .clickSave()
+      .waitForModalToClose()
+      .clickResetFilters();
   }
 
 }
