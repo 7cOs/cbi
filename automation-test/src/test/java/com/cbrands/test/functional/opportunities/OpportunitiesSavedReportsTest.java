@@ -16,40 +16,34 @@ import java.net.MalformedURLException;
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
-  private Login loginPage;
-  private LogoutPage logoutPage;
   private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
     this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
+    log.info("\nLoading webpage...");
+    driver.get(webAppBaseUrl);
+
+    final Login loginPage = new Login(driver);
+    homePage = loginPage.loginAs(TestUser.ACTOR4);
+
+    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
+    opportunitiesPage.goToPage();
+
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
   }
 
   @AfterClass
   public void tearDownClass() {
+    final LogoutPage logoutPage = new LogoutPage(driver);
+    logoutPage.goToPage();
     this.shutDownBrowser();
   }
 
   @BeforeMethod
   public void setUp() {
-    final TestUser testUser = TestUser.ACTOR4;
-
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
-    homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
-
-    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
-  }
-
-  @AfterMethod
-  public void tearDown() {
-    logoutPage.goToPage();
   }
 
   @Test(description = "Enabling/Disabling Save Report link", dataProvider = "createRunReportData")
@@ -78,7 +72,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "createRunReportData"
   )
   public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
     opportunitiesPage = this.setUpNewSavedReport(name, distributorSearchText);
 
     Assert.assertTrue(
