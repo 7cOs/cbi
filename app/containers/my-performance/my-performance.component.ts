@@ -281,10 +281,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
-    if (parameters.leftSide) {
-      this.handleLeftRowDataElementClicked(parameters);
-    } else {
-      this.handleRightRowElementClicked(parameters);
+    switch (parameters.type) {
+      case RowType.data:
+      case RowType.dismissableTotal:
+        if (parameters.leftSide) {
+          this.handleLeftRowDataElementClicked(parameters);
+        } else {
+          this.handleRightRowElementClicked(parameters);
+        }
+        break;
+      case RowType.total:
+        this.handleTotalRowClicked(parameters);
+        break;
+      default:
+        break;
     }
   }
 
@@ -373,142 +383,146 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
-    if (parameters.type === RowType.data || parameters.type === RowType.dismissableTotal) {
-      this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0); // GA on click total/subaccount row?
-      if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts) {
-        this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
-          filter: this.filterState
-        })));
-      }
-      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
+    if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts) {
+      this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
+      this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
+        filter: this.filterState
+      })));
+    }
+    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
-      const isMemberOfExceptionHierarchy: boolean =
-        !!(this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy);
+    const isMemberOfExceptionHierarchy: boolean =
+      !!(this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy);
 
-      switch (this.salesHierarchyViewType) {
-        case SalesHierarchyViewType.roleGroups:
-          const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
+    switch (this.salesHierarchyViewType) {
+      case SalesHierarchyViewType.roleGroups:
+        const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
-          if (parameters.row.metadata.alternateHierarchyId) {
-            this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+        if (parameters.row.metadata.alternateHierarchyId) {
+          this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
+
+          if (parameters.row.metadata.exceptionHierarchy) {
+            this.store.dispatch(new ResponsibilitiesActions.SetExceptionHierarchy());
           }
+        }
 
-          this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
+        this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
+          positionId: parameters.row.metadata.positionId,
+          alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+          entityTypeGroupName: entityTypeGroupName,
+          entityTypeCode: parameters.row.metadata.entityTypeCode,
+          entityType: parameters.row.metadata.entityType,
+          entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+          filter: this.filterState,
+          selectedEntityDescription: parameters.row.descriptionRow0,
+          brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
+          skuPackageType: this.selectedSkuPackageType,
+          isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
+        }));
+
+        this.fetchProductMetricsWhenClick(parameters);
+        break;
+      case SalesHierarchyViewType.people:
+        if (this.isInsideAlternateHierarchy()) {
+          this.store.dispatch(new ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities({
             positionId: parameters.row.metadata.positionId,
             alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-            entityTypeGroupName: entityTypeGroupName,
-            entityTypeCode: parameters.row.metadata.entityTypeCode,
-            entityType: parameters.row.metadata.entityType,
-            entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
             filter: this.filterState,
             selectedEntityDescription: parameters.row.descriptionRow0,
             brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
             skuPackageType: this.selectedSkuPackageType,
             isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
           }));
-
-          this.fetchProductMetricsWhenClick(parameters);
-          break;
-        case SalesHierarchyViewType.people:
-          if (this.isInsideAlternateHierarchy()) {
-            this.store.dispatch(new ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities({
-              positionId: parameters.row.metadata.positionId,
-              alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-              filter: this.filterState,
-              selectedEntityDescription: parameters.row.descriptionRow0,
-              brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-              skuPackageType: this.selectedSkuPackageType,
-              isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
-            }));
-          } else {
-            this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
-              positionId: parameters.row.metadata.positionId,
-              filter: this.filterState,
-              selectedEntityDescription: parameters.row.descriptionRow0,
-              brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-              skuPackageType: this.selectedSkuPackageType,
-              isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
-            }));
-          }
-          this.fetchProductMetricsWhenClick(parameters);
-          break;
-        case SalesHierarchyViewType.accounts:
-          this.store.dispatch(new ResponsibilitiesActions.FetchSubAccounts({
+        } else {
+          this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
             positionId: parameters.row.metadata.positionId,
-            contextPositionId: this.currentState.responsibilities.positionId,
-            entityTypeAccountName: parameters.row.descriptionRow0,
-            selectedPositionId: parameters.row.metadata.positionId,
             filter: this.filterState,
             selectedEntityDescription: parameters.row.descriptionRow0,
-            brandSkuCode: this.currentState.selectedSkuPackageCode || this.currentState.selectedBrandCode,
+            brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
             skuPackageType: this.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
           }));
-          if (!this.isInsideAlternateHierarchy()) {
-            this.fetchProductMetricsWhenClick(parameters);
-          }
-          break;
-        case SalesHierarchyViewType.subAccounts:
-          this.selectedSubaccountCode = parameters.row.metadata.positionId;
-          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
-          this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-            positionId: parameters.row.metadata.positionId,
-            filter: this.filterState,
-            selectedEntityType: this.currentState.selectedEntityType,
-            selectedBrandCode: this.currentState.selectedBrandCode,
-            inAlternateHierarchy: this.isInsideAlternateHierarchy(),
-            entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-            contextPositionId: this.currentState.responsibilities.positionId
-          }));
-          break;
-        default:
-          break;
-      }
-    } else if (parameters.type === RowType.total && this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-      this.selectedSubaccountCode = null;
-      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
-      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
-      this.handleTeamPerformanceDataRefresh();
+        }
+        this.fetchProductMetricsWhenClick(parameters);
+        break;
+      case SalesHierarchyViewType.accounts:
+        this.store.dispatch(new ResponsibilitiesActions.FetchSubAccounts({
+          positionId: parameters.row.metadata.positionId,
+          contextPositionId: this.currentState.responsibilities.positionId,
+          entityTypeAccountName: parameters.row.descriptionRow0,
+          selectedPositionId: parameters.row.metadata.positionId,
+          filter: this.filterState,
+          selectedEntityDescription: parameters.row.descriptionRow0,
+          brandSkuCode: this.currentState.selectedSkuPackageCode || this.currentState.selectedBrandCode,
+          skuPackageType: this.selectedSkuPackageType,
+        }));
+        if (!this.isInsideAlternateHierarchy()) {
+          this.fetchProductMetricsWhenClick(parameters);
+        }
+        break;
+      case SalesHierarchyViewType.subAccounts:
+        this.selectedSubaccountCode = parameters.row.metadata.positionId;
+        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
+        this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
+          positionId: parameters.row.metadata.positionId,
+          filter: this.filterState,
+          selectedEntityType: this.currentState.selectedEntityType,
+          selectedBrandCode: this.currentState.selectedBrandCode,
+          inAlternateHierarchy: this.isInsideAlternateHierarchy(),
+          entityTypeCode: this.currentState.responsibilities.entityTypeCode,
+          contextPositionId: this.currentState.responsibilities.positionId
+        }));
+        break;
+      default:
+        break;
     }
   }
 
   private handleRightRowElementClicked(parameters: HandleElementClickedParameters): void {
-    if (parameters.type === RowType.data || parameters.type === RowType.dismissableTotal) {
-      this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
-      switch (this.productMetricsViewType) {
-        case ProductMetricsViewType.brands:
-          this.selectedBrandCode = parameters.row.metadata.brandCode;
-          this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
-          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
+    this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
+    switch (this.productMetricsViewType) {
+      case ProductMetricsViewType.brands:
+        this.selectedBrandCode = parameters.row.metadata.brandCode;
+        this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
+        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
 
-          this.fetchProductMetricsWhenClick(parameters);
+        this.fetchProductMetricsWhenClick(parameters);
 
-          if (parameters.row.metadata.brandCode) {
-            this.dispatchRefreshAllPerformance(parameters.row.metadata.brandCode, null);
+        if (parameters.row.metadata.brandCode) {
+          this.dispatchRefreshAllPerformance(parameters.row.metadata.brandCode, null);
+        }
+        break;
+      case ProductMetricsViewType.skus:
+      case ProductMetricsViewType.packages:
+        if (parameters.type === RowType.data) {
+          this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
+          this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
+            skuPackageCode: parameters.row.metadata.skuPackageCode,
+            skuPackageType: parameters.row.metadata.skuPackageType
+          }));
+          if (parameters.row.metadata.skuPackageCode) {
+            this.dispatchRefreshAllPerformance(parameters.row.metadata.skuPackageCode,
+              parameters.row.metadata.skuPackageType);
           }
-          break;
-        case ProductMetricsViewType.skus:
-        case ProductMetricsViewType.packages:
-          if (parameters.type === RowType.data) {
-            this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
-            this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
-            this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
-              skuPackageCode: parameters.row.metadata.skuPackageCode,
-              skuPackageType: parameters.row.metadata.skuPackageType
-            }));
-            if (parameters.row.metadata.skuPackageCode) {
-              this.dispatchRefreshAllPerformance(parameters.row.metadata.skuPackageCode,
-                parameters.row.metadata.skuPackageType);
-            }
-          } else {
-            this.selectedSkuPackageCode = null;
-            this.selectedSkuPackageType = null;
-            this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-            this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
-          }
-          break;
-        default:
-          break;
-      }
+        } else {
+          this.selectedSkuPackageCode = null;
+          this.selectedSkuPackageType = null;
+          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+          this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  private handleTotalRowClicked(parameters: HandleElementClickedParameters) {
+    if (parameters.leftSide && this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+      this.selectedSubaccountCode = null;
+      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
+      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
+      this.handleTeamPerformanceDataRefresh();
     }
   }
 
