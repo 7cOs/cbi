@@ -192,6 +192,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
+  @Test(
+    description = "Attempting to create a new Saved Report when the max allowed has already been reached",
+    dependsOnMethods = "createSavedReport"
+  )
+  public void createAfterMaxLimit() {
+    Assert.fail("Test not implemented.");
+  }
+
   @DataProvider
   public static Object[][] createRunReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
