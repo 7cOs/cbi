@@ -395,6 +395,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       !!(this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy);
 
     switch (this.salesHierarchyViewType) {
+
       case SalesHierarchyViewType.roleGroups:
         const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
 
@@ -454,7 +455,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           filter: this.filterState,
           selectedEntityDescription: parameters.row.descriptionRow0,
           brandSkuCode: this.currentState.selectedSkuPackageCode || this.currentState.selectedBrandCode,
-          skuPackageType: this.selectedSkuPackageType,
+          skuPackageType: this.selectedSkuPackageType
         }));
         if (!this.isInsideAlternateHierarchy()) {
           this.fetchProductMetricsWhenClick(parameters);
