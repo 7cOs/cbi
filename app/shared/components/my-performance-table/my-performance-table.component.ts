@@ -85,12 +85,11 @@ export class MyPerformanceTableComponent {
   }
 
   public getTotalRowClasses() {
-    const columnWidthClass = this.getColumnWidthClass();
-
     let classes: CssClasses = {
       'deselected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode) ? true : false
     };
 
+    const columnWidthClass = this.getColumnWidthClass();
     if (columnWidthClass) {
       classes[columnWidthClass] = true;
     }
@@ -111,14 +110,13 @@ export class MyPerformanceTableComponent {
   }
 
   public getEntityRowClasses(row: MyPerformanceTableRow): CssClasses {
-    const columnWidthClass = this.getColumnWidthClass();
-
     let classes: CssClasses = {
       'performance-error': row.performanceError,
       'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
       'selected-subaccount': (this.selectedSubaccountCode && row.metadata.positionId === this.selectedSubaccountCode) ? true : false
     };
 
+    const columnWidthClass = this.getColumnWidthClass();
     if (columnWidthClass) {
       classes[columnWidthClass] = true;
     }
@@ -127,12 +125,11 @@ export class MyPerformanceTableComponent {
   }
 
   public getDismissableTotalRowClasses(): CssClasses {
-    const columnWidthClass = this.getColumnWidthClass();
-
     let classes: CssClasses = {
       'selected': (!this.selectedSkuPackageCode && this.dismissableTotalRow) ? true : false
     };
 
+    const columnWidthClass = this.getColumnWidthClass();
     if (columnWidthClass) {
       classes[columnWidthClass] = true;
     }
