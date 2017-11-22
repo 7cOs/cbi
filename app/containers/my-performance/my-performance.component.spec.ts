@@ -883,14 +883,22 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should send analytics event', () => {
+    it('should send analytics event when not viewing subaccounts', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
       componentInstance.handleElementClicked(params);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
         'Team Snapshot',
         'Link Click',
         rowMock.descriptionRow0
       ]);
+    });
+
+    it('should not send analytics event when viewing subaccounts', () => {
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+      componentInstance.handleElementClicked(params);
+      expect(analyticsServiceMock.trackEvent.calls.count()).toBe(0);
     });
 
     describe('when viewing subacounts', () => {
