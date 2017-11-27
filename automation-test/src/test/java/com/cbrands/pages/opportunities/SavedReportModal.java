@@ -12,7 +12,7 @@ import org.testng.Assert;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class SavedReportModal extends TestNGBasePage {
-  private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, '-report')]";
+  private static final String MODAL_CONTAINER_XPATH = "";
   private static final String EDIT_NAME_XPATH = MODAL_CONTAINER_XPATH +
     "//input[contains(@ng-model, 'editedFilterName')]";
 
@@ -84,7 +84,7 @@ public class SavedReportModal extends TestNGBasePage {
   }
 
   public boolean isMaxSavedReportsLimitErrorDisplayed() {
-    return isElementPresent(By.xpath(MODAL_CONTAINER_XPATH + "//p[contains(@ng-hide, 'opportunitiesFilters.length')]"));
+    return isElementPresent(By.xpath(MODAL_CONTAINER_XPATH + "//p[contains(@ng-hide, 'opportunityFilters.length')]"));
   }
 }
 

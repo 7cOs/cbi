@@ -14,6 +14,7 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
+  private static final int MAX_SAVED_REPORT_LIMIT = 10;
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
   private HomePage homePage;
@@ -198,6 +199,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "distributorData"
   )
   public void createAfterMaxLimit(String distributor) {
+    for(int i = 1; i <= MAX_SAVED_REPORT_LIMIT; i++) {
+      this.setUpNewSavedReport("Test Max Limit - Report #" + i, distributor);
+    }
+
     final SavedReportModal savedReportModal = opportunitiesPage
       .enterDistributorSearchText(distributor)
       .clickSearchForDistributor()
