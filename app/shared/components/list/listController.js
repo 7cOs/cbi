@@ -52,7 +52,7 @@ module.exports = /*  @ngInject */
     vm.undoClicked = false;
     vm.selectAllToastVisible = false;
     vm.maxOpportunities = maxOpportunities;
-    vm.downloadOption = 'WithoutRationales';
+    vm.downloadOption = 'WithRationales';
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
