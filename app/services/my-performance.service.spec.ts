@@ -8,7 +8,7 @@ import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilter } from '../models/my-performance-filter.model';
 import { MyPerformanceService } from './my-performance.service';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { PremiseTypeLabel, PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../enums/team-performance-table-header.enum';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
@@ -273,6 +273,19 @@ describe('Service: MyPerformanceService', () => {
       expect(actualBrandsLabel).toBe(ProductMetricHeaderProductType.Brand);
       expect(actualSkusLabel).toBe(ProductMetricHeaderProductType.SKU);
       expect(actualPackagesLabel).toBe(ProductMetricHeaderProductType.Package);
+    });
+  });
+
+  describe('getPremiseTypeStateLabel', () => {
+
+    it('should return the PremiseTypeLabel associated with the passed in PremiseTypeValue', () => {
+      const actualAllPremiseTypeLabel = myPerformanceService.getPremiseTypeStateLabel(PremiseTypeValue.All);
+      const actualOffPremiseTypeLabel = myPerformanceService.getPremiseTypeStateLabel(PremiseTypeValue.Off);
+      const actualOnPremiseTypeLabel = myPerformanceService.getPremiseTypeStateLabel(PremiseTypeValue.On);
+
+      expect(actualAllPremiseTypeLabel).toBe(PremiseTypeLabel.All);
+      expect(actualOffPremiseTypeLabel).toBe(PremiseTypeLabel.Off);
+      expect(actualOnPremiseTypeLabel).toBe(PremiseTypeLabel.On);
     });
   });
 });

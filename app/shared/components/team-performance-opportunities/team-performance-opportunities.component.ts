@@ -9,5 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class TeamPerformanceOpportunitiesComponent {
   @Output() onCloseIndicatorClicked = new EventEmitter<any>();
 
+  @Input() premiseType: string;
+  @Input() productName: string;
   @Input() subTitle: string;
 }

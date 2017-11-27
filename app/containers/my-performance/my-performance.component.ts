@@ -101,6 +101,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ];
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
+  private currentPremiseTypeValue: string;
 
   constructor(
     private store: Store<AppState>,
@@ -130,6 +131,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.deselectSkuPackageIfNeeded(this.filterState, filterState);
         this.filterState = filterState;
         const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
+        this.currentPremiseTypeValue = this.myPerformanceService.getPremiseTypeStateLabel(filterState.premiseType);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
         this.performanceMetric = currentMetricName;

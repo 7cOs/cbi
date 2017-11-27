@@ -56,6 +56,8 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
 
   md-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
     team-performance-opportunities(
+      [productName]="'Corona Extra'",
+      [premiseType]="currentPremiseTypeValue",
       [subTitle]="'Town & Country Dist Inc – IL'",
       (onCloseIndicatorClicked)="toggleOpportunityTable()")
 
