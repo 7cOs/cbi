@@ -194,10 +194,29 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
-    dependsOnMethods = "createSavedReport"
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "distributorData"
   )
-  public void createAfterMaxLimit() {
-    Assert.fail("Test not implemented.");
+  public void createAfterMaxLimit(String distributor) {
+    final SavedReportModal savedReportModal = opportunitiesPage
+      .enterDistributorSearchText(distributor)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickSaveReportLink();
+
+    Assert.assertTrue(
+      savedReportModal.isMaxSavedReportsLimitErrorDisplayed(),
+      "Failed to display error message when max limit of Saved Reports already reached."
+    );
+  }
+
+  @DataProvider
+  public static Object[][] distributorData() {
+    return new Object[][]{
+      {"Healy Wholesale"}
+    };
   }
 
   @DataProvider
