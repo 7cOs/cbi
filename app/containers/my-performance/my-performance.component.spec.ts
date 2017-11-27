@@ -2,6 +2,7 @@ import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { MdSidenavModule } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 import { sample } from 'lodash';
 import { Store } from '@ngrx/store';
@@ -35,7 +36,7 @@ import { MyPerformanceFilterEvent, MyPerformanceFilter } from '../../models/my-p
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
-import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -106,6 +107,21 @@ class MyPerformanceTableComponentMock {
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
+}
+
+@Component({
+  selector: 'team-performance-opportunities',
+  template: ''
+})
+class TeamPerformanceOpportunitiesComponentMock {
+  @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+  @Output() onOpportunityCountClicked = new EventEmitter<TeamPerformanceTableOpportunity>();
+
+  @Input() opportunities: Array<TeamPerformanceTableOpportunity>;
+  @Input() premiseType: string;
+  @Input() productName: string;
+  @Input() subtitle: string;
+  @Input() total: number;
 }
 
 describe('MyPerformanceComponent', () => {
@@ -205,7 +221,8 @@ describe('MyPerformanceComponent', () => {
       getMetricValueName: jasmine.createSpy('getMetricValueName'),
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.returnValue(accountDashboardStateParamMock),
       getSalesHierarchyViewTypeLabel: jasmine.createSpy('getSalesHierarchyViewTypeLabel').and.callThrough(),
-      getProductMetricsViewTypeLabel: jasmine.createSpy('getProductMetricsViewTypeLabel').and.callThrough()
+      getProductMetricsViewTypeLabel: jasmine.createSpy('getProductMetricsViewTypeLabel').and.callThrough(),
+      getPremiseTypeStateLabel: jasmine.createSpy('getPremiseTypeStateLabel').and.callThrough()
     };
     analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
 
@@ -217,7 +234,11 @@ describe('MyPerformanceComponent', () => {
         MyPerformanceTableComponentMock,
         MyPerformanceComponent,
         MyPerformanceTableRowComponent,
-        SortIndicatorComponent
+        SortIndicatorComponent,
+        TeamPerformanceOpportunitiesComponentMock
+      ],
+      imports: [
+        MdSidenavModule
       ],
       providers: [
         {
