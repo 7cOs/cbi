@@ -15,6 +15,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
+@Deprecated
 public class Login extends LoadableComponent<Login>{
   private Log log = LogFactory.getLog(Login.class);
 
