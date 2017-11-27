@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { TeamPerformanceTableOpportunity } from '../../../models/my-performance-table-row.model';
+
 @Component({
   selector: 'team-performance-opportunities',
   template: require('./team-performance-opportunities.component.pug'),
@@ -8,8 +10,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 export class TeamPerformanceOpportunitiesComponent {
   @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+  @Output() onOpportunityCountClicked = new EventEmitter<TeamPerformanceTableOpportunity>();
 
+  @Input() opportunities: Array<TeamPerformanceTableOpportunity>;
   @Input() premiseType: string;
   @Input() productName: string;
-  @Input() subTitle: string;
+  @Input() subtitle: string;
+  @Input() total: number;
+
+  public handleOpportunityCountClicked(opportunity: TeamPerformanceTableOpportunity): void {
+    this.onOpportunityCountClicked.emit(opportunity);
+  }
 }

@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
-import { MyPerformanceTableRow } from './my-performance-table-row.model';
+import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from './my-performance-table-row.model';
 
 const chance = new Chance();
 const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
@@ -30,4 +30,18 @@ export function getMyPerformanceTableRowMock(length: number) {
   }
 
   return rows;
+}
+
+export function getTeamPerformanceTableOpportunitiesMock() {
+  const randomLength: number = chance.natural({min: 1, max: 20});
+  let opportunities: Array<TeamPerformanceTableOpportunity> = [];
+
+  for (let i = 0; i < randomLength; i++) {
+    opportunities.push({
+      name: chance.string({ length: 20 }),
+      count: chance.natural({ max: 999999999999 })
+    });
+  }
+
+  return opportunities;
 }

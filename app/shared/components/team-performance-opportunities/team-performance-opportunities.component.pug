@@ -3,7 +3,7 @@ section.opportunities-component-section
   .opportunities-header
     .header-summary
       .header-title Opportunities
-      .header-sub-title {{ subTitle }}
+      .header-sub-title {{ subtitle }}
     .close-indicator-container((click)="onCloseIndicatorClicked.emit()")
       img.close-indicator(src="../../../assets/img/icons/thin-x.svg")
 
@@ -16,18 +16,10 @@ section.opportunities-component-section
       .type-label Opportunity Type
       .count-label # Of Opportunities
 
-    .opportunity-row
-      div Non-Buy
-      div 9
-
-    .opportunity-row
-      div Low-Velocity
-      div 999
-
-    .opportunity-row
-      div At Risk
-      div 999999
+    .opportunity-row(*ngFor="let opportunity of opportunities")
+      div {{ opportunity.name }}
+      div((click)="handleOpportunityCountClicked(opportunity)") {{ opportunity.count }}
 
     .opportunity-row.total-row
-      .total-column-label Total
-      .total-column-value 999999999999
+      .total-row-label Total
+      .total-row-value {{ total }}

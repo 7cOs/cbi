@@ -82,7 +82,6 @@
 
     .opportunity-row {
       border-top: solid 1px $border-gray;
-      cursor: pointer;
       display: inline-block;
       font-size: 14px;
       height: 50px;
@@ -97,6 +96,7 @@
       div:last-child {
         background-color: $body-bg;
         color: $water-blue;
+        cursor: pointer;
         float: right;
         font-weight: 600;
         height: 35px;
@@ -104,21 +104,17 @@
         text-align: center;
         width: 35%;
       }
-    }
 
-    .total-row {
-      height: 55px;
+      .total-row-value:last-child {
+        color: $gray-1;
+        cursor: default;
+      }
 
-      .total-column-label {
+      .total-row-label {
         font-weight: 600;
-        margin-left: 0;
         text-align: right;
         text-transform: uppercase;
         width: 50%;
-      }
-
-      .total-column-value {
-        color: $gray-1;
       }
     }
   }
