@@ -39,6 +39,9 @@ public class OpportunitiesPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
 
+  @FindBy(how = How.XPATH, using = "//a[contains(., 'Reset')]")
+  private WebElement resetFiltersButton;
+
   @FindBy(how = How.XPATH, using = FILTER_FORM_XPATH + "//a[contains(., 'Save Report')]")
   private WebElement saveReportButton;
 
@@ -206,6 +209,11 @@ public class OpportunitiesPage extends TestNGBasePage {
     return PageFactory.initElements(driver, SavedReportModal.class);
   }
 
+  public OpportunitiesPage clickResetFilters() {
+    waitForElementToClickable(resetFiltersButton, true).click();
+    return this;
+  }
+
   public OpportunitiesPage waitForLoaderToDisappear() {
     waitForElementToDisappear(By.xpath("//div[contains(@class, 'loader-wrap')]"));
     return this;
@@ -255,12 +263,17 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public SavedReportDropdown clickSavedReportsDropdown() {
-    waitForElementToClickable(savedReportsDropdown, true).click();
+    scrollToAndClick(savedReportsDropdown);
+
     return new SavedReportDropdown();
   }
 
   public boolean isMyAccountsOnlySelected() {
     return "true".equalsIgnoreCase(accountScopeFilter.getAttribute("aria-checked"));
+  }
+
+  public boolean isSaveReportButtonEnabled() {
+    return !"true".equalsIgnoreCase(saveReportButton.getAttribute("disabled"));
   }
 
   public int getDisplayedOpportunitiesCount() {
@@ -271,11 +284,16 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public class SavedReportDropdown {
-    private static final String NO_SAVED_REPORTS_TEXT = "No saved reports";
     private static final String SAVED_FILTER_OPTION_XPATH = "//md-option[contains(@class, 'saved-filter-option')]";
-    private static final int HOVER_ARROW_ICON_SIZE = 17;
-    private static final String VISIBLE_DROPDOWN_XPATH = "//div" + "[@aria-hidden='false']" +
-      "[contains(@class, 'md-select-menu-container')]";
+    private static final String OPEN_DROPDOWN_XPATH =
+      "//div[@aria-hidden='false']" +
+        "[contains(@class, 'md-select-menu-container')]" +
+        "[." + SAVED_FILTER_OPTION_XPATH + "]";
+    private static final String SAVED_REPORT_OPTION_XPATH = OPEN_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH;
+
+    public SavedReportDropdown() {
+      waitForElementToClickable(findElement(By.xpath(OPEN_DROPDOWN_XPATH)), true);
+    }
 
     public OpportunitiesPage selectSavedReportWithName(String reportName) {
       waitForElementToClickable(
@@ -296,14 +314,19 @@ public class OpportunitiesPage extends TestNGBasePage {
     public OpportunitiesPage deleteAllSavedReports() {
       WebElement savedReportOption = this.getFirstSavedReportOption();
 
-      while (!NO_SAVED_REPORTS_TEXT.equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
-        this.clickSavedReportHoverArrow(savedReportOption)
-          .clickSavedReportDeleteLink()
-          .waitForModalToClose()
-          .clickSavedReportsDropdown();
-        savedReportOption = this.getFirstSavedReportOption();
+      while (!"No saved reports".equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
+        savedReportOption =
+          this.clickSavedReportHoverArrow(savedReportOption)
+            .clickSavedReportDeleteLink()
+            .waitForModalToClose()
+            .clickSavedReportsDropdown()
+            .getFirstSavedReportOption();
       }
 
+      return this.closeDropdown().clickResetFilters();
+    }
+
+    public OpportunitiesPage closeDropdown() {
       waitForElementToClickable(findElement(By.xpath("//md-backdrop")), true).click();
 
       return PageFactory.initElements(driver, OpportunitiesPage.class);
@@ -314,35 +337,29 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
 
     private By getHandleForSavedReportWithName(String name) {
-      return By.xpath(VISIBLE_DROPDOWN_XPATH + SAVED_FILTER_OPTION_XPATH + "[contains(., '" + name + "')]");
+      return By.xpath(SAVED_REPORT_OPTION_XPATH + "[contains(., '" + name + "')]");
     }
 
     private WebElement getFirstSavedReportOption() {
-      final String withSavedReports = "[." + SAVED_FILTER_OPTION_XPATH + "]";
-      final String visibleSavedReportsDropdown = VISIBLE_DROPDOWN_XPATH + withSavedReports;
-
       return waitForElementToClickable(
-        findElement(By.xpath(visibleSavedReportsDropdown + SAVED_FILTER_OPTION_XPATH)),
+        findElement(By.xpath(SAVED_REPORT_OPTION_XPATH)),
         true
       );
     }
 
     private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
       this.clickHoverArrowFor(savedReport).waitForLoaderToDisappear();
-
       return PageFactory.initElements(driver, SavedReportModal.class);
     }
 
     private OpportunitiesPage clickHoverArrowFor(WebElement savedReport) {
       waitForElementToClickable(savedReport, true);
-      final int xPos = savedReport.getSize().getWidth() - HOVER_ARROW_ICON_SIZE;
-      final int yPos = savedReport.getSize().getHeight() / 2;
-
       final Actions action = new Actions(driver);
-      action
-        .moveToElement(savedReport, xPos, yPos)
-        .click()
-        .perform();
+      action.moveToElement(savedReport).perform();
+
+      scrollToAndClick(
+        findElement(By.xpath("//div[contains(@class, 'saved-reports-arrow')][@role='button']"))
+      );
 
       return PageFactory.initElements(driver, OpportunitiesPage.class);
     }
