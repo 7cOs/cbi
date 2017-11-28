@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
@@ -47,6 +48,8 @@ public class LoginPage extends TestNGBasePage {
       .clickSubmit();
 
     log.info("User: " + testUser.userName() + " login submitted");
+
+    Assert.assertTrue(landingPage.isLoaded(), "Failed to log in user: " + testUser.userName());
 
     return landingPage;
   }
