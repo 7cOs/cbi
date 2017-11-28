@@ -750,11 +750,10 @@ module.exports = /*  @ngInject */
 
       csvHeaderPromise.resolve(createCSVHeader());
 
-      return csvHeaderPromise.promise;
+      return createCSVHeader();
     }
 
     function createCSVHeader() {
-console.log('**********************************   createCSVHeader ', vm.downloadOption);
       const localCSVHeader = angular.copy(vm.csvHeader);
 
       if (vm.downloadOption !== 'Stores') {
@@ -763,9 +762,11 @@ console.log('**********************************   createCSVHeader ', vm.download
         }
       }
 
-      if (vm.downloadOption === 'WithRationales') localCSVHeader.push('Rationale');
-console.log('  localCSVHeader   ', localCSVHeader);
-      return localCSVHeader.toString();
+      if (vm.downloadOption === 'WithRationales') {
+        localCSVHeader.push('Rationale');
+      }
+
+      return localCSVHeader;
     }
 
     /**
