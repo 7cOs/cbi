@@ -383,8 +383,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts) {
-      this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
       })));
@@ -520,6 +520,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private handleTotalRowClicked(parameters: HandleElementClickedParameters) {
     if (parameters.leftSide && this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+      this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'TOTAL');
       this.selectedSubaccountCode = null;
       this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
       this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));

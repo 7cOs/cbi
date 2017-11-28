@@ -576,6 +576,10 @@ div.ctv {
         color: $blue;
       }
 
+      /deep/.right-col {
+        box-shadow: inset -15px 0 15px -8px rgba(0, 0, 0, 0.1);
+      }
+
       /deep/.center-col {
         background-color: $gray-4;
         color: $black;

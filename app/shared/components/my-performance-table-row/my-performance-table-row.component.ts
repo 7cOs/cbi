@@ -47,7 +47,8 @@ export class MyPerformanceTableRowComponent {
     };
   }
 
-  public sublineClicked(): void {
+  public sublineClicked(event: any): void {
+    event.stopPropagation();
     if (this.isSubAcountsOrDistributors) {
       this.onSublineClicked.emit();
     }

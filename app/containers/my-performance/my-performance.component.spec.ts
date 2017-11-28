@@ -883,22 +883,17 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should send analytics event when not viewing subaccounts', () => {
+    it('should send analytics event for any viewType', () => {
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
-      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
+      const salesHierarchyViewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]);
+      componentInstance.salesHierarchyViewType = salesHierarchyViewTypes[chance.integer(
+        {min: 0 , max: salesHierarchyViewTypes.length - 1})];
       componentInstance.handleElementClicked(params);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
         'Team Snapshot',
         'Link Click',
         rowMock.descriptionRow0
       ]);
-    });
-
-    it('should not send analytics event when viewing subaccounts', () => {
-      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
-      componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
-      componentInstance.handleElementClicked(params);
-      expect(analyticsServiceMock.trackEvent.calls.count()).toBe(0);
     });
 
     describe('when viewing subacounts', () => {
@@ -1258,13 +1253,18 @@ describe('MyPerformanceComponent', () => {
 
   describe('when left side total row is clicked', () => {
     describe('when viewtype is subaccounts', () => {
-      it('should clear the selected subaccount, set the entitytype to account, and refresh performances', () => {
+      it('should clear the selected subaccount, set the entitytype to account,refresh performances and send analytic event', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0};
         componentInstance.handleElementClicked(params);
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearMyPerformanceSelectedSubaccountCode());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(EntityType.Account));
+        expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
+          'Team Snapshot',
+          'Link Click',
+          'TOTAL'
+        ]);
       });
     });
   });

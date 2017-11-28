@@ -11,7 +11,7 @@ td.left-col(colspan=1)
         span {{rowData.descriptionRow0}}
       div.description-line-1(*ngIf="rowData.descriptionRow1",
                             [ngClass]="getSublineClass()",
-                            (click)="sublineClicked(); $event.stopPropagation()")
+                            (click)="sublineClicked($event)")
         span.description-line-1 {{rowData.descriptionRow1}}
 
 td.center-col(colspan=1) {{rowData.metricColumn0 | number}}
