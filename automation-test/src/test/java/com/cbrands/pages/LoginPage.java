@@ -48,8 +48,8 @@ public class LoginPage extends TestNGBasePage {
       .clickSubmit();
 
     log.info("User: " + testUser.userName() + " login submitted");
-
     Assert.assertTrue(landingPage.isLoaded(), "Failed to log in user: " + testUser.userName());
+    log.info("Logged in successfully as: " + testUser.userName());
 
     return landingPage;
   }

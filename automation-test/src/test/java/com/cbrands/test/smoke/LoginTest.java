@@ -28,11 +28,7 @@ public class LoginTest extends BaseTestCase {
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
   public void testLogin(TestUser testUser) throws MalformedURLException {
     this.setUpTestWith(testUser);
-
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
-
-    log.info("Logged in successfully as: " + testUser.userName());
+    loginPage.loginAs(testUser);
   }
 
   private void setUpTestWith(TestUser testUser) throws MalformedURLException {
