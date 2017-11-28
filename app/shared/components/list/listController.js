@@ -683,7 +683,7 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = message;
     }
 
-    function getCSVData(includeOptions) {
+    function getCSVData() {
       const csvDataPromise = $q.defer();
 
       if (vm.isAllOpportunitiesSelected) {
@@ -695,20 +695,19 @@ module.exports = /*  @ngInject */
 
         getOpportunitiesPromise
           .then(opportunities => {
-            csvDataPromise.resolve(createCSVData(opportunities, includeOptions));
+            csvDataPromise.resolve(createCSVData(opportunities));
             loaderService.closeLoader();
           })
           .catch(() => {
             loaderService.closeLoader();
           });
       } else {
-        csvDataPromise.resolve(createCSVData(vm.selected, includeOptions));
+        csvDataPromise.resolve(createCSVData(vm.selected));
       }
-
       return csvDataPromise.promise;
     }
 
-    function createCSVData(opportunities, options) {
+    function createCSVData(opportunities) {
       return opportunities.reduce((data, opportunity) => {
         const item = {};
         const csvItem = {};
@@ -725,7 +724,7 @@ module.exports = /*  @ngInject */
         csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
         csvItem.storeSegmentation = item.store.segmentation;
 
-        if (options !== 'Stores') {
+        if (vm.downloadOption !== 'Stores') {
           csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
           csvItem.productName = item.product.name || item.product.brand;
           csvItem.itemAuthorization = item.isItemAuthorization;
@@ -735,7 +734,7 @@ module.exports = /*  @ngInject */
           csvItem.impactPredicted = item.impactDescription;
         }
 
-        if (options === true || options === 'WithRationales') {
+        if (vm.downloadOption === 'WithRationales') {
           csvItem.rationale = item.rationale;
         }
 
