@@ -1,13 +1,13 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.pages.HomePage;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
 
