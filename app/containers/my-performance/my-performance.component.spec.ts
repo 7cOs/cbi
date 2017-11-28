@@ -626,8 +626,19 @@ describe('MyPerformanceComponent', () => {
           isMemberOfExceptionHierarchy: false
         }));
       });
-    });
 
+      it('should close the opportunities table by setting isOpportunityTableExtended to false', () => {
+        componentInstanceCopy.isOpportunityTableExtended = false;
+        componentInstance.handleBackButtonClicked();
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+
+        componentInstanceCopy.isOpportunityTableExtended = true;
+        componentInstance.handleBackButtonClicked();
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+      });
+    });
   });
 
   describe('when left side data row is clicked', () => {
@@ -1521,6 +1532,24 @@ describe('MyPerformanceComponent', () => {
           isMemberOfExceptionHierarchy: false
         }));
       });
+
+      it('should close the opportunities table by setting isOpportunityTableExtended to false', () => {
+        componentInstanceCopy.isOpportunityTableExtended = false;
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+
+        componentInstanceCopy.isOpportunityTableExtended = true;
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+      });
     });
 
     it('should not dispatch actions when steps back are not possible', () => {
@@ -2320,6 +2349,26 @@ describe('MyPerformanceComponent', () => {
         contextPositionId: currentMock.responsibilities.positionId
       }));
     });
+
+    it('should set isOpportunityTableExtended to false to close the opportunities table', () => {
+      componentInstanceCopy.isOpportunityTableExtended = false;
+      filterSubject.next(stateMock.myPerformanceFilter);
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+
+      componentInstanceCopy.isOpportunityTableExtended = true;
+      filterSubject.next(stateMock.myPerformanceFilter);
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+    });
+
+    it('should reach out to the myPerformanceService to get the display label for the current premise type', () => {
+      myPerformanceServiceMock.getPremiseTypeStateLabel.calls.reset();
+      expect(myPerformanceServiceMock.getPremiseTypeStateLabel).not.toHaveBeenCalled();
+
+      filterSubject.next(stateMock.myPerformanceFilter);
+      expect(myPerformanceServiceMock.getPremiseTypeStateLabel).toHaveBeenCalledWith(stateMock.myPerformanceFilter.premiseType);
+    });
   });
 
   describe('when the filter is updated', () => {
@@ -2596,6 +2645,19 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
+    });
+  });
+
+  describe('toggleOpportunityTable', () => {
+    it('should set the isOpportunityTableExtended to its inverse', () => {
+      componentInstanceCopy.isOpportunityTableExtended = false;
+      componentInstance.toggleOpportunityTable();
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(true);
+
+      componentInstance.toggleOpportunityTable();
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
     });
   });
 });

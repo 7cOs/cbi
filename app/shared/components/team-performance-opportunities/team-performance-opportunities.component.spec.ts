@@ -69,9 +69,18 @@ describe('Team Performance Opportunities Component', () => {
 
     it('should contain an opportunity row for each passed in opportunity', () => {
       const expectedOpportunityElementCount = opportunitiesMock.length + 1; // Factor in total row
-      const opportunityElements = fixture.debugElement.queryAll(By.css('.opportunity-row'));
+      const opportunityRowElements = fixture.debugElement.queryAll(By.css('.opportunity-row'));
 
-      expect(expectedOpportunityElementCount).toBe(opportunityElements.length);
+      expect(expectedOpportunityElementCount).toBe(opportunityRowElements.length);
+
+      opportunityRowElements.forEach((opportunityRow, index) => {
+        if (index < opportunitiesMock.length) {
+          const childDivs = opportunityRow.queryAll(By.css('div'));
+
+          expect(childDivs[0].nativeElement.textContent).toBe(opportunitiesMock[index].name);
+          expect(childDivs[1].nativeElement.textContent).toBe(opportunitiesMock[index].count.toString());
+        }
+      });
     });
   });
 
