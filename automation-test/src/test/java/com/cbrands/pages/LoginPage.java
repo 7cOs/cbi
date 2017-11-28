@@ -33,6 +33,7 @@ public class LoginPage extends TestNGBasePage {
 
   @Override
   protected void load() {
+    log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
   }
 

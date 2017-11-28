@@ -36,7 +36,6 @@ public class LoginTest extends BaseTestCase {
     loginPage = PageFactory.initElements(driver, LoginPage.class);
     logoutPage = PageFactory.initElements(driver, LogoutPage.class);
 
-    log.info("\nLoading webpage...");
     loginPage.goToPage();
   }
 
