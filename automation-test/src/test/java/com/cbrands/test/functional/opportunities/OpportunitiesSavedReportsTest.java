@@ -199,9 +199,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "distributorData"
   )
   public void createAfterMaxLimit(String distributor) {
-    for(int i = 1; i <= MAX_SAVED_REPORT_LIMIT; i++) {
-      this.setUpNewSavedReport("Test Max Limit - Report #" + i, distributor);
-    }
+    this.setUpMaxNumberOfSavedReports(distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
       .enterDistributorSearchText(distributor)
@@ -268,6 +266,22 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .clickSave()
       .waitForModalToClose()
       .clickResetFilters();
+  }
+
+  private void setUpMaxNumberOfSavedReports(String distributor) {
+    for(int i = this.getExistingNumberOfSavedReports() + 1; i <= MAX_SAVED_REPORT_LIMIT; i++) {
+      this.setUpNewSavedReport("Test Max Limit - Report #" + i, distributor);
+    }
+  }
+
+  private int getExistingNumberOfSavedReports() {
+    final int existingNumberOfSavedReports;
+
+    final OpportunitiesPage.SavedReportDropdown savedReportDropdown = opportunitiesPage.clickSavedReportsDropdown();
+    existingNumberOfSavedReports = savedReportDropdown.getNumberOfSavedReports();
+    savedReportDropdown.closeDropdown();
+
+    return existingNumberOfSavedReports;
   }
 
 }
