@@ -17,8 +17,4 @@ div.modal.download-opportunity
     button.btn-action(ng-csv="list.getCSVData(list.downloadOption)"
                       filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv"
                       csv-header="list.getCSVHeader()"
-                      ng-click="$mdCloseMenu($event)"
-                      analytics-event-on="click"
-                      category="Opportunities"
-                      action="Download"
-                      label="{{list.currentOpportunityId}}") Download
+                      ng-click="$mdCloseMenu($event)") Download
