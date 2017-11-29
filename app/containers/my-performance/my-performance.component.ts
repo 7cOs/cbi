@@ -89,6 +89,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private selectedBrandCode: string;
   private selectedSkuPackageCode: string;
+  private selectedSubaccountCode: string;
   private tableHeaderRowLeft: Array<string> = [
     this.myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.roleGroups),
     'DEPLETIONS',
@@ -290,6 +291,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       case RowType.total:
+        this.handleTotalRowClicked(parameters);
+        break;
       default:
         break;
     }
@@ -381,9 +384,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
-    this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
-      filter: this.filterState
-    })));
+    if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts) {
+      this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
+        filter: this.filterState
+      })));
+    }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
     const isMemberOfExceptionHierarchy: boolean =
@@ -456,6 +461,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.fetchProductMetricsWhenClick(parameters);
         }
         break;
+      case SalesHierarchyViewType.subAccounts:
+        this.selectedSubaccountCode = parameters.row.metadata.positionId;
+        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
+        this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
+          positionId: parameters.row.metadata.positionId,
+          filter: this.filterState,
+          selectedEntityType: this.currentState.selectedEntityType,
+          selectedBrandCode: this.currentState.selectedBrandCode,
+          inAlternateHierarchy: this.isInsideAlternateHierarchy(),
+          entityTypeCode: this.currentState.responsibilities.entityTypeCode,
+          contextPositionId: this.currentState.responsibilities.positionId
+        }));
+        break;
       default:
         break;
     }
@@ -497,6 +515,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         break;
       default:
         break;
+    }
+  }
+
+  private handleTotalRowClicked(parameters: HandleElementClickedParameters) {
+    if (parameters.leftSide && this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+      this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'TOTAL');
+      this.selectedSubaccountCode = null;
+      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
+      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
+      this.handleTeamPerformanceDataRefresh();
     }
   }
 
@@ -556,7 +584,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                                         || this.currentState.responsibilities.positionId;
 
       if (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-        actionPayload.positionId = this.currentState.responsibilities.accountPositionId;
+        actionPayload.positionId = this.currentState.selectedSubaccountCode || this.currentState.responsibilities.accountPositionId;
       }
     }
 
@@ -603,6 +631,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
+    this.selectedSubaccountCode = null;
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
     this.fetchProductMetricsForPreviousState(previousState);
 
@@ -721,7 +750,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: this.currentState.responsibilities.accountPositionId || this.currentState.responsibilities.positionId,
+        positionId: this.currentState.selectedSubaccountCode
+          || this.currentState.responsibilities.accountPositionId
+          || this.currentState.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
         selectedBrandCode: this.currentState.selectedBrandCode,

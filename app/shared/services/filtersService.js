@@ -2,7 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
-    var paramsNotIncludedInSaveFilter = ['opportunitiesType', 'featureType', 'itemAuthorizationType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
+    var paramsNotIncludedInSaveFilter = ['opportunitiesType', 'featureType', 'itemAuthorizationType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes', 'priorityPackages'];
     var model = {
       account: [],
       appliedFilter: {
@@ -186,7 +186,7 @@ module.exports = /*  @ngInject */
       selectedTemplate: {
         myAccountsOnly: true,
         simpleDistributionType: false,
-        priorityPackage: false,
+        priorityPackage: [],
         account: [],
         subaccount: [],
         brand: [],
@@ -265,6 +265,12 @@ module.exports = /*  @ngInject */
           showInStoreLevel: true,
           showInOtherLevels: false
         }
+      ],
+      priorityPackages: [
+        { label: 'Gaintain', name: 'Gaintain', value: 'GAINTAIN' },
+        { label: 'Impact', name: 'Impact', value: 'IMPACT' },
+        { label: 'Innovation', name: 'Innovation', value: 'INNOVATION' },
+        { label: 'Additional CA', name: 'Additional', value: 'ADDL_CA' }
       ]
     };
 

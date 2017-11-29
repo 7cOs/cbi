@@ -270,10 +270,11 @@ describe('MyPerformanceTableComponent', () => {
       expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
     });
 
-    it('should not emit an event when the viewtype is subaccounts', () => {
+    it('should emit an event when the viewtype is subaccounts', () => {
       componentInstance.viewType = SalesHierarchyViewType.subAccounts;
       componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
-      expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalledWith(
+        {type: rowTypeMock, index: indexMock, row: myPerformanceTableRowMock});
     });
   });
 
@@ -302,7 +303,8 @@ describe('MyPerformanceTableComponent', () => {
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,
-        'selected-sku': false
+        'selected-sku': false,
+        'selected-subaccount': false,
       });
     });
 
@@ -313,6 +315,7 @@ describe('MyPerformanceTableComponent', () => {
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': false,
+        'selected-subaccount': false,
         [columnWidthClassMock]: true
       });
     });
@@ -322,7 +325,8 @@ describe('MyPerformanceTableComponent', () => {
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': true,
-        'selected-sku': false
+        'selected-sku': false,
+        'selected-subaccount': false,
       });
     });
 
@@ -331,7 +335,28 @@ describe('MyPerformanceTableComponent', () => {
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,
-        'selected-sku': true
+        'selected-sku': true,
+        'selected-subaccount': false,
+      });
+    });
+
+    it('should return an object with selected-subaccount true when the row matches the selectedSubaccountPackageCode', () => {
+      componentInstance.selectedSubaccountCode = rowData.metadata.positionId;
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false,
+        'selected-subaccount': true,
+      });
+    });
+
+    it('should return an object with selected-subaccount false when the row has positionId but not same as selectedSubaccountcode', () => {
+      componentInstance.selectedSubaccountCode = rowData.metadata.positionId + chance.character();
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false,
+        'selected-subaccount': false,
       });
     });
   });
@@ -376,6 +401,53 @@ describe('MyPerformanceTableComponent', () => {
       expect(classObject).toEqual({
         'selected': false,
         [columnWidthClassMock]: true
+      });
+    });
+  });
+
+  describe('getTotalRowClasses', () => {
+    let columnWidthClassMock: string;
+    let getColumnWidthClassSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      columnWidthClassMock = chance.string();
+      getColumnWidthClassSpy = spyOn(componentInstance, 'getColumnWidthClass').and.returnValue(columnWidthClassMock);
+      componentInstance.viewType = SalesHierarchyViewType.subAccounts;
+    });
+
+    describe('when viewtype is subaccounts', () => {
+      describe('when selectedsubaccount has defined value', () => {
+        it('should return true for deselected-total-row', () => {
+          componentInstance.selectedSubaccountCode = chance.string();
+          const classObject = componentInstance.getTotalRowClasses();
+          expect(classObject).toEqual({
+            'deselected-total-row': true,
+            [columnWidthClassMock]: true
+          });
+        });
+      });
+    });
+
+    describe('when viewtype is not subaccounts', () => {
+      it('should return false for both properties', () => {
+        componentInstance.viewType = SalesHierarchyViewType.roleGroups;
+        componentInstance.selectedSubaccountCode = chance.string();
+        const classObject = componentInstance.getTotalRowClasses();
+        expect(classObject).toEqual({
+          'deselected-total-row': false,
+          [columnWidthClassMock]: true
+        });
+      });
+    });
+
+    describe('when selectedSubaccount is undefined', () => {
+      it('should return false for both properties', () => {
+        componentInstance.selectedSubaccountCode = undefined;
+        const classObject = componentInstance.getTotalRowClasses();
+        expect(classObject).toEqual({
+          'deselected-total-row': false,
+          [columnWidthClassMock]: true
+        });
       });
     });
   });
