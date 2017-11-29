@@ -3,8 +3,10 @@ package com.cbrands.test.functional.login;
 import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -18,23 +20,14 @@ import java.util.List;
  */
 public class LoginTest extends BaseTestCase {
 
-  private Login loginPage;
-  private LogoutPage logoutPage;
-
-  @AfterMethod
-  public void tearDown() {
-    logoutPage.goToPage();
-
-    this.shutDownBrowser();
-  }
-
   @Test(dataProvider = "userCredentials", description = "Testing login and logout for a valid user")
   public void testUserLogin(TestUser testUser) throws MalformedURLException {
-    this.setUpFor(testUser);
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
+    this.startUpBrowser("Functional - Login: " + testUser.fullName());
 
-    log.info("Logged in successfully as: " + testUser.userName());
+    PageFactory.initElements(driver, LoginPage.class).loginAs(testUser);
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
+
+    this.shutDownBrowser();
   }
 
   @DataProvider(name = "userCredentials")
@@ -47,15 +40,6 @@ public class LoginTest extends BaseTestCase {
     final List<Object[]> usersParams = new ArrayList<>();
     Arrays.asList(testUsers).stream().forEach(u -> usersParams.add(new Object[]{u}));
     return usersParams;
-  }
-
-  private void setUpFor(TestUser testUser) throws MalformedURLException {
-    this.startUpBrowser("Functional - Login: " + testUser.fullName());
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
   }
 
 }
