@@ -2,7 +2,7 @@ package com.cbrands.test.functional.opportunities;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
-import com.cbrands.pages.Login;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
@@ -23,20 +23,15 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
     this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
 
-    final Login loginPage = new Login(driver);
-    homePage = loginPage.loginAs(TestUser.ACTOR4);
-
+    homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
   }
 
   @AfterClass
   public void tearDownClass() {
-    final LogoutPage logoutPage = new LogoutPage(driver);
-    logoutPage.goToPage();
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
     this.shutDownBrowser();
   }
 
