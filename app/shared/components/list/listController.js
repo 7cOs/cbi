@@ -704,6 +704,7 @@ module.exports = /*  @ngInject */
       } else {
         csvDataPromise.resolve(createCSVData(vm.selected));
       }
+      sendDownloadEvent();
       return csvDataPromise.promise;
     }
 
