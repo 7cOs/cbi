@@ -1,8 +1,7 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.pages.HomePage;
-import com.cbrands.pages.Login;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
@@ -13,7 +12,6 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 
 public class OpportunitiesTest extends BaseTestCase {
-  private LogoutPage logoutPage;
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeClass
@@ -28,15 +26,7 @@ public class OpportunitiesTest extends BaseTestCase {
 
   @BeforeMethod
   public void setUp() {
-    final TestUser testUser = TestUser.ACTOR4;
-
-    final Login loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
+    PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
 
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
@@ -44,7 +34,7 @@ public class OpportunitiesTest extends BaseTestCase {
 
   @AfterMethod
   public void tearDown() {
-    logoutPage.goToPage();
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
   }
 
   @Test(description = "Search Opportunities")
