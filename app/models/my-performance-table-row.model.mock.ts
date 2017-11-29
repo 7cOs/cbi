@@ -32,16 +32,13 @@ export function getMyPerformanceTableRowMock(length: number) {
   return rows;
 }
 
-export function getTeamPerformanceTableOpportunitiesMock() {
-  const randomLength: number = chance.natural({min: 1, max: 20});
-  let opportunities: Array<TeamPerformanceTableOpportunity> = [];
+export function getTeamPerformanceTableOpportunityMock(): TeamPerformanceTableOpportunity {
+  return {
+    name: chance.string({ length: 20 }),
+    count: chance.natural({ max: 999999999999 })
+  };
+}
 
-  for (let i = 0; i < randomLength; i++) {
-    opportunities.push({
-      name: chance.string({ length: 20 }),
-      count: chance.natural({ max: 999999999999 })
-    });
-  }
-
-  return opportunities;
+export function getTeamPerformanceTableOpportunitiesMock(): Array<TeamPerformanceTableOpportunity> {
+  return Array(chance.natural({min: 1, max: 20})).fill('').map(() => getTeamPerformanceTableOpportunityMock());
 }

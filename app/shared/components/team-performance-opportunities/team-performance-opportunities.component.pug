@@ -4,8 +4,8 @@ section.opportunities-component-section
     .header-summary
       .header-title Opportunities
       .header-sub-title {{ subtitle }}
-    .close-indicator-container((click)="onCloseIndicatorClicked.emit()")
-      img.close-indicator(src="../../../assets/img/icons/thin-x.svg")
+    .close-indicator-container
+      img.close-indicator(src="../../../assets/img/icons/thin-x.svg", (click)="onCloseIndicatorClicked.emit()")
 
   .opportunities-summary
     .product-name {{ productName }}
