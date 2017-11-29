@@ -10,9 +10,9 @@ div.modal.download-opportunity
 
     label Download:
       md-radio-group(ng-model="list.csvDownloadOption")
-        md-radio-button.md-primary(value="WithRationales" aria-label="With Rationales") Opportunities with rationales
-        md-radio-button.md-primary(value="WithoutRationales" aria-label="Without Rationales") Opportunities without rationales
-        md-radio-button.md-primary(value="Stores" aria-label="New Distribution") Stores only
+        md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[0].value}}" aria-label="{{list.filtersService.csvDownloadOptions[0].label}}") Opportunities with rationales
+        md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[1].value}}" aria-label="{{list.filtersService.csvDownloadOptions[1].label}}") Opportunities without rationales
+        md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[2].value}}" aria-label="{{list.filtersService.csvDownloadOptions[2].label}}") Stores only
 
     button.btn-action(ng-csv="list.getCSVData(list.downloadOption)"
                       filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv"
