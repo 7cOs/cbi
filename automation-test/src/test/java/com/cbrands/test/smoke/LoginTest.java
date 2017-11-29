@@ -35,8 +35,6 @@ public class LoginTest extends BaseTestCase {
     this.startUpBrowser("Smoke - LoginTest: " + testUser.fullName());
     loginPage = PageFactory.initElements(driver, LoginPage.class);
     logoutPage = PageFactory.initElements(driver, LogoutPage.class);
-
-    loginPage.goToPage();
   }
 
   @DataProvider(name = "userCredentials")
