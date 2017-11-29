@@ -31,8 +31,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
-
-    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
   }
 
   @AfterClass
@@ -47,8 +45,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage.goToPage();
   }
 
-  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "createRunReportData")
-  public void enableSavedReport(String name, String distributorSearchText) {
+  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "distributorData")
+  public void enableSavedReport(String distributorSearchText) {
     Assert.assertFalse(
       opportunitiesPage.isSaveReportButtonEnabled(),
       "Save Report link failed to be disabled when no filters applied."
@@ -68,8 +66,58 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
-    description = "Creating an Opportunities Saved Report",
+    description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
+    dataProvider = "distributorData"
+  )
+  public void createAfterMaxLimit(String distributor) {
+    this.setUpMaxNumberOfSavedReports(distributor);
+
+    final SavedReportModal savedReportModal = opportunitiesPage
+      .enterDistributorSearchText(distributor)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickSaveReportLink();
+
+    Assert.assertTrue(
+      savedReportModal.isMaxSavedReportsLimitErrorDisplayed(),
+      "Failed to display error message when max limit of Saved Reports already reached."
+    );
+  }
+
+  @Test(
+    description = "Deleting a Saved Report",
+    dependsOnMethods = "createAfterMaxLimit",
+    dataProvider = "deleteReportData"
+  )
+  public void deleteSavedReport(String reportNameToDelete, String distributor) {
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
+    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportNameToDelete)
+      .clickSavedReportDeleteLink()
+      .waitForModalToClose();
+
+    Assert.assertFalse(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Opportunities page."
+    );
+
+    homePage.goToPage();
+    Assert.assertFalse(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Home page."
+    );
+  }
+
+  @Test(
+    description = "Creating an Opportunities Saved Report",
+    dependsOnMethods = "deleteSavedReport",
     dataProvider = "createRunReportData"
   )
   public void createSavedReport(String name, String distributorSearchText) {
@@ -163,55 +211,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     Assert.assertTrue(
       homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
       "Saved Report with edited  name " + editedReportName + " failed to appear in the dropdown on the Home page."
-    );
-  }
-
-  @Test(
-    description = "Deleting a Saved Report",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "deleteReportData"
-  )
-  public void deleteSavedReport(String reportNameToDelete, String distributor) {
-    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportNameToDelete)
-      .clickSavedReportDeleteLink()
-      .waitForModalToClose();
-
-    Assert.assertFalse(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertFalse(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Home page."
-    );
-  }
-
-  @Test(
-    description = "Attempting to create a new Saved Report when the max allowed has already been reached",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "distributorData"
-  )
-  public void createAfterMaxLimit(String distributor) {
-    this.setUpMaxNumberOfSavedReports(distributor);
-
-    final SavedReportModal savedReportModal = opportunitiesPage
-      .enterDistributorSearchText(distributor)
-      .clickSearchForDistributor()
-      .clickFirstDistributorResult()
-      .clickApplyFiltersButton()
-      .waitForLoaderToDisappear()
-      .clickSaveReportLink();
-
-    Assert.assertTrue(
-      savedReportModal.isMaxSavedReportsLimitErrorDisplayed(),
-      "Failed to display error message when max limit of Saved Reports already reached."
     );
   }
 
