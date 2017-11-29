@@ -168,7 +168,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       div.filter-blocks-inline
         div.nested-columns
           label Priority Packages
-          md-checkbox(ng-model="filter.filtersService.model.selected.priorityPackage" aria-label="Priority Package" ng-click="filter.chipsService.updateChip('priorityPackage', 'Priority Packages')") Priority Packages
+          md-checkbox(ng-repeat="priority in filter.filtersService.model.priorityPackages" ng-model="filter.filtersService.model['priorityPackage' + priority.name]" aria-label="Priority Package {{priority.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.priorityPackage, priority.name, 'priorityPackage')") {{priority.label}}
 
     div(column='2' ng-show="filter.filtersService.model.expanded")
       div.checkbox-inline
