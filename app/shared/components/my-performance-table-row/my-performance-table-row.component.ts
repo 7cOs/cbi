@@ -11,7 +11,6 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
   styles: [ require('../my-performance-table/my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableRowComponent {
-  @Output() onCellClicked = new EventEmitter<number>();
   @Output() onSublineClicked = new EventEmitter<any>();
   @Output() onDismissableRowXClicked = new EventEmitter<any>();
 
@@ -48,7 +47,8 @@ export class MyPerformanceTableRowComponent {
     };
   }
 
-  public sublineClicked(): void {
+  public sublineClicked(event: Event): void {
+    event.stopPropagation();
     if (this.isSubAcountsOrDistributors) {
       this.onSublineClicked.emit();
     }

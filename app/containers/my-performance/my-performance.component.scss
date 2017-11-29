@@ -21,7 +21,7 @@ my-performance-table {
       background-color: $dark-blue-2;
       color: $gray-10;
 
-      /deep/.center-col {
+      .center-col {
         background-color: $dark-blue-7;
       }
     }

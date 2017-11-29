@@ -263,8 +263,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public SavedReportDropdown clickSavedReportsDropdown() {
-    scrollToAndClick(savedReportsDropdown);
-
+	waitForElementToClickable(savedReportsDropdown, true).click();
     return new SavedReportDropdown();
   }
 
@@ -311,10 +310,22 @@ public class OpportunitiesPage extends TestNGBasePage {
       return PageFactory.initElements(driver, SavedReportModal.class);
     }
 
-    public OpportunitiesPage deleteAllSavedReports() {
+    public OpportunitiesPage clearAllSavedReports() {
+      final OpportunitiesPage opportunitiesPage;
+
+      if (!isPlaceholderForNoOptions(this.getFirstSavedReportOption())) {
+        opportunitiesPage = deleteAllReportsAndResetFilters();
+      } else {
+        opportunitiesPage = this.closeDropdown();
+      }
+
+      return opportunitiesPage;
+    }
+
+    private OpportunitiesPage deleteAllReportsAndResetFilters() {
       WebElement savedReportOption = this.getFirstSavedReportOption();
 
-      while (!"No saved reports".equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim())) {
+      while (!isPlaceholderForNoOptions(savedReportOption)) {
         savedReportOption =
           this.clickSavedReportHoverArrow(savedReportOption)
             .clickSavedReportDeleteLink()
@@ -324,6 +335,10 @@ public class OpportunitiesPage extends TestNGBasePage {
       }
 
       return this.closeDropdown().clickResetFilters();
+    }
+
+    private boolean isPlaceholderForNoOptions(WebElement savedReportOption) {
+      return "No saved reports".equalsIgnoreCase(savedReportOption.getAttribute("textContent").trim());
     }
 
     public OpportunitiesPage closeDropdown() {
