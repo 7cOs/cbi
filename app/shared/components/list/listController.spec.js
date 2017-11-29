@@ -52,8 +52,8 @@ describe('Unit: list controller', function() {
     expect(ctrl.userService).not.toBeUndefined();
     expect(typeof (ctrl.userService)).toEqual('object');
 
-    expect(ctrl.downloadOption).not.toBeUndefined();
-    expect(typeof (ctrl.downloadOption)).toEqual('string');
+    expect(ctrl.csvDownloadOption).not.toBeUndefined();
+    expect(typeof (ctrl.csvDownloadOption)).toEqual('string');
   });
 
   it('should expose public methods', function() {
@@ -499,8 +499,8 @@ describe('Unit: list controller', function() {
 
     it('should create a csvItem for each selected opportunity (WithoutRationales), and add it to the data array', () => {
       ctrl.selected = [opportunities[0]];
-      ctrl.downloadOption = 'WithoutRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.downloadOption);
+      ctrl.csvDownloadOption = 'WithoutRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       const csvHeader = ctrl.getCSVHeader();
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
@@ -545,8 +545,8 @@ describe('Unit: list controller', function() {
 
     it('should create a csvItem item for each selected opportunity (WithRationales), and add it to the data array', () => {
       ctrl.selected = [opportunities[0]];
-      ctrl.downloadOption = 'WithRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.downloadOption);
+      ctrl.csvDownloadOption = 'WithRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       const csvHeader = ctrl.getCSVHeader();
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
@@ -593,8 +593,8 @@ describe('Unit: list controller', function() {
 
     it('should create a csvItem item and add a rationale when provided as input', () => {
       ctrl.selected = [opportunities[0]];
-      ctrl.downloadOption = 'WithRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.downloadOption);
+      ctrl.csvDownloadOption = 'WithRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       const csvHeader = ctrl.getCSVHeader();
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
@@ -641,8 +641,8 @@ describe('Unit: list controller', function() {
 
     it('should create a csvItem with store only option', () => {
       ctrl.selected = [opportunities[0]];
-      ctrl.downloadOption = 'Stores';
-      const dataPromise = ctrl.getCSVData(ctrl.downloadOption);
+      ctrl.csvDownloadOption = 'Stores';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       const csvHeader = ctrl.getCSVHeader();
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
@@ -673,8 +673,8 @@ describe('Unit: list controller', function() {
 
     it('should be able to parse when the distributor list is null', () => {
       ctrl.selected = [opportunities[1]];
-      ctrl.downloadOption = 'WithoutRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.downloadOption);
+      ctrl.csvDownloadOption = 'WithoutRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
@@ -699,8 +699,8 @@ describe('Unit: list controller', function() {
 
     it('should take the brand as product name if the product name is null', () => {
       ctrl.selected = [opportunities[1]];
-      ctrl.downloadOption = 'WithoutRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.downloadOption);
+      ctrl.csvDownloadOption = 'WithoutRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,

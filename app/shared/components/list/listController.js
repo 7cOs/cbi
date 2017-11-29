@@ -52,7 +52,7 @@ module.exports = /*  @ngInject */
     vm.undoClicked = false;
     vm.selectAllToastVisible = false;
     vm.maxOpportunities = maxOpportunities;
-    vm.downloadOption = 'WithRationales';
+    vm.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -724,7 +724,7 @@ module.exports = /*  @ngInject */
         csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
         csvItem.storeSegmentation = item.store.segmentation;
 
-        if (vm.downloadOption !== 'Stores') {
+        if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
           csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
           csvItem.productName = item.product.name || item.product.brand;
           csvItem.itemAuthorization = item.isItemAuthorization;
@@ -734,7 +734,7 @@ module.exports = /*  @ngInject */
           csvItem.impactPredicted = item.impactDescription;
         }
 
-        if (vm.downloadOption === 'WithRationales') {
+        if (vm.csvDownloadOption === filtersService.csvDownloadOptions[0].value) {
           csvItem.rationale = item.rationale;
         }
 
@@ -755,13 +755,13 @@ module.exports = /*  @ngInject */
     function createCSVHeader() {
       const localCSVHeader = angular.copy(vm.csvHeader);
 
-      if (vm.downloadOption !== 'Stores') {
+      if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
         for (var key in vm.csvHeaderNoStores) {
           localCSVHeader.push(vm.csvHeaderNoStores[key]);
         }
       }
 
-      if (vm.downloadOption === 'WithRationales') {
+      if (vm.csvDownloadOption === filtersService.csvDownloadOptions[0].value) {
         localCSVHeader.push('Rationale');
       }
 
