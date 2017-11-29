@@ -27,6 +27,7 @@ import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-
 import { getProductMetricsBrandMock,
          getProductMetricsSkuMock,
          getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
+import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -2668,6 +2669,57 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
+    });
+  });
+
+  describe('showProductMetricsOpportunities flag', () => {
+    let filterStateMock: MyPerformanceFilter;
+    let currentStateMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      filterStateMock = getMyPerformanceFilterMock();
+      currentStateMock = getMyPerformanceEntitiesDataMock();
+    });
+
+    describe('when filtering for a Premise Type of All', () => {
+      it('should be set to false regardless of the current SalesHierarchyViewType', () => {
+        filterStateMock.premiseType = PremiseTypeValue.All;
+        currentStateMock.salesHierarchyViewType.viewType = getSalesHierarchyViewTypeMock();
+
+        filterSubject.next(filterStateMock);
+        currentSubject.next(currentStateMock);
+
+        expect(componentInstanceCopy.showProductMetricsOpportunities).toBe(false);
+      });
+    });
+
+    describe('when filtering for a Premise Type of On or Off', () => {
+
+      beforeEach(() => {
+        filterStateMock.premiseType = sample([PremiseTypeValue.On, PremiseTypeValue.Off]);
+        filterSubject.next(filterStateMock);
+      });
+
+      it('should be set to true when the current SalesHierarchyViewType is Distributors or SubAccounts', () => {
+        currentStateMock.salesHierarchyViewType.viewType = sample([
+          SalesHierarchyViewType.distributors,
+          SalesHierarchyViewType.subAccounts
+        ]);
+        currentSubject.next(currentStateMock);
+
+        expect(componentInstanceCopy.showProductMetricsOpportunities).toBe(true);
+      });
+
+      it('should be set to false when the current SalesHierarchyViewType is NOT Distributors or SubAccounts', () => {
+        currentStateMock.salesHierarchyViewType.viewType = sample([
+          SalesHierarchyViewType.roleGroups,
+          SalesHierarchyViewType.people,
+          SalesHierarchyViewType.accounts
+        ]);
+        currentSubject.next(currentStateMock);
+
+        expect(componentInstanceCopy.showProductMetricsOpportunities).toBe(false);
+      });
     });
   });
 });

@@ -64,6 +64,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public salesHierarchyViewType: SalesHierarchyViewType;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
+  public showProductMetricsOpportunities: boolean = false;
   public showSalesContributionToVolume: boolean = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -132,6 +133,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+        this.showProductMetricsOpportunities = this.getShowProductMetricsOpportunities();
         this.performanceMetric = currentMetricName;
         this.tableHeaderRowLeft[1] = currentMetricName;
         this.tableHeaderRowRight[1] = currentMetricName;
@@ -172,8 +174,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType);
 
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
-
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
+        this.showProductMetricsOpportunities = this.getShowProductMetricsOpportunities();
 
         this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
@@ -615,6 +617,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private getShowProductMetricsContributionToVolume(): boolean {
     return this.filterState && this.filterState.metricType === MetricTypeValue.volume;
+  }
+
+  private getShowProductMetricsOpportunities(): boolean {
+    return (this.salesHierarchyViewType === SalesHierarchyViewType.distributors ||
+      this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) &&
+      this.filterState && this.filterState.premiseType !== PremiseTypeValue.All;
   }
 
   private isInsideAlternateHierarchy(): boolean {
