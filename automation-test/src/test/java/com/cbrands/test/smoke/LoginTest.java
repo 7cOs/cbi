@@ -1,12 +1,13 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.pages.HomePage;
-import com.cbrands.pages.Login;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
-import org.testng.Assert;
-import org.testng.annotations.*;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
 
@@ -14,7 +15,7 @@ import java.net.MalformedURLException;
  * Automated test for logging in and out of the web app.
  */
 public class LoginTest extends BaseTestCase {
-  private Login loginPage;
+  private LoginPage loginPage;
   private LogoutPage logoutPage;
 
   @AfterMethod
@@ -27,20 +28,15 @@ public class LoginTest extends BaseTestCase {
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
   public void testLogin(TestUser testUser) throws MalformedURLException {
     this.setUpTestWith(testUser);
-
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
-
-    log.info("Logged in successfully as: " + testUser.userName());
+    loginPage.loginAs(testUser);
   }
 
   private void setUpTestWith(TestUser testUser) throws MalformedURLException {
     this.startUpBrowser("Smoke - LoginTest: " + testUser.fullName());
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
+    loginPage = PageFactory.initElements(driver, LoginPage.class);
+    logoutPage = PageFactory.initElements(driver, LogoutPage.class);
 
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
+    loginPage.goToPage();
   }
 
   @DataProvider(name = "userCredentials")
