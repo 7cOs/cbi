@@ -131,4 +131,14 @@ export class MyPerformanceService {
         return ProductMetricHeaderProductType.Package;
     }
   }
+
+  public getPremiseTypeStateLabel(premiseType: PremiseTypeValue): string {
+    const premiseTypeLabelMap = {
+      [PremiseTypeValue.All]: 'All',
+      [PremiseTypeValue.Off]: 'Off-Premise',
+      [PremiseTypeValue.On]: 'On-Premise'
+    };
+
+    return premiseTypeLabelMap[premiseType] || 'All';
+  }
 }
