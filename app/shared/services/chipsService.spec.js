@@ -252,18 +252,20 @@ describe('[Services.chipsService]', function() {
         expect(filtersService.model.opportunityStatusTargeted).toEqual(true);
       });
 
-      it('should remove selected filter and update filter model given "productType" chip', function() {
-        filtersService.model.selected.productType = ['featured', 'priority', 'authorized'];
-        filtersService.model.productTypeFeatured = true;
-        filtersService.model.productTypePriority = true;
-        filtersService.model.productTypeAuthorized = true;
+      it('should remove selected filter and update filter model given "priorityPackage" chip', function() {
+        filtersService.model.selected.priorityPackage = ['gaintain', 'impact', 'innovation', 'additional'];
+        filtersService.model.priorityPackageGaintain = true;
+        filtersService.model.priorityPackageImpact = true;
+        filtersService.model.priorityPackageInnovation = true;
+        filtersService.model.priorityPackageAdditional = true;
 
-        chipsService.removeFromFilterService({type: 'productType', name: 'Priority Packages'});
+        chipsService.removeFromFilterService({type: 'priorityPackage', name: 'Impact'});
 
-        expect(filtersService.model.selected.productType).toEqual(['featured', 'authorized']);
-        expect(filtersService.model.productTypeFeatured).toEqual(true);
-        expect(filtersService.model.productTypePriority).toEqual(false);
-        expect(filtersService.model.productTypeAuthorized).toEqual(true);
+        expect(filtersService.model.selected.priorityPackage).toEqual(['gaintain', 'innovation', 'additional']);
+        expect(filtersService.model.priorityPackageGaintain).toBeTruthy();
+        expect(filtersService.model.priorityPackageImpact).toBeFalsy();
+        expect(filtersService.model.priorityPackageInnovation).toBeTruthy();
+        expect(filtersService.model.priorityPackageAdditional).toBeTruthy();
       });
 
       it('should remove selected filter and update filter model given "tradeChannel" chip', function() {

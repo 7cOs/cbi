@@ -15,7 +15,6 @@ my-performance-breadcrumb(
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
   (backButtonClicked)="handleBackButtonClicked()")
 
-
 md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()")
   div.tables
     my-performance-table.left(
@@ -27,6 +26,7 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
       [totalRow]="displayLeftTotalRow() ? totalRowData : null",
       [sortingCriteria]="sortingCriteria",
       [viewType]="salesHierarchyViewType",
+      [selectedSubaccountCode]="selectedSubaccountCode",
       [showContributionToVolume]="showSalesContributionToVolume",
       [showOpportunities]="false",
       (onSublineClicked)="handleSublineClicked($event)",

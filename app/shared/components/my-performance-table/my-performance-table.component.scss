@@ -542,7 +542,110 @@ div.ctv {
     }
   }
 
-  &.view-type-subAccounts,
+  &.view-type-subAccounts {
+
+    tr, td, th {
+      cursor: pointer;
+    }
+
+    tr.total-row {
+
+      /deep/td.left-col {
+
+        div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0;
+        }
+      }
+    }
+
+    tr.total-row.deselected-total-row {
+      background-color: $light-blue-4;
+
+      /deep/.left-col,
+      /deep/.right-col {
+        background-color: $body-bg;
+        color: $blue;
+      }
+
+      /deep/.right-col {
+        box-shadow: inset -15px 0 15px -8px rgba(0, 0, 0, 0.1);
+      }
+
+      /deep/.center-col {
+        background-color: $gray-4;
+        color: $black;
+      }
+
+      &:hover {
+        /deep/.left-col,
+        /deep/.center-col,
+        /deep/.right-col {
+          background-color: $light-blue-4;
+        }
+      }
+    }
+
+    tr.entity-row {
+
+      &:hover {
+
+        /deep/td {
+          background-color: $light-blue-4;
+        }
+      }
+
+      &.performance-error {
+
+        &:hover {
+
+          /deep/td {
+            background-color: $light-blue-4;
+          }
+        }
+      }
+
+      /deep/td.left-col {
+
+        div.description-line-1 {
+          padding-top: 5px;
+
+          &.link {
+            span {
+              color: $hyperlink;
+            }
+
+            &:hover span, &:active span {
+              color: $hyperlink-hover;
+            }
+          }
+        }
+
+        span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0;
+          color: $blue;
+        }
+
+        div.description-line-0 {
+          color: $black;
+        }
+      }
+    }
+  }
+
   &.view-type-distributors {
 
     tr.total-row {
@@ -629,6 +732,18 @@ div.ctv {
   /deep/.right-col {
     font-weight: $semibold;
     color: $gray-1;
+    background-color: $light-blue-4;
+  }
+}
+
+.selected-subaccount {
+  font-weight: $semibold;
+  background-color: $light-blue-4;
+
+  /deep/.left-col,
+  /deep/.center-col,
+  /deep/.right-col {
+    font-weight: $semibold;
     background-color: $light-blue-4;
   }
 }

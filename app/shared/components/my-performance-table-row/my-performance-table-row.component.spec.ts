@@ -117,4 +117,12 @@ describe('MyPerformanceTableComponent', () => {
       expect(cls).toEqual('negative');
     });
   });
+
+  describe('when subline is clicked', () => {
+    it('should stop event propogation when subline is clicked', () => {
+      const event = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
+      componentInstance.sublineClicked(event);
+      expect(event.stopPropagation).toHaveBeenCalled();
+    });
+  });
 });
