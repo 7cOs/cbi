@@ -19,8 +19,8 @@ import { ResponsibilitiesTransformerService } from  '../../services/responsibili
 import { ResponsibilitiesService } from  '../../services/responsibilities.service';
 import { SharedModule } from '../../shared/shared.module';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
-import { TeamPerformanceOpportunitiesComponent
-} from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
+import { TeamPerformanceOpportunitiesComponent }
+  from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
 import { WindowService } from '../../services/window.service';
 
 @NgModule({
