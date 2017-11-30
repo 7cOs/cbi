@@ -28,7 +28,7 @@ function buildBranch(project, branchName, token, runTestSuite, skipDeployment) {
   };
 
   if (runTestSuite) {
-    options.body.runTestSuite = runTestSuite;
+    options.body.build_parameters.runTestSuite = runTestSuite;
   }
 
   rp(options)
