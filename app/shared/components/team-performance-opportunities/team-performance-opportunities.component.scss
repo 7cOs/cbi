@@ -16,14 +16,14 @@
 
       .header-title {
         font-size: 24px;
-        font-weight: 300;
+        font-weight: $light;
         margin-left: 25px;
         margin-top: 20px;
       }
 
       .header-sub-title {
         font-size: 11px;
-        font-weight: 600;
+        font-weight: $semibold;
         margin-left: 25px;
         text-transform: uppercase;
       }
@@ -44,7 +44,7 @@
 
     .product-name {
       font-size: 18px;
-      font-weight: 600;
+      font-weight: $semibold;
       margin-left: 20px;
       margin-top: 20px;
     }
@@ -62,7 +62,7 @@
       display: inline-block;
       font-family: $rajdhani;
       font-size: 11px;
-      font-weight: bold;
+      font-weight: $bold;
       letter-spacing: 1px;
       margin-bottom: 5px;
       margin-top: 15px;
@@ -98,7 +98,7 @@
         color: $water-blue;
         cursor: pointer;
         float: right;
-        font-weight: 600;
+        font-weight: $semibold;
         height: 35px;
         padding-top: 18px;
         text-align: center;
@@ -111,7 +111,7 @@
       }
 
       .total-row-label {
-        font-weight: 600;
+        font-weight: $semibold;
         text-align: right;
         text-transform: uppercase;
         width: 50%;

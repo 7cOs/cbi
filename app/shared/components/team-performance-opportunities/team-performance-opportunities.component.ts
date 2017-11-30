@@ -9,7 +9,7 @@ import { TeamPerformanceTableOpportunity } from '../../../models/my-performance-
 })
 
 export class TeamPerformanceOpportunitiesComponent {
-  @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+  @Output() onCloseIndicatorClicked = new EventEmitter<Event>();
   @Output() onOpportunityCountClicked = new EventEmitter<TeamPerformanceTableOpportunity>();
 
   @Input() opportunities: Array<TeamPerformanceTableOpportunity>;
