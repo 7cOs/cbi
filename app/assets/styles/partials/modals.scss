@@ -551,6 +551,7 @@ md-dialog {
       font-family: $work-sans;
       padding-left: 20px;
       padding-right: 20px;
+      background-color: $gray-14;
 
       .top {
         margin-bottom: 10px;
@@ -568,11 +569,16 @@ md-dialog {
         font-size: 17px;
       }
 
+      .pad-top {
+        padding-top: 20px;
+      }
+
       label {
         font-family: $work-sans;
         font-size: 16px;
         font-weight: $regular;
         letter-spacing: normal;
+        text-transform: none;
 
         .bottom {
           margin: 5px 0;

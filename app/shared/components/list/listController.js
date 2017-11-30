@@ -739,17 +739,17 @@ module.exports = /*  @ngInject */
           csvItem.rationale = item.rationale;
         }
 
-        data.push(csvItem);
+        if (vm.csvDownloadOption === filtersService.csvDownloadOptions[2].value) {
+          if (!data.find(x => x.storeName === csvItem.storeName)) data.push(csvItem);
+        } else {
+          data.push(csvItem);
+        }
 
         return data;
       }, []);
     }
 
     function getCSVHeader() {
-      const csvHeaderPromise = $q.defer();
-
-      csvHeaderPromise.resolve(createCSVHeader());
-
       return createCSVHeader();
     }
 

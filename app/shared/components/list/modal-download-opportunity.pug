@@ -14,7 +14,8 @@ div.modal.download-opportunity
         md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[1].value}}" aria-label="{{list.filtersService.csvDownloadOptions[1].label}}") Opportunities without rationales
         md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[2].value}}" aria-label="{{list.filtersService.csvDownloadOptions[2].label}}") Stores only
 
-    button.btn-action(ng-csv="list.getCSVData(list.downloadOption)"
+    div.pad-top
+      button.btn-action(ng-csv="list.getCSVData(list.downloadOption)"
                       filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv"
                       csv-header="list.getCSVHeader()"
                       ng-click="$mdCloseMenu($event)") Download
