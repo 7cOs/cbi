@@ -6,7 +6,7 @@ import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { PremiseTypeLabel, PremiseTypeValue } from '../enums/premise-type.enum';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../enums/team-performance-table-header.enum';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
@@ -132,15 +132,13 @@ export class MyPerformanceService {
     }
   }
 
-  public getPremiseTypeStateLabel(premiseType: PremiseTypeValue): PremiseTypeLabel {
-    switch (premiseType) {
-      case PremiseTypeValue.All:
-      default:
-        return PremiseTypeLabel.All;
-      case PremiseTypeValue.Off:
-        return PremiseTypeLabel.Off;
-      case PremiseTypeValue.On:
-        return PremiseTypeLabel.On;
-    }
+  public getPremiseTypeStateLabel(premiseType: PremiseTypeValue): string {
+    const premiseTypeLabelMap = {
+      [PremiseTypeValue.All]: 'All',
+      [PremiseTypeValue.Off]: 'Off-Premise',
+      [PremiseTypeValue.On]: 'On-Premise'
+    };
+
+    return premiseTypeLabelMap[premiseType] || 'All';
   }
 }
