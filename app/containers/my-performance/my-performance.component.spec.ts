@@ -732,7 +732,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedPositionId: rowMock.metadata.positionId,
         selectedEntityDescription: rowMock.descriptionRow0,
-        brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
+        brandSkuCode: componentInstanceCopy.selectedBrandCode,
         skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
