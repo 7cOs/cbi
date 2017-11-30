@@ -30,30 +30,30 @@ deployment:
   develop:
     branch: develop
     commands:
-      - bash bin/deploy.sh app-orion-dev.git
+      - bash scripts/ci-deploy-to-heroku.sh app-orion-dev.git
 
   qa:
     branch: test
     commands:
-      - bash bin/deploy.sh app-orion-qa.git
-      - bash bin/automation-test.sh
+      - bash scripts/ci-deploy-to-heroku.sh app-orion-qa.git
+      - bash scripts/ci-run-automation-tests.sh
 
   ga-automation:
     branch: ga-automation
     commands:
-      - bash bin/deploy.sh app-compass-ga-automation.git
+      - bash scripts/ci-deploy-to-heroku.sh app-compass-ga-automation.git
 
   stage:
     branch: stage
     commands:
-      - bash bin/deploy.sh app-compass-stage.git
+      - bash scripts/ci-deploy-to-heroku.sh app-compass-stage.git
 
   preprod:
     branch: preprod
     commands:
-      - bash bin/deploy.sh app-compass-preprod.git
+      - bash scripts/ci-deploy-to-heroku.sh app-compass-preprod.git
 
   production:
     branch: master
     commands:
-      - bash bin/deploy.sh app-orion-prod.git
+      - bash scripts/ci-deploy-to-heroku.sh app-orion-prod.git

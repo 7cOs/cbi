@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const rp = require('request-promise');
 
 const projectArgName = 'project:';
@@ -10,7 +8,7 @@ const skipDeploymentArgName = 'skipDeployment:';
 
 const username = 'ConstellationBrands';
 
-let project = 'app-orion';
+let project = 'compass-portal';
 let branchName = 'test';
 let token = process.env.CIRCLE_CI_API_TOKEN;
 let runTestSuite = '';
