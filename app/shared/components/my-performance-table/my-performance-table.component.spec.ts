@@ -264,10 +264,11 @@ describe('MyPerformanceTableComponent', () => {
         {type: rowTypeMock, index: indexMock, row: myPerformanceTableRowMock});
     });
 
-    it('should not emit an event when the viewtype is distributors', () => {
+    it('should emit an event when the viewtype is distributors', () => {
       componentInstance.viewType = SalesHierarchyViewType.distributors;
       componentInstance.onRowClicked(rowTypeMock, indexMock, myPerformanceTableRowMock);
-      expect(componentInstance.onElementClicked.emit).not.toHaveBeenCalled();
+      expect(componentInstance.onElementClicked.emit).toHaveBeenCalledWith(
+        {type: rowTypeMock, index: indexMock, row: myPerformanceTableRowMock});
     });
 
     it('should emit an event when the viewtype is subaccounts', () => {
@@ -304,7 +305,7 @@ describe('MyPerformanceTableComponent', () => {
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': false,
-        'selected-subaccount': false,
+        'selected-entity-row': false,
       });
     });
 
@@ -315,7 +316,7 @@ describe('MyPerformanceTableComponent', () => {
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': false,
-        'selected-subaccount': false,
+        'selected-entity-row': false,
         [columnWidthClassMock]: true
       });
     });
@@ -326,7 +327,7 @@ describe('MyPerformanceTableComponent', () => {
       expect(classObject).toEqual({
         'performance-error': true,
         'selected-sku': false,
-        'selected-subaccount': false,
+        'selected-entity-row': false,
       });
     });
 
@@ -336,27 +337,27 @@ describe('MyPerformanceTableComponent', () => {
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': true,
-        'selected-subaccount': false,
+        'selected-entity-row': false,
       });
     });
 
-    it('should return an object with selected-subaccount true when the row matches the selectedSubaccountPackageCode', () => {
+    it('should return an object with selected-entity-row true when the row matches the selectedSubaccountPackageCode', () => {
       componentInstance.selectedSubaccountCode = rowData.metadata.positionId;
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': false,
-        'selected-subaccount': true,
+        'selected-entity-row': true,
       });
     });
 
-    it('should return an object with selected-subaccount false when the row has positionId but not same as selectedSubaccountcode', () => {
+    it('should return an object with selected-entity-row false when the row has positionId but not same as selectedSubaccountcode', () => {
       componentInstance.selectedSubaccountCode = rowData.metadata.positionId + chance.character();
       const classObject = componentInstance.getEntityRowClasses(rowData);
       expect(classObject).toEqual({
         'performance-error': false,
         'selected-sku': false,
-        'selected-subaccount': false,
+        'selected-entity-row': false,
       });
     });
   });

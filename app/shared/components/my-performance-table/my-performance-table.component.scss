@@ -542,7 +542,8 @@ div.ctv {
     }
   }
 
-  &.view-type-subAccounts {
+  &.view-type-subAccounts ,
+  &.view-type-distributors {
 
     tr, td, th {
       cursor: pointer;
@@ -567,7 +568,7 @@ div.ctv {
       }
     }
 
-    tr.total-row.deselected-total-row {
+    tr.total-row.deselected-total-row  {
       background-color: $light-blue-4;
 
       /deep/.left-col,
@@ -736,7 +737,7 @@ div.ctv {
   }
 }
 
-.selected-subaccount {
+.selected-entity-row {
   font-weight: $semibold;
   background-color: $light-blue-4;
 

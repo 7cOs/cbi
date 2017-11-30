@@ -28,7 +28,7 @@ import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
-describe('My Performance Reducer', () => {
+fdescribe('My Performance Reducer', () => {
   let inputMyPerformanceStateMock: MyPerformanceState;
   let myPerformanceFilterStateMock: MyPerformanceFilterState;
 
@@ -153,6 +153,7 @@ describe('My Performance Reducer', () => {
           selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
           selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
           selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
+          selectedDistributorCode: inputMyPerformanceStateMock.current.selectedDistributorCode,
           filter: inputMyPerformanceStateMock.current.filter
         },
         versions: inputMyPerformanceStateMock.versions
@@ -217,6 +218,7 @@ describe('My Performance Reducer', () => {
           selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
           selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
           selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
+          selectedDistributorCode: inputMyPerformanceStateMock.current.selectedDistributorCode,
           filter: inputMyPerformanceStateMock.current.filter
         },
         versions: inputMyPerformanceStateMock.versions
@@ -245,6 +247,7 @@ describe('My Performance Reducer', () => {
         selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
         selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
         selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
+        selectedDistributorCode: inputMyPerformanceStateMock.current.selectedDistributorCode,
         filter: inputMyPerformanceStateMock.current.filter
       },
       versions: inputMyPerformanceStateMock.versions

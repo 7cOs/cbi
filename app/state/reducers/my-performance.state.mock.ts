@@ -45,6 +45,7 @@ export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
     selectedSkuPackageCode: chance.string(),
     selectedSkuPackageType: getSkuPackageTypeMock(),
     selectedSubaccountCode: chance.string(),
+    selectedDistributorCode: chance.string(),
     filter: getMyPerformanceFilterMock()
   };
 }

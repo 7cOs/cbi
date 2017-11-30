@@ -24,6 +24,7 @@ export interface MyPerformanceEntitiesData {
   selectedSkuPackageCode?: string;
   selectedSkuPackageType?: SkuPackageType;
   selectedSubaccountCode?: string;
+  selectedDistributorCode?: string;
   filter: MyPerformanceFilterState;
 }
 
@@ -56,10 +57,12 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_BRAND_CODE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SKU_CODE:
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_BRAND_CODE:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE:
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES:
@@ -90,6 +93,7 @@ export function myPerformanceReducer(
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuPackageCode: state.current.selectedSkuPackageCode,
           selectedSubaccountCode: state.current.selectedSubaccountCode,
+          selectedDistributorCode: state.current.selectedDistributorCode,
           filter: state.current.filter
         },
         versions: state.versions
@@ -108,6 +112,7 @@ export function myPerformanceReducer(
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuPackageCode: state.current.selectedSkuPackageCode,
           selectedSubaccountCode: state.current.selectedSubaccountCode,
+          selectedDistributorCode: state.current.selectedDistributorCode,
           filter: state.current.filter
         },
         versions: state.versions

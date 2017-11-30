@@ -110,6 +110,7 @@ class MyPerformanceTableComponentMock {
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSubaccountCode: string;
+  @Input() selectedDistributorCode: string;
 }
 
 describe('MyPerformanceComponent', () => {
@@ -2214,7 +2215,7 @@ describe('MyPerformanceComponent', () => {
         isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
-        positionId: currentMock.responsibilities.accountPositionId,
+        positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
         selectedBrandCode: currentMock.selectedBrandCode,
@@ -2249,7 +2250,7 @@ describe('MyPerformanceComponent', () => {
         isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
-        positionId: currentMock.responsibilities.positionId,
+        positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
         selectedBrandCode: currentMock.selectedBrandCode,
@@ -2284,7 +2285,7 @@ describe('MyPerformanceComponent', () => {
         isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
-        positionId: currentMock.responsibilities.positionId,
+        positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
         selectedBrandCode: currentMock.selectedBrandCode,
@@ -2318,7 +2319,7 @@ describe('MyPerformanceComponent', () => {
         isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
-        positionId: currentMock.responsibilities.accountPositionId,
+        positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
         selectedBrandCode: currentMock.selectedBrandCode,
@@ -2351,7 +2352,7 @@ describe('MyPerformanceComponent', () => {
         isMemberOfExceptionHierarchy: false
       }));
       expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
-        positionId: currentMock.responsibilities.accountPositionId,
+        positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
         selectedBrandCode: currentMock.selectedBrandCode,
