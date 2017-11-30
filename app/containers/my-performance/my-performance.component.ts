@@ -456,7 +456,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           selectedPositionId: parameters.row.metadata.positionId,
           filter: this.filterState,
           selectedEntityDescription: parameters.row.descriptionRow0,
-          brandSkuCode: this.currentState.selectedSkuPackageCode || this.currentState.selectedBrandCode,
+          brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
           skuPackageType: this.selectedSkuPackageType
         }));
         if (!this.isInsideAlternateHierarchy()) {

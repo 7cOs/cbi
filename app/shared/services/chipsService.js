@@ -182,8 +182,6 @@ module.exports = /*  @ngInject */
     function removeFromFilterService(chip) {
       if (chip.type === 'myAccountsOnly') {
         filtersService.model.selected['myAccountsOnly'] = false;
-      } else if (chip.type === 'priorityPackage') {
-        filtersService.model.selected['priorityPackage'] = false;
       } else if (chip.type === 'simpleDistributionType') {
         filtersService.model.selected['simpleDistributionType'] = false;
       } else if (chip.type === 'storeFormat') {
@@ -213,13 +211,13 @@ module.exports = /*  @ngInject */
             arr.splice(i, 1);
             filtersService.model['opportunityStatus' + chip.name] = false;
             break;
-          } else if (chip.type === 'productType' && $filter('titlecase')(arr[i]) === chip.name.split(' ')[0]) {
-            arr.splice(i, 1);
-            filtersService.model['productType' + chip.name.split(' ')[0]] = false;
-            break;
           } else if (chip.type === 'tradeChannel' && $filter('titlecase')(arr[i]) === chip.name) {
             arr.splice(i, 1);
             filtersService.model['tradeChannel' + chip.name] = false;
+            break;
+          } else if (chip.type === 'priorityPackage' && $filter('titlecase')(arr[i]) === chip.name) {
+            arr.splice(i, 1);
+            filtersService.model['priorityPackage' + chip.name] = false;
             break;
           } else if (chip.type === 'city' && arr[i] === chip.name.toUpperCase()) {
             arr.splice(i, 1);
