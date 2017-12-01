@@ -1,5 +1,7 @@
 'use strict';
 
+import { values } from 'lodash';
+
 module.exports = /*  @ngInject */
   function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
@@ -749,7 +751,7 @@ module.exports = /*  @ngInject */
         }
         return;
       }, []);
-      return Object.values(csvData);
+      return values(csvData);
     }
 
     function getCSVHeader() {
