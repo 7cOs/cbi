@@ -3,14 +3,22 @@
 TEST_SUITE=$1
 
 cd automation-test
-mvn install -DskipTests=true
 
-if [ $runTestSuite ] ; then
-  echo Running specified test suite $TEST_SUITE
-  mvn test -P $TEST_SUITE -DargLine="-Denv=qa -Dbrowser=ie"
-  mvn test -P $TEST_SUITE -DargLine="-Denv=qa -Dbrowser=chrome"
+if [[ -z "${TEST_SUITE}" ]]; then
+  echo NO TEST SUITE SPECIFIED - SKIPPING AT EXECUTION
+  exit -1
 else
-  echo Running default test suite
-  mvn test -DargLine="-Denv=qa -Dbrowser=ie"
-  mvn test -DargLine="-Denv=qa -Dbrowser=chrome"
+  echo INSTALLING MAVEN DEPENDENCIES FOR AT SUITE RUN
+  mvn install -DskipTests=true
+fi
+
+if [ "$TEST_SUITE" == "smoke-test" ] ; then
+  echo RUNNING SMOKE TEST SUITE FOR IE AND CHROME
+  mvn test -P smoke-test -DargLine="-Denv=qa -Dbrowser=ie"
+  mvn test -P smoke-test -DargLine="-Denv=qa -Dbrowser=chrome"
+elif [ "$TEST_SUITE" == "functional-test" ] ; then
+  echo RUNNING SMOKE TEST SUITE FOR IE AND CHROME
+  mvn test -P functional-test -DargLine="-Denv=qa -Dbrowser=chrome"
+else
+  echo UNRECOGNIZED TEST SUITE SPECIFIED - SKIPPING AT EXECUTION
 fi
