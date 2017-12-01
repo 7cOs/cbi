@@ -275,4 +275,17 @@ describe('Service: MyPerformanceService', () => {
       expect(actualPackagesLabel).toBe(ProductMetricHeaderProductType.Package);
     });
   });
+
+  describe('getPremiseTypeStateLabel', () => {
+
+    it('should return a label associated with the passed in PremiseTypeValue', () => {
+      const actualAllPremiseTypeLabel = myPerformanceService.getPremiseTypeStateLabel(PremiseTypeValue.All);
+      const actualOffPremiseTypeLabel = myPerformanceService.getPremiseTypeStateLabel(PremiseTypeValue.Off);
+      const actualOnPremiseTypeLabel = myPerformanceService.getPremiseTypeStateLabel(PremiseTypeValue.On);
+
+      expect(actualAllPremiseTypeLabel).toBe('All');
+      expect(actualOffPremiseTypeLabel).toBe('Off-Premise');
+      expect(actualOnPremiseTypeLabel).toBe('On-Premise');
+    });
+  });
 });

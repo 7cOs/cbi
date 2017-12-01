@@ -1,6 +1,11 @@
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
 
+export interface TeamPerformanceTableOpportunity {
+  name: string;
+  count: number;
+}
+
 export interface MyPerformanceTableRowMetadata {
   alternateHierarchyId?: string;
   brandCode?: string;
