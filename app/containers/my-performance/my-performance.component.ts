@@ -16,6 +16,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { getTeamPerformanceTableOpportunitiesMock } from '../../models/my-performance-table-row.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -23,7 +24,7 @@ import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
-import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -73,6 +74,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRange: DateRange;
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
+
+// Mocks
+  public teamPerformanceTableOpportunitiesMock: Array<TeamPerformanceTableOpportunity> = getTeamPerformanceTableOpportunitiesMock();
+  public selectedProductNameMock: string = chance.string({ length: 20 });
+  public selectedEntityNameMock: string = chance.string({ length: 20 });
+  public selectedOpportunitiesTotal: number = chance.natural({ max: 999999999999 });
+
   private currentState: MyPerformanceEntitiesData;
   private defaultUserPremiseType: PremiseTypeValue;
   private entityType: EntityType;
@@ -101,6 +109,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     'CTV'
   ];
   private versions: MyPerformanceEntitiesData[];
+  private isOpportunityTableExtended: boolean = false;
+  private currentPremiseTypeLabel: string;
 
   constructor(
     private store: Store<AppState>,
@@ -130,11 +140,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.deselectSkuPackageIfNeeded(this.filterState, filterState);
         this.filterState = filterState;
         const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
+        this.currentPremiseTypeLabel = this.myPerformanceService.getPremiseTypeStateLabel(filterState.premiseType);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
         this.performanceMetric = currentMetricName;
         this.tableHeaderRowLeft[1] = currentMetricName;
         this.tableHeaderRowRight[1] = currentMetricName;
+        this.isOpportunityTableExtended = false;
         this.setSelectedDateRangeValues();
         this.handleTeamPerformanceDataRefresh();
     });
@@ -299,7 +311,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
+
     const previousIndex: number = this.versions.length - 1;
     const previousState: MyPerformanceEntitiesData = this.versions[previousIndex];
 
@@ -315,6 +329,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
 
+    this.isOpportunityTableExtended = false;
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
 
@@ -363,6 +378,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public displayRightTotalRow(): boolean {
     return this.isShowingRoleGroups() && this.productMetricsViewType === ProductMetricsViewType.brands;
+  }
+
+  public toggleOpportunityTable(): void {
+    this.isOpportunityTableExtended = !this.isOpportunityTableExtended;
+  }
+
+  public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
+    console.log('Opportunity Clicked: ', opportunity);
   }
 
   private sendFilterAnalyticsEvent(): void {

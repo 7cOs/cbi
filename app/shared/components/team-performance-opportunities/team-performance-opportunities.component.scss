@@ -1,0 +1,121 @@
+@import '../../../assets/styles/base/variables';
+
+.opportunities-component-section {
+  color: $gray-1;
+  padding: 0;
+  width: 375px;
+
+  .opportunities-header {
+    background-color: $gray-4;
+    border-bottom: 2px solid $gray-8;
+    height: 80px;
+
+    .header-summary {
+      float: left;
+      width: 90%;
+
+      .header-title {
+        font-size: 24px;
+        font-weight: $light;
+        margin-left: 25px;
+        margin-top: 20px;
+      }
+
+      .header-sub-title {
+        font-size: 11px;
+        font-weight: $semibold;
+        margin-left: 25px;
+        text-transform: uppercase;
+      }
+    }
+
+    .close-indicator-container {
+      float: right;
+      width: 10%;
+
+      .close-indicator {
+        cursor: pointer;
+        margin-top: 30px;
+      }
+    }
+  }
+
+  .opportunities-summary {
+
+    .product-name {
+      font-size: 18px;
+      font-weight: $semibold;
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+
+    .product-premise-type {
+      font-size: 16px;
+      margin-left: 20px;
+      margin-top: 15px;
+    }
+  }
+
+  .opportunities-table {
+
+    .label-row {
+      display: inline-block;
+      font-family: $rajdhani;
+      font-size: 11px;
+      font-weight: $bold;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      margin-top: 15px;
+      text-transform: uppercase;
+      width: 100%;
+
+      .type-label {
+        float: left;
+        margin-left: 20px;
+      }
+
+      .count-label {
+        float: right;
+        margin-right: 10px;
+      }
+    }
+
+    .opportunity-row {
+      border-top: solid 1px $border-gray;
+      display: inline-block;
+      font-size: 14px;
+      height: 50px;
+      width: 100%;
+
+      div:first-child {
+        float: left;
+        margin-left: 20px;
+        padding-top: 18px;
+      }
+
+      div:last-child {
+        background-color: $body-bg;
+        color: $water-blue;
+        cursor: pointer;
+        float: right;
+        font-weight: $semibold;
+        height: 35px;
+        padding-top: 18px;
+        text-align: center;
+        width: 35%;
+      }
+
+      .total-row-value:last-child {
+        color: $gray-1;
+        cursor: default;
+      }
+
+      .total-row-label {
+        font-weight: $semibold;
+        text-align: right;
+        text-transform: uppercase;
+        width: 50%;
+      }
+    }
+  }
+}
