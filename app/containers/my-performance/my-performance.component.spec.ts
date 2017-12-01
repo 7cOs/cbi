@@ -2,6 +2,7 @@ import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { MdSidenavModule } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 import { sample } from 'lodash';
 import { Store } from '@ngrx/store';
@@ -37,7 +38,7 @@ import { MyPerformanceFilterEvent, MyPerformanceFilter } from '../../models/my-p
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
-import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -110,6 +111,21 @@ class MyPerformanceTableComponentMock {
   @Input() dismissableTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSubaccountCode: string;
+}
+
+@Component({
+  selector: 'team-performance-opportunities',
+  template: ''
+})
+class TeamPerformanceOpportunitiesComponentMock {
+  @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+  @Output() onOpportunityCountClicked = new EventEmitter<TeamPerformanceTableOpportunity>();
+
+  @Input() opportunities: Array<TeamPerformanceTableOpportunity>;
+  @Input() premiseType: string;
+  @Input() productName: string;
+  @Input() subtitle: string;
+  @Input() total: number;
 }
 
 describe('MyPerformanceComponent', () => {
@@ -209,7 +225,8 @@ describe('MyPerformanceComponent', () => {
       getMetricValueName: jasmine.createSpy('getMetricValueName'),
       accountDashboardStateParameters: jasmine.createSpy('accountDashboardStateParameters').and.returnValue(accountDashboardStateParamMock),
       getSalesHierarchyViewTypeLabel: jasmine.createSpy('getSalesHierarchyViewTypeLabel').and.callThrough(),
-      getProductMetricsViewTypeLabel: jasmine.createSpy('getProductMetricsViewTypeLabel').and.callThrough()
+      getProductMetricsViewTypeLabel: jasmine.createSpy('getProductMetricsViewTypeLabel').and.callThrough(),
+      getPremiseTypeStateLabel: jasmine.createSpy('getPremiseTypeStateLabel').and.callThrough()
     };
     analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
 
@@ -221,7 +238,11 @@ describe('MyPerformanceComponent', () => {
         MyPerformanceTableComponentMock,
         MyPerformanceComponent,
         MyPerformanceTableRowComponent,
-        SortIndicatorComponent
+        SortIndicatorComponent,
+        TeamPerformanceOpportunitiesComponentMock
+      ],
+      imports: [
+        MdSidenavModule
       ],
       providers: [
         {
@@ -610,8 +631,19 @@ describe('MyPerformanceComponent', () => {
           isMemberOfExceptionHierarchy: false
         }));
       });
-    });
 
+      it('should close the opportunities table by setting isOpportunityTableExtended to false', () => {
+        componentInstanceCopy.isOpportunityTableExtended = false;
+        componentInstance.handleBackButtonClicked();
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+
+        componentInstanceCopy.isOpportunityTableExtended = true;
+        componentInstance.handleBackButtonClicked();
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+      });
+    });
   });
 
   describe('when left side data row is clicked', () => {
@@ -732,7 +764,7 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedPositionId: rowMock.metadata.positionId,
         selectedEntityDescription: rowMock.descriptionRow0,
-        brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode,
+        brandSkuCode: componentInstanceCopy.selectedBrandCode,
         skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
@@ -1555,6 +1587,24 @@ describe('MyPerformanceComponent', () => {
           accountPositionId: previousVersionMock.responsibilities.accountPositionId,
           isMemberOfExceptionHierarchy: false
         }));
+      });
+
+      it('should close the opportunities table by setting isOpportunityTableExtended to false', () => {
+        componentInstanceCopy.isOpportunityTableExtended = false;
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+
+        componentInstanceCopy.isOpportunityTableExtended = true;
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
       });
     });
 
@@ -2392,6 +2442,26 @@ describe('MyPerformanceComponent', () => {
         contextPositionId: currentMock.responsibilities.positionId
       }));
     });
+
+    it('should set isOpportunityTableExtended to false to close the opportunities table', () => {
+      componentInstanceCopy.isOpportunityTableExtended = false;
+      filterSubject.next(stateMock.myPerformanceFilter);
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+
+      componentInstanceCopy.isOpportunityTableExtended = true;
+      filterSubject.next(stateMock.myPerformanceFilter);
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+    });
+
+    it('should reach out to the myPerformanceService to get the display label for the current premise type', () => {
+      myPerformanceServiceMock.getPremiseTypeStateLabel.calls.reset();
+      expect(myPerformanceServiceMock.getPremiseTypeStateLabel).not.toHaveBeenCalled();
+
+      filterSubject.next(stateMock.myPerformanceFilter);
+      expect(myPerformanceServiceMock.getPremiseTypeStateLabel).toHaveBeenCalledWith(stateMock.myPerformanceFilter.premiseType);
+    });
   });
 
   describe('when the filter is updated', () => {
@@ -2668,6 +2738,19 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
+    });
+  });
+
+  describe('toggleOpportunityTable', () => {
+    it('should set the isOpportunityTableExtended to its inverse', () => {
+      componentInstanceCopy.isOpportunityTableExtended = false;
+      componentInstance.toggleOpportunityTable();
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(true);
+
+      componentInstance.toggleOpportunityTable();
+
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
     });
   });
 });
