@@ -11,6 +11,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class OpportunitiesPage extends TestNGBasePage {
@@ -263,7 +265,8 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public SavedReportDropdown clickSavedReportsDropdown() {
-	waitForElementToClickable(savedReportsDropdown, true).click();
+    waitForVisibleFluentWait(savedReportsDropdown);
+    waitForElementToClickable(savedReportsDropdown, true).click();
     return new SavedReportDropdown();
   }
 
@@ -379,5 +382,17 @@ public class OpportunitiesPage extends TestNGBasePage {
       return PageFactory.initElements(driver, OpportunitiesPage.class);
     }
 
+    public int getNumberOfSavedReports() {
+      final int numberOfSavedReports;
+      final List<WebElement> list = findElements(By.xpath(SAVED_REPORT_OPTION_XPATH));
+
+      if(1 == list.size() && isPlaceholderForNoOptions(list.get(0))) {
+        numberOfSavedReports = 0;
+      } else {
+        numberOfSavedReports = list.size();
+      }
+
+      return numberOfSavedReports;
+    }
   }
 }
