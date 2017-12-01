@@ -709,7 +709,9 @@ module.exports = /*  @ngInject */
     }
 
     function createCSVData(opportunities) {
-      return opportunities.reduce((data, opportunity) => {
+      let objMap = {};
+      let counter = 0;
+      opportunities.reduce((data, opportunity) => {
         const item = {};
         const csvItem = {};
         angular.copy(opportunity, item);
@@ -740,20 +742,17 @@ module.exports = /*  @ngInject */
         }
 
         if (vm.csvDownloadOption === filtersService.csvDownloadOptions[2].value) {
-          if (!data.find(x => x.storeName === csvItem.storeName)) data.push(csvItem);
+          objMap[csvItem.TDLinx] = csvItem;
         } else {
-          data.push(csvItem);
+          objMap[counter] = csvItem;
+          counter = counter + 1;
         }
-
-        return data;
+        return;
       }, []);
+      return Object.values(objMap);
     }
 
     function getCSVHeader() {
-      return createCSVHeader();
-    }
-
-    function createCSVHeader() {
       const localCSVHeader = angular.copy(vm.csvHeader);
 
       if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {

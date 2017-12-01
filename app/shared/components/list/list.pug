@@ -30,8 +30,7 @@
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index, false)")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
-      md-menu(md-offset="0 45")
-        button.btn-action.download-button(ng-click="list.downloadModal(product.id)" ng-disabled="list.selected < 1") Download
+      button.btn-action.download-button(ng-click="list.downloadModal(product.id, $event)" ng-disabled="list.selected < 1") Download
 
       button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton && !list.targetListService.model.currentList.archived") Remove
 
