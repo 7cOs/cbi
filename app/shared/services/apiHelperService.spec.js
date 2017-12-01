@@ -230,14 +230,14 @@ describe('[Services.apiHelperService]', function() {
     it('should return opportunities specific formatting when priority package is selected', function() {
       const mockObject = {
         masterSKU: '112154',
-        priorityPackage: true,
+        priorityPackage: ['Gaintain'],
         premiseType: 'on',
         simpleDistributionType: true,
         type: 'opportunities',
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&priorityPackage=true&filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&priorityPackageGroups=GAINTAIN&filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -348,6 +348,12 @@ describe('[Services.apiHelperService]', function() {
       filtersService.model.selected = {premiseType: 'off'};
       const result = APIHelper.formatQueryString(opportunityData);
       expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityStatus%3Atargeted%2CpremiseType%3Aoff%2CtradeChannel%3A05%7C03');
+    });
+
+    it('should construct for opportunity status closed and 3 priority packages', function() {
+      var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538"],"opportunityStatus":["closed"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain","priorityPackage":["Gaintain","Impact","Additional"]}');
+      const result = APIHelper.formatQueryString(opportunityData);
+      expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&priorityPackageGroups=GAINTAIN|IMPACT|ADDL_CA&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityStatus%3Atargeted%2CpremiseType%3Aoff%2C');
     });
 
     it('it should take an object and format it into a query string for consumption', function() {

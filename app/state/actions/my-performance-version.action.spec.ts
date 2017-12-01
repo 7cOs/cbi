@@ -177,4 +177,38 @@ describe('My Performance Version Actions', () => {
       expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SKU_CODE);
     });
   });
+
+  describe('SetMyPerformanceSelectedSubaccountCode', () => {
+    let selectedSubaccountCodeMock: string;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode;
+
+    beforeEach(() => {
+      selectedSubaccountCodeMock = chance.string();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(selectedSubaccountCodeMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(selectedSubaccountCodeMock);
+    });
+  });
+
+  describe('ClearMyPerformanceSelectedSubaccountCode', () => {
+    let action: MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode;
+
+    beforeEach(() => {
+      action = new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode();
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE);
+    });
+  });
 });

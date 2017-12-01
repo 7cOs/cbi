@@ -12,11 +12,14 @@ This project contains code for the Compass Web Portal application. It includes t
 1. Install [Node.js](https://docs.npmjs.com/getting-started/installing-node)  
 It is recommended that you use a version at least as new as specified in the `engines` section of [package.json](package.json) for parity with the [CI environment](https://circleci.com/gh/ConstellationBrands/compass-portal) and the [deployment environment](https://dashboard.heroku.com/pipelines/30ba816e-b652-4ca7-aed5-4a95a884d086)  
 ( As of this writing, use Node version **8.1.4** or newer to at least match Heroku/CircleCI )  
+2. Obtain a copy of the local [**`.env`** configuration file](https://github.com/ConstellationBrands/compass-portal/wiki/Environment-Variable-Configuration#local-environment-variables) from Slack or from another developer on the team. Note: Make sure the file is named `.env`, if sent via email, some clients prefix random characters to .env file.
+3. If connecting via wifi on a Mac in CBI NY office, make sure to be on `Guest-Access` or `cbi_devnet` wifi network.
 
 ## Installation
 1. Clone the compass-portal repo: `git clone git@github.com:ConstellationBrands/compass-portal.git`
 2. Change into the compass-portal directory that you just cloned (`cd compass-portal`)
-3. Install build dependencies: `npm install`
+3. Copy the `.env` file that you obtained from Slack or a dev team member into your `compass-portal` directory.
+4. Install build dependencies: `npm install`
 
 ## Compile and Run
 - To get started quickly, run the following command: `npm run dev`

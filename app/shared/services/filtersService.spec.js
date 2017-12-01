@@ -195,7 +195,7 @@ describe('Unit: filter service', function() {
             selectedTemplate: {
                 myAccountsOnly: true,
                 simpleDistributionType: false,
-                priorityPackage: false,
+                priorityPackage: [],
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -274,6 +274,12 @@ describe('Unit: filter service', function() {
                 showInStoreLevel: true,
                 showInOtherLevels: false
                 }
+            ],
+            priorityPackages: [
+              { label: 'Gaintain', name: 'Gaintain', value: 'GAINTAIN' },
+              { label: 'Impact', name: 'Impact', value: 'IMPACT' },
+              { label: 'Innovation', name: 'Innovation', value: 'INNOVATION' },
+              { label: 'Additional CA', name: 'Additional', value: 'ADDL_CA' }
             ]
     };
 
@@ -459,7 +465,7 @@ describe('Unit: filter service', function() {
             selected: {
                 myAccountsOnly: true,
                 simpleDistributionType: false,
-                priorityPackage: false,
+                priorityPackage: [],
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -493,7 +499,7 @@ describe('Unit: filter service', function() {
             selectedTemplate: {
                 myAccountsOnly: true,
                 simpleDistributionType: false,
-                priorityPackage: false,
+                priorityPackage: [],
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -572,6 +578,12 @@ describe('Unit: filter service', function() {
                 showInStoreLevel: true,
                 showInOtherLevels: false
                 }
+            ],
+            priorityPackages: [
+              { label: 'Gaintain', name: 'Gaintain', value: 'GAINTAIN' },
+              { label: 'Impact', name: 'Impact', value: 'IMPACT' },
+              { label: 'Innovation', name: 'Innovation', value: 'INNOVATION' },
+              { label: 'Additional CA', name: 'Additional', value: 'ADDL_CA' }
             ],
             states: []
     };
@@ -739,7 +751,6 @@ describe('Unit: filter service', function() {
   });
 
   it('reset filters', function() {
-
       filtersService.resetFilters();
       expect(filtersService.model).toEqual(resetModelObject);
 

@@ -1,0 +1,25 @@
+section.opportunities-component-section
+
+  .opportunities-header
+    .header-summary
+      .header-title Opportunities
+      .header-sub-title {{ subtitle }}
+    .close-indicator-container
+      img.close-indicator(src="../../../assets/img/icons/thin-x.svg", (click)="onCloseIndicatorClicked.emit()")
+
+  .opportunities-summary
+    .product-name {{ productName }}
+    .product-premise-type {{ premiseType }} Opportunities
+
+  .opportunities-table
+    .label-row
+      .type-label Opportunity Type
+      .count-label # Of Opportunities
+
+    .opportunity-row(*ngFor="let opportunity of opportunities")
+      div {{ opportunity.name }}
+      div((click)="handleOpportunityCountClicked(opportunity)") {{ opportunity.count }}
+
+    .opportunity-row.total-row
+      .total-row-label Total
+      .total-row-value {{ total }}

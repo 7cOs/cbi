@@ -16,40 +16,34 @@ import java.net.MalformedURLException;
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
-  private Login loginPage;
-  private LogoutPage logoutPage;
   private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
     this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
+    log.info("\nLoading webpage...");
+    driver.get(webAppBaseUrl);
+
+    final Login loginPage = new Login(driver);
+    homePage = loginPage.loginAs(TestUser.ACTOR4);
+
+    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
+    opportunitiesPage.goToPage();
+
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
   }
 
   @AfterClass
   public void tearDownClass() {
+    final LogoutPage logoutPage = new LogoutPage(driver);
+    logoutPage.goToPage();
     this.shutDownBrowser();
   }
 
   @BeforeMethod
   public void setUp() {
-    final TestUser testUser = TestUser.ACTOR4;
-
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
-    homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
-
-    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
-  }
-
-  @AfterMethod
-  public void tearDown() {
-    logoutPage.goToPage();
   }
 
   @Test(description = "Enabling/Disabling Save Report link", dataProvider = "createRunReportData")
@@ -59,7 +53,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Save Report link failed to be disabled when no filters applied."
     );
 
-    opportunitiesPage= opportunitiesPage
+    opportunitiesPage = opportunitiesPage
       .enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
       .clickFirstDistributorResult()
@@ -78,7 +72,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "createRunReportData"
   )
   public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().deleteAllSavedReports();
     opportunitiesPage = this.setUpNewSavedReport(name, distributorSearchText);
 
     Assert.assertTrue(
@@ -126,7 +119,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "duplicateReportData"
+    dataProvider = "editDuplicateReportData"
   )
   public void attemptToEditWithExistingName(String existingReportName, String distributor) {
     opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
@@ -199,6 +192,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
+  @Test(
+    description = "Attempting to create a new Saved Report when the max allowed has already been reached",
+    dependsOnMethods = "createSavedReport"
+  )
+  public void createAfterMaxLimit() {
+    Assert.fail("Test not implemented.");
+  }
+
   @DataProvider
   public static Object[][] createRunReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
@@ -208,10 +209,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @DataProvider
-  public static Object[][] duplicateReportData() {
+  public static Object[][] editDuplicateReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {"Duplicate " + testReportName, "Healy Wholesale"}
+      {"Edit Duplicate " + testReportName, "Healy Wholesale"}
     };
   }
 

@@ -1,7 +1,6 @@
 @import '../../assets/styles/base/variables';
 
 my-performance-table {
-  margin-top: 30px;
   display: inline-block;
   width: 50%;
   min-width: 565px;
@@ -21,50 +20,67 @@ my-performance-table {
       background-color: $dark-blue-2;
       color: $gray-10;
 
-      /deep/.center-col {
+      .center-col {
         background-color: $dark-blue-7;
       }
     }
   }
 }
 
-.tables {
-  display: inline-block;
-  position: relative;
+.tables-container {
+  height: 742px;
+  margin-top: 30px;
 
-  .error-cover {
-    width: 100%;
-    z-index: 1;
-    height: 599px;
-    background-color: $gray-4;
-    display: block;
-    position: absolute;
-    bottom: 0;
-    text-align: center;
+  /deep/.mat-sidenav-backdrop {
+    background-color: $gray-9;
+    cursor: pointer;
+    opacity: 0.5;
+  }
 
-    .error-container {
-      display: inline-block;
-      width: 277px;
-      margin: 120 auto;
-      margin-top: 120px;
+  .opportunities-container {
+    border-bottom: 2px solid $gray-8;
+    left: auto;
+    width: auto;
+  }
+
+  .tables {
+    display: inline-block;
+    position: relative;
+
+    .error-cover {
+      width: 100%;
+      z-index: 1;
+      height: 599px;
+      background-color: $gray-4;
+      display: block;
+      position: absolute;
+      bottom: 0;
       text-align: center;
 
-      .error-icon {
+      .error-container {
         display: inline-block;
-        width: 117px;
-        height: 117px;
-        margin: 20 auto;
-      }
-
-      .error-cover-message {
         width: 277px;
-        height: 66px;
-        font-family: $work-sans;
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 1.38;
+        margin: 120px auto;
+        margin-top: 120px;
         text-align: center;
-        color: $gray-2;
+
+        .error-icon {
+          display: inline-block;
+          width: 117px;
+          height: 117px;
+          margin: 20px auto;
+        }
+
+        .error-cover-message {
+          width: 277px;
+          height: 66px;
+          font-family: $work-sans;
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 1.38;
+          text-align: center;
+          color: $gray-2;
+        }
       }
     }
   }
