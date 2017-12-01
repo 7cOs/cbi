@@ -1,16 +1,12 @@
 #!/bin/bash
 
-TEST_SUITE=$1
+# default to smoke-test suite
+TEST_SUITE=${1:-smoke-test}
 
 cd automation-test
 
-if [[ -z "${TEST_SUITE}" ]]; then
-  echo NO TEST SUITE SPECIFIED - SKIPPING AT EXECUTION
-  exit -1
-else
-  echo INSTALLING MAVEN DEPENDENCIES FOR AT SUITE RUN
-  mvn install -DskipTests=true
-fi
+echo INSTALLING MAVEN DEPENDENCIES FOR AT SUITE RUN
+mvn install -DskipTests=true
 
 if [ "$TEST_SUITE" == "smoke-test" ] ; then
   echo RUNNING SMOKE TEST SUITE FOR IE AND CHROME
