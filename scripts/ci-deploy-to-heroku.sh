@@ -3,8 +3,8 @@
 HEROKU_GIT_INSTANCE=$1
 
 if [ ! $skipDeployment ] || ( [ $skipDeployment ] && ! $skipDeployment ) ; then
-  echo Pushing $CIRCLE_SHA1 to HEROKU_GIT_INSTANCE
-  git push git@heroku.com:HEROKU_GIT_INSTANCE $CIRCLE_SHA1:master -f
+  echo PUSHING $CIRCLE_SHA1 TO HEROKU INSTANCE $HEROKU_GIT_INSTANCE
+  git push git@heroku.com:$HEROKU_GIT_INSTANCE $CIRCLE_SHA1:master -f
 else
-  echo Skipping Deployment to Heroku
+  echo SKIPPING DEPLOYMENT TO HEROKU
 fi

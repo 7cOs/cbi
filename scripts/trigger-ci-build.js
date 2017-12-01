@@ -46,7 +46,7 @@ function buildBranch(project, branchName, token, runTestSuite, skipDeployment) {
 process.argv.forEach((value, index, array) => {
   if (value.indexOf(projectArgName) !== -1) {
     project = value.slice(projectArgName.length);
-    if (!project || !project) {
+    if (!project || !project.length) {
       console.log('Please enter a valid project');
     }
   }
@@ -70,15 +70,21 @@ process.argv.forEach((value, index, array) => {
   }
 
   if (value.indexOf(skipDeploymentArgName) !== -1) {
-    skipDeployment = value.slice(skipDeploymentArgName.length);
+    skipDeployment = value.slice(skipDeploymentArgName.length) !== 'false';
   }
 });
 
 if (project && project.length &&
   branchName && branchName.length &&
-  token && token.length &&
-  skipDeployment !== undefined) {
+  token && token.length) {
     buildBranch(project, branchName, token, runTestSuite, skipDeployment);
 } else {
-  console.log('Please provide the arguments according to documentation.');
+  console.log('Please provide valid arguments. Usage:');
+  console.log('  node trigger-ci-build.js opt1:val1 opt2:val2 ...');
+  console.log('Options:');
+  console.log(`  ${projectArgName}<repo/ci-project> [default: compass-portal]`);
+  console.log(`  ${branchArgName}<branch> [default: test]`);
+  console.log(`  ${tokenArgName}<ci-token> [default: process.env.CIRCLE_CI_API_TOKEN]`);
+  console.log(`  ${runTestSuiteArgName}<suite>`);
+  console.log(`  ${skipDeploymentArgName}<true|false> [default: true]`);
 }
