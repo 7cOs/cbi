@@ -2,6 +2,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import { SetMetricAndPremiseTypePayload } from './my-performance-filter.action';
 import * as MyPerformanceFilterActions from './my-performance-filter.action';
 
 describe('My Performance Filter Actions', () => {
@@ -75,6 +76,27 @@ describe('My Performance Filter Actions', () => {
 
     it('should have the correct payload', () => {
       expect(action.payload).toBe(payload);
+    });
+  });
+
+  describe('SetMetricAndPremiseType', () => {
+    let action: MyPerformanceFilterActions.SetMetricAndPremiseType;
+    const payloadMock: SetMetricAndPremiseTypePayload = {
+      metricType: MetricTypeValue.volume,
+      premiseType: PremiseTypeValue.On
+    };
+
+    beforeEach(() => {
+      action = new MyPerformanceFilterActions.SetMetricAndPremiseType(payloadMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceFilterActions.SET_METRIC_AND_PREMISE_TYPE).toBe('[My Performance Filter] SET_METRIC_AND_PREMISE_TYPE');
+      expect(action.type).toBe(MyPerformanceFilterActions.SET_METRIC_AND_PREMISE_TYPE);
+    });
+
+    it('should have the correct payload', () => {
+      expect(action.payload).toBe(payloadMock);
     });
   });
 });
