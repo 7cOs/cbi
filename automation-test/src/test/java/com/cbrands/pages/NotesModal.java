@@ -72,7 +72,7 @@ public class NotesModal extends TestNGBasePage {
     Assert.assertNotNull(selectedTopic, "No topic found by name of: " + name);
 
     waitForElementToClickable(selectedTopic, true).click();
-    waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH + "//md-option[@ng-repeat='topic in n.noteTopics']"));
+    waitForElementToClickable(selectedTopic, false);
 
     return this;
   }
@@ -96,11 +96,11 @@ public class NotesModal extends TestNGBasePage {
 
   public NotesModal enterNoteText(String noteText) {
     final By noteTextXPathSelector = By.xpath(".//text-angular//div[@contenteditable='true']");
-    final WebElement textBox = modalContainer.findElement(noteTextXPathSelector);
-    waitForVisibleFluentWait(textBox);
-    waitForElementToClickable(textBox, true).click();
 
-    textBox.sendKeys(noteText);
+    enterText(
+      noteText,
+      modalContainer.findElement(noteTextXPathSelector)
+    );
     waitForTextPresent(noteTextXPathSelector, noteText);
 
     return this;

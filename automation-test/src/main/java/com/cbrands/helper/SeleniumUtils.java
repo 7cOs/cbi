@@ -444,6 +444,17 @@ public class SeleniumUtils {
     }
   }
 
+  /**
+   * Enter text into a given textbox while ensuring it has focus
+   * @param expectedText text to enter
+   * @param textBoxElement textbox element to receive text
+   */
+  public static void enterText(String expectedText, WebElement textBoxElement) {
+    waitForVisibleFluentWait(textBoxElement);
+    waitForElementToClickable(textBoxElement, true).click();
+    driver.switchTo().activeElement().sendKeys(expectedText);
+  }
+
 	/**
 	 * Wait for text present.
 	 *
