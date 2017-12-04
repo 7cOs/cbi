@@ -1,6 +1,6 @@
 {
   "name": "compass",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "engines": {
     "node": "8.1.4",
     "npm": "5.2.0"
@@ -44,6 +44,7 @@
     "@ngrx/core": "1.2.0",
     "@ngrx/effects": "2.0.4",
     "@ngrx/store": "2.2.3",
+    "@ngrx/store-devtools": "^3.2.4",
     "@types/angular": "1.5.11",
     "@types/angular-animate": "1.5.6",
     "@types/angular-mocks": "1.5.9",

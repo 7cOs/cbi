@@ -15,40 +15,53 @@ my-performance-breadcrumb(
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
   (backButtonClicked)="handleBackButtonClicked()")
 
-div.tables
-  my-performance-table.left(
-    [tableData]="salesHierarchy",
-    [dateRange]="dateRange",
-    [showDateRange]="true",
-    [tableHeaderRow]="tableHeaderRowLeft",
-    [performanceMetric]="performanceMetric",
-    [totalRow]="displayLeftTotalRow() ? totalRowData : null",
-    [sortingCriteria]="sortingCriteria",
-    [viewType]="salesHierarchyViewType",
-    [selectedSubaccountCode]="selectedSubaccountCode",
-    [showContributionToVolume]="showSalesContributionToVolume",
-    [showOpportunities]="false",
-    (onSublineClicked)="handleSublineClicked($event)",
-    (onSortingCriteriaChanged)="handleSortRows($event)",
-    (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
+md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()")
+  div.tables
+    my-performance-table.left(
+      [tableData]="salesHierarchy",
+      [dateRange]="dateRange",
+      [showDateRange]="true",
+      [tableHeaderRow]="tableHeaderRowLeft",
+      [performanceMetric]="performanceMetric",
+      [totalRow]="displayLeftTotalRow() ? totalRowData : null",
+      [sortingCriteria]="sortingCriteria",
+      [viewType]="salesHierarchyViewType",
+      [selectedSubaccountCode]="selectedSubaccountCode",
+      [showContributionToVolume]="showSalesContributionToVolume",
+      [showOpportunities]="false",
+      (onSublineClicked)="handleSublineClicked($event)",
+      (onSortingCriteriaChanged)="handleSortRows($event)",
+      (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
 
-  my-performance-table.right(
-    [tableData]="productMetrics",
-    [dateRange]="dateRange",
-    [tableHeaderRow]="tableHeaderRowRight",
-    [totalRow]="displayRightTotalRow() ? totalRowData : null",
-    [performanceMetric]="'Product Snapshot'",
-    [dismissableTotalRow]="productMetricsSelectedBrandRow",
-    [sortingCriteria]="sortingCriteria",
-    [selectedSkuPackageCode]="selectedSkuPackageCode",
-    [showContributionToVolume]="showProductMetricsContributionToVolume",
-    [showOpportunities]="showProductMetricsOpportunities",
-    [viewType]="productMetricsViewType",
-    (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
-    (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})",
-    (onDismissableRowXClicked)="handleDismissableRowXClicked()")
+    my-performance-table.right(
+      [tableData]="productMetrics",
+      [dateRange]="dateRange",
+      [tableHeaderRow]="tableHeaderRowRight",
+      [totalRow]="displayRightTotalRow() ? totalRowData : null",
+      [performanceMetric]="'Product Snapshot'",
+      [dismissableTotalRow]="productMetricsSelectedBrandRow",
+      [sortingCriteria]="sortingCriteria",
+      [selectedSkuPackageCode]="selectedSkuPackageCode",
+      [showContributionToVolume]="showProductMetricsContributionToVolume",
+      [showOpportunities]="showProductMetricsOpportunities",
+      [viewType]="productMetricsViewType",
+      (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
+      (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})",
+      (onDismissableRowXClicked)="handleDismissableRowXClicked()")
 
-  div.error-cover(*ngIf="fetchResponsibilitiesFailure || fetchProductMetricsFailure")
-    div.error-container
-      img.error-icon(src="../../assets/img/icons/error-ico.svg")
-      p.error-cover-message Sorry, something went wrong. Try refreshing the page or navigate back to a previous view.
+    div.error-cover(*ngIf="fetchResponsibilitiesFailure || fetchProductMetricsFailure")
+      div.error-container
+        img.error-icon(src="../../assets/img/icons/error-ico.svg")
+        p.error-cover-message Sorry, something went wrong. Try refreshing the page or navigate back to a previous view.
+
+  md-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
+    team-performance-opportunities(
+      [opportunities]="teamPerformanceTableOpportunitiesMock",
+      [productName]="selectedProductNameMock",
+      [premiseType]="currentPremiseTypeLabel",
+      [subtitle]="selectedEntityNameMock",
+      [total]="selectedOpportunitiesTotal",
+      (onCloseIndicatorClicked)="toggleOpportunityTable()",
+      (onOpportunityCountClicked)="handleOpportunityClicked($event)")
+
+div((click)="toggleOpportunityTable()") Toggle Opportunities

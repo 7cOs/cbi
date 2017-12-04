@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
@@ -21,6 +22,7 @@ import { NotificationsComponent } from './shared/components/Notifications/notifi
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
+import { Environment } from './environment';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
@@ -44,7 +46,8 @@ AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
     EffectsModule,
     HttpModule,
     MyPerformanceModule,
-    StoreModule.provideStore(rootReducer)
+    StoreModule.provideStore(rootReducer),
+    Environment.isLocal() ? StoreDevtoolsModule.instrumentOnlyWithExtension({maxAge: 25}) : []
   ],
   declarations: [
     AnalyticsEventDirective,
