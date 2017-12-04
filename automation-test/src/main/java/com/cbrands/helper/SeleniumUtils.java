@@ -450,7 +450,6 @@ public class SeleniumUtils {
    * @param textBoxElement textbox element to receive text
    */
   public static void enterText(String expectedText, WebElement textBoxElement) {
-    waitForVisibleFluentWait(textBoxElement);
     waitForElementToClickable(textBoxElement, true).click();
     driver.switchTo().activeElement().sendKeys(expectedText);
   }
