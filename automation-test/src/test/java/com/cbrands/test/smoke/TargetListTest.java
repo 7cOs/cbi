@@ -1,8 +1,7 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.pages.HomePage;
-import com.cbrands.pages.Login;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.targetList.TargetListListingsPage;
 import com.cbrands.test.BaseTestCase;
@@ -15,8 +14,6 @@ import java.net.MalformedURLException;
 public class TargetListTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
-  private Login loginPage;
-  private LogoutPage logoutPage;
   private TargetListListingsPage targetListListingPage;
 
   @BeforeClass
@@ -31,23 +28,14 @@ public class TargetListTest extends BaseTestCase {
 
   @BeforeMethod
   public void setUp() {
-    final TestUser testUser = TestUser.ACTOR4;
-
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
-
+    PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     targetListListingPage = PageFactory.initElements(driver, TargetListListingsPage.class);
     targetListListingPage.goToPage();
   }
 
   @AfterMethod
   public void tearDown() {
-    logoutPage.goToPage();
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
   }
 
   @Test(dataProvider = "targetListData", description = "Create a new Target List")
