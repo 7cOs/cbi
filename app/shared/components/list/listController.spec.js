@@ -2320,9 +2320,35 @@ describe('Unit: list controller', function() {
 
     it('should send correct event for target list details page', () => {
       ctrl.pageName = 'target-list-detail';
+      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
       ctrl.sendDownloadEvent();
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Download Target List', selectedListMock);
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        analyticsCategoryMock,
+        'Download Target List - With Rationales',
+        selectedListMock);
+    });
+
+    it('should send correct event for target list details page', () => {
+      ctrl.pageName = 'target-list-detail';
+      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+      ctrl.sendDownloadEvent();
+
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        analyticsCategoryMock,
+        'Download Target List - WithOut Rationales',
+        selectedListMock);
+    });
+
+    it('should send correct event for target list details page', () => {
+      ctrl.pageName = 'target-list-detail';
+      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+      ctrl.sendDownloadEvent();
+
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        analyticsCategoryMock,
+        'Download Target List - Stores Only',
+        selectedListMock);
     });
   });
 });
