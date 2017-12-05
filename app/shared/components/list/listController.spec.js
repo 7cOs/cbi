@@ -2336,7 +2336,7 @@ describe('Unit: list controller', function() {
 
       expect(analyticsService.trackEvent).toHaveBeenCalledWith(
         analyticsCategoryMock,
-        'Download Target List - WithOut Rationales',
+        'Download Target List - Without Rationales',
         selectedListMock);
     });
 

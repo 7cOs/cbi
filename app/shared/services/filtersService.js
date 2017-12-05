@@ -442,7 +442,7 @@ module.exports = /*  @ngInject */
 
     var csvDownloadOptions = [
       { value: 'WithRationales', label: 'With Rationales' },
-      { value: 'WithoutRationales', label: 'WithOut Rationales' },
+      { value: 'WithoutRationales', label: 'Without Rationales' },
       { value: 'Stores', label: 'Stores Only' }
     ];
 
