@@ -2318,7 +2318,7 @@ describe('Unit: list controller', function() {
       expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Download', 'Opportunity Result List');
     });
 
-    it('should send correct event for target list details page', () => {
+    it('should send correct event for target list details page while csvDownloadOption is With Rationales', () => {
       ctrl.pageName = 'target-list-detail';
       ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
       ctrl.sendDownloadEvent();
@@ -2329,7 +2329,7 @@ describe('Unit: list controller', function() {
         selectedListMock);
     });
 
-    it('should send correct event for target list details page', () => {
+    it('should send correct event for target list details page while csvDownloadOption is Without Rationales', () => {
       ctrl.pageName = 'target-list-detail';
       ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
       ctrl.sendDownloadEvent();
@@ -2340,7 +2340,7 @@ describe('Unit: list controller', function() {
         selectedListMock);
     });
 
-    it('should send correct event for target list details page', () => {
+    it('should send correct event for target list details page while csvDownloadOption is Stores', () => {
       ctrl.pageName = 'target-list-detail';
       ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
       ctrl.sendDownloadEvent();
