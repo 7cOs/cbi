@@ -74,7 +74,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
   private currentState: MyPerformanceEntitiesData;
-  private defaultUserPremiseType: PremiseTypeValue;
   private entityType: EntityType;
   private filterState: MyPerformanceFilterState;
   private dateRangeSubscription: Subscription;
@@ -207,10 +206,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       includes(this.userService.model.currentUser.srcTypeCd, 'EXCPN_HIER');
 
     if (this.filterState) {
-      this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
-        this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
+      const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+        MetricTypeValue.volume, this.userService.model.currentUser.srcTypeCd[0]);
 
-      this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType( this.defaultUserPremiseType ));
+      this.store.dispatch(new MyPerformanceFilterActions.SetMetricAndPremiseType({
+        metricType: MetricTypeValue.volume,
+        premiseType: defaultUserPremiseType
+      }));
       this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
         positionId: currentUserId,
         filter: this.filterState,
@@ -324,10 +326,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     switch (event.filterType) {
       case MyPerformanceFilterActionType.Metric:
         if (event.filterValue !== this.filterState.metricType) {
-          this.store.dispatch(new MyPerformanceFilterActions.SetMetric(event.filterValue));
-          this.defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
+          const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
             event.filterValue, this.userService.model.currentUser.srcTypeCd[0]);
-          this.store.dispatch(new MyPerformanceFilterActions.SetPremiseType(this.defaultUserPremiseType));
+
+          this.store.dispatch(new MyPerformanceFilterActions.SetMetricAndPremiseType({
+            metricType: event.filterValue,
+            premiseType: defaultUserPremiseType
+          }));
           this.sendFilterAnalyticsEvent();
         }
         break;
@@ -702,10 +707,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleTeamPerformanceDataRefresh(): void {
-    if (this.currentState
-      && this.currentState.responsibilities.status === ActionStatus.Fetched
-      && this.productMetricsState
-      && this.productMetricsState.status === ActionStatus.Fetched) {
+    if (this.currentState && this.productMetricsState) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: this.currentState.responsibilities.positionId,
         groupedEntities: this.currentState.responsibilities.groupedEntities,

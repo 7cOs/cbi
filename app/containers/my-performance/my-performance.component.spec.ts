@@ -280,17 +280,34 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.calls.reset();
     }));
 
+    it('should dispatch the SetMetricAndPremiseType action to initialize the metric filter to volume with '
+    + 'the logged in user`s default premise type', () => {
+      const defaultPremiseTypeMock: PremiseTypeValue = sample([PremiseTypeValue.All, PremiseTypeValue.On, PremiseTypeValue.Off]);
+
+      myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(defaultPremiseTypeMock);
+      filterSubject.next(stateMock.myPerformanceFilter);
+      storeMock.dispatch.calls.reset();
+      componentInstance.ngOnInit();
+
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceFilterActions.SetMetricAndPremiseType({
+        metricType: MetricTypeValue.volume,
+        premiseType: defaultPremiseTypeMock
+      }));
+    });
+
     it('should dispatch actions to fetch data for the current user', () => {
       myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(PremiseTypeValue.On);
       filterSubject.next(stateMock.myPerformanceFilter);
+      storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-        new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.On)
-      );
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceFilterActions.SetMetricAndPremiseType({
+        metricType: MetricTypeValue.volume,
+        premiseType: PremiseTypeValue.On
+      }));
       expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
-        stateMock.myPerformanceFilter.metricType,
+        MetricTypeValue.volume,
         userService.model.currentUser.srcTypeCd[0]
       );
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.FetchResponsibilities({
@@ -307,9 +324,10 @@ describe('MyPerformanceComponent', () => {
       }));
     });
 
-    it('should dispatch actions actions to appropriately handle empty positionId', () => {
+    it('should dispatch actions to appropriately handle empty positionId', () => {
       userService.model.currentUser.positionId = '';
       filterSubject.next(stateMock.myPerformanceFilter);
+      storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
@@ -324,6 +342,7 @@ describe('MyPerformanceComponent', () => {
     it('should dispatch actions actions to appropriately handle undefined positionId', () => {
       delete userService.model.currentUser.positionId;
       filterSubject.next(stateMock.myPerformanceFilter);
+      storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
@@ -1554,10 +1573,16 @@ describe('MyPerformanceComponent', () => {
           case MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE:
             currentFilterMock.distributionType = action.payload;
             break;
+          case MyPerformanceFilterActions.SET_METRIC_AND_PREMISE_TYPE:
+            currentFilterMock.metricType = action.payload.metricType;
+            currentFilterMock.premiseType = action.payload.premiseType;
+            if (action.payload.metricType === MetricTypeValue.PointsOfDistribution) {
+              currentFilterMock.distributionType = DistributionTypeValue.simple;
+            }
+            break;
           default:
             break;
         }
-        filterSubject.next(currentFilterMock);
       });
       storeMock.dispatch.calls.reset();
     }));
@@ -1574,16 +1599,16 @@ describe('MyPerformanceComponent', () => {
         };
         componentInstance.filterOptionSelected(filterEventMock);
 
-        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.count()).toBe(1);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-          new MyPerformanceFilterActions.SetMetric(filterEventMock.filterValue)
+          new MyPerformanceFilterActions.SetMetricAndPremiseType({
+            metricType: filterEventMock.filterValue,
+            premiseType: defaultPremiseTypeMock
+          })
         );
         expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
           filterEventMock.filterValue,
           userService.model.currentUser.srcTypeCd[0]
-        );
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
-          new MyPerformanceFilterActions.SetPremiseType(defaultPremiseTypeMock)
         );
 
         expect(analyticsServiceMock.trackEvent.calls.count()).toBe(3);
@@ -1611,18 +1636,15 @@ describe('MyPerformanceComponent', () => {
         };
         componentInstance.filterOptionSelected(filterEventMock);
 
-        expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-          new MyPerformanceFilterActions.SetMetric(filterEventMock.filterValue)
-        );
+        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceFilterActions.SetMetricAndPremiseType({
+          metricType: filterEventMock.filterValue,
+          premiseType: defaultPremiseTypeMock
+        }));
         expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
           filterEventMock.filterValue,
           userService.model.currentUser.srcTypeCd[0]
         );
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
-          new MyPerformanceFilterActions.SetPremiseType(defaultPremiseTypeMock)
-        );
-
         expect(analyticsServiceMock.trackEvent.calls.count()).toBe(4);
         expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
           'Team Performance Filters',
@@ -1750,6 +1772,7 @@ describe('MyPerformanceComponent', () => {
           distributionType: DistributionTypeValue.simple
         };
         filterSubject.next(currentFilterMock);
+        storeMock.dispatch.calls.reset();
       });
 
       it('should dispatch appropriate actions and send analytics events', () => {
@@ -2141,7 +2164,7 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.count()).toBe(12);
       expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
@@ -2175,7 +2198,7 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.count()).toBe(12);
       expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
@@ -2209,7 +2232,7 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.count()).toBe(12);
       expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
@@ -2242,7 +2265,7 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.count()).toBe(12);
       expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
@@ -2274,7 +2297,7 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
+      expect(storeMock.dispatch.calls.count()).toBe(12);
       expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
@@ -2316,12 +2339,11 @@ describe('MyPerformanceComponent', () => {
         previousFilterMock.premiseType = PremiseTypeValue.All;
         filterSubject.next(previousFilterMock);
         componentInstance.selectedSkuPackageType = SkuPackageType.sku;
-        storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
         currentFilterMock.premiseType = PremiseTypeValue.On;
         filterSubject.next(currentFilterMock);
-        expect(storeMock.dispatch.calls.count()).toBe(1);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        expect(storeMock.dispatch.calls.count()).toBe(13);
+        expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
       });
     });
 
@@ -2330,17 +2352,16 @@ describe('MyPerformanceComponent', () => {
         previousFilterMock.premiseType = PremiseTypeValue.On;
         filterSubject.next(previousFilterMock);
         componentInstance.selectedSkuPackageType = SkuPackageType.package;
-        storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
         currentFilterMock.premiseType = PremiseTypeValue.Off;
         filterSubject.next(currentFilterMock);
-        expect(storeMock.dispatch.calls.count()).toBe(1);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        expect(storeMock.dispatch.calls.count()).toBe(13);
+        expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
       });
     });
 
     describe('when going from On premise type to On with a selected Package', () => {
-      it('should not deselect the Pacakge or trigger any actions', () => {
+      it('should not deselect the Pacakge by dispatching ClearMyPerformanceSelectedSkuCode', () => {
         componentInstance.selectedSkuPackageType = SkuPackageType.package;
         previousFilterMock.premiseType = PremiseTypeValue.On;
         filterSubject.next(previousFilterMock);
@@ -2348,12 +2369,15 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
         currentFilterMock.premiseType = PremiseTypeValue.On;
         filterSubject.next(currentFilterMock);
-        expect(storeMock.dispatch.calls.count()).toBe(0);
+
+        for (let i = 0; i <= storeMock.dispatch.calls.count(); i++) {
+          expect(storeMock.dispatch.calls.argsFor(i)[0]).not.toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        }
       });
     });
 
     describe('when going from On premise type to Off with no selected Package', () => {
-      it('should not deselect the Pacakge or trigger any actions', () => {
+      it('should not deselect the Pacakge by dispatching ClearMyPerformanceSelectedSkuCode', () => {
         componentInstance.selectedSkuPackageType = null;
         previousFilterMock.premiseType = PremiseTypeValue.On;
         filterSubject.next(previousFilterMock);
@@ -2361,7 +2385,10 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
         currentFilterMock.premiseType = PremiseTypeValue.Off;
         filterSubject.next(currentFilterMock);
-        expect(storeMock.dispatch.calls.count()).toBe(0);
+
+        for (let i = 0; i <= storeMock.dispatch.calls.count(); i++) {
+          expect(storeMock.dispatch.calls.argsFor(i)[0]).not.toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        }
       });
     });
   });
