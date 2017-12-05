@@ -1,0 +1,21 @@
+div.modal.download-opportunity
+  .title
+    a.hide-row(ng-click="list.closeModal()")
+    h4 Download
+  div.modal-form
+    label.top Current Selection:
+      p
+        span.opportunities {{list.selected.length}} opportunities
+        span.across-stores  across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores
+
+    label Download:
+      md-radio-group(ng-model="list.csvDownloadOption")
+        md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[0].value}}" aria-label="{{list.filtersService.csvDownloadOptions[0].label}}") Opportunities with rationales
+        md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[1].value}}" aria-label="{{list.filtersService.csvDownloadOptions[1].label}}") Opportunities without rationales
+        md-radio-button.md-primary(value="{{list.filtersService.csvDownloadOptions[2].value}}" aria-label="{{list.filtersService.csvDownloadOptions[2].label}}") Stores only
+
+    div.pad-top
+      button.btn-action(ng-csv="list.getCSVData(list.downloadOption)"
+                      filename="{{list.getDate() | date:'yyyy-MM-dd'}}{{list.csvDownloadOption}}.csv"
+                      csv-header="list.getCSVHeader()"
+                      ng-click="$mdCloseMenu($event)") Download

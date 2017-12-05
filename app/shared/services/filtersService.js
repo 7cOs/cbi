@@ -440,24 +440,31 @@ module.exports = /*  @ngInject */
       timePeriodValue: model.distributionTimePeriod.year[1]
     };
 
+    var csvDownloadOptions = [
+      { label: 'With Rationales', value: 'WithRationales' },
+      { label: 'With Out Rationales', value: 'WithoutRationales' },
+      { label: 'Stores', value: 'Stores' }
+    ];
+
     var service = {
       model: model,
-      addSortFilter: addSortFilter,
-      disableFilters: disableFilters,
-      getAppliedFilters: getAppliedFilters,
-      resetFilters: resetFilters,
-      updateSelectedFilterModel: updateSelectedFilterModel,
-      checkForAuthorizationFlag: checkForAuthorizationFlag,
-      resetSort: resetSort,
-      cleanUpSaveFilterObj: cleanUpSaveFilterObj,
-      lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
+      lastEndingTimePeriod: lastEndingTimePeriod,
       trendPropertyNames: trendPropertyNames,
-      resetPagination: resetPagination,
+      csvDownloadOptions: csvDownloadOptions,
+      addSortFilter: addSortFilter,
+      cleanUpSaveFilterObj: cleanUpSaveFilterObj,
+      checkForAuthorizationFlag: checkForAuthorizationFlag,
       depletionsTimePeriodFromName: depletionsTimePeriodFromName,
       depletionsTimePeriodFromV3APICode: depletionsTimePeriodFromV3APICode,
+      disableFilters: disableFilters,
       distributionTimePeriodFromV3APICode: distributionTimePeriodFromV3APICode,
-      getNewPaginationState: getNewPaginationState
+      getAppliedFilters: getAppliedFilters,
+      getNewPaginationState: getNewPaginationState,
+      resetFilters: resetFilters,
+      resetPagination: resetPagination,
+      resetSort: resetSort,
+      updateSelectedFilterModel: updateSelectedFilterModel
     };
 
     return service;

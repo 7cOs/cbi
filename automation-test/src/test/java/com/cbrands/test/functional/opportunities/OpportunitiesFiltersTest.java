@@ -2,7 +2,7 @@ package com.cbrands.test.functional.opportunities;
 
 import com.cbrands.PremiseType;
 import com.cbrands.TestUser;
-import com.cbrands.pages.Login;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
@@ -14,8 +14,6 @@ import java.net.MalformedURLException;
 
 public class OpportunitiesFiltersTest extends BaseTestCase {
 
-  private Login loginPage;
-  private LogoutPage logoutPage;
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeClass
@@ -28,24 +26,9 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     this.shutDownBrowser();
   }
 
-  @BeforeMethod
-  public void setUp() {
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    driver.get(webAppBaseUrl);
-  }
-
-  private void loginToOpportunitiesPage(TestUser user) {
-    loginPage.loginAs(user);
-
-    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
-    opportunitiesPage.goToPage();
-  }
-
   @AfterMethod
   public void tearDown() {
-    logoutPage.goToPage();
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
   }
 
   @Test(description = "Filter Opportunities by Chain Retailer", dataProvider = "chainRetailersData")
@@ -294,5 +277,12 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
     return new Object[][]{
       {TestUser.ACTOR4, "Healy Wholesale", "Chicago Bev"}
     };
+  }
+
+  private void loginToOpportunitiesPage(TestUser user) {
+    PageFactory.initElements(driver, LoginPage.class).loginAs(user);
+
+    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
+    opportunitiesPage.goToPage();
   }
 }
