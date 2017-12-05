@@ -707,10 +707,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleTeamPerformanceDataRefresh(): void {
-    if (this.currentState
-      && this.currentState.responsibilities.status === ActionStatus.Fetched
-      && this.productMetricsState
-      && this.productMetricsState.status === ActionStatus.Fetched) {
+    if (this.currentState && this.productMetricsState) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: this.currentState.responsibilities.positionId,
         groupedEntities: this.currentState.responsibilities.groupedEntities,
