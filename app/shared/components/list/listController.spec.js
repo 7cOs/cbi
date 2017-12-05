@@ -2329,7 +2329,7 @@ describe('Unit: list controller', function() {
 
       expect(analyticsService.trackEvent).toHaveBeenCalledWith(
         'Opportunities',
-        'Download Opportunities - WithOut Rationales',
+        'Download Opportunities - Without Rationales',
         'Opportunity Result Set');
     });
 

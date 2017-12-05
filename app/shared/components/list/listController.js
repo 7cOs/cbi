@@ -143,7 +143,7 @@ module.exports = /*  @ngInject */
       if (vm.pageName === 'opportunities') {
         analyticsService.trackEvent(
           'Opportunities',
-          'Download Opportunities - ' + filtersService.csvDownloadOptions.find(x => x.value === vm.csvDownloadOption).label,
+          'Download Opportunities - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
           'Opportunity Result Set');
       } else {
         analyticsService.trackEvent(
@@ -715,8 +715,7 @@ module.exports = /*  @ngInject */
 
     function createCSVData(opportunities) {
       const csvData = {};
-      let counter = 0;
-      opportunities.reduce((data, opportunity, counter) => {
+      opportunities.reduce((data, opportunity, idx) => {
         const item = {};
         const csvItem = {};
         angular.copy(opportunity, item);
@@ -749,7 +748,7 @@ module.exports = /*  @ngInject */
         if (vm.csvDownloadOption === filtersService.csvDownloadOptions[2].value) {
           csvData[csvItem.TDLinx] = csvItem;
         } else {
-          csvData[counter] = csvItem;
+          csvData[idx] = csvItem;
         }
         return;
       }, []);
