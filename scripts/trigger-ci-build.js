@@ -8,6 +8,7 @@ const runTestSuiteEnvtArgName = 'runTestSuiteEnvt:';
 const skipDeploymentArgName = 'skipDeployment:';
 
 const username = 'ConstellationBrands';
+const possibleEnvironments = ['dev', 'qa', 'stage', 'prod', 'ga'];
 
 let project = 'compass-portal';
 let branchName = 'test';
@@ -77,7 +78,7 @@ process.argv.forEach((value, index, array) => {
 
   if (value.indexOf(runTestSuiteEnvtArgName) !== -1) {
     runTestSuiteEnvt = value.slice(runTestSuiteEnvtArgName.length);
-    if (!runTestSuiteEnvt || !token.runTestSuiteEnvt) {
+    if (!runTestSuiteEnvt || !token.runTestSuiteEnvt || possibleEnvironments.indexOf(runTestSuiteEnvt) === -1) {
       console.log('Please enter a valid environment in which to run the test suite');
     }
   }
@@ -99,6 +100,6 @@ if (project && project.length &&
   console.log(`  ${branchArgName}<branch> [default: test]`);
   console.log(`  ${tokenArgName}<ci-token> [default: process.env.CIRCLE_CI_API_TOKEN]`);
   console.log(`  ${runTestSuiteArgName}<suite>`);
-  console.log(`  ${runTestSuiteEnvtArgName}<suite-environment> [default: qa]`);
+  console.log(`  ${runTestSuiteEnvtArgName}<suite-environment> [default: qa] [possible values:[${possibleEnvironments}]]`);
   console.log(`  ${skipDeploymentArgName}<true|false> [default: true]`);
 }
