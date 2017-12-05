@@ -147,7 +147,7 @@ module.exports = {
         },
 
         eslint: {
-          failOnWarning: false,
+          failOnWarning: true,
           failOnError: true
         }
       }
