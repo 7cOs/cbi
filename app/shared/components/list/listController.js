@@ -151,7 +151,7 @@ module.exports = /*  @ngInject */
             vm.targetListService.model.currentList.permissionLevel,
             vm.targetListService.model.currentList.archived
           ),
-          'Download Target List - ' + filtersService.csvDownloadOptions.find(x => x.value === vm.csvDownloadOption).label,
+          'Download Target List',
           vm.targetListService.model.currentList.id
         );
       }
