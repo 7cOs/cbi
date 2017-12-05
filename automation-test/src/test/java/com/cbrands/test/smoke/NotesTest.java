@@ -1,12 +1,18 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.pages.*;
+import com.cbrands.pages.AccountDashboardPage;
+import com.cbrands.pages.LoginPage;
+import com.cbrands.pages.LogoutPage;
+import com.cbrands.pages.NotesModal;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
 
@@ -14,25 +20,16 @@ public class NotesTest extends BaseTestCase {
   private static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util
     .Date());
 
-  private LogoutPage logoutPage;
   private NotesModal notesModal;
 
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
     this.startUpBrowser("Smoke - NotesTest");
 
-    logoutPage = new LogoutPage(driver);
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
+    PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.NOTES_ACTOR);
+    PageFactory.initElements(driver, AccountDashboardPage.class).goToPage();
 
-    final Login loginPage = new Login(driver);
-    final HomePage homePage = loginPage.loginAs(TestUser.NOTES_ACTOR);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + TestUser.NOTES_ACTOR.userName());
-
-    final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
-    accountDashboardPage.goToPage();
-
-    notesModal = accountDashboardPage
+    notesModal = PageFactory.initElements(driver, AccountDashboardPage.class)
       .filterForStore("Taco Joint", "IL", "Ontario")
       .clickApplyFilters()
       .clickNotesButton()
@@ -41,7 +38,7 @@ public class NotesTest extends BaseTestCase {
 
   @AfterClass
   public void tearDownClass() {
-    logoutPage.goToPage();
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
     this.shutDownBrowser();
   }
 
