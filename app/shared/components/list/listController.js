@@ -1,7 +1,5 @@
 'use strict';
 
-import { values } from 'lodash';
-
 module.exports = /*  @ngInject */
   function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
@@ -12,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     const vm = this;
     const maxOpportunities = 1000;
+    const values = require('lodash/values');
 
     // Services
     vm.opportunitiesService = opportunitiesService;
@@ -141,14 +140,17 @@ module.exports = /*  @ngInject */
 
     function sendDownloadEvent() {
       if (vm.pageName === 'opportunities') {
-        analyticsService.trackEvent('Opportunities', 'Download', 'Opportunity Result List');
+        analyticsService.trackEvent(
+          'Opportunities',
+          'Download Opportunities - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
+          'Opportunity Result Set');
       } else {
         analyticsService.trackEvent(
           targetListService.getAnalyticsCategory(
             vm.targetListService.model.currentList.permissionLevel,
             vm.targetListService.model.currentList.archived
           ),
-          'Download Target List',
+          'Download Target List - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
           vm.targetListService.model.currentList.id
         );
       }
@@ -712,8 +714,7 @@ module.exports = /*  @ngInject */
 
     function createCSVData(opportunities) {
       const csvData = {};
-      let counter = 0;
-      opportunities.reduce((data, opportunity, counter) => {
+      opportunities.reduce((data, opportunity, idx) => {
         const item = {};
         const csvItem = {};
         angular.copy(opportunity, item);
@@ -746,7 +747,7 @@ module.exports = /*  @ngInject */
         if (vm.csvDownloadOption === filtersService.csvDownloadOptions[2].value) {
           csvData[csvItem.TDLinx] = csvItem;
         } else {
-          csvData[counter] = csvItem;
+          csvData[idx] = csvItem;
         }
         return;
       }, []);

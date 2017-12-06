@@ -2287,7 +2287,7 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('sendDownloadEvent', () => {
+  describe('sendDownloadEvent GA events', () => {
     let analyticsCategoryMock;
     let permissionLevelMock;
     let selectedListMock;
@@ -2311,18 +2311,76 @@ describe('Unit: list controller', function() {
       });
     });
 
-    it('should send correct event for opportunities page', () => {
-      ctrl.pageName = 'opportunities';
-      ctrl.sendDownloadEvent();
+    describe('when page is opportunities', () => {
+      beforeEach(() => {
+        ctrl.pageName = 'opportunities';
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Download', 'Opportunity Result List');
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - With Rationales',
+          'Opportunity Result Set');
+      });
+
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Without Rationales',
+          'Opportunity Result Set');
+      });
+
+      it('should record GA event when csvDownloadOption is Stores', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Stores Only',
+          'Opportunity Result Set');
+      });
     });
 
-    it('should send correct event for target list details page', () => {
-      ctrl.pageName = 'target-list-detail';
-      ctrl.sendDownloadEvent();
+    describe('when page is target list details', () => {
+      beforeEach(() => {
+        ctrl.pageName = 'target-list-detail';
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Download Target List', selectedListMock);
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - With Rationales',
+          selectedListMock);
+      });
+
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Without Rationales',
+          selectedListMock);
+      });
+
+      it('should record GA event when csvDownloadOption is Stores', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Stores Only',
+          selectedListMock);
+      });
     });
   });
 });
