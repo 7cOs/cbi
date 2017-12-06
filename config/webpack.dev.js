@@ -81,7 +81,7 @@ module.exports = webpackMerge(commonConfig, {
         },
 
         eslint: {
-          failOnWarning: false,
+          failOnWarning: true,
           failOnError: true
         }
       }
