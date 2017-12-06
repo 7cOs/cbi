@@ -2312,8 +2312,11 @@ describe('Unit: list controller', function() {
     });
 
     describe('when page is opportunities', () => {
-      it('csvDownloadOption is With Rationales', () => {
+      beforeEach(() => {
         ctrl.pageName = 'opportunities';
+      });
+
+      it('csvDownloadOption is With Rationales', () => {
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
         ctrl.sendDownloadEvent();
 
@@ -2324,7 +2327,6 @@ describe('Unit: list controller', function() {
       });
 
       it('csvDownloadOption is Without Rationales', () => {
-        ctrl.pageName = 'opportunities';
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
         ctrl.sendDownloadEvent();
 
@@ -2335,7 +2337,6 @@ describe('Unit: list controller', function() {
       });
 
       it('csvDownloadOption is Stores', () => {
-        ctrl.pageName = 'opportunities';
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
         ctrl.sendDownloadEvent();
 
