@@ -2311,37 +2311,39 @@ describe('Unit: list controller', function() {
       });
     });
 
-    it('when opportunities page and csvDownloadOption is With Rationales', () => {
-      ctrl.pageName = 'opportunities';
-      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
-      ctrl.sendDownloadEvent();
+    describe('when page is opportunities', () => {
+      it('csvDownloadOption is With Rationales', () => {
+        ctrl.pageName = 'opportunities';
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        'Opportunities',
-        'Download Opportunities - With Rationales',
-        'Opportunity Result Set');
-    });
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - With Rationales',
+          'Opportunity Result Set');
+      });
 
-    it('when opportunities page and csvDownloadOption is Without Rationales', () => {
-      ctrl.pageName = 'opportunities';
-      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
-      ctrl.sendDownloadEvent();
+      it('csvDownloadOption is Without Rationales', () => {
+        ctrl.pageName = 'opportunities';
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        'Opportunities',
-        'Download Opportunities - Without Rationales',
-        'Opportunity Result Set');
-    });
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Without Rationales',
+          'Opportunity Result Set');
+      });
 
-    it('when opportunities page and csvDownloadOption is Stores', () => {
-      ctrl.pageName = 'opportunities';
-      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
-      ctrl.sendDownloadEvent();
+      it('csvDownloadOption is Stores', () => {
+        ctrl.pageName = 'opportunities';
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        'Opportunities',
-        'Download Opportunities - Stores Only',
-        'Opportunity Result Set');
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Stores Only',
+          'Opportunity Result Set');
+      });
     });
 
     it('should send correct event for target list details page', () => {
