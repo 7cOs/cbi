@@ -360,6 +360,26 @@ describe('MyPerformanceTableComponent', () => {
         'selected-entity-row': false,
       });
     });
+
+    it('should return an object with selected-entity-row true when the row matches the selectedDistributorPackageCode', () => {
+      componentInstance.selectedDistributorCode = rowData.metadata.positionId;
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false,
+        'selected-entity-row': true,
+      });
+    });
+
+    it('should return an object with selected-entity-row false when the row has positionId but not same as selectedDistributorcode', () => {
+      componentInstance.selectedDistributorCode = rowData.metadata.positionId + chance.character();
+      const classObject = componentInstance.getEntityRowClasses(rowData);
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false,
+        'selected-entity-row': false,
+      });
+    });
   });
 
   describe('getDismissableTotalRowClasses', () => {
@@ -429,7 +449,20 @@ describe('MyPerformanceTableComponent', () => {
       });
     });
 
-    describe('when viewtype is not subaccounts', () => {
+    describe('when viewtype is distributors', () => {
+      describe('when selectedDistributor has defined value', () => {
+        it('should return true for deselected-total-row', () => {
+          componentInstance.selectedDistributorCode = chance.string();
+          const classObject = componentInstance.getTotalRowClasses();
+          expect(classObject).toEqual({
+            'deselected-total-row': true,
+            [columnWidthClassMock]: true
+          });
+        });
+      });
+    });
+
+    describe('when viewtype is not subaccounts or distributors', () => {
       it('should return false for both properties', () => {
         componentInstance.viewType = SalesHierarchyViewType.roleGroups;
         componentInstance.selectedSubaccountCode = chance.string();
@@ -444,6 +477,17 @@ describe('MyPerformanceTableComponent', () => {
     describe('when selectedSubaccount is undefined', () => {
       it('should return false for both properties', () => {
         componentInstance.selectedSubaccountCode = undefined;
+        const classObject = componentInstance.getTotalRowClasses();
+        expect(classObject).toEqual({
+          'deselected-total-row': false,
+          [columnWidthClassMock]: true
+        });
+      });
+    });
+
+    describe('when selectedDistributor is undefined', () => {
+      it('should return false for both properties', () => {
+        componentInstance.selectedDistributorCode = undefined;
         const classObject = componentInstance.getTotalRowClasses();
         expect(classObject).toEqual({
           'deselected-total-row': false,

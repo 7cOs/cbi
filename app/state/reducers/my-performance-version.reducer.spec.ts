@@ -226,6 +226,48 @@ describe('My Performance Version Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
+  it('should set the selected distributor code when SetMyPerformanceSelectedDistributorCode is received', () => {
+    const payload = chance.string();
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
+        selectedSkuPackageCode: beforeState.current.selectedSkuPackageCode,
+        selectedSkuPackageType: beforeState.current.selectedSkuPackageType,
+        selectedEntityType: beforeState.current.selectedEntityType,
+        selectedDistributorCode: payload,
+        filter: beforeState.current.filter
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(payload));
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should clear the selected distributor when ClearMyPerformanceSelectedDistributorCode is received', () => {
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
+        selectedSkuPackageCode: beforeState.current.selectedSkuPackageCode,
+        selectedSkuPackageType: beforeState.current.selectedSkuPackageType,
+        selectedEntityType: beforeState.current.selectedEntityType,
+        filter: beforeState.current.filter
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
+    expect(actualState).toEqual(expectedState);
+  });
+
   it('should return the MyPerformanceState to its initial state when ClearMyPerformanceState is received', () => {
     expect(myPerformanceVersionReducer(getMyPerformanceStateMock(), new MyPerformanceVersionActions.ClearMyPerformanceState()))
       .toEqual(initialState);

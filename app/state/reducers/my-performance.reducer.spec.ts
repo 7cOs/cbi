@@ -28,7 +28,7 @@ import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 const chance = new Chance();
 
-fdescribe('My Performance Reducer', () => {
+describe('My Performance Reducer', () => {
   let inputMyPerformanceStateMock: MyPerformanceState;
   let myPerformanceFilterStateMock: MyPerformanceFilterState;
 
@@ -69,10 +69,12 @@ fdescribe('My Performance Reducer', () => {
         skuPackageType: SkuPackageType.package
       }),
       new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(chance.string()),
+      new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(chance.string()),
       new MyPerformanceVersionActions.ClearMyPerformanceState(),
       new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode(),
       new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode(),
       new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode(),
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode(),
     ];
 
     const returnedStates: MyPerformanceState[] = actions.map((action: Action) => {

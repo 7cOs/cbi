@@ -211,4 +211,38 @@ describe('My Performance Version Actions', () => {
       expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE);
     });
   });
+
+  describe('SetMyPerformanceSelectedDistributorCode', () => {
+    let selectedDistributorCodeMock: string;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode;
+
+    beforeEach(() => {
+      selectedDistributorCodeMock = chance.string();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(selectedDistributorCodeMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(selectedDistributorCodeMock);
+    });
+  });
+
+  describe('ClearMyPerformanceSelectedDistributorCode', () => {
+    let action: MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode;
+
+    beforeEach(() => {
+      action = new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode();
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE);
+    });
+  });
 });
