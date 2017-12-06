@@ -148,7 +148,7 @@ module.exports = /*  @ngInject */
             vm.targetListService.model.currentList.permissionLevel,
             vm.targetListService.model.currentList.archived
           ),
-          'Download Target List',
+          'Download Target List - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
           vm.targetListService.model.currentList.id
         );
       }
@@ -712,8 +712,7 @@ module.exports = /*  @ngInject */
 
     function createCSVData(opportunities) {
       const csvData = {};
-      let counter = 0;
-      opportunities.reduce((data, opportunity, counter) => {
+      opportunities.reduce((data, opportunity, idx) => {
         const item = {};
         const csvItem = {};
         angular.copy(opportunity, item);
@@ -746,7 +745,7 @@ module.exports = /*  @ngInject */
         if (vm.csvDownloadOption === filtersService.csvDownloadOptions[2].value) {
           csvData[csvItem.TDLinx] = csvItem;
         } else {
-          csvData[counter] = csvItem;
+          csvData[idx] = csvItem;
         }
         return;
       }, []);

@@ -441,9 +441,9 @@ module.exports = /*  @ngInject */
     };
 
     var csvDownloadOptions = [
-      { label: 'With Rationales', value: 'WithRationales' },
-      { label: 'With Out Rationales', value: 'WithoutRationales' },
-      { label: 'Stores', value: 'Stores' }
+      { value: 'WithRationales', label: 'With Rationales' },
+      { value: 'WithoutRationales', label: 'Without Rationales' },
+      { value: 'Stores', label: 'Stores Only' }
     ];
 
     var service = {
