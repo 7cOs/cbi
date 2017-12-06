@@ -2311,11 +2311,40 @@ describe('Unit: list controller', function() {
       });
     });
 
-    it('should send correct event for opportunities page', () => {
-      ctrl.pageName = 'opportunities';
-      ctrl.sendDownloadEvent();
+    describe('when page is opportunities', () => {
+      beforeEach(() => {
+        ctrl.pageName = 'opportunities';
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Download', 'Opportunity Result List');
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - With Rationales',
+          'Opportunity Result Set');
+      });
+
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Without Rationales',
+          'Opportunity Result Set');
+      });
+
+      it('should record GA event when csvDownloadOption is Stores', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Stores Only',
+          'Opportunity Result Set');
+      });
     });
 
     describe('when page is target list details', () => {
@@ -2323,7 +2352,7 @@ describe('Unit: list controller', function() {
         ctrl.pageName = 'target-list-detail';
       });
 
-      it('csvDownloadOption is With Rationales', () => {
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
         ctrl.sendDownloadEvent();
 
@@ -2333,7 +2362,7 @@ describe('Unit: list controller', function() {
           selectedListMock);
       });
 
-      it('csvDownloadOption is Without Rationales', () => {
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
         ctrl.sendDownloadEvent();
 
@@ -2343,7 +2372,7 @@ describe('Unit: list controller', function() {
           selectedListMock);
       });
 
-      it('csvDownloadOption is Stores', () => {
+      it('should record GA event when csvDownloadOption is Stores', () => {
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
         ctrl.sendDownloadEvent();
 
