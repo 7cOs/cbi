@@ -2316,7 +2316,7 @@ describe('Unit: list controller', function() {
         ctrl.pageName = 'opportunities';
       });
 
-      it('csvDownloadOption is With Rationales', () => {
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
         ctrl.sendDownloadEvent();
 
@@ -2326,7 +2326,7 @@ describe('Unit: list controller', function() {
           'Opportunity Result Set');
       });
 
-      it('csvDownloadOption is Without Rationales', () => {
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
         ctrl.sendDownloadEvent();
 
@@ -2336,7 +2336,7 @@ describe('Unit: list controller', function() {
           'Opportunity Result Set');
       });
 
-      it('csvDownloadOption is Stores', () => {
+      it('should record GA event when csvDownloadOption is Stores', () => {
         ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
         ctrl.sendDownloadEvent();
 
@@ -2347,12 +2347,40 @@ describe('Unit: list controller', function() {
       });
     });
 
-    it('should send correct event for target list details page', () => {
-      ctrl.pageName = 'target-list-detail';
+    describe('when page is target list details', () => {
+      beforeEach(() => {
+        ctrl.pageName = 'target-list-detail';
+      });
 
-      ctrl.sendDownloadEvent();
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Download Target List', selectedListMock);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - With Rationales',
+          selectedListMock);
+      });
+
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Without Rationales',
+          selectedListMock);
+      });
+
+      it('should record GA event when csvDownloadOption is Stores', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Stores Only',
+          selectedListMock);
+      });
     });
   });
 });
