@@ -169,6 +169,42 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  public getDistributorOpportunityCount(positionId: string, distributorId: string, premiseType: PremiseTypeValue): any {
+    const url = `/v3/positions/${ positionId }/opportunityCounts`;
+    const params = {
+      distributorCode: distributorId,
+      premiseType: PremiseTypeValue[premiseType].toLowerCase(),
+      countStructureType: 'BRAND_SKU_OPPTYPE',
+      segment: 'A|B',
+      impact: 'high|medium',
+      type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY',
+    };
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getSubAccountOpportunityCount(accountId: string, subAccountId: string, premiseType: PremiseTypeValue): any {
+    const url = `/v3/accounts/${ accountId }/opportunityCounts`;
+    const params = {
+      subAccountCode: subAccountId,
+      premiseType: PremiseTypeValue[premiseType].toLowerCase(),
+      countStructureType: 'BRAND_SKU_OPPTYPE',
+      segment: 'A|B',
+      impact: 'high|medium',
+      type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY'
+    };
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
   private getParams(filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType): any {
     let params: any = {
       metricType: filter.hasOwnProperty('distributionType')

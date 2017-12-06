@@ -40,6 +40,7 @@ export class ResponsibilitiesEffects {
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.checkEmptyResponsibilitiesResponse(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getResponsibilityOpportunityCounts(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructFetchResponsibilitiesSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
   }
@@ -53,6 +54,7 @@ export class ResponsibilitiesEffects {
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.checkEmptyResponsibilitiesResponse(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getResponsibilityOpportunityCounts(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructFetchAlternateHierarchySuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
   }
@@ -102,6 +104,8 @@ export class ResponsibilitiesEffects {
     .switchMap((action: Action) => Observable.of(action.payload))
     .switchMap((refreshTotalPerformanceData: RefreshTotalPerformanceData) =>
       this.responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData))
+    .switchMap((refreshTotalPerformanceData: RefreshTotalPerformanceData) =>
+      this.responsibilitiesService.getResponsibilityOpportunityCounts(refreshTotalPerformanceData))
     .switchMap((refreshTotalPerformanceData: RefreshTotalPerformanceData) => {
       return Observable.of(
         new ResponsibilitiesActions.FetchTotalPerformanceSuccess(refreshTotalPerformanceData.entitiesTotalPerformances)
@@ -117,6 +121,7 @@ export class ResponsibilitiesEffects {
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.checkEmptySubaccountsResponse(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
+      .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountOpportunityCounts(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
   }

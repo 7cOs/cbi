@@ -568,6 +568,72 @@ export class ResponsibilitiesService {
     return Observable.of(subAccountsData);
   }
 
+  public getResponsibilityOpportunityCounts(pipelineData: (ResponsibilitiesData|RefreshAllPerformancesData))
+  : Observable<ResponsibilitiesData|RefreshAllPerformancesData> {
+    if (pipelineData.filter.premiseType === PremiseTypeValue.All) return Observable.of(pipelineData);
+
+    switch (pipelineData.salesHierarchyViewType) {
+      case SalesHierarchyViewType.distributors:
+        return this.getDistributorOpportunityCounts(pipelineData);
+      case SalesHierarchyViewType.subAccounts:
+        return this.getRefreshedSubAccountOpportunityCounts(pipelineData);
+      default:
+        return Observable.of(pipelineData);
+    }
+  }
+
+  public getSubAccountOpportunityCounts(subAccountsData: SubAccountData): Observable<SubAccountData> {
+    if (subAccountsData.filter.premiseType === PremiseTypeValue.All) return Observable.of(subAccountsData);
+
+    const selectedAccountGroup: string = Object.keys(subAccountsData.groupedEntities)[0];
+    const subAccountIdsString: string = this.getPositionIdQueryString(subAccountsData.groupedEntities[selectedAccountGroup]);
+
+    return this.myPerformanceApiService.getSubAccountOpportunityCount(
+      subAccountsData.positionId, subAccountIdsString, subAccountsData.filter.premiseType)
+      .switchMap((response: any) => {
+        return Observable.of(subAccountsData);
+      })
+      .catch(() => {
+        return Observable.of(subAccountsData);
+      });
+  }
+
+  private getDistributorOpportunityCounts(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    const distributorIdsString: string = this.getPositionIdQueryString(responsibilitiesData.groupedEntities.DISTRIBUTOR);
+
+    return this.myPerformanceApiService.getDistributorOpportunityCount(
+      responsibilitiesData.positionId, distributorIdsString, responsibilitiesData.filter.premiseType)
+      .switchMap((response: any) => {
+        return Observable.of(responsibilitiesData);
+      })
+      .catch(() => {
+        return Observable.of(responsibilitiesData);
+      });
+  }
+
+  private getRefreshedSubAccountOpportunityCounts(pipelineData: (ResponsibilitiesData|RefreshAllPerformancesData))
+  : Observable<ResponsibilitiesData|RefreshAllPerformancesData> {
+    const selectedAccountGroup: string = Object.keys(pipelineData.groupedEntities)[0];
+    const distributorIdsString: string = this.getPositionIdQueryString(pipelineData.groupedEntities[selectedAccountGroup]);
+
+    return this.myPerformanceApiService.getDistributorOpportunityCount(
+      pipelineData.positionId, distributorIdsString, pipelineData.filter.premiseType)
+      .switchMap((response: any) => {
+        return Observable.of(pipelineData);
+      })
+      .catch(() => {
+        return Observable.of(pipelineData);
+      });
+  }
+
+  private getPositionIdQueryString(hierarchyEntities: Array<HierarchyEntity>): string {
+    return hierarchyEntities.reduce((positionIdString: string, hierarchyEntity: EntityWithPerformance, index: number): string => {
+      return index === 0 || index === hierarchyEntities.length + 1
+        ? hierarchyEntity.positionId
+        : positionIdString += `|${ hierarchyEntity.positionId }`;
+    }, '');
+  }
+
   private getAccountPerformances(
     accountsId: string,
     filter: MyPerformanceFilterState,
