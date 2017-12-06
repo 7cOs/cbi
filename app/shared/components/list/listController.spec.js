@@ -2287,7 +2287,7 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('sendDownloadEvent', () => {
+  describe('sendDownloadEvent GA events', () => {
     let analyticsCategoryMock;
     let permissionLevelMock;
     let selectedListMock;
@@ -2311,7 +2311,7 @@ describe('Unit: list controller', function() {
       });
     });
 
-    it('should send correct event for opportunities page while csvDownloadOption is With Rationales', () => {
+    it('when opportunities page and csvDownloadOption is With Rationales', () => {
       ctrl.pageName = 'opportunities';
       ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
       ctrl.sendDownloadEvent();
@@ -2322,7 +2322,7 @@ describe('Unit: list controller', function() {
         'Opportunity Result Set');
     });
 
-    it('should send correct event for opportunities page while csvDownloadOption is Without Rationales', () => {
+    it('when opportunities page and csvDownloadOption is Without Rationales', () => {
       ctrl.pageName = 'opportunities';
       ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
       ctrl.sendDownloadEvent();
@@ -2333,7 +2333,7 @@ describe('Unit: list controller', function() {
         'Opportunity Result Set');
     });
 
-    it('should send correct event for opportunities page while csvDownloadOption is Stores', () => {
+    it('when opportunities page and csvDownloadOption is Stores', () => {
       ctrl.pageName = 'opportunities';
       ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
       ctrl.sendDownloadEvent();
