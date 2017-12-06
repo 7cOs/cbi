@@ -44,6 +44,7 @@ public class LoginPage extends TestNGBasePage {
   }
 
   public HomePage loginAs(TestUser testUser) {
+    this.goToPage();
     final HomePage landingPage = this.enterUserName(testUser)
       .enterPassword(testUser)
       .clickSubmit();

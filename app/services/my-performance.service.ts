@@ -14,6 +14,12 @@ import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum'
 @Injectable()
 export class MyPerformanceService {
 
+  private premiseTypeLabelMap = {
+    [PremiseTypeValue.All]: 'All',
+    [PremiseTypeValue.Off]: 'Off-Premise',
+    [PremiseTypeValue.On]: 'On-Premise'
+  };
+
   public getUserDefaultPremiseType(metric: MetricTypeValue, userType: string): PremiseTypeValue {
     let  defaultPremiseType: PremiseTypeValue = PremiseTypeValue.Off;
 
@@ -130,5 +136,9 @@ export class MyPerformanceService {
       case ProductMetricsViewType.packages:
         return ProductMetricHeaderProductType.Package;
     }
+  }
+
+  public getPremiseTypeStateLabel(premiseType: PremiseTypeValue): string {
+    return this.premiseTypeLabelMap[premiseType] || 'All';
   }
 }

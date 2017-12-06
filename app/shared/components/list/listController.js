@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     const vm = this;
     const maxOpportunities = 1000;
+    const values = require('lodash/values');
 
     // Services
     vm.opportunitiesService = opportunitiesService;
@@ -52,6 +53,7 @@ module.exports = /*  @ngInject */
     vm.undoClicked = false;
     vm.selectAllToastVisible = false;
     vm.maxOpportunities = maxOpportunities;
+    vm.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -65,8 +67,10 @@ module.exports = /*  @ngInject */
     vm.createNewList = createNewList;
     vm.depletionsVsYaPercent = depletionsVsYaPercent;
     vm.displayBrandIcon = displayBrandIcon;
+    vm.downloadModal = downloadModal;
     vm.expandCallback = expandCallback;
     vm.getCSVData = getCSVData;
+    vm.getCSVHeader = getCSVHeader;
     vm.getDate = getDate;
     vm.getMemos = getMemos;
     vm.getTargetLists = getTargetLists;
@@ -112,7 +116,9 @@ module.exports = /*  @ngInject */
       'Current YTD Store Volume',
       'Last YTD Store Volume',
       'Volume Trend for Store CYTD vs CYTD Last Year',
-      'Segmentation',
+      'Segmentation'
+    ];
+    vm.csvHeaderNoStores = [
       'Opportunity Type',
       'Product',
       'Item Authorization',
@@ -121,7 +127,6 @@ module.exports = /*  @ngInject */
       'Opportunity Status',
       'Opportunity Predicted Impact'
     ];
-    vm.csvHeaderRationale = csvHeaderRationale();
 
     init();
 
@@ -135,14 +140,17 @@ module.exports = /*  @ngInject */
 
     function sendDownloadEvent() {
       if (vm.pageName === 'opportunities') {
-        analyticsService.trackEvent('Opportunities', 'Download', 'Opportunity Result List');
+        analyticsService.trackEvent(
+          'Opportunities',
+          'Download Opportunities - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
+          'Opportunity Result Set');
       } else {
         analyticsService.trackEvent(
           targetListService.getAnalyticsCategory(
             vm.targetListService.model.currentList.permissionLevel,
             vm.targetListService.model.currentList.archived
           ),
-          'Download Target List',
+          'Download Target List - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
           vm.targetListService.model.currentList.id
         );
       }
@@ -553,6 +561,22 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function downloadModal(oId, ev) {
+      vm.currentOpportunityId = oId;
+      vm.sharedCollaborators = [];
+      vm.opportunityShared = false;
+      vm.shareOpportunityFail = false;
+
+      const parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: false,
+        parent: parentEl,
+        scope: $scope.$new(),
+        targetEvent: ev,
+        template: require('./modal-download-opportunity.pug')
+      });
+    }
+
     // Make call to applicable API endpoint for memo information per product
     // trigger population of memo with response data
     function getMemos(storeId, productId, type, code) {
@@ -663,8 +687,9 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = message;
     }
 
-    function getCSVData(includeRationale) {
+    function getCSVData() {
       const csvDataPromise = $q.defer();
+
       if (vm.isAllOpportunitiesSelected) {
         loaderService.openLoader(true);
 
@@ -674,21 +699,22 @@ module.exports = /*  @ngInject */
 
         getOpportunitiesPromise
           .then(opportunities => {
-            csvDataPromise.resolve(createCSVData(opportunities, includeRationale));
+            csvDataPromise.resolve(createCSVData(opportunities));
             loaderService.closeLoader();
           })
           .catch(() => {
             loaderService.closeLoader();
           });
       } else {
-        csvDataPromise.resolve(createCSVData(vm.selected, includeRationale));
+        csvDataPromise.resolve(createCSVData(vm.selected));
       }
-
+      sendDownloadEvent();
       return csvDataPromise.promise;
     }
 
-    function createCSVData(opportunities, includeRationale) {
-      return opportunities.reduce((data, opportunity) => {
+    function createCSVData(opportunities) {
+      const csvData = {};
+      opportunities.reduce((data, opportunity, idx) => {
         const item = {};
         const csvItem = {};
         angular.copy(opportunity, item);
@@ -703,22 +729,45 @@ module.exports = /*  @ngInject */
         csvItem.storeDepletionsCTDYA = item.store.depletionsCurrentYearToDateYA;
         csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
         csvItem.storeSegmentation = item.store.segmentation;
-        csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
-        csvItem.productName = item.product.name || item.product.brand;
-        csvItem.itemAuthorization = item.isItemAuthorization;
-        csvItem.chainMandate = item.isChainMandate;
-        csvItem.onFeature = item.isOnFeature;
-        csvItem.opportunityStatus = item.status;
-        csvItem.impactPredicted = item.impactDescription;
 
-        if (includeRationale) {
+        if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
+          csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
+          csvItem.productName = item.product.name || item.product.brand;
+          csvItem.itemAuthorization = item.isItemAuthorization;
+          csvItem.chainMandate = item.isChainMandate;
+          csvItem.onFeature = item.isOnFeature;
+          csvItem.opportunityStatus = item.status;
+          csvItem.impactPredicted = item.impactDescription;
+        }
+
+        if (vm.csvDownloadOption === filtersService.csvDownloadOptions[0].value) {
           csvItem.rationale = item.rationale;
         }
 
-        data.push(csvItem);
-
-        return data;
+        if (vm.csvDownloadOption === filtersService.csvDownloadOptions[2].value) {
+          csvData[csvItem.TDLinx] = csvItem;
+        } else {
+          csvData[idx] = csvItem;
+        }
+        return;
       }, []);
+      return values(csvData);
+    }
+
+    function getCSVHeader() {
+      let localCSVHeader;
+
+      if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
+        localCSVHeader = vm.csvHeader.concat(vm.csvHeaderNoStores);
+      } else {
+        localCSVHeader = angular.copy(vm.csvHeader);
+      }
+
+      if (vm.csvDownloadOption === filtersService.csvDownloadOptions[0].value) {
+        localCSVHeader.push('Rationale');
+      }
+
+      return localCSVHeader;
     }
 
     /**
@@ -978,12 +1027,6 @@ module.exports = /*  @ngInject */
      */
     function isItemInList(opportunity, currentSelectionList) {
       return currentSelectionList.indexOf(opportunity) !== -1;
-    }
-
-    function csvHeaderRationale() {
-      const rationale = angular.copy(vm.csvHeader);
-      rationale.push('Rationale');
-      return rationale;
     }
 
     function removeItem(item, list, idx) {
