@@ -2318,37 +2318,40 @@ describe('Unit: list controller', function() {
       expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Download', 'Opportunity Result List');
     });
 
-    it('when target list details page and csvDownloadOption is With Rationales', () => {
-      ctrl.pageName = 'target-list-detail';
-      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
-      ctrl.sendDownloadEvent();
+    describe('when page is target list details', () => {
+      beforeEach(() => {
+        ctrl.pageName = 'target-list-detail';
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        analyticsCategoryMock,
-        'Download Target List - With Rationales',
-        selectedListMock);
-    });
+      it('csvDownloadOption is With Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
 
-    it('when target list details page and csvDownloadOption is Without Rationales', () => {
-      ctrl.pageName = 'target-list-detail';
-      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
-      ctrl.sendDownloadEvent();
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - With Rationales',
+          selectedListMock);
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        analyticsCategoryMock,
-        'Download Target List - Without Rationales',
-        selectedListMock);
-    });
+      it('csvDownloadOption is Without Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
 
-    it('when target list details page and csvDownloadOption is Stores', () => {
-      ctrl.pageName = 'target-list-detail';
-      ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
-      ctrl.sendDownloadEvent();
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Without Rationales',
+          selectedListMock);
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        analyticsCategoryMock,
-        'Download Target List - Stores Only',
-        selectedListMock);
+      it('csvDownloadOption is Stores', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Stores Only',
+          selectedListMock);
+      });
     });
   });
 });
