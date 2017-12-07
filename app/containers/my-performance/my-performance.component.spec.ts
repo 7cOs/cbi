@@ -1302,7 +1302,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when right side data row is clicked', () => {
-    it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
+    beforeEach(() => {
       storeMock.dispatch.calls.reset();
 
       let rowMock = getMyPerformanceTableRowMock(1)[0];
@@ -1316,6 +1316,9 @@ describe('MyPerformanceComponent', () => {
 
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
+    });
+
+    it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
       expect(storeMock.dispatch.calls.count()).toBe(2);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
         new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());

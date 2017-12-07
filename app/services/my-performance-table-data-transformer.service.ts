@@ -106,13 +106,20 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues): MyPerformanceTableRow {
-    return {
+    const rowTotal: MyPerformanceTableRow = {
       descriptionRow0: productMetricsValues.brandDescription,
       metricColumn0: productMetricsValues.current,
       metricColumn1: productMetricsValues.yearAgo,
       metricColumn2: productMetricsValues.yearAgoPercent,
       ctv: 100,
+      metadata: {}
     };
+
+    if (productMetricsValues.brandCode) {
+      rowTotal.metadata.brandCode = productMetricsValues.brandCode;
+    }
+
+    return rowTotal;
   }
 
   private getPercentageOfTotal(contribution: number, total: number): number {
