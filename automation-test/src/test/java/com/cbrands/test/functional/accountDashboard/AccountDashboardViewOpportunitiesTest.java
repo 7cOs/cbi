@@ -1,11 +1,9 @@
 package com.cbrands.test.functional.accountDashboard;
 
 import com.cbrands.PremiseType;
-import com.cbrands.pages.AccountDashboardPage;
-
 import com.cbrands.TestUser;
-import com.cbrands.pages.HomePage;
-import com.cbrands.pages.Login;
+import com.cbrands.pages.AccountDashboardPage;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
@@ -16,8 +14,6 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 
 public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
-  private Login loginPage;
-  private LogoutPage logoutPage;
   private AccountDashboardPage accountDashboardPage;
 
   @BeforeClass
@@ -32,15 +28,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
 
   @BeforeMethod
   public void setUp() {
-    final TestUser testUser = TestUser.ACTOR4;
-
-    loginPage = new Login(driver);
-    logoutPage = new LogoutPage(driver);
-
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
-    final HomePage homePage = loginPage.loginAs(testUser);
-    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
+    PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
 
     accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
     accountDashboardPage.goToPage();
@@ -48,7 +36,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
 
   @AfterMethod
   public void tearDown() {
-    logoutPage.goToPage();
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
   }
 
   @Test(

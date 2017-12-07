@@ -2,7 +2,7 @@ package com.cbrands.test.functional.opportunities;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
-import com.cbrands.pages.Login;
+import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
@@ -14,6 +14,7 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
+  private static final int MAX_SAVED_REPORT_LIMIT = 10;
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
   private HomePage homePage;
@@ -22,22 +23,15 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @BeforeClass
   public void setUpClass() throws MalformedURLException {
     this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
-    log.info("\nLoading webpage...");
-    driver.get(webAppBaseUrl);
 
-    final Login loginPage = new Login(driver);
-    homePage = loginPage.loginAs(TestUser.ACTOR4);
-
+    homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
-
-    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
   }
 
   @AfterClass
   public void tearDownClass() {
-    final LogoutPage logoutPage = new LogoutPage(driver);
-    logoutPage.goToPage();
+    PageFactory.initElements(driver, LogoutPage.class).goToPage();
     this.shutDownBrowser();
   }
 
@@ -46,8 +40,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage.goToPage();
   }
 
-  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "createRunReportData")
-  public void enableSavedReport(String name, String distributorSearchText) {
+  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "distributorData")
+  public void enableSavedReport(String distributorSearchText) {
     Assert.assertFalse(
       opportunitiesPage.isSaveReportButtonEnabled(),
       "Save Report link failed to be disabled when no filters applied."
@@ -67,8 +61,58 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
-    description = "Creating an Opportunities Saved Report",
+    description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
+    dataProvider = "distributorData"
+  )
+  public void createAfterMaxLimit(String distributor) {
+    this.setUpMaxNumberOfSavedReports(distributor);
+
+    final SavedReportModal savedReportModal = opportunitiesPage
+      .enterDistributorSearchText(distributor)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickSaveReportLink();
+
+    Assert.assertTrue(
+      savedReportModal.isMaxSavedReportsLimitErrorDisplayed(),
+      "Failed to display error message when max limit of Saved Reports already reached."
+    );
+  }
+
+  @Test(
+    description = "Deleting a Saved Report",
+    dependsOnMethods = "createAfterMaxLimit",
+    dataProvider = "deleteReportData"
+  )
+  public void deleteSavedReport(String reportNameToDelete, String distributor) {
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
+    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportNameToDelete)
+      .clickSavedReportDeleteLink()
+      .waitForModalToClose();
+
+    Assert.assertFalse(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Opportunities page."
+    );
+
+    homePage.goToPage();
+    Assert.assertFalse(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      "Saved Report with name " + reportNameToDelete +
+        " failed to be removed from the dropdown on the Home page."
+    );
+  }
+
+  @Test(
+    description = "Creating an Opportunities Saved Report",
+    dependsOnMethods = "deleteSavedReport",
     dataProvider = "createRunReportData"
   )
   public void createSavedReport(String name, String distributorSearchText) {
@@ -165,39 +209,11 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
-  @Test(
-    description = "Deleting a Saved Report",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "deleteReportData"
-  )
-  public void deleteSavedReport(String reportNameToDelete, String distributor) {
-    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportNameToDelete)
-      .clickSavedReportDeleteLink()
-      .waitForModalToClose();
-
-    Assert.assertFalse(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertFalse(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Home page."
-    );
-  }
-
-  @Test(
-    description = "Attempting to create a new Saved Report when the max allowed has already been reached",
-    dependsOnMethods = "createSavedReport"
-  )
-  public void createAfterMaxLimit() {
-    Assert.fail("Test not implemented.");
+  @DataProvider
+  public static Object[][] distributorData() {
+    return new Object[][]{
+      {"Healy Wholesale"}
+    };
   }
 
   @DataProvider
@@ -244,6 +260,22 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .clickSave()
       .waitForModalToClose()
       .clickResetFilters();
+  }
+
+  private void setUpMaxNumberOfSavedReports(String distributor) {
+    for(int i = this.getExistingNumberOfSavedReports() + 1; i <= MAX_SAVED_REPORT_LIMIT; i++) {
+      this.setUpNewSavedReport("Test Max Limit - Report #" + i, distributor);
+    }
+  }
+
+  private int getExistingNumberOfSavedReports() {
+    final int existingNumberOfSavedReports;
+
+    final OpportunitiesPage.SavedReportDropdown savedReportDropdown = opportunitiesPage.clickSavedReportsDropdown();
+    existingNumberOfSavedReports = savedReportDropdown.getNumberOfSavedReports();
+    savedReportDropdown.closeDropdown();
+
+    return existingNumberOfSavedReports;
   }
 
 }

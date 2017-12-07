@@ -51,6 +51,9 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.userService).not.toBeUndefined();
     expect(typeof (ctrl.userService)).toEqual('object');
+
+    expect(ctrl.csvDownloadOption).not.toBeUndefined();
+    expect(typeof (ctrl.csvDownloadOption)).toEqual('string');
   });
 
   it('should expose public methods', function() {
@@ -92,6 +95,9 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.getCSVData).not.toBeUndefined();
     expect(typeof (ctrl.getCSVData)).toEqual('function');
+
+    expect(ctrl.getCSVHeader).not.toBeUndefined();
+    expect(typeof (ctrl.getCSVHeader)).toEqual('function');
 
     expect(ctrl.getDate).not.toBeUndefined();
     expect(typeof (ctrl.getDate)).toEqual('function');
@@ -491,9 +497,11 @@ describe('Unit: list controller', function() {
         }
     }];
 
-    it('should create a csvItem for each selected opportunity, and add it to the data array', () => {
+    it('should create a csvItem for each selected opportunity (WithoutRationales), and add it to the data array', () => {
       ctrl.selected = [opportunities[0]];
-      const dataPromise = ctrl.getCSVData();
+      ctrl.csvDownloadOption = 'WithoutRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+      const csvHeader = ctrl.getCSVHeader();
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
@@ -514,11 +522,32 @@ describe('Unit: list controller', function() {
         'opportunityStatus': opportunities[0].status,
         'impactPredicted': opportunities[0].impactDescription
       }]);
+      expect(csvHeader).toEqual([
+        'Distributor',
+        'TDLinx',
+        'Store Name',
+        'Store Number',
+        'Address',
+        'City',
+        'ZIP',
+        'Current YTD Store Volume',
+        'Last YTD Store Volume',
+        'Volume Trend for Store CYTD vs CYTD Last Year',
+        'Segmentation',
+        'Opportunity Type',
+        'Product',
+        'Item Authorization',
+        'Chain Mandate',
+        'On Feature',
+        'Opportunity Status',
+        'Opportunity Predicted Impact']);
     });
 
-    it('should add a rationale when provided as input', () => {
+    it('should create a csvItem item for each selected opportunity (WithRationales), and add it to the data array', () => {
       ctrl.selected = [opportunities[0]];
-      const dataPromise = ctrl.getCSVData(true);
+      ctrl.csvDownloadOption = 'WithRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+      const csvHeader = ctrl.getCSVHeader();
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
@@ -540,11 +569,112 @@ describe('Unit: list controller', function() {
         'impactPredicted': opportunities[0].impactDescription,
         'rationale': opportunities[0].rationale
       }]);
+      expect(csvHeader).toEqual([
+        'Distributor',
+        'TDLinx',
+        'Store Name',
+        'Store Number',
+        'Address',
+        'City',
+        'ZIP',
+        'Current YTD Store Volume',
+        'Last YTD Store Volume',
+        'Volume Trend for Store CYTD vs CYTD Last Year',
+        'Segmentation',
+        'Opportunity Type',
+        'Product',
+        'Item Authorization',
+        'Chain Mandate',
+        'On Feature',
+        'Opportunity Status',
+        'Opportunity Predicted Impact',
+        'Rationale']);
+    });
+
+    it('should create a csvItem item and add a rationale when provided as input', () => {
+      ctrl.selected = [opportunities[0]];
+      ctrl.csvDownloadOption = 'WithRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+      const csvHeader = ctrl.getCSVHeader();
+      expect(dataPromise.$$state.value).toEqual([{
+        'storeDistributor': opportunities[0].store.distributors[0],
+        'TDLinx': opportunities[0].store.id,
+        'storeName': opportunities[0].store.name,
+        'storeNumber': opportunities[0].store.storeNumber,
+        'storeAddress': opportunities[0].store.streetAddress,
+        'storeCity': opportunities[0].store.city,
+        'storeZip': opportunities[0].store.zip,
+        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': opportunities[0].store.segmentation,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
+        'productName': opportunities[0].product.name,
+        'itemAuthorization': opportunities[0].isItemAuthorization,
+        'chainMandate': opportunities[0].isChainMandate,
+        'onFeature': opportunities[0].isOnFeature,
+        'opportunityStatus': opportunities[0].status,
+        'impactPredicted': opportunities[0].impactDescription,
+        'rationale': opportunities[0].rationale
+      }]);
+      expect(csvHeader).toEqual([
+        'Distributor',
+        'TDLinx',
+        'Store Name',
+        'Store Number',
+        'Address',
+        'City',
+        'ZIP',
+        'Current YTD Store Volume',
+        'Last YTD Store Volume',
+        'Volume Trend for Store CYTD vs CYTD Last Year',
+        'Segmentation',
+        'Opportunity Type',
+        'Product',
+        'Item Authorization',
+        'Chain Mandate',
+        'On Feature',
+        'Opportunity Status',
+        'Opportunity Predicted Impact',
+        'Rationale']);
+      });
+
+    it('should create a csvItem with store only option', () => {
+      ctrl.selected = [opportunities[0]];
+      ctrl.csvDownloadOption = 'Stores';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+      const csvHeader = ctrl.getCSVHeader();
+      expect(dataPromise.$$state.value).toEqual([{
+        'storeDistributor': opportunities[0].store.distributors[0],
+        'TDLinx': opportunities[0].store.id,
+        'storeName': opportunities[0].store.name,
+        'storeNumber': opportunities[0].store.storeNumber,
+        'storeAddress': opportunities[0].store.streetAddress,
+        'storeCity': opportunities[0].store.city,
+        'storeZip': opportunities[0].store.zip,
+        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': opportunities[0].store.segmentation
+      }]);
+      expect(csvHeader).toEqual([
+        'Distributor',
+        'TDLinx',
+        'Store Name',
+        'Store Number',
+        'Address',
+        'City',
+        'ZIP',
+        'Current YTD Store Volume',
+        'Last YTD Store Volume',
+        'Volume Trend for Store CYTD vs CYTD Last Year',
+        'Segmentation']);
     });
 
     it('should be able to parse when the distributor list is null', () => {
       ctrl.selected = [opportunities[1]];
-      const dataPromise = ctrl.getCSVData(false);
+      ctrl.csvDownloadOption = 'WithoutRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
@@ -569,7 +699,8 @@ describe('Unit: list controller', function() {
 
     it('should take the brand as product name if the product name is null', () => {
       ctrl.selected = [opportunities[1]];
-      const dataPromise = ctrl.getCSVData(false);
+      ctrl.csvDownloadOption = 'WithoutRationales';
+      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
       expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
@@ -2156,7 +2287,7 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('sendDownloadEvent', () => {
+  describe('sendDownloadEvent GA events', () => {
     let analyticsCategoryMock;
     let permissionLevelMock;
     let selectedListMock;
@@ -2180,18 +2311,76 @@ describe('Unit: list controller', function() {
       });
     });
 
-    it('should send correct event for opportunities page', () => {
-      ctrl.pageName = 'opportunities';
-      ctrl.sendDownloadEvent();
+    describe('when page is opportunities', () => {
+      beforeEach(() => {
+        ctrl.pageName = 'opportunities';
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Download', 'Opportunity Result List');
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - With Rationales',
+          'Opportunity Result Set');
+      });
+
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Without Rationales',
+          'Opportunity Result Set');
+      });
+
+      it('should record GA event when csvDownloadOption is Stores', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Opportunities',
+          'Download Opportunities - Stores Only',
+          'Opportunity Result Set');
+      });
     });
 
-    it('should send correct event for target list details page', () => {
-      ctrl.pageName = 'target-list-detail';
-      ctrl.sendDownloadEvent();
+    describe('when page is target list details', () => {
+      beforeEach(() => {
+        ctrl.pageName = 'target-list-detail';
+      });
 
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Download Target List', selectedListMock);
+      it('should record GA event when csvDownloadOption is With Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - With Rationales',
+          selectedListMock);
+      });
+
+      it('should record GA event when csvDownloadOption is Without Rationales', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[1].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Without Rationales',
+          selectedListMock);
+      });
+
+      it('should record GA event when csvDownloadOption is Stores', () => {
+        ctrl.csvDownloadOption = filtersService.csvDownloadOptions[2].value;
+        ctrl.sendDownloadEvent();
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          analyticsCategoryMock,
+          'Download Target List - Stores Only',
+          selectedListMock);
+      });
     });
   });
 });

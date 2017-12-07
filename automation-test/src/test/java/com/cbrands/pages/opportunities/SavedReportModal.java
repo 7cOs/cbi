@@ -82,6 +82,10 @@ public class SavedReportModal extends TestNGBasePage {
   public boolean isDuplicateNameErrorDisplayed() {
     return isElementPresent(By.xpath(MODAL_CONTAINER_XPATH + "//p[contains(@ng-if, 'duplicateName')]"));
   }
+
+  public boolean isMaxSavedReportsLimitErrorDisplayed() {
+    return isElementPresent(By.xpath(MODAL_CONTAINER_XPATH + "//p[contains(@ng-hide, 'opportunityFilters.length')]"));
+  }
 }
 
 

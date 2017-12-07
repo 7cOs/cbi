@@ -14,7 +14,7 @@
     "dev": "concurrently --kill-others --raw \"npm run build:dev:watch\" \"npm run serve\"",
     "clean": "rimraf public",
     "lint:ts": "tslint --format stylish -p tsconfig.json --type-check '*.ts' 'app/**/*.ts' 'config/**/*.ts' 'server/**/*.ts'",
-    "lint:js": "eslint '*.js' 'app/**/*.js' 'config/**/*.js' 'server/**/*.js'",
+    "lint:js": "eslint --max-warnings 0 '*.js' 'app/**/*.js' 'config/**/*.js' 'server/**/*.js'",
     "lint:ts:ci": "tslint --format stylish -c tslint.ci.json '*.ts' 'app/**/*.ts' 'config/**/*.ts' 'server/**/*.ts'",
     "lint:js:ci": "eslint -c .eslintrc-ci '*.js' 'app/**/*.js' 'config/**/*.js' 'server/**/*.js'",
     "lint:sass": "sass-lint '**/*.scss' -v --no-exit -f stylish -i 'app/assets/styles/lib/**/*, node_modules/**/*'",
