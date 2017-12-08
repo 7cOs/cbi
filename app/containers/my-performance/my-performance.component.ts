@@ -632,6 +632,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
       actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId
                                         || this.currentState.responsibilities.positionId;
+
+      if (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+        actionPayload.positionId = this.currentState.selectedSubaccountCode || this.currentState.responsibilities.accountPositionId;
+      }
+
+      if (this.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
+        actionPayload.positionId = this.currentState.selectedDistributorCode || this.currentState.responsibilities.accountPositionId;
+      }
     }
 
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionPayload));

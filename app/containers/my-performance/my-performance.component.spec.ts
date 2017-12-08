@@ -1128,7 +1128,7 @@ describe('MyPerformanceComponent', () => {
         new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(rowMock.metadata.brandCode)
       );
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-        positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        positionId: stateMock.myPerformance.current.selectedSubaccountCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
@@ -1165,7 +1165,7 @@ describe('MyPerformanceComponent', () => {
         new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(rowMock.metadata.brandCode)
       );
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-        positionId: stateMock.myPerformance.current.responsibilities.positionId,
+        positionId: stateMock.myPerformance.current.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
