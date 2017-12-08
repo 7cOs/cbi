@@ -113,8 +113,8 @@ export class MyPerformanceTableComponent {
     let classes: CssClasses = {
       'performance-error': row.performanceError,
       'selected-sku': !!(this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode),
-      'selected-entity-row': !!((this.selectedSubaccountCode || this.selectedDistributorCode) &&
-      (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode))
+      'selected-entity-row': !!((this.selectedSubaccountCode || this.selectedDistributorCode)
+        && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode))
     };
 
     const columnWidthClass = this.getColumnWidthClass();

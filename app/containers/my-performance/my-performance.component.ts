@@ -488,30 +488,34 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         break;
       case SalesHierarchyViewType.subAccounts:
         this.selectedSubaccountCode = parameters.row.metadata.positionId;
-        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
-        this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-          positionId: parameters.row.metadata.positionId,
-          filter: this.filterState,
-          selectedEntityType: this.currentState.selectedEntityType,
-          selectedBrandCode: this.currentState.selectedBrandCode,
-          inAlternateHierarchy: this.isInsideAlternateHierarchy(),
-          entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-          contextPositionId: this.currentState.responsibilities.positionId
-        }));
+        if (this.selectedSubaccountCode !== this.currentState.selectedSubaccountCode) {
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
+          this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
+            positionId: parameters.row.metadata.positionId,
+            filter: this.filterState,
+            selectedEntityType: this.currentState.selectedEntityType,
+            selectedBrandCode: this.currentState.selectedBrandCode,
+            inAlternateHierarchy: this.isInsideAlternateHierarchy(),
+            entityTypeCode: this.currentState.responsibilities.entityTypeCode,
+            contextPositionId: this.currentState.responsibilities.positionId
+          }));
+        }
         break;
       case SalesHierarchyViewType.distributors:
         this.selectedDistributorCode = parameters.row.metadata.positionId;
-        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
-        this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-          positionId: parameters.row.metadata.positionId,
-          filter: this.filterState,
-          selectedEntityType: this.currentState.selectedEntityType,
-          selectedBrandCode: this.currentState.selectedBrandCode,
-          inAlternateHierarchy: this.isInsideAlternateHierarchy(),
-          isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy,
-          entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-          contextPositionId: this.currentState.responsibilities.positionId
-        }));
+        if (this.selectedDistributorCode !== this.currentState.selectedDistributorCode) {
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
+          this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
+            positionId: parameters.row.metadata.positionId,
+            filter: this.filterState,
+            selectedEntityType: this.currentState.selectedEntityType,
+            selectedBrandCode: this.currentState.selectedBrandCode,
+            inAlternateHierarchy: this.isInsideAlternateHierarchy(),
+            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy,
+            entityTypeCode: this.currentState.responsibilities.entityTypeCode,
+            contextPositionId: this.currentState.responsibilities.positionId
+          }));
+        }
         break;
       default:
         break;
@@ -559,16 +563,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private handleTotalRowClicked(parameters: HandleElementClickedParameters) {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'TOTAL');
-    if (parameters.leftSide && this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-      this.selectedSubaccountCode = null;
-      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
-      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
-      this.handleTeamPerformanceDataRefresh();
-    } else if (parameters.leftSide && this.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-      this.selectedDistributorCode = null;
-      this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
-      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Person));
-      this.handleTeamPerformanceDataRefresh();
+    if (parameters.leftSide) {
+      if (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
+        this.selectedSubaccountCode = null;
+        this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
+        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
+        this.handleTeamPerformanceDataRefresh();
+      } else if (this.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
+        this.selectedDistributorCode = null;
+        this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
+        this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Person));
+        this.handleTeamPerformanceDataRefresh();
+      }
     }
   }
 
@@ -626,14 +632,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       actionPayload.entityTypeCode = this.currentState.responsibilities.entityTypeCode;
       actionPayload.contextPositionId = this.currentState.responsibilities.alternateHierarchyId
                                         || this.currentState.responsibilities.positionId;
-
-      if (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) {
-        actionPayload.positionId = this.currentState.selectedSubaccountCode || this.currentState.responsibilities.accountPositionId;
-      }
-
-      if (this.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-        actionPayload.positionId = this.currentState.selectedDistributorCode || this.currentState.responsibilities.accountPositionId;
-      }
     }
 
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionPayload));
