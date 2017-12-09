@@ -972,7 +972,6 @@ describe('MyPerformanceComponent', () => {
     describe('when ProductMetrics data row is highlighted', () => {
 
       beforeEach(() => {
-        // rowMock = getMyPerformanceTableRowMock(1)[0];
         params = {
           leftSide: false,
           type: RowType.dismissableTotal,
@@ -1012,7 +1011,6 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should dispatch appropriate actions to deselect brand row selected', () => {
-        // params.row.metadata.brandCode = rowMock.metadata.brandCode;
         componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
         componentInstance.handleElementClicked(params);
 
