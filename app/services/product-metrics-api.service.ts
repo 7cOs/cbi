@@ -7,9 +7,11 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
+import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 
 @Injectable()
 export class ProductMetricsApiService {
@@ -145,6 +147,47 @@ export class ProductMetricsApiService {
     })
       .map(res => res.json())
       .catch(err => this.handleError(err, aggregation, params.type));
+  }
+
+  // public getDistributorOpportunityCounts(positionId: string, distributorId: string, premiseType: PremiseTypeValue): any {
+  //   const url = `/v3/positions/${ positionId }/opportunityCounts`;
+  //   const params = {
+  //     distributorCode: distributorId,
+  //     premiseType: PremiseTypeValue[premiseType].toLowerCase(),
+  //     countStructureType: 'BRAND_SKU_OPPTYPE',
+  //     segment: 'A|B',
+  //     impact: 'high|medium',
+  //     type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY',
+  //   };
+
+  //   return this.http.get(url, {
+  //     params: params
+  //   })
+  //     .map(res => res.json())
+  //     .catch(err => Observable.throw(err));
+  // }
+
+  public getSubAccountOpportunityCounts(
+    accountId: string,
+    subAccountId: string,
+    viewType: ProductMetricsViewType,
+    premiseType: PremiseTypeValue
+  ): Observable<Array<OpportunityCountDTO>> {
+    const url = `/v3/accounts/${ accountId }/opportunityCounts`;
+    const params = {
+      subAccountCode: subAccountId,
+      premiseType: PremiseTypeValue[premiseType].toLowerCase(),
+      countStructureType: viewType === ProductMetricsViewType.brands ? 'BRAND_OPPTYPE' : 'SKU_OPPTYPE',
+      segment: 'A|B',
+      impact: 'high|medium',
+      type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY'
+    };
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => Observable.throw(err));
   }
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {

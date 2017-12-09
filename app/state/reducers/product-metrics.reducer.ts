@@ -1,17 +1,21 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
+import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
 import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 
 export interface ProductMetricsState extends State {
   status: ActionStatus;
+  opportunityCountsStatus: ActionStatus;
   products: ProductMetrics;
+  opportunityCounts?: GroupedOpportunityCounts;
   selectedBrandCodeValues?: ProductMetricsValues;
   productMetricsViewType: ProductMetricsViewType;
 }
 
 export const initialState: ProductMetricsState = {
   status: ActionStatus.NotFetched,
+  opportunityCountsStatus: ActionStatus.NotFetched,
   products: {},
   productMetricsViewType: ProductMetricsViewType.brands
 };
@@ -48,6 +52,7 @@ export function productMetricsReducer(
     case ProductMetricsActions.DESELECT_BRAND_VALUES:
       return {
         status: state.status,
+        opportunityCountsStatus: state.opportunityCountsStatus,
         products: state.products,
         productMetricsViewType: state.productMetricsViewType
       };
@@ -55,6 +60,22 @@ export function productMetricsReducer(
     case ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE:
       return Object.assign({}, state, {
         productMetricsViewType: action.payload
+      });
+
+    case ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS:
+      return Object.assign({}, state, {
+        opportunityCountsStatus: ActionStatus.Fetching
+      });
+
+    case ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_SUCCESS:
+      return Object.assign({}, state, {
+        opportunityCounts: action.payload,
+        opportunityCountsStatus: ActionStatus.Fetched
+      });
+
+    case ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_FAILURE:
+      return Object.assign({}, state, {
+        opportunityCountsStatus: ActionStatus.Error
       });
 
     default:

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { CalculatorService } from './calculator.service';
+import { GroupedOpportunityCounts, OpportunityCount } from '../models/opportunity-count.model';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 
@@ -14,6 +16,26 @@ export class ProductMetricsTransformerService {
 
     // combine brand and sku metrics into single metrics object via property assignment
     return Object.assign({}, ...metrics);
+  }
+
+  public transformAndGroupOpportunityCountDTOs(dtos: Array<OpportunityCountDTO>): GroupedOpportunityCounts {
+    return dtos.reduce((groupedOpportunityCounts: GroupedOpportunityCounts, dto: OpportunityCountDTO) => {
+      groupedOpportunityCounts[dto.label] = {
+        total: dto.count,
+        opportunities: this.formatOpportunityCounts(dto.items)
+      };
+
+      return groupedOpportunityCounts;
+    }, {});
+  }
+
+  private formatOpportunityCounts(opportunityCounts: Array<OpportunityCountDTO>): Array<OpportunityCount> {
+    return opportunityCounts.map((opportunityCount: OpportunityCountDTO) => {
+      return {
+        name: opportunityCount.label,
+        count: opportunityCount.count
+      };
+    });
   }
 
   private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {

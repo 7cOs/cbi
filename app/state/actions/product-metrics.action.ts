@@ -1,9 +1,10 @@
 import { Action } from '@ngrx/store';
 
+import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
 
 export interface FetchProductMetricsPayload {
   positionId: string;
@@ -18,6 +19,14 @@ export interface FetchProductMetricsPayload {
 export interface FetchProductMetricsSuccessPayload {
   positionId: string;
   products: ProductMetrics;
+}
+
+export interface FetchOpportunityCountsPayload {
+  positionId: string;
+  accountId: string;
+  selectedEntityType: EntityType;
+  productMetricsViewType: ProductMetricsViewType;
+  filter: MyPerformanceFilterState;
 }
 
 export const FETCH_PRODUCT_METRICS = '[ProductMetrics] FETCH_PRODUCT_METRICS';
@@ -37,6 +46,27 @@ export class FetchProductMetricsSuccess implements Action {
 export const FETCH_PRODUCT_METRICS_FAILURE = '[ProductMetrics] FETCH_PRODUCT_METRICS_FAILURE';
 export class FetchProductMetricsFailure implements Action {
   readonly type = FETCH_PRODUCT_METRICS_FAILURE;
+
+  constructor(public payload: Error) { }
+}
+
+export const FETCH_OPPORTUNITY_COUNTS = '[ProductMetrics] FETCH_OPPORTUNITY_COUNTS';
+export class FetchOpportunityCounts implements Action {
+  readonly type = FETCH_OPPORTUNITY_COUNTS;
+
+  constructor(public payload: FetchOpportunityCountsPayload) { }
+}
+
+export const FETCH_OPPORTUNITY_COUNTS_SUCCESS = '[ProductMetrics] FETCH_OPPORTUNITY_COUNTS_SUCCESS';
+export class FetchOpportunityCountsSuccess implements Action {
+  readonly type = FETCH_OPPORTUNITY_COUNTS_SUCCESS;
+
+  constructor(public payload: GroupedOpportunityCounts) { }
+}
+
+export const FETCH_OPPORTUNITY_COUNTS_FAILURE = '[ProductMetrics] FETCH_OPPORTUNITY_COUNTS_FAILURE';
+export class FetchOpportunityCountsFailure implements Action {
+  readonly type = FETCH_OPPORTUNITY_COUNTS_FAILURE;
 
   constructor(public payload: Error) { }
 }
@@ -64,6 +94,9 @@ export type Action =
   FetchProductMetrics
   | FetchProductMetricsSuccess
   | FetchProductMetricsFailure
+  | FetchOpportunityCounts
+  | FetchOpportunityCountsSuccess
+  | FetchOpportunityCountsFailure
   | SelectBrandValues
   | DeselectBrandValues
   | SetProductMetricsViewType;

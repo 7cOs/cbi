@@ -28,7 +28,6 @@ import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-
 import { getProductMetricsBrandMock,
          getProductMetricsSkuMock,
          getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -141,6 +140,7 @@ describe('MyPerformanceComponent', () => {
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
   let myPerformanceProductMetricsMock: ProductMetricsState = {
     status: ActionStatus.Fetching,
+    opportunityCountsStatus: ActionStatus.NotFetched,
     products: {},
     productMetricsViewType: ProductMetricsViewType.brands
   };
@@ -943,7 +943,7 @@ describe('MyPerformanceComponent', () => {
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock};
         componentInstance.handleElementClicked(params);
 
-        expect(storeMock.dispatch.calls.count()).toBe(3);
+        expect(storeMock.dispatch.calls.count()).toBe(4);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
           new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedSubaccountCode(rowMock.metadata.positionId));
@@ -1309,6 +1309,7 @@ describe('MyPerformanceComponent', () => {
       let rowMock = getMyPerformanceTableRowMock(1)[0];
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Fetching,
+        opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
         productMetricsViewType: ProductMetricsViewType.skus
       };
@@ -1913,37 +1914,49 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should be called when viewtype is sku and selectedBrandCodeValues is defined', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched,
-        products: {brandValues: []},
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetched,
+        opportunityCountsStatus: ActionStatus.NotFetched,
+        products: { brandValues: [] },
         selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
-        productMetricsViewType: ProductMetricsViewType.skus};
+        productMetricsViewType: ProductMetricsViewType.skus
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).toHaveBeenCalledWith(
         myPerformanceProductMetricsMock.selectedBrandCodeValues);
     });
 
     it('should not be called product metrics are still fetching', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetching,
-        products: {brandValues: []},
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetching,
+        opportunityCountsStatus: ActionStatus.NotFetched,
+        products: { brandValues: [] },
         selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
-        productMetricsViewType: ProductMetricsViewType.skus};
+        productMetricsViewType: ProductMetricsViewType.skus
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).not.toHaveBeenCalled();
     });
 
     it('should not be called when viewtype is sku and selectedBrandCodeValues is undefined', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched,
-        products: {brandValues: []},
-        productMetricsViewType: ProductMetricsViewType.skus};
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetched,
+        opportunityCountsStatus: ActionStatus.NotFetched,
+        products: { brandValues: [] },
+        productMetricsViewType: ProductMetricsViewType.skus
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).not.toHaveBeenCalled();
     });
 
     it('should not be called when viewtype is brand and selectedBrandCodeValues is defined', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetched,
-        products: {brandValues: []},
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetched,
+        opportunityCountsStatus: ActionStatus.NotFetched,
+        products: { brandValues: [] },
         selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
-        productMetricsViewType: ProductMetricsViewType.brands};
+        productMetricsViewType: ProductMetricsViewType.brands
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).not.toHaveBeenCalled();
     });
@@ -2176,6 +2189,7 @@ describe('MyPerformanceComponent', () => {
     it('should set fetchProductMetricsFailure to false when productmetrics status is fetched', () => {
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Fetched,
+        opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
         productMetricsViewType: ProductMetricsViewType.brands
       };
@@ -2186,6 +2200,7 @@ describe('MyPerformanceComponent', () => {
     it('should set fetchProductMetricsFailure to true when productmetrics status is error', () => {
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Error,
+        opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
         productMetricsViewType: ProductMetricsViewType.brands
       };
@@ -2197,17 +2212,23 @@ describe('MyPerformanceComponent', () => {
   describe('when fetching productMetrics', () => {
 
     it('should set productMetricsFetching to true when productmetrics status is fetching', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.Fetching,
-        products: {brandValues: []},
-        productMetricsViewType: ProductMetricsViewType.skus};
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetching,
+        opportunityCountsStatus: ActionStatus.NotFetched,
+        products: { brandValues: [] },
+        productMetricsViewType: ProductMetricsViewType.skus
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.productMetricsFetching).toBe(true);
     });
 
     it('should set productMetricsFetching to false when productmetrics status is notfetched', () => {
-      myPerformanceProductMetricsMock = {status: ActionStatus.NotFetched,
-        products: {brandValues: []},
-        productMetricsViewType: ProductMetricsViewType.brands};
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.NotFetched,
+        opportunityCountsStatus: ActionStatus.NotFetched,
+        products: { brandValues: [] },
+        productMetricsViewType: ProductMetricsViewType.brands
+      };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(componentInstance.productMetricsFetching).toBe(false);
     });
@@ -2228,7 +2249,8 @@ describe('MyPerformanceComponent', () => {
       currentMock = getMyPerformanceEntitiesDataMock();
       productMetricsStateMock = {
         status: ActionStatus.Fetched,
-        products: {brandValues: []},
+        opportunityCountsStatus: ActionStatus.NotFetched,
+        products: { brandValues: [] },
         productMetricsViewType: ProductMetricsViewType.brands
       };
 
@@ -2604,6 +2626,7 @@ describe('MyPerformanceComponent', () => {
       beforeEach(() => {
         productMetricsStateMock = {
           status: ActionStatus.Fetched,
+          opportunityCountsStatus: ActionStatus.NotFetched,
           products: {
             brandValues: [],
             skuValues: []
@@ -2657,6 +2680,7 @@ describe('MyPerformanceComponent', () => {
       currentMock = getMyPerformanceEntitiesDataMock();
       productMetricsStateMock = {
         status: ActionStatus.Fetched,
+        opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
         productMetricsViewType: ProductMetricsViewType.skus
       };
@@ -2752,9 +2776,8 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when filtering for a Premise Type of All', () => {
-      it('should be set to false regardless of the current SalesHierarchyViewType', () => {
+      it('should be set to false regardless of what table entity is clicked', () => {
         filterStateMock.premiseType = PremiseTypeValue.All;
-        currentStateMock.salesHierarchyViewType.viewType = getSalesHierarchyViewTypeMock();
 
         filterSubject.next(filterStateMock);
         currentSubject.next(currentStateMock);
@@ -2770,22 +2793,15 @@ describe('MyPerformanceComponent', () => {
         filterSubject.next(filterStateMock);
       });
 
-      it('should be set to true when the current SalesHierarchyViewType is Distributors or SubAccounts', () => {
-        currentStateMock.salesHierarchyViewType.viewType = sample([
-          SalesHierarchyViewType.distributors,
-          SalesHierarchyViewType.subAccounts
-        ]);
+      it('should be set to true when a SubAccount is currently selected', () => {
+        currentStateMock.selectedSubaccountCode = chance.string();
         currentSubject.next(currentStateMock);
 
         expect(componentInstanceCopy.showProductMetricsOpportunities).toBe(true);
       });
 
-      it('should be set to false when the current SalesHierarchyViewType is NOT Distributors or SubAccounts', () => {
-        currentStateMock.salesHierarchyViewType.viewType = sample([
-          SalesHierarchyViewType.roleGroups,
-          SalesHierarchyViewType.people,
-          SalesHierarchyViewType.accounts
-        ]);
+      it('should be set to false when a SubAccount is not currently selected', () => {
+        delete currentStateMock.selectedSubaccountCode;
         currentSubject.next(currentStateMock);
 
         expect(componentInstanceCopy.showProductMetricsOpportunities).toBe(false);

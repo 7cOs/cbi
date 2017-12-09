@@ -6,7 +6,10 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
+import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
@@ -165,5 +168,26 @@ export class ProductMetricsService {
     } else {
       return Observable.of(productMetricsData);
     }
+  }
+
+  public getOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<GroupedOpportunityCounts> {
+    switch (fetchOpportunityCountsData.selectedEntityType) {
+      case EntityType.SubAccount:
+      default:
+        return this.getSubAccountOpportunityCounts(fetchOpportunityCountsData);
+    }
+  }
+
+  private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<GroupedOpportunityCounts> {
+    return this.productMetricsApiService.getSubAccountOpportunityCounts(
+      fetchOpportunityCountsData.accountId,
+      fetchOpportunityCountsData.positionId,
+      fetchOpportunityCountsData.productMetricsViewType,
+      fetchOpportunityCountsData.filter.premiseType)
+      .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
+        return this.productMetricsTransformerService.transformAndGroupOpportunityCountDTOs(opportunityCountResponse);
+      });
   }
 }

@@ -17,6 +17,7 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetching,
+      opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
       productMetricsViewType: ProductMetricsViewType.brands
     };
@@ -40,6 +41,7 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: ActionStatus.Fetched,
+      opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: products,
       productMetricsViewType: ProductMetricsViewType.brands
     };
@@ -55,6 +57,7 @@ describe('ProductMetrics Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
+      opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
       productMetricsViewType: ProductMetricsViewType.brands
     };
@@ -82,6 +85,7 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: initialState.status,
+      opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
       selectedBrandCodeValues: products.brandValues[chosenProductMetricsValuesIndex],
       productMetricsViewType: ProductMetricsViewType.brands
@@ -100,6 +104,7 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: initialState.status,
+      opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
       productMetricsViewType: payload
     };
@@ -120,6 +125,7 @@ describe('ProductMetrics Reducer', () => {
 
     const expectedState = {
       status: initialState.status,
+      opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
       productMetricsViewType: ProductMetricsViewType.brands
     };

@@ -498,6 +498,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           entityTypeCode: this.currentState.responsibilities.entityTypeCode,
           contextPositionId: this.currentState.responsibilities.positionId
         }));
+        if (this.filterState.premiseType !== PremiseTypeValue.All) {
+          this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
+            positionId: parameters.row.metadata.positionId,
+            accountId: this.currentState.responsibilities.accountPositionId,
+            selectedEntityType: this.currentState.selectedEntityType,
+            productMetricsViewType: this.productMetricsState.productMetricsViewType,
+            filter: this.filterState
+          }));
+        }
         break;
       default:
         break;
@@ -643,9 +652,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private getShowProductMetricsOpportunities(): boolean {
-    return (this.salesHierarchyViewType === SalesHierarchyViewType.distributors ||
-      this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts) &&
-      this.filterState && this.filterState.premiseType !== PremiseTypeValue.All;
+    return (this.currentState && !!this.currentState.selectedSubaccountCode)
+      && this.filterState
+      && this.filterState.premiseType !== PremiseTypeValue.All;
   }
 
   private isInsideAlternateHierarchy(): boolean {
