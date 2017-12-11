@@ -630,7 +630,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       }
 
       if (this.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
-        actionPayload.positionId = this.currentState.selectedDistributorCode || this.currentState.responsibilities.accountPositionId;
+        actionPayload.positionId = this.currentState.selectedDistributorCode || this.currentState.responsibilities.positionId;
       }
     }
 
