@@ -57,8 +57,7 @@ export class ProductMetricsService {
             productMetricsData.contextPositionId
           ));
         }
-      } else {
-        if (productMetricsData.selectedEntityType === EntityType.Distributor) {
+      } else if (productMetricsData.selectedEntityType === EntityType.Distributor) {
           const contextPositionId = productMetricsData.isMemberOfExceptionHierarchy
             ? productMetricsData.contextPositionId
             : '0';
@@ -94,7 +93,6 @@ export class ProductMetricsService {
             ));
           }
         }
-      }
     } else if (productMetricsData.selectedEntityType === EntityType.Person
       || productMetricsData.selectedEntityType === EntityType.AccountGroup) {
       apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
