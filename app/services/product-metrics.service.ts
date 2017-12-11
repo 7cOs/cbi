@@ -59,11 +59,10 @@ export class ProductMetricsService {
         }
       } else {
         if (productMetricsData.selectedEntityType === EntityType.Distributor) {
-          if (productMetricsData.isMemberOfExceptionHierarchy) {
-            this.getDistributorProductMetrics(productMetricsData, productMetricsData.contextPositionId, apiCalls);
-          } else {
-            this.getDistributorProductMetrics(productMetricsData, '0', apiCalls);
-          }
+          const contextPositionId = productMetricsData.isMemberOfExceptionHierarchy
+            ? productMetricsData.contextPositionId
+            : '0';
+          this.getDistributorProductMetrics(productMetricsData, contextPositionId, apiCalls);
         } else {
           apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
             productMetricsData.positionId,

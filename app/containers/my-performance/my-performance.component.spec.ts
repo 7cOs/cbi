@@ -950,13 +950,12 @@ describe('MyPerformanceComponent', () => {
           new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedSubaccountCode(rowMock.metadata.positionId));
         expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
-          positionId: rowMock.metadata.positionId,
+          positionId: currentMock.selectedSubaccountCode,
           filter: stateMock.myPerformanceFilter,
           selectedEntityType: currentMock.selectedEntityType,
-          selectedBrandCode: currentMock.selectedBrandCode,
+          selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
           inAlternateHierarchy: false,
-          entityTypeCode: currentMock.responsibilities.entityTypeCode,
-          contextPositionId: currentMock.responsibilities.positionId
+          isMemberOfExceptionHierarchy: false
         }));
       });
     });
@@ -980,14 +979,12 @@ describe('MyPerformanceComponent', () => {
           new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedDistributorCode(rowMock.metadata.positionId));
         expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
-          positionId: rowMock.metadata.positionId,
+          positionId: currentMock.selectedDistributorCode,
           filter: stateMock.myPerformanceFilter,
           selectedEntityType: currentMock.selectedEntityType,
-          selectedBrandCode: currentMock.selectedBrandCode,
+          selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
           inAlternateHierarchy: false,
-          isMemberOfExceptionHierarchy: false,
-          entityTypeCode: currentMock.responsibilities.entityTypeCode,
-          contextPositionId: currentMock.responsibilities.positionId
+          isMemberOfExceptionHierarchy: false
         }));
       });
     });
@@ -1128,7 +1125,7 @@ describe('MyPerformanceComponent', () => {
         new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(rowMock.metadata.brandCode)
       );
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-        positionId: stateMock.myPerformance.current.selectedSubaccountCode,
+        positionId: stateMock.myPerformance.current.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,
@@ -1165,7 +1162,7 @@ describe('MyPerformanceComponent', () => {
         new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(rowMock.metadata.brandCode)
       );
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-        positionId: stateMock.myPerformance.current.selectedDistributorCode,
+        positionId: stateMock.myPerformance.current.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
         selectedBrandCode: rowMock.metadata.brandCode,

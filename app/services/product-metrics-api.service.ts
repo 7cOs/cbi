@@ -72,7 +72,7 @@ export class ProductMetricsApiService {
       }
     );
 
-    return this.http.get(`${ url }`, {
+    return this.http.get(url, {
       params: params
     })
       .map(res => res.json())
@@ -95,7 +95,7 @@ export class ProductMetricsApiService {
       }
     );
 
-    return this.http.get(`${ url }`, {
+    return this.http.get(url, {
       params: params
     })
       .map(res => res.json())
