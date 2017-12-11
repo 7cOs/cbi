@@ -62,7 +62,20 @@ export class ProductMetricsService {
           const contextPositionId = productMetricsData.isMemberOfExceptionHierarchy
             ? productMetricsData.contextPositionId
             : '0';
-          this.getDistributorProductMetrics(productMetricsData, contextPositionId, apiCalls);
+          apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+            productMetricsData.positionId,
+            contextPositionId,
+            productMetricsData.filter,
+            aggregationLevel
+          ));
+          if (aggregationLevel === ProductMetricsAggregationType.sku) {
+            apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+              productMetricsData.positionId,
+              contextPositionId,
+              productMetricsData.filter,
+              ProductMetricsAggregationType.brand
+            ));
+          }
         } else {
           apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
             productMetricsData.positionId,
@@ -142,7 +155,20 @@ export class ProductMetricsService {
         ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.Distributor) {
-      this.getDistributorProductMetrics(productMetricsData, productMetricsData.contextPositionId, apiCalls);
+      apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+        productMetricsData.positionId,
+        productMetricsData.contextPositionId,
+        productMetricsData.filter,
+        aggregationLevel
+      ));
+      if (aggregationLevel === ProductMetricsAggregationType.sku) {
+        apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.contextPositionId,
+          productMetricsData.filter,
+          ProductMetricsAggregationType.brand
+        ));
+      }
     }
 
     const allCalls: Observable<ProductMetricsDTO[]> = Observable.forkJoin(apiCalls);
@@ -174,26 +200,6 @@ export class ProductMetricsService {
       }));
     } else {
       return Observable.of(productMetricsData);
-    }
-  }
-
-  private getDistributorProductMetrics (productMetricsData: ProductMetricsData,
-                                        contextPostionId: string, apiCalls: Observable<ProductMetricsDTO>[]): void {
-    const aggregationLevel = productMetricsData.selectedBrandCode ? ProductMetricsAggregationType.sku : ProductMetricsAggregationType.brand;
-
-    apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
-      productMetricsData.positionId,
-      contextPostionId,
-      productMetricsData.filter,
-      aggregationLevel
-    ));
-    if (aggregationLevel === ProductMetricsAggregationType.sku) {
-      apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
-        productMetricsData.positionId,
-        contextPostionId,
-        productMetricsData.filter,
-        ProductMetricsAggregationType.brand
-      ));
     }
   }
 }
