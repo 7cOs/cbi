@@ -466,7 +466,7 @@ describe('ProductMetrics Service', () => {
           it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
             productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
               expect(transformProductMetricsSpy.calls.count()).toBe(1);
-              expect(transformProductMetricsSpy.calls.argsFor(0)[ 0 ]).toEqual(
+              expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
                 [ productMetricsSkuDTOMock, productMetricsBrandsDTOMock ]
               );
               done();
@@ -516,7 +516,7 @@ describe('ProductMetrics Service', () => {
             productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
               expect(transformProductMetricsSpy.calls.count()).toBe(1);
               expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
-                [ productMetricsBrandsDTOMock ]
+                [productMetricsBrandsDTOMock]
               );
               done();
             });
@@ -566,7 +566,7 @@ describe('ProductMetrics Service', () => {
           it('should call transformAndCombineProductMetricsDTOs with correct input', (done) => {
             productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
               expect(transformProductMetricsSpy.calls.count()).toBe(1);
-              expect(transformProductMetricsSpy.calls.argsFor(0)[ 0 ]).toEqual(
+              expect(transformProductMetricsSpy.calls.argsFor(0)[0]).toEqual(
                 [ productMetricsSkuDTOMock, productMetricsBrandsDTOMock ]
               );
               done();
