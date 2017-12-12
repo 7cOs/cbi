@@ -28,6 +28,7 @@ export interface ProductMetricsData {
   products?: ProductMetrics;
   productMetricsViewType?: ProductMetricsViewType;
   inAlternateHierarchy?: boolean;
+  isMemberOfExceptionHierarchy?: boolean;
 }
 
 @Injectable()
@@ -59,24 +60,42 @@ export class ProductMetricsService {
             productMetricsData.contextPositionId
           ));
         }
-      } else {
-        apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
-          productMetricsData.positionId,
-          productMetricsData.entityTypeCode,
-          productMetricsData.filter,
-          aggregationLevel,
-          productMetricsData.contextPositionId
-        ));
-        if (aggregationLevel === ProductMetricsAggregationType.sku) {
+      } else if (productMetricsData.selectedEntityType === EntityType.Distributor) {
+          const contextPositionId = productMetricsData.isMemberOfExceptionHierarchy
+            ? productMetricsData.contextPositionId
+            : '0';
+          apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+            productMetricsData.positionId,
+            contextPositionId,
+            productMetricsData.filter,
+            aggregationLevel
+          ));
+          if (aggregationLevel === ProductMetricsAggregationType.sku) {
+            apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+              productMetricsData.positionId,
+              contextPositionId,
+              productMetricsData.filter,
+              ProductMetricsAggregationType.brand
+            ));
+          }
+        } else {
           apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
             productMetricsData.positionId,
             productMetricsData.entityTypeCode,
             productMetricsData.filter,
-            ProductMetricsAggregationType.brand,
+            aggregationLevel,
             productMetricsData.contextPositionId
           ));
+          if (aggregationLevel === ProductMetricsAggregationType.sku) {
+            apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+              productMetricsData.positionId,
+              productMetricsData.entityTypeCode,
+              productMetricsData.filter,
+              ProductMetricsAggregationType.brand,
+              productMetricsData.contextPositionId
+            ));
+          }
         }
-      }
     } else if (productMetricsData.selectedEntityType === EntityType.Person
       || productMetricsData.selectedEntityType === EntityType.AccountGroup) {
       apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
@@ -130,6 +149,21 @@ export class ProductMetricsService {
       ));
       if (aggregationLevel === ProductMetricsAggregationType.sku) {
         apiCalls.push(this.productMetricsApiService.getSubAccountProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.contextPositionId,
+          productMetricsData.filter,
+          ProductMetricsAggregationType.brand
+        ));
+      }
+    } else if (productMetricsData.selectedEntityType === EntityType.Distributor) {
+      apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+        productMetricsData.positionId,
+        productMetricsData.contextPositionId,
+        productMetricsData.filter,
+        aggregationLevel
+      ));
+      if (aggregationLevel === ProductMetricsAggregationType.sku) {
+        apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
           productMetricsData.positionId,
           productMetricsData.contextPositionId,
           productMetricsData.filter,

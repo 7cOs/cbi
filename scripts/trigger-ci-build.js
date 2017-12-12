@@ -4,14 +4,17 @@ const projectArgName = 'project:';
 const branchArgName = 'branch:';
 const tokenArgName = 'token:';
 const runTestSuiteArgName = 'runTestSuite:';
+const runTestSuiteEnvtArgName = 'runTestSuiteEnvt:';
 const skipDeploymentArgName = 'skipDeployment:';
 
 const username = 'ConstellationBrands';
+const possibleEnvironments = ['qa'];
 
 let project = 'compass-portal';
 let branchName = 'test';
 let token = process.env.CIRCLE_CI_API_TOKEN;
 let runTestSuite = '';
+let runTestSuiteEnvt = 'qa';
 let skipDeployment = true;
 
 function buildBranch(project, branchName, token, runTestSuite, skipDeployment) {
@@ -29,6 +32,10 @@ function buildBranch(project, branchName, token, runTestSuite, skipDeployment) {
 
   if (runTestSuite) {
     options.body.build_parameters.runTestSuite = runTestSuite;
+  }
+
+  if (runTestSuiteEnvt) {
+    options.body.build_parameters.runTestSuiteEnvt = runTestSuiteEnvt;
   }
 
   rp(options)
@@ -69,6 +76,13 @@ process.argv.forEach((value, index, array) => {
     runTestSuite = value.slice(runTestSuiteArgName.length);
   }
 
+  if (value.indexOf(runTestSuiteEnvtArgName) !== -1) {
+    runTestSuiteEnvt = value.slice(runTestSuiteEnvtArgName.length);
+    if (!runTestSuiteEnvt || !token.runTestSuiteEnvt || possibleEnvironments.indexOf(runTestSuiteEnvt) === -1) {
+      console.log('Please enter a valid environment for the test suite');
+    }
+  }
+
   if (value.indexOf(skipDeploymentArgName) !== -1) {
     skipDeployment = value.slice(skipDeploymentArgName.length) !== 'false';
   }
@@ -86,5 +100,6 @@ if (project && project.length &&
   console.log(`  ${branchArgName}<branch> [default: test]`);
   console.log(`  ${tokenArgName}<ci-token> [default: process.env.CIRCLE_CI_API_TOKEN]`);
   console.log(`  ${runTestSuiteArgName}<suite>`);
+  console.log(`  ${runTestSuiteEnvtArgName}<suite-environment> [default: qa] [possible values:[${possibleEnvironments}]]`);
   console.log(`  ${skipDeploymentArgName}<true|false> [default: true]`);
 }

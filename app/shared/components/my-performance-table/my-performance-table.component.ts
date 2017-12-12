@@ -47,6 +47,7 @@ export class MyPerformanceTableComponent {
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSkuPackageCode: string;
   @Input() selectedSubaccountCode: string;
+  @Input() selectedDistributorCode: string;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
@@ -79,14 +80,13 @@ export class MyPerformanceTableComponent {
   }
 
   public onRowClicked(type: RowType, index: number, row?: MyPerformanceTableRow) {
-    if (this.viewType !== SalesHierarchyViewType.distributors) {
       this.onElementClicked.emit({type: type, index: index, row: row});
-    }
   }
 
   public getTotalRowClasses() {
     let classes: CssClasses = {
-      'deselected-total-row': (this.viewType === SalesHierarchyViewType.subAccounts && this.selectedSubaccountCode) ? true : false
+      'deselected-total-row': !!((this.viewType === SalesHierarchyViewType.subAccounts ||
+        this.viewType === SalesHierarchyViewType.distributors) && (this.selectedSubaccountCode || this.selectedDistributorCode))
     };
 
     const columnWidthClass = this.getColumnWidthClass();
@@ -112,8 +112,9 @@ export class MyPerformanceTableComponent {
   public getEntityRowClasses(row: MyPerformanceTableRow): CssClasses {
     let classes: CssClasses = {
       'performance-error': row.performanceError,
-      'selected-sku': (this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode) ? true : false,
-      'selected-subaccount': (this.selectedSubaccountCode && row.metadata.positionId === this.selectedSubaccountCode) ? true : false
+      'selected-sku': !!(this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode),
+      'selected-entity-row': !!((this.selectedSubaccountCode || this.selectedDistributorCode)
+        && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode))
     };
 
     const columnWidthClass = this.getColumnWidthClass();

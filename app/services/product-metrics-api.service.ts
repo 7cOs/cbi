@@ -11,7 +11,6 @@ import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
-import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 
 @Injectable()
 export class ProductMetricsApiService {
@@ -74,7 +73,30 @@ export class ProductMetricsApiService {
       }
     );
 
-    return this.http.get(`${ url }`, {
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(err, aggregation, params.type));
+  }
+
+  public getDistributorProductMetrics(
+    distributorId: string,
+    positionId: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/distributors/${ distributorId }/productMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {
+        aggregationLevel: aggregation,
+        positionId: positionId
+      }
+    );
+
+    return this.http.get(url, {
       params: params
     })
       .map(res => res.json())
