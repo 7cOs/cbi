@@ -7,35 +7,35 @@ const parametersUtils = require('../../lib/trigger-ci-parameters-utils');
 
 module.exports = function(app) {
   app.post('/slack-app', (req, res) => {
-    console.log(req.body);
-
     if (!req.body.token || req.body.token !== process.env.SLACK_APP_TOKEN) {
       res.send(401);
     } else {
 
-      const parameters = parametersUtils.parse(req.body.text.split(' '));
-
-// do a try/catch around parameters
-
-      res.json({'text': 'Requesting build...'});
-
-      circleCIClient.buildBranch(parameters)
-      .then((parsedBody) => {
-        sendUpdateToSlashFunction(req.body.response_url, 'Build created!');
-        sendUpdateToSlashFunction(req.body.response_url, 'Build URL: ' + parsedBody.build_url);
-      })
-      .catch((error) => {
-        console.log('error called');
-        console.log(error);
-        sendUpdateToSlashFunction(req.body.response_url, 'There was an error creating the build');
-      });
+      try {
+        const parameters = parametersUtils.parse(req.body.text.split(' '));
+        res.json({'text': 'Requesting build...'});
+        triggerBuild(parameters, req.body.response_url);
+      } catch (error) {
+        sendUpdateToSlashFunction(req.body.response_url, error.message);
+        sendUpdateToSlashFunction(req.body.response_url, parametersUtils.instructions);
+      }
     }
   });
 };
 
+function triggerBuild(parameters, responseURL) {
+  circleCIClient.buildBranch(parameters)
+  .then((parsedBody) => {
+    sendUpdateToSlashFunction(responseURL, 'Build created!');
+    sendUpdateToSlashFunction(responseURL, 'Build URL: ' + parsedBody.build_url);
+  })
+  .catch((error) => {
+    sendUpdateToSlashFunction(responseURL, 'There was an error creating the build');
+    sendUpdateToSlashFunction(responseURL, error.message);
+  });
+}
+
 function sendUpdateToSlashFunction(url, text) {
-  console.log('Sending updates');
-  console.log(`url = ${url}`);
   const options = {
     method: 'POST',
     uri: url,
@@ -47,11 +47,8 @@ function sendUpdateToSlashFunction(url, text) {
 
   rp(options)
   .then((parsedBody) => {
-    console.log('Update sent!');
-    // console.log(parsedBody);
   })
   .catch((error) => {
-    console.log('error sending an update');
     console.log(error);
   });
 }
