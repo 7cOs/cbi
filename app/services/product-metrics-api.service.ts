@@ -170,14 +170,13 @@ export class ProductMetricsApiService {
   public getSubAccountOpportunityCounts(
     accountId: string,
     subAccountId: string,
-    viewType: ProductMetricsViewType,
     premiseType: PremiseTypeValue
   ): Observable<Array<OpportunityCountDTO>> {
     const url = `/v3/accounts/${ accountId }/opportunityCounts`;
     const params = {
       subAccountCode: subAccountId,
       premiseType: PremiseTypeValue[premiseType].toLowerCase(),
-      countStructureType: viewType === ProductMetricsViewType.brands ? 'BRAND_OPPTYPE' : 'SKU_OPPTYPE',
+      countStructureType: 'BRAND_SKU_OPPTYPE',
       segment: 'A|B',
       impact: 'high|medium',
       type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY'

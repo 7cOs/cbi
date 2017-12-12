@@ -165,12 +165,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
             productMetrics.products,
+            productMetrics.opportunityCounts,
             this.productMetricsViewType
           );
 
           this.productMetricsSelectedBrandRow = this.productMetricsViewType !== ProductMetricsViewType.brands
             && productMetrics.selectedBrandCodeValues
-              ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
+              ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
+                productMetrics.selectedBrandCodeValues, productMetrics.opportunityCounts)
               : null;
 
           this.handleDataRefreshAndDeselectionIfNeeded();

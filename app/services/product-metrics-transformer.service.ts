@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { CalculatorService } from './calculator.service';
-import { GroupedOpportunityCounts, OpportunityCount } from '../models/opportunity-count.model';
+import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
@@ -18,24 +18,22 @@ export class ProductMetricsTransformerService {
     return Object.assign({}, ...metrics);
   }
 
-  public transformAndGroupOpportunityCountDTOs(dtos: Array<OpportunityCountDTO>): GroupedOpportunityCounts {
-    return dtos.reduce((groupedOpportunityCounts: GroupedOpportunityCounts, dto: OpportunityCountDTO) => {
-      groupedOpportunityCounts[dto.label] = {
-        total: dto.count,
-        opportunities: this.formatOpportunityCounts(dto.items)
+  public transformAndGroupOpportunityCounts(dtos: Array<OpportunityCountDTO>): GroupedOpportunityCounts {
+    return dtos.reduce((brandOpportunityCounts: GroupedOpportunityCounts, dto: OpportunityCountDTO) => {
+      brandOpportunityCounts[dto.label] = {
+        total: dto.count
       };
 
-      return groupedOpportunityCounts;
+      const skuPackageGroupedOpportunityCounts: GroupedOpportunityCounts = dto.items.reduce(
+        (skuPackageOpportunityCounts: GroupedOpportunityCounts, innerDTO: OpportunityCountDTO) => {
+          skuPackageOpportunityCounts[innerDTO.label] = {
+            total: innerDTO.count
+          };
+        return skuPackageOpportunityCounts;
+      }, {});
+
+      return Object.assign({}, brandOpportunityCounts, skuPackageGroupedOpportunityCounts);
     }, {});
-  }
-
-  private formatOpportunityCounts(opportunityCounts: Array<OpportunityCountDTO>): Array<OpportunityCount> {
-    return opportunityCounts.map((opportunityCount: OpportunityCountDTO) => {
-      return {
-        name: opportunityCount.label,
-        count: opportunityCount.count
-      };
-    });
   }
 
   private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {

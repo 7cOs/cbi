@@ -3,6 +3,7 @@ import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
@@ -57,7 +58,11 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getRightTableData(productMetrics: ProductMetrics, productMetricsViewType: ProductMetricsViewType): MyPerformanceTableRow[] {
+  public getRightTableData(
+    productMetrics: ProductMetrics,
+    groupedOpportunityCounts: GroupedOpportunityCounts,
+    productMetricsViewType: ProductMetricsViewType
+  ): MyPerformanceTableRow[] {
     const productsValues: ProductMetricsValues[] = productMetricsViewType === ProductMetricsViewType.brands
       ? productMetrics.brandValues : productMetrics.skuValues;
     const total: number = productsValues.reduce((sum: number, item: ProductMetricsValues): number => {
@@ -83,6 +88,10 @@ export class MyPerformanceTableDataTransformerService {
         rightTableData.metadata.skuPackageCode = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
       }
 
+      if (groupedOpportunityCounts) {
+        rightTableData.opportunities = this.matchProductMetricOpportunityCounts(item, groupedOpportunityCounts, productMetricsViewType);
+      }
+
       return rightTableData;
     });
 
@@ -105,14 +114,21 @@ export class MyPerformanceTableDataTransformerService {
     return totalRow;
   }
 
-  public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues): MyPerformanceTableRow {
-    return {
+  public getProductMetricsSelectedBrandRow(
+    productMetricsValues: ProductMetricsValues,
+    groupedOpportunityCounts: GroupedOpportunityCounts
+  ): MyPerformanceTableRow {
+    const selectedBrandRow: MyPerformanceTableRow = {
       descriptionRow0: productMetricsValues.brandDescription,
       metricColumn0: productMetricsValues.current,
       metricColumn1: productMetricsValues.yearAgo,
       metricColumn2: productMetricsValues.yearAgoPercent,
-      ctv: 100,
+      ctv: 100
     };
+
+    if (groupedOpportunityCounts) selectedBrandRow.opportunities = groupedOpportunityCounts[productMetricsValues.brandCode].total;
+
+    return selectedBrandRow;
   }
 
   private getPercentageOfTotal(contribution: number, total: number): number {
@@ -131,6 +147,26 @@ export class MyPerformanceTableDataTransformerService {
         return SpecializedAccountName[name] || name;
       default:
         return name;
+    }
+  }
+
+  private matchProductMetricOpportunityCounts(
+    item: ProductMetricsValues,
+    groupedOpportunityCounts: GroupedOpportunityCounts,
+    productMetricsViewType: ProductMetricsViewType
+  ): (number|string) {
+    if (productMetricsViewType === ProductMetricsViewType.brands) {
+      if (groupedOpportunityCounts[item.brandCode]) {
+        return groupedOpportunityCounts[item.brandCode].total;
+      } else {
+        return '-';
+      }
+    } else {
+      if (groupedOpportunityCounts[item.beerId.masterPackageSKUCode]) {
+        return groupedOpportunityCounts[item.beerId.masterPackageSKUCode].total;
+      } else {
+        return '-';
+      }
     }
   }
 }

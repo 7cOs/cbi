@@ -342,7 +342,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     describe('when ProductMetricsViewType is brands', () => {
       it('should return properly formatted table data for ProductMetrics', () => {
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.brands
+          products, undefined, ProductMetricsViewType.brands
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -356,7 +356,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
       it('should calculate ctv based on total of provided rows,', () => {
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.brands
+          products, undefined, ProductMetricsViewType.brands
         );
 
         total = 0;
@@ -376,7 +376,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         products.brandValues[0].yearAgo = 0;
 
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.brands
+          products, undefined, ProductMetricsViewType.brands
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -395,7 +395,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         products.brandValues[1].yearAgo = chance.floating({min: 0.1});
 
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.brands
+          products, undefined, ProductMetricsViewType.brands
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -411,7 +411,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     describe('when ProductMetricsViewType is skus and metrics are SKUs', () => {
       it('should return properly formatted table data for ProductMetrics', () => {
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -426,7 +426,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
       it('should calculate ctv based on total of provided rows,', () => {
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         total = 0;
@@ -446,7 +446,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         products.skuValues[0].yearAgo = 0;
 
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -466,7 +466,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         products.skuValues[1].yearAgo = chance.floating({min: 0.1});
 
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -490,7 +490,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
       it('should return properly formatted table data for ProductMetrics', () => {
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -505,7 +505,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
       it('should calculate ctv based on total of provided rows,', () => {
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         total = 0;
@@ -525,7 +525,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         products.skuValues[0].yearAgo = 0;
 
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -545,7 +545,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         products.skuValues[1].yearAgo = chance.floating({min: 0.1});
 
         const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
-          products, ProductMetricsViewType.skus
+          products, undefined, ProductMetricsViewType.skus
         );
 
         expect(transformedProductMetricsData).toBeDefined();
@@ -569,7 +569,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
     it('should return a formatted total row from brand product metrics values', () => {
       const rowData: MyPerformanceTableRow =
-        myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock);
+        myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock, undefined);
 
       expect(rowData.descriptionRow0).toEqual(productMetricsValuesMock.brandDescription);
       expect(rowData.metricColumn0).toEqual(productMetricsValuesMock.current);

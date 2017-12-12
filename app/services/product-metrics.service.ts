@@ -184,10 +184,9 @@ export class ProductMetricsService {
     return this.productMetricsApiService.getSubAccountOpportunityCounts(
       fetchOpportunityCountsData.accountId,
       fetchOpportunityCountsData.positionId,
-      fetchOpportunityCountsData.productMetricsViewType,
       fetchOpportunityCountsData.filter.premiseType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
-        return this.productMetricsTransformerService.transformAndGroupOpportunityCountDTOs(opportunityCountResponse);
+        return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
       });
   }
 }

@@ -6,6 +6,5 @@ export interface OpportunityCount {
 export interface GroupedOpportunityCounts {
   [key: string]: {
     total: number;
-    opportunities: Array<OpportunityCount>;
   };
 }
