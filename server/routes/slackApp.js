@@ -12,20 +12,23 @@ module.exports = function(app) {
     if (!req.body.token || req.body.token !== process.env.SLACK_APP_TOKEN) {
       res.send(401);
     } else {
+
       const parameters = parametersUtils.parse(req.body.text.split(' '));
+
+// do a try/catch around parameters
+
+      res.json({'text': 'Requesting build...'});
 
       circleCIClient.buildBranch(parameters)
       .then((parsedBody) => {
         sendUpdateToSlashFunction(req.body.response_url, 'Build created!');
-        sendUpdateToSlashFunction(req.body.response_url, 'You can follow the update at this URL: ' + parsedBody.build_url);
+        sendUpdateToSlashFunction(req.body.response_url, 'Build URL: ' + parsedBody.build_url);
       })
       .catch((error) => {
         console.log('error called');
         console.log(error);
         sendUpdateToSlashFunction(req.body.response_url, 'There was an error creating the build');
       });
-
-      res.json({'text': 'Requesting build...'});
     }
   });
 };
