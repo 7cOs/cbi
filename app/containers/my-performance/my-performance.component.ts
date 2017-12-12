@@ -522,6 +522,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.deselectBrandValue();
         } else if (this.selectedSkuPackageCode === parameters.row.metadata.skuPackageCode) {
           this.deselectSkuPackage();
+          this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         } else if (parameters.type === RowType.data) {
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
@@ -534,9 +535,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               parameters.row.metadata.skuPackageType);
           }
         } else {
-          this.selectedSkuPackageCode = null;
-          this.selectedSkuPackageType = null;
-          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+          this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
         break;

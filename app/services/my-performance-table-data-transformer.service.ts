@@ -111,11 +111,11 @@ export class MyPerformanceTableDataTransformerService {
       metricColumn0: productMetricsValues.current,
       metricColumn1: productMetricsValues.yearAgo,
       metricColumn2: productMetricsValues.yearAgoPercent,
-      ctv: 100,
-      metadata: {}
+      ctv: 100
     };
 
     if (productMetricsValues.brandCode) {
+      rowTotal.metadata = {};
       rowTotal.metadata.brandCode = productMetricsValues.brandCode;
     }
 
