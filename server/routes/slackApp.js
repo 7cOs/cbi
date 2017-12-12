@@ -13,7 +13,7 @@ module.exports = function(app) {
 
     const parameters = parametersUtils.parse(req.body.text.split(' '));
 
-    circleCIClient.client.buildBranch(parameters)
+    circleCIClient.buildBranch(parameters)
     .then((response) => {
       console.log('then called');
       // console.log(response);
