@@ -9,23 +9,24 @@ module.exports = function(app) {
   app.post('/slack-app', (req, res) => {
     console.log(req.body);
 
-// check token
+    if (!req.body.token || req.body.token !== process.env.SLACK_APP_TOKEN) {
+      res.send(401);
+    } else {
+      const parameters = parametersUtils.parse(req.body.text.split(' '));
 
-    const parameters = parametersUtils.parse(req.body.text.split(' '));
+      circleCIClient.buildBranch(parameters)
+      .then((parsedBody) => {
+        sendUpdateToSlashFunction(req.body.response_url, 'Build created!');
+        sendUpdateToSlashFunction(req.body.response_url, 'You can follow the update at this URL: ' + parsedBody.build_url);
+      })
+      .catch((error) => {
+        console.log('error called');
+        console.log(error);
+        sendUpdateToSlashFunction(req.body.response_url, 'There was an error creating the build');
+      });
 
-    circleCIClient.buildBranch(parameters)
-    .then((response) => {
-      console.log('then called');
-      // console.log(response);
-      sendUpdateToSlashFunction(req.body.response_url, 'Build created!');
-    })
-    .catch((error) => {
-      console.log('error called');
-      console.log(error);
-      sendUpdateToSlashFunction(req.body.response_url, 'There was an error creating the build');
-    });
-
-    res.json({'text': 'Requesting build...'});
+      res.json({'text': 'Requesting build...'});
+    }
   });
 };
 
