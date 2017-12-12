@@ -427,13 +427,15 @@ describe('MyPerformanceComponent', () => {
     });
 
     describe('when back button is NOT displayed and not viewing subaccounts', () => {
-      it('should NOT dispatch any actions', () => {
+      it('should only dispatch RefreshAllPerformances and FetchProductMetrics actions', () => {
         componentInstance.showLeftBackButton = false;
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
         componentInstance.handleElementClicked(params);
 
-        expect(storeMock.dispatch.calls.count()).toBe(0);
+        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.argsFor(0)[0].type).toEqual(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES);
+        expect(storeMock.dispatch.calls.argsFor(1)[0].type).toEqual(ProductMetricsActions.FETCH_PRODUCT_METRICS);
       });
     });
 
@@ -1376,7 +1378,7 @@ describe('MyPerformanceComponent', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0};
         componentInstance.handleElementClicked(params);
-        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.count()).toBe(4);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearMyPerformanceSelectedSubaccountCode());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(EntityType.Account));
         expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
@@ -1384,6 +1386,8 @@ describe('MyPerformanceComponent', () => {
           'Link Click',
           'TOTAL'
         ]);
+        expect(storeMock.dispatch.calls.argsFor(2)[0].type).toEqual(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES);
+        expect(storeMock.dispatch.calls.argsFor(3)[0].type).toEqual(ProductMetricsActions.FETCH_PRODUCT_METRICS);
       });
     });
 
@@ -1392,9 +1396,11 @@ describe('MyPerformanceComponent', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0};
         componentInstance.handleElementClicked(params);
-        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.count()).toBe(4);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearMyPerformanceSelectedDistributorCode());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(EntityType.Person));
+        expect(storeMock.dispatch.calls.argsFor(2)[0].type).toEqual(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES);
+        expect(storeMock.dispatch.calls.argsFor(3)[0].type).toEqual(ProductMetricsActions.FETCH_PRODUCT_METRICS);
         expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
           'Team Snapshot',
           'Link Click',
@@ -2389,8 +2395,8 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
-      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(12);
+      expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -2404,7 +2410,7 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
-      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(11)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.selectedSubaccountCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -2425,7 +2431,7 @@ describe('MyPerformanceComponent', () => {
       filterSubject.next(stateMock.myPerformanceFilter);
 
       expect(storeMock.dispatch.calls.count()).toBe(12);
-      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -2439,7 +2445,7 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
-      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(11)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -2460,7 +2466,7 @@ describe('MyPerformanceComponent', () => {
       filterSubject.next(stateMock.myPerformanceFilter);
 
       expect(storeMock.dispatch.calls.count()).toBe(12);
-      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -2474,7 +2480,7 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
-      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(11)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -2493,8 +2499,8 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
-      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(12);
+      expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -2508,7 +2514,7 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
-      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(11)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.selectedDistributorCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -2592,8 +2598,8 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
-      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(12);
+      expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -2607,7 +2613,7 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
-      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(11)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.selectedSubaccountCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
@@ -2625,8 +2631,8 @@ describe('MyPerformanceComponent', () => {
       currentSubject.next(currentMock);
       filterSubject.next(stateMock.myPerformanceFilter);
 
-      expect(storeMock.dispatch.calls.count()).toBe(10);
-      expect(storeMock.dispatch.calls.argsFor(8)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+      expect(storeMock.dispatch.calls.count()).toBe(12);
+      expect(storeMock.dispatch.calls.argsFor(10)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: currentMock.responsibilities.positionId,
         groupedEntities: currentMock.responsibilities.groupedEntities,
         hierarchyGroups: currentMock.responsibilities.hierarchyGroups,
@@ -2640,7 +2646,7 @@ describe('MyPerformanceComponent', () => {
         accountPositionId: currentMock.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: false
       }));
-      expect(storeMock.dispatch.calls.argsFor(9)[0]).toEqual(new FetchProductMetrics({
+      expect(storeMock.dispatch.calls.argsFor(11)[0]).toEqual(new FetchProductMetrics({
         positionId: currentMock.selectedSubaccountCode,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,

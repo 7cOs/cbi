@@ -549,6 +549,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  // TODO: refactor this method so that #handleTeamPerformanceDataRefresh isn't called every time the
+  // total row is clicked, and so the intent of this method is clarified based on the conditions of the
+  // 'if' statement (or perhaps move the logic of this check outside this method)
   private handleTotalRowClicked(parameters: HandleElementClickedParameters) {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'TOTAL');
     if (parameters.leftSide) {
