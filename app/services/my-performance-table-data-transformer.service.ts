@@ -164,6 +164,8 @@ export class MyPerformanceTableDataTransformerService {
     } else {
       if (groupedOpportunityCounts[item.beerId.masterPackageSKUCode]) {
         return groupedOpportunityCounts[item.beerId.masterPackageSKUCode].total;
+      } else if (groupedOpportunityCounts[item.beerId.masterSKUCode]) {
+        return groupedOpportunityCounts[item.beerId.masterSKUCode].total;
       } else {
         return '-';
       }
