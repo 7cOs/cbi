@@ -73,9 +73,21 @@ export class SetMyPerformanceSelectedSubaccountCode implements Action {
   constructor(public payload: string) { }
 }
 
+export const SET_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE = '[My Performance] SET_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE';
+export class SetMyPerformanceSelectedDistributorCode implements Action {
+  readonly type = SET_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE;
+
+  constructor(public payload: string) { }
+}
+
 export const CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE';
 export class ClearMyPerformanceSelectedSubaccountCode implements Action {
   readonly type = CLEAR_MY_PERFORMANCE_SELECTED_SUBACCOUNT_CODE;
+}
+
+export const CLEAR_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE = '[My Performance] CLEAR_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE';
+export class ClearMyPerformanceSelectedDistributorCode implements Action {
+  readonly type = CLEAR_MY_PERFORMANCE_SELECTED_DISTRIBUTOR_CODE;
 }
 
 export type Action =
@@ -89,4 +101,6 @@ export type Action =
   | SetMyPerformanceSelectedSkuCode
   | ClearMyPerformanceSelectedSkuCode
   | SetMyPerformanceSelectedSubaccountCode
-  | ClearMyPerformanceSelectedSubaccountCode;
+  | SetMyPerformanceSelectedDistributorCode
+  | ClearMyPerformanceSelectedSubaccountCode
+  | ClearMyPerformanceSelectedDistributorCode;

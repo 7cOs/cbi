@@ -86,6 +86,7 @@ describe('My Performance Version Reducer', () => {
         selectedSkuPackageCode: beforeState.current.selectedSkuPackageCode,
         selectedEntityType: entityTypeMock,
         selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
+        selectedDistributorCode: beforeState.current.selectedDistributorCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -106,6 +107,7 @@ describe('My Performance Version Reducer', () => {
         selectedBrandCode: selectedBrandCodeMock,
         selectedEntityType: beforeState.current.selectedEntityType,
         selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
+        selectedDistributorCode: beforeState.current.selectedDistributorCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -131,6 +133,7 @@ describe('My Performance Version Reducer', () => {
         selectedSkuPackageType: skuPackagePayload.skuPackageType,
         selectedEntityType: beforeState.current.selectedEntityType,
         selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
+        selectedDistributorCode: beforeState.current.selectedDistributorCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -152,6 +155,7 @@ describe('My Performance Version Reducer', () => {
         selectedSkuPackageCode: clearedSkuPackageCode,
         selectedEntityType: beforeState.current.selectedEntityType,
         selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
+        selectedDistributorCode: beforeState.current.selectedDistributorCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -170,6 +174,7 @@ describe('My Performance Version Reducer', () => {
         selectedEntityDescription: beforeState.current.selectedEntityDescription,
         selectedEntityType: beforeState.current.selectedEntityType,
         selectedSubaccountCode: beforeState.current.selectedSubaccountCode,
+        selectedDistributorCode: beforeState.current.selectedDistributorCode,
         filter: beforeState.current.filter
       },
       versions: beforeState.versions
@@ -218,6 +223,48 @@ describe('My Performance Version Reducer', () => {
     };
     const actualState =
       myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should set the selected distributor code when SetMyPerformanceSelectedDistributorCode is received', () => {
+    const payload = chance.string();
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
+        selectedSkuPackageCode: beforeState.current.selectedSkuPackageCode,
+        selectedSkuPackageType: beforeState.current.selectedSkuPackageType,
+        selectedEntityType: beforeState.current.selectedEntityType,
+        selectedDistributorCode: payload,
+        filter: beforeState.current.filter
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(payload));
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should clear the selected distributor when ClearMyPerformanceSelectedDistributorCode is received', () => {
+    const beforeState = getMyPerformanceStateMock();
+    const expectedState = {
+      current: {
+        responsibilities: beforeState.current.responsibilities,
+        salesHierarchyViewType: beforeState.current.salesHierarchyViewType,
+        selectedEntityDescription: beforeState.current.selectedEntityDescription,
+        selectedBrandCode: beforeState.current.selectedBrandCode,
+        selectedSkuPackageCode: beforeState.current.selectedSkuPackageCode,
+        selectedSkuPackageType: beforeState.current.selectedSkuPackageType,
+        selectedEntityType: beforeState.current.selectedEntityType,
+        filter: beforeState.current.filter
+      },
+      versions: beforeState.versions
+    };
+    const actualState =
+      myPerformanceVersionReducer(beforeState, new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
     expect(actualState).toEqual(expectedState);
   });
 
