@@ -1,15 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { CalculatorService } from './calculator.service';
-import {
-  getProductMetricsBrandDTOMock,
-  getProductMetricsSkuDTOMock
-} from '../models/product-metrics.model.mock';
-import {
-  ProductMetrics,
-  ProductMetricsValues,
-  ProductMetricsDTO
-} from '../models/product-metrics.model';
+import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
+import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
+import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
+import { ProductMetrics, ProductMetricsValues, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
 
 describe('Service: ProductMetricsTransformerService', () => {
@@ -23,13 +19,13 @@ describe('Service: ProductMetricsTransformerService', () => {
     ]
   }));
 
-  describe('transformAndCombineProductMetricsDTOs', () => {
-    beforeEach(inject([ ProductMetricsTransformerService, CalculatorService ],
-      (_productMetricsTransformerService: ProductMetricsTransformerService, _calculatorService: CalculatorService) => {
-        productMetricsTransformerService = _productMetricsTransformerService;
-        calculatorService = _calculatorService;
-    }));
+  beforeEach(inject([ ProductMetricsTransformerService, CalculatorService ],
+    (_productMetricsTransformerService: ProductMetricsTransformerService, _calculatorService: CalculatorService) => {
+      productMetricsTransformerService = _productMetricsTransformerService;
+      calculatorService = _calculatorService;
+  }));
 
+  describe('transformAndCombineProductMetricsDTOs', () => {
     it('should return a collection of formatted ProductMetrics with both brandValues and skuValues', () => {
       const productMetricsBrandDTOMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
       const productMetricsSkuDTOMock: ProductMetricsDTO = getProductMetricsSkuDTOMock();
@@ -87,6 +83,29 @@ describe('Service: ProductMetricsTransformerService', () => {
 
         expect(transformedProductMetrics.skuValues[i]).toEqual(expectedValues);
       }
+    });
+  });
+
+  describe('transformAndGroupOpportunityCounts', () => {
+    let opportunityCountDTOMock: Array<OpportunityCountDTO>;
+
+    beforeEach(() => {
+      opportunityCountDTOMock = getOpportunityCountDTOsMock();
+    });
+
+    it('should return a GroupedOpportunityCounts object containing each brand/sku/package opportunity count total', () => {
+      const transformedOpportunityCounts: GroupedOpportunityCounts = productMetricsTransformerService.transformAndGroupOpportunityCounts(
+        opportunityCountDTOMock);
+
+      opportunityCountDTOMock.forEach((brandOpportunityCount: OpportunityCountDTO) => {
+        expect(transformedOpportunityCounts[brandOpportunityCount.label].total).toBeDefined();
+        expect(transformedOpportunityCounts[brandOpportunityCount.label].total).toBe(brandOpportunityCount.count);
+
+        brandOpportunityCount.items.forEach((skuPackageOpportunityCount: OpportunityCountDTO) => {
+          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].total).toBeDefined();
+          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].total).toBe(skuPackageOpportunityCount.count);
+        });
+      });
     });
   });
 });

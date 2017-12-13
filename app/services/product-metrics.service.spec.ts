@@ -18,15 +18,19 @@ import { ProductMetricsTransformerService } from '../services/product-metrics-tr
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
 
+import { getGroupedOpportunityCountsMock } from '../models/opportunity-count.model.mock';
+import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
+
 const chance = new Chance();
 
-describe('ProductMetrics Service', () => {
+fdescribe('ProductMetrics Service', () => {
   let positionIdMock: string;
   let contextPositionIdMock: string;
   let entityTypeCodeMock: string;
   let performanceFilterStateMock: MyPerformanceFilterState;
   let selectedEntityTypeMock: EntityType;
 
+  let groupedOpportunityCountsMock: GroupedOpportunityCounts;
   let productMetricsWithBrandValuesMock: ProductMetrics;
   let productMetricsWithSkuValuesMock: ProductMetrics;
   let productMetricsWithCombinedValuesMock: ProductMetrics;
@@ -48,6 +52,7 @@ describe('ProductMetrics Service', () => {
     performanceFilterStateMock = getMyPerformanceFilterMock();
     selectedEntityTypeMock = getEntityTypeMock();
 
+    groupedOpportunityCountsMock = getGroupedOpportunityCountsMock();
     productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
     productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(SkuPackageType.package);
     productMetricsWithCombinedValuesMock = Object.assign({}, productMetricsWithBrandValuesMock, productMetricsWithSkuValuesMock);
@@ -110,6 +115,9 @@ describe('ProductMetrics Service', () => {
         return aggregation === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
+      },
+      getOpportunityCounts() {
+        return Observable.of(groupedOpportunityCountsMock);
       }
     };
 

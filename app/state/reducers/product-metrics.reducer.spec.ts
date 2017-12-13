@@ -1,11 +1,15 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
+import { getGroupedOpportunityCountsMock } from '../../models/opportunity-count.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
+import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
+import { ProductMetricsState } from './product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 const positionIdMock = chance.string();
@@ -143,5 +147,62 @@ describe('ProductMetrics Reducer', () => {
       initialState,
       { type: 'UNKNOWN_ACTION' } as any
     )).toBe(initialState);
+  });
+
+  describe('when a FetchOpportunityCounts action is dispatched', () => {
+    it('should update the opportunity counts status to Fetching', () => {
+      const actionPayloadMock: ProductMetricsActions.FetchOpportunityCountsPayload = {
+        positionId: chance.string(),
+        selectedEntityId: chance.string(),
+        selectedEntityType: getEntityTypeMock(),
+        productMetricsViewType: getProductMetricsViewTypeMock(),
+        filter: getMyPerformanceFilterMock()
+      };
+      const expectedState: ProductMetricsState = {
+        status: initialState.status,
+        opportunityCountsStatus: ActionStatus.Fetching,
+        products: initialState.products,
+        productMetricsViewType: initialState.productMetricsViewType
+      };
+      const actualState: ProductMetricsState = productMetricsReducer(
+        initialState,
+        new ProductMetricsActions.FetchOpportunityCounts(actionPayloadMock));
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchOpportunityCountsSuccess action is dispatched', () => {
+    it('should store the grouped opportunity counts and set the opportunity count status to Fetched', () => {
+      const actionPayloadMock: GroupedOpportunityCounts = getGroupedOpportunityCountsMock();
+      const expectedState: ProductMetricsState = {
+        status: initialState.status,
+        opportunityCountsStatus: ActionStatus.Fetched,
+        opportunityCounts: actionPayloadMock,
+        products: initialState.products,
+        productMetricsViewType: initialState.productMetricsViewType
+      };
+      const actualState: ProductMetricsState = productMetricsReducer(
+        initialState,
+        new ProductMetricsActions.FetchOpportunityCountsSuccess(actionPayloadMock));
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchOpportunityCountsFailure is dispatched', () => {
+    it('should should update the opportunity counts status to Error', () => {
+      const expectedState: ProductMetricsState = {
+        status: initialState.status,
+        opportunityCountsStatus: ActionStatus.Error,
+        products: initialState.products,
+        productMetricsViewType: initialState.productMetricsViewType
+      };
+      const actualState: ProductMetricsState = productMetricsReducer(
+        initialState,
+        new ProductMetricsActions.FetchOpportunityCountsFailure(new Error()));
+
+      expect(actualState).toEqual(expectedState);
+    });
   });
 });

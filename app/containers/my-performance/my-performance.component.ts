@@ -499,7 +499,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           if (this.filterState.premiseType !== PremiseTypeValue.All) {
             this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
               positionId: parameters.row.metadata.positionId,
-              accountId: this.currentState.responsibilities.accountPositionId,
+              selectedEntityId: this.currentState.responsibilities.accountPositionId,
               selectedEntityType: this.currentState.selectedEntityType,
               productMetricsViewType: this.productMetricsState.productMetricsViewType,
               filter: this.filterState
@@ -512,6 +512,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedDistributorCode !== this.currentState.selectedDistributorCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
+
+          if (this.filterState.premiseType !== PremiseTypeValue.All) {
+            this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
+              positionId: parameters.row.metadata.positionId,
+              selectedEntityId: this.currentState.selectedDistributorCode,
+              selectedEntityType: this.currentState.selectedEntityType,
+              productMetricsViewType: this.productMetricsState.productMetricsViewType,
+              filter: this.filterState
+            }));
+          }
         }
         break;
       default:
@@ -678,9 +688,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private getShowProductMetricsOpportunities(): boolean {
-    return (this.currentState && !!this.currentState.selectedSubaccountCode)
-      && this.filterState
-      && this.filterState.premiseType !== PremiseTypeValue.All;
+    return this.currentState &&
+      (!!this.currentState.selectedSubaccountCode || !!this.currentState.selectedDistributorCode) &&
+      this.filterState &&
+      this.filterState.premiseType !== PremiseTypeValue.All;
   }
 
   private isInsideAlternateHierarchy(): boolean {

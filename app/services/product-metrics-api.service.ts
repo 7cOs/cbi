@@ -171,23 +171,23 @@ export class ProductMetricsApiService {
       .catch(err => this.handleError(err, aggregation, params.type));
   }
 
-  // public getDistributorOpportunityCounts(positionId: string, distributorId: string, premiseType: PremiseTypeValue): any {
-  //   const url = `/v3/positions/${ positionId }/opportunityCounts`;
-  //   const params = {
-  //     distributorCode: distributorId,
-  //     premiseType: PremiseTypeValue[premiseType].toLowerCase(),
-  //     countStructureType: 'BRAND_SKU_OPPTYPE',
-  //     segment: 'A|B',
-  //     impact: 'high|medium',
-  //     type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY',
-  //   };
+  public getDistributorOpportunityCounts(positionId: string, distributorId: string, premiseType: PremiseTypeValue): any {
+    const url = `/v3/positions/${ positionId }/opportunityCounts`;
+    const params = {
+      distributorCode: distributorId,
+      premiseType: PremiseTypeValue[premiseType].toLowerCase(),
+      countStructureType: 'BRAND_SKU_OPPTYPE',
+      segment: 'A|B',
+      impact: 'high|medium',
+      type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY',
+    };
 
-  //   return this.http.get(url, {
-  //     params: params
-  //   })
-  //     .map(res => res.json())
-  //     .catch(err => Observable.throw(err));
-  // }
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => Observable.throw(err));
+  }
 
   public getSubAccountOpportunityCounts(
     accountId: string,

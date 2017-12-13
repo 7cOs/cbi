@@ -204,20 +204,32 @@ export class ProductMetricsService {
     }
   }
 
-  public getOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
-  : Observable<GroupedOpportunityCounts> {
+  public getOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload): Observable<GroupedOpportunityCounts> {
     switch (fetchOpportunityCountsData.selectedEntityType) {
       case EntityType.SubAccount:
-      default:
         return this.getSubAccountOpportunityCounts(fetchOpportunityCountsData);
+      case EntityType.Distributor:
+        return this.getDistributorOpportunityCounts(fetchOpportunityCountsData);
+      default:
+        throw new Error(`[getOpportunityCounts]: Unsupported EntityType ${ fetchOpportunityCountsData.selectedEntityType }`);
     }
   }
 
-  private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
-  : Observable<GroupedOpportunityCounts> {
+  private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload): Observable<GroupedOpportunityCounts> {
     return this.productMetricsApiService.getSubAccountOpportunityCounts(
-      fetchOpportunityCountsData.accountId,
+      fetchOpportunityCountsData.selectedEntityId,
       fetchOpportunityCountsData.positionId,
+      fetchOpportunityCountsData.filter.premiseType)
+      .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
+        return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+      });
+  }
+
+  private getDistributorOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<GroupedOpportunityCounts> {
+    return this.productMetricsApiService.getDistributorOpportunityCounts(
+      fetchOpportunityCountsData.positionId,
+      fetchOpportunityCountsData.selectedEntityId,
       fetchOpportunityCountsData.filter.premiseType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);

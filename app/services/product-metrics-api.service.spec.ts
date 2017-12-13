@@ -5,9 +5,11 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
+import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
 import { getProductMetricsBrandDTOMock } from '../models/product-metrics.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetricsApiService } from './product-metrics-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
@@ -604,6 +606,88 @@ describe('Service: ProductMetricsApiService', () => {
           expect(res).toBeDefined();
           expect(res.skuValues).toEqual([]);
           expect(res.type).toEqual('volume');
+          done();
+        });
+    });
+  });
+
+  describe('getSubAccountOpportunityCounts', () => {
+    let accountIdMock: string;
+    let subAccountIdMock: string;
+    let premiseTypeMock: PremiseTypeValue;
+    let opportunityCountDTOsMock: Array<OpportunityCountDTO>;
+    let expectedUrl: string;
+    let expectedParams: string;
+
+    beforeEach(() => {
+      accountIdMock = chance.string(chanceStringOptions);
+      subAccountIdMock = chance.string(chanceStringOptions);
+      premiseTypeMock = PremiseTypeValue.On;
+      opportunityCountDTOsMock = getOpportunityCountDTOsMock();
+      expectedUrl = `/v3/accounts/${ accountIdMock }/opportunityCounts`;
+      expectedParams = `?subAccountCode=${ subAccountIdMock }`
+        + `&premiseType=${ PremiseTypeValue[premiseTypeMock].toLowerCase() }`
+        + `&countStructureType=BRAND_SKU_OPPTYPE`
+        + `&segment=A|B`
+        + `&impact=high|medium`
+        + `&type=NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY`;
+    });
+
+    it('should call the subaccount opportunity counts endpoint and return OpportunityCountDTOs when successful', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(opportunityCountDTOsMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(expectedUrl + encodeURI(expectedParams));
+      });
+
+      productMetricsApiService
+        .getSubAccountOpportunityCounts(accountIdMock, subAccountIdMock, premiseTypeMock)
+        .subscribe((response: Array<ProductMetricsDTO>) => {
+          expect(response).toEqual(opportunityCountDTOsMock);
+          done();
+        });
+    });
+  });
+
+  describe('getDistributorOpportunityCounts', () => {
+    let positionIdMock: string;
+    let distributorIdMock: string;
+    let premiseTypeMock: PremiseTypeValue;
+    let opportunityCountDTOsMock: Array<OpportunityCountDTO>;
+    let expectedUrl: string;
+    let expectedParams: string;
+
+    beforeEach(() => {
+      positionIdMock = chance.string(chanceStringOptions);
+      distributorIdMock = chance.string(chanceStringOptions);
+      premiseTypeMock = PremiseTypeValue.Off;
+      opportunityCountDTOsMock = getOpportunityCountDTOsMock();
+      expectedUrl = `/v3/positions/${ positionIdMock }/opportunityCounts`;
+      expectedParams = `?distributorCode=${ distributorIdMock }`
+        + `&premiseType=${ PremiseTypeValue[premiseTypeMock].toLowerCase() }`
+        + `&countStructureType=BRAND_SKU_OPPTYPE`
+        + `&segment=A|B`
+        + `&impact=high|medium`
+        + `&type=NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY`;
+    });
+
+    it('should call the distributor opportunity counts endpoint and return OpportunityCountDTOs when successful', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(opportunityCountDTOsMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(expectedUrl + encodeURI(expectedParams));
+      });
+
+      productMetricsApiService
+        .getDistributorOpportunityCounts(positionIdMock, distributorIdMock, premiseTypeMock)
+        .subscribe((response: Array<OpportunityCountDTO>) => {
+          expect(response).toEqual(opportunityCountDTOsMock);
           done();
         });
     });
