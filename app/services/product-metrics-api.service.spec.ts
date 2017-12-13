@@ -271,6 +271,82 @@ describe('Service: ProductMetricsApiService', () => {
     });
   });
 
+  describe('getDistributorProductMetrics', () => {
+    let filterMock: MyPerformanceFilterState;
+    let expectedPositionId: string;
+    let expectedDistributorId: string;
+
+    beforeEach(() => {
+      filterMock = {
+        metricType: MetricTypeValue.velocity,
+        dateRangeCode: DateRangeTimePeriodValue.L3CM,
+        premiseType: PremiseTypeValue.Off
+      };
+      expectedDistributorId = chance.string(chanceStringOptions);
+      expectedPositionId = chance.string(chanceStringOptions);
+    });
+
+    it('should call the getDistributorProductMetrics endpoint and return all ProductMetrics', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(productMetricsDTOMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(`/v3/distributors/${expectedDistributorId}/productMetrics`
+          + `?type=velocity&dateRangeCode=L3CM&premiseType=Off&aggregationLevel=brand&positionId=${expectedPositionId}`);
+      });
+
+      productMetricsApiService
+        .getDistributorProductMetrics(expectedDistributorId, expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
+        .subscribe((res) => {
+          expect(res).toEqual(productMetricsDTOMock);
+          done();
+        });
+    });
+
+    it('should call the getDistributorProductMetrics endpoint and return empty brandValues when '
+      + 'brand aggregation response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new Response(options) as Response & Error);
+      });
+
+      productMetricsApiService
+        .getDistributorProductMetrics(expectedDistributorId, expectedPositionId, filterMock, ProductMetricsAggregationType.brand)
+        .subscribe((res) => {
+          expect(res).toBeDefined();
+          expect(res.brandValues).toEqual([]);
+          expect(res.type).toEqual('velocity');
+          done();
+        });
+    });
+
+    it('should call the getDistributorProductMetrics endpoint and return empty skuValues when sku aggregation response is 404', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          type: ResponseType.Error,
+          status: 404,
+          statusText: 'No performance totals found with given parameters'
+        });
+        connection.mockError(new Response(options) as Response & Error);
+      });
+
+      productMetricsApiService
+        .getDistributorProductMetrics(expectedDistributorId, expectedPositionId, filterMock, ProductMetricsAggregationType.sku)
+        .subscribe((res) => {
+          expect(res).toBeDefined();
+          expect(res.skuValues).toEqual([]);
+          expect(res.type).toEqual('velocity');
+          done();
+        });
+    });
+  });
+
   describe('getRoleGroupProductMetrics', () => {
     let filterMock: MyPerformanceFilterState;
     let expectedPositionId: string;
