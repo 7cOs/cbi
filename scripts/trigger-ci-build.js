@@ -19,7 +19,7 @@ function triggerBuild(parameters) {
       })
       .catch((error) => {
         console.log('Error when creating the build');
-        throw error;
+        console.log(error.message);
       });
   } else {
     throw new Error('Insufficient arguments');

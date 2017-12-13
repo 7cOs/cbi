@@ -16,7 +16,6 @@ module.exports = function(app) {
         res.json({'text': 'Creating build...'});
         triggerBuild(parameters, req.body.response_url);
       } catch (error) {
-        sendUpdateToSlashFunction(req.body.response_url, 'There was an error when creating the build');
         sendUpdateToSlashFunction(req.body.response_url, error.message);
         sendUpdateToSlashFunction(req.body.response_url, parametersUtils.instructions);
       }
@@ -31,7 +30,9 @@ function triggerBuild(parameters, responseURL) {
     sendUpdateToSlashFunction(responseURL, 'Build URL: ' + parsedBody.build_url);
   })
   .catch((error) => {
-    throw error;
+    sendUpdateToSlashFunction(responseURL, 'There was an error when creating the build');
+    sendUpdateToSlashFunction(responseURL, error.message);
+    sendUpdateToSlashFunction(responseURL, parametersUtils.instructions);
   });
 }
 
