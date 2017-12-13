@@ -10,12 +10,12 @@ module.exports = function(app) {
     if (!req.body.token || req.body.token !== process.env.SLACK_APP_TOKEN) {
       res.send(401);
     } else {
-
       try {
         const parameters = parametersUtils.parse(req.body.text.split(' '));
         res.json({'text': 'Creating build...'});
         triggerBuild(parameters, req.body.response_url);
       } catch (error) {
+        res.json({'text': 'There was an error parsing the parameters:'});
         sendUpdateToSlashFunction(req.body.response_url, error.message);
         sendUpdateToSlashFunction(req.body.response_url, parametersUtils.instructions);
       }
