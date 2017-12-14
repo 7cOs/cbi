@@ -126,7 +126,10 @@ export class MyPerformanceTableDataTransformerService {
       ctv: 100
     };
 
-    if (groupedOpportunityCounts) selectedBrandRow.opportunities = groupedOpportunityCounts[productMetricsValues.brandCode].total;
+    if (groupedOpportunityCounts) selectedBrandRow.opportunities = this.matchProductMetricOpportunityCounts(
+      productMetricsValues,
+      groupedOpportunityCounts,
+      ProductMetricsViewType.brands);
 
     return selectedBrandRow;
   }
