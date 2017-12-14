@@ -8,7 +8,7 @@ export interface ProductMetricsState extends State {
   status: ActionStatus;
   opportunityCountsStatus: ActionStatus;
   products: ProductMetrics;
-  opportunityCounts: GroupedOpportunityCounts;
+  opportunityCounts?: GroupedOpportunityCounts;
   selectedBrandCodeValues?: ProductMetricsValues;
   productMetricsViewType: ProductMetricsViewType;
 }
@@ -17,7 +17,6 @@ export const initialState: ProductMetricsState = {
   status: ActionStatus.NotFetched,
   opportunityCountsStatus: ActionStatus.NotFetched,
   products: {},
-  opportunityCounts: {},
   productMetricsViewType: ProductMetricsViewType.brands
 };
 
@@ -51,13 +50,9 @@ export function productMetricsReducer(
       });
 
     case ProductMetricsActions.DESELECT_BRAND_VALUES:
-      return {
-        status: state.status,
-        opportunityCountsStatus: state.opportunityCountsStatus,
-        products: state.products,
-        opportunityCounts: state.opportunityCounts,
-        productMetricsViewType: state.productMetricsViewType
-      };
+      const newState: ProductMetricsState = Object.assign({}, state);
+      delete newState.selectedBrandCodeValues;
+      return newState;
 
     case ProductMetricsActions.SET_PRODUCT_METRICS_VIEW_TYPE:
       return Object.assign({}, state, {

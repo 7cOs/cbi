@@ -614,7 +614,7 @@ describe('Service: ProductMetricsApiService', () => {
   describe('getSubAccountOpportunityCounts', () => {
     let accountIdMock: string;
     let subAccountIdMock: string;
-    let premiseTypeMock: PremiseTypeValue;
+    let premiseTypeMock: string;
     let opportunityCountDTOsMock: Array<OpportunityCountDTO>;
     let expectedUrl: string;
     let expectedParams: string;
@@ -622,11 +622,11 @@ describe('Service: ProductMetricsApiService', () => {
     beforeEach(() => {
       accountIdMock = chance.string(chanceStringOptions);
       subAccountIdMock = chance.string(chanceStringOptions);
-      premiseTypeMock = PremiseTypeValue.On;
+      premiseTypeMock = 'on';
       opportunityCountDTOsMock = getOpportunityCountDTOsMock();
       expectedUrl = `/v3/accounts/${ accountIdMock }/opportunityCounts`;
       expectedParams = `?subAccountCode=${ subAccountIdMock }`
-        + `&premiseType=${ PremiseTypeValue[premiseTypeMock].toLowerCase() }`
+        + `&premiseType=${ premiseTypeMock }`
         + `&countStructureType=BRAND_SKU_OPPTYPE`
         + `&segment=A|B`
         + `&impact=high|medium`
@@ -655,7 +655,7 @@ describe('Service: ProductMetricsApiService', () => {
   describe('getDistributorOpportunityCounts', () => {
     let positionIdMock: string;
     let distributorIdMock: string;
-    let premiseTypeMock: PremiseTypeValue;
+    let premiseTypeMock: string;
     let opportunityCountDTOsMock: Array<OpportunityCountDTO>;
     let expectedUrl: string;
     let expectedParams: string;
@@ -663,11 +663,11 @@ describe('Service: ProductMetricsApiService', () => {
     beforeEach(() => {
       positionIdMock = chance.string(chanceStringOptions);
       distributorIdMock = chance.string(chanceStringOptions);
-      premiseTypeMock = PremiseTypeValue.Off;
+      premiseTypeMock = 'off';
       opportunityCountDTOsMock = getOpportunityCountDTOsMock();
       expectedUrl = `/v3/positions/${ positionIdMock }/opportunityCounts`;
       expectedParams = `?distributorCode=${ distributorIdMock }`
-        + `&premiseType=${ PremiseTypeValue[premiseTypeMock].toLowerCase() }`
+        + `&premiseType=${ premiseTypeMock }`
         + `&countStructureType=BRAND_SKU_OPPTYPE`
         + `&segment=A|B`
         + `&impact=high|medium`
