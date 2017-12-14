@@ -6,7 +6,7 @@ div.modal.download-opportunity
     label.top Current Selection:
       p
         span.opportunities {{list.selected.length}} opportunities
-        span.across-stores  across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores
+        span.across-stores  across {{list.retrieveStoreCountForSelectedOpportunities(list.selected) | number:0}} stores
 
     label Download:
       md-radio-group(ng-model="list.csvDownloadOption")

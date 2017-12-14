@@ -182,6 +182,9 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.isTotalOpportunitiesWithinMaxLimit).not.toBeUndefined();
     expect(typeof (ctrl.isTotalOpportunitiesWithinMaxLimit)).toEqual('function');
+
+    expect(ctrl.retrieveStoreCountForSelectedOpportunities).not.toBeUndefined();
+    expect(typeof (ctrl.retrieveStoreCountForSelectedOpportunities)).toEqual('function');
   });
 
   describe('Bindings', function() {
@@ -2381,6 +2384,118 @@ describe('Unit: list controller', function() {
           'Download Target List - Stores Only',
           selectedListMock);
       });
+    });
+
+    describe('list.retrieveStoreCountForSelectedOpportunities', () => {
+      beforeEach(() => {
+        ctrl.isAllOpportunitiesInPageSelected = false;
+      });
+
+      it('should return the count of all items on page if isAllOpportunitiesInPageSelected is true', () => {
+        ctrl.isAllOpportunitiesInPageSelected = true;
+        opportunitiesService.model.opportunities = [
+          {
+            'id': '1'
+          },
+          {
+            'id': '2'
+          }];
+        let selectedList = opportunitiesService.model.opportunities;
+        let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+
+        expect(storeCount).toEqual(opportunitiesService.model.opportunities.length);
+      });
+
+      it('should return 0 if the list is empty', () => {
+        opportunitiesService.model.opportunities = [];
+        let selectedList = opportunitiesService.model.opportunities;
+        let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+
+        expect(storeCount).toEqual(opportunitiesService.model.opportunities.length);
+      });
+
+      it('should return 0 if the list is null', () => {
+        opportunitiesService.model.opportunities;
+        let selectedList = opportunitiesService.model.opportunities;
+        let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+
+        expect(storeCount).toEqual(opportunitiesService.model.opportunities.length);
+      });
+
+      it('should return number of unique stores from multiple opportunities from same store', () => {
+        let selectedList = [{
+          'id': '1',
+          'store': {
+            'id': '1'
+          }
+        },
+        {
+          'id': '2',
+          'store': {
+            'id': '1'
+          }
+        },
+        {
+          'id': '3',
+          'store': {
+            'id': '1'
+          }
+        }];
+        let expectedStoreCount = 1;
+        let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+
+        expect(storeCount).toEqual(expectedStoreCount);
+      });
+
+      it('should return number of unique stores from multiple opportunities all from different stores', () => {
+        let selectedList = [{
+          'id': '1',
+          'store': {
+            'id': '1'
+          }
+        },
+        {
+          'id': '2',
+          'store': {
+            'id': '2'
+          }
+        },
+        {
+          'id': '3',
+          'store': {
+            'id': '3'
+          }
+        }];
+        let expectedStoreCount = 3;
+        let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+
+        expect(storeCount).toEqual(expectedStoreCount);
+      });
+    });
+
+    it('should return number of unique stores from mix of multiple opportunities from same store and different store', () => {
+      let selectedList = [{
+        'id': '1',
+        'store': {
+          'id': '1'
+        }
+      },
+      {
+        'id': '2',
+        'store': {
+          'id': '1'
+        }
+      },
+      {
+        'id': '3',
+        'store': {
+          'id': '2'
+        }
+      }];
+      let expectedStoreCount = 2;
+      let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+
+      expect(storeCount).toEqual(expectedStoreCount);
     });
   });
 });

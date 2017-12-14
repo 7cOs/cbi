@@ -103,6 +103,7 @@ module.exports = /*  @ngInject */
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
     vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
     vm.sendDownloadEvent = sendDownloadEvent;
+    vm.retrieveStoreCountForSelectedOpportunities = retrieveStoreCountForSelectedOpportunities;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -1077,5 +1078,13 @@ module.exports = /*  @ngInject */
     function init() {
       // Initialize the target lists for the user Id
       getTargetLists();
+    }
+
+    function retrieveStoreCountForSelectedOpportunities(selected) {
+      if (this.isAllOpportunitiesInPageSelected) {
+        return this.opportunitiesService.model.opportunities.length;
+      } else {
+        return new Set(selected.map(opportunity => opportunity.store.id)).size;
+      }
     }
   };
