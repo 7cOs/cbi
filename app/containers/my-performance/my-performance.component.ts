@@ -166,7 +166,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((productMetrics: ProductMetricsState) => {
         this.productMetricsState = productMetrics;
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
-        this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
+        this.productMetricsFetching = this.isFetchingProductMetrics();
         this.productMetricsViewType = productMetrics.productMetricsViewType;
         this.tableHeaderRowRight[0] = this.myPerformanceService.getProductMetricsViewTypeLabel(productMetrics.productMetricsViewType);
 
@@ -711,6 +711,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
       this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+  }
+
+  private isFetchingProductMetrics(): boolean {
+    return this.productMetricsState.status === ActionStatus.Fetching ||
+      this.productMetricsState.opportunityCountsStatus === ActionStatus.Fetching;
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
