@@ -14,12 +14,12 @@
     }
   }
 
-  span:nth-child(2):nth-last-child(n+6):after {
+  span:nth-child(2):nth-last-child(n+#{$breadstartindex}):after {
     content: url('../../../assets/img/icons/breadcrumb-right-arrow-black.svg') ' ... ' url('../../../assets/img/icons/breadcrumb-right-arrow-black.svg');
   }
 
-  span:nth-child(3):nth-last-child(n+10),
-  span:nth-child(3):nth-last-child(n+10) ~ span:nth-last-child(n+10) {
+  span:nth-child(3):nth-last-child(n+#{$breadendindex}),
+  span:nth-child(3):nth-last-child(n+#{$breadendindex}) ~ span:nth-last-child(n+#{$breadendindex}) {
     & {
       display: none;
     }
