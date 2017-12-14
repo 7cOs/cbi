@@ -617,12 +617,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         case SalesHierarchyViewType.subAccounts:
           actionPayload.isMemberOfExceptionHierarchy = !!(this.currentState.responsibilities.exceptionHierarchy
-            || parameters.row.metadata.exceptionHierarchy);
+            || (parameters.row && parameters.row.metadata.exceptionHierarchy));
           break;
 
         case SalesHierarchyViewType.distributors:
           actionPayload.isMemberOfExceptionHierarchy = !!(this.currentState.responsibilities.exceptionHierarchy
-            || parameters.row.metadata.exceptionHierarchy);
+            || (parameters.row && parameters.row.metadata.exceptionHierarchy));
           break;
 
         default:
@@ -639,6 +639,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
       if (this.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
         actionPayload.positionId = this.currentState.selectedDistributorCode || this.currentState.responsibilities.positionId;
+        actionPayload.isMemberOfExceptionHierarchy = !!(this.currentState.responsibilities.exceptionHierarchy
+          || parameters.row.metadata.exceptionHierarchy);
       }
     }
 
@@ -811,7 +813,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedBrandCode: this.currentState.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
+        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId,
+        isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
       }));
     }
   }
