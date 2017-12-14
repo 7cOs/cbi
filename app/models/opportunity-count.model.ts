@@ -8,3 +8,8 @@ export interface GroupedOpportunityCounts {
     total: number;
   };
 }
+
+export interface GroupedOpportunityCountsWithTotal {
+  total: number;
+  groupedOpportunityCounts: GroupedOpportunityCounts;
+}

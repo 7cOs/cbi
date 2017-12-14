@@ -23,7 +23,7 @@ import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
 
 const chance = new Chance();
 
-fdescribe('ProductMetrics Service', () => {
+describe('ProductMetrics Service', () => {
   let positionIdMock: string;
   let contextPositionIdMock: string;
   let entityTypeCodeMock: string;

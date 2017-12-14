@@ -171,7 +171,8 @@ export class ProductMetricsApiService {
       .catch(err => this.handleError(err, aggregation, params.type));
   }
 
-  public getDistributorOpportunityCounts(positionId: string, distributorId: string, premiseType: PremiseTypeValue): any {
+  public getDistributorOpportunityCounts(positionId: string, distributorId: string, premiseType: PremiseTypeValue)
+  : Observable<OpportunityCountDTO[]> {
     const url = `/v3/positions/${ positionId }/opportunityCounts`;
     const params = {
       distributorCode: distributorId,
@@ -193,7 +194,7 @@ export class ProductMetricsApiService {
     accountId: string,
     subAccountId: string,
     premiseType: PremiseTypeValue
-  ): Observable<Array<OpportunityCountDTO>> {
+  ): Observable<OpportunityCountDTO[]> {
     const url = `/v3/accounts/${ accountId }/opportunityCounts`;
     const params = {
       subAccountCode: subAccountId,

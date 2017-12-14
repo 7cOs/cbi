@@ -152,6 +152,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.isOpportunityTableExtended = false;
         this.setSelectedDateRangeValues();
         this.handleTeamPerformanceDataRefresh();
+
+        if (this.currentState) {
+          this.handleOpportunityCountFetch(
+            this.currentState.selectedSubaccountCode || this.currentState.responsibilities.positionId,
+            this.currentState.responsibilities.accountPositionId || this.currentState.selectedDistributorCode,
+            this.currentState.responsibilities.alternateHierarchyId,
+            this.currentState.responsibilities.exceptionHierarchy);
+        }
     });
 
     this.productMetricsSubscription = this.store
@@ -495,16 +503,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedSubaccountCode !== this.currentState.selectedSubaccountCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
-
-          if (this.filterState.premiseType !== PremiseTypeValue.All) {
-            this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
-              positionId: parameters.row.metadata.positionId,
-              selectedEntityId: this.currentState.responsibilities.accountPositionId,
-              selectedEntityType: this.currentState.selectedEntityType,
-              productMetricsViewType: this.productMetricsState.productMetricsViewType,
-              filter: this.filterState
-            }));
-          }
+          this.handleOpportunityCountFetch(
+            parameters.row.metadata.positionId,
+            this.currentState.responsibilities.accountPositionId,
+            this.currentState.responsibilities.alternateHierarchyId,
+            isMemberOfExceptionHierarchy);
         }
         break;
       case SalesHierarchyViewType.distributors:
@@ -512,16 +515,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedDistributorCode !== this.currentState.selectedDistributorCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
-
-          if (this.filterState.premiseType !== PremiseTypeValue.All) {
-            this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
-              positionId: parameters.row.metadata.positionId,
-              selectedEntityId: this.currentState.selectedDistributorCode,
-              selectedEntityType: this.currentState.selectedEntityType,
-              productMetricsViewType: this.productMetricsState.productMetricsViewType,
-              filter: this.filterState
-            }));
-          }
+          this.handleOpportunityCountFetch(
+            this.currentState.responsibilities.positionId,
+            this.currentState.selectedDistributorCode,
+            this.currentState.responsibilities.alternateHierarchyId,
+            isMemberOfExceptionHierarchy);
         }
         break;
       default:
@@ -838,6 +836,28 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
         contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
+      }));
+    }
+  }
+
+  private handleOpportunityCountFetch(
+    positionId: string,
+    contextId: string,
+    alternateHierarchyId: string,
+    isMemberOfExceptionHierarchy: boolean
+  ): void {
+    if (this.filterState.premiseType !== PremiseTypeValue.All &&
+      (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts ||
+      this.salesHierarchyViewType === SalesHierarchyViewType.distributors)) {
+
+      this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
+        positionId: positionId,
+        contextId: contextId,
+        alternateHierarchyId: alternateHierarchyId,
+        isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy,
+        selectedEntityType: this.currentState.selectedEntityType,
+        productMetricsViewType: this.productMetricsState.productMetricsViewType,
+        filter: this.filterState
       }));
     }
   }

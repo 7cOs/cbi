@@ -24,7 +24,9 @@ export interface FetchProductMetricsSuccessPayload {
 
 export interface FetchOpportunityCountsPayload {
   positionId: string;
-  selectedEntityId: string;
+  contextId: string;
+  alternateHierarchyId: string;
+  isMemberOfExceptionHierarchy: boolean;
   selectedEntityType: EntityType;
   productMetricsViewType: ProductMetricsViewType;
   filter: MyPerformanceFilterState;

@@ -145,6 +145,7 @@ describe('MyPerformanceComponent', () => {
     status: ActionStatus.Fetching,
     opportunityCountsStatus: ActionStatus.NotFetched,
     products: {},
+    opportunityCounts: {},
     productMetricsViewType: ProductMetricsViewType.brands
   };
 
@@ -1395,6 +1396,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetching,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.skus
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
@@ -2002,6 +2004,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
+        opportunityCounts: {},
         selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
         productMetricsViewType: ProductMetricsViewType.skus
       };
@@ -2015,6 +2018,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetching,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
+        opportunityCounts: {},
         selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
         productMetricsViewType: ProductMetricsViewType.skus
       };
@@ -2027,6 +2031,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.skus
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
@@ -2038,6 +2043,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
+        opportunityCounts: {},
         selectedBrandCodeValues: getProductMetricsSkuMock(SkuPackageType.sku),
         productMetricsViewType: ProductMetricsViewType.brands
       };
@@ -2275,6 +2281,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.brands
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
@@ -2286,6 +2293,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Error,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.brands
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
@@ -2300,6 +2308,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetching,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.skus
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
@@ -2311,6 +2320,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.NotFetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.brands
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
@@ -2335,6 +2345,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.brands
       };
 
@@ -2817,6 +2828,7 @@ describe('MyPerformanceComponent', () => {
             brandValues: [],
             skuValues: []
           },
+          opportunityCounts: {},
           productMetricsViewType: ProductMetricsViewType.brands,
           selectedBrandCodeValues: getProductMetricsBrandMock()
         };
@@ -2868,6 +2880,7 @@ describe('MyPerformanceComponent', () => {
         status: ActionStatus.Fetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: {brandValues: []},
+        opportunityCounts: {},
         productMetricsViewType: ProductMetricsViewType.skus
       };
 

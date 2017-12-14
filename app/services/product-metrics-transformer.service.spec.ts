@@ -96,15 +96,19 @@ describe('Service: ProductMetricsTransformerService', () => {
     it('should return a GroupedOpportunityCounts object containing each brand/sku/package opportunity count total', () => {
       const transformedOpportunityCounts: GroupedOpportunityCounts = productMetricsTransformerService.transformAndGroupOpportunityCounts(
         opportunityCountDTOMock);
+      let brandOpportunityCountTotal: number = 0;
 
       opportunityCountDTOMock.forEach((brandOpportunityCount: OpportunityCountDTO) => {
         expect(transformedOpportunityCounts[brandOpportunityCount.label].total).toBeDefined();
-        expect(transformedOpportunityCounts[brandOpportunityCount.label].total).toBe(brandOpportunityCount.count);
 
         brandOpportunityCount.items.forEach((skuPackageOpportunityCount: OpportunityCountDTO) => {
+          brandOpportunityCountTotal += skuPackageOpportunityCount.count;
           expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].total).toBeDefined();
           expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].total).toBe(skuPackageOpportunityCount.count);
         });
+
+        expect(transformedOpportunityCounts[brandOpportunityCount.label].total).toBe(brandOpportunityCountTotal);
+        brandOpportunityCountTotal = 0;
       });
     });
   });

@@ -217,7 +217,7 @@ export class ProductMetricsService {
 
   private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload): Observable<GroupedOpportunityCounts> {
     return this.productMetricsApiService.getSubAccountOpportunityCounts(
-      fetchOpportunityCountsData.selectedEntityId,
+      fetchOpportunityCountsData.contextId,
       fetchOpportunityCountsData.positionId,
       fetchOpportunityCountsData.filter.premiseType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
@@ -227,9 +227,15 @@ export class ProductMetricsService {
 
   private getDistributorOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
   : Observable<GroupedOpportunityCounts> {
+    const positionId: string = fetchOpportunityCountsData.isMemberOfExceptionHierarchy
+      ? fetchOpportunityCountsData.alternateHierarchyId
+      : fetchOpportunityCountsData.alternateHierarchyId
+        ? '0'
+        : fetchOpportunityCountsData.positionId;
+
     return this.productMetricsApiService.getDistributorOpportunityCounts(
-      fetchOpportunityCountsData.positionId,
-      fetchOpportunityCountsData.selectedEntityId,
+      positionId,
+      fetchOpportunityCountsData.contextId,
       fetchOpportunityCountsData.filter.premiseType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);

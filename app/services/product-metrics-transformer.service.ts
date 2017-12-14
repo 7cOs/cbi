@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { CalculatorService } from './calculator.service';
-import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
+import { GroupedOpportunityCounts, GroupedOpportunityCountsWithTotal } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
@@ -18,22 +18,30 @@ export class ProductMetricsTransformerService {
     return Object.assign({}, ...metrics);
   }
 
-  public transformAndGroupOpportunityCounts(dtos: Array<OpportunityCountDTO>): GroupedOpportunityCounts {
+  public transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): GroupedOpportunityCounts {
     return dtos.reduce((brandOpportunityCounts: GroupedOpportunityCounts, dto: OpportunityCountDTO) => {
+      const skuPackageGroupedOpportunityCounts: GroupedOpportunityCountsWithTotal = this.getGroupedOpportunityCountsAndTotal(dto.items);
+
       brandOpportunityCounts[dto.label] = {
+        total: skuPackageGroupedOpportunityCounts.total
+      };
+
+      return Object.assign({}, brandOpportunityCounts, skuPackageGroupedOpportunityCounts.groupedOpportunityCounts);
+    }, {});
+  }
+
+  private getGroupedOpportunityCountsAndTotal(dtos: OpportunityCountDTO[]): GroupedOpportunityCountsWithTotal {
+    return dtos.reduce((groupedOpportunityCountsWithTotal: GroupedOpportunityCountsWithTotal, dto: OpportunityCountDTO) => {
+      groupedOpportunityCountsWithTotal.total += dto.count;
+      groupedOpportunityCountsWithTotal.groupedOpportunityCounts[dto.label] = {
         total: dto.count
       };
 
-      const skuPackageGroupedOpportunityCounts: GroupedOpportunityCounts = dto.items.reduce(
-        (skuPackageOpportunityCounts: GroupedOpportunityCounts, innerDTO: OpportunityCountDTO) => {
-          skuPackageOpportunityCounts[innerDTO.label] = {
-            total: innerDTO.count
-          };
-        return skuPackageOpportunityCounts;
-      }, {});
-
-      return Object.assign({}, brandOpportunityCounts, skuPackageGroupedOpportunityCounts);
-    }, {});
+      return groupedOpportunityCountsWithTotal;
+    }, {
+      total: 0,
+      groupedOpportunityCounts: {}
+    });
   }
 
   private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {

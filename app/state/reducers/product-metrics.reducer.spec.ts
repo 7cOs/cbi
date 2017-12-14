@@ -23,6 +23,7 @@ describe('ProductMetrics Reducer', () => {
       status: ActionStatus.Fetching,
       opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
+      opportunityCounts: initialState.opportunityCounts,
       productMetricsViewType: ProductMetricsViewType.brands
     };
 
@@ -47,6 +48,7 @@ describe('ProductMetrics Reducer', () => {
       status: ActionStatus.Fetched,
       opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: products,
+      opportunityCounts: initialState.opportunityCounts,
       productMetricsViewType: ProductMetricsViewType.brands
     };
 
@@ -63,6 +65,7 @@ describe('ProductMetrics Reducer', () => {
       status: ActionStatus.Error,
       opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
+      opportunityCounts: initialState.opportunityCounts,
       productMetricsViewType: ProductMetricsViewType.brands
     };
 
@@ -75,6 +78,7 @@ describe('ProductMetrics Reducer', () => {
   });
 
   it('should update selectedBrandCodeValues with the first item in product corresponding to the given brand code in payload', () => {
+    const initialStateCopy = Object.assign({}, initialState);
     const products = getProductMetricsWithBrandValuesMock();
     const chosenProductMetricsValuesIndex = chance.natural({min: 0, max: products.brandValues.length - 1});
     const chosenBrandCode = chance.string();
@@ -85,18 +89,19 @@ describe('ProductMetrics Reducer', () => {
 
     products.brandValues[chosenProductMetricsValuesIndex].brandCode = chosenBrandCode;
 
-    initialState.products = products;
+    initialStateCopy.products = products;
 
     const expectedState = {
-      status: initialState.status,
-      opportunityCountsStatus: initialState.opportunityCountsStatus,
-      products: initialState.products,
+      status: initialStateCopy.status,
+      opportunityCountsStatus: initialStateCopy.opportunityCountsStatus,
+      products: initialStateCopy.products,
+      opportunityCounts: initialStateCopy.opportunityCounts,
       selectedBrandCodeValues: products.brandValues[chosenProductMetricsValuesIndex],
       productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(
-      initialState,
+      initialStateCopy,
       new ProductMetricsActions.SelectBrandValues(chosenBrandCode)
     );
 
@@ -110,6 +115,7 @@ describe('ProductMetrics Reducer', () => {
       status: initialState.status,
       opportunityCountsStatus: initialState.opportunityCountsStatus,
       products: initialState.products,
+      opportunityCounts: initialState.opportunityCounts,
       productMetricsViewType: payload
     };
 
@@ -123,19 +129,21 @@ describe('ProductMetrics Reducer', () => {
 
   it('should delete the selectedBrandCodeValues from the state when a deselectBrandValues action is dispatched', () => {
     const products = getProductMetricsWithBrandValuesMock();
+    const initialStateCopy = Object.assign({}, initialState);
 
-    initialState.products = products;
-    initialState.selectedBrandCodeValues = products.brandValues[chance.natural({min: 0, max: products.brandValues.length - 1})];
+    initialStateCopy.products = products;
+    initialStateCopy.selectedBrandCodeValues = products.brandValues[chance.natural({min: 0, max: products.brandValues.length - 1})];
 
     const expectedState = {
-      status: initialState.status,
-      opportunityCountsStatus: initialState.opportunityCountsStatus,
-      products: initialState.products,
+      status: initialStateCopy.status,
+      opportunityCountsStatus: initialStateCopy.opportunityCountsStatus,
+      products: initialStateCopy.products,
+      opportunityCounts: initialStateCopy.opportunityCounts,
       productMetricsViewType: ProductMetricsViewType.brands
     };
 
     const actualState = productMetricsReducer(
-      initialState,
+      initialStateCopy,
       new ProductMetricsActions.DeselectBrandValues()
     );
 
@@ -153,7 +161,9 @@ describe('ProductMetrics Reducer', () => {
     it('should update the opportunity counts status to Fetching', () => {
       const actionPayloadMock: ProductMetricsActions.FetchOpportunityCountsPayload = {
         positionId: chance.string(),
-        selectedEntityId: chance.string(),
+        contextId: chance.string(),
+        alternateHierarchyId: chance.string(),
+        isMemberOfExceptionHierarchy: chance.bool(),
         selectedEntityType: getEntityTypeMock(),
         productMetricsViewType: getProductMetricsViewTypeMock(),
         filter: getMyPerformanceFilterMock()
@@ -162,6 +172,7 @@ describe('ProductMetrics Reducer', () => {
         status: initialState.status,
         opportunityCountsStatus: ActionStatus.Fetching,
         products: initialState.products,
+        opportunityCounts: initialState.opportunityCounts,
         productMetricsViewType: initialState.productMetricsViewType
       };
       const actualState: ProductMetricsState = productMetricsReducer(
@@ -196,6 +207,7 @@ describe('ProductMetrics Reducer', () => {
         status: initialState.status,
         opportunityCountsStatus: ActionStatus.Error,
         products: initialState.products,
+        opportunityCounts: initialState.opportunityCounts,
         productMetricsViewType: initialState.productMetricsViewType
       };
       const actualState: ProductMetricsState = productMetricsReducer(
