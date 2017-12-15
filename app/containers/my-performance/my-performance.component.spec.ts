@@ -1336,6 +1336,48 @@ describe('MyPerformanceComponent', () => {
       });
     });
 
+    describe('when a subaccount is currently selected', () => {
+      it('should deselect the subaccount and clear selection ', () => {
+        currentMock.selectedSubaccountCode = rowMock.metadata.positionId;
+        currentSubject.next(currentMock);
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: chance.integer(), row: rowMock};
+        componentInstance.handleElementClicked(params);
+        expect(storeMock.dispatch.calls.count()).toBe(5);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+          new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
+          new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
+        expect(storeMock.dispatch.calls.argsFor(3)[0].type).toEqual(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES);
+        expect(storeMock.dispatch.calls.argsFor(4)[0].type).toEqual(ProductMetricsActions.FETCH_PRODUCT_METRICS);
+      });
+    });
+
+    describe('when a distributor is currently selected', () => {
+      it('should deselect the distributor and clear selection ', () => {
+        currentMock.selectedDistributorCode = rowMock.metadata.positionId;
+        currentSubject.next(currentMock);
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: chance.integer(), row: rowMock};
+        componentInstance.handleElementClicked(params);
+        expect(storeMock.dispatch.calls.count()).toBe(5);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+          new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
+        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(
+          new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Person));
+        expect(storeMock.dispatch.calls.argsFor(3)[0].type).toEqual(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES);
+        expect(storeMock.dispatch.calls.argsFor(4)[0].type).toEqual(ProductMetricsActions.FETCH_PRODUCT_METRICS);
+      });
+    });
+
     describe('when subaccount subline link clicked', () => {
       it('should correctly call functions for accountDashboard when subAccount clicked with matching hierarchy entity within ' +
         'alternate hierarchy', () => {
