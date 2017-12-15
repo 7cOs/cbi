@@ -104,6 +104,7 @@ module.exports = /*  @ngInject */
     vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
     vm.sendDownloadEvent = sendDownloadEvent;
     vm.retrieveStoreCountForSelectedOpportunities = retrieveStoreCountForSelectedOpportunities;
+    vm.retrieveOpportunityCountFromSelection = retrieveOpportunityCountFromSelection;
 
     // Custom Headers for CSV export
     vm.csvHeader = [

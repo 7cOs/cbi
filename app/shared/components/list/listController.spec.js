@@ -2471,31 +2471,94 @@ describe('Unit: list controller', function() {
 
         expect(storeCount).toEqual(expectedStoreCount);
       });
+
+      it('should return number of unique stores from mix of multiple opportunities from same store and different store', () => {
+        let selectedList = [{
+          'id': '1',
+          'store': {
+            'id': '1'
+          }
+        },
+        {
+          'id': '2',
+          'store': {
+            'id': '1'
+          }
+        },
+        {
+          'id': '3',
+          'store': {
+            'id': '2'
+          }
+        }];
+        let expectedStoreCount = 2;
+        let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+
+        expect(storeCount).toEqual(expectedStoreCount);
+      });
     });
 
-    it('should return number of unique stores from mix of multiple opportunities from same store and different store', () => {
-      let selectedList = [{
-        'id': '1',
-        'store': {
-          'id': '1'
-        }
-      },
-      {
-        'id': '2',
-        'store': {
-          'id': '1'
-        }
-      },
-      {
-        'id': '3',
-        'store': {
-          'id': '2'
-        }
-      }];
-      let expectedStoreCount = 2;
-      let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
+    describe('list.retrieveOpportunityCountFromSelection', () => {
+      beforeEach(() => {
+        ctrl.isAllOpportunitiesSelected = false;
+      });
 
-      expect(storeCount).toEqual(expectedStoreCount);
+      it('should return the count of all items if isAllOpportunitiesSelected is true', () => {
+        ctrl.isAllOpportunitiesSelected = true;
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 2;
+        let selectedList = [
+          {
+            'id': '1'
+          },
+          {
+            'id': '2'
+          }];
+        let opportunityCount = ctrl.retrieveOpportunityCountFromSelection(selectedList);
+
+        expect(opportunityCount).toEqual(filtersService.model.appliedFilter.pagination.totalOpportunities);
+      });
+
+      it('should return 0 if the list is empty', () => {
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
+        let selectedList = [];
+        let opportunityCount = ctrl.retrieveOpportunityCountFromSelection(selectedList);
+
+        expect(opportunityCount).toEqual(filtersService.model.appliedFilter.pagination.totalOpportunities);
+      });
+
+      it('should return 0 if the list is null', () => {
+        let selectedList = null;
+        let opportunityCount = ctrl.retrieveOpportunityCountFromSelection(selectedList);
+
+        expect(opportunityCount).toEqual(0);
+      });
+
+      it('should return number of opportunities selected, not totalOpportunities', () => {
+        let selectedList = [{
+          'id': '1',
+          'store': {
+            'id': '1'
+          }
+        },
+        {
+          'id': '2',
+          'store': {
+            'id': '1'
+          }
+        },
+        {
+          'id': '3',
+          'store': {
+            'id': '1'
+          }
+        }];
+        let expectedOpportunityCount = 3;
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 10;
+        let opportunityCount = ctrl.retrieveOpportunityCountFromSelection(selectedList);
+
+        expect(opportunityCount).toEqual(expectedOpportunityCount);
+        expect(opportunityCount).not.toEqual(filtersService.model.appliedFilter.pagination.totalOpportunities);
+      });
     });
   });
 });

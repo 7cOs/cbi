@@ -5,7 +5,7 @@ div.modal.download-opportunity
   div.modal-form
     label.top Current Selection:
       p
-        span.opportunities {{list.selected.length}} opportunities
+        span.opportunities {{list.retrieveOpportunityCountFromSelection(list.selected) | number:0}} opportunities
         span.across-stores  across {{list.retrieveStoreCountForSelectedOpportunities(list.selected) | number:0}} stores
 
     label Download:
