@@ -421,8 +421,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
-    const isMemberOfExceptionHierarchy: boolean =
-      !!(this.currentState.responsibilities.exceptionHierarchy || parameters.row.metadata.exceptionHierarchy);
+    const isMemberOfExceptionHierarchy: boolean = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
 
     switch (this.salesHierarchyViewType) {
 
@@ -619,13 +618,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           break;
 
         case SalesHierarchyViewType.subAccounts:
-          actionPayload.isMemberOfExceptionHierarchy = !!(this.currentState.responsibilities.exceptionHierarchy
-            || parameters.row.metadata.exceptionHierarchy);
+          actionPayload.isMemberOfExceptionHierarchy = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
           break;
 
         case SalesHierarchyViewType.distributors:
-          actionPayload.isMemberOfExceptionHierarchy = !!(this.currentState.responsibilities.exceptionHierarchy
-            || parameters.row.metadata.exceptionHierarchy);
+          actionPayload.isMemberOfExceptionHierarchy = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
           break;
 
         default:
@@ -642,10 +639,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
       if (this.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
         actionPayload.positionId = this.currentState.selectedDistributorCode || this.currentState.responsibilities.positionId;
+        actionPayload.isMemberOfExceptionHierarchy = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
       }
     }
 
     this.store.dispatch(new ProductMetricsActions.FetchProductMetrics(actionPayload));
+  }
+
+  private selectedEntityIsMemberOfExceptionHierarchy(parameters?: HandleElementClickedParameters): boolean {
+    return !!(this.currentState.responsibilities.exceptionHierarchy ||
+      (parameters && parameters.row && parameters.row.metadata.exceptionHierarchy));
   }
 
   private getShowSalesContributionToVolume(): boolean {
@@ -666,7 +669,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       entityType: this.currentState.selectedEntityType,
       alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
       accountPositionId: this.currentState.responsibilities.accountPositionId,
-      isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
+      isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
     }));
   }
 
@@ -708,7 +711,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         entityType: previousState.selectedEntityType,
         alternateHierarchyId: previousState.responsibilities.alternateHierarchyId,
         accountPositionId: previousState.responsibilities.accountPositionId,
-        isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
+        isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
       }));
     }
   }
@@ -766,7 +769,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       entityType: this.currentState.selectedEntityType,
       alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
       accountPositionId: this.currentState.responsibilities.accountPositionId,
-      isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
+      isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
     }));
   }
 
@@ -808,7 +811,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         entityType: this.currentState.selectedEntityType,
         alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
         accountPositionId: this.currentState.responsibilities.accountPositionId,
-        isMemberOfExceptionHierarchy: this.currentState.responsibilities.exceptionHierarchy
+        isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
         positionId: this.currentState.selectedSubaccountCode
@@ -820,7 +823,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedBrandCode: this.currentState.selectedBrandCode,
         inAlternateHierarchy: this.isInsideAlternateHierarchy(),
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
-        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId
+        contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId,
+        isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
       }));
     }
   }
