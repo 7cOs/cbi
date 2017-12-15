@@ -12,6 +12,7 @@
       div(ng-switch="$chip.type")
         div(ng-switch-when="state") {{$chip.name}}
         div(ng-switch-when="cbbdChain") {{$chip.name}}
+        div(ng-switch-when="priorityPackage") {{$chip.name}}
         div(ng-switch-when="zipCode") {{$chip.name | zipcode}}
         div(ng-switch-default) {{$chip.name | titlecase}}
 form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
