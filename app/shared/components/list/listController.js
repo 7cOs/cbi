@@ -1081,10 +1081,8 @@ module.exports = /*  @ngInject */
     }
 
     function retrieveStoreCountForSelectedOpportunities(selected) {
-      if (this.isAllOpportunitiesInPageSelected) {
-        return this.opportunitiesService.model.opportunities.length;
-      } else {
-        return new Set(selected.map(opportunity => opportunity.store.id)).size;
-      }
+      return this.isAllOpportunitiesSelected
+        ? this.opportunitiesService.model.opportunities.length
+        : new Set(selected.map(opportunity => opportunity.store.id)).size;
     }
   };
