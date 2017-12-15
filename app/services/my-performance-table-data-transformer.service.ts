@@ -115,8 +115,7 @@ export class MyPerformanceTableDataTransformerService {
     };
 
     if (productMetricsValues.brandCode) {
-      rowTotal.metadata = {};
-      rowTotal.metadata.brandCode = productMetricsValues.brandCode;
+      rowTotal.metadata = { brandCode:  productMetricsValues.brandCode };
     }
 
     return rowTotal;
