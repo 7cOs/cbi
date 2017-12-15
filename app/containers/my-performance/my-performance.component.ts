@@ -495,6 +495,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedSubaccountCode !== this.currentState.selectedSubaccountCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
+        } else if (this.selectedSubaccountCode === parameters.row.metadata.positionId) {
+          this.selectedSubaccountCode = null;
+          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
+          this.handleTeamPerformanceDataRefresh();
         }
         break;
       case SalesHierarchyViewType.distributors:
@@ -502,6 +507,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedDistributorCode !== this.currentState.selectedDistributorCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
+        } else if (this.selectedDistributorCode === parameters.row.metadata.positionId) {
+          this.selectedDistributorCode = null;
+          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Person));
+          this.handleTeamPerformanceDataRefresh();
         }
         break;
       default:
