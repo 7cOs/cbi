@@ -6,7 +6,7 @@ const circleCIClient = require('../../lib/circle-ci-client');
 const parametersUtils = require('../../lib/trigger-ci-parameters-utils');
 
 module.exports = function(app) {
-  app.post('/slack-app', (req, res) => {
+  app.post('/slack-trigger-ci', (req, res) => {
     if (!req.body.token || req.body.token !== process.env.SLACK_APP_TOKEN) {
       res.send(401);
     } else {
