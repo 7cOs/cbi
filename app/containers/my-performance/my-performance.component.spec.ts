@@ -1337,15 +1337,25 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
         expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
-        expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
+
+        const expectedFetchProductMetricsArguments: ProductMetricsActions.FetchProductMetricsPayload = {
+          positionId: componentInstance.salesHierarchyViewType === SalesHierarchyViewType.distributors
+            ? stateMock.myPerformance.current.selectedDistributorCode
+            : stateMock.myPerformance.current.responsibilities.positionId,
           entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
           filter: stateMock.myPerformanceFilter as any,
           selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
           selectedBrandCode: undefined,
           inAlternateHierarchy: false,
           contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId
-        }));
+        };
+
+        if (componentInstance.salesHierarchyViewType === SalesHierarchyViewType.distributors) {
+          expectedFetchProductMetricsArguments.isMemberOfExceptionHierarchy = false;
+        }
+
+        expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics(expectedFetchProductMetricsArguments));
+
         expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
           positionId: stateMock.myPerformance.current.responsibilities.positionId,
           groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
