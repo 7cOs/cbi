@@ -69,10 +69,12 @@ describe('My Performance Reducer', () => {
         skuPackageType: SkuPackageType.package
       }),
       new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(chance.string()),
+      new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(chance.string()),
       new MyPerformanceVersionActions.ClearMyPerformanceState(),
       new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode(),
       new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode(),
       new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode(),
+      new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode(),
     ];
 
     const returnedStates: MyPerformanceState[] = actions.map((action: Action) => {
@@ -153,6 +155,7 @@ describe('My Performance Reducer', () => {
           selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
           selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
           selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
+          selectedDistributorCode: inputMyPerformanceStateMock.current.selectedDistributorCode,
           filter: inputMyPerformanceStateMock.current.filter
         },
         versions: inputMyPerformanceStateMock.versions
@@ -217,6 +220,7 @@ describe('My Performance Reducer', () => {
           selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
           selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
           selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
+          selectedDistributorCode: inputMyPerformanceStateMock.current.selectedDistributorCode,
           filter: inputMyPerformanceStateMock.current.filter
         },
         versions: inputMyPerformanceStateMock.versions
@@ -245,6 +249,7 @@ describe('My Performance Reducer', () => {
         selectedBrandCode: inputMyPerformanceStateMock.current.selectedBrandCode,
         selectedSkuPackageCode: inputMyPerformanceStateMock.current.selectedSkuPackageCode,
         selectedSubaccountCode: inputMyPerformanceStateMock.current.selectedSubaccountCode,
+        selectedDistributorCode: inputMyPerformanceStateMock.current.selectedDistributorCode,
         filter: inputMyPerformanceStateMock.current.filter
       },
       versions: inputMyPerformanceStateMock.versions

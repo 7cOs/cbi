@@ -5,6 +5,11 @@ import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 
+export interface SetMetricAndPremiseTypePayload {
+  metricType: MetricTypeValue;
+  premiseType: PremiseTypeValue;
+}
+
 export const SET_METRIC = '[My Performance Filter] SET_METRIC';
 export class SetMetric implements Action {
   readonly type = SET_METRIC;
@@ -29,8 +34,15 @@ export class SetDistributionType implements Action {
   constructor(public payload: DistributionTypeValue) { }
 }
 
+export const SET_METRIC_AND_PREMISE_TYPE = '[My Performance Filter] SET_METRIC_AND_PREMISE_TYPE';
+export class SetMetricAndPremiseType implements Action {
+  readonly type = SET_METRIC_AND_PREMISE_TYPE;
+  constructor(public payload: SetMetricAndPremiseTypePayload) { }
+}
+
 export type Action
   = SetMetric
   | SetTimePeriod
   | SetPremiseType
-  | SetDistributionType;
+  | SetDistributionType
+  | SetMetricAndPremiseType;

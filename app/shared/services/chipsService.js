@@ -353,7 +353,7 @@ module.exports = /*  @ngInject */
           displayName = result;
         }
       }
-      if (displayName !== 'CBBD Chain') {
+      if (displayName !== 'CBBD Chain' && displayName !== 'Additional CA') {
         displayName = $filter('titlecase')(displayName);
       }
 
