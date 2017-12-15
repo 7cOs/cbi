@@ -741,7 +741,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private deselectSkuPackage() {
+  private deselectSkuPackage(): void {
     this.selectedSkuPackageCode = null;
     this.selectedSkuPackageType = null;
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
