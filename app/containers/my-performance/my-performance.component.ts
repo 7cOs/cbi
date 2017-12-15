@@ -495,6 +495,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedSubaccountCode !== this.currentState.selectedSubaccountCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
+        } else if (this.selectedSubaccountCode === parameters.row.metadata.positionId) {
+          this.selectedSubaccountCode = null;
+          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Account));
+          this.handleTeamPerformanceDataRefresh();
         }
         break;
       case SalesHierarchyViewType.distributors:
@@ -502,6 +507,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedDistributorCode !== this.currentState.selectedDistributorCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
+        } else if (this.selectedDistributorCode === parameters.row.metadata.positionId) {
+          this.selectedDistributorCode = null;
+          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Person));
+          this.handleTeamPerformanceDataRefresh();
         }
         break;
       default:
@@ -525,7 +535,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         break;
       case ProductMetricsViewType.skus:
       case ProductMetricsViewType.packages:
-        if (parameters.type === RowType.data) {
+        if (this.selectedBrandCode === parameters.row.metadata.brandCode) {
+          this.deselectBrandValue();
+        } else if (this.selectedSkuPackageCode === parameters.row.metadata.skuPackageCode) {
+          this.deselectSkuPackage();
+          this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
+        } else if (parameters.type === RowType.data) {
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
@@ -537,9 +552,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               parameters.row.metadata.skuPackageType);
           }
         } else {
-          this.selectedSkuPackageCode = null;
-          this.selectedSkuPackageType = null;
-          this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+          this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
         break;
@@ -739,6 +752,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.selectedSkuPackageType = null;
       this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
     }
+  }
+
+  private deselectSkuPackage(): void {
+    this.selectedSkuPackageCode = null;
+    this.selectedSkuPackageType = null;
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
   }
 
   private deselectBrandValue(): void {
