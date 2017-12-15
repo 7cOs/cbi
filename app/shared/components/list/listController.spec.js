@@ -2388,38 +2388,38 @@ describe('Unit: list controller', function() {
 
     describe('list.retrieveStoreCountForSelectedOpportunities', () => {
       beforeEach(() => {
-        ctrl.isAllOpportunitiesInPageSelected = false;
+        ctrl.isAllOpportunitiesSelected = false;
       });
 
-      it('should return the count of all items on page if isAllOpportunitiesInPageSelected is true', () => {
-        ctrl.isAllOpportunitiesInPageSelected = true;
-        opportunitiesService.model.opportunities = [
+      it('should return the count of all items if isAllOpportunitiesSelected is true', () => {
+        ctrl.isAllOpportunitiesSelected = true;
+        filtersService.model.appliedFilter.pagination.totalStores = 2;
+        let selectedList = [
           {
             'id': '1'
           },
           {
             'id': '2'
           }];
-        let selectedList = opportunitiesService.model.opportunities;
         let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
 
-        expect(storeCount).toEqual(opportunitiesService.model.opportunities.length);
+        expect(storeCount).toEqual(filtersService.model.appliedFilter.pagination.totalStores);
       });
 
       it('should return 0 if the list is empty', () => {
-        opportunitiesService.model.opportunities = [];
-        let selectedList = opportunitiesService.model.opportunities;
+        filtersService.model.appliedFilter.pagination.totalStores = 0;
+        let selectedList = [];
         let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
 
-        expect(storeCount).toEqual(opportunitiesService.model.opportunities.length);
+        expect(storeCount).toEqual(filtersService.model.appliedFilter.pagination.totalStores);
       });
 
       it('should return 0 if the list is null', () => {
-        opportunitiesService.model.opportunities;
-        let selectedList = opportunitiesService.model.opportunities;
+        filtersService.model.appliedFilter.pagination.totalStores = 0;
+        let selectedList = null;
         let storeCount = ctrl.retrieveStoreCountForSelectedOpportunities(selectedList);
 
-        expect(storeCount).toEqual(opportunitiesService.model.opportunities.length);
+        expect(storeCount).toEqual(filtersService.model.appliedFilter.pagination.totalStores);
       });
 
       it('should return number of unique stores from multiple opportunities from same store', () => {

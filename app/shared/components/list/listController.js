@@ -1081,8 +1081,18 @@ module.exports = /*  @ngInject */
     }
 
     function retrieveStoreCountForSelectedOpportunities(selected) {
+      if (selected === null) return 0;
+
       return this.isAllOpportunitiesSelected
-        ? this.opportunitiesService.model.opportunities.length
+        ? this.filtersService.model.appliedFilter.pagination.totalStores
         : new Set(selected.map(opportunity => opportunity.store.id)).size;
+    }
+
+    function retrieveOpportunityCountFromSelection(selected) {
+      if (selected === null) return 0;
+
+      return this.isAllOpportunitiesSelected
+        ? this.filtersService.model.appliedFilter.pagination.totalOpportunities
+        : selected.length;
     }
   };
