@@ -38,6 +38,10 @@ my-performance-table {
     opacity: 0.5;
   }
 
+  /deep/.mat-sidenav-content {
+    overflow: hidden;
+  }
+
   .opportunities-container {
     border-bottom: 2px solid $gray-8;
     left: auto;
