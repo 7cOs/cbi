@@ -6,8 +6,8 @@ machine:
 
 general:
     artifacts:
-        - "automation-test/target/target/"
-        - "automation-test/target/surefire-reports/"
+        - "automation-test/target/target/screenshot"
+        - "automation-test/target/surefire-reports/Suite"
 
 dependencies:
   pre:
