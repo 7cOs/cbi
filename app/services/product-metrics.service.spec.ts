@@ -1335,8 +1335,9 @@ describe('ProductMetrics Service', () => {
     beforeEach(() => {
       fetchOpportunityCountsMock = {
         positionId: chance.string(),
-        contextId: chance.string(),
         alternateHierarchyId: chance.string(),
+        distributorId: chance.string(),
+        subAccountId: chance.string(),
         isMemberOfExceptionHierarchy: chance.bool(),
         selectedEntityType: getEntityTypeMock(),
         productMetricsViewType: getProductMetricsViewTypeMock(),
@@ -1350,7 +1351,7 @@ describe('ProductMetrics Service', () => {
         fetchOpportunityCountsMock.filter.premiseType = PremiseTypeValue.On;
       });
 
-      it('should call getSubAccountOpportunityCounts with the passed in contextId, positionId and '
+      it('should call getSubAccountOpportunityCounts with the passed in subAccountId, positionId and '
       + 'a stringified lower case PremiseTypeValue', (done) => {
         const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getSubAccountOpportunityCounts').and.callThrough();
         const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
@@ -1361,7 +1362,7 @@ describe('ProductMetrics Service', () => {
 
         expect(getOpportunityCountsSpy.calls.count()).toBe(1);
         expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
-          fetchOpportunityCountsMock.contextId,
+          fetchOpportunityCountsMock.subAccountId,
           fetchOpportunityCountsMock.positionId,
           expectedPremiseTypeValue
         ]);
@@ -1399,7 +1400,7 @@ describe('ProductMetrics Service', () => {
           fetchOpportunityCountsMock.alternateHierarchyId = undefined;
         });
 
-        it('should call getDistributorOpportunityCounts with the passed in positionId, contextId, and stringified lower '
+        it('should call getDistributorOpportunityCounts with the passed in distributorId, positionId, and stringified lower '
         + 'case PremiseTypeValue', (done) => {
           const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
           const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
@@ -1410,8 +1411,8 @@ describe('ProductMetrics Service', () => {
 
           expect(getOpportunityCountsSpy.calls.count()).toBe(1);
           expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
+            fetchOpportunityCountsMock.distributorId,
             fetchOpportunityCountsMock.positionId,
-            fetchOpportunityCountsMock.contextId,
             expectedPremiseTypeValue
           ]);
         });
@@ -1423,7 +1424,7 @@ describe('ProductMetrics Service', () => {
           fetchOpportunityCountsMock.alternateHierarchyId = chance.string();
         });
 
-        it('should call getDistributorOpportunityCounts with a positionId of `0` and the passed in contextId, and stringified lower '
+        it('should call getDistributorOpportunityCounts with the passed in distributorId, a positionId of undefined, and stringified lower '
         + 'case PremiseTypeValue', (done) => {
           const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
           const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
@@ -1434,8 +1435,8 @@ describe('ProductMetrics Service', () => {
 
           expect(getOpportunityCountsSpy.calls.count()).toBe(1);
           expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
-            '0',
-            fetchOpportunityCountsMock.contextId,
+            fetchOpportunityCountsMock.distributorId,
+            undefined,
             expectedPremiseTypeValue
           ]);
         });
@@ -1447,8 +1448,8 @@ describe('ProductMetrics Service', () => {
           fetchOpportunityCountsMock.alternateHierarchyId = chance.string();
         });
 
-        it('should call getDistributorOpportunityCounts with a positionId of the Alternate Hierarchy Id and '
-        + 'the passed in contextId, and stringified lower case PremiseTypeValue', (done) => {
+        it('should call getDistributorOpportunityCounts with the passed in distributorId, alternateHierarchyId, and '
+        + 'and a stringified lower case PremiseTypeValue', (done) => {
           const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
           const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
 
@@ -1458,8 +1459,8 @@ describe('ProductMetrics Service', () => {
 
           expect(getOpportunityCountsSpy.calls.count()).toBe(1);
           expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
+            fetchOpportunityCountsMock.distributorId,
             fetchOpportunityCountsMock.alternateHierarchyId,
-            fetchOpportunityCountsMock.contextId,
             expectedPremiseTypeValue
           ]);
         });

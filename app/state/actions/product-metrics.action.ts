@@ -24,8 +24,9 @@ export interface FetchProductMetricsSuccessPayload {
 
 export interface FetchOpportunityCountsPayload {
   positionId: string;
-  contextId: string;
   alternateHierarchyId: string;
+  distributorId: string;
+  subAccountId: string;
   isMemberOfExceptionHierarchy: boolean;
   selectedEntityType: EntityType;
   productMetricsViewType: ProductMetricsViewType;

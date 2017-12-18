@@ -154,9 +154,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (this.currentState) {
           this.handleOpportunityCountFetch(
-            this.currentState.selectedSubaccountCode || this.currentState.responsibilities.positionId,
-            this.currentState.responsibilities.accountPositionId || this.currentState.selectedDistributorCode,
-            this.currentState.responsibilities.alternateHierarchyId,
+            this.currentState.selectedDistributorCode,
+            this.currentState.selectedSubaccountCode,
             this.currentState.responsibilities.exceptionHierarchy);
         }
     });
@@ -509,9 +508,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
           this.handleOpportunityCountFetch(
-            parameters.row.metadata.positionId,
-            this.currentState.responsibilities.accountPositionId,
-            this.currentState.responsibilities.alternateHierarchyId,
+            this.currentState.selectedDistributorCode,
+            this.selectedSubaccountCode,
             isMemberOfExceptionHierarchy);
         }
         break;
@@ -521,9 +519,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
           this.handleOpportunityCountFetch(
-            this.currentState.responsibilities.positionId,
-            this.currentState.selectedDistributorCode,
-            this.currentState.responsibilities.alternateHierarchyId,
+            this.selectedDistributorCode,
+            this.currentState.selectedSubaccountCode,
             isMemberOfExceptionHierarchy);
         }
         break;
@@ -850,20 +847,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleOpportunityCountFetch(
-    positionId: string,
-    contextId: string,
-    alternateHierarchyId: string,
-    isMemberOfExceptionHierarchy: boolean
-  ): void {
-    if (this.filterState.premiseType !== PremiseTypeValue.All &&
-      (this.salesHierarchyViewType === SalesHierarchyViewType.subAccounts ||
-      this.salesHierarchyViewType === SalesHierarchyViewType.distributors)) {
-
+  private handleOpportunityCountFetch(distributorId: string, subAccountId: string, isMemberOfExceptionHierarchy: boolean): void {
+    if (this.filterState.premiseType !== PremiseTypeValue.All && (!!distributorId || !!subAccountId)) {
       this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
-        positionId: positionId,
-        contextId: contextId,
-        alternateHierarchyId: alternateHierarchyId,
+        positionId: this.currentState.responsibilities.positionId,
+        alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+        distributorId: distributorId,
+        subAccountId: subAccountId,
         isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy,
         selectedEntityType: this.currentState.selectedEntityType,
         productMetricsViewType: this.productMetricsState.productMetricsViewType,

@@ -219,7 +219,7 @@ export class ProductMetricsService {
     const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
 
     return this.productMetricsApiService.getSubAccountOpportunityCounts(
-      fetchOpportunityCountsData.contextId,
+      fetchOpportunityCountsData.subAccountId,
       fetchOpportunityCountsData.positionId,
       premiseTypeValue)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
@@ -233,12 +233,12 @@ export class ProductMetricsService {
     const positionId: string = fetchOpportunityCountsData.isMemberOfExceptionHierarchy
       ? fetchOpportunityCountsData.alternateHierarchyId
       : fetchOpportunityCountsData.alternateHierarchyId
-        ? '0'
+        ? undefined
         : fetchOpportunityCountsData.positionId;
 
     return this.productMetricsApiService.getDistributorOpportunityCounts(
+      fetchOpportunityCountsData.distributorId,
       positionId,
-      fetchOpportunityCountsData.contextId,
       premiseTypeValue)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);

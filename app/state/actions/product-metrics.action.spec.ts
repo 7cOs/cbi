@@ -139,8 +139,9 @@ describe('ProductMetrics Actions', () => {
     beforeEach(() => {
       actionPayloadMock = {
         positionId: chance.string(),
-        contextId: chance.string(),
         alternateHierarchyId: chance.string(),
+        distributorId: chance.string(),
+        subAccountId: chance.string(),
         isMemberOfExceptionHierarchy: chance.bool(),
         selectedEntityType: getEntityTypeMock(),
         productMetricsViewType: getProductMetricsViewTypeMock(),

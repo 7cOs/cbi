@@ -171,11 +171,11 @@ export class ProductMetricsApiService {
       .catch(err => this.handleError(err, aggregation, params.type));
   }
 
-  public getDistributorOpportunityCounts(positionId: string, distributorId: string, premiseType: string)
+  public getDistributorOpportunityCounts(distributorId: string, positionId: string, premiseType: string)
   : Observable<OpportunityCountDTO[]> {
-    const url = `/v3/positions/${ positionId }/opportunityCounts`;
+    const url = `/v3/distributors/${ distributorId }/opportunityCounts`;
     const params = {
-      distributorCode: distributorId,
+      positionIds: positionId,
       premiseType: premiseType,
       countStructureType: 'BRAND_SKU_OPPTYPE',
       segment: 'A|B',
@@ -191,13 +191,13 @@ export class ProductMetricsApiService {
   }
 
   public getSubAccountOpportunityCounts(
-    accountId: string,
     subAccountId: string,
+    positionId: string,
     premiseType: string
   ): Observable<OpportunityCountDTO[]> {
-    const url = `/v3/accounts/${ accountId }/opportunityCounts`;
+    const url = `/v3/subAccounts/${ subAccountId }/opportunityCounts`;
     const params = {
-      subAccountCode: subAccountId,
+      positionIds: positionId,
       premiseType: premiseType,
       countStructureType: 'BRAND_SKU_OPPTYPE',
       segment: 'A|B',
