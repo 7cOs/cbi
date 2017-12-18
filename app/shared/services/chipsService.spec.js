@@ -268,6 +268,18 @@ describe('[Services.chipsService]', function() {
         expect(filtersService.model.priorityPackageAdditional).toBeTruthy();
       });
 
+      it('should remove selected filter and update filter model given "priorityPackage" chip, without case sensitivity', () => {
+        filtersService.model.selected.priorityPackage = ['InNovatiON', 'aDditional cA'];
+        filtersService.model.priorityPackageInnovation = true;
+        filtersService.model.priorityPackageAdditional = true;
+
+        chipsService.removeFromFilterService({type: 'priorityPackage', name: 'addiTional Ca'});
+
+        expect(filtersService.model.selected.priorityPackage).toEqual(['InNovatiON']);
+        expect(filtersService.model.priorityPackageInnovation).toBeTruthy();
+        expect(filtersService.model.priorityPackageAdditional).toBeTruthy();
+      });
+
       it('should remove selected filter and update filter model given "tradeChannel" chip', function() {
         filtersService.model.selected.tradeChannel = ['Drug', 'Mass Merchandiser', 'Grocery'];
         filtersService.model['tradeChannelDrug'] = true;

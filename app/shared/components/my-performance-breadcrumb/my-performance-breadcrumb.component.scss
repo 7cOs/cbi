@@ -8,6 +8,22 @@
   line-height: 60px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 
+  span {
+    &:not(:last-child):after {
+      content: url('../../../assets/img/icons/breadcrumb-right-arrow-black.svg');
+    }
+  }
+
+  span:nth-child(#{$breadstartindex}):nth-last-child(n+4):after {
+    content: url('../../../assets/img/icons/breadcrumb-right-arrow-black.svg') ' ... ' url('../../../assets/img/icons/breadcrumb-right-arrow-black.svg');
+  }
+
+  span:nth-child(#{$breadendindex}):nth-last-child(n+#{$breadendindex}),
+  span:nth-child(#{$breadendindex}):nth-last-child(n+#{$breadendindex}) ~ span:nth-last-child(n+#{$breadendindex}) {
+    & {
+      display: none;
+    }
+  }
 }
 
 .breadcrumb-entity {
