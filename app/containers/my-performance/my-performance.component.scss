@@ -30,11 +30,16 @@ my-performance-table {
 .tables-container {
   height: 742px;
   margin-top: 30px;
+  width: 1130px;
 
   /deep/.mat-sidenav-backdrop {
     background-color: $gray-9;
     cursor: pointer;
     opacity: 0.5;
+  }
+
+  /deep/.mat-sidenav-content {
+    overflow: hidden;
   }
 
   .opportunities-container {
