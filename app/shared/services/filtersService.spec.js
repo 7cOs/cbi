@@ -279,7 +279,7 @@ describe('Unit: filter service', function() {
               { label: 'Gaintain', name: 'Gaintain', value: 'GAINTAIN' },
               { label: 'Impact', name: 'Impact', value: 'IMPACT' },
               { label: 'Innovation', name: 'Innovation', value: 'INNOVATION' },
-              { label: 'Additional CA', name: 'Additional CA', value: 'ADDL_CA' }
+              { label: 'Additional CA', name: 'Additional CA', value: 'ADDITIONAL_CA_PRIORITY_PACKS' }
             ]
     };
 
@@ -583,7 +583,7 @@ describe('Unit: filter service', function() {
               { label: 'Gaintain', name: 'Gaintain', value: 'GAINTAIN' },
               { label: 'Impact', name: 'Impact', value: 'IMPACT' },
               { label: 'Innovation', name: 'Innovation', value: 'INNOVATION' },
-              { label: 'Additional CA', name: 'Additional CA', value: 'ADDL_CA' }
+              { label: 'Additional CA', name: 'Additional CA', value: 'ADDITIONAL_CA_PRIORITY_PACKS' }
             ],
             states: []
     };
