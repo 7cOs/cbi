@@ -28,6 +28,5 @@ export interface MyPerformanceTableRow {
   metricColumn2: number;
   metadata?: MyPerformanceTableRowMetadata;
   opportunities?: (number|string);
-  opportunitiesError?: boolean;
   performanceError?: boolean;
 }

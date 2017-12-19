@@ -1394,7 +1394,7 @@ describe('ProductMetrics Service', () => {
         fetchOpportunityCountsMock.filter.premiseType = PremiseTypeValue.On;
       });
 
-      describe('when we are not in the Standard Hierarchy', () => {
+      describe('when we are in the Standard Hierarchy', () => {
         beforeEach(() => {
           fetchOpportunityCountsMock.isMemberOfExceptionHierarchy = false;
           fetchOpportunityCountsMock.alternateHierarchyId = undefined;

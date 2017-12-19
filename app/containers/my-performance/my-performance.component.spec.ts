@@ -1011,6 +1011,24 @@ describe('MyPerformanceComponent', () => {
           filter: filterStateMock
         }));
       });
+
+      it('should NOT dispatch an action to fetch opportunity counts when filtering for a premise type of All when '
+      + 'a SubAccount is clicked', () => {
+        const filterStateMock: MyPerformanceFilterState = {
+          metricType: MetricTypeValue.volume,
+          dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
+          premiseType: PremiseTypeValue.All
+        };
+        filterSubject.next(filterStateMock);
+        storeMock.dispatch.calls.reset();
+
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock};
+        componentInstance.handleElementClicked(params);
+
+        for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
+          expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+        }
+      });
     });
 
     describe('when viewing distributors', () => {
@@ -1070,6 +1088,24 @@ describe('MyPerformanceComponent', () => {
           productMetricsViewType: myPerformanceProductMetricsMock.productMetricsViewType,
           filter: filterStateMock
         }));
+      });
+
+      it('should NOT dispatch an action to fetch opportunity counts when filtering for a premise type of All when '
+      + 'a Distributor is clicked', () => {
+        const filterStateMock: MyPerformanceFilterState = {
+          metricType: MetricTypeValue.volume,
+          dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
+          premiseType: PremiseTypeValue.All
+        };
+        filterSubject.next(filterStateMock);
+        storeMock.dispatch.calls.reset();
+
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock};
+        componentInstance.handleElementClicked(params);
+
+        for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
+          expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+        }
       });
     });
   });
@@ -2770,6 +2806,40 @@ describe('MyPerformanceComponent', () => {
         productMetricsViewType: productMetricsStateMock.productMetricsViewType,
         filter: stateMock.myPerformanceFilter as any
       }));
+    });
+
+    it('should NOT dispatch FetchOpportunityCounts when a SubAccount is selected when filtering for a PremiseType of All', () => {
+      currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.subAccounts;
+      currentMock.selectedSubaccountCode = chance.string();
+      delete currentMock.selectedDistributorCode;
+
+      currentSubject.next(currentMock);
+      storeMock.dispatch.calls.reset();
+
+      filterSubject.next(Object.assign(stateMock.myPerformanceFilter, {
+        premiseType: PremiseTypeValue.All
+      }));
+
+      for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
+        expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+      }
+    });
+
+    it('should NOT dispatch FetchOpportunityCounts when a Distirbutor is selected when filtering for a PremiseType of All', () => {
+      currentMock.salesHierarchyViewType.viewType = SalesHierarchyViewType.distributors;
+      currentMock.selectedDistributorCode = chance.string();
+      delete currentMock.selectedSubaccountCode;
+
+      currentSubject.next(currentMock);
+      storeMock.dispatch.calls.reset();
+
+      filterSubject.next(Object.assign(stateMock.myPerformanceFilter, {
+        premiseType: PremiseTypeValue.All
+      }));
+
+      for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
+        expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+      }
     });
 
     it('should set isOpportunityTableExtended to false to close the opportunities table', () => {

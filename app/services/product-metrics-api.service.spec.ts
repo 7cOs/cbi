@@ -691,5 +691,28 @@ describe('Service: ProductMetricsApiService', () => {
           done();
         });
     });
+
+    it('should call the distirbutor opportunity counts endpoint with no `positionIds` query param when '
+    + 'no positionId is passed in', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(opportunityCountDTOsMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(expectedUrl + encodeURI(`?premiseType=${ premiseTypeMock }`
+        + `&countStructureType=BRAND_SKU_OPPTYPE`
+        + `&segment=A|B`
+        + `&impact=high|medium`
+        + `&type=NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY`));
+      });
+
+      productMetricsApiService
+        .getDistributorOpportunityCounts(distributorIdMock, undefined, premiseTypeMock)
+        .subscribe((response: Array<OpportunityCountDTO>) => {
+          expect(response).toEqual(opportunityCountDTOsMock);
+          done();
+        });
+    });
   });
 });
