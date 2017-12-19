@@ -304,6 +304,10 @@ td, th {
   }
 }
 
+.no-sub-header-border {
+  border: 0 solid $gray-10;
+}
+
 .summary-header {
   font-family: $work-sans;
   font-size: 24px;
