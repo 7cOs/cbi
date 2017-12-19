@@ -305,6 +305,10 @@ td, th {
   }
 }
 
+.no-sub-header-border {
+  border: 0 solid $gray-10;
+}
+
 .summary-header {
   font-family: $work-sans;
   font-size: 24px;
@@ -707,7 +711,7 @@ div.ctv {
 
 .rolegroup-icon-container {
   width: $left-col-icon-width;
-  height: 18px;
+  height: 20px;
   box-sizing: border-box;
 
   .rolegroup-icon-background {
