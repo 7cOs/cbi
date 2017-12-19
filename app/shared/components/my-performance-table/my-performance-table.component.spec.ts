@@ -232,6 +232,26 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
+  describe('getSubHeaderClasses', () => {
+    it('should return two-right-columns-present when showing both CTV and Opps and Total Row is not selected', () => {
+      componentInstance.showContributionToVolume = true;
+      componentInstance.showOpportunities = true;
+      componentInstance.totalRow = null;
+      const cls = componentInstance.getSubHeaderClasses();
+      expect(cls).toEqual('two-right-columns-present');
+    });
+
+    it('should return two-right-columns-present no-sub-header-border when showing both CTV and Opps and Total Row is selected', () => {
+      componentInstance.showContributionToVolume = true;
+      componentInstance.showOpportunities = true;
+      const totalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.totalRow = totalRowMock;
+      const cls = componentInstance.getSubHeaderClasses();
+      expect(cls).toEqual('two-right-columns-present no-sub-header-border');
+    });
+
+  });
+
   describe('when calling onRowClicked', () => {
     let rowTypeMock: RowType = RowType.data;
     let indexMock: number;
