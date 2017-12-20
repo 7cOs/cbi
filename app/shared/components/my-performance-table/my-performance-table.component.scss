@@ -163,12 +163,13 @@ tr.two-right-columns-present {
 }
 
 .performance-table-summary {
+  box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.05);
   background-color: $gray-4;
   border-bottom: 2px solid $gray-8;
   font-family: $rajdhani;
-  height: 70px;
+  height: 55px;
   min-width: $table-width;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 
 .total-row {
