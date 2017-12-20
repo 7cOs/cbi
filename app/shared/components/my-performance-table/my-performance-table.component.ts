@@ -55,6 +55,7 @@ export class MyPerformanceTableComponent {
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
+  private rippleEffect: boolean = false;
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -80,6 +81,7 @@ export class MyPerformanceTableComponent {
   }
 
   public onRowClicked(type: RowType, index: number, row?: MyPerformanceTableRow) {
+      this.rippleEffect = true;
       this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
@@ -112,6 +114,8 @@ export class MyPerformanceTableComponent {
   public getEntityRowClasses(row: MyPerformanceTableRow): CssClasses {
     let classes: CssClasses = {
       'performance-error': row.performanceError,
+      'ripple-effect': this.rippleEffect && !!((this.selectedSubaccountCode || this.selectedDistributorCode)
+        && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode)),
       'selected-sku': !!(this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode),
       'selected-entity-row': !!((this.selectedSubaccountCode || this.selectedDistributorCode)
         && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode))
