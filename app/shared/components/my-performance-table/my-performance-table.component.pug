@@ -22,7 +22,7 @@ div.performance-table-wrapper
         th.right-col.opportunities.sort-indicator(*ngIf="showOpportunities", colspan=1)
           span OPPS
 
-      tr.sub-header.col-100-pct([ngClass]="getColumnWidthClass()")
+      tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
         th(colspan=1)
         th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn0)")
           span(*ngIf='dateRange') {{ dateRange.displayCode }}

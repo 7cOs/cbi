@@ -855,7 +855,7 @@ describe('Unit: filter controller (opportunities)', function() {
     it('should NOT log a GA event on userService.saveOpportunityFilter error', () => {
       spyOn(userService, 'saveOpportunityFilter').and.callFake(() => {
         const defer = q.defer();
-        defer.reject({ data: [{ error: 'Error!' }] });
+        defer.reject({ data: [{ error: 'Error!', message: 'already exists' }] });
         return defer.promise;
       });
       spyOn(analyticsService, 'trackEvent');

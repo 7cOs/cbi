@@ -114,11 +114,9 @@ export class MyPerformanceTableDataTransformerService {
     return totalRow;
   }
 
-  public getProductMetricsSelectedBrandRow(
-    productMetricsValues: ProductMetricsValues,
-    groupedOpportunityCounts: GroupedOpportunityCounts
-  ): MyPerformanceTableRow {
-    const selectedBrandRow: MyPerformanceTableRow = {
+  public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues, groupedOpportunityCounts: GroupedOpportunityCounts)
+  : MyPerformanceTableRow {
+    const rowTotal: MyPerformanceTableRow = {
       descriptionRow0: productMetricsValues.brandDescription,
       metricColumn0: productMetricsValues.current,
       metricColumn1: productMetricsValues.yearAgo,
@@ -126,12 +124,16 @@ export class MyPerformanceTableDataTransformerService {
       ctv: 100
     };
 
-    if (groupedOpportunityCounts) selectedBrandRow.opportunities = this.matchProductMetricOpportunityCounts(
+    if (productMetricsValues.brandCode) {
+      rowTotal.metadata = { brandCode:  productMetricsValues.brandCode };
+    }
+
+    if (groupedOpportunityCounts) rowTotal.opportunities = this.matchProductMetricOpportunityCounts(
       productMetricsValues,
       groupedOpportunityCounts,
       ProductMetricsViewType.brands);
 
-    return selectedBrandRow;
+    return rowTotal;
   }
 
   private getPercentageOfTotal(contribution: number, total: number): number {

@@ -215,7 +215,7 @@ module.exports = /*  @ngInject */
             arr.splice(i, 1);
             filtersService.model['tradeChannel' + chip.name] = false;
             break;
-          } else if (chip.type === 'priorityPackage' && $filter('titlecase')(arr[i]) === chip.name) {
+          } else if (chip.type === 'priorityPackage' && arr[i].toUpperCase() === chip.name.toUpperCase()) {
             arr.splice(i, 1);
             filtersService.model['priorityPackage' + chip.name] = false;
             break;
@@ -353,7 +353,7 @@ module.exports = /*  @ngInject */
           displayName = result;
         }
       }
-      if (displayName !== 'CBBD Chain') {
+      if (displayName !== 'CBBD Chain' && displayName !== 'Additional CA') {
         displayName = $filter('titlecase')(displayName);
       }
 

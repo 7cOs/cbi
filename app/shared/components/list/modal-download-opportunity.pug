@@ -5,8 +5,8 @@ div.modal.download-opportunity
   div.modal-form
     label.top Current Selection:
       p
-        span.opportunities {{list.selected.length}} opportunities
-        span.across-stores  across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores
+        span.opportunities {{list.retrieveOpportunityCountFromSelection(list.selected) | number:0}} opportunities
+        span.across-stores  across {{list.retrieveStoreCountForSelectedOpportunities(list.selected) | number:0}} stores
 
     label Download:
       md-radio-group(ng-model="list.csvDownloadOption")
@@ -18,4 +18,4 @@ div.modal.download-opportunity
       button.btn-action(ng-csv="list.getCSVData(list.downloadOption)"
                       filename="{{list.getDate() | date:'yyyy-MM-dd'}}{{list.csvDownloadOption}}.csv"
                       csv-header="list.getCSVHeader()"
-                      ng-click="$mdCloseMenu($event)") Download
+                      ng-click="list.closeModal()") Download

@@ -109,6 +109,22 @@ export class MyPerformanceTableComponent {
     return style;
   }
 
+  public getSubHeaderClasses(): string {
+    let style = '';
+
+    if (this.showContributionToVolume && this.showOpportunities) {
+      style = 'two-right-columns-present';
+    } else if (this.showContributionToVolume || this.showOpportunities) {
+      style = 'one-right-column-present';
+    }
+
+    if (this.totalRow) {
+      style = style.concat(' no-sub-header-border');
+    }
+
+    return style;
+  }
+
   public getEntityRowClasses(row: MyPerformanceTableRow): CssClasses {
     let classes: CssClasses = {
       'performance-error': row.performanceError,

@@ -163,12 +163,13 @@ tr.two-right-columns-present {
 }
 
 .performance-table-summary {
+  box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.05);
   background-color: $gray-4;
   border-bottom: 2px solid $gray-8;
   font-family: $rajdhani;
-  height: 70px;
+  height: 55px;
   min-width: $table-width;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 
 .total-row {
@@ -302,6 +303,10 @@ td, th {
     text-transform: uppercase;
     color: $gray-1;
   }
+}
+
+.no-sub-header-border {
+  border: 0 solid $gray-10;
 }
 
 .summary-header {
@@ -617,7 +622,8 @@ div.ctv {
       /deep/td.left-col {
 
         div.description-line-1 {
-          padding-top: 5px;
+          padding-top: 2px;
+          width: 114px;
 
           &.link {
             span {
@@ -706,7 +712,7 @@ div.ctv {
 
 .rolegroup-icon-container {
   width: $left-col-icon-width;
-  height: 18px;
+  height: 20px;
   box-sizing: border-box;
 
   .rolegroup-icon-background {
