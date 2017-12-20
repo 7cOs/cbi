@@ -322,7 +322,7 @@ module.exports = /*  @ngInject */
         closeModal();
       })
       .catch(error => {
-        if (error.data[0].description === 'F101') vm.duplicateName = true;
+        if (error.data[0].message.includes('already exists')) vm.duplicateName = true;
         console.error('Error saving report: ', error);
         loaderService.closeLoader();
       });
