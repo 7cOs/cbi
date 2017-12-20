@@ -65,31 +65,35 @@ export class MyPerformanceTableDataTransformerService {
   ): MyPerformanceTableRow[] {
     const productsValues: ProductMetricsValues[] = productMetricsViewType === ProductMetricsViewType.brands
       ? productMetrics.brandValues : productMetrics.skuValues;
-    const total: number = productsValues.reduce((sum: number, item: ProductMetricsValues): number => {
-      return sum + item.current;
+    const total: number = productsValues.reduce((sum: number, productMetricsValues: ProductMetricsValues): number => {
+      return sum + productMetricsValues.current;
     }, 0);
 
-    const rowData: MyPerformanceTableRow[] = productsValues.map((item: ProductMetricsValues) => {
+    const rowData: MyPerformanceTableRow[] = productsValues.map((productMetricsValues: ProductMetricsValues) => {
       const rightTableData: MyPerformanceTableRow = {
         descriptionRow0: productMetricsViewType === ProductMetricsViewType.brands
-          ? item.brandDescription
-          : item.beerId.masterPackageSKUDescription || item.beerId.masterSKUDescription,
-        metricColumn0: item.current,
-        metricColumn1: item.yearAgo,
-        metricColumn2: item.yearAgoPercent,
-        ctv: total ? this.getPercentageOfTotal(item.current, total) : 0,
+          ? productMetricsValues.brandDescription
+          : productMetricsValues.beerId.masterPackageSKUDescription || productMetricsValues.beerId.masterSKUDescription,
+        metricColumn0: productMetricsValues.current,
+        metricColumn1: productMetricsValues.yearAgo,
+        metricColumn2: productMetricsValues.yearAgoPercent,
+        ctv: total ? this.getPercentageOfTotal(productMetricsValues.current, total) : 0,
         metadata: {}
       };
 
       if (productMetricsViewType === ProductMetricsViewType.brands) {
-        rightTableData.metadata.brandCode = item.brandCode;
+        rightTableData.metadata.brandCode = productMetricsValues.brandCode;
       } else {
-        rightTableData.metadata.skuPackageType = item.beerId.masterPackageSKUCode ? SkuPackageType.package : SkuPackageType.sku;
-        rightTableData.metadata.skuPackageCode = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
+        rightTableData.metadata.skuPackageType = productMetricsValues.beerId.masterPackageSKUCode
+          ? SkuPackageType.package
+          : SkuPackageType.sku;
+        rightTableData.metadata.skuPackageCode = productMetricsValues.beerId.masterPackageSKUCode
+          || productMetricsValues.beerId.masterSKUCode;
       }
 
       if (groupedOpportunityCounts) {
-        rightTableData.opportunities = this.matchProductMetricOpportunityCounts(item, groupedOpportunityCounts, productMetricsViewType);
+        rightTableData.opportunities = this.matchProductMetricOpportunityCounts(
+          productMetricsValues, groupedOpportunityCounts, productMetricsViewType);
       }
 
       return rightTableData;
@@ -161,19 +165,19 @@ export class MyPerformanceTableDataTransformerService {
     productMetricsViewType: ProductMetricsViewType
   ): (number|string) {
     if (productMetricsViewType === ProductMetricsViewType.brands) {
-      if (groupedOpportunityCounts[item.brandCode]) {
-        return groupedOpportunityCounts[item.brandCode].total;
-      } else {
-        return '-';
-      }
+      return groupedOpportunityCounts[item.brandCode] ? groupedOpportunityCounts[item.brandCode].total : '-';
     } else {
+      let productOpportunityCountTotal: (number|string);
+
       if (groupedOpportunityCounts[item.beerId.masterPackageSKUCode]) {
-        return groupedOpportunityCounts[item.beerId.masterPackageSKUCode].total;
+        productOpportunityCountTotal = groupedOpportunityCounts[item.beerId.masterPackageSKUCode].total;
       } else if (groupedOpportunityCounts[item.beerId.masterSKUCode]) {
-        return groupedOpportunityCounts[item.beerId.masterSKUCode].total;
+        productOpportunityCountTotal = groupedOpportunityCounts[item.beerId.masterSKUCode].total;
       } else {
-        return '-';
+        productOpportunityCountTotal = '-';
       }
+
+      return productOpportunityCountTotal;
     }
   }
 }

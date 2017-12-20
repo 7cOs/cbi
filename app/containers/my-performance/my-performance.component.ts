@@ -707,10 +707,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private getShowProductMetricsOpportunities(): boolean {
-    return this.currentState &&
-      (!!this.currentState.selectedSubaccountCode || !!this.currentState.selectedDistributorCode) &&
-      this.filterState &&
-      this.filterState.premiseType !== PremiseTypeValue.All;
+    return this.currentState
+      && (!!this.currentState.selectedSubaccountCode || !!this.currentState.selectedDistributorCode)
+      && this.filterState
+      && this.filterState.premiseType !== PremiseTypeValue.All;
   }
 
   private isInsideAlternateHierarchy(): boolean {
@@ -719,16 +719,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private isFetchingResponsibilities(): boolean {
     return this.currentState.responsibilities &&
-    (this.currentState.responsibilities.status === ActionStatus.Fetching ||
-      this.currentState.responsibilities.responsibilitiesStatus === ActionStatus.Fetching ||
-      this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
-      this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
-      this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+    (this.currentState.responsibilities.status === ActionStatus.Fetching
+      || this.currentState.responsibilities.responsibilitiesStatus === ActionStatus.Fetching
+      || this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching
+      || this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching
+      || this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
   }
 
   private isFetchingProductMetrics(): boolean {
-    return this.productMetricsState.status === ActionStatus.Fetching ||
-      this.productMetricsState.opportunityCountsStatus === ActionStatus.Fetching;
+    return this.productMetricsState.status === ActionStatus.Fetching
+    || this.productMetricsState.opportunityCountsStatus === ActionStatus.Fetching;
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
