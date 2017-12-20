@@ -1025,9 +1025,9 @@ describe('MyPerformanceComponent', () => {
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock};
         componentInstance.handleElementClicked(params);
 
-        for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
-          expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
-        }
+        storeMock.dispatch.calls.allArgs().forEach(actionDispatch => {
+          expect(actionDispatch.type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+        });
       });
     });
 
@@ -1103,9 +1103,9 @@ describe('MyPerformanceComponent', () => {
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock};
         componentInstance.handleElementClicked(params);
 
-        for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
-          expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
-        }
+        storeMock.dispatch.calls.allArgs().forEach(actionDispatch => {
+          expect(actionDispatch.type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+        });
       });
     });
   });
@@ -3079,9 +3079,9 @@ describe('MyPerformanceComponent', () => {
         premiseType: PremiseTypeValue.All
       }));
 
-      for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
-        expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
-      }
+      storeMock.dispatch.calls.allArgs().forEach(actionDispatch => {
+        expect(actionDispatch.type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+      });
     });
 
     it('should NOT dispatch FetchOpportunityCounts when a Distirbutor is selected when filtering for a PremiseType of All', () => {
@@ -3096,9 +3096,9 @@ describe('MyPerformanceComponent', () => {
         premiseType: PremiseTypeValue.All
       }));
 
-      for (let i = 0; i < storeMock.dispatch.calls.count(); i++) {
-        expect(storeMock.dispatch.calls.argsFor(i)[0].type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
-      }
+      storeMock.dispatch.calls.allArgs().forEach(actionDispatch => {
+        expect(actionDispatch.type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+      });
     });
 
     it('should set isOpportunityTableExtended to false to close the opportunities table', () => {
@@ -3194,9 +3194,9 @@ describe('MyPerformanceComponent', () => {
         currentFilterMock.premiseType = PremiseTypeValue.On;
         filterSubject.next(currentFilterMock);
 
-        for (let i = 0; i <= storeMock.dispatch.calls.count(); i++) {
-          expect(storeMock.dispatch.calls.argsFor(i)[0]).not.toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-        }
+        storeMock.dispatch.calls.allArgs().forEach(actionDispatch => {
+          expect(actionDispatch.type).not.toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        });
       });
     });
 
@@ -3210,9 +3210,9 @@ describe('MyPerformanceComponent', () => {
         currentFilterMock.premiseType = PremiseTypeValue.Off;
         filterSubject.next(currentFilterMock);
 
-        for (let i = 0; i <= storeMock.dispatch.calls.count(); i++) {
-          expect(storeMock.dispatch.calls.argsFor(i)[0]).not.toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-        }
+        storeMock.dispatch.calls.allArgs().forEach(actionDispatch => {
+          expect(actionDispatch.type).not.toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        });
       });
     });
   });

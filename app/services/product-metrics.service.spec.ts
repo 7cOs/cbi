@@ -24,6 +24,8 @@ import { ProductMetricsTransformerService } from '../services/product-metrics-tr
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
 
+import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
+
 const chance = new Chance();
 
 describe('ProductMetrics Service', () => {
@@ -1364,7 +1366,11 @@ describe('ProductMetrics Service', () => {
         expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
           fetchOpportunityCountsMock.subAccountId,
           fetchOpportunityCountsMock.positionId,
-          expectedPremiseTypeValue
+          expectedPremiseTypeValue,
+          ProductMetricsServiceConstants.opportunityCountStructureType,
+          ProductMetricsServiceConstants.opportunitySegment,
+          ProductMetricsServiceConstants.opportunityImpact,
+          ProductMetricsServiceConstants.opportunityType
         ]);
       });
 
@@ -1413,7 +1419,11 @@ describe('ProductMetrics Service', () => {
           expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
             fetchOpportunityCountsMock.distributorId,
             fetchOpportunityCountsMock.positionId,
-            expectedPremiseTypeValue
+            expectedPremiseTypeValue,
+            ProductMetricsServiceConstants.opportunityCountStructureType,
+            ProductMetricsServiceConstants.opportunitySegment,
+            ProductMetricsServiceConstants.opportunityImpact,
+            ProductMetricsServiceConstants.opportunityType
           ]);
         });
       });
@@ -1437,7 +1447,11 @@ describe('ProductMetrics Service', () => {
           expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
             fetchOpportunityCountsMock.distributorId,
             undefined,
-            expectedPremiseTypeValue
+            expectedPremiseTypeValue,
+            ProductMetricsServiceConstants.opportunityCountStructureType,
+            ProductMetricsServiceConstants.opportunitySegment,
+            ProductMetricsServiceConstants.opportunityImpact,
+            ProductMetricsServiceConstants.opportunityType
           ]);
         });
       });
@@ -1461,7 +1475,11 @@ describe('ProductMetrics Service', () => {
           expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
             fetchOpportunityCountsMock.distributorId,
             fetchOpportunityCountsMock.alternateHierarchyId,
-            expectedPremiseTypeValue
+            expectedPremiseTypeValue,
+            ProductMetricsServiceConstants.opportunityCountStructureType,
+            ProductMetricsServiceConstants.opportunitySegment,
+            ProductMetricsServiceConstants.opportunityImpact,
+            ProductMetricsServiceConstants.opportunityType
           ]);
         });
       });

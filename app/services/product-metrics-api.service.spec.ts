@@ -615,6 +615,10 @@ describe('Service: ProductMetricsApiService', () => {
     let subAccountIdMock: string;
     let positionIdMock: string;
     let premiseTypeMock: string;
+    let countStructureMock: string;
+    let segmentMock: string;
+    let impactMock: string;
+    let typeMock: string;
     let opportunityCountDTOsMock: Array<OpportunityCountDTO>;
     let expectedUrl: string;
     let expectedParams: string;
@@ -622,15 +626,19 @@ describe('Service: ProductMetricsApiService', () => {
     beforeEach(() => {
       subAccountIdMock = chance.string(chanceStringOptions);
       positionIdMock = chance.string(chanceStringOptions);
-      premiseTypeMock = 'on';
+      premiseTypeMock = chance.string(chanceStringOptions);
+      countStructureMock = chance.string(chanceStringOptions);
+      segmentMock = chance.string(chanceStringOptions);
+      impactMock = chance.string(chanceStringOptions);
+      typeMock = chance.string(chanceStringOptions);
       opportunityCountDTOsMock = getOpportunityCountDTOsMock();
       expectedUrl = `/v3/subAccounts/${ subAccountIdMock }/opportunityCounts`;
       expectedParams = `?positionIds=${ positionIdMock }`
         + `&premiseType=${ premiseTypeMock }`
-        + `&countStructureType=BRAND_SKU_OPPTYPE`
-        + `&segment=A|B`
-        + `&impact=high|medium`
-        + `&type=NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY`;
+        + `&countStructureType=${ countStructureMock }`
+        + `&segment=${ segmentMock }`
+        + `&impact=${ impactMock}`
+        + `&type=${ typeMock }`;
     });
 
     it('should call the subaccount opportunity counts endpoint and return OpportunityCountDTOs when successful', (done) => {
@@ -644,7 +652,14 @@ describe('Service: ProductMetricsApiService', () => {
       });
 
       productMetricsApiService
-        .getSubAccountOpportunityCounts(subAccountIdMock, positionIdMock, premiseTypeMock)
+        .getSubAccountOpportunityCounts(
+          subAccountIdMock,
+          positionIdMock,
+          premiseTypeMock,
+          countStructureMock,
+          segmentMock,
+          impactMock,
+          typeMock)
         .subscribe((response: Array<ProductMetricsDTO>) => {
           expect(response).toEqual(opportunityCountDTOsMock);
           done();
@@ -656,6 +671,10 @@ describe('Service: ProductMetricsApiService', () => {
     let distributorIdMock: string;
     let positionIdMock: string;
     let premiseTypeMock: string;
+    let countStructureTypeMock: string;
+    let segmentMock: string;
+    let impactMock: string;
+    let typeMock: string;
     let opportunityCountDTOsMock: Array<OpportunityCountDTO>;
     let expectedUrl: string;
     let expectedParams: string;
@@ -663,15 +682,19 @@ describe('Service: ProductMetricsApiService', () => {
     beforeEach(() => {
       distributorIdMock = chance.string(chanceStringOptions);
       positionIdMock = chance.string(chanceStringOptions);
-      premiseTypeMock = 'off';
+      premiseTypeMock = chance.string(chanceStringOptions);
+      countStructureTypeMock = chance.string(chanceStringOptions);
+      segmentMock = chance.string(chanceStringOptions);
+      impactMock = chance.string(chanceStringOptions);
+      typeMock = chance.string(chanceStringOptions);
       opportunityCountDTOsMock = getOpportunityCountDTOsMock();
       expectedUrl = `/v3/distributors/${ distributorIdMock }/opportunityCounts`;
       expectedParams = `?positionIds=${ positionIdMock }`
         + `&premiseType=${ premiseTypeMock }`
-        + `&countStructureType=BRAND_SKU_OPPTYPE`
-        + `&segment=A|B`
-        + `&impact=high|medium`
-        + `&type=NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY`;
+        + `&countStructureType=${ countStructureTypeMock }`
+        + `&segment=${ segmentMock }`
+        + `&impact=${ impactMock }`
+        + `&type=${ typeMock }`;
     });
 
     it('should call the distributor opportunity counts endpoint and return OpportunityCountDTOs when successful', (done) => {
@@ -685,7 +708,14 @@ describe('Service: ProductMetricsApiService', () => {
       });
 
       productMetricsApiService
-        .getDistributorOpportunityCounts(distributorIdMock, positionIdMock, premiseTypeMock)
+        .getDistributorOpportunityCounts(
+          distributorIdMock,
+          positionIdMock,
+          premiseTypeMock,
+          countStructureTypeMock,
+          segmentMock,
+          impactMock,
+          typeMock)
         .subscribe((response: Array<OpportunityCountDTO>) => {
           expect(response).toEqual(opportunityCountDTOsMock);
           done();
@@ -701,14 +731,21 @@ describe('Service: ProductMetricsApiService', () => {
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(expectedUrl + encodeURI(`?premiseType=${ premiseTypeMock }`
-        + `&countStructureType=BRAND_SKU_OPPTYPE`
-        + `&segment=A|B`
-        + `&impact=high|medium`
-        + `&type=NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY`));
+        + `&countStructureType=${ countStructureTypeMock }`
+        + `&segment=${ segmentMock }`
+        + `&impact=${ impactMock }`
+        + `&type=${ typeMock }`));
       });
 
       productMetricsApiService
-        .getDistributorOpportunityCounts(distributorIdMock, undefined, premiseTypeMock)
+        .getDistributorOpportunityCounts(
+          distributorIdMock,
+          undefined,
+          premiseTypeMock,
+          countStructureTypeMock,
+          segmentMock,
+          impactMock,
+          typeMock)
         .subscribe((response: Array<OpportunityCountDTO>) => {
           expect(response).toEqual(opportunityCountDTOsMock);
           done();

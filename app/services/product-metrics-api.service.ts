@@ -171,16 +171,23 @@ export class ProductMetricsApiService {
       .catch(err => this.handleError(err, aggregation, params.type));
   }
 
-  public getDistributorOpportunityCounts(distributorId: string, positionId: string, premiseType: string)
-  : Observable<OpportunityCountDTO[]> {
+  public getDistributorOpportunityCounts(
+    distributorId: string,
+    positionId: string,
+    premiseType: string,
+    countStructureType: string,
+    segment: string,
+    impact: string,
+    type: string
+  ): Observable<OpportunityCountDTO[]> {
     const url = `/v3/distributors/${ distributorId }/opportunityCounts`;
     const params = {
       positionIds: positionId,
       premiseType: premiseType,
-      countStructureType: 'BRAND_SKU_OPPTYPE',
-      segment: 'A|B',
-      impact: 'high|medium',
-      type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY',
+      countStructureType: countStructureType,
+      segment: segment,
+      impact: impact,
+      type: type,
     };
 
     return this.http.get(url, {
@@ -193,16 +200,20 @@ export class ProductMetricsApiService {
   public getSubAccountOpportunityCounts(
     subAccountId: string,
     positionId: string,
-    premiseType: string
+    premiseType: string,
+    countStructureType: string,
+    segment: string,
+    impact: string,
+    type: string
   ): Observable<OpportunityCountDTO[]> {
     const url = `/v3/subAccounts/${ subAccountId }/opportunityCounts`;
     const params = {
       positionIds: positionId,
       premiseType: premiseType,
-      countStructureType: 'BRAND_SKU_OPPTYPE',
-      segment: 'A|B',
-      impact: 'high|medium',
-      type: 'NON_BUY|AT_RISK|LOW_VELOCITY|QUALITY|NO_REBUY'
+      countStructureType: countStructureType,
+      segment: segment,
+      impact: impact,
+      type: type
     };
 
     return this.http.get(url, {

@@ -29,6 +29,7 @@ module.exports = function (config) {
     v3BaseUrls: {
       accounts: 'https://api-account-internal-prod.herokuapp.com',
       distributors: 'https://api-distributors-internal-prod.herokuapp.com',
+      opportunities: 'https://api-opportunity-internal-prod.herokuapp.com',
       positions: 'https://api-position-internal-prod.herokuapp.com',
       productMetrics: 'https://cbi-product-metrics-api-prod.herokuapp.com'
     }

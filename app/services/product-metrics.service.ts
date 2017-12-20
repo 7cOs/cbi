@@ -13,6 +13,7 @@ import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
+import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
@@ -221,7 +222,11 @@ export class ProductMetricsService {
     return this.productMetricsApiService.getSubAccountOpportunityCounts(
       fetchOpportunityCountsData.subAccountId,
       fetchOpportunityCountsData.positionId,
-      premiseTypeValue)
+      premiseTypeValue,
+      ProductMetricsServiceConstants.opportunityCountStructureType,
+      ProductMetricsServiceConstants.opportunitySegment,
+      ProductMetricsServiceConstants.opportunityImpact,
+      ProductMetricsServiceConstants.opportunityType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
       });
@@ -229,17 +234,21 @@ export class ProductMetricsService {
 
   private getDistributorOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
   : Observable<GroupedOpportunityCounts> {
-    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
     const positionId: string = fetchOpportunityCountsData.isMemberOfExceptionHierarchy
       ? fetchOpportunityCountsData.alternateHierarchyId
       : fetchOpportunityCountsData.alternateHierarchyId
         ? undefined
         : fetchOpportunityCountsData.positionId;
+    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
 
     return this.productMetricsApiService.getDistributorOpportunityCounts(
       fetchOpportunityCountsData.distributorId,
       positionId,
-      premiseTypeValue)
+      premiseTypeValue,
+      ProductMetricsServiceConstants.opportunityCountStructureType,
+      ProductMetricsServiceConstants.opportunitySegment,
+      ProductMetricsServiceConstants.opportunityImpact,
+      ProductMetricsServiceConstants.opportunityType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
       });

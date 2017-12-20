@@ -144,7 +144,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentPremiseTypeLabel = this.myPerformanceService.getPremiseTypeStateLabel(filterState.premiseType);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
-        this.showProductMetricsOpportunities = this.getShowProductMetricsOpportunities();
+        this.showProductMetricsOpportunities = this.shouldShowProductMetricsOpportunities();
         this.performanceMetric = currentMetricName;
         this.tableHeaderRowLeft[1] = currentMetricName;
         this.tableHeaderRowRight[1] = currentMetricName;
@@ -176,11 +176,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             this.productMetricsViewType
           );
 
-          this.productMetricsSelectedBrandRow = this.productMetricsViewType !== ProductMetricsViewType.brands
-            && productMetrics.selectedBrandCodeValues
-              ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
-                productMetrics.selectedBrandCodeValues, productMetrics.opportunityCounts)
-              : null;
+          if (this.productMetricsViewType !== ProductMetricsViewType.brands && productMetrics.selectedBrandCodeValues) {
+            this.productMetricsSelectedBrandRow = this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
+              productMetrics.selectedBrandCodeValues, productMetrics.opportunityCounts);
+          } else {
+            this.productMetricsSelectedBrandRow = null;
+          }
 
           this.handleDataRefreshAndDeselectionIfNeeded();
         }
@@ -196,7 +197,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
-        this.showProductMetricsOpportunities = this.getShowProductMetricsOpportunities();
+        this.showProductMetricsOpportunities = this.shouldShowProductMetricsOpportunities();
 
         this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
@@ -706,7 +707,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     return this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
-  private getShowProductMetricsOpportunities(): boolean {
+  private shouldShowProductMetricsOpportunities(): boolean {
     return this.currentState
       && (!!this.currentState.selectedSubaccountCode || !!this.currentState.selectedDistributorCode)
       && this.filterState
