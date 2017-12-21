@@ -10,6 +10,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
+import { CssClasses } from '../../models/css-classes.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
@@ -18,6 +19,7 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../models/my-performance-table-row.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -63,6 +65,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public responsibilitiesFetching: boolean;
   public selectedSkuPackageType: SkuPackageType;
   public salesHierarchyViewType: SalesHierarchyViewType;
+  public salesHierarchyLoadingState: LoadingState = LoadingState.Loaded;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showSalesContributionToVolume: boolean = false;
@@ -110,6 +113,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ];
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
+  private isTransitionOn: boolean = false;
   private currentPremiseTypeLabel: string;
 
   constructor(
@@ -392,6 +396,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
     console.log('Opportunity Clicked: ', opportunity);
+  }
+
+  public toggleLoading(): void {
+    this.salesHierarchyLoadingState = LoadingState.Loading;
+  }
+
+  public toggleLoaded(): void {
+    this.salesHierarchyLoadingState = LoadingState.Loaded;
+  }
+
+  public toggleLoadedWithAnimation(): void {
+    this.salesHierarchyLoadingState = LoadingState.LoadedWithAnimation;
   }
 
   private sendFilterAnalyticsEvent(): void {

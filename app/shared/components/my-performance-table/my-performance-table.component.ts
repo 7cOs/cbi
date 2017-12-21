@@ -4,6 +4,7 @@ import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
+import { LoadingState } from '../../../enums/loading-state.enum';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../../enums/row-type.enum';
@@ -48,18 +49,24 @@ export class MyPerformanceTableComponent {
   @Input() selectedSkuPackageCode: string;
   @Input() selectedSubaccountCode: string;
   @Input() selectedDistributorCode: string;
+  @Input() loadingState: LoadingState;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
   public rowType = RowType;
+  public loadingStateEnum = LoadingState;
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
 
   constructor (private calculatorService: CalculatorService) { }
 
-  public getTableHeightClass(): string {
-    return (this.totalRow || this.dismissableTotalRow) ? 'total-row-present' : 'total-row-absent';
+  public getTableBodyClasses(): CssClasses {
+    return {
+      'total-row-present': !!(this.totalRow || this.dismissableTotalRow),
+      'total-row-absent': !(this.totalRow || this.dismissableTotalRow),
+      [this.loadingState]: true
+    };
   }
 
   public getSortStatus(columnType: ColumnType): SortStatus {

@@ -56,7 +56,7 @@ div.performance-table-wrapper
                               [showX]=true,
                               (onDismissableRowXClicked)="onDismissableRowXClicked.emit()")
 
-    tbody([ngClass]="getTableHeightClass()")
+    tbody([ngClass]="getTableBodyClasses()")
 
       tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let rowIndex = index",
                                 [ngClass]="getEntityRowClasses(rowData)",
@@ -67,3 +67,5 @@ div.performance-table-wrapper
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
                                 (onSublineClicked)="onSublineClicked.emit(rowData);")
+
+  beer-loader.fill-test-coco(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="true")
