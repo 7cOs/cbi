@@ -114,7 +114,8 @@ export class MyPerformanceTableComponent {
   public getEntityRowClasses(row: MyPerformanceTableRow): CssClasses {
     let classes: CssClasses = {
       'performance-error': row.performanceError,
-      'ripple-effect': true,
+      'ripple-effect': this.rippleEffect && !!((this.selectedSubaccountCode || this.selectedDistributorCode)
+        && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode)),
       'selected-sku': !!(this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode),
       'selected-entity-row': !!((this.selectedSubaccountCode || this.selectedDistributorCode)
         && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode))
