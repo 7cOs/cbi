@@ -7,8 +7,8 @@ import 'rxjs/add/operator/map';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
-import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetrics } from '../models/product-metrics.model';
@@ -205,7 +205,8 @@ export class ProductMetricsService {
     }
   }
 
-  public getOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload): Observable<GroupedOpportunityCounts> {
+  public getOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
     switch (fetchOpportunityCountsData.selectedEntityType) {
       case EntityType.SubAccount:
         return this.getSubAccountOpportunityCounts(fetchOpportunityCountsData);
@@ -216,7 +217,8 @@ export class ProductMetricsService {
     }
   }
 
-  private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload): Observable<GroupedOpportunityCounts> {
+  private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
     const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
 
     return this.productMetricsApiService.getSubAccountOpportunityCounts(
@@ -233,7 +235,7 @@ export class ProductMetricsService {
   }
 
   private getDistributorOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
-  : Observable<GroupedOpportunityCounts> {
+  : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
     const positionId: string = fetchOpportunityCountsData.isMemberOfExceptionHierarchy
       ? fetchOpportunityCountsData.alternateHierarchyId
       : fetchOpportunityCountsData.alternateHierarchyId

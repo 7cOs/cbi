@@ -1709,42 +1709,6 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when right side data row is clicked', () => {
-    it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
-      storeMock.dispatch.calls.reset();
-
-      let rowMock = getMyPerformanceTableRowMock(1)[0];
-      myPerformanceProductMetricsMock = {
-        status: ActionStatus.Fetching,
-        opportunityCountsStatus: ActionStatus.NotFetched,
-        products: {brandValues: []},
-        productMetricsViewType: ProductMetricsViewType.skus
-      };
-      productMetricsSubject.next(myPerformanceProductMetricsMock);
-      componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
-
-      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
-      componentInstance.handleElementClicked(params);
-      expect(storeMock.dispatch.calls.count()).toBe(2);
-      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-        new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-        positionId: stateMock.myPerformance.current.responsibilities.positionId,
-        groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-        hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-        selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-        salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-        filter: stateMock.myPerformanceFilter as any,
-        brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
-        skuPackageType: null,
-        entityType: stateMock.myPerformance.current.selectedEntityType,
-        alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-        accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-        isMemberOfExceptionHierarchy: false
-      }));
-    });
-  });
-
   describe('handleBreadcrumbEntityClicked', () => {
     describe('when steps back are possible', () => {
       let breadcrumbTrailMock: string[];

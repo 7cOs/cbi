@@ -3,13 +3,13 @@ export interface OpportunityCount {
   count: number;
 }
 
-export interface GroupedOpportunityCounts {
-  [key: string]: {
-    total: number;
+export interface OpportunitiesGroupedByBrandSkuPackageCode {
+  [brandSkuPackageCode: string]: {
+    brandSkuPackageOpportunityCount: number;
   };
 }
 
-export interface GroupedOpportunityCountsWithTotal {
-  total: number;
-  groupedOpportunityCounts: GroupedOpportunityCounts;
+export interface OpportunitiesGroupedBySkuPackageCode {
+  skuPackageOpportunityCount: number;
+  opportunitiesGroupedBySkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode;
 }

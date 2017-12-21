@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
@@ -65,7 +65,7 @@ export const FETCH_OPPORTUNITY_COUNTS_SUCCESS = '[ProductMetrics] FETCH_OPPORTUN
 export class FetchOpportunityCountsSuccess implements Action {
   readonly type = FETCH_OPPORTUNITY_COUNTS_SUCCESS;
 
-  constructor(public payload: GroupedOpportunityCounts) { }
+  constructor(public payload: OpportunitiesGroupedByBrandSkuPackageCode) { }
 }
 
 export const FETCH_OPPORTUNITY_COUNTS_FAILURE = '[ProductMetrics] FETCH_OPPORTUNITY_COUNTS_FAILURE';

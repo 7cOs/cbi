@@ -7,12 +7,12 @@ import * as Chance from 'chance';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchOpportunityCountsPayload } from '../actions/product-metrics.action';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
-import { getGroupedOpportunityCountsMock } from '../../models/opportunity-count.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { ProductMetricsEffects } from './product-metrics.effect';
@@ -37,14 +37,14 @@ describe('ProductMetrics Effects', () => {
   let productMetricsEffects: ProductMetricsEffects;
   let productMetricsService: ProductMetricsService;
   let productMetricsDataMock: ProductMetricsData;
-  let groupedOpportunityCountsMock: GroupedOpportunityCounts;
+  let opportunitiesGroupedByBrandSkuPackageCodeMock: OpportunitiesGroupedByBrandSkuPackageCode;
 
   const productMetricsServiceMock = {
     getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
       return Observable.of(productMetricsData);
     },
-    getOpportunityCounts(opportunityCountsPayload: FetchOpportunityCountsPayload): Observable<GroupedOpportunityCounts> {
-      return Observable.of(groupedOpportunityCountsMock);
+    getOpportunityCounts(opportunityCountsPayload: FetchOpportunityCountsPayload): Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
+      return Observable.of(opportunitiesGroupedByBrandSkuPackageCodeMock);
     },
     filterProductMetricsBrand(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
       return Observable.of(responsibilitiesData);
@@ -59,7 +59,7 @@ describe('ProductMetrics Effects', () => {
     productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
     productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(SkuPackageType.package);
     performanceFilterStateMock = getMyPerformanceFilterMock();
-    groupedOpportunityCountsMock = getGroupedOpportunityCountsMock();
+    opportunitiesGroupedByBrandSkuPackageCodeMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
     error = new Error(chance.string());
 
     productMetricsDataMock = {
@@ -260,7 +260,7 @@ describe('ProductMetrics Effects', () => {
 
       it('should dispatch a FetchOpportunityCountsSuccess action with the returned GroupedOpportunityCounts', (done) => {
         productMetricsEffects.fetchProductMetricOpportunityCounts$().subscribe((action: Action) => {
-          expect(action).toEqual(new ProductMetricsActions.FetchOpportunityCountsSuccess(groupedOpportunityCountsMock));
+          expect(action).toEqual(new ProductMetricsActions.FetchOpportunityCountsSuccess(opportunitiesGroupedByBrandSkuPackageCodeMock));
           done();
         });
       });

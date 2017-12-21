@@ -3,8 +3,8 @@ import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
-import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
@@ -60,7 +60,7 @@ export class MyPerformanceTableDataTransformerService {
 
   public getRightTableData(
     productMetrics: ProductMetrics,
-    groupedOpportunityCounts: GroupedOpportunityCounts,
+    opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode,
     productMetricsViewType: ProductMetricsViewType
   ): MyPerformanceTableRow[] {
     const productsValues: ProductMetricsValues[] = productMetricsViewType === ProductMetricsViewType.brands
@@ -91,9 +91,9 @@ export class MyPerformanceTableDataTransformerService {
           || productMetricsValues.beerId.masterSKUCode;
       }
 
-      if (groupedOpportunityCounts) {
+      if (opportunitiesGroupedByBrandSkuPackageCode) {
         rightTableData.opportunities = this.matchProductMetricOpportunityCounts(
-          productMetricsValues, groupedOpportunityCounts, productMetricsViewType);
+          productMetricsValues, opportunitiesGroupedByBrandSkuPackageCode, productMetricsViewType);
       }
 
       return rightTableData;
@@ -118,8 +118,10 @@ export class MyPerformanceTableDataTransformerService {
     return totalRow;
   }
 
-  public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues, groupedOpportunityCounts: GroupedOpportunityCounts)
-  : MyPerformanceTableRow {
+  public getProductMetricsSelectedBrandRow(
+    productMetricsValues: ProductMetricsValues,
+    opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode
+  ): MyPerformanceTableRow {
     const rowTotal: MyPerformanceTableRow = {
       descriptionRow0: productMetricsValues.brandDescription,
       metricColumn0: productMetricsValues.current,
@@ -132,9 +134,9 @@ export class MyPerformanceTableDataTransformerService {
       rowTotal.metadata = { brandCode:  productMetricsValues.brandCode };
     }
 
-    if (groupedOpportunityCounts) rowTotal.opportunities = this.matchProductMetricOpportunityCounts(
+    if (opportunitiesGroupedByBrandSkuPackageCode) rowTotal.opportunities = this.matchProductMetricOpportunityCounts(
       productMetricsValues,
-      groupedOpportunityCounts,
+      opportunitiesGroupedByBrandSkuPackageCode,
       ProductMetricsViewType.brands);
 
     return rowTotal;
@@ -161,23 +163,26 @@ export class MyPerformanceTableDataTransformerService {
 
   private matchProductMetricOpportunityCounts(
     item: ProductMetricsValues,
-    groupedOpportunityCounts: GroupedOpportunityCounts,
+    opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode,
     productMetricsViewType: ProductMetricsViewType
   ): (number|string) {
     if (productMetricsViewType === ProductMetricsViewType.brands) {
-      return groupedOpportunityCounts[item.brandCode] ? groupedOpportunityCounts[item.brandCode].total : '-';
+      return opportunitiesGroupedByBrandSkuPackageCode[item.brandCode]
+        ? opportunitiesGroupedByBrandSkuPackageCode[item.brandCode].brandSkuPackageOpportunityCount
+        : '-';
     } else {
-      let productOpportunityCountTotal: (number|string);
+      let skuPackageOpportunityCount: (number|string);
 
-      if (groupedOpportunityCounts[item.beerId.masterPackageSKUCode]) {
-        productOpportunityCountTotal = groupedOpportunityCounts[item.beerId.masterPackageSKUCode].total;
-      } else if (groupedOpportunityCounts[item.beerId.masterSKUCode]) {
-        productOpportunityCountTotal = groupedOpportunityCounts[item.beerId.masterSKUCode].total;
+      if (opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterPackageSKUCode]) {
+        skuPackageOpportunityCount
+          = opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCount;
+      } else if (opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterSKUCode]) {
+        skuPackageOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterSKUCode].brandSkuPackageOpportunityCount;
       } else {
-        productOpportunityCountTotal = '-';
+        skuPackageOpportunityCount = '-';
       }
 
-      return productOpportunityCountTotal;
+      return skuPackageOpportunityCount;
     }
   }
 }

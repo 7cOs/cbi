@@ -1,5 +1,5 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
@@ -8,7 +8,7 @@ export interface ProductMetricsState extends State {
   status: ActionStatus;
   opportunityCountsStatus: ActionStatus;
   products: ProductMetrics;
-  opportunityCounts?: GroupedOpportunityCounts;
+  opportunityCounts?: OpportunitiesGroupedByBrandSkuPackageCode;
   selectedBrandCodeValues?: ProductMetricsValues;
   productMetricsViewType: ProductMetricsViewType;
 }

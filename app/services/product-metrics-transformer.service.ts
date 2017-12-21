@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { CalculatorService } from './calculator.service';
-import { GroupedOpportunityCounts, GroupedOpportunityCountsWithTotal } from '../models/opportunity-count.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
@@ -18,29 +18,34 @@ export class ProductMetricsTransformerService {
     return Object.assign({}, ...metrics);
   }
 
-  public transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): GroupedOpportunityCounts {
-    return dtos.reduce((brandOpportunityCounts: GroupedOpportunityCounts, dto: OpportunityCountDTO) => {
-      const skuPackageGroupedOpportunityCounts: GroupedOpportunityCountsWithTotal = this.getGroupedOpportunityCountsAndTotal(dto.items);
+  public transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): OpportunitiesGroupedByBrandSkuPackageCode {
+    return dtos.reduce(
+      (brandSkuPackageOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode, brandOpportunityCountDTO: OpportunityCountDTO) => {
 
-      brandOpportunityCounts[dto.label] = {
-        total: skuPackageGroupedOpportunityCounts.total
+      const skuPackageGroupedOpportunities: OpportunitiesGroupedBySkuPackageCode = this.getOpportunitiesGroupedBySkuPackageCode(
+        brandOpportunityCountDTO.items);
+
+      brandSkuPackageOpportunityCounts[brandOpportunityCountDTO.label] = {
+        brandSkuPackageOpportunityCount: skuPackageGroupedOpportunities.skuPackageOpportunityCount
       };
 
-      return Object.assign({}, brandOpportunityCounts, skuPackageGroupedOpportunityCounts.groupedOpportunityCounts);
+      return Object.assign(brandSkuPackageOpportunityCounts, skuPackageGroupedOpportunities.opportunitiesGroupedBySkuPackageCode);
     }, {});
   }
 
-  private getGroupedOpportunityCountsAndTotal(dtos: OpportunityCountDTO[]): GroupedOpportunityCountsWithTotal {
-    return dtos.reduce((groupedOpportunityCountsWithTotal: GroupedOpportunityCountsWithTotal, dto: OpportunityCountDTO) => {
-      groupedOpportunityCountsWithTotal.total += dto.count;
-      groupedOpportunityCountsWithTotal.groupedOpportunityCounts[dto.label] = {
-        total: dto.count
+  private getOpportunitiesGroupedBySkuPackageCode(skuPackageOpportunitiesDTO: OpportunityCountDTO[]): OpportunitiesGroupedBySkuPackageCode {
+    return skuPackageOpportunitiesDTO.reduce(
+      (opportunitiesGroupedBySkuPackageCode: OpportunitiesGroupedBySkuPackageCode, skuPackageOpportunityDTO: OpportunityCountDTO) => {
+
+      opportunitiesGroupedBySkuPackageCode.skuPackageOpportunityCount += skuPackageOpportunityDTO.count;
+      opportunitiesGroupedBySkuPackageCode.opportunitiesGroupedBySkuPackageCode[skuPackageOpportunityDTO.label] = {
+        brandSkuPackageOpportunityCount: skuPackageOpportunityDTO.count
       };
 
-      return groupedOpportunityCountsWithTotal;
+      return opportunitiesGroupedBySkuPackageCode;
     }, {
-      total: 0,
-      groupedOpportunityCounts: {}
+      skuPackageOpportunityCount: 0,
+      opportunitiesGroupedBySkuPackageCode: {}
     });
   }
 

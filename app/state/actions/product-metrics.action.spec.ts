@@ -5,8 +5,8 @@ import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
-import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from './product-metrics.action';
@@ -161,13 +161,13 @@ describe('ProductMetrics Actions', () => {
   });
 
   describe('FetchOpportunityCountsSuccess', () => {
-    let actionPayloadMock: GroupedOpportunityCounts;
+    let actionPayloadMock: OpportunitiesGroupedByBrandSkuPackageCode;
     let action: ProductMetricsActions.FetchOpportunityCountsSuccess;
 
     beforeEach(() => {
       actionPayloadMock = {
         [chance.string()]: {
-          total: chance.integer()
+          brandSkuPackageOpportunityCount: chance.integer()
         }
       };
       action = new ProductMetricsActions.FetchOpportunityCountsSuccess(actionPayloadMock);

@@ -6,25 +6,24 @@ import * as Chance from 'chance';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
 import { getEntityTypeMock } from '../enums/entity-responsibilities.enum.mock';
-import { getGroupedOpportunityCountsMock } from '../models/opportunity-count.model.mock';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
+import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../models/opportunity-count.model.mock';
 import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
 import { getProductMetricsViewTypeMock } from '../enums/product-metrics-view-type.enum.mock';
 import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
 import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
-import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
+import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
-
-import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
 
 const chance = new Chance();
 
@@ -35,7 +34,7 @@ describe('ProductMetrics Service', () => {
   let performanceFilterStateMock: MyPerformanceFilterState;
   let selectedEntityTypeMock: EntityType;
 
-  let groupedOpportunityCountsMock: GroupedOpportunityCounts;
+  let opportunitiesGroupedByBrandSkuPackageCodeMock: OpportunitiesGroupedByBrandSkuPackageCode;
   let opportunityCountDTOsMock: OpportunityCountDTO[];
   let productMetricsWithBrandValuesMock: ProductMetrics;
   let productMetricsWithSkuValuesMock: ProductMetrics;
@@ -58,7 +57,7 @@ describe('ProductMetrics Service', () => {
     performanceFilterStateMock = getMyPerformanceFilterMock();
     selectedEntityTypeMock = getEntityTypeMock();
 
-    groupedOpportunityCountsMock = getGroupedOpportunityCountsMock();
+    opportunitiesGroupedByBrandSkuPackageCodeMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
     opportunityCountDTOsMock = getOpportunityCountDTOsMock();
     productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
     productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(SkuPackageType.package);
@@ -135,8 +134,8 @@ describe('ProductMetrics Service', () => {
       transformAndCombineProductMetricsDTOs(dtos: ProductMetricsDTO[]): ProductMetrics {
         return dtos.length === 1 ? productMetricsWithBrandValuesMock : productMetricsWithCombinedValuesMock;
       },
-      transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): GroupedOpportunityCounts {
-        return groupedOpportunityCountsMock;
+      transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): OpportunitiesGroupedByBrandSkuPackageCode {
+        return opportunitiesGroupedByBrandSkuPackageCodeMock;
       }
     };
 
@@ -1387,8 +1386,10 @@ describe('ProductMetrics Service', () => {
       });
 
       it('should return the transformed GroupedOpportunityCounts', (done) => {
-        productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe((response: GroupedOpportunityCounts) => {
-          expect(response).toEqual(groupedOpportunityCountsMock);
+        productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(
+          (response: OpportunitiesGroupedByBrandSkuPackageCode) => {
+
+          expect(response).toEqual(opportunitiesGroupedByBrandSkuPackageCodeMock);
           done();
         });
       });
@@ -1498,8 +1499,10 @@ describe('ProductMetrics Service', () => {
         });
 
         it('should return the transformed GroupedOpportunityCounts', (done) => {
-          productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe((response: GroupedOpportunityCounts) => {
-            expect(response).toEqual(groupedOpportunityCountsMock);
+          productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(
+            (response: OpportunitiesGroupedByBrandSkuPackageCode) => {
+
+            expect(response).toEqual(opportunitiesGroupedByBrandSkuPackageCodeMock);
             done();
           });
         });

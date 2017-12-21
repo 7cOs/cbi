@@ -3,7 +3,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { CalculatorService } from './calculator.service';
 import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
 import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
-import { GroupedOpportunityCounts } from '../models/opportunity-count.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetrics, ProductMetricsValues, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
@@ -94,20 +94,21 @@ describe('Service: ProductMetricsTransformerService', () => {
     });
 
     it('should return a GroupedOpportunityCounts object containing each brand/sku/package opportunity count total', () => {
-      const transformedOpportunityCounts: GroupedOpportunityCounts = productMetricsTransformerService.transformAndGroupOpportunityCounts(
-        opportunityCountDTOMock);
+      const transformedOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode
+        = productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountDTOMock);
       let brandOpportunityCountTotal: number = 0;
 
       opportunityCountDTOMock.forEach((brandOpportunityCount: OpportunityCountDTO) => {
-        expect(transformedOpportunityCounts[brandOpportunityCount.label].total).toBeDefined();
+        expect(transformedOpportunityCounts[brandOpportunityCount.label].brandSkuPackageOpportunityCount).toBeDefined();
 
         brandOpportunityCount.items.forEach((skuPackageOpportunityCount: OpportunityCountDTO) => {
           brandOpportunityCountTotal += skuPackageOpportunityCount.count;
-          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].total).toBeDefined();
-          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].total).toBe(skuPackageOpportunityCount.count);
+          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].brandSkuPackageOpportunityCount).toBeDefined();
+          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].brandSkuPackageOpportunityCount)
+            .toBe(skuPackageOpportunityCount.count);
         });
 
-        expect(transformedOpportunityCounts[brandOpportunityCount.label].total).toBe(brandOpportunityCountTotal);
+        expect(transformedOpportunityCounts[brandOpportunityCount.label].brandSkuPackageOpportunityCount).toBe(brandOpportunityCountTotal);
         brandOpportunityCountTotal = 0;
       });
     });

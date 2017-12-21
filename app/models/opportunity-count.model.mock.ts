@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 
-import { GroupedOpportunityCounts, OpportunityCount } from './opportunity-count.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunityCount } from './opportunity-count.model';
 
 const chance = new Chance();
 
@@ -15,13 +15,13 @@ export function getOpportunityCountMocks(): Array<OpportunityCount> {
   return Array(chance.natural({min: 1, max: 20})).fill('').map(() => getOpportunityCountMock());
 }
 
-export function getGroupedOpportunityCountsMock(): GroupedOpportunityCounts {
+export function getOpportunitiesGroupedByBrandSkuPackageCodeMock(): OpportunitiesGroupedByBrandSkuPackageCode {
   return {
     [chance.string()]: {
-      total: chance.natural()
+      brandSkuPackageOpportunityCount: chance.natural()
     },
     [chance.string()]: {
-      total: chance.natural()
+      brandSkuPackageOpportunityCount: chance.natural()
     }
   };
 }

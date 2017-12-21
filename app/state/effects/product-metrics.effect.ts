@@ -6,7 +6,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
-import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
@@ -35,7 +35,8 @@ export class ProductMetricsEffects {
     return this.actions$
       .ofType(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS)
       .switchMap((action: Action) => this.productMetricsService.getOpportunityCounts(action.payload))
-      .switchMap((response: GroupedOpportunityCounts) => Observable.of(new ProductMetricsActions.FetchOpportunityCountsSuccess(response)))
+      .switchMap((response: OpportunitiesGroupedByBrandSkuPackageCode) =>
+        Observable.of(new ProductMetricsActions.FetchOpportunityCountsSuccess(response)))
       .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchOpportunityCountsFailure(error)));
   }
 

@@ -1,13 +1,13 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
-import { getGroupedOpportunityCountsMock } from '../../models/opportunity-count.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
 import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
-import { GroupedOpportunityCounts } from '../../models/opportunity-count.model';
 import { initialState, productMetricsReducer } from './product-metrics.reducer';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { ProductMetricsState } from './product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
@@ -179,7 +179,7 @@ describe('ProductMetrics Reducer', () => {
 
   describe('when a FetchOpportunityCountsSuccess action is dispatched', () => {
     it('should store the grouped opportunity counts and set the opportunity count status to Fetched', () => {
-      const actionPayloadMock: GroupedOpportunityCounts = getGroupedOpportunityCountsMock();
+      const actionPayloadMock: OpportunitiesGroupedByBrandSkuPackageCode = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
       const expectedState: ProductMetricsState = {
         status: initialState.status,
         opportunityCountsStatus: ActionStatus.Fetched,
