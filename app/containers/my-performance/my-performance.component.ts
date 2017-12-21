@@ -82,6 +82,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public selectedOpportunitiesTotal: number = chance.natural({ max: 999999999999 });
 
   private currentState: MyPerformanceEntitiesData;
+  private currentUserId: string;
   private entityType: EntityType;
   private filterState: MyPerformanceFilterState;
   private dateRangeSubscription: Subscription;
@@ -124,6 +125,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
+
+    const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
+    const currentUserIsMemberOfExceptionHierarchy: boolean =
+      includes(this.userService.model.currentUser.srcTypeCd, 'EXCPN_HIER');
+
     this.titleService.setTitle(this.$state.current.title);
     this.dateRangeSubscription = this.store
       .select(state => state.dateRanges)
@@ -214,11 +221,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.showLeftBackButton = versions.length > 0;
     });
 
-    const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
-    const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
-    const currentUserIsMemberOfExceptionHierarchy: boolean =
-      includes(this.userService.model.currentUser.srcTypeCd, 'EXCPN_HIER');
-
     if (this.filterState) {
       const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
         MetricTypeValue.volume, this.userService.model.currentUser.srcTypeCd[0]);
@@ -228,13 +230,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         premiseType: defaultUserPremiseType
       }));
       this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
-        positionId: currentUserId,
+        positionId: this.currentUserId,
         filter: this.filterState,
         selectedEntityDescription: currentUserFullName,
         isMemberOfExceptionHierarchy: currentUserIsMemberOfExceptionHierarchy
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: currentUserId,
+        positionId: this.currentUserId,
         filter: this.filterState,
         selectedEntityType: EntityType.Person,
         selectedBrandCode: this.selectedBrandCode
@@ -810,7 +812,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private handleTeamPerformanceDataRefresh(): void {
     if (this.currentState && this.productMetricsState) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
-        positionId: this.currentState.responsibilities.positionId,
+        positionId: this.currentState.responsibilities.positionId === CORPORATE_USER_POSITION_ID
+                    ? this.currentUserId
+                    : this.currentState.responsibilities.positionId,
         groupedEntities: this.currentState.responsibilities.groupedEntities,
         hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
         selectedEntityType: this.currentState.selectedEntityType,
@@ -827,7 +831,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         positionId: this.currentState.selectedSubaccountCode
           || this.currentState.selectedDistributorCode
           || this.currentState.responsibilities.accountPositionId
-          || this.currentState.responsibilities.positionId,
+          || this.currentState.responsibilities.positionId
+          || this.currentUserId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
         selectedBrandCode: this.currentState.selectedBrandCode,
