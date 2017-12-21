@@ -740,7 +740,7 @@ div.ctv {
   margin-left: -600px;
   width: 601px;
   height: 60px;
-  background-color: rgba(17, 119, 184, 0.05);
+  background-color: red;
   transform: scale(0);
   opacity: 0.5;
 }
@@ -762,6 +762,6 @@ div.ctv {
 }
 
 .ripple-effect::after {
-  animation: ripple 3s;
+  animation: ripple 1.8s;
 }
 
