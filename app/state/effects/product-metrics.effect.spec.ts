@@ -242,7 +242,7 @@ describe('ProductMetrics Effects', () => {
         filter: getMyPerformanceFilterMock()
       };
 
-      runner.queue(new ProductMetricsActions.FetchOpportunityCounts(actionPayloadMock));
+      actions$.next(new ProductMetricsActions.FetchOpportunityCounts(actionPayloadMock));
     });
 
     describe('when everything returns successfully', () => {
