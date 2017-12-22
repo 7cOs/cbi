@@ -162,27 +162,27 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   private matchProductMetricOpportunityCounts(
-    item: ProductMetricsValues,
+    product: ProductMetricsValues,
     opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode,
     productMetricsViewType: ProductMetricsViewType
   ): (number|string) {
+    let productOpportunityCount: (number|string);
+
     if (productMetricsViewType === ProductMetricsViewType.brands) {
-      return opportunitiesGroupedByBrandSkuPackageCode[item.brandCode]
-        ? opportunitiesGroupedByBrandSkuPackageCode[item.brandCode].brandSkuPackageOpportunityCount
+      productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.brandCode]
+        ? opportunitiesGroupedByBrandSkuPackageCode[product.brandCode].brandSkuPackageOpportunityCount
         : '-';
     } else {
-      let skuPackageOpportunityCount: (number|string);
-
-      if (opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterPackageSKUCode]) {
-        skuPackageOpportunityCount
-          = opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCount;
-      } else if (opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterSKUCode]) {
-        skuPackageOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[item.beerId.masterSKUCode].brandSkuPackageOpportunityCount;
+      if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode]) {
+        productOpportunityCount
+          = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCount;
+      } else if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode]) {
+        productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode].brandSkuPackageOpportunityCount;
       } else {
-        skuPackageOpportunityCount = '-';
+        productOpportunityCount = '-';
       }
-
-      return skuPackageOpportunityCount;
     }
+
+    return productOpportunityCount;
   }
 }
