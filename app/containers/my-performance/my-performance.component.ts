@@ -66,6 +66,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public selectedSkuPackageType: SkuPackageType;
   public salesHierarchyViewType: SalesHierarchyViewType;
   public salesHierarchyLoadingState: LoadingState = LoadingState.Loaded;
+  public productMetricsLoadingState: LoadingState = LoadingState.Loaded;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showSalesContributionToVolume: boolean = false;
@@ -113,8 +114,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ];
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
-  private isTransitionOn: boolean = false;
   private currentPremiseTypeLabel: string;
+  private drillingDownInitiated: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -161,6 +162,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.productMetricsState = productMetrics;
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
+        this.updateLoaderStatus();
         this.productMetricsViewType = productMetrics.productMetricsViewType;
         this.tableHeaderRowRight[0] = this.myPerformanceService.getProductMetricsViewTypeLabel(productMetrics.productMetricsViewType);
 
@@ -184,6 +186,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
+        this.updateLoaderStatus();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
         this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType);
 
@@ -306,10 +309,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
+          this.drillingDownInitiated = false;
           this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
+        this.drillingDownInitiated = false;
         this.handleTotalRowClicked(parameters);
         break;
       default:
@@ -398,18 +403,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     console.log('Opportunity Clicked: ', opportunity);
   }
 
-  public toggleLoading(): void {
-    this.salesHierarchyLoadingState = LoadingState.Loading;
-  }
-
-  public toggleLoaded(): void {
-    this.salesHierarchyLoadingState = LoadingState.Loaded;
-  }
-
-  public toggleLoadedWithAnimation(): void {
-    this.salesHierarchyLoadingState = LoadingState.LoadedWithAnimation;
-  }
-
   private sendFilterAnalyticsEvent(): void {
     const category = 'Team Performance Filters';
     this.analyticsService.trackEvent(category, 'Metric', this.performanceMetric);
@@ -431,9 +424,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
         this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
+      this.drillingDownInitiated = true;
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
       })));
+    } else {
+      this.drillingDownInitiated = false;
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
@@ -797,6 +793,21 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       accountPositionId: this.currentState.responsibilities.accountPositionId,
       isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
     }));
+  }
+
+  private updateLoaderStatus() {
+    if (this.productMetricsFetching || this.responsibilitiesFetching) {
+      this.salesHierarchyLoadingState = LoadingState.Loading;
+      this.productMetricsLoadingState = LoadingState.Loading;
+    } else {
+      if (this.drillingDownInitiated) {
+        this.salesHierarchyLoadingState = LoadingState.LoadedWithAnimation;
+        this.productMetricsLoadingState = LoadingState.LoadedWithAnimation;
+      } else {
+        this.salesHierarchyLoadingState = LoadingState.Loaded;
+        this.productMetricsLoadingState = LoadingState.Loaded;
+      }
+    }
   }
 
   private handleDataRefreshAndDeselectionIfNeeded(): void {

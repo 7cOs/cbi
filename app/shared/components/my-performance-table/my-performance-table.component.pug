@@ -68,4 +68,4 @@ div.performance-table-wrapper
                                 [viewType]="viewType",
                                 (onSublineClicked)="onSublineClicked.emit(rowData);")
 
-  beer-loader.individual-loader([showLoader]="loadingState===loadingStateEnum.Loading")
+  beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
