@@ -5,7 +5,7 @@
   background-color: $white;
   padding: 10px 20px;
 
-  md-card-title {
+  mat-card-title {
     font-size: 18px;
     padding: 13px 0 0;
 
@@ -18,7 +18,7 @@
     }
   }
 
-  md-card-content {
+  mat-card-content {
     padding-left: 0;
     padding-right: 0;
 
@@ -37,7 +37,7 @@
     }
   }
 
-  md-card-actions {
+  mat-card-actions {
     font-size: 11px;
     font-family: $rajdhani;
     color: $hyperlink;

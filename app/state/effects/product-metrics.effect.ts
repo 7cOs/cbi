@@ -23,7 +23,8 @@ export class ProductMetricsEffects {
   fetchProductMetrics$(): Observable<Action> {
     return this.actions$
       .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS)
-      .switchMap((action: Action): Observable<FetchProductMetricsPayload> => Observable.of(action.payload))
+      .switchMap((action: ProductMetricsActions.FetchProductMetrics): Observable<FetchProductMetricsPayload> =>
+        Observable.of(action.payload))
       .switchMap((productMetricsData: ProductMetricsData) => this.productMetricsService.getProductMetrics(productMetricsData))
       .switchMap((productMetricsData) => this.productMetricsService.filterProductMetricsBrand(productMetricsData))
       .switchMap((productMetricsData: ProductMetricsData) => this.constructSuccessAction(productMetricsData))
@@ -34,7 +35,7 @@ export class ProductMetricsEffects {
   fetchProductMetricOpportunityCounts$(): Observable<Action> {
     return this.actions$
       .ofType(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS)
-      .switchMap((action: Action) => this.productMetricsService.getOpportunityCounts(action.payload))
+      .switchMap((action: ProductMetricsActions.FetchOpportunityCounts) => this.productMetricsService.getOpportunityCounts(action.payload))
       .switchMap((response: OpportunitiesGroupedByBrandSkuPackageCode) =>
         Observable.of(new ProductMetricsActions.FetchOpportunityCountsSuccess(response)))
       .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchOpportunityCountsFailure(error)));
@@ -44,7 +45,7 @@ export class ProductMetricsEffects {
   fetchProdcutMetricsFailure$(): Observable<Action> {
     return this.actions$
       .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE, ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_FAILURE)
-      .do((action: Action) => {
+      .do((action: ProductMetricsActions.FetchProductMetricsFailure | ProductMetricsActions.FetchOpportunityCountsFailure) => {
         console.error('ProductMetrics fetch failure:', action.payload);
       });
   }

@@ -1,5 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { ReplaySubject, Subject } from 'rxjs';
 import { getAppVersionMock } from '../../models/app-version.model.mock';
 import { CompassVersionEffects } from './compass-version.effect';
 import { FetchVersionAction, FetchVersionFailureAction, FetchVersionSuccessAction } from '../actions/compass-version.action';
@@ -8,7 +9,7 @@ let chance = new Chance();
 
 describe('Compass Version Effects', () => {
 
-  let runner: EffectsRunner;
+  let actions$: Subject<any>;
   let compassVersionEffects: CompassVersionEffects;
   const mockVersion = getAppVersionMock();
   let mockVersionService = {
@@ -16,22 +17,24 @@ describe('Compass Version Effects', () => {
     model: { } as any
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      EffectsTestingModule
-    ],
-    providers: [
-      CompassVersionEffects,
-      {
-        provide: 'versionService',
-        useValue: mockVersionService
-      }
-    ]
-  }));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [ ],
+      providers: [
+        CompassVersionEffects,
+        provideMockActions(() => actions$),
+        {
+          provide: 'versionService',
+          useValue: mockVersionService
+        }
+      ]
+    });
 
-  beforeEach(inject([ EffectsRunner, CompassVersionEffects ],
-    (_runner: EffectsRunner, _compassWebEffects: CompassVersionEffects) => {
-      runner = _runner;
+    actions$ = new ReplaySubject(1);
+  });
+
+  beforeEach(inject([ CompassVersionEffects ],
+    (_compassWebEffects: CompassVersionEffects) => {
       compassVersionEffects = _compassWebEffects;
     }
   ));
@@ -46,7 +49,7 @@ describe('Compass Version Effects', () => {
         (_versionService: any) => {
           versionService = _versionService;
 
-          runner.queue(new FetchVersionAction());
+          actions$.next(new FetchVersionAction());
         }
       ));
 
@@ -67,7 +70,7 @@ describe('Compass Version Effects', () => {
         (versionService: any) => {
           versionService.getVersion = () => Promise.reject(error);
 
-          runner.queue(new FetchVersionAction());
+          actions$.next(new FetchVersionAction());
         }
       ));
 
@@ -85,7 +88,7 @@ describe('Compass Version Effects', () => {
     const err = new Error(chance.string());
 
     beforeEach(() => {
-      runner.queue(new FetchVersionFailureAction(err));
+      actions$.next(new FetchVersionFailureAction(err));
       spyOn(console, 'error');
     });
 

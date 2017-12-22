@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
-import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
-import { Observable } from 'rxjs';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 
 import { DateRange } from '../../models/date-range.model';
@@ -19,7 +19,7 @@ describe('Date Ranges Effects', () => {
   const dateRangesMock: DateRange[] = [dateRange1, dateRange2];
   const err = new Error(chance.string());
 
-  let runner: EffectsRunner;
+  let actions$: Subject<any>;
   let dateRangesEffects: DateRangesEffects;
   let dateRangeApiServiceMock = {
     getDateRanges() {
@@ -32,26 +32,28 @@ describe('Date Ranges Effects', () => {
     }
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      EffectsTestingModule
-    ],
-    providers: [
-      DateRangesEffects,
-      {
-        provide: DateRangeApiService,
-        useValue: dateRangeApiServiceMock
-      },
-      {
-        provide: DateRangeTransformerService,
-        useValue: dateRangeTransformerServiceMock
-      }
-    ]
-  }));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [
+        DateRangesEffects,
+        provideMockActions(() => actions$),
+        {
+          provide: DateRangeApiService,
+          useValue: dateRangeApiServiceMock
+        },
+        {
+          provide: DateRangeTransformerService,
+          useValue: dateRangeTransformerServiceMock
+        }
+      ]
+    });
 
-  beforeEach(inject([ EffectsRunner, DateRangesEffects ],
-    (_runner: EffectsRunner, _compassWebEffects: DateRangesEffects) => {
-      runner = _runner;
+    actions$ = new ReplaySubject(1);
+  });
+
+  beforeEach(inject([ DateRangesEffects ],
+    (_compassWebEffects: DateRangesEffects) => {
       dateRangesEffects = _compassWebEffects;
     }
   ));
@@ -65,7 +67,7 @@ describe('Date Ranges Effects', () => {
         (_dateRangeApiService: DateRangeApiService) => {
           dateRangeApiService = _dateRangeApiService;
 
-          runner.queue(new FetchDateRangesAction());
+          actions$.next(new FetchDateRangesAction());
         }
       ));
 
@@ -83,7 +85,7 @@ describe('Date Ranges Effects', () => {
       beforeEach(inject([ DateRangeApiService ],
         (_dateRangeApiService: DateRangeApiService) => {
           dateRangeApiService = _dateRangeApiService;
-          runner.queue(new FetchDateRangesAction());
+          actions$.next(new FetchDateRangesAction());
         }
       ));
 
@@ -100,7 +102,7 @@ describe('Date Ranges Effects', () => {
   describe('when a FetchVersionFailureAction is received', () => {
 
     beforeEach(() => {
-      runner.queue(new FetchDateRangesFailureAction(err));
+      actions$.next(new FetchDateRangesFailureAction(err));
       spyOn(console, 'error');
     });
 

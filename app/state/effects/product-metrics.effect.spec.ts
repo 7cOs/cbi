@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
-import { Observable } from 'rxjs';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -33,7 +33,7 @@ describe('ProductMetrics Effects', () => {
   let selectedEntityTypeMock: EntityType = EntityType.Person;
   let productMetricsSuccessPayloadMock: ProductMetricsActions.FetchProductMetricsSuccessPayload;
   let error: Error;
-  let runner: EffectsRunner;
+  let actions$: Subject<any>;
   let productMetricsEffects: ProductMetricsEffects;
   let productMetricsService: ProductMetricsService;
   let productMetricsDataMock: ProductMetricsData;
@@ -72,24 +72,23 @@ describe('ProductMetrics Effects', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [
-        EffectsTestingModule
-      ],
+      imports: [ ],
       providers: [
         ProductMetricsEffects,
+        provideMockActions(() => actions$),
         {
           provide: ProductMetricsService,
           useValue: productMetricsServiceMock
         }
       ]
     });
+
+    actions$ = new ReplaySubject(1);
   });
 
-  beforeEach(inject([ EffectsRunner, ProductMetricsEffects, ProductMetricsService ],
-    (_runner: EffectsRunner,
-      _productMetricsEffects: ProductMetricsEffects,
+  beforeEach(inject([ ProductMetricsEffects, ProductMetricsService ],
+    (_productMetricsEffects: ProductMetricsEffects,
       _productMetricsService: ProductMetricsService) => {
-      runner = _runner;
       productMetricsEffects = _productMetricsEffects;
       productMetricsService = _productMetricsService;
     }
@@ -97,7 +96,7 @@ describe('ProductMetrics Effects', () => {
 
   describe('when a FetchProductMetrics is received', () => {
     beforeEach(() => {
-      runner.queue(new ProductMetricsActions.FetchProductMetrics({
+      actions$.next(new ProductMetricsActions.FetchProductMetrics({
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
         entityTypeCode: entityTypeCodeMock,
@@ -216,7 +215,7 @@ describe('ProductMetrics Effects', () => {
   describe('when a failed FetchProductMetricsFailure is received', () => {
 
     beforeEach(() => {
-      runner.queue(new ProductMetricsActions.FetchProductMetricsFailure(error));
+      actions$.next(new ProductMetricsActions.FetchProductMetricsFailure(error));
       spyOn(console, 'error');
     });
 
