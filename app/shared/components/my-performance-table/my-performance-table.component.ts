@@ -93,7 +93,8 @@ export class MyPerformanceTableComponent {
   public getTotalRowClasses() {
     let classes: CssClasses = {
       'deselected-total-row': !!((this.viewType === SalesHierarchyViewType.subAccounts ||
-        this.viewType === SalesHierarchyViewType.distributors) && (this.selectedSubaccountCode || this.selectedDistributorCode))
+        this.viewType === SalesHierarchyViewType.distributors) && (this.selectedSubaccountCode || this.selectedDistributorCode)),
+      [this.loadingState]: true
     };
 
     const columnWidthClass = this.getColumnWidthClass();
@@ -150,7 +151,8 @@ export class MyPerformanceTableComponent {
 
   public getDismissableTotalRowClasses(): CssClasses {
     let classes: CssClasses = {
-      'selected': (!this.selectedSkuPackageCode && this.dismissableTotalRow) ? true : false
+      'selected': (!this.selectedSkuPackageCode && this.dismissableTotalRow) ? true : false,
+      [this.loadingState]: true
     };
 
     const columnWidthClass = this.getColumnWidthClass();
