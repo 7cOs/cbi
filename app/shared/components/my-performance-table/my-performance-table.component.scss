@@ -64,7 +64,7 @@ tbody {
 .loaded {
   opacity: 1;
 
-  animation: transit 1s;
+  transition: opacity 0.5s;
 }
 
 .loaded-with-animation {

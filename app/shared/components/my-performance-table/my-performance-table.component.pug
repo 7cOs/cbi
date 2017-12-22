@@ -9,7 +9,7 @@ div.performance-table-wrapper
 
   table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
 
-    thead.col-100-pct
+    thead.col-100-pct([ngClass]="loadingState")
 
       tr.top-header.col-100-pct([ngClass]="getColumnWidthClass()")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
