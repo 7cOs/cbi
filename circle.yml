@@ -4,6 +4,11 @@ machine:
   node:
     version: v8.1.4
 
+general:
+    artifacts:
+        - "automation-test/target/target/screenshot"
+        - "automation-test/target/surefire-reports/Suite"
+
 dependencies:
   pre:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
@@ -20,8 +25,6 @@ test:
   post:
     - cp -r coverage/* $CIRCLE_ARTIFACTS
     - bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
-    - mkdir -p $CIRCLE_TEST_REPORTS/testng/
-    - find . -type f -regex ".*/target/surefire-reports/.*html" -exec cp {} $CIRCLE_TEST_REPORTS/testng/ \;
 
 deployment:
   develop:
