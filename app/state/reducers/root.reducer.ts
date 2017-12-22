@@ -25,7 +25,3 @@ export const reducers: ActionReducerMap<AppState> = {
 };
 
 export const metaReducers: MetaReducer<AppState>[] = Environment.isLocal() ? [storeFreeze] : [];
-
-// const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combineReducers)(reducers);
-// const productionReducer: ActionReducer<AppState> = combineReducers(reducers);
-// export const rootReducer: ActionReducer<AppState> = Environment.isLocal() ? developmentReducer : productionReducer;
