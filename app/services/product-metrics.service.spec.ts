@@ -4,16 +4,23 @@ import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
 import { getEntityTypeMock } from '../enums/entity-responsibilities.enum.mock';
 import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
+import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../models/opportunity-count.model.mock';
+import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
+import { getProductMetricsViewTypeMock } from '../enums/product-metrics-view-type.enum.mock';
 import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
 import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
-import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
+import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
@@ -27,6 +34,8 @@ describe('ProductMetrics Service', () => {
   let performanceFilterStateMock: MyPerformanceFilterState;
   let selectedEntityTypeMock: EntityType;
 
+  let opportunitiesGroupedByBrandSkuPackageCodeMock: OpportunitiesGroupedByBrandSkuPackageCode;
+  let opportunityCountDTOsMock: OpportunityCountDTO[];
   let productMetricsWithBrandValuesMock: ProductMetrics;
   let productMetricsWithSkuValuesMock: ProductMetrics;
   let productMetricsWithCombinedValuesMock: ProductMetrics;
@@ -48,6 +57,8 @@ describe('ProductMetrics Service', () => {
     performanceFilterStateMock = getMyPerformanceFilterMock();
     selectedEntityTypeMock = getEntityTypeMock();
 
+    opportunitiesGroupedByBrandSkuPackageCodeMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
+    opportunityCountDTOsMock = getOpportunityCountDTOsMock();
     productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
     productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(SkuPackageType.package);
     productMetricsWithCombinedValuesMock = Object.assign({}, productMetricsWithBrandValuesMock, productMetricsWithSkuValuesMock);
@@ -110,12 +121,21 @@ describe('ProductMetrics Service', () => {
         return aggregation === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
+      },
+      getSubAccountOpportunityCounts() {
+        return Observable.of(opportunityCountDTOsMock);
+      },
+      getDistributorOpportunityCounts() {
+        return Observable.of(opportunityCountDTOsMock);
       }
     };
 
     productMetricsTransformerServiceMock = {
       transformAndCombineProductMetricsDTOs(dtos: ProductMetricsDTO[]): ProductMetrics {
         return dtos.length === 1 ? productMetricsWithBrandValuesMock : productMetricsWithCombinedValuesMock;
+      },
+      transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): OpportunitiesGroupedByBrandSkuPackageCode {
+        return opportunitiesGroupedByBrandSkuPackageCodeMock;
       }
     };
 
@@ -1303,6 +1323,186 @@ describe('ProductMetrics Service', () => {
 
           productMetricsService.filterProductMetricsBrand(productMetricsDataMock).subscribe((productMetricsData: ProductMetricsData) => {
             expect(productMetricsData).toEqual(productMetricsDataMock);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('getOpportunityCounts', () => {
+    let fetchOpportunityCountsMock: FetchOpportunityCountsPayload;
+
+    beforeEach(() => {
+      fetchOpportunityCountsMock = {
+        positionId: chance.string(),
+        alternateHierarchyId: chance.string(),
+        distributorId: chance.string(),
+        subAccountId: chance.string(),
+        isMemberOfExceptionHierarchy: chance.bool(),
+        selectedEntityType: getEntityTypeMock(),
+        productMetricsViewType: getProductMetricsViewTypeMock(),
+        filter: getMyPerformanceFilterMock()
+      };
+    });
+
+    describe('when fetching opportunity counts for a SubAccount', () => {
+      beforeEach(() => {
+        fetchOpportunityCountsMock.selectedEntityType = EntityType.SubAccount;
+        fetchOpportunityCountsMock.filter.premiseType = PremiseTypeValue.On;
+      });
+
+      it('should call getSubAccountOpportunityCounts with the passed in subAccountId, positionId and '
+      + 'a stringified lower case PremiseTypeValue', (done) => {
+        const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getSubAccountOpportunityCounts').and.callThrough();
+        const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
+
+        productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
+          done();
+        });
+
+        expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+        expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
+          fetchOpportunityCountsMock.subAccountId,
+          fetchOpportunityCountsMock.positionId,
+          expectedPremiseTypeValue,
+          ProductMetricsServiceConstants.opportunityCountStructureType,
+          ProductMetricsServiceConstants.opportunitySegment,
+          ProductMetricsServiceConstants.opportunityImpact,
+          ProductMetricsServiceConstants.opportunityType
+        ]);
+      });
+
+      it('should call productMetricsTransformerService.transformAndGroupOpportunityCounts with the opportunity counts '
+      + 'received from the API call', (done) => {
+        const transformerSpy = spyOn(productMetricsTransformerService, 'transformAndGroupOpportunityCounts').and.callThrough();
+
+        productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
+          done();
+        });
+
+        expect(transformerSpy.calls.count()).toBe(1);
+        expect(transformerSpy.calls.argsFor(0)[0]).toBe(opportunityCountDTOsMock);
+      });
+
+      it('should return the transformed GroupedOpportunityCounts', (done) => {
+        productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(
+          (response: OpportunitiesGroupedByBrandSkuPackageCode) => {
+
+          expect(response).toEqual(opportunitiesGroupedByBrandSkuPackageCodeMock);
+          done();
+        });
+      });
+    });
+
+    describe('when fetching opportunity counts for a Distributor', () => {
+      beforeEach(() => {
+        fetchOpportunityCountsMock.selectedEntityType = EntityType.Distributor;
+        fetchOpportunityCountsMock.filter.premiseType = PremiseTypeValue.On;
+      });
+
+      describe('when we are in the Standard Hierarchy', () => {
+        beforeEach(() => {
+          fetchOpportunityCountsMock.isMemberOfExceptionHierarchy = false;
+          fetchOpportunityCountsMock.alternateHierarchyId = undefined;
+        });
+
+        it('should call getDistributorOpportunityCounts with the passed in distributorId, positionId, and stringified lower '
+        + 'case PremiseTypeValue', (done) => {
+          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
+          const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
+
+          productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
+            done();
+          });
+
+          expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+          expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
+            fetchOpportunityCountsMock.distributorId,
+            fetchOpportunityCountsMock.positionId,
+            expectedPremiseTypeValue,
+            ProductMetricsServiceConstants.opportunityCountStructureType,
+            ProductMetricsServiceConstants.opportunitySegment,
+            ProductMetricsServiceConstants.opportunityImpact,
+            ProductMetricsServiceConstants.opportunityType
+          ]);
+        });
+      });
+
+      describe('when we are not in the Exception Hierarchy but are in an Alternate Hierarchy', () => {
+        beforeEach(() => {
+          fetchOpportunityCountsMock.isMemberOfExceptionHierarchy = false;
+          fetchOpportunityCountsMock.alternateHierarchyId = chance.string();
+        });
+
+        it('should call getDistributorOpportunityCounts with the passed in distributorId, a positionId of undefined, and stringified lower '
+        + 'case PremiseTypeValue', (done) => {
+          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
+          const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
+
+          productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
+            done();
+          });
+
+          expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+          expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
+            fetchOpportunityCountsMock.distributorId,
+            undefined,
+            expectedPremiseTypeValue,
+            ProductMetricsServiceConstants.opportunityCountStructureType,
+            ProductMetricsServiceConstants.opportunitySegment,
+            ProductMetricsServiceConstants.opportunityImpact,
+            ProductMetricsServiceConstants.opportunityType
+          ]);
+        });
+      });
+
+      describe('when we are in the Exception Hierarchy and the Alternate Hierarchy', () => {
+        beforeEach(() => {
+          fetchOpportunityCountsMock.isMemberOfExceptionHierarchy = true;
+          fetchOpportunityCountsMock.alternateHierarchyId = chance.string();
+        });
+
+        it('should call getDistributorOpportunityCounts with the passed in distributorId, alternateHierarchyId, and '
+        + 'and a stringified lower case PremiseTypeValue', (done) => {
+          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
+          const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
+
+          productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
+            done();
+          });
+
+          expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+          expect(getOpportunityCountsSpy.calls.argsFor(0)).toEqual([
+            fetchOpportunityCountsMock.distributorId,
+            fetchOpportunityCountsMock.alternateHierarchyId,
+            expectedPremiseTypeValue,
+            ProductMetricsServiceConstants.opportunityCountStructureType,
+            ProductMetricsServiceConstants.opportunitySegment,
+            ProductMetricsServiceConstants.opportunityImpact,
+            ProductMetricsServiceConstants.opportunityType
+          ]);
+        });
+      });
+
+      describe('when the API call returns Opportunity Counts', () => {
+        it('should call productMetricsTransformerService.transformAndGroupOpportunityCounts with the opportunity counts '
+        + 'received from the API call', (done) => {
+          const transformerSpy = spyOn(productMetricsTransformerService, 'transformAndGroupOpportunityCounts').and.callThrough();
+
+          productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
+            done();
+          });
+
+          expect(transformerSpy.calls.count()).toBe(1);
+          expect(transformerSpy.calls.argsFor(0)[0]).toBe(opportunityCountDTOsMock);
+        });
+
+        it('should return the transformed GroupedOpportunityCounts', (done) => {
+          productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(
+            (response: OpportunitiesGroupedByBrandSkuPackageCode) => {
+
+            expect(response).toEqual(opportunitiesGroupedByBrandSkuPackageCodeMock);
             done();
           });
         });

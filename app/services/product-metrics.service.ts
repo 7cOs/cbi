@@ -6,10 +6,14 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetrics } from '../models/product-metrics.model';
 import { ProductMetricsApiService } from '../services/product-metrics-api.service';
+import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
@@ -199,5 +203,56 @@ export class ProductMetricsService {
     } else {
       return Observable.of(productMetricsData);
     }
+  }
+
+  public getOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
+    switch (fetchOpportunityCountsData.selectedEntityType) {
+      case EntityType.SubAccount:
+        return this.getSubAccountOpportunityCounts(fetchOpportunityCountsData);
+      case EntityType.Distributor:
+        return this.getDistributorOpportunityCounts(fetchOpportunityCountsData);
+      default:
+        throw new Error(`[getOpportunityCounts]: Unsupported EntityType ${ fetchOpportunityCountsData.selectedEntityType }`);
+    }
+  }
+
+  private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
+    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
+
+    return this.productMetricsApiService.getSubAccountOpportunityCounts(
+      fetchOpportunityCountsData.subAccountId,
+      fetchOpportunityCountsData.positionId,
+      premiseTypeValue,
+      ProductMetricsServiceConstants.opportunityCountStructureType,
+      ProductMetricsServiceConstants.opportunitySegment,
+      ProductMetricsServiceConstants.opportunityImpact,
+      ProductMetricsServiceConstants.opportunityType)
+      .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
+        return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+      });
+  }
+
+  private getDistributorOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
+  : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
+    const positionId: string = fetchOpportunityCountsData.isMemberOfExceptionHierarchy
+      ? fetchOpportunityCountsData.alternateHierarchyId
+      : fetchOpportunityCountsData.alternateHierarchyId
+        ? undefined
+        : fetchOpportunityCountsData.positionId;
+    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
+
+    return this.productMetricsApiService.getDistributorOpportunityCounts(
+      fetchOpportunityCountsData.distributorId,
+      positionId,
+      premiseTypeValue,
+      ProductMetricsServiceConstants.opportunityCountStructureType,
+      ProductMetricsServiceConstants.opportunitySegment,
+      ProductMetricsServiceConstants.opportunityImpact,
+      ProductMetricsServiceConstants.opportunityType)
+      .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
+        return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+      });
   }
 }
