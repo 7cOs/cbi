@@ -10,7 +10,6 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import { CssClasses } from '../../models/css-classes.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
@@ -116,6 +115,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private isOpportunityTableExtended: boolean = false;
   private currentPremiseTypeLabel: string;
   private drillingDownInitiated: boolean = false;
+  private drillingUpInitiated: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -303,6 +303,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
+    this.drillingUpInitiated = false;
     switch (parameters.type) {
       case RowType.data:
       case RowType.dismissableTotal:
@@ -333,6 +334,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
+    this.drillingUpInitiated = true;
+    this.drillingDownInitiated = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Breadcrumb');
     const { trail, entityDescription } = event;
     const indexOffset: number = 1;
@@ -800,9 +803,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.salesHierarchyLoadingState = LoadingState.Loading;
       this.productMetricsLoadingState = LoadingState.Loading;
     } else {
+      debugger;
       if (this.drillingDownInitiated) {
-        this.salesHierarchyLoadingState = LoadingState.LoadedWithAnimation;
-        this.productMetricsLoadingState = LoadingState.LoadedWithAnimation;
+        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+      } else if (this.drillingUpInitiated) {
+        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
       } else {
         this.salesHierarchyLoadingState = LoadingState.Loaded;
         this.productMetricsLoadingState = LoadingState.Loaded;
