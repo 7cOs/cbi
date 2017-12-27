@@ -59,6 +59,7 @@ div.performance-table-wrapper
     tbody([ngClass]="getTableHeightClass()")
 
       tr.entity-row.col-100-pct.ripple-effect(mdRipple,
+                                mdRippleColor="rgba(17, 119, 184, .05)",
                                 *ngFor="let rowData of sortedTableData, let rowIndex = index",
                                 [ngClass]="getEntityRowClasses(rowData)",
                                 (click)="onRowClicked(rowType.data, rowIndex, rowData)",
