@@ -6,18 +6,16 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { FetchAlternateHierarchyResponsibilitiesPayload,
-         FetchSubAccountsPayload,
-         FetchResponsibilitiesPayload } from '../../state/actions/responsibilities.action';
+         FetchResponsibilitiesPayload,
+         FetchSubAccountsPayload } from '../../state/actions/responsibilities.action';
+import { FetchEntityWithPerformanceData,
+         RefreshAllPerformancesData,
+         RefreshTotalPerformanceData,
+         ResponsibilitiesData,
+         ResponsibilitiesService,
+         SubAccountData } from '../../services/responsibilities.service';
 import { Performance } from '../../models/performance.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
-import {
-  ResponsibilitiesService,
-  ResponsibilitiesData,
-  SubAccountData,
-  RefreshAllPerformancesData,
-  FetchEntityWithPerformanceData,
-  RefreshTotalPerformanceData
-} from '../../services/responsibilities.service';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import * as ViewTypeActions from '../../state/actions/sales-hierarchy-view-type.action';
 

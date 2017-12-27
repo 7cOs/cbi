@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { CalculatorService } from './calculator.service';
+import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../models/opportunity-count.model';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 
@@ -14,6 +16,37 @@ export class ProductMetricsTransformerService {
 
     // combine brand and sku metrics into single metrics object via property assignment
     return Object.assign({}, ...metrics);
+  }
+
+  public transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): OpportunitiesGroupedByBrandSkuPackageCode {
+    return dtos.reduce(
+      (brandSkuPackageOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode, brandOpportunityCountDTO: OpportunityCountDTO) => {
+
+      const skuPackageGroupedOpportunities: OpportunitiesGroupedBySkuPackageCode = this.getOpportunitiesGroupedBySkuPackageCode(
+        brandOpportunityCountDTO.items);
+
+      brandSkuPackageOpportunityCounts[brandOpportunityCountDTO.label] = {
+        brandSkuPackageOpportunityCount: skuPackageGroupedOpportunities.skuPackageOpportunityCount
+      };
+
+      return Object.assign(brandSkuPackageOpportunityCounts, skuPackageGroupedOpportunities.opportunitiesGroupedBySkuPackageCode);
+    }, {});
+  }
+
+  private getOpportunitiesGroupedBySkuPackageCode(skuPackageOpportunitiesDTO: OpportunityCountDTO[]): OpportunitiesGroupedBySkuPackageCode {
+    return skuPackageOpportunitiesDTO.reduce(
+      (opportunitiesGroupedBySkuPackageCode: OpportunitiesGroupedBySkuPackageCode, skuPackageOpportunityDTO: OpportunityCountDTO) => {
+
+      opportunitiesGroupedBySkuPackageCode.skuPackageOpportunityCount += skuPackageOpportunityDTO.count;
+      opportunitiesGroupedBySkuPackageCode.opportunitiesGroupedBySkuPackageCode[skuPackageOpportunityDTO.label] = {
+        brandSkuPackageOpportunityCount: skuPackageOpportunityDTO.count
+      };
+
+      return opportunitiesGroupedBySkuPackageCode;
+    }, {
+      skuPackageOpportunityCount: 0,
+      opportunitiesGroupedBySkuPackageCode: {}
+    });
   }
 
   private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {

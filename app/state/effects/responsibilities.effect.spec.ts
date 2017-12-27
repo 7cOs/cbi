@@ -25,6 +25,11 @@ import { FetchAlternateHierarchyResponsibilities,
          SetTotalPerformanceForSelectedRoleGroup,
          RefreshAllPerformancesPayload,
          RefreshAllPerformances } from '../actions/responsibilities.action';
+import { FetchEntityWithPerformanceData,
+         RefreshAllPerformancesData,
+         RefreshTotalPerformanceData,
+         ResponsibilitiesData,
+         SubAccountData } from '../../services/responsibilities.service';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
@@ -34,21 +39,16 @@ import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.m
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getSalesHierarchyViewTypeMock } from '../../enums/sales-hierarchy-view-type.enum.mock';
+import { getSkuPackageTypeMock } from '../../enums/sku-package-type.enum.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
-import { ResponsibilitiesData,
-  SubAccountData,
-  FetchEntityWithPerformanceData,
-  RefreshAllPerformancesData,
-  RefreshTotalPerformanceData } from '../../services/responsibilities.service';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
-import { getSkuPackageTypeMock } from '../../enums/sku-package-type.enum.mock';
 
 const chance = new Chance();
 

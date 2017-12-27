@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
 import { Performance } from '../models/performance.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
@@ -57,30 +58,42 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getRightTableData(productMetrics: ProductMetrics, productMetricsViewType: ProductMetricsViewType): MyPerformanceTableRow[] {
+  public getRightTableData(
+    productMetrics: ProductMetrics,
+    opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode,
+    productMetricsViewType: ProductMetricsViewType
+  ): MyPerformanceTableRow[] {
     const productsValues: ProductMetricsValues[] = productMetricsViewType === ProductMetricsViewType.brands
       ? productMetrics.brandValues : productMetrics.skuValues;
-    const total: number = productsValues.reduce((sum: number, item: ProductMetricsValues): number => {
-      return sum + item.current;
+    const total: number = productsValues.reduce((sum: number, productMetricsValues: ProductMetricsValues): number => {
+      return sum + productMetricsValues.current;
     }, 0);
 
-    const rowData: MyPerformanceTableRow[] = productsValues.map((item: ProductMetricsValues) => {
+    const rowData: MyPerformanceTableRow[] = productsValues.map((productMetricsValues: ProductMetricsValues) => {
       const rightTableData: MyPerformanceTableRow = {
         descriptionRow0: productMetricsViewType === ProductMetricsViewType.brands
-          ? item.brandDescription
-          : item.beerId.masterPackageSKUDescription || item.beerId.masterSKUDescription,
-        metricColumn0: item.current,
-        metricColumn1: item.yearAgo,
-        metricColumn2: item.yearAgoPercent,
-        ctv: total ? this.getPercentageOfTotal(item.current, total) : 0,
+          ? productMetricsValues.brandDescription
+          : productMetricsValues.beerId.masterPackageSKUDescription || productMetricsValues.beerId.masterSKUDescription,
+        metricColumn0: productMetricsValues.current,
+        metricColumn1: productMetricsValues.yearAgo,
+        metricColumn2: productMetricsValues.yearAgoPercent,
+        ctv: total ? this.getPercentageOfTotal(productMetricsValues.current, total) : 0,
         metadata: {}
       };
 
       if (productMetricsViewType === ProductMetricsViewType.brands) {
-        rightTableData.metadata.brandCode = item.brandCode;
+        rightTableData.metadata.brandCode = productMetricsValues.brandCode;
       } else {
-        rightTableData.metadata.skuPackageType = item.beerId.masterPackageSKUCode ? SkuPackageType.package : SkuPackageType.sku;
-        rightTableData.metadata.skuPackageCode = item.beerId.masterPackageSKUCode || item.beerId.masterSKUCode;
+        rightTableData.metadata.skuPackageType = productMetricsValues.beerId.masterPackageSKUCode
+          ? SkuPackageType.package
+          : SkuPackageType.sku;
+        rightTableData.metadata.skuPackageCode = productMetricsValues.beerId.masterPackageSKUCode
+          || productMetricsValues.beerId.masterSKUCode;
+      }
+
+      if (opportunitiesGroupedByBrandSkuPackageCode) {
+        rightTableData.opportunities = this.matchProductMetricOpportunityCounts(
+          productMetricsValues, opportunitiesGroupedByBrandSkuPackageCode, productMetricsViewType);
       }
 
       return rightTableData;
@@ -105,7 +118,10 @@ export class MyPerformanceTableDataTransformerService {
     return totalRow;
   }
 
-  public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues): MyPerformanceTableRow {
+  public getProductMetricsSelectedBrandRow(
+    productMetricsValues: ProductMetricsValues,
+    opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode
+  ): MyPerformanceTableRow {
     const rowTotal: MyPerformanceTableRow = {
       descriptionRow0: productMetricsValues.brandDescription,
       metricColumn0: productMetricsValues.current,
@@ -117,6 +133,11 @@ export class MyPerformanceTableDataTransformerService {
     if (productMetricsValues.brandCode) {
       rowTotal.metadata = { brandCode:  productMetricsValues.brandCode };
     }
+
+    if (opportunitiesGroupedByBrandSkuPackageCode) rowTotal.opportunities = this.matchProductMetricOpportunityCounts(
+      productMetricsValues,
+      opportunitiesGroupedByBrandSkuPackageCode,
+      ProductMetricsViewType.brands);
 
     return rowTotal;
   }
@@ -138,5 +159,30 @@ export class MyPerformanceTableDataTransformerService {
       default:
         return name;
     }
+  }
+
+  private matchProductMetricOpportunityCounts(
+    product: ProductMetricsValues,
+    opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode,
+    productMetricsViewType: ProductMetricsViewType
+  ): (number|string) {
+    let productOpportunityCount: (number|string);
+
+    if (productMetricsViewType === ProductMetricsViewType.brands) {
+      productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.brandCode]
+        ? opportunitiesGroupedByBrandSkuPackageCode[product.brandCode].brandSkuPackageOpportunityCount
+        : '-';
+    } else {
+      if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode]) {
+        productOpportunityCount
+          = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCount;
+      } else if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode]) {
+        productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode].brandSkuPackageOpportunityCount;
+      } else {
+        productOpportunityCount = '-';
+      }
+    }
+
+    return productOpportunityCount;
   }
 }
