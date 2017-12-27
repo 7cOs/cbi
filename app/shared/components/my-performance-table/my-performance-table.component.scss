@@ -38,7 +38,7 @@ tbody {
   overflow-y: overlay;
 
   tr {
-    display: table-row;
+    display: block;
     width: 100%;
   }
 
@@ -214,6 +214,7 @@ tr.two-right-columns-present {
 }
 
 .entity-row {
+  position: relative;
   height: $row-height;
   border-bottom: 1px solid $gray-10;
 
@@ -255,6 +256,10 @@ span.negative {
 
 span.link-out {
   color: $blue;
+}
+
+td {
+  height: 60px;
 }
 
 td, th {
@@ -734,40 +739,3 @@ div.ctv {
     background-image: url('../../../assets/img/icons/rolegroup.svg');
   }
 }
-
-.ripple-effect {
-  position: relative;
-  overflow: hidden;
-}
-
-.ripple-effect:after {
-  content: '';
-  position: absolute;
-  margin-left: -600px;
-  width: 601px;
-  height: 60px;
-  background-color: red;
-  transform: scale(0);
-  opacity: 0.5;
-}
-
-@keyframes ripple {
-  0% {
-    transform: scaleX(0);
-  }
-
-  20% {
-    transform: scaleX(1);
-    opacity: 0.3;
-  }
-
-  100% {
-    opacity: 0;
-    transform: scaleX(1);
-  }
-}
-
-.ripple-effect::after {
-  animation: ripple 1.8s;
-}
-

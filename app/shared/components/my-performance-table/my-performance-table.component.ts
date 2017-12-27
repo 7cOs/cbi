@@ -1,3 +1,4 @@
+import { NgModule } from '@angular/core';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { CalculatorService } from '../../../services/calculator.service';
@@ -10,6 +11,13 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
+import { SharedModule } from '../../../shared/shared.module';
+
+@NgModule({
+  imports: [
+    SharedModule
+  ]
+})
 
 @Component({
   selector: 'my-performance-table',
@@ -55,7 +63,6 @@ export class MyPerformanceTableComponent {
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
-  private rippleEffect: boolean = false;
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -81,7 +88,6 @@ export class MyPerformanceTableComponent {
   }
 
   public onRowClicked(type: RowType, index: number, row?: MyPerformanceTableRow) {
-      this.rippleEffect = true;
       this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
@@ -130,8 +136,6 @@ export class MyPerformanceTableComponent {
   public getEntityRowClasses(row: MyPerformanceTableRow): CssClasses {
     let classes: CssClasses = {
       'performance-error': row.performanceError,
-      'ripple-effect': this.rippleEffect && !!((this.selectedSubaccountCode || this.selectedDistributorCode)
-        && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode)),
       'selected-sku': !!(this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode),
       'selected-entity-row': !!((this.selectedSubaccountCode || this.selectedDistributorCode)
         && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode))
