@@ -336,6 +336,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.drillingUpInitiated = true;
+    this.drillingDownInitiated = false;
     this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
 
@@ -835,7 +837,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.salesHierarchyLoadingState = LoadingState.Loading;
       this.productMetricsLoadingState = LoadingState.Loading;
     } else {
-      debugger;
       if (this.drillingDownInitiated) {
         this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
         this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
