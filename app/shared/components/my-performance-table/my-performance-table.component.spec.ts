@@ -19,6 +19,14 @@ import { SortStatus } from '../../../enums/sort-status.enum';
 const chance = new Chance();
 
 @Component({
+  selector: 'beer-loader',
+  template: ''
+})
+class BeerLoaderComponentMock {
+  @Input() showLoader: false;
+}
+
+@Component({
   selector: '[my-performance-table-row]',
   template: ''
 })
@@ -39,6 +47,7 @@ describe('MyPerformanceTableComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
+        BeerLoaderComponentMock,
         MyPerformanceTableComponent,
         MockMyPerformanceTableRowComponent,
         SortIndicatorComponent

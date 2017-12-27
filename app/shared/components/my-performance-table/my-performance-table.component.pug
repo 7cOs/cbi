@@ -1,3 +1,5 @@
+beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
+
 div.performance-table-wrapper
 
   div.performance-table-summary.col-100-pct
@@ -67,5 +69,3 @@ div.performance-table-wrapper
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
                                 (onSublineClicked)="onSublineClicked.emit(rowData);")
-
-  beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")

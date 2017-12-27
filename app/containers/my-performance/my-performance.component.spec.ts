@@ -64,14 +64,6 @@ import { WindowService } from '../../services/window.service';
 const chance = new Chance();
 
 @Component({
-  selector: 'beer-loader',
-  template: ''
-})
-class BeerLoaderComponentMock {
-  @Input() showLoader: false;
-}
-
-@Component({
   selector: 'my-performance-filter',
   template: ''
 })
@@ -114,6 +106,7 @@ class MyPerformanceTableComponentMock {
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSubaccountCode: string;
   @Input() selectedDistributorCode: string;
+  @Input() loadingState: boolean;
 }
 
 @Component({
@@ -236,7 +229,6 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        BeerLoaderComponentMock,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
         MyPerformanceTableComponentMock,
