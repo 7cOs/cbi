@@ -1,9 +1,12 @@
 import * as Chance from 'chance';
 
+import { FetchOpportunityCountsPayload } from './product-metrics.action';
+import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ProductMetricsActions from './product-metrics.action';
@@ -129,4 +132,68 @@ describe('ProductMetrics Actions', () => {
     });
   });
 
+  describe('FetchOpportunityCounts', () => {
+    let actionPayloadMock: FetchOpportunityCountsPayload;
+    let action: ProductMetricsActions.FetchOpportunityCounts;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        positionId: chance.string(),
+        alternateHierarchyId: chance.string(),
+        distributorId: chance.string(),
+        subAccountId: chance.string(),
+        isMemberOfExceptionHierarchy: chance.bool(),
+        selectedEntityType: getEntityTypeMock(),
+        productMetricsViewType: getProductMetricsViewTypeMock(),
+        filter: getMyPerformanceFilterMock()
+      };
+      action = new ProductMetricsActions.FetchOpportunityCounts(actionPayloadMock);
+    });
+
+    it('should have the correct action type', () => {
+      expect(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS).toBe('[ProductMetrics] FETCH_OPPORTUNITY_COUNTS');
+      expect(action.type).toBe(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
+  describe('FetchOpportunityCountsSuccess', () => {
+    let actionPayloadMock: OpportunitiesGroupedByBrandSkuPackageCode;
+    let action: ProductMetricsActions.FetchOpportunityCountsSuccess;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        [chance.string()]: {
+          brandSkuPackageOpportunityCount: chance.integer()
+        }
+      };
+      action = new ProductMetricsActions.FetchOpportunityCountsSuccess(actionPayloadMock);
+    });
+
+    it('should have the correct action type', () => {
+      expect(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_SUCCESS).toBe('[ProductMetrics] FETCH_OPPORTUNITY_COUNTS_SUCCESS');
+      expect(action.type).toBe(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_SUCCESS);
+    });
+  });
+
+  describe('FetchOpportunityCountsFailure', () => {
+    const errorMock: Error = new Error(chance.string());
+    let action: ProductMetricsActions.FetchOpportunityCountsFailure;
+
+    beforeEach(() => {
+      action = new ProductMetricsActions.FetchOpportunityCountsFailure(errorMock);
+    });
+
+    it('should have the correct action type', () => {
+      expect(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_FAILURE).toBe('[ProductMetrics] FETCH_OPPORTUNITY_COUNTS_FAILURE');
+      expect(action.type).toBe(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_FAILURE);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(errorMock);
+    });
+  });
 });
