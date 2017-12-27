@@ -61,12 +61,15 @@ export class MyPerformanceTableComponent {
 
   constructor (private calculatorService: CalculatorService) { }
 
-  public getTableBodyClasses(): CssClasses {
+  public getTableClasses(): CssClasses {
     return {
-      'total-row-present': !!(this.totalRow || this.dismissableTotalRow),
-      'total-row-absent': !(this.totalRow || this.dismissableTotalRow),
+      [`view-type-${this.viewType}`]: true,
       [this.loadingState]: true
     };
+  }
+
+  public getTableBodyClasses(): string {
+    return (this.totalRow || this.dismissableTotalRow) ? 'total-row-present' : 'total-row-absent';
   }
 
   public getSortStatus(columnType: ColumnType): SortStatus {

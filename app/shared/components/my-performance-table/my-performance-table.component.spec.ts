@@ -177,7 +177,7 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.totalRow = totalRowMock;
       componentInstance.dismissableTotalRow = dismissableTotalRowMock;
 
-      const tableClass = componentInstance.getTableHeightClass();
+      const tableClass = componentInstance.getTableBodyClasses();
       expect(tableClass).toBe('total-row-present');
     });
 
@@ -187,7 +187,7 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.totalRow = totalRowMock;
       componentInstance.dismissableTotalRow = dismissableTotalRowMock;
 
-      const tableClass = componentInstance.getTableHeightClass();
+      const tableClass = componentInstance.getTableBodyClasses();
       expect(tableClass).toBe('total-row-present');
     });
 
@@ -197,7 +197,7 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.totalRow = totalRowMock;
       componentInstance.dismissableTotalRow = dismissableTotalRowMock;
 
-      const tableClass = componentInstance.getTableHeightClass();
+      const tableClass = componentInstance.getTableBodyClasses();
       expect(tableClass).toBe('total-row-absent');
     });
   });

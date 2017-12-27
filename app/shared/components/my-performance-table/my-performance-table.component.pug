@@ -7,9 +7,9 @@ div.performance-table-wrapper
     div.summary-date-range
       span(*ngIf='dateRange && showDateRange') {{ dateRange.range }}
 
-  table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
+  table.my-performance-table.col-100-pct.view-type([ngClass]="getTableClasses()")
 
-    thead.col-100-pct([ngClass]="loadingState")
+    thead.col-100-pct
 
       tr.top-header.col-100-pct([ngClass]="getColumnWidthClass()")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
