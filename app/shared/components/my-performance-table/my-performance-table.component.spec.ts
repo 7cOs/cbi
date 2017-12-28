@@ -6,8 +6,11 @@ import * as Chance from 'chance';
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { getDateRangeMock } from '../../../models/date-range.model.mock';
+import { getLoadingStateMock } from '../../../enums/loading-state.enum.mock';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { getProductMetricsViewTypeMock } from '../../../enums/product-metrics-view-type.enum.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
+import { getSalesHierarchyViewTypeMock } from '../../../enums/sales-hierarchy-view-type.enum.mock';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -39,7 +42,6 @@ class MockMyPerformanceTableRowComponent {
 }
 
 describe('MyPerformanceTableComponent', () => {
-
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
   let componentInstance: MyPerformanceTableComponent;
   let tableHeaderRow: Array<string> = ['column1', 'column2', 'column3'];
@@ -144,7 +146,6 @@ describe('MyPerformanceTableComponent', () => {
   });
 
   describe('setTableData', () => {
-
     it('should sort the data if some sorting criteria were present', () => {
       const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
@@ -178,16 +179,43 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
-  describe('getTableHeightClass', () => {
+  describe('getTableClasses', () => {
+    describe('when viewType is one of SalesHierarchyViewType', () => {
+      it('should return the classes depending on the input parameters', () => {
+        componentInstance.loadingState = getLoadingStateMock();
+        componentInstance.viewType = getSalesHierarchyViewTypeMock();
 
+        const tableClass = componentInstance.getTableClasses();
+        expect(tableClass).toEqual({
+          [`view-type-${componentInstance.viewType}`]: true,
+          [componentInstance.loadingState]: true
+        });
+      });
+    });
+
+    describe('when viewType is one of ProductMetricsViewType', () => {
+      it('should return the classes depending on the input parameters', () => {
+        componentInstance.loadingState = getLoadingStateMock();
+        componentInstance.viewType = getProductMetricsViewTypeMock();
+
+        const tableClass = componentInstance.getTableClasses();
+        expect(tableClass).toEqual({
+          [`view-type-${componentInstance.viewType}`]: true,
+          [componentInstance.loadingState]: true
+        });
+      });
+    });
+  });
+
+  describe('getTableBodyClasses', () => {
     it('should return the total-row-present class when total row is present', () => {
       const totalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
       const dismissableTotalRowMock: MyPerformanceTableRow = null;
       componentInstance.totalRow = totalRowMock;
       componentInstance.dismissableTotalRow = dismissableTotalRowMock;
 
-      const tableClass = componentInstance.getTableBodyClasses();
-      expect(tableClass).toBe('total-row-present');
+      const tableBodyClass = componentInstance.getTableBodyClasses();
+      expect(tableBodyClass).toBe('total-row-present');
     });
 
     it('should return the total-row-present class when dismissable total row is present', () => {
@@ -196,8 +224,8 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.totalRow = totalRowMock;
       componentInstance.dismissableTotalRow = dismissableTotalRowMock;
 
-      const tableClass = componentInstance.getTableBodyClasses();
-      expect(tableClass).toBe('total-row-present');
+      const tableBodyClass = componentInstance.getTableBodyClasses();
+      expect(tableBodyClass).toBe('total-row-present');
     });
 
     it('should return the total-row-absent class when total row is absent', () => {
@@ -206,8 +234,8 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.totalRow = totalRowMock;
       componentInstance.dismissableTotalRow = dismissableTotalRowMock;
 
-      const tableClass = componentInstance.getTableBodyClasses();
-      expect(tableClass).toBe('total-row-absent');
+      const tableBodyClass = componentInstance.getTableBodyClasses();
+      expect(tableBodyClass).toBe('total-row-absent');
     });
   });
 
