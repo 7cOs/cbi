@@ -30,6 +30,7 @@ import { getProductMetricsBrandMock,
          getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
 import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -2536,18 +2537,39 @@ describe('MyPerformanceComponent', () => {
     beforeEach(() => {
       currentMock = getMyPerformanceEntitiesDataMock();
       currentMock.responsibilities = getResponsibilitesStateMock();
+      currentMock.responsibilities.status = ActionStatus.Fetching;
     });
 
-    it('should set responsibilitiesFetching to true when responsibilities are currently fetching', () => {
-      currentMock.responsibilities.status = ActionStatus.Fetching;
+    it('should set responsibilitiesFetching to true', () => {
       currentSubject.next(currentMock);
       expect(componentInstance.responsibilitiesFetching).toBe(true);
     });
 
-    it('should set responsibilitiesFetching to false when responsibilities are fetched or not fetching', () => {
+    it('should update the table loader status to Loading', () => {
+      currentSubject.next(currentMock);
+      expect(componentInstance.salesHierarchyLoadingState).toEqual(LoadingState.Loading);
+      expect(componentInstance.productMetricsLoadingState).toEqual(LoadingState.Loading);
+    });
+  });
+
+  describe('when NOT fetching responsibilities', () => {
+    let currentMock: MyPerformanceEntitiesData;
+
+    beforeEach(() => {
+      currentMock = getMyPerformanceEntitiesDataMock();
+      currentMock.responsibilities = getResponsibilitesStateMock();
       currentMock.responsibilities.status = ActionStatus.Fetched;
+    });
+
+    it('should set responsibilitiesFetching to false', () => {
       currentSubject.next(currentMock);
       expect(componentInstance.responsibilitiesFetching).toBe(false);
+    });
+
+    it('should update the table loader status to Loading', () => {
+      currentSubject.next(currentMock);
+      expect(componentInstance.salesHierarchyLoadingState).toEqual(LoadingState.Loaded);
+      expect(componentInstance.productMetricsLoadingState).toEqual(LoadingState.Loaded);
     });
   });
 
@@ -2577,27 +2599,46 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when fetching productMetrics', () => {
-
-    it('should set productMetricsFetching to true when productmetrics status is fetching', () => {
+    beforeEach(() => {
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Fetching,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
         productMetricsViewType: ProductMetricsViewType.skus
       };
-      productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.productMetricsFetching).toBe(true);
     });
 
-    it('should set productMetricsFetching to false when productmetrics status is notfetched', () => {
+    it('should set productMetricsFetching to true', () => {
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.productMetricsFetching).toBeTruthy();
+    });
+
+    it('should update the table loader status to Loading', () => {
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.salesHierarchyLoadingState).toEqual(LoadingState.Loading);
+      expect(componentInstance.productMetricsLoadingState).toEqual(LoadingState.Loading);
+    });
+  });
+
+  describe('when NOT fetching productMetrics', () => {
+    beforeEach(() => {
       myPerformanceProductMetricsMock = {
         status: ActionStatus.NotFetched,
         opportunityCountsStatus: ActionStatus.NotFetched,
         products: { brandValues: [] },
         productMetricsViewType: ProductMetricsViewType.brands
       };
+    });
+
+    it('should set productMetricsFetching to false', () => {
       productMetricsSubject.next(myPerformanceProductMetricsMock);
-      expect(componentInstance.productMetricsFetching).toBe(false);
+      expect(componentInstance.productMetricsFetching).toBeFalsy();
+    });
+
+    it('should update the table loader status to Loaded', () => {
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.salesHierarchyLoadingState).toEqual(LoadingState.Loaded);
+      expect(componentInstance.productMetricsLoadingState).toEqual(LoadingState.Loaded);
     });
   });
 
