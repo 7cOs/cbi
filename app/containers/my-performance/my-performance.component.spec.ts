@@ -1972,23 +1972,61 @@ describe('MyPerformanceComponent', () => {
 
         expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
       });
+
+      it('should update the drilling up/down indicators', () => {
+        componentInstanceCopy.drillingUpInitiated = chance.bool();
+        componentInstanceCopy.drillingDownInitiated = chance.bool();
+
+        setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.subAccounts);
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbTrailMock,
+          entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
+        });
+
+        expect(componentInstanceCopy.drillingUpInitiated).toBeTruthy();
+        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+      });
     });
 
-    it('should not dispatch actions when steps back are not possible', () => {
-      const breadcrumbLength = chance.natural({max: 9});
-      const entityIndex = breadcrumbLength - 1;
-      const breadcrumbMock = Array(breadcrumbLength).fill('').map(element => chance.string());
-      const entityMock = breadcrumbMock[entityIndex];
+    describe('when steps back are NOT possible', () => {
+      let breadcrumbLength: number;
+      let entityIndex: number;
+      let breadcrumbMock: string[];
+      let entityMock: string;
 
-      storeMock.dispatch.calls.reset();
-      storeMock.select.calls.reset();
-
-      componentInstance.handleBreadcrumbEntityClicked({
-        trail: breadcrumbMock,
-        entityDescription: entityMock
+      beforeEach(() => {
+        breadcrumbLength = chance.natural({max: 9});
+        entityIndex = breadcrumbLength - 1;
+        breadcrumbMock = Array(breadcrumbLength).fill('').map(element => chance.string());
+        entityMock = breadcrumbMock[entityIndex];
       });
 
-      expect(storeMock.dispatch.calls.count()).toBe(0);
+      it('should not dispatch actions', () => {
+        storeMock.dispatch.calls.reset();
+        storeMock.select.calls.reset();
+
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbMock,
+          entityDescription: entityMock
+        });
+
+        expect(storeMock.dispatch.calls.count()).toBe(0);
+      });
+
+      it('should NOT update the drilling up/down indicators', () => {
+        let drillingUpInitiatedExpectedValue = chance.bool();
+        const drillingDownInitiatedExpectedValue = chance.bool();
+        componentInstanceCopy.drillingUpInitiated = drillingUpInitiatedExpectedValue;
+        componentInstanceCopy.drillingDownInitiated = drillingDownInitiatedExpectedValue;
+
+        componentInstance.handleBreadcrumbEntityClicked({
+          trail: breadcrumbMock,
+          entityDescription: entityMock
+        });
+
+        expect(componentInstanceCopy.drillingUpInitiated).toEqual(drillingUpInitiatedExpectedValue);
+        expect(componentInstanceCopy.drillingDownInitiated).toEqual(drillingDownInitiatedExpectedValue);
+      });
     });
   });
 
