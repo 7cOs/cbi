@@ -414,7 +414,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('Perform various events when back button is clicked', () => {
+  describe('when back button is clicked', () => {
     beforeEach(() => {
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
@@ -661,6 +661,15 @@ describe('MyPerformanceComponent', () => {
 
         expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
       });
+
+      it('should update the drilling up/down indicators', () => {
+        componentInstanceCopy.drillingUpInitiated = chance.string();
+        componentInstanceCopy.drillingDownInitiated = chance.string();
+        componentInstance.handleBackButtonClicked();
+
+        expect(componentInstanceCopy.drillingUpInitiated).toBeTruthy();
+        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+      });
     });
   });
 
@@ -691,6 +700,15 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
       expect(storeMock.dispatch.calls.argsFor(0)[0].payload.filter).toEqual(stateMock.myPerformanceFilter);
       expect(storeMock.dispatch.calls.argsFor(0)[0].payload.filter).not.toEqual(stateMock.myPerformance.current.filter);
+    });
+
+    it('should update the drill up indicator to false', () => {
+      componentInstanceCopy.drillingUpInitiated = chance.bool();
+
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(componentInstanceCopy.drillingUpInitiated).toBeFalsy();
     });
 
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
@@ -1022,6 +1040,15 @@ describe('MyPerformanceComponent', () => {
           expect(actionDispatch.type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
         });
       });
+
+      it('should update the drill down indicator to false', () => {
+        componentInstanceCopy.drillingDownInitiated = chance.bool();
+
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+        componentInstance.handleElementClicked(params);
+
+        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+      });
     });
 
     describe('when viewing distributors', () => {
@@ -1100,6 +1127,34 @@ describe('MyPerformanceComponent', () => {
           expect(actionDispatch.type).not.toEqual(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS);
         });
       });
+
+      it('should update the drill down indicator to false', () => {
+        componentInstanceCopy.drillingDownInitiated = chance.bool();
+
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+        componentInstance.handleElementClicked(params);
+
+        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+      });
+    });
+
+    describe('when viewing anything but distributors or subAccounts', () => {
+      beforeEach(() => {
+        const viewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]).filter(viewType =>
+          viewType !== SalesHierarchyViewType.distributors && viewType !== SalesHierarchyViewType.subAccounts
+        );
+
+        componentInstance.salesHierarchyViewType = sample(viewTypes);
+      });
+
+      it('should update the drill down indicator to true', () => {
+        componentInstanceCopy.drillingDownInitiated = chance.bool();
+
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+        componentInstance.handleElementClicked(params);
+
+        expect(componentInstanceCopy.drillingDownInitiated).toBeTruthy();
+      });
     });
   });
 
@@ -1109,6 +1164,17 @@ describe('MyPerformanceComponent', () => {
     beforeEach(() => {
       rowMock = getMyPerformanceTableRowMock(1)[0];
       rowMock.metadata.positionId = undefined;
+    });
+
+    it('should update the drill up/down indicators', () => {
+      componentInstanceCopy.drillingUpInitiated = chance.bool();
+      componentInstanceCopy.drillingDownInitiated = chance.bool();
+
+      params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
+
+      expect(componentInstanceCopy.drillingUpInitiated).toBeFalsy();
+      expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
     });
 
     describe('when salesHierarchyViewType value is set ', () => {
@@ -1665,10 +1731,25 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when left side total row is clicked', () => {
+    let params: HandleElementClickedParameters;
+
+    beforeEach(() => {
+      params = { leftSide: true, type: RowType.total, index: 0};
+    });
+
+    it('should update the drill up/down indicators', () => {
+      componentInstanceCopy.drillingUpInitiated = chance.bool();
+      componentInstanceCopy.drillingDownInitiated = chance.bool();
+
+      componentInstance.handleElementClicked(params);
+
+      expect(componentInstanceCopy.drillingUpInitiated).toBeFalsy();
+      expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+    });
+
     describe('when viewtype is subaccounts', () => {
       it('should clear the selected subaccount, set the entitytype to account,refresh performances and send analytic event', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
-        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0};
         componentInstance.handleElementClicked(params);
         expect(storeMock.dispatch.calls.count()).toBe(4);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearMyPerformanceSelectedSubaccountCode());
@@ -1686,7 +1767,6 @@ describe('MyPerformanceComponent', () => {
     describe('when viewtype is distributors', () => {
       it('should clear the selected distributor, set the entitytype to person,refresh performances and send analytic event', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
-        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0};
         componentInstance.handleElementClicked(params);
         expect(storeMock.dispatch.calls.count()).toBe(4);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ClearMyPerformanceSelectedDistributorCode());
