@@ -60,6 +60,7 @@ export class MyPerformanceTableComponent {
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
   public rowType = RowType;
+  public rippleColor: string = 'rgba(17, 119, 184, 0.05)';
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;

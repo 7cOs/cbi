@@ -62,7 +62,7 @@ div.performance-table-wrapper
                                 [ngClass]="getEntityRowClasses(rowData)",
                                 (click)="onRowClicked(rowType.data, rowIndex, rowData)",
                                 mdRipple,
-                                mdRippleColor="rgba(17, 119, 184, .05)",
+                                mdRippleColor="{{rippleColor}}",
                                 my-performance-table-row,
                                 [rowData]="rowData",
                                 [showContributionToVolume]="showContributionToVolume",
