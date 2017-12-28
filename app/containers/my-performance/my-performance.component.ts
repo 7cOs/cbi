@@ -115,8 +115,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
   private currentPremiseTypeLabel: string;
-  private drillingDownInitiated: boolean = false;
-  private drillingUpInitiated: boolean = false;
+  private drillingDown: boolean = false;
+  private drillingUp: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -315,19 +315,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
-    this.drillingUpInitiated = false;
+    this.drillingUp = false;
     switch (parameters.type) {
       case RowType.data:
       case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
-          this.drillingDownInitiated = false;
+          this.drillingDown = false;
           this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
-        this.drillingDownInitiated = false;
+        this.drillingDown = false;
         this.handleTotalRowClicked(parameters);
         break;
       default:
@@ -336,8 +336,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
-    this.drillingUpInitiated = true;
-    this.drillingDownInitiated = false;
+    this.drillingUp = true;
+    this.drillingDown = false;
     this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
 
@@ -356,8 +356,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
 
-    this.drillingUpInitiated = true;
-    this.drillingDownInitiated = false;
+    this.drillingUp = true;
+    this.drillingDown = false;
     this.isOpportunityTableExtended = false;
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
@@ -441,12 +441,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
         this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
-      this.drillingDownInitiated = true;
+      this.drillingDown = true;
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
       })));
     } else {
-      this.drillingDownInitiated = false;
+      this.drillingDown = false;
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
@@ -837,10 +837,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.salesHierarchyLoadingState = LoadingState.Loading;
       this.productMetricsLoadingState = LoadingState.Loading;
     } else {
-      if (this.drillingDownInitiated) {
+      if (this.drillingDown) {
         this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
         this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
-      } else if (this.drillingUpInitiated) {
+      } else if (this.drillingUp) {
         this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
         this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
       } else {

@@ -663,12 +663,12 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should update the drilling up/down indicators', () => {
-        componentInstanceCopy.drillingUpInitiated = chance.string();
-        componentInstanceCopy.drillingDownInitiated = chance.string();
+        componentInstanceCopy.drillingUp = chance.string();
+        componentInstanceCopy.drillingDown = chance.string();
         componentInstance.handleBackButtonClicked();
 
-        expect(componentInstanceCopy.drillingUpInitiated).toBeTruthy();
-        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+        expect(componentInstanceCopy.drillingUp).toBeTruthy();
+        expect(componentInstanceCopy.drillingDown).toBeFalsy();
       });
     });
   });
@@ -703,12 +703,12 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should update the drill up indicator to false', () => {
-      componentInstanceCopy.drillingUpInitiated = chance.bool();
+      componentInstanceCopy.drillingUp = chance.bool();
 
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
 
-      expect(componentInstanceCopy.drillingUpInitiated).toBeFalsy();
+      expect(componentInstanceCopy.drillingUp).toBeFalsy();
     });
 
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
@@ -1042,12 +1042,12 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should update the drill down indicator to false', () => {
-        componentInstanceCopy.drillingDownInitiated = chance.bool();
+        componentInstanceCopy.drillingDown = chance.bool();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+        expect(componentInstanceCopy.drillingDown).toBeFalsy();
       });
     });
 
@@ -1129,12 +1129,12 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should update the drill down indicator to false', () => {
-        componentInstanceCopy.drillingDownInitiated = chance.bool();
+        componentInstanceCopy.drillingDown = chance.bool();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+        expect(componentInstanceCopy.drillingDown).toBeFalsy();
       });
     });
 
@@ -1148,12 +1148,12 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should update the drill down indicator to true', () => {
-        componentInstanceCopy.drillingDownInitiated = chance.bool();
+        componentInstanceCopy.drillingDown = chance.bool();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillingDownInitiated).toBeTruthy();
+        expect(componentInstanceCopy.drillingDown).toBeTruthy();
       });
     });
   });
@@ -1167,14 +1167,14 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should update the drill up/down indicators', () => {
-      componentInstanceCopy.drillingUpInitiated = chance.bool();
-      componentInstanceCopy.drillingDownInitiated = chance.bool();
+      componentInstanceCopy.drillingUp = chance.bool();
+      componentInstanceCopy.drillingDown = chance.bool();
 
       params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
 
-      expect(componentInstanceCopy.drillingUpInitiated).toBeFalsy();
-      expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+      expect(componentInstanceCopy.drillingUp).toBeFalsy();
+      expect(componentInstanceCopy.drillingDown).toBeFalsy();
     });
 
     describe('when salesHierarchyViewType value is set ', () => {
@@ -1738,13 +1738,13 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should update the drill up/down indicators', () => {
-      componentInstanceCopy.drillingUpInitiated = chance.bool();
-      componentInstanceCopy.drillingDownInitiated = chance.bool();
+      componentInstanceCopy.drillingUp = chance.bool();
+      componentInstanceCopy.drillingDown = chance.bool();
 
       componentInstance.handleElementClicked(params);
 
-      expect(componentInstanceCopy.drillingUpInitiated).toBeFalsy();
-      expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+      expect(componentInstanceCopy.drillingUp).toBeFalsy();
+      expect(componentInstanceCopy.drillingDown).toBeFalsy();
     });
 
     describe('when viewtype is subaccounts', () => {
@@ -2054,8 +2054,8 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should update the drilling up/down indicators', () => {
-        componentInstanceCopy.drillingUpInitiated = chance.bool();
-        componentInstanceCopy.drillingDownInitiated = chance.bool();
+        componentInstanceCopy.drillingUp = chance.bool();
+        componentInstanceCopy.drillingDown = chance.bool();
 
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.subAccounts);
         componentInstance.handleBreadcrumbEntityClicked({
@@ -2063,8 +2063,8 @@ describe('MyPerformanceComponent', () => {
           entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
-        expect(componentInstanceCopy.drillingUpInitiated).toBeTruthy();
-        expect(componentInstanceCopy.drillingDownInitiated).toBeFalsy();
+        expect(componentInstanceCopy.drillingUp).toBeTruthy();
+        expect(componentInstanceCopy.drillingDown).toBeFalsy();
       });
     });
 
@@ -2094,18 +2094,18 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should NOT update the drilling up/down indicators', () => {
-        let drillingUpInitiatedExpectedValue = chance.bool();
-        const drillingDownInitiatedExpectedValue = chance.bool();
-        componentInstanceCopy.drillingUpInitiated = drillingUpInitiatedExpectedValue;
-        componentInstanceCopy.drillingDownInitiated = drillingDownInitiatedExpectedValue;
+        let drillingUpExpectedValue = chance.bool();
+        const drillingDownExpectedValue = chance.bool();
+        componentInstanceCopy.drillingUp = drillingUpExpectedValue;
+        componentInstanceCopy.drillingDown = drillingDownExpectedValue;
 
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbMock,
           entityDescription: entityMock
         });
 
-        expect(componentInstanceCopy.drillingUpInitiated).toEqual(drillingUpInitiatedExpectedValue);
-        expect(componentInstanceCopy.drillingDownInitiated).toEqual(drillingDownInitiatedExpectedValue);
+        expect(componentInstanceCopy.drillingUp).toEqual(drillingUpExpectedValue);
+        expect(componentInstanceCopy.drillingDown).toEqual(drillingDownExpectedValue);
       });
     });
   });
