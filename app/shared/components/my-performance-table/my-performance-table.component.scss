@@ -99,6 +99,38 @@ tbody {
   animation: transit 1s;
 }
 
+.loaded-with-slide-up-animation {
+  position: relative;
+  top: 660px;
+  opacity: 1;
+
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  transform: translateY(-100%);
+
+  -webkit-transition: -webkit-transform 0.7s ease-out;
+  -moz-transition: -moz-transform 0.7s ease-out;
+  transition: transform 0.7s ease-out;
+
+  animation: transit 1s;
+}
+
+.loaded-with-slide-down-animation {
+  position: relative;
+  top: -660px;
+  opacity: 1;
+
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  transform: translateY(100%);
+
+  -webkit-transition: -webkit-transform 0.7s ease-out;
+  -moz-transition: -moz-transform 0.7s ease-out;
+  transition: transform 0.7s ease-out;
+
+  animation: transit 1s;
+}
+
 @keyframes transit {
   0% {
     opacity: 0;

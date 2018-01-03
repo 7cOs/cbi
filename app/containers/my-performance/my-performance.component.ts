@@ -117,6 +117,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private currentPremiseTypeLabel: string;
   private drillingDown: boolean = false;
   private drillingUp: boolean = false;
+  private selectingBrand: boolean = false;
+  private deselectingBrand: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -363,6 +365,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleDismissableRowXClicked(): void {
+    this.selectingBrand = false;
+    this.deselectingBrand = true;
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
     this.deselectBrandValue();
   }
@@ -560,6 +564,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
     switch (this.productMetricsViewType) {
       case ProductMetricsViewType.brands:
+        this.selectingBrand = true;
+        this.deselectingBrand = false;
         this.selectedBrandCode = parameters.row.metadata.brandCode;
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
@@ -573,11 +579,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case ProductMetricsViewType.skus:
       case ProductMetricsViewType.packages:
         if (this.selectedBrandCode === parameters.row.metadata.brandCode) {
+          this.selectingBrand = false;
+          this.deselectingBrand = true;
           this.deselectBrandValue();
         } else if (this.selectedSkuPackageCode === parameters.row.metadata.skuPackageCode) {
+          this.selectingBrand = false;
+          this.deselectingBrand = false;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         } else if (parameters.type === RowType.data) {
+          this.selectingBrand = false;
+          this.deselectingBrand = false;
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
@@ -589,6 +601,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               parameters.row.metadata.skuPackageType);
           }
         } else {
+          this.selectingBrand = false;
+          this.deselectingBrand = false;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
@@ -843,6 +857,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       } else if (this.drillingUp) {
         this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
         this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+      } else if (this.selectingBrand) {
+        this.salesHierarchyLoadingState = LoadingState.Loaded;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideUpAnimation;
+      } else if (this.deselectingBrand) {
+        this.salesHierarchyLoadingState = LoadingState.Loaded;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideDownAnimation;
       } else {
         this.salesHierarchyLoadingState = LoadingState.Loaded;
         this.productMetricsLoadingState = LoadingState.Loaded;
