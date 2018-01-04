@@ -38,7 +38,7 @@ tbody {
   overflow-y: overlay;
 
   tr {
-    display: table-row;
+    display: block;
     width: 100%;
   }
 
@@ -214,8 +214,9 @@ tr.two-right-columns-present {
 }
 
 .entity-row {
-  height: $row-height;
   border-bottom: 1px solid $gray-10;
+  height: $row-height;
+  position: relative;
 
   /deep/.center-col {
     text-align: center;
@@ -255,6 +256,10 @@ span.negative {
 
 span.link-out {
   color: $blue;
+}
+
+td {
+  height: 60px;
 }
 
 td, th {
