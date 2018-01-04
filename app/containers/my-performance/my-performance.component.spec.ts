@@ -663,8 +663,8 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should update the drilling up/down indicators', () => {
-        componentInstanceCopy.drillingUp = chance.string();
-        componentInstanceCopy.drillingDown = chance.string();
+        componentInstanceCopy.drillingUp = chance.bool();
+        componentInstanceCopy.drillingDown = chance.bool();
         componentInstance.handleBackButtonClicked();
 
         expect(componentInstanceCopy.drillingUp).toBeTruthy();
@@ -2094,7 +2094,7 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should NOT update the drilling up/down indicators', () => {
-        let drillingUpExpectedValue = chance.bool();
+        const drillingUpExpectedValue = chance.bool();
         const drillingDownExpectedValue = chance.bool();
         componentInstanceCopy.drillingUp = drillingUpExpectedValue;
         componentInstanceCopy.drillingDown = drillingDownExpectedValue;
