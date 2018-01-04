@@ -18,6 +18,7 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../models/my-performance-table-row.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -63,8 +64,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public responsibilitiesFetching: boolean;
   public selectedSkuPackageType: SkuPackageType;
   public salesHierarchyViewType: SalesHierarchyViewType;
+  public salesHierarchyLoadingState: LoadingState = LoadingState.Loaded;
+  public productMetricsLoadingState: LoadingState = LoadingState.Loaded;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
+  public showProductMetricsOpportunities: boolean = false;
   public showSalesContributionToVolume: boolean = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -75,7 +79,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
 
-// Mocks
+  // Mocks
   public teamPerformanceTableOpportunitiesMock: Array<TeamPerformanceTableOpportunity> = getTeamPerformanceTableOpportunitiesMock();
   public selectedProductNameMock: string = chance.string({ length: 20 });
   public selectedEntityNameMock: string = chance.string({ length: 20 });
@@ -112,6 +116,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
   private currentPremiseTypeLabel: string;
+  private drillingDown: boolean = false;
+  private drillingUp: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -150,12 +156,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.currentPremiseTypeLabel = this.myPerformanceService.getPremiseTypeStateLabel(filterState.premiseType);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsContributionToVolume = this.getShowProductMetricsContributionToVolume();
+        this.showProductMetricsOpportunities = this.shouldShowProductMetricsOpportunities();
         this.performanceMetric = currentMetricName;
         this.tableHeaderRowLeft[1] = currentMetricName;
         this.tableHeaderRowRight[1] = currentMetricName;
         this.isOpportunityTableExtended = false;
         this.setSelectedDateRangeValues();
         this.handleTeamPerformanceDataRefresh();
+
+        if (this.currentState) {
+          this.handleOpportunityCountFetch(
+            this.currentState.selectedDistributorCode,
+            this.currentState.selectedSubaccountCode,
+            this.currentState.responsibilities.exceptionHierarchy);
+        }
     });
 
     this.productMetricsSubscription = this.store
@@ -163,20 +177,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((productMetrics: ProductMetricsState) => {
         this.productMetricsState = productMetrics;
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
-        this.productMetricsFetching = productMetrics.status === ActionStatus.Fetching;
+        this.productMetricsFetching = this.isFetchingProductMetrics();
+        this.updateLoaderStatus();
         this.productMetricsViewType = productMetrics.productMetricsViewType;
         this.tableHeaderRowRight[0] = this.myPerformanceService.getProductMetricsViewTypeLabel(productMetrics.productMetricsViewType);
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
             productMetrics.products,
+            productMetrics.opportunityCounts,
             this.productMetricsViewType
           );
 
-          this.productMetricsSelectedBrandRow = this.productMetricsViewType !== ProductMetricsViewType.brands
-            && productMetrics.selectedBrandCodeValues
-              ? this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues)
-              : null;
+          if (this.productMetricsViewType !== ProductMetricsViewType.brands && productMetrics.selectedBrandCodeValues) {
+            this.productMetricsSelectedBrandRow = this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
+              productMetrics.selectedBrandCodeValues, productMetrics.opportunityCounts);
+          } else {
+            this.productMetricsSelectedBrandRow = null;
+          }
 
           this.handleDataRefreshAndDeselectionIfNeeded();
         }
@@ -187,12 +205,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
+        this.updateLoaderStatus();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
         this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType);
 
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
-
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
+        this.showProductMetricsOpportunities = this.shouldShowProductMetricsOpportunities();
 
         this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
@@ -298,16 +317,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
+    this.drillingUp = false;
     switch (parameters.type) {
       case RowType.data:
       case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
+          this.drillingDown = false;
           this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
+        this.drillingDown = false;
         this.handleTotalRowClicked(parameters);
         break;
       default:
@@ -316,6 +338,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.drillingUp = true;
+    this.drillingDown = false;
     this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
 
@@ -334,6 +358,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
 
+    this.drillingUp = true;
+    this.drillingDown = false;
     this.isOpportunityTableExtended = false;
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
@@ -417,9 +443,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
         this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
+      this.drillingDown = true;
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
       })));
+    } else {
+      this.drillingDown = false;
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
@@ -497,6 +526,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedSubaccountCode !== this.currentState.selectedSubaccountCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSubaccountCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
+          this.handleOpportunityCountFetch(
+            this.currentState.selectedDistributorCode,
+            this.selectedSubaccountCode,
+            isMemberOfExceptionHierarchy);
         } else if (this.selectedSubaccountCode === parameters.row.metadata.positionId) {
           this.selectedSubaccountCode = null;
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSubaccountCode());
@@ -509,6 +542,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (this.selectedDistributorCode !== this.currentState.selectedDistributorCode) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedDistributorCode(parameters.row.metadata.positionId));
           this.fetchProductMetricsWhenClick(parameters);
+          this.handleOpportunityCountFetch(
+            this.selectedDistributorCode,
+            this.currentState.selectedSubaccountCode,
+            isMemberOfExceptionHierarchy);
         } else if (this.selectedDistributorCode === parameters.row.metadata.positionId) {
           this.selectedDistributorCode = null;
           this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedDistributorCode());
@@ -689,17 +726,29 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     return this.filterState && this.filterState.metricType === MetricTypeValue.volume;
   }
 
+  private shouldShowProductMetricsOpportunities(): boolean {
+    return this.currentState
+      && (!!this.currentState.selectedSubaccountCode || !!this.currentState.selectedDistributorCode)
+      && this.filterState
+      && this.filterState.premiseType !== PremiseTypeValue.All;
+  }
+
   private isInsideAlternateHierarchy(): boolean {
     return !!this.currentState.responsibilities.alternateHierarchyId;
   }
 
   private isFetchingResponsibilities(): boolean {
     return this.currentState.responsibilities &&
-    (this.currentState.responsibilities.status === ActionStatus.Fetching ||
-      this.currentState.responsibilities.responsibilitiesStatus === ActionStatus.Fetching ||
-      this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching ||
-      this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching ||
-      this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+    (this.currentState.responsibilities.status === ActionStatus.Fetching
+      || this.currentState.responsibilities.responsibilitiesStatus === ActionStatus.Fetching
+      || this.currentState.responsibilities.entitiesPerformanceStatus === ActionStatus.Fetching
+      || this.currentState.responsibilities.totalPerformanceStatus === ActionStatus.Fetching
+      || this.currentState.responsibilities.subaccountsStatus === ActionStatus.Fetching);
+  }
+
+  private isFetchingProductMetrics(): boolean {
+    return this.productMetricsState.status === ActionStatus.Fetching
+    || this.productMetricsState.opportunityCountsStatus === ActionStatus.Fetching;
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
@@ -785,6 +834,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }));
   }
 
+  private updateLoaderStatus() {
+    if (this.productMetricsFetching || this.responsibilitiesFetching) {
+      this.salesHierarchyLoadingState = LoadingState.Loading;
+      this.productMetricsLoadingState = LoadingState.Loading;
+    } else {
+      if (this.drillingDown) {
+        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+      } else if (this.drillingUp) {
+        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+      } else {
+        this.salesHierarchyLoadingState = LoadingState.Loaded;
+        this.productMetricsLoadingState = LoadingState.Loaded;
+      }
+    }
+  }
+
   private handleDataRefreshAndDeselectionIfNeeded(): void {
     if (this.productMetricsState
       && this.productMetricsState.status === ActionStatus.Fetched
@@ -840,6 +907,21 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         entityTypeCode: this.currentState.responsibilities.entityTypeCode,
         contextPositionId: this.currentState.responsibilities.alternateHierarchyId || this.currentState.responsibilities.positionId,
         isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
+      }));
+    }
+  }
+
+  private handleOpportunityCountFetch(distributorId: string, subAccountId: string, isMemberOfExceptionHierarchy: boolean): void {
+    if (this.filterState.premiseType !== PremiseTypeValue.All && (!!distributorId || !!subAccountId)) {
+      this.store.dispatch(new ProductMetricsActions.FetchOpportunityCounts({
+        positionId: this.currentState.responsibilities.positionId,
+        alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+        distributorId: distributorId,
+        subAccountId: subAccountId,
+        isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy,
+        selectedEntityType: this.currentState.selectedEntityType,
+        productMetricsViewType: this.productMetricsState.productMetricsViewType,
+        filter: this.filterState
       }));
     }
   }

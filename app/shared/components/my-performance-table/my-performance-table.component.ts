@@ -4,6 +4,7 @@ import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
+import { LoadingState } from '../../../enums/loading-state.enum';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../../enums/row-type.enum';
@@ -48,17 +49,27 @@ export class MyPerformanceTableComponent {
   @Input() selectedSkuPackageCode: string;
   @Input() selectedSubaccountCode: string;
   @Input() selectedDistributorCode: string;
+  @Input() loadingState: LoadingState;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
   public rowType = RowType;
+  public loadingStateEnum = LoadingState;
+  public rippleColor: string = 'rgba(17, 119, 184, 0.05)';
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
 
   constructor (private calculatorService: CalculatorService) { }
 
-  public getTableHeightClass(): string {
+  public getTableClasses(): CssClasses {
+    return {
+      [`view-type-${this.viewType}`]: true,
+      [this.loadingState]: true
+    };
+  }
+
+  public getTableBodyClasses(): string {
     return (this.totalRow || this.dismissableTotalRow) ? 'total-row-present' : 'total-row-absent';
   }
 
@@ -104,6 +115,22 @@ export class MyPerformanceTableComponent {
       style = 'two-right-columns-present';
     } else if (this.showContributionToVolume || this.showOpportunities) {
       style = 'one-right-column-present';
+    }
+
+    return style;
+  }
+
+  public getSubHeaderClasses(): string {
+    let style = '';
+
+    if (this.showContributionToVolume && this.showOpportunities) {
+      style = 'two-right-columns-present';
+    } else if (this.showContributionToVolume || this.showOpportunities) {
+      style = 'one-right-column-present';
+    }
+
+    if (this.totalRow) {
+      style = style.concat(' no-sub-header-border');
     }
 
     return style;

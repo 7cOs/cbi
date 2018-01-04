@@ -1,3 +1,5 @@
+beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
+
 div.performance-table-wrapper
 
   div.performance-table-summary.col-100-pct
@@ -7,7 +9,7 @@ div.performance-table-wrapper
     div.summary-date-range
       span(*ngIf='dateRange && showDateRange') {{ dateRange.range }}
 
-  table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
+  table.my-performance-table.col-100-pct.view-type([ngClass]="getTableClasses()")
 
     thead.col-100-pct
 
@@ -22,7 +24,7 @@ div.performance-table-wrapper
         th.right-col.opportunities.sort-indicator(*ngIf="showOpportunities", colspan=1)
           span OPPS
 
-      tr.sub-header.col-100-pct([ngClass]="getColumnWidthClass()")
+      tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
         th(colspan=1)
         th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn0)")
           span(*ngIf='dateRange') {{ dateRange.displayCode }}
@@ -56,14 +58,17 @@ div.performance-table-wrapper
                               [showX]=true,
                               (onDismissableRowXClicked)="onDismissableRowXClicked.emit()")
 
-    tbody([ngClass]="getTableHeightClass()")
+    tbody([ngClass]="getTableBodyClasses()")
 
-      tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let rowIndex = index",
-                                [ngClass]="getEntityRowClasses(rowData)",
-                                (click)="onRowClicked(rowType.data, rowIndex, rowData)",
+      tr.entity-row.col-100-pct(
+                                *ngFor="let rowData of sortedTableData, let rowIndex = index",
                                 my-performance-table-row,
+                                mdRipple,
+                                mdRippleColor="{{rippleColor}}",
+                                [ngClass]="getEntityRowClasses(rowData)",
                                 [rowData]="rowData",
                                 [showContributionToVolume]="showContributionToVolume",
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
-                                (onSublineClicked)="onSublineClicked.emit(rowData);")
+                                (click)="onRowClicked(rowType.data, rowIndex, rowData)",
+                                (onSublineClicked)="onSublineClicked.emit(rowData)")

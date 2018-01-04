@@ -7,6 +7,7 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
@@ -168,6 +169,58 @@ export class ProductMetricsApiService {
     })
       .map(res => res.json())
       .catch(err => this.handleError(err, aggregation, params.type));
+  }
+
+  public getDistributorOpportunityCounts(
+    distributorId: string,
+    positionId: string,
+    premiseType: string,
+    countStructureType: string,
+    segment: string,
+    impact: string,
+    type: string
+  ): Observable<OpportunityCountDTO[]> {
+    const url = `/v3/distributors/${ distributorId }/opportunityCounts`;
+    const params = {
+      positionIds: positionId,
+      premiseType: premiseType,
+      countStructureType: countStructureType,
+      segment: segment,
+      impact: impact,
+      type: type,
+    };
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => Observable.throw(err));
+  }
+
+  public getSubAccountOpportunityCounts(
+    subAccountId: string,
+    positionId: string,
+    premiseType: string,
+    countStructureType: string,
+    segment: string,
+    impact: string,
+    type: string
+  ): Observable<OpportunityCountDTO[]> {
+    const url = `/v3/subAccounts/${ subAccountId }/opportunityCounts`;
+    const params = {
+      positionIds: positionId,
+      premiseType: premiseType,
+      countStructureType: countStructureType,
+      segment: segment,
+      impact: impact,
+      type: type
+    };
+
+    return this.http.get(url, {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => Observable.throw(err));
   }
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {

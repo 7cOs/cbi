@@ -6,6 +6,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ProductMetricsData } from '../../services/product-metrics.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
@@ -29,10 +30,20 @@ export class ProductMetricsEffects {
       .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailure(error)));
   }
 
+  @Effect()
+  fetchProductMetricOpportunityCounts$(): Observable<Action> {
+    return this.actions$
+      .ofType(ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS)
+      .switchMap((action: Action) => this.productMetricsService.getOpportunityCounts(action.payload))
+      .switchMap((response: OpportunitiesGroupedByBrandSkuPackageCode) =>
+        Observable.of(new ProductMetricsActions.FetchOpportunityCountsSuccess(response)))
+      .catch((error: Error) => Observable.of(new ProductMetricsActions.FetchOpportunityCountsFailure(error)));
+  }
+
   @Effect({dispatch: false})
   fetchProdcutMetricsFailure$(): Observable<Action> {
     return this.actions$
-      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE)
+      .ofType(ProductMetricsActions.FETCH_PRODUCT_METRICS_FAILURE, ProductMetricsActions.FETCH_OPPORTUNITY_COUNTS_FAILURE)
       .do((action: Action) => {
         console.error('ProductMetrics fetch failure:', action.payload);
       });
