@@ -58,14 +58,15 @@ div.performance-table-wrapper
 
     tbody([ngClass]="getTableHeightClass()")
 
-      tr.entity-row.col-100-pct(*ngFor="let rowData of sortedTableData, let rowIndex = index",
-                                [ngClass]="getEntityRowClasses(rowData)",
-                                (click)="onRowClicked(rowType.data, rowIndex, rowData)",
+      tr.entity-row.col-100-pct(
+                                *ngFor="let rowData of sortedTableData, let rowIndex = index",
                                 my-performance-table-row,
+                                mdRipple,
+                                mdRippleColor="{{rippleColor}}",
+                                [ngClass]="getEntityRowClasses(rowData)",
                                 [rowData]="rowData",
                                 [showContributionToVolume]="showContributionToVolume",
                                 [showOpportunities]="showOpportunities",
                                 [viewType]="viewType",
-                                (onSublineClicked)="onSublineClicked.emit(rowData);",
-                                mdRipple,
-                                mdRippleColor="{{rippleColor}}")
+                                (click)="onRowClicked(rowType.data, rowIndex, rowData)",
+                                (onSublineClicked)="onSublineClicked.emit(rowData)")
