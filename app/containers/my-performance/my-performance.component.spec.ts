@@ -127,7 +127,7 @@ class TeamPerformanceOpportunitiesComponentMock {
   @Input() total: number;
 }
 
-fdescribe('MyPerformanceComponent', () => {
+describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
   let componentInstanceCopy: any;
@@ -1465,6 +1465,15 @@ fdescribe('MyPerformanceComponent', () => {
         componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
       });
 
+      it('should update the drillStatus indicator to BrandDeselected', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
+
+        params.row.metadata.brandCode = stateMock.myPerformance.current.selectedBrandCode;
+        componentInstance.handleElementClicked(params);
+
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandDeselected);
+      });
+
       it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
         componentInstance.handleElementClicked(params);
 
@@ -2447,6 +2456,14 @@ fdescribe('MyPerformanceComponent', () => {
       currentMock = getMyPerformanceEntitiesDataMock();
       currentMock.responsibilities = getResponsibilitesStateMock();
       myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([getMyPerformanceTableRowMock]);
+    });
+
+    it('should update the drillStatus indicator to BrandDeselected', () => {
+      componentInstanceCopy.drillStatus = getDrillStatusMock();
+
+      componentInstance.handleDismissableRowXClicked();
+
+      expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandDeselected);
     });
 
     it('should dispatch all actions correctly and assign variables correctly and call 4 actions', () => {
