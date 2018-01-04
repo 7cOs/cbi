@@ -57,58 +57,6 @@ tbody {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-.loading {
-  opacity: 0;
-}
-
-.loaded {
-  opacity: 1;
-
-  transition: opacity 0.5s;
-}
-
-.loaded-with-slide-left-animation {
-  position: relative;
-  right: -565px;
-  opacity: 1;
-
-  -webkit-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  transform: translateX(-100%);
-
-  -webkit-transition: -webkit-transform 0.7s ease-out;
-  -moz-transition: -moz-transform 0.7s ease-out;
-  transition: transform 0.7s ease-out;
-
-  animation: transit 1s;
-}
-
-.loaded-with-slide-right-animation {
-  position: relative;
-  right: 565px;
-  opacity: 1;
-
-  -webkit-transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  transform: translateX(100%);
-
-  -webkit-transition: -webkit-transform 0.7s ease-out;
-  -moz-transition: -moz-transform 0.7s ease-out;
-  transition: transform 0.7s ease-out;
-
-  animation: transit 1s;
-}
-
-@keyframes transit {
-  0% {
-    opacity: 0;
-  }
-
-  80% {
-    opacity: 0.5;
-  }
-}
-
 .individual-loader {
   display: inline-block;
   position: absolute;
@@ -190,6 +138,58 @@ tr.one-right-column-present {
     &.spanned {
       width: 51%;
     }
+  }
+}
+
+.loading {
+  opacity: 0;
+}
+
+.loaded {
+  opacity: 1;
+
+  transition: opacity 0.5s;
+}
+
+.loaded-with-slide-left-animation {
+  position: relative;
+  right: -565px;
+  opacity: 1;
+
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  transform: translateX(-100%);
+
+  -webkit-transition: -webkit-transform 0.7s ease-out;
+  -moz-transition: -moz-transform 0.7s ease-out;
+  transition: transform 0.7s ease-out;
+
+  animation: transit 1s;
+}
+
+.loaded-with-slide-right-animation {
+  position: relative;
+  right: 565px;
+  opacity: 1;
+
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  transform: translateX(100%);
+
+  -webkit-transition: -webkit-transform 0.7s ease-out;
+  -moz-transition: -moz-transform 0.7s ease-out;
+  transition: transform 0.7s ease-out;
+
+  animation: transit 1s;
+}
+
+@keyframes transit {
+  0% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 0.5;
   }
 }
 
