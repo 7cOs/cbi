@@ -1139,7 +1139,7 @@ describe('MyPerformanceComponent', () => {
         componentInstance.salesHierarchyViewType = sample(viewTypes);
       });
 
-      it('should update the drillStatus indicator to true', () => {
+      it('should update the drillStatus indicator to Down', () => {
         componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
@@ -2095,7 +2095,7 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.count()).toBe(0);
       });
 
-      it('should NOT update the drillStatus indicator to Up', () => {
+      it('should NOT update the drillStatus indicator', () => {
         const drillStatusExpectedValue = getDrillStatusMock();
         componentInstanceCopy.drillStatus = drillStatusExpectedValue;
 
