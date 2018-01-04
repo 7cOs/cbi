@@ -39,6 +39,7 @@ class MockMyPerformanceTableRowComponent {
   @Input() showOpportunities: boolean;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() showX: boolean;
+  @Input() mdRippleColor: string;
 }
 
 describe('MyPerformanceTableComponent', () => {
