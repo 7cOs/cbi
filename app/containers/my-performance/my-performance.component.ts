@@ -325,7 +325,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
         break;
       case RowType.total:
-        this.drillStatus = DrillStatus.Neutral;
+        this.drillStatus = DrillStatus.Inactive;
         this.handleTotalRowClicked(parameters);
         break;
       default:
@@ -443,7 +443,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         filter: this.filterState
       })));
     } else {
-      this.drillStatus = DrillStatus.Neutral;
+      this.drillStatus = DrillStatus.Inactive;
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
@@ -574,11 +574,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.drillStatus = DrillStatus.BrandDeselected;
           this.deselectBrandValue();
         } else if (this.selectedSkuPackageCode === parameters.row.metadata.skuPackageCode) {
-          this.drillStatus = DrillStatus.Neutral;
+          this.drillStatus = DrillStatus.Inactive;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         } else if (parameters.type === RowType.data) {
-          this.drillStatus = DrillStatus.Neutral;
+          this.drillStatus = DrillStatus.Inactive;
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
@@ -590,7 +590,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               parameters.row.metadata.skuPackageType);
           }
         } else {
-          this.drillStatus = DrillStatus.Neutral;
+          this.drillStatus = DrillStatus.Inactive;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
@@ -860,7 +860,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.productMetricsLoadingState = LoadingState.LoadedWithSlideDownAnimation;
           break;
 
-        case DrillStatus.Neutral:
+        case DrillStatus.Inactive:
         default:
           this.salesHierarchyLoadingState = LoadingState.Loaded;
           this.productMetricsLoadingState = LoadingState.Loaded;

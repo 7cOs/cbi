@@ -3,5 +3,5 @@ export enum DrillStatus {
   Up,
   BrandSelected,
   BrandDeselected,
-  Neutral
+  Inactive
 }

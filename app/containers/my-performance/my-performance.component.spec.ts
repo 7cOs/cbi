@@ -1033,13 +1033,13 @@ describe('MyPerformanceComponent', () => {
         });
       });
 
-      it('should update the drillStatus indicator to Neutral', () => {
+      it('should update the drillStatus indicator to Inactive', () => {
         componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Neutral);
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
     });
 
@@ -1120,13 +1120,13 @@ describe('MyPerformanceComponent', () => {
         });
       });
 
-      it('should update the drillStatus indicator to Neutral', () => {
+      it('should update the drillStatus indicator to Inactive', () => {
         componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Neutral);
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
     });
 
@@ -1402,13 +1402,13 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
       });
 
-      it('should update the drillStatus indicator to Neutral', () => {
+      it('should update the drillStatus indicator to Inactive', () => {
         componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Neutral);
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
 
       it('should trigger appropriate actions with any salesHierarchyViewType and ' +
@@ -1743,12 +1743,12 @@ describe('MyPerformanceComponent', () => {
       params = { leftSide: true, type: RowType.total, index: 0};
     });
 
-    it('should update the drillStatus indicator to Neutral', () => {
+    it('should update the drillStatus indicator to Inactive', () => {
       componentInstanceCopy.drillStatus = getDrillStatusMock();
 
       componentInstance.handleElementClicked(params);
 
-      expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Neutral);
+      expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
     });
 
     describe('when viewtype is subaccounts', () => {
