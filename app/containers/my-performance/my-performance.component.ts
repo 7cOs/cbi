@@ -14,6 +14,7 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { DrillStatus } from '../../enums/drill-status.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../models/my-performance-table-row.model.mock';
@@ -115,10 +116,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
   private currentPremiseTypeLabel: string;
-  private drillingDown: boolean = false;
-  private drillingUp: boolean = false;
-  private selectingBrand: boolean = false;
-  private deselectingBrand: boolean = false;
+  private drillStatus: DrillStatus;
 
   constructor(
     private store: Store<AppState>,
@@ -317,19 +315,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
-    this.drillingUp = false;
     switch (parameters.type) {
       case RowType.data:
       case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
-          this.drillingDown = false;
           this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
-        this.drillingDown = false;
+        this.drillStatus = DrillStatus.Neutral;
         this.handleTotalRowClicked(parameters);
         break;
       default:
@@ -338,8 +334,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
-    this.drillingUp = true;
-    this.drillingDown = false;
+    this.drillStatus = DrillStatus.Up;
     this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
 
@@ -358,15 +353,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
 
-    this.drillingUp = true;
-    this.drillingDown = false;
+    this.drillStatus = DrillStatus.Up;
     this.isOpportunityTableExtended = false;
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
 
   public handleDismissableRowXClicked(): void {
-    this.selectingBrand = false;
-    this.deselectingBrand = true;
+    this.drillStatus = DrillStatus.BrandDeselected;
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
     this.deselectBrandValue();
   }
@@ -445,12 +438,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
         this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
-      this.drillingDown = true;
+      this.drillStatus = DrillStatus.Down;
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
       })));
     } else {
-      this.drillingDown = false;
+      this.drillStatus = DrillStatus.Neutral;
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
@@ -564,8 +557,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
     switch (this.productMetricsViewType) {
       case ProductMetricsViewType.brands:
-        this.selectingBrand = true;
-        this.deselectingBrand = false;
+        this.drillStatus = DrillStatus.BrandSelected;
         this.selectedBrandCode = parameters.row.metadata.brandCode;
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
@@ -579,17 +571,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case ProductMetricsViewType.skus:
       case ProductMetricsViewType.packages:
         if (this.selectedBrandCode === parameters.row.metadata.brandCode) {
-          this.selectingBrand = false;
-          this.deselectingBrand = true;
+          this.drillStatus = DrillStatus.BrandDeselected;
           this.deselectBrandValue();
         } else if (this.selectedSkuPackageCode === parameters.row.metadata.skuPackageCode) {
-          this.selectingBrand = false;
-          this.deselectingBrand = false;
+          this.drillStatus = DrillStatus.Neutral;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         } else if (parameters.type === RowType.data) {
-          this.selectingBrand = false;
-          this.deselectingBrand = false;
+          this.drillStatus = DrillStatus.Neutral;
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
@@ -601,8 +590,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               parameters.row.metadata.skuPackageType);
           }
         } else {
-          this.selectingBrand = false;
-          this.deselectingBrand = false;
+          this.drillStatus = DrillStatus.Neutral;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
@@ -851,21 +839,32 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.salesHierarchyLoadingState = LoadingState.Loading;
       this.productMetricsLoadingState = LoadingState.Loading;
     } else {
-      if (this.drillingDown) {
-        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
-        this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
-      } else if (this.drillingUp) {
-        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
-        this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
-      } else if (this.selectingBrand) {
-        this.salesHierarchyLoadingState = LoadingState.Loaded;
-        this.productMetricsLoadingState = LoadingState.LoadedWithSlideUpAnimation;
-      } else if (this.deselectingBrand) {
-        this.salesHierarchyLoadingState = LoadingState.Loaded;
-        this.productMetricsLoadingState = LoadingState.LoadedWithSlideDownAnimation;
-      } else {
-        this.salesHierarchyLoadingState = LoadingState.Loaded;
-        this.productMetricsLoadingState = LoadingState.Loaded;
+      switch (this.drillStatus) {
+        case DrillStatus.Down:
+          this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+          break;
+
+        case DrillStatus.Up:
+          this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+          break;
+
+        case DrillStatus.BrandSelected:
+          this.salesHierarchyLoadingState = LoadingState.Loaded;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideUpAnimation;
+          break;
+
+        case DrillStatus.BrandDeselected:
+          this.salesHierarchyLoadingState = LoadingState.Loaded;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideDownAnimation;
+          break;
+
+        case DrillStatus.Neutral:
+        default:
+          this.salesHierarchyLoadingState = LoadingState.Loaded;
+          this.productMetricsLoadingState = LoadingState.Loaded;
+          break;
       }
     }
   }
