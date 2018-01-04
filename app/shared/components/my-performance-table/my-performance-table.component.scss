@@ -38,7 +38,7 @@ tbody {
   overflow-y: overlay;
 
   tr {
-    display: table-row;
+    display: block;
     width: 100%;
   }
 
@@ -55,6 +55,65 @@ tbody {
 :host-context(.edge) tbody {
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.loading {
+  opacity: 0;
+}
+
+.loaded {
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.loaded-with-slide-left-animation {
+  opacity: 1;
+  position: relative;
+  right: -565px;
+
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  transform: translateX(-100%);
+
+  -webkit-transition: -webkit-transform 0.7s ease-out;
+  -moz-transition: -moz-transform 0.7s ease-out;
+  transition: transform 0.7s ease-out;
+
+  animation: transit 1s;
+}
+
+.loaded-with-slide-right-animation {
+  opacity: 1;
+  position: relative;
+  right: 565px;
+
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  transform: translateX(100%);
+
+  -webkit-transition: -webkit-transform 0.7s ease-out;
+  -moz-transition: -moz-transform 0.7s ease-out;
+  transition: transform 0.7s ease-out;
+
+  animation: transit 1s;
+}
+
+@keyframes transit {
+  0% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+}
+
+.individual-loader {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
 }
 
 th {
@@ -214,8 +273,9 @@ tr.two-right-columns-present {
 }
 
 .entity-row {
-  height: $row-height;
   border-bottom: 1px solid $gray-10;
+  height: $row-height;
+  position: relative;
 
   /deep/.center-col {
     text-align: center;
@@ -255,6 +315,10 @@ span.negative {
 
 span.link-out {
   color: $blue;
+}
+
+td {
+  height: 60px;
 }
 
 td, th {
