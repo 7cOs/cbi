@@ -63,14 +63,13 @@ tbody {
 
 .loaded {
   opacity: 1;
-
   transition: opacity 0.5s;
 }
 
 .loaded-with-slide-left-animation {
+  opacity: 1;
   position: relative;
   right: -565px;
-  opacity: 1;
 
   -webkit-transform: translateX(-100%);
   -moz-transform: translateX(-100%);
@@ -84,9 +83,9 @@ tbody {
 }
 
 .loaded-with-slide-right-animation {
+  opacity: 1;
   position: relative;
   right: 565px;
-  opacity: 1;
 
   -webkit-transform: translateX(100%);
   -moz-transform: translateX(100%);
@@ -100,9 +99,9 @@ tbody {
 }
 
 .loaded-with-slide-up-animation {
+  opacity: 1;
   position: relative;
   top: 660px;
-  opacity: 1;
 
   -webkit-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
@@ -116,9 +115,9 @@ tbody {
 }
 
 .loaded-with-slide-down-animation {
+  opacity: 1;
   position: relative;
   top: -660px;
-  opacity: 1;
 
   -webkit-transform: translateY(100%);
   -moz-transform: translateY(100%);
