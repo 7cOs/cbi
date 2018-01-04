@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { CalculatorService } from '../../../services/calculator.service';
@@ -11,13 +10,6 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { SharedModule } from '../../../shared/shared.module';
-
-@NgModule({
-  imports: [
-    SharedModule
-  ]
-})
 
 @Component({
   selector: 'my-performance-table',
