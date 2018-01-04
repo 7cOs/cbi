@@ -214,9 +214,9 @@ tr.two-right-columns-present {
 }
 
 .entity-row {
-  position: relative;
-  height: $row-height;
   border-bottom: 1px solid $gray-10;
+  height: $row-height;
+  position: relative;
 
   /deep/.center-col {
     text-align: center;
