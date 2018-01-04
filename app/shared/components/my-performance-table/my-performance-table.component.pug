@@ -1,3 +1,5 @@
+beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
+
 div.performance-table-wrapper
 
   div.performance-table-summary.col-100-pct
@@ -7,7 +9,7 @@ div.performance-table-wrapper
     div.summary-date-range
       span(*ngIf='dateRange && showDateRange') {{ dateRange.range }}
 
-  table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
+  table.my-performance-table.col-100-pct.view-type([ngClass]="getTableClasses()")
 
     thead.col-100-pct
 
@@ -56,7 +58,7 @@ div.performance-table-wrapper
                               [showX]=true,
                               (onDismissableRowXClicked)="onDismissableRowXClicked.emit()")
 
-    tbody([ngClass]="getTableHeightClass()")
+    tbody([ngClass]="getTableBodyClasses()")
 
       tr.entity-row.col-100-pct(
                                 *ngFor="let rowData of sortedTableData, let rowIndex = index",

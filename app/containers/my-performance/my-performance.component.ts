@@ -18,6 +18,7 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../models/my-performance-table-row.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -63,6 +64,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public responsibilitiesFetching: boolean;
   public selectedSkuPackageType: SkuPackageType;
   public salesHierarchyViewType: SalesHierarchyViewType;
+  public salesHierarchyLoadingState: LoadingState = LoadingState.Loaded;
+  public productMetricsLoadingState: LoadingState = LoadingState.Loaded;
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showProductMetricsOpportunities: boolean = false;
@@ -112,6 +115,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
   private currentPremiseTypeLabel: string;
+  private drillingDown: boolean = false;
+  private drillingUp: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -166,6 +171,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.productMetricsState = productMetrics;
         this.fetchProductMetricsFailure = productMetrics && productMetrics.status === ActionStatus.Error;
         this.productMetricsFetching = this.isFetchingProductMetrics();
+        this.updateLoaderStatus();
         this.productMetricsViewType = productMetrics.productMetricsViewType;
         this.tableHeaderRowRight[0] = this.myPerformanceService.getProductMetricsViewTypeLabel(productMetrics.productMetricsViewType);
 
@@ -192,6 +198,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.responsibilitiesFetching = this.isFetchingResponsibilities();
+        this.updateLoaderStatus();
         this.salesHierarchyViewType = current.salesHierarchyViewType.viewType;
         this.tableHeaderRowLeft[0] = this.myPerformanceService.getSalesHierarchyViewTypeLabel(current.salesHierarchyViewType.viewType);
 
@@ -308,16 +315,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
+    this.drillingUp = false;
     switch (parameters.type) {
       case RowType.data:
       case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
+          this.drillingDown = false;
           this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
+        this.drillingDown = false;
         this.handleTotalRowClicked(parameters);
         break;
       default:
@@ -326,6 +336,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
+    this.drillingUp = true;
+    this.drillingDown = false;
     this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
 
@@ -344,6 +356,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
 
+    this.drillingUp = true;
+    this.drillingDown = false;
     this.isOpportunityTableExtended = false;
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
@@ -427,9 +441,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
         this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
+      this.drillingDown = true;
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
       })));
+    } else {
+      this.drillingDown = false;
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
@@ -813,6 +830,24 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       accountPositionId: this.currentState.responsibilities.accountPositionId,
       isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
     }));
+  }
+
+  private updateLoaderStatus() {
+    if (this.productMetricsFetching || this.responsibilitiesFetching) {
+      this.salesHierarchyLoadingState = LoadingState.Loading;
+      this.productMetricsLoadingState = LoadingState.Loading;
+    } else {
+      if (this.drillingDown) {
+        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+      } else if (this.drillingUp) {
+        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+        this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+      } else {
+        this.salesHierarchyLoadingState = LoadingState.Loaded;
+        this.productMetricsLoadingState = LoadingState.Loaded;
+      }
+    }
   }
 
   private handleDataRefreshAndDeselectionIfNeeded(): void {
