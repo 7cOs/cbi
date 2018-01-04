@@ -1463,12 +1463,11 @@ describe('MyPerformanceComponent', () => {
           productMetricsViewType: ProductMetricsViewType.skus
         };
         productMetricsSubject.next(myPerformanceProductMetricsMock);
+
         componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
         componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
         componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
-      });
 
-      afterEach(() => {
         stateMock.myPerformance.current.selectedSubaccountCode = chance.string();
         stateMock.myPerformance.current.selectedDistributorCode = chance.string();
       });
