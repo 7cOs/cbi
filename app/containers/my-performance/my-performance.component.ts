@@ -14,6 +14,7 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { DrillStatus } from '../../enums/drill-status.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../models/my-performance-table-row.model.mock';
@@ -86,6 +87,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public selectedOpportunitiesTotal: number = chance.natural({ max: 999999999999 });
 
   private currentState: MyPerformanceEntitiesData;
+  private currentUserId: string;
   private entityType: EntityType;
   private filterState: MyPerformanceFilterState;
   private dateRangeSubscription: Subscription;
@@ -115,8 +117,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private versions: MyPerformanceEntitiesData[];
   private isOpportunityTableExtended: boolean = false;
   private currentPremiseTypeLabel: string;
-  private drillingDown: boolean = false;
-  private drillingUp: boolean = false;
+  private drillStatus: DrillStatus;
 
   constructor(
     private store: Store<AppState>,
@@ -130,6 +131,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
+
+    const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
+    const currentUserIsMemberOfExceptionHierarchy: boolean =
+      includes(this.userService.model.currentUser.srcTypeCd, 'EXCPN_HIER');
+
     this.titleService.setTitle(this.$state.current.title);
     this.dateRangeSubscription = this.store
       .select(state => state.dateRanges)
@@ -233,11 +240,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.showLeftBackButton = versions.length > 0;
     });
 
-    const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
-    const currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
-    const currentUserIsMemberOfExceptionHierarchy: boolean =
-      includes(this.userService.model.currentUser.srcTypeCd, 'EXCPN_HIER');
-
     if (this.filterState) {
       const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
         MetricTypeValue.volume, this.userService.model.currentUser.srcTypeCd[0]);
@@ -247,13 +249,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         premiseType: defaultUserPremiseType
       }));
       this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
-        positionId: currentUserId,
+        positionId: this.currentUserId,
         filter: this.filterState,
         selectedEntityDescription: currentUserFullName,
         isMemberOfExceptionHierarchy: currentUserIsMemberOfExceptionHierarchy
       }));
       this.store.dispatch(new ProductMetricsActions.FetchProductMetrics({
-        positionId: currentUserId,
+        positionId: this.currentUserId,
         filter: this.filterState,
         selectedEntityType: EntityType.Person,
         selectedBrandCode: this.selectedBrandCode
@@ -315,19 +317,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
-    this.drillingUp = false;
     switch (parameters.type) {
       case RowType.data:
       case RowType.dismissableTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
-          this.drillingDown = false;
           this.handleRightRowElementClicked(parameters);
         }
         break;
       case RowType.total:
-        this.drillingDown = false;
+        this.drillStatus = DrillStatus.Inactive;
         this.handleTotalRowClicked(parameters);
         break;
       default:
@@ -336,8 +336,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleBackButtonClicked(): void {
-    this.drillingUp = true;
-    this.drillingDown = false;
+    this.drillStatus = DrillStatus.Up;
     this.isOpportunityTableExtended = false;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', 'Back Button');
 
@@ -356,13 +355,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const clickedState: MyPerformanceEntitiesData = this.versions[clickedIndex];
     if (stepsBack < 1) return;
 
-    this.drillingUp = true;
-    this.drillingDown = false;
+    this.drillStatus = DrillStatus.Up;
     this.isOpportunityTableExtended = false;
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
 
   public handleDismissableRowXClicked(): void {
+    this.drillStatus = DrillStatus.BrandDeselected;
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
     this.deselectBrandValue();
   }
@@ -441,12 +440,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
         this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
-      this.drillingDown = true;
+      this.drillStatus = DrillStatus.Down;
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
       })));
     } else {
-      this.drillingDown = false;
+      this.drillStatus = DrillStatus.Inactive;
     }
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
@@ -560,6 +559,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', parameters.row.descriptionRow0);
     switch (this.productMetricsViewType) {
       case ProductMetricsViewType.brands:
+        this.drillStatus = DrillStatus.BrandSelected;
         this.selectedBrandCode = parameters.row.metadata.brandCode;
         this.store.dispatch(new ProductMetricsActions.SelectBrandValues(parameters.row.metadata.brandCode));
         this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedBrandCode(parameters.row.metadata.brandCode));
@@ -573,11 +573,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case ProductMetricsViewType.skus:
       case ProductMetricsViewType.packages:
         if (this.selectedBrandCode === parameters.row.metadata.brandCode) {
+          this.drillStatus = DrillStatus.BrandDeselected;
           this.deselectBrandValue();
         } else if (this.selectedSkuPackageCode === parameters.row.metadata.skuPackageCode) {
+          this.drillStatus = DrillStatus.Inactive;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         } else if (parameters.type === RowType.data) {
+          this.drillStatus = DrillStatus.Inactive;
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
           this.selectedSkuPackageCode = parameters.row.metadata.skuPackageCode;
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedSkuCode({
@@ -589,6 +592,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               parameters.row.metadata.skuPackageType);
           }
         } else {
+          this.drillStatus = DrillStatus.Inactive;
           this.deselectSkuPackage();
           this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
@@ -837,15 +841,32 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.salesHierarchyLoadingState = LoadingState.Loading;
       this.productMetricsLoadingState = LoadingState.Loading;
     } else {
-      if (this.drillingDown) {
-        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
-        this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
-      } else if (this.drillingUp) {
-        this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
-        this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
-      } else {
-        this.salesHierarchyLoadingState = LoadingState.Loaded;
-        this.productMetricsLoadingState = LoadingState.Loaded;
+      switch (this.drillStatus) {
+        case DrillStatus.Down:
+          this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+          break;
+
+        case DrillStatus.Up:
+          this.salesHierarchyLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideRightAnimation;
+          break;
+
+        case DrillStatus.BrandSelected:
+          this.salesHierarchyLoadingState = LoadingState.Loaded;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideUpAnimation;
+          break;
+
+        case DrillStatus.BrandDeselected:
+          this.salesHierarchyLoadingState = LoadingState.Loaded;
+          this.productMetricsLoadingState = LoadingState.LoadedWithSlideDownAnimation;
+          break;
+
+        case DrillStatus.Inactive:
+        default:
+          this.salesHierarchyLoadingState = LoadingState.Loaded;
+          this.productMetricsLoadingState = LoadingState.Loaded;
+          break;
       }
     }
   }
@@ -877,7 +898,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private handleTeamPerformanceDataRefresh(): void {
     if (this.currentState && this.productMetricsState) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
-        positionId: this.currentState.responsibilities.positionId,
+        positionId: this.currentState.responsibilities.positionId === CORPORATE_USER_POSITION_ID
+                    ? this.currentUserId
+                    : this.currentState.responsibilities.positionId,
         groupedEntities: this.currentState.responsibilities.groupedEntities,
         hierarchyGroups: this.currentState.responsibilities.hierarchyGroups,
         selectedEntityType: this.currentState.selectedEntityType,
@@ -894,7 +917,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         positionId: this.currentState.selectedSubaccountCode
           || this.currentState.selectedDistributorCode
           || this.currentState.responsibilities.accountPositionId
-          || this.currentState.responsibilities.positionId,
+          || this.currentState.responsibilities.positionId
+          || this.currentUserId,
         filter: this.filterState,
         selectedEntityType: this.currentState.selectedEntityType,
         selectedBrandCode: this.currentState.selectedBrandCode,
