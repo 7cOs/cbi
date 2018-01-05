@@ -13,13 +13,15 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { dateRangeStateMock } from '../../models/date-range-state.model.mock';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { DrillStatus } from '../../enums/drill-status.enum';
 import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetrics,
          SelectBrandValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
+import { getDrillStatusMock } from '../../enums/drill-status.enum.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock,
          getMyPerformanceStateMock,
@@ -662,13 +664,12 @@ describe('MyPerformanceComponent', () => {
         expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
       });
 
-      it('should update the drilling up/down indicators', () => {
-        componentInstanceCopy.drillingUp = chance.bool();
-        componentInstanceCopy.drillingDown = chance.bool();
+      it('should update the drillStatus indicator to Up', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
+
         componentInstance.handleBackButtonClicked();
 
-        expect(componentInstanceCopy.drillingUp).toBeTruthy();
-        expect(componentInstanceCopy.drillingDown).toBeFalsy();
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Up);
       });
     });
   });
@@ -700,15 +701,6 @@ describe('MyPerformanceComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
       expect(storeMock.dispatch.calls.argsFor(0)[0].payload.filter).toEqual(stateMock.myPerformanceFilter);
       expect(storeMock.dispatch.calls.argsFor(0)[0].payload.filter).not.toEqual(stateMock.myPerformance.current.filter);
-    });
-
-    it('should update the drill up indicator to false', () => {
-      componentInstanceCopy.drillingUp = chance.bool();
-
-      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
-      componentInstance.handleElementClicked(params);
-
-      expect(componentInstanceCopy.drillingUp).toBeFalsy();
     });
 
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
@@ -1041,13 +1033,13 @@ describe('MyPerformanceComponent', () => {
         });
       });
 
-      it('should update the drill down indicator to false', () => {
-        componentInstanceCopy.drillingDown = chance.bool();
+      it('should update the drillStatus indicator to Inactive', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillingDown).toBeFalsy();
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
     });
 
@@ -1128,13 +1120,13 @@ describe('MyPerformanceComponent', () => {
         });
       });
 
-      it('should update the drill down indicator to false', () => {
-        componentInstanceCopy.drillingDown = chance.bool();
+      it('should update the drillStatus indicator to Inactive', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillingDown).toBeFalsy();
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
     });
 
@@ -1147,13 +1139,13 @@ describe('MyPerformanceComponent', () => {
         componentInstance.salesHierarchyViewType = sample(viewTypes);
       });
 
-      it('should update the drill down indicator to true', () => {
-        componentInstanceCopy.drillingDown = chance.bool();
+      it('should update the drillStatus indicator to Down', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillingDown).toBeTruthy();
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Down);
       });
     });
   });
@@ -1166,28 +1158,24 @@ describe('MyPerformanceComponent', () => {
       rowMock.metadata.positionId = undefined;
     });
 
-    it('should update the drill up/down indicators', () => {
-      componentInstanceCopy.drillingUp = chance.bool();
-      componentInstanceCopy.drillingDown = chance.bool();
-
-      params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
-      componentInstance.handleElementClicked(params);
-
-      expect(componentInstanceCopy.drillingUp).toBeFalsy();
-      expect(componentInstanceCopy.drillingDown).toBeFalsy();
-    });
-
-    describe('when salesHierarchyViewType value is set ', () => {
-
+    describe('when productMetricsViewType is brands', () => {
       beforeEach(() => {
+        componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
         storeMock.dispatch.and.callThrough();
         storeMock.dispatch.calls.reset();
       });
 
-      it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and ' +
-        'when productMetricsViewType is brands', () => {
+      it('should update the drillStatus indicator to BrandSelected', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
+
+        params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+        componentInstance.handleElementClicked(params);
+
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandSelected);
+      });
+
+      it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
-        componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
         params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
@@ -1221,10 +1209,8 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
-      it('should trigger appropriate actions when current salesHierarchyViewType is accounts and ' +
-        'when productMetricsViewType is brands', () => {
+      it('should trigger appropriate actions when current salesHierarchyViewType is accounts', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.accounts;
-        componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
         params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
@@ -1258,10 +1244,8 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
-      it('should trigger appropriate actions when current salesHierarchyViewType is people and ' +
-        'when productMetricsViewType is brands', () => {
+      it('should trigger appropriate actions when current salesHierarchyViewType is people', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
-        componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
         params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
@@ -1295,10 +1279,8 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
-      it('should trigger appropriate actions when current salesHierarchyViewType is subAccounts and ' +
-        'when productMetricsViewType is brands', () => {
+      it('should trigger appropriate actions when current salesHierarchyViewType is subAccounts', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
-        componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
         params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
         expect(storeMock.dispatch.calls.count()).toBe(4);
@@ -1332,9 +1314,8 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should trigger appropriate actions when current salesHierarchyViewType is distributors and ' +
-        'when productMetricsViewType is brands, and NOT in exception hierarchy', () => {
+        ' NOT in exception hierarchy', () => {
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
-        componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
         params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
@@ -1370,7 +1351,7 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should trigger appropriate actions when current salesHierarchyViewType is distributors and ' +
-        'when productMetricsViewType is brands, there is a selected distributor, and IS in exception hierarchy', () => {
+        'there is a selected distributor, and IS in exception hierarchy', () => {
         let currentMock: MyPerformanceEntitiesData;
         currentMock = getMyPerformanceEntitiesDataMock();
         currentMock.responsibilities.exceptionHierarchy = true;
@@ -1379,7 +1360,6 @@ describe('MyPerformanceComponent', () => {
         currentSubject.next(currentMock);
 
         componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
-        componentInstance.productMetricsViewType = ProductMetricsViewType.brands;
         params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
@@ -1412,6 +1392,23 @@ describe('MyPerformanceComponent', () => {
           accountPositionId: currentMock.responsibilities.accountPositionId,
           isMemberOfExceptionHierarchy: true
         }));
+      });
+    });
+
+    describe('when productMetricsViewType is skus', () => {
+      beforeEach(() => {
+        componentInstance.productMetricsViewType = ProductMetricsViewType.skus;
+        storeMock.dispatch.and.callThrough();
+        storeMock.dispatch.calls.reset();
+      });
+
+      it('should update the drillStatus indicator to Inactive', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
+
+        params = { leftSide: false, type: RowType.data, index: 0, row: rowMock };
+        componentInstance.handleElementClicked(params);
+
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
 
       it('should trigger appropriate actions with any salesHierarchyViewType and ' +
@@ -1466,6 +1463,15 @@ describe('MyPerformanceComponent', () => {
         componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
         componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
         componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+      });
+
+      it('should update the drillStatus indicator to BrandDeselected', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
+
+        params.row.metadata.brandCode = stateMock.myPerformance.current.selectedBrandCode;
+        componentInstance.handleElementClicked(params);
+
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandDeselected);
       });
 
       it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
@@ -1737,14 +1743,12 @@ describe('MyPerformanceComponent', () => {
       params = { leftSide: true, type: RowType.total, index: 0};
     });
 
-    it('should update the drill up/down indicators', () => {
-      componentInstanceCopy.drillingUp = chance.bool();
-      componentInstanceCopy.drillingDown = chance.bool();
+    it('should update the drillStatus indicator to Inactive', () => {
+      componentInstanceCopy.drillStatus = getDrillStatusMock();
 
       componentInstance.handleElementClicked(params);
 
-      expect(componentInstanceCopy.drillingUp).toBeFalsy();
-      expect(componentInstanceCopy.drillingDown).toBeFalsy();
+      expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
     });
 
     describe('when viewtype is subaccounts', () => {
@@ -2053,9 +2057,8 @@ describe('MyPerformanceComponent', () => {
         expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
       });
 
-      it('should update the drilling up/down indicators', () => {
-        componentInstanceCopy.drillingUp = chance.bool();
-        componentInstanceCopy.drillingDown = chance.bool();
+      it('should update the drillStatus indicator to Up', () => {
+        componentInstanceCopy.drillStatus = getDrillStatusMock();
 
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.subAccounts);
         componentInstance.handleBreadcrumbEntityClicked({
@@ -2063,8 +2066,7 @@ describe('MyPerformanceComponent', () => {
           entityDescription: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
-        expect(componentInstanceCopy.drillingUp).toBeTruthy();
-        expect(componentInstanceCopy.drillingDown).toBeFalsy();
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Up);
       });
     });
 
@@ -2093,19 +2095,16 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.count()).toBe(0);
       });
 
-      it('should NOT update the drilling up/down indicators', () => {
-        const drillingUpExpectedValue = chance.bool();
-        const drillingDownExpectedValue = chance.bool();
-        componentInstanceCopy.drillingUp = drillingUpExpectedValue;
-        componentInstanceCopy.drillingDown = drillingDownExpectedValue;
+      it('should NOT update the drillStatus indicator', () => {
+        const drillStatusExpectedValue = getDrillStatusMock();
+        componentInstanceCopy.drillStatus = drillStatusExpectedValue;
 
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbMock,
           entityDescription: entityMock
         });
 
-        expect(componentInstanceCopy.drillingUp).toEqual(drillingUpExpectedValue);
-        expect(componentInstanceCopy.drillingDown).toEqual(drillingDownExpectedValue);
+        expect(componentInstanceCopy.drillStatus).toEqual(drillStatusExpectedValue);
       });
     });
   });
@@ -2457,6 +2456,14 @@ describe('MyPerformanceComponent', () => {
       currentMock = getMyPerformanceEntitiesDataMock();
       currentMock.responsibilities = getResponsibilitesStateMock();
       myPerformanceTableDataTransformerService.getRightTableData.and.returnValue([getMyPerformanceTableRowMock]);
+    });
+
+    it('should update the drillStatus indicator to BrandDeselected', () => {
+      componentInstanceCopy.drillStatus = getDrillStatusMock();
+
+      componentInstance.handleDismissableRowXClicked();
+
+      expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandDeselected);
     });
 
     it('should dispatch all actions correctly and assign variables correctly and call 4 actions', () => {
