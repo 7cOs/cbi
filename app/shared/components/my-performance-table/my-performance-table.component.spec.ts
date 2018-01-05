@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { MatRippleModule } from '@angular/material';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -40,7 +41,6 @@ class MockMyPerformanceTableRowComponent {
   @Input() showEmptyLastColumn: boolean;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() showX: boolean;
-  @Input() mdRippleColor: string;
 }
 
 describe('MyPerformanceTableComponent', () => {
@@ -50,6 +50,7 @@ describe('MyPerformanceTableComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ MatRippleModule ],
       declarations: [
         BeerLoaderComponentMock,
         MyPerformanceTableComponent,
