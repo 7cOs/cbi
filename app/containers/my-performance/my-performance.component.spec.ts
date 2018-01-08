@@ -1697,6 +1697,33 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
+      it('should dispatch actions to clear the selected SKU/Package and refresh performance data when'
+      + 'deselecting a selected brand when a SKU/Package is also selected', () => {
+        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
+        componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
+        componentInstanceCopy.selectedSkuPackageCode = chance.string();
+        componentInstanceCopy.selectedSkuPackageType = chance.string();
+
+        componentInstance.handleElementClicked(params);
+
+        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+          positionId: stateMock.myPerformance.current.responsibilities.positionId,
+          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+          filter: stateMock.myPerformanceFilter as any,
+          entityType: stateMock.myPerformance.current.selectedEntityType,
+          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+          isMemberOfExceptionHierarchy: false,
+          brandSkuCode: componentInstanceCopy.selectedBrandCode,
+          skuPackageType: null
+        }));
+      });
+
       it('should dispatch appropriate actions to deselect sku or package row selected', () => {
         componentInstanceCopy.selectedSkuPackageCode = params.row.metadata.skuPackageCode;
         componentInstance.handleElementClicked(params);
