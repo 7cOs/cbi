@@ -361,9 +361,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleDismissableRowXClicked(): void {
-    this.drillStatus = DrillStatus.BrandDeselected;
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
-    this.deselectBrandValue();
+    this.deselectAllProductMetrics();
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
@@ -573,12 +572,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case ProductMetricsViewType.skus:
       case ProductMetricsViewType.packages:
         if (this.selectedBrandCode === parameters.row.metadata.brandCode) {
-          this.drillStatus = DrillStatus.BrandDeselected;
-          this.deselectBrandValue();
+          this.handleProductMetricDeselect();
         } else if (this.selectedSkuPackageCode === parameters.row.metadata.skuPackageCode) {
-          this.drillStatus = DrillStatus.Inactive;
           this.deselectSkuPackage();
-          this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         } else if (parameters.type === RowType.data) {
           this.drillStatus = DrillStatus.Inactive;
           this.selectedSkuPackageType = parameters.row.metadata.skuPackageType;
@@ -592,9 +588,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               parameters.row.metadata.skuPackageType);
           }
         } else {
-          this.drillStatus = DrillStatus.Inactive;
           this.deselectSkuPackage();
-          this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
         }
         break;
       default:
@@ -808,16 +802,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private deselectSkuPackage(): void {
+    this.drillStatus = DrillStatus.Inactive;
     this.selectedSkuPackageCode = null;
     this.selectedSkuPackageType = null;
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+    this.dispatchRefreshAllPerformance(this.selectedBrandCode, null);
   }
 
   private deselectBrandValue(): void {
     delete this.selectedBrandCode;
-    this.selectedSkuPackageCode = null;
-    this.selectedSkuPackageType = null;
-    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+    this.drillStatus = DrillStatus.BrandDeselected;
+
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
     this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
     this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
@@ -834,6 +829,21 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       accountPositionId: this.currentState.responsibilities.accountPositionId,
       isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
     }));
+  }
+
+  private handleProductMetricDeselect(): void {
+    if (this.selectedSkuPackageCode) {
+      this.deselectSkuPackage();
+    } else {
+      this.deselectBrandValue();
+    }
+  }
+
+  private deselectAllProductMetrics(): void {
+    this.selectedSkuPackageCode = null;
+    this.selectedSkuPackageType = null;
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+    this.deselectBrandValue();
   }
 
   private updateLoaderStatus() {
@@ -891,7 +901,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       && this.productMetricsViewType !== ProductMetricsViewType.brands
       && this.productMetrics
       && this.productMetrics.length === 0) {
-      this.deselectBrandValue();
+      this.handleProductMetricDeselect();
     }
   }
 
