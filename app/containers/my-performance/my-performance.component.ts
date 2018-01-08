@@ -150,6 +150,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.filterStateSubscription = this.store
       .select(state => state.myPerformanceFilter)
       .subscribe((filterState: MyPerformanceFilterState)  => {
+        this.drillStatus = DrillStatus.Inactive;
         this.deselectSkuPackageIfNeeded(this.filterState, filterState);
         this.filterState = filterState;
         const currentMetricName = this.myPerformanceService.getMetricValueName(filterState.metricType);
