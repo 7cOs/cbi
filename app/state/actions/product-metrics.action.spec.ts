@@ -3,6 +3,7 @@ import * as Chance from 'chance';
 import { FetchOpportunityCountsPayload } from './product-metrics.action';
 import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
 import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
 import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
@@ -165,11 +166,7 @@ describe('ProductMetrics Actions', () => {
     let action: ProductMetricsActions.FetchOpportunityCountsSuccess;
 
     beforeEach(() => {
-      actionPayloadMock = {
-        [chance.string()]: {
-          brandSkuPackageOpportunityCount: chance.integer()
-        }
-      };
+      actionPayloadMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
       action = new ProductMetricsActions.FetchOpportunityCountsSuccess(actionPayloadMock);
     });
 

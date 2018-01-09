@@ -93,22 +93,23 @@ describe('Service: ProductMetricsTransformerService', () => {
       opportunityCountDTOMock = getOpportunityCountDTOsMock();
     });
 
-    it('should return a GroupedOpportunityCounts object containing each brand/sku/package opportunity count total', () => {
+    it('should return GroupedOpportunityCounts containing each brand/sku/package opportunity count total', () => {
       const transformedOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode
         = productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountDTOMock);
       let brandOpportunityCountTotal: number = 0;
 
       opportunityCountDTOMock.forEach((brandOpportunityCount: OpportunityCountDTO) => {
-        expect(transformedOpportunityCounts[brandOpportunityCount.label].brandSkuPackageOpportunityCount).toBeDefined();
+        expect(transformedOpportunityCounts[brandOpportunityCount.label].brandSkuPackageOpportunityCountTotal).toBeDefined();
 
         brandOpportunityCount.items.forEach((skuPackageOpportunityCount: OpportunityCountDTO) => {
           brandOpportunityCountTotal += skuPackageOpportunityCount.count;
-          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].brandSkuPackageOpportunityCount).toBeDefined();
-          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].brandSkuPackageOpportunityCount)
+          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].brandSkuPackageOpportunityCountTotal).toBeDefined();
+          expect(transformedOpportunityCounts[skuPackageOpportunityCount.label].brandSkuPackageOpportunityCountTotal)
             .toBe(skuPackageOpportunityCount.count);
         });
 
-        expect(transformedOpportunityCounts[brandOpportunityCount.label].brandSkuPackageOpportunityCount).toBe(brandOpportunityCountTotal);
+        expect(transformedOpportunityCounts[brandOpportunityCount.label].brandSkuPackageOpportunityCountTotal)
+          .toBe(brandOpportunityCountTotal);
         brandOpportunityCountTotal = 0;
       });
     });

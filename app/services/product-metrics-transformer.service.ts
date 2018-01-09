@@ -3,6 +3,7 @@ import 'rxjs/add/operator/map';
 
 import { CalculatorService } from './calculator.service';
 import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../models/opportunity-count.model';
+import { OpportunityCount } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
@@ -26,27 +27,61 @@ export class ProductMetricsTransformerService {
         brandOpportunityCountDTO.items);
 
       brandSkuPackageOpportunityCounts[brandOpportunityCountDTO.label] = {
-        brandSkuPackageOpportunityCount: skuPackageGroupedOpportunities.skuPackageOpportunityCount
+        brandSkuPackageOpportunityCountTotal: skuPackageGroupedOpportunities.skuPackageOpportunityCountTotal,
+        opportunityCounts: skuPackageGroupedOpportunities.brandOpportunityCounts
       };
 
-      return Object.assign(brandSkuPackageOpportunityCounts, skuPackageGroupedOpportunities.opportunitiesGroupedBySkuPackageCode);
+      return Object.assign(skuPackageGroupedOpportunities.opportunitiesGroupedBySkuPackageCode, brandSkuPackageOpportunityCounts);
     }, {});
   }
 
   private getOpportunitiesGroupedBySkuPackageCode(skuPackageOpportunitiesDTO: OpportunityCountDTO[]): OpportunitiesGroupedBySkuPackageCode {
-    return skuPackageOpportunitiesDTO.reduce(
-      (opportunitiesGroupedBySkuPackageCode: OpportunitiesGroupedBySkuPackageCode, skuPackageOpportunityDTO: OpportunityCountDTO) => {
+    const groupedBrandOpportunityCounts: { [key: string]: number } = {};
 
-      opportunitiesGroupedBySkuPackageCode.skuPackageOpportunityCount += skuPackageOpportunityDTO.count;
+    const groupedOpportunities: OpportunitiesGroupedBySkuPackageCode = skuPackageOpportunitiesDTO.reduce(
+      (opportunitiesGroupedBySkuPackageCode: OpportunitiesGroupedBySkuPackageCode, skuPackageOpportunityDTO: OpportunityCountDTO) => {
+      const skuPackageOpportunityCounts: OpportunityCount[] = this.getOpportunityCounts(skuPackageOpportunityDTO.items);
+
+      opportunitiesGroupedBySkuPackageCode.skuPackageOpportunityCountTotal += skuPackageOpportunityDTO.count;
       opportunitiesGroupedBySkuPackageCode.opportunitiesGroupedBySkuPackageCode[skuPackageOpportunityDTO.label] = {
-        brandSkuPackageOpportunityCount: skuPackageOpportunityDTO.count
+        brandSkuPackageOpportunityCountTotal: skuPackageOpportunityDTO.count,
+        opportunityCounts: skuPackageOpportunityCounts
       };
+
+      skuPackageOpportunityCounts.forEach((opportunityCount: OpportunityCount) => {
+        if (groupedBrandOpportunityCounts[opportunityCount.name]) {
+          groupedBrandOpportunityCounts[opportunityCount.name] += opportunityCount.count;
+        } else {
+          groupedBrandOpportunityCounts[opportunityCount.name] = opportunityCount.count;
+        }
+      });
 
       return opportunitiesGroupedBySkuPackageCode;
     }, {
-      skuPackageOpportunityCount: 0,
-      opportunitiesGroupedBySkuPackageCode: {}
+      skuPackageOpportunityCountTotal: 0,
+      opportunitiesGroupedBySkuPackageCode: {},
+      brandOpportunityCounts: []
     });
+
+    Object.keys(groupedBrandOpportunityCounts).forEach((opportunityTypeName: string) => {
+      groupedOpportunities.brandOpportunityCounts.push({
+        name: opportunityTypeName,
+        count: groupedBrandOpportunityCounts[opportunityTypeName]
+      });
+    });
+
+    return groupedOpportunities;
+  }
+
+  private getOpportunityCounts(skuPackageOpportunityCountsDTO: OpportunityCountDTO[]): OpportunityCount[] {
+    return skuPackageOpportunityCountsDTO.reduce((opportunityCounts: OpportunityCount[], skuPackageOpportunity: OpportunityCountDTO) => {
+      opportunityCounts.push({
+        name: skuPackageOpportunity.label,
+        count: skuPackageOpportunity.count
+      });
+
+      return opportunityCounts;
+    }, []);
   }
 
   private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {

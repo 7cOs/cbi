@@ -170,14 +170,15 @@ export class MyPerformanceTableDataTransformerService {
 
     if (productMetricsViewType === ProductMetricsViewType.brands) {
       productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.brandCode]
-        ? opportunitiesGroupedByBrandSkuPackageCode[product.brandCode].brandSkuPackageOpportunityCount
+        ? opportunitiesGroupedByBrandSkuPackageCode[product.brandCode].brandSkuPackageOpportunityCountTotal
         : '-';
     } else {
       if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode]) {
         productOpportunityCount
-          = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCount;
+          = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCountTotal;
       } else if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode]) {
-        productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode].brandSkuPackageOpportunityCount;
+        productOpportunityCount =
+          opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode].brandSkuPackageOpportunityCountTotal;
       } else {
         productOpportunityCount = '-';
       }
