@@ -48,7 +48,7 @@ public class NotesModal extends TestNGBasePage {
    * Clicks the add Note button when other notes already exist.
    */
   public NotesModal clickAddNoteButton() {
-    final WebElement addNoteButton = modalContainer.findElement(By.xpath(".//p[contains(., 'New Note')]"));
+    final WebElement addNoteButton = modalContainer.findElement(By.xpath(".//*[contains(text(), 'New Note')]"));
     waitForVisibleFluentWait(addNoteButton);
     waitForElementToClickable(addNoteButton, true).click();
     return this;
