@@ -1462,288 +1462,232 @@ describe('MyPerformanceComponent', () => {
         productMetricsSubject.next(myPerformanceProductMetricsMock);
 
         componentInstanceCopy.selectedBrandCode = stateMock.myPerformance.current.selectedBrandCode;
-        componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
-        componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
-
-        stateMock.myPerformance.current.selectedSubaccountCode = chance.string();
-        stateMock.myPerformance.current.selectedDistributorCode = chance.string();
       });
 
-      it('should update the drillStatus indicator to BrandDeselected when a selected brand row is clicked and'
-      + ' no SKU/Package is selected', () => {
-        componentInstanceCopy.drillStatus = getDrillStatusMock();
-        componentInstanceCopy.selectedSkuPackageCode = undefined;
-        componentInstanceCopy.selectedSkuPackageType = undefined;
+      describe('when a Brand is deselected and no SKU/Package row is selected', () => {
+        beforeEach(() => {
+          componentInstanceCopy.selectedSkuPackageCode = undefined;
+          componentInstanceCopy.selectedSkuPackageType = undefined;
+        });
 
-        params.row.metadata.brandCode = stateMock.myPerformance.current.selectedBrandCode;
-        componentInstance.handleElementClicked(params);
+        it('should update the drillStatus indicator to BrandDeselected', () => {
+          componentInstanceCopy.drillStatus = getDrillStatusMock();
 
-        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandDeselected);
+          params.row.metadata.brandCode = stateMock.myPerformance.current.selectedBrandCode;
+          componentInstance.handleElementClicked(params);
+
+          expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandDeselected);
+        });
+
+        it('should dispatch appropriate actions to deselect the selected brand row when the SalesHierarchyViewType '
+        + 'is distributors and a distributor is selected', () => {
+          componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
+          componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
+          stateMock.myPerformance.current.selectedDistributorCode = chance.string();
+
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+            positionId: stateMock.myPerformance.current.selectedDistributorCode,
+            contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
+            entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            selectedBrandCode: undefined,
+            inAlternateHierarchy: false,
+            isMemberOfExceptionHierarchy: false,
+            filter: stateMock.myPerformanceFilter as any
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: stateMock.myPerformance.current.responsibilities.positionId,
+            groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+            hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+            filter: stateMock.myPerformanceFilter as any,
+            entityType: stateMock.myPerformance.current.selectedEntityType,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+            isMemberOfExceptionHierarchy: false
+          }));
+        });
+
+        it('should dispatch appropriate actions to deselect the selected brand row when the SalesHierarchyViewType '
+        + 'is distributors and a distributor is NOT selected', () => {
+          componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
+          componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
+
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+            positionId: stateMock.myPerformance.current.selectedDistributorCode,
+            contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
+            entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            selectedBrandCode: undefined,
+            inAlternateHierarchy: false,
+            isMemberOfExceptionHierarchy: false,
+            filter: stateMock.myPerformanceFilter as any
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: stateMock.myPerformance.current.responsibilities.positionId,
+            groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+            hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+            filter: stateMock.myPerformanceFilter as any,
+            entityType: stateMock.myPerformance.current.selectedEntityType,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+            isMemberOfExceptionHierarchy: false
+          }));
+        });
+
+        it('should dispatch appropriate actions to deselect the brand row when the SalesHierarchyViewType '
+        + 'is subAccounts and a SubAccount is selected', () => {
+          componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+          componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
+          stateMock.myPerformance.current.selectedSubaccountCode = chance.string();
+
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+            positionId: stateMock.myPerformance.current.selectedSubaccountCode,
+            contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
+            entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            selectedBrandCode: undefined,
+            inAlternateHierarchy: false,
+            filter: stateMock.myPerformanceFilter as any
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: stateMock.myPerformance.current.responsibilities.positionId,
+            groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+            hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+            filter: stateMock.myPerformanceFilter as any,
+            entityType: stateMock.myPerformance.current.selectedEntityType,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+            isMemberOfExceptionHierarchy: false
+          }));
+        });
+
+        it('should dispatch appropriate actions to deselect the brand row when the SalesHierarchyViewType '
+        + 'is subAccounts a SubAccount is NOT selected', () => {
+          componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
+          componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
+
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+            positionId: stateMock.myPerformance.current.selectedSubaccountCode,
+            contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
+            entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            selectedBrandCode: undefined,
+            inAlternateHierarchy: false,
+            filter: stateMock.myPerformanceFilter as any
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: stateMock.myPerformance.current.responsibilities.positionId,
+            groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+            hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+            filter: stateMock.myPerformanceFilter as any,
+            entityType: stateMock.myPerformance.current.selectedEntityType,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+            isMemberOfExceptionHierarchy: false
+          }));
+        });
+
+        it('should dispatch appropriate actions to deselect the brand row when the SalesHierarchyViewType '
+        + 'is roleGroups, people, or accounts', () => {
+          componentInstance.salesHierarchyViewType = sample([
+            SalesHierarchyViewType.roleGroups,
+            SalesHierarchyViewType.people,
+            SalesHierarchyViewType.accounts
+          ]);
+          componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
+
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
+            positionId: stateMock.myPerformance.current.responsibilities.positionId,
+            contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
+            entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            selectedBrandCode: undefined,
+            inAlternateHierarchy: false,
+            filter: stateMock.myPerformanceFilter as any
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: stateMock.myPerformance.current.responsibilities.positionId,
+            groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+            hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+            filter: stateMock.myPerformanceFilter as any,
+            entityType: stateMock.myPerformance.current.selectedEntityType,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+            isMemberOfExceptionHierarchy: false
+          }));
+        });
       });
 
-      it('should update the drillStatus indicator to Inactive when a selected brand row is clicked and'
-      + ' a SKU/Package row is also selected', () => {
-        componentInstanceCopy.drillStatus = getDrillStatusMock();
-        componentInstanceCopy.selectedSkuPackageCode = chance.string();
-        componentInstanceCopy.selectedSkuPackageType = chance.string();
+      describe('when a Brand is deselected and a SKU/Package row is also selected', () => {
+        beforeEach(() => {
+          componentInstanceCopy.selectedSkuPackageCode = stateMock.myPerformance.current.selectedSkuPackageCode;
+          componentInstanceCopy.selectedSkuPackageType = stateMock.myPerformance.current.selectedSkuPackageType;
+        });
 
-        params.row.metadata.brandCode = stateMock.myPerformance.current.selectedBrandCode;
-        componentInstance.handleElementClicked(params);
+        it('should update the drillStatus indicator to Inactive', () => {
+          componentInstanceCopy.drillStatus = getDrillStatusMock();
 
-        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
-      });
+          params.row.metadata.brandCode = stateMock.myPerformance.current.selectedBrandCode;
+          componentInstance.handleElementClicked(params);
 
-      it('should dispatch appropriate actions for clearing the selectedSkuPackageCode', () => {
-        componentInstance.handleElementClicked(params);
+          expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
+        });
 
-        expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
-          skuPackageType: null,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
-        }));
-      });
+        it('should dispatch actions to clear the selected SkuPackage but not the selected Brand and refresh performance data', () => {
+          componentInstance.handleElementClicked(params);
 
-      it('should dispatch appropriate actions to deselect the selected brand row when the SalesHierarchyViewType '
-      + 'is distributors, a distributor is selected, and no SKU/Package is selected', () => {
-        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
-        componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
-        componentInstanceCopy.selectedSkuPackageCode = undefined;
-        componentInstanceCopy.selectedSkuPackageType = undefined;
-
-        componentInstance.handleElementClicked(params);
-
-        expect(storeMock.dispatch.calls.count()).toBe(4);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
-        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-          positionId: stateMock.myPerformance.current.selectedDistributorCode,
-          contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
-          entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          selectedBrandCode: undefined,
-          inAlternateHierarchy: false,
-          isMemberOfExceptionHierarchy: false,
-          filter: stateMock.myPerformanceFilter as any
-        }));
-        expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
-        }));
-      });
-
-      it('should dispatch appropriate actions to deselect the selected brand row when the SalesHierarchyViewType '
-      + 'is distributors and a distributor is NOT selected, and no SKU/Package is selected', () => {
-        delete stateMock.myPerformance.current.selectedSubaccountCode;
-        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.distributors;
-        componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
-        componentInstanceCopy.selectedSkuPackageCode = undefined;
-        componentInstanceCopy.selectedSkuPackageType = undefined;
-
-        componentInstance.handleElementClicked(params);
-
-        expect(storeMock.dispatch.calls.count()).toBe(4);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
-        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-          positionId: stateMock.myPerformance.current.selectedDistributorCode,
-          contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
-          entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          selectedBrandCode: undefined,
-          inAlternateHierarchy: false,
-          isMemberOfExceptionHierarchy: false,
-          filter: stateMock.myPerformanceFilter as any
-        }));
-        expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
-        }));
-      });
-
-      it('should dispatch appropriate actions to deselect the brand row when the SalesHierarchyViewType '
-      + 'is subAccounts, a SubAccount is selected and no SKU/Package is selected', () => {
-        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
-        componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
-        componentInstanceCopy.selectedSkuPackageCode = undefined;
-        componentInstanceCopy.selectedSkuPackageType = undefined;
-
-        componentInstance.handleElementClicked(params);
-
-        expect(storeMock.dispatch.calls.count()).toBe(4);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
-        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-          positionId: stateMock.myPerformance.current.selectedSubaccountCode,
-          contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
-          entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          selectedBrandCode: undefined,
-          inAlternateHierarchy: false,
-          filter: stateMock.myPerformanceFilter as any
-        }));
-        expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
-        }));
-      });
-
-      it('should dispatch appropriate actions to deselect the brand row when the SalesHierarchyViewType '
-      + 'is subAccounts a SubAccount is NOT selected, and no SKU/Package is selected', () => {
-        delete stateMock.myPerformance.current.selectedSubaccountCode;
-        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.subAccounts;
-        componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
-        componentInstanceCopy.selectedSkuPackageCode = undefined;
-        componentInstanceCopy.selectedSkuPackageType = undefined;
-
-        componentInstance.handleElementClicked(params);
-
-        expect(storeMock.dispatch.calls.count()).toBe(4);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
-        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-          positionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
-          entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          selectedBrandCode: undefined,
-          inAlternateHierarchy: false,
-          filter: stateMock.myPerformanceFilter as any
-        }));
-        expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
-        }));
-      });
-
-      it('should dispatch appropriate actions to deselect the brand row when the SalesHierarchyViewType '
-      + 'is roleGroups, people, or accounts, and no SKU/Package is selected', () => {
-        componentInstance.salesHierarchyViewType = sample([
-          SalesHierarchyViewType.roleGroups,
-          SalesHierarchyViewType.people,
-          SalesHierarchyViewType.accounts
-        ]);
-        componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
-        componentInstanceCopy.selectedSkuPackageCode = undefined;
-        componentInstanceCopy.selectedSkuPackageType = undefined;
-
-        componentInstance.handleElementClicked(params);
-
-        expect(storeMock.dispatch.calls.count()).toBe(4);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.DeselectBrandValues());
-        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchProductMetrics({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          contextPositionId: componentInstanceCopy.currentState.responsibilities.positionId,
-          entityTypeCode: componentInstanceCopy.currentState.responsibilities.entityTypeCode,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          selectedBrandCode: undefined,
-          inAlternateHierarchy: false,
-          filter: stateMock.myPerformanceFilter as any
-        }));
-        expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
-        }));
-      });
-
-      it('should dispatch actions to clear the selected SKU/Package and refresh performance data when'
-      + 'deselecting a selected brand when a SKU/Package is also selected', () => {
-        componentInstance.salesHierarchyViewType = SalesHierarchyViewType.people;
-        componentInstanceCopy.selectedBrandCode = params.row.metadata.brandCode;
-        componentInstanceCopy.selectedSkuPackageCode = chance.string();
-        componentInstanceCopy.selectedSkuPackageType = chance.string();
-
-        componentInstance.handleElementClicked(params);
-
-        expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false,
-          brandSkuCode: componentInstanceCopy.selectedBrandCode,
-          skuPackageType: null
-        }));
-      });
-
-      it('should dispatch appropriate actions to deselect sku or package row selected', () => {
-        componentInstanceCopy.selectedSkuPackageCode = params.row.metadata.skuPackageCode;
-        componentInstance.handleElementClicked(params);
-
-        expect(storeMock.dispatch.calls.count()).toBe(2);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: stateMock.myPerformance.current.responsibilities.positionId,
-          groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
-          hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
-          selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
-          salesHierarchyViewType: componentInstance.salesHierarchyViewType,
-          filter: stateMock.myPerformanceFilter as any,
-          brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
-          skuPackageType: null,
-          entityType: stateMock.myPerformance.current.selectedEntityType,
-          alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
-          accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
-        }));
+          expect(storeMock.dispatch.calls.count()).toBe(2);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.ClearMyPerformanceSelectedSkuCode());
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
+            positionId: stateMock.myPerformance.current.responsibilities.positionId,
+            groupedEntities: stateMock.myPerformance.current.responsibilities.groupedEntities,
+            hierarchyGroups: stateMock.myPerformance.current.responsibilities.hierarchyGroups,
+            selectedEntityType: stateMock.myPerformance.current.selectedEntityType,
+            salesHierarchyViewType: componentInstance.salesHierarchyViewType,
+            filter: stateMock.myPerformanceFilter as any,
+            brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+            skuPackageType: null,
+            entityType: stateMock.myPerformance.current.selectedEntityType,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            accountPositionId: stateMock.myPerformance.current.responsibilities.accountPositionId,
+            isMemberOfExceptionHierarchy: false
+          }));
+        });
       });
     });
 
