@@ -2294,6 +2294,18 @@ describe('MyPerformanceComponent', () => {
       storeMock.dispatch.and.callThrough();
     });
 
+    it('should update the drillStatus indicator to Inactive', () => {
+      const drillStatusPick = Object.keys(DrillStatus)
+        .map(key => DrillStatus[key])
+        .filter(value => typeof value === 'number')
+        .filter(drillStatus => drillStatus !== DrillStatus.Inactive);
+      componentInstanceCopy.drillStatus = sample(drillStatusPick);
+
+      filterSubject.next(currentFilterMock);
+
+      expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
+    });
+
     describe('when Metric Type filter is changed', () => {
       it('should dispatch appropriate actions and send analytics events', () => {
         const filterEventMock = {
