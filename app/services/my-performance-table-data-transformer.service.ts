@@ -165,13 +165,13 @@ export class MyPerformanceTableDataTransformerService {
     product: ProductMetricsValues,
     opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode,
     productMetricsViewType: ProductMetricsViewType
-  ): (number|string) {
-    let productOpportunityCount: (number|string);
+  ): number {
+    let productOpportunityCount: number;
 
     if (productMetricsViewType === ProductMetricsViewType.brands) {
       productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.brandCode]
         ? opportunitiesGroupedByBrandSkuPackageCode[product.brandCode].brandSkuPackageOpportunityCountTotal
-        : '-';
+        : 0;
     } else {
       if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode]) {
         productOpportunityCount
@@ -180,7 +180,7 @@ export class MyPerformanceTableDataTransformerService {
         productOpportunityCount =
           opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode].brandSkuPackageOpportunityCountTotal;
       } else {
-        productOpportunityCount = '-';
+        productOpportunityCount = 0;
       }
     }
 

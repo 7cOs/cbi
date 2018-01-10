@@ -39,36 +39,36 @@ div.performance-table-wrapper
         th.right-col.opportunities(*ngIf="showOpportunities", colspan=1)
 
       tr.total-row.col-100-pct(
-                              *ngIf="totalRow",
-                              [ngClass]="getTotalRowClasses()",
-                              my-performance-table-row,
-                              [rowData]="totalRow",
-                              [showContributionToVolume]="showContributionToVolume",
-                              [showOpportunities]="showOpportunities",
-                              (click)="onElementClicked.emit({type: rowType.total, index: $event})")
+        *ngIf="totalRow",
+        my-performance-table-row,
+        [ngClass]="getTotalRowClasses()",
+        [rowData]="totalRow",
+        [showContributionToVolume]="showContributionToVolume",
+        (click)="onElementClicked.emit({type: rowType.total, index: $event})")
 
       tr.dismissable-total-row.col-100-pct(
-                              *ngIf="dismissableTotalRow",
-                              [ngClass]="getDismissableTotalRowClasses()",
-                              (click)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event, row: dismissableTotalRow})",
-                              my-performance-table-row,
-                              [rowData]="dismissableTotalRow",
-                              [showContributionToVolume]="showContributionToVolume",
-                              [showOpportunities]="showOpportunities",
-                              [showX]=true,
-                              (onDismissableRowXClicked)="onDismissableRowXClicked.emit()")
+        *ngIf="dismissableTotalRow",
+        my-performance-table-row,
+        [ngClass]="getDismissableTotalRowClasses()",
+        [rowData]="dismissableTotalRow",
+        [showX]=true,
+        [showContributionToVolume]="showContributionToVolume",
+        [showOpportunities]="showOpportunities",
+        (click)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event, row: dismissableTotalRow})",
+        (onDismissableRowXClicked)="onDismissableRowXClicked.emit()",
+        (onOpportunityCountClicked)="onOpportunityCountClicked.emit(dismissableTotalRow)")
 
     tbody([ngClass]="getTableBodyClasses()")
-
       tr.entity-row.col-100-pct(
-                                *ngFor="let rowData of sortedTableData, let rowIndex = index",
-                                my-performance-table-row,
-                                mdRipple,
-                                mdRippleColor="{{rippleColor}}",
-                                [ngClass]="getEntityRowClasses(rowData)",
-                                [rowData]="rowData",
-                                [showContributionToVolume]="showContributionToVolume",
-                                [showOpportunities]="showOpportunities",
-                                [viewType]="viewType",
-                                (click)="onRowClicked(rowType.data, rowIndex, rowData)",
-                                (onSublineClicked)="onSublineClicked.emit(rowData)")
+        *ngFor="let rowData of sortedTableData, let rowIndex = index",
+        my-performance-table-row,
+        mdRipple,
+        mdRippleColor="{{rippleColor}}",
+        [ngClass]="getEntityRowClasses(rowData)",
+        [rowData]="rowData",
+        [showContributionToVolume]="showContributionToVolume",
+        [showOpportunities]="showOpportunities",
+        [viewType]="viewType",
+        (click)="onRowClicked(rowType.data, rowIndex, rowData)",
+        (onSublineClicked)="onSublineClicked.emit(rowData)",
+        (onOpportunityCountClicked)="onOpportunityCountClicked.emit(rowData)")

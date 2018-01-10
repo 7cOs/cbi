@@ -590,14 +590,14 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           });
         });
 
-        it('should return a formatted row containing an opportunities column containing a `-` when '
+        it('should return a formatted row containing an opportunities column containing a 0 when '
         + 'there is no key matching the brandCode in the given GroupedOpportunitiesCounts', () => {
           const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
             products, opportunitiesGroupedByBrandSkuPackageCodeMock, ProductMetricsViewType.brands);
 
           transformedProductMetricsData.forEach((tableRow: MyPerformanceTableRow) => {
             expect(tableRow.opportunities).toBeDefined();
-            expect(tableRow.opportunities).toBe('-');
+            expect(tableRow.opportunities).toBe(0);
           });
         });
       });
@@ -623,14 +623,14 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           });
         });
 
-        it('should return a formatted row containing an opportunities column containing a `-` when '
+        it('should return a formatted row containing an opportunities column containing a 0 when '
         + 'there is no key matching the masterPackageSKUCode in the given GroupedOpportunitiesCounts', () => {
           const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
             products, opportunitiesGroupedByBrandSkuPackageCodeMock, ProductMetricsViewType.packages);
 
           transformedProductMetricsData.forEach((tableRow: MyPerformanceTableRow) => {
             expect(tableRow.opportunities).toBeDefined();
-            expect(tableRow.opportunities).toBe('-');
+            expect(tableRow.opportunities).toBe(0);
           });
         });
       });
@@ -663,7 +663,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
           transformedProductMetricsData.forEach((tableRow: MyPerformanceTableRow) => {
             expect(tableRow.opportunities).toBeDefined();
-            expect(tableRow.opportunities).toBe('-');
+            expect(tableRow.opportunities).toBe(0);
           });
         });
       });
@@ -713,14 +713,14 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           opportunitiesGroupedByBrandSkuPackageCodeMock[productMetricsValuesMock.brandCode].brandSkuPackageOpportunityCountTotal);
       });
 
-      it('should return a formatted row containing an opportunities column with a `-` value when there is no '
+      it('should return a formatted row containing an opportunities column with a 0 value when there is no '
       + 'key matching the brandCode in the given GroupedOpportunitiesCounts', () => {
         const rowData: MyPerformanceTableRow = myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
           productMetricsValuesMock,
           opportunitiesGroupedByBrandSkuPackageCodeMock);
 
         expect(rowData.opportunities).toBeDefined();
-        expect(rowData.opportunities).toBe('-');
+        expect(rowData.opportunities).toBe(0);
       });
     });
   });

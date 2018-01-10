@@ -48,7 +48,8 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
       [viewType]="productMetricsViewType",
       (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
       (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})",
-      (onDismissableRowXClicked)="handleDismissableRowXClicked()")
+      (onDismissableRowXClicked)="handleDismissableRowXClicked()",
+      (onOpportunityCountClicked)="handleOpportunityCountClicked($event)")
 
     div.error-cover(*ngIf="fetchResponsibilitiesFailure || fetchProductMetricsFailure")
       div.error-container
