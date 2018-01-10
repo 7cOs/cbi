@@ -833,11 +833,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private deselectBrandOrSKUPackage(): void {
-    if (this.selectedSkuPackageCode) {
-      this.deselectSkuPackage();
-    } else {
-      this.deselectBrandValue();
-    }
+    this.selectedSkuPackageCode ? this.deselectSkuPackage() : this.deselectBrandValue();
   }
 
   private deselectAllProductMetrics(): void {
