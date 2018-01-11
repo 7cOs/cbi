@@ -677,16 +677,50 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         productMetricsValuesMock = getProductMetricsBrandMock();
     });
 
-    describe('when ProductMetricsValues are passed in', () => {
+    describe('when ProductMetricsValues are passed in with no OpportunitiesGroupedByBrandSkuPackageCode', () => {
       it('should return a formatted brandSkuPackageOpportunityCountTotal row from brand product metrics values', () => {
         const rowData: MyPerformanceTableRow =
-          myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock);
+          myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock, undefined);
 
         expect(rowData.descriptionRow0).toEqual(productMetricsValuesMock.brandDescription);
         expect(rowData.metricColumn0).toEqual(productMetricsValuesMock.current);
         expect(rowData.metricColumn1).toEqual(productMetricsValuesMock.yearAgo);
         expect(rowData.metricColumn2).toEqual(productMetricsValuesMock.yearAgoPercent);
         expect(rowData.ctv).toEqual(100);
+      });
+    });
+
+    describe('when ProductMetricsValues are passed in with OpportunitiesGroupedByBrandSkuPackageCode', () => {
+      let  opportunitiesGroupedByBrandSkuPackageCodeMock: OpportunitiesGroupedByBrandSkuPackageCode;
+
+      beforeEach(() => {
+        opportunitiesGroupedByBrandSkuPackageCodeMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
+      });
+
+      it('should return a formatted row containing an opportunities column with the matched brandSkuPackageOpportunityCountTotal value '
+      + 'from the OpportunitiesGroupedByBrandSkuPackageCode based on brandCode', () => {
+        opportunitiesGroupedByBrandSkuPackageCodeMock[productMetricsValuesMock.brandCode] = {
+          brandSkuPackageOpportunityCountTotal: chance.natural(),
+          opportunityCounts: getOpportunityCountMocks()
+        };
+
+        const rowData: MyPerformanceTableRow = myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
+          productMetricsValuesMock,
+          opportunitiesGroupedByBrandSkuPackageCodeMock);
+
+        expect(rowData.opportunities).toBeDefined();
+        expect(rowData.opportunities).toBe(
+          opportunitiesGroupedByBrandSkuPackageCodeMock[productMetricsValuesMock.brandCode].brandSkuPackageOpportunityCountTotal);
+      });
+
+      it('should return a formatted row containing an opportunities column with a 0 value when there is no '
+      + 'key matching the brandCode in the given GroupedOpportunitiesCounts', () => {
+        const rowData: MyPerformanceTableRow = myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
+          productMetricsValuesMock,
+          opportunitiesGroupedByBrandSkuPackageCodeMock);
+
+        expect(rowData.opportunities).toBeDefined();
+        expect(rowData.opportunities).toBe(0);
       });
     });
   });

@@ -190,7 +190,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           if (this.productMetricsViewType !== ProductMetricsViewType.brands && productMetrics.selectedBrandCodeValues) {
             this.productMetricsSelectedBrandRow = this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
-              productMetrics.selectedBrandCodeValues);
+              productMetrics.selectedBrandCodeValues, productMetrics.opportunityCounts);
           } else {
             this.productMetricsSelectedBrandRow = null;
           }
