@@ -15,12 +15,12 @@ if [ "$TEST_SUITE" == "smoke-test" ] ; then
   echo RUNNING SMOKE TEST SUITE FOR IE AND CHROME
 
   mvn test -P smoke-test -DargLine="-Denv="$TEST_SUITE_ENVT" -Dbrowser=ie"
-  exit_ie=$? # store exit code from IE run
+  ie_exit_code=$? # store exit code from IE run
 
   mvn test -P smoke-test -DargLine="-Denv="$TEST_SUITE_ENVT" -Dbrowser=chrome"
-  exit_chrome=$? # store exit code from CHROME run
+  chrome_exit_code=$? # store exit code from CHROME run
 
-  exit $exit_ie||$exit_chrome # return compound exit code
+  exit $ie_exit_code||$chrome_exit_code # return compound exit code
 elif [ "$TEST_SUITE" == "functional-test" ] ; then
   echo RUNNING FUNCTIONAL TEST SUITE FOR CHROME
   mvn test -P functional-test -DargLine="-Denv="$TEST_SUITE_ENVT" -Dbrowser=chrome"
