@@ -20,12 +20,10 @@ if [ "$TEST_SUITE" == "smoke-test" ] ; then
   mvn test -P smoke-test -DargLine="-Denv="$TEST_SUITE_ENVT" -Dbrowser=chrome"
   chrome_exit_code=$? # store exit code from CHROME run
 
-  exit $ie_exit_code||$chrome_exit_code # return compound exit code
+  exit $(($ie_exit_code|$chrome_exit_code)) # return compound exit code
 elif [ "$TEST_SUITE" == "functional-test" ] ; then
   echo RUNNING FUNCTIONAL TEST SUITE FOR CHROME
   mvn test -P functional-test -DargLine="-Denv="$TEST_SUITE_ENVT" -Dbrowser=chrome"
 else
   echo UNRECOGNIZED TEST SUITE SPECIFIED - SKIPPING AT EXECUTION
 fi
-
-
