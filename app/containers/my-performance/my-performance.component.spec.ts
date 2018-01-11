@@ -2562,7 +2562,7 @@ describe('MyPerformanceComponent', () => {
       };
       productMetricsSubject.next(myPerformanceProductMetricsMock);
       expect(myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow).toHaveBeenCalledWith(
-        myPerformanceProductMetricsMock.selectedBrandCodeValues, myPerformanceProductMetricsMock.opportunityCounts);
+        myPerformanceProductMetricsMock.selectedBrandCodeValues);
     });
 
     it('should not be called product metrics are still fetching', () => {

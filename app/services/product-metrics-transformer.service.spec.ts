@@ -4,6 +4,7 @@ import { CalculatorService } from './calculator.service';
 import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
 import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
+import { OpportunityCount } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetrics, ProductMetricsValues, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
@@ -111,6 +112,49 @@ describe('Service: ProductMetricsTransformerService', () => {
         expect(transformedOpportunityCounts[brandOpportunityCount.label].brandSkuPackageOpportunityCountTotal)
           .toBe(brandOpportunityCountTotal);
         brandOpportunityCountTotal = 0;
+      });
+    });
+
+    it('should return GroupedOpportunityCounts containing the sum of each opportunity type count for each Brand`s Skus/Packages', () => {
+      const transformedOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode =
+        productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountDTOMock);
+
+      opportunityCountDTOMock.forEach((brandOpportunityCount: OpportunityCountDTO) => {
+        const expectedBrandOpportunityTypeCounts = {};
+
+        brandOpportunityCount.items.forEach((skuPackageOpportunityCount: OpportunityCountDTO) => {
+          skuPackageOpportunityCount.items.forEach((skuPackageOpportunityTypeCount: OpportunityCountDTO) => {
+            expectedBrandOpportunityTypeCounts[skuPackageOpportunityTypeCount.label]
+              ? expectedBrandOpportunityTypeCounts[skuPackageOpportunityTypeCount.label] += skuPackageOpportunityTypeCount.count
+              : expectedBrandOpportunityTypeCounts[skuPackageOpportunityTypeCount.label] = skuPackageOpportunityTypeCount.count;
+          });
+        });
+
+        transformedOpportunityCounts[brandOpportunityCount.label].opportunityCounts.forEach((opportunityCount: OpportunityCount) => {
+          expect(expectedBrandOpportunityTypeCounts[opportunityCount.name]).toBeTruthy();
+          expect(expectedBrandOpportunityTypeCounts[opportunityCount.name]).toBe(opportunityCount.count);
+        });
+      });
+    });
+
+    it('should return GroupedOpportunityCounts containing each individual sku/package opportunity type counts', () => {
+      const transformedOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode =
+        productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountDTOMock);
+
+      opportunityCountDTOMock.forEach((brandOpportunityCount: OpportunityCountDTO) => {
+        brandOpportunityCount.items.forEach((skuPackageOpportunityCount: OpportunityCountDTO) => {
+          skuPackageOpportunityCount.items.forEach((skuPackageOpportunityTypeCount: OpportunityCountDTO) => {
+            const expectedSkuPackageOpportunityCount: OpportunityCount =
+              transformedOpportunityCounts[skuPackageOpportunityCount.label].opportunityCounts.find(opportunityCount =>
+                opportunityCount.name === skuPackageOpportunityTypeCount.label
+                && opportunityCount.count === skuPackageOpportunityTypeCount.count);
+
+            expect(expectedSkuPackageOpportunityCount).toEqual({
+              name: skuPackageOpportunityTypeCount.label,
+              count: skuPackageOpportunityTypeCount.count
+            });
+          });
+        });
       });
     });
   });
