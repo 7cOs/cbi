@@ -58,10 +58,10 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
 
   md-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
     team-performance-opportunities(
-      [opportunities]="teamPerformanceTableOpportunitiesMock",
-      [productName]="selectedProductNameMock",
+      [opportunities]="teamPerformanceTableOpportunities",
+      [productName]="selectedBrandSkuPackageName",
       [premiseType]="currentPremiseTypeLabel",
-      [subtitle]="selectedEntityNameMock",
-      [total]="selectedOpportunitiesTotal",
+      [subtitle]="selectedSalesHierarchyEntityName",
+      [total]="selectedOpportunityCountTotal",
       (onCloseIndicatorClicked)="toggleOpportunityTable()",
       (onOpportunityCountClicked)="handleOpportunityClicked($event)")
