@@ -34,6 +34,7 @@ export class MyPerformanceTableComponent {
       this.sortedTableData = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
+      this.transformRowData(this.sortedTableData);
     }
   }
 
@@ -187,6 +188,15 @@ export class MyPerformanceTableComponent {
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
       this.sortedTableData = this.sortedTableData.sort(this.sortingFunction);
+      this.transformRowData(this.sortedTableData);
+    }
+  }
+
+  private transformRowData (rowData: Array<MyPerformanceTableRow>) {
+    const index = rowData.findIndex(data => data.descriptionRow0 === 'GEOGRAPHY');
+    if (index === 0) {
+      const geographyObj = rowData.splice(index, 1);
+      this.sortedTableData = this.sortedTableData.concat(geographyObj);
     }
   }
 }

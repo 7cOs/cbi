@@ -144,6 +144,51 @@ describe('MyPerformanceTableComponent', () => {
       expect(rowComponent2.rowData).toBe(tableData[0]);
     });
 
+    it('should sort the data with two criteria accordingly when alternate hierarchy is present', () => {
+      let tableData = getMyPerformanceTableRowMock(3);
+      tableData[0].descriptionRow0 = 'GEOGRAPHY';
+      tableData[0].metricColumn0 = 1;
+      tableData[1].descriptionRow0 = 'a';
+      tableData[1].metricColumn0 = 0;
+      tableData[2].descriptionRow0 = 'b';
+      tableData[2].metricColumn0 = 2;
+      componentInstance.tableData = tableData.slice();
+
+      const sortingCriteria = [
+        {
+          columnType: ColumnType.descriptionRow0,
+          ascending: false
+        },
+        {
+          columnType: ColumnType.metricColumn0,
+          ascending: false
+        }
+      ];
+      componentInstance.sortingCriteria = sortingCriteria;
+
+      fixture.detectChanges();
+
+      const mockElements = fixture.debugElement
+        .queryAll(By.directive(MockMyPerformanceTableRowComponent));
+      const rowComponent0 = mockElements[0]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+      const rowComponent1 = mockElements[1]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+      const rowComponent2 = mockElements[2]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+
+      expect(rowComponent0.rowData).toBeTruthy();
+      expect(rowComponent1.rowData).toBeTruthy();
+      expect(rowComponent2.rowData).toBeTruthy();
+
+      expect(rowComponent0.rowData).toBe(tableData[2]);
+      expect(rowComponent1.rowData).toBe(tableData[1]);
+      expect(rowComponent2.rowData).toBe(tableData[0]);
+    });
+
   });
 
   describe('setTableData', () => {
