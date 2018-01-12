@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { findIndex } from 'lodash';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
+import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
 import { LoadingState } from '../../../enums/loading-state.enum';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -34,7 +36,7 @@ export class MyPerformanceTableComponent {
       this.sortedTableData = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-      this.transformRowData(this.sortedTableData);
+      this.sortedTableData = this.sortGeographyRowToBottom(this.sortedTableData);
     }
   }
 
@@ -188,15 +190,18 @@ export class MyPerformanceTableComponent {
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
       this.sortedTableData = this.sortedTableData.sort(this.sortingFunction);
-      this.transformRowData(this.sortedTableData);
+      this.sortedTableData = this.sortGeographyRowToBottom(this.sortedTableData);
     }
   }
 
-  private transformRowData (rowData: Array<MyPerformanceTableRow>) {
-    const index = rowData.findIndex(data => data.descriptionRow0 === 'GEOGRAPHY');
-    if (index === 0) {
+  private sortGeographyRowToBottom (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
+    const index = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
+    if (index !== -1) {
       const geographyObj = rowData.splice(index, 1);
-      this.sortedTableData = this.sortedTableData.concat(geographyObj);
+      this.sortedTableData = rowData.concat(geographyObj);
+      return this.sortedTableData;
+    } else {
+      return rowData;
     }
   }
 }
