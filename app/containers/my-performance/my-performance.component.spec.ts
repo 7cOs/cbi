@@ -27,6 +27,7 @@ import { getMyPerformanceEntitiesDataMock,
          getMyPerformanceStateMock,
          getResponsibilitesStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
 import { getProductMetricsBrandMock,
          getProductMetricsSkuMock,
          getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
@@ -44,6 +45,7 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../../enums/team-performance-table-header.enum';
@@ -3764,11 +3766,89 @@ describe('MyPerformanceComponent', () => {
       componentInstanceCopy.isOpportunityTableExtended = false;
       componentInstance.toggleOpportunityTable();
 
-      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(true);
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBeTruthy();
 
       componentInstance.toggleOpportunityTable();
 
-      expect(componentInstanceCopy.isOpportunityTableExtended).toBe(false);
+      expect(componentInstanceCopy.isOpportunityTableExtended).toBeFalsy();
+    });
+  });
+
+  describe('handleOpportunityCountTotalClicked', () => {
+    let groupedOpportunityCountsMock: OpportunitiesGroupedByBrandSkuPackageCode;
+    let tableRowMock: MyPerformanceTableRow;
+
+    beforeEach(() => {
+      groupedOpportunityCountsMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
+      tableRowMock = getMyPerformanceTableRowMock(1)[0];
+      delete tableRowMock.metadata.brandCode;
+      delete tableRowMock.metadata.skuPackageCode;
+
+      productMetricsSubject.next(Object.assign({}, myPerformanceProductMetricsMock, {
+        opportunityCounts: groupedOpportunityCountsMock
+      }));
+
+      storeMock.dispatch.and.callThrough();
+      storeMock.dispatch.calls.reset();
+    });
+
+    describe('when any opportunity count total is clicked', () => {
+      let brandOrSkuPackage: string;
+
+      beforeEach(() => {
+        brandOrSkuPackage = sample(['brandCode', 'skuPackageCode']);
+        tableRowMock.metadata[brandOrSkuPackage] = Object.keys(groupedOpportunityCountsMock)[0];
+        componentInstanceCopy.clickedSalesHierarchyEntityName = chance.string();
+      });
+
+      it('should set isOpportunityTableExtended to true when the table row opportunities is not 0 and set input data '
+      + 'for the opportunity table component', () => {
+        tableRowMock.opportunities = chance.natural();
+        componentInstance.handleOpportunityCountTotalClicked(tableRowMock);
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBeTruthy();
+        expect(componentInstanceCopy.selectedSalesHierarchyEntityName).toBe(componentInstanceCopy.clickedSalesHierarchyEntityName);
+        expect(componentInstanceCopy.selectedBrandSkuPackageName).toBe(tableRowMock.descriptionRow0);
+        expect(componentInstanceCopy.selectedOpportunityCountTotal).toBe(tableRowMock.opportunities);
+      });
+
+      it('should not set isOpportunityTableExtended to true and no opportunity table component inputs should change', () => {
+        tableRowMock.opportunities = 0;
+        componentInstance.handleOpportunityCountTotalClicked(tableRowMock);
+
+        expect(componentInstanceCopy.isOpportunityTableExtended).toBeFalsy();
+        expect(componentInstanceCopy.selectedSalesHierarchyEntityName).not.toBe(componentInstanceCopy.clickedSalesHierarchyEntityName);
+        expect(componentInstanceCopy.selectedBrandSkuPackageName).not.toBe(tableRowMock.descriptionRow0);
+        expect(componentInstanceCopy.selectedOpportunityCountTotal).not.toBe(tableRowMock.opportunities);
+      });
+    });
+
+    describe('when a Brand opportunity count total is clicked', () => {
+      beforeEach(() => {
+        tableRowMock.metadata.brandCode = Object.keys(groupedOpportunityCountsMock)[0];
+        tableRowMock.opportunities = chance.natural();
+      });
+
+      it('should set the opportunity type count input data based on the brandCode in the row metadata', () => {
+        componentInstance.handleOpportunityCountTotalClicked(tableRowMock);
+
+        expect(componentInstanceCopy.teamPerformanceTableOpportunities)
+          .toBe(groupedOpportunityCountsMock[tableRowMock.metadata.brandCode].opportunityCounts);
+      });
+    });
+
+    describe('when a SKU/Package opportunity count total is clicked', () => {
+      beforeEach(() => {
+        tableRowMock.metadata.skuPackageCode = Object.keys(groupedOpportunityCountsMock)[0];
+        tableRowMock.opportunities = chance.natural();
+      });
+
+      it('should set the opportunity type count input data based on the skuPackageCode in the row metadata', () => {
+        componentInstance.handleOpportunityCountTotalClicked(tableRowMock);
+
+        expect(componentInstanceCopy.teamPerformanceTableOpportunities)
+          .toBe(groupedOpportunityCountsMock[tableRowMock.metadata.skuPackageCode].opportunityCounts);
+      });
     });
   });
 });
