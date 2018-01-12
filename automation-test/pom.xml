@@ -116,6 +116,7 @@
 	</dependencies>
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -128,6 +129,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -137,10 +139,13 @@
 						<suiteXmlFile>testng-smoke-test.xml</suiteXmlFile>
 					</suiteXmlFiles>
 					<workingDirectory>target/</workingDirectory>
+					<reportsDirectory>target/surefire-reports/${maven.build.timestamp}</reportsDirectory>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>functional-test</id>
@@ -155,6 +160,7 @@
 								<suiteXmlFile>testng-functional-test.xml</suiteXmlFile>
 							</suiteXmlFiles>
 							<workingDirectory>target/</workingDirectory>
+							<reportsDirectory>target/surefire-reports/functional/${maven.build.timestamp}</reportsDirectory>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -173,6 +179,7 @@
 								<suiteXmlFile>testng-smoke-test.xml</suiteXmlFile>
 							</suiteXmlFiles>
 							<workingDirectory>target/</workingDirectory>
+							<reportsDirectory>target/surefire-reports/smoke/${maven.build.timestamp}</reportsDirectory>
 						</configuration>
 					</plugin>
 				</plugins>
