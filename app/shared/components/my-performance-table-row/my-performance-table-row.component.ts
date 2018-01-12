@@ -18,6 +18,7 @@ export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
+  @Input() showEmptyLastColumn: boolean = false;
   @Input() showX: boolean = false;
   @Input()
   set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {

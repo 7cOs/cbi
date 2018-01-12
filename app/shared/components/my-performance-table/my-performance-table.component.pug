@@ -53,7 +53,8 @@ div.performance-table-wrapper
         [rowData]="dismissableTotalRow",
         [showX]=true,
         [showContributionToVolume]="showContributionToVolume",
-        [showOpportunities]="showOpportunities",
+        [showOpportunities]="false",
+        [showEmptyLastColumn]="showOpportunities",
         (click)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event, row: dismissableTotalRow})",
         (onDismissableRowXClicked)="onDismissableRowXClicked.emit()",
         (onOpportunityCountClicked)="onOpportunityCountClicked.emit(dismissableTotalRow)")

@@ -1,3 +1,5 @@
+import { By } from '@angular/platform-browser';
+import { Pipe } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -9,6 +11,18 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
 
 const chance = new Chance();
 
+@Pipe({
+  name: 'number',
+  pure: false
+})
+export class NumberPipeMock implements Pipe {
+  name: string = 'number';
+
+  transform(query: number, ...args: any[]): any {
+    return query;
+  }
+}
+
 describe('MyPerformanceTableComponent', () => {
 
   let fixture: ComponentFixture<MyPerformanceTableRowComponent>;
@@ -17,7 +31,8 @@ describe('MyPerformanceTableComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        MyPerformanceTableRowComponent
+        MyPerformanceTableRowComponent,
+        NumberPipeMock
       ]
     });
 
@@ -123,6 +138,31 @@ describe('MyPerformanceTableComponent', () => {
       const event = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
       componentInstance.sublineClicked(event);
       expect(event.stopPropagation).toHaveBeenCalled();
+    });
+  });
+
+  describe('showEmptyLastColumn Input', () => {
+    beforeEach(() => {
+      componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];
+    });
+
+    it('should contain a .right-col td element with no content when showEmptyLastColumn is true', () => {
+      componentInstance.showEmptyLastColumn = true;
+      fixture.detectChanges();
+
+      const rightColumnElement = fixture.debugElement.query(By.css('.right-col'));
+
+      expect(rightColumnElement).not.toBe(null);
+      expect(rightColumnElement.nativeElement.textContent).toBe('');
+    });
+
+    it('should not contain a .right-col td element when showEmptyLastColumn is false', () => {
+      componentInstance.showEmptyLastColumn = false;
+      fixture.detectChanges();
+
+      const rightColumnElement = fixture.debugElement.query(By.css('.right-col'));
+
+      expect(rightColumnElement).toBe(null);
     });
   });
 });

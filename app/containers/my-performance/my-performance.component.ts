@@ -414,7 +414,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleOpportunityCountTotalClicked(myPerformanceTableRow: MyPerformanceTableRow): void {
-    // console.log('myPerformanceTableRow', myPerformanceTableRow);
     if (myPerformanceTableRow.opportunities === 0) return;
 
     const selectedProductCode: string = myPerformanceTableRow.metadata.brandCode
