@@ -5,6 +5,7 @@ import { CalculatorService } from './calculator.service';
 import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCount } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
+import { OpportunityTypeLabel } from '../enums/opportunity.enum';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 
@@ -75,8 +76,10 @@ export class ProductMetricsTransformerService {
 
   private getOpportunityCounts(skuPackageOpportunityCountsDTO: OpportunityCountDTO[]): OpportunityCount[] {
     return skuPackageOpportunityCountsDTO.reduce((opportunityCounts: OpportunityCount[], skuPackageOpportunity: OpportunityCountDTO) => {
+      const opportunityTypeName: string = OpportunityTypeLabel[skuPackageOpportunity.label] || skuPackageOpportunity.label;
+
       opportunityCounts.push({
-        name: skuPackageOpportunity.label,
+        name: opportunityTypeName,
         count: skuPackageOpportunity.count
       });
 
