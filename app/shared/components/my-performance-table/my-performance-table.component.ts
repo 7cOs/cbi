@@ -33,10 +33,10 @@ export class MyPerformanceTableComponent {
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
     if (tableData) {
-      this.sortedTableData = typeof this.sortingFunction === 'function'
+      const sortedTableData: Array<MyPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-      this.sortedTableData = this.sortGeographyRowToBottom(this.sortedTableData);
+      this.sortedTableData = this.sortGeographyRowToBottom(sortedTableData);
     }
   }
 
@@ -189,16 +189,16 @@ export class MyPerformanceTableComponent {
     this._sortingCriteria = criteria;
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
-      this.sortedTableData = this.sortedTableData.sort(this.sortingFunction);
-      this.sortedTableData = this.sortGeographyRowToBottom(this.sortedTableData);
+      const sortedData: Array<MyPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
+      this.sortedTableData = this.sortGeographyRowToBottom(sortedData);
     }
   }
 
   private sortGeographyRowToBottom (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
     const index = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
     if (index !== -1) {
-      const geographyObj = rowData.splice(index, 1);
-      return rowData.concat(geographyObj);
+      const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(index, 1);
+      return rowData.concat(geographyTableRow);
     } else {
       return rowData;
     }
