@@ -18,7 +18,7 @@ const optionsMockStandard = getSelectOptionsMockStandard();
 const optionsMockStrings = getSelectOptionsMockStrings();
 const titleMock = chance.string();
 
-xdescribe('CompassSelectComponent', () => {
+describe('CompassSelectComponent', () => {
   let fixture: ComponentFixture<CompassSelectComponent>;
   let componentInstance: CompassSelectComponent;
 
@@ -36,28 +36,28 @@ xdescribe('CompassSelectComponent', () => {
   });
 
   describe('component init', () => {
-    it('should initialize the current selected option based on the passed in [model] input', fakeAsync(() => {
+    it('should initialize the currently displayed/selected option based on the passed in [model] input', fakeAsync(() => {
       fixture.autoDetectChanges();
       tick();
-      let selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
+      let displayedTriggerElement = fixture.debugElement.query(By.css('mat-select-trigger')).nativeElement;
 
-      expect(selectedOptionElement.textContent).toBe(optionsMockStandard[0].display);
+      expect(displayedTriggerElement.textContent).toBe(optionsMockStandard[0].display);
 
       componentInstance.options = optionsMockNumbers;
       componentInstance.model = optionsMockNumbers[1].value;
       fixture.autoDetectChanges();
       tick();
-      selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
+      displayedTriggerElement = fixture.debugElement.query(By.css('mat-select-trigger')).nativeElement;
 
-      expect(selectedOptionElement.textContent).toBe(optionsMockNumbers[1].display);
+      expect(displayedTriggerElement.textContent).toBe(optionsMockNumbers[1].display);
 
       componentInstance.options = optionsMockStrings;
       componentInstance.model = optionsMockStrings[2].value;
       fixture.autoDetectChanges();
       tick();
-      selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
+      displayedTriggerElement = fixture.debugElement.query(By.css('mat-select-trigger')).nativeElement;
 
-      expect(selectedOptionElement.textContent).toBe(optionsMockStrings[2].display);
+      expect(displayedTriggerElement.textContent).toBe(optionsMockStrings[2].display);
     }));
   });
 
@@ -65,7 +65,7 @@ xdescribe('CompassSelectComponent', () => {
     it('should contain a title element when [title] input is passed in', () => {
       componentInstance.title = titleMock;
       fixture.detectChanges();
-      const titleElement = fixture.debugElement.query(By.css('.title'));
+      const titleElement = fixture.debugElement.query(By.css('.select-title'));
 
       expect(titleElement).not.toBe(null);
       expect(titleElement.nativeElement.textContent).toBe(titleMock);
@@ -73,7 +73,7 @@ xdescribe('CompassSelectComponent', () => {
 
     it('should not contain a title element when [title] input is not passed in', () => {
       fixture.detectChanges();
-      const titleElement = fixture.debugElement.query(By.css('.title'));
+      const titleElement = fixture.debugElement.query(By.css('.select-title'));
 
       expect(titleElement).toBe(null);
     });
@@ -84,7 +84,7 @@ xdescribe('CompassSelectComponent', () => {
       componentInstance.options = optionsMockStrings;
       componentInstance.model = optionsMockStrings[0].value;
       fixture.detectChanges();
-      const subtitleElement = fixture.debugElement.query(By.css('.subtitle'));
+      const subtitleElement = fixture.debugElement.query(By.css('.select-subtitle'));
 
       expect(subtitleElement).not.toBe(null);
       expect(subtitleElement.nativeElement.textContent).toBe(optionsMockStrings[0].subDisplay);
@@ -94,26 +94,27 @@ xdescribe('CompassSelectComponent', () => {
       componentInstance.options = optionsMockStandard;
       componentInstance.model = optionsMockStandard[0].value;
       fixture.detectChanges();
-      const subtitleElement = fixture.debugElement.query(By.css('.subtitle'));
+      const subtitleElement = fixture.debugElement.query(By.css('.select-subtitle'));
 
       expect(subtitleElement).toBe(null);
     });
   });
 
   describe('component output event', () => {
-    it('should output the value of a clicked option', () => {
+    xit('should output the value of a clicked option', (done: any) => {
       componentInstance.options = optionsMockStandard;
       componentInstance.model = optionsMockStandard[0].value;
       fixture.detectChanges();
 
       componentInstance.onOptionSelected.subscribe((value: any) => {
         expect(value).toBe(optionsMockStandard[0].value);
+        done();
       });
 
       fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement.click();
       fixture.detectChanges();
 
-      fixture.debugElement.query(By.css('.compass-select-option:nth-child(1)')).triggerEventHandler('click', null);
+      fixture.debugElement.query(By.css('.compass-select-option:nth-child(1)')).nativeElement.click();
     });
   });
 });
