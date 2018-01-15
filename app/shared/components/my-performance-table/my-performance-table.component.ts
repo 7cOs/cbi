@@ -198,8 +198,7 @@ export class MyPerformanceTableComponent {
     const index = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
     if (index !== -1) {
       const geographyObj = rowData.splice(index, 1);
-      this.sortedTableData = rowData.concat(geographyObj);
-      return this.sortedTableData;
+      return rowData.concat(geographyObj);
     } else {
       return rowData;
     }
