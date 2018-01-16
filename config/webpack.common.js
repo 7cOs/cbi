@@ -85,9 +85,19 @@ module.exports = {
       {
         test: /\.svg$/,
         include: [ helpers.root('app') ],
-        exclude: [ helpers.root('app/assets/fonts') ],
+        exclude: [ helpers.root('app/assets/fonts'), helpers.root('app/assets/img/logos/Compass_logo.svg') ],
         loaders: [
           'url-loader?limit=8192&mimetype=image/svg+xml&name=assets/img/[name].[hash].[ext]',
+          'image-webpack-loader?bypassOnDebug=false'
+        ]
+      },
+      // prevent base64 inline of this SVG for IE11 support
+      // https://connect.microsoft.com/IE/feedback/details/1635483/ie-11-svgs-referenced-as-base64-text-on-imgs-dont-apply-embedded-style
+      {
+        test: /Compass_logo\.svg$/,
+        include: [ helpers.root('app/assets/img/logos/Compass_logo.svg') ],
+        loaders: [
+          'url-loader?limit=1&mimetype=image/svg+xml&name=assets/img/[name].[hash].[ext]',
           'image-webpack-loader?bypassOnDebug=false'
         ]
       },
