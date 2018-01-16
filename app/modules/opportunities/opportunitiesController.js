@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService, loaderService, title) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService, loaderService, toastService, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -27,6 +27,7 @@ module.exports = /*  @ngInject */
     vm.userService = userService;
     vm.opportunitiesService = opportunitiesService;
     vm.loaderService = loaderService;
+    vm.toastService = toastService;
 
     // Expose public methods
     vm.applySavedFilter = applySavedFilter;
@@ -135,6 +136,7 @@ module.exports = /*  @ngInject */
         .catch(() => {
           vm.deleteReportError = true;
         });
+        toastService.showToast('reportdeleted');
     }
 
     function placeholderSelect(data) {

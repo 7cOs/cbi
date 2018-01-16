@@ -1,6 +1,8 @@
-.toast-header.success(ng-show="nb.archived") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Archived!
-.toast-header.success(ng-show="nb.deleted") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Deleted!
-.toast-header.success(ng-show="nb.added") Opportunity Added!
+.toast-header.success(ng-show="nb.archived") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Archived
+.toast-header.success(ng-show="nb.deleted") Target List<span ng-if="nb.multipleTargetListsSelected">s</span> Deleted
+.toast-header.success(ng-show="nb.added") Opportunity Added
+.toast-header.success(ng-show="nb.reportdeleted") Report Successfully Deleted
+.toast-header.success(ng-show="nb.reportsaved") Report Successfully Saved
 .toast-header.success(ng-show="nb.copied") <span>{{nb.multipleTargetListsSelected ? 'Opportunities' : 'Opportunity'}}</span> added to target list!
 .toast-header(ng-show="nb.deleteError") Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.
 .toast-header(ng-show="nb.performanceDataError") An error occurred while loading performance data. Some data may be incomplete.

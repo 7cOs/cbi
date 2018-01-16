@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function filterController($state, $scope, $mdDialog, $mdSelect, analyticsService, loaderService, chipsService, filtersService, opportunityFiltersService, userService, usStatesService) {
+  function filterController($state, $scope, $mdDialog, $mdSelect, analyticsService, loaderService, chipsService, filtersService, opportunityFiltersService, toastService, userService, usStatesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -326,6 +326,8 @@ module.exports = /*  @ngInject */
         console.error('Error saving report: ', error);
         loaderService.closeLoader();
       });
+
+      toastService.showToast('reportsaved');
     }
 
     function updateFilter() {

@@ -181,3 +181,18 @@ button {
     width: 14px;
   }
 }
+
+.saved-reports-edit-container {
+  float: right;
+  height: 14px;
+  width: 14px;
+
+  .saved-reports-edit-icon {
+    background-image: url('../../img/icons/edit-note-blue.svg');
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+    height: 14px;
+    width: 14px;
+  }
+}
