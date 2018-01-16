@@ -123,7 +123,13 @@
     .state {
       md-select {
         margin-bottom: 0;
+        font-family: $work-sans;
+        font-size: 0.7em;
       }
+    }
+
+    .md-select-placeholder {
+      font-style: normal;
     }
 
     .dropdown-filter md-select-value .md-select-icon {
