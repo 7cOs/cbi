@@ -160,7 +160,7 @@ describe('Service: ProductMetricsTransformerService', () => {
       });
     });
 
-    it('should return Opportunity Types with transformed names if an OpportunityTypeLabel is available', () => {
+    it('should return Opportunity Types with transformed names if an OpportunityTypeLabel enum is matched', () => {
       const opportunityTypeMock: OpportunityType = getOpportunityTypeMock();
       const expectedOpportunityTypeLabel: OpportunityTypeLabel = OpportunityTypeLabel[opportunityTypeMock];
 
@@ -176,9 +176,14 @@ describe('Service: ProductMetricsTransformerService', () => {
       transformedOpportunityCounts[opportunityCountDTOMock[0].label].opportunityCounts.forEach((opportunityCount: OpportunityCount) => {
         expect(opportunityCount.name).toBe(expectedOpportunityTypeLabel);
       });
+    });
 
-      transformedOpportunityCounts[opportunityCountDTOMock[1].label].opportunityCounts.forEach((opportunityCount: OpportunityCount) => {
-        expect(opportunityCount.name).not.toBe(expectedOpportunityTypeLabel);
+    it('should not return Opportunity Types with OpportunityTypeLabel enum names if there is no match', () => {
+      const transformedOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode =
+        productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountDTOMock);
+
+      transformedOpportunityCounts[opportunityCountDTOMock[0].label].opportunityCounts.forEach((opportunityCount: OpportunityCount) => {
+        expect(OpportunityTypeLabel[opportunityCount.name]).toBe(undefined);
       });
     });
   });
