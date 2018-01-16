@@ -114,7 +114,8 @@ module.exports = /*  @ngInject */
       var parentEl = angular.element(document.body);
       vm.currentFilter = $filter('filter')(userService.model.opportunityFilters, {id: filterId});
       vm.duplicateName = false;
-
+      vm.editedFilterName = vm.currentFilter[0].name;
+      vm.filtersService.model.appliedFilter.appliedFilter = vm.currentFilter[0].filterString;
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -122,6 +123,10 @@ module.exports = /*  @ngInject */
         targetEvent: ev,
         template: require('./modal-edit-filter.pug')
       });
+
+      ev.stopPropagation();
+      $mdSelect.hide();
+
     }
 
     function deleteSavedFilter(filterId) {
@@ -166,6 +171,7 @@ module.exports = /*  @ngInject */
           vm.updateReportError = false;
           vm.currentFilter[0].name = vm.editedFilterName;
           closeModal();
+          toastService.showToast('reportsaved');
         })
         .catch(() => {
           vm.updateReportError = true;
