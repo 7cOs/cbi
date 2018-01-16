@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { findIndex } from 'lodash';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
+import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
 import { LoadingState } from '../../../enums/loading-state.enum';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -31,9 +33,10 @@ export class MyPerformanceTableComponent {
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
     if (tableData) {
-      this.sortedTableData = typeof this.sortingFunction === 'function'
+      const sortedTableData: Array<MyPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
+      this.sortedTableData = this.sortGeographyRowToBottom(sortedTableData);
     }
   }
 
@@ -186,7 +189,18 @@ export class MyPerformanceTableComponent {
     this._sortingCriteria = criteria;
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
-      this.sortedTableData = this.sortedTableData.sort(this.sortingFunction);
+      const sortedData: Array<MyPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
+      this.sortedTableData = this.sortGeographyRowToBottom(sortedData);
+    }
+  }
+
+  private sortGeographyRowToBottom (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
+    const index = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
+    if (index !== -1) {
+      const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(index, 1);
+      return rowData.concat(geographyTableRow);
+    } else {
+      return rowData;
     }
   }
 }
