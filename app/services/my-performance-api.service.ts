@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
@@ -19,6 +17,7 @@ export class MyPerformanceApiService {
 
   constructor(private http: Http) { }
 
+  // DONE
   public getResponsibilities(positionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities`;
 
@@ -27,6 +26,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  // DONE
   public getHierarchyGroupPerformance(groupType: string, filter: MyPerformanceFilterState,
                                       positionId: string, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
@@ -39,6 +39,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
+  // DONE
   public getAlternateHierarchyGroupPerformance(groupType: string, positionId: string,
     alternateHierarchyId: string, filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
@@ -143,6 +144,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  // DONE
   public getSubAccountPerformance(
     subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState,
     brandSkuCode?: string, skuPackageType?: SkuPackageType)
@@ -169,6 +171,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  // DONE
   private getParams(filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType): any {
     const metricType: string = filter.hasOwnProperty('distributionType')
       ? `${ filter.distributionType.toLowerCase() }PointsOfDistribution`
@@ -193,10 +196,12 @@ export class MyPerformanceApiService {
     return params;
   }
 
+  // DONE
   private handleError(err: Error): Observable<Error> {
     return Observable.throw(err);
   }
 
+  // DONE
   private handlePerformanceError(err: any): Observable<PerformanceDTO> {
     if (err.status === 404) {
       const emptyDTO: PerformanceDTO = {

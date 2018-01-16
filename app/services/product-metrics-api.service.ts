@@ -3,12 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 
@@ -57,6 +54,7 @@ export class ProductMetricsApiService {
       .catch(err => this.handleError(err, aggregation, params.type));
   }
 
+  // DONE
   public getSubAccountProductMetrics(
     subAccountId: string,
     positionId: string,
@@ -223,6 +221,7 @@ export class ProductMetricsApiService {
       .catch(err => Observable.throw(err));
   }
 
+  // DONE
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
     const metricType: string = filter.hasOwnProperty('distributionType')
       ? `${ filter.distributionType.toLowerCase() }PointsOfDistribution`
@@ -237,6 +236,7 @@ export class ProductMetricsApiService {
     };
   }
 
+  // DONE
   private handleError(err: any, aggregation: ProductMetricsAggregationType, type: string): Observable<ProductMetricsDTO> {
     if (err.status === 404) {
       let empty: ProductMetricsDTO = { type: type };
