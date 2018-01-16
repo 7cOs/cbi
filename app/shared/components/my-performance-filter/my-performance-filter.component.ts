@@ -5,13 +5,11 @@ import { CompassRadioOption } from '../../../models/compass-radio-component.mode
 import { CompassSelectOption } from '../../../models/compass-select-component.model';
 import { DateRangesState } from '../../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
-import {
-  depletionsPremiseOptionsModel,
-  distributionOptionsModel,
-  distributionPremiseOptionsModel,
-  metricOptionsModel,
-  MyPerformanceFilterEvent // tslint:disable-line:no-unused-variable
-} from '../../../models/my-performance-filter.model';
+import { depletionsPremiseOptionsModel,
+         distributionOptionsModel,
+         distributionPremiseOptionsModel,
+         metricOptionsModel,
+         MyPerformanceFilterEvent } from '../../../models/my-performance-filter.model';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterActionType } from '../../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';

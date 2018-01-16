@@ -105,7 +105,7 @@ describe('Service: MyPerformanceApiService', () => {
     const skuPackageTypeMock = SkuPackageType.sku;
 
     const filterStateMock: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.volume,
+      metricType: MetricTypeValue.Depletions,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On
     };
@@ -175,7 +175,7 @@ describe('Service: MyPerformanceApiService', () => {
 
   describe('getAlternateHierarchyPersonPerformance', () => {
     const filterStateMock: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.volume,
+      metricType: MetricTypeValue.Depletions,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On
     };
@@ -237,7 +237,7 @@ describe('Service: MyPerformanceApiService', () => {
 
   describe('getSubAccountPerformance', () => {
     const filterStateMock: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.volume,
+      metricType: MetricTypeValue.Depletions,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On
     };
@@ -293,7 +293,7 @@ describe('Service: MyPerformanceApiService', () => {
 
   describe('getDistributorPerformance', () => {
     const filterStateMock: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.volume,
+      metricType: MetricTypeValue.Depletions,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On
     };
@@ -357,7 +357,7 @@ describe('Service: MyPerformanceApiService', () => {
 
   describe('getAccountPerformance', () => {
     const filterStateMock: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.volume,
+      metricType: MetricTypeValue.Depletions,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On
     };
@@ -443,7 +443,7 @@ describe('Service: MyPerformanceApiService', () => {
 
   describe('getHierarchyGroupPerformance', () => {
     const filterStateMock: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.velocity,
+      metricType: MetricTypeValue.Velocity,
       dateRangeCode: DateRangeTimePeriodValue.L90BDL,
       premiseType: PremiseTypeValue.All
     };
@@ -498,7 +498,7 @@ describe('Service: MyPerformanceApiService', () => {
   describe('getAlternateHierarchyGroupPerformance', () => {
     const hierarchyGroupTypeMock: string = chance.string();
     const filterStateMock: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.velocity,
+      metricType: MetricTypeValue.Velocity,
       dateRangeCode: DateRangeTimePeriodValue.L90BDL,
       premiseType: PremiseTypeValue.All
     };

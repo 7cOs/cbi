@@ -8,7 +8,7 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
 export interface MyPerformanceFilterState extends MyPerformanceFilter {}
 
 export const initialState: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.volume,
+  metricType: MetricTypeValue.Depletions,
   dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
   premiseType: PremiseTypeValue.All
 };
@@ -23,11 +23,11 @@ export function myPerformanceFilterReducer(
     case MyPerformanceFilterActions.SET_METRIC:
       const newState: MyPerformanceFilterState = {
         metricType: action.payload,
-        dateRangeCode: action.payload === MetricTypeValue.volume ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
-        premiseType: action.payload === MetricTypeValue.volume ? PremiseTypeValue.All : PremiseTypeValue.Off
+        dateRangeCode: action.payload === MetricTypeValue.Depletions ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
+        premiseType: action.payload === MetricTypeValue.Depletions ? PremiseTypeValue.All : PremiseTypeValue.Off
       };
 
-      if (action.payload === MetricTypeValue.PointsOfDistribution) newState.distributionType = DistributionTypeValue.simple;
+      if (action.payload === MetricTypeValue.Distribution) newState.distributionType = DistributionTypeValue.Simple;
 
       return newState;
 
@@ -49,13 +49,13 @@ export function myPerformanceFilterReducer(
     case MyPerformanceFilterActions.SET_METRIC_AND_PREMISE_TYPE:
       const filterState: MyPerformanceFilterState = {
         metricType: action.payload.metricType,
-        dateRangeCode: action.payload.metricType === MetricTypeValue.volume
+        dateRangeCode: action.payload.metricType === MetricTypeValue.Depletions
           ? DateRangeTimePeriodValue.CYTDBDL
           : DateRangeTimePeriodValue.L90BDL,
         premiseType: action.payload.premiseType
       };
 
-      if (action.payload.metricType === MetricTypeValue.PointsOfDistribution) filterState.distributionType = DistributionTypeValue.simple;
+      if (action.payload.metricType === MetricTypeValue.Distribution) filterState.distributionType = DistributionTypeValue.Simple;
 
       return filterState;
 

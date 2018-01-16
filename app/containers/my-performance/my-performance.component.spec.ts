@@ -316,7 +316,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceFilterActions.SetMetricAndPremiseType({
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         premiseType: defaultPremiseTypeMock
       }));
     });
@@ -329,11 +329,11 @@ describe('MyPerformanceComponent', () => {
 
       expect(storeMock.dispatch.calls.count()).toBe(3);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceFilterActions.SetMetricAndPremiseType({
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         premiseType: PremiseTypeValue.On
       }));
       expect(myPerformanceServiceMock.getUserDefaultPremiseType).toHaveBeenCalledWith(
-        MetricTypeValue.volume,
+        MetricTypeValue.Depletions,
         userService.model.currentUser.srcTypeCd[0]
       );
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ResponsibilitiesActions.FetchResponsibilities({
@@ -965,7 +965,7 @@ describe('MyPerformanceComponent', () => {
 
       it('should set the subaccount code in the state and refetch product metrics when filtering for a premise type of All', () => {
         const filterStateMock: MyPerformanceFilterState = {
-          metricType: MetricTypeValue.volume,
+          metricType: MetricTypeValue.Depletions,
           dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
           premiseType: PremiseTypeValue.All
         };
@@ -994,7 +994,7 @@ describe('MyPerformanceComponent', () => {
 
       it('should dispatch an action to fetch opportunity counts when NOT filtering for a premise type of All', () => {
         const filterStateMock: MyPerformanceFilterState = {
-          metricType: MetricTypeValue.volume,
+          metricType: MetricTypeValue.Depletions,
           dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
           premiseType: sample([PremiseTypeValue.On, PremiseTypeValue.Off])
         };
@@ -1020,7 +1020,7 @@ describe('MyPerformanceComponent', () => {
       it('should NOT dispatch an action to fetch opportunity counts when filtering for a premise type of All when '
       + 'a SubAccount is clicked', () => {
         const filterStateMock: MyPerformanceFilterState = {
-          metricType: MetricTypeValue.volume,
+          metricType: MetricTypeValue.Depletions,
           dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
           premiseType: PremiseTypeValue.All
         };
@@ -1053,7 +1053,7 @@ describe('MyPerformanceComponent', () => {
 
       it('should set the distributor code in the state and refetch product metrics when filtering for a premiseType of All', () => {
         const filterStateMock: MyPerformanceFilterState = {
-          metricType: MetricTypeValue.volume,
+          metricType: MetricTypeValue.Depletions,
           dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
           premiseType: PremiseTypeValue.All
         };
@@ -1081,7 +1081,7 @@ describe('MyPerformanceComponent', () => {
 
       it('should dispatch an action to fetch opportunity counts when NOT filtering for a premise type of All', () => {
         const filterStateMock: MyPerformanceFilterState = {
-          metricType: MetricTypeValue.volume,
+          metricType: MetricTypeValue.Depletions,
           dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
           premiseType: sample([PremiseTypeValue.On, PremiseTypeValue.Off])
         };
@@ -1107,7 +1107,7 @@ describe('MyPerformanceComponent', () => {
       it('should NOT dispatch an action to fetch opportunity counts when filtering for a premise type of All when '
       + 'a Distributor is clicked', () => {
         const filterStateMock: MyPerformanceFilterState = {
-          metricType: MetricTypeValue.volume,
+          metricType: MetricTypeValue.Depletions,
           dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
           premiseType: PremiseTypeValue.All
         };
@@ -2254,7 +2254,7 @@ describe('MyPerformanceComponent', () => {
       userService.model.currentUser.srcTypeCd = [chance.string()];
       myPerformanceServiceMock.getUserDefaultPremiseType.and.returnValue(defaultPremiseTypeMock);
       currentFilterMock = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
         premiseType: PremiseTypeValue.All
       };
@@ -2265,8 +2265,8 @@ describe('MyPerformanceComponent', () => {
         switch (action.type) {
           case MyPerformanceFilterActions.SET_METRIC:
             currentFilterMock.metricType = action.payload;
-            if (action.payload === MetricTypeValue.PointsOfDistribution) {
-              currentFilterMock.distributionType = DistributionTypeValue.simple;
+            if (action.payload === MetricTypeValue.Distribution) {
+              currentFilterMock.distributionType = DistributionTypeValue.Simple;
             }
             break;
           case MyPerformanceFilterActions.SET_PREMISE_TYPE:
@@ -2281,8 +2281,8 @@ describe('MyPerformanceComponent', () => {
           case MyPerformanceFilterActions.SET_METRIC_AND_PREMISE_TYPE:
             currentFilterMock.metricType = action.payload.metricType;
             currentFilterMock.premiseType = action.payload.premiseType;
-            if (action.payload.metricType === MetricTypeValue.PointsOfDistribution) {
-              currentFilterMock.distributionType = DistributionTypeValue.simple;
+            if (action.payload.metricType === MetricTypeValue.Distribution) {
+              currentFilterMock.distributionType = DistributionTypeValue.Simple;
             }
             break;
           default:
@@ -2312,7 +2312,7 @@ describe('MyPerformanceComponent', () => {
       it('should dispatch appropriate actions and send analytics events', () => {
         const filterEventMock = {
           filterType: MyPerformanceFilterActionType.Metric,
-          filterValue: MetricTypeValue.velocity
+          filterValue: MetricTypeValue.Velocity
         };
         componentInstance.filterOptionSelected(filterEventMock);
 
@@ -2349,7 +2349,7 @@ describe('MyPerformanceComponent', () => {
       it('should dispatch appropriate actions and send 4 analytics events when Metric Type is changed to distribution', () => {
         const filterEventMock = {
           filterType: MyPerformanceFilterActionType.Metric,
-          filterValue: MetricTypeValue.PointsOfDistribution
+          filterValue: MetricTypeValue.Distribution
         };
         componentInstance.filterOptionSelected(filterEventMock);
 
@@ -2483,10 +2483,10 @@ describe('MyPerformanceComponent', () => {
     describe('when Distribution Type filter is changed', () => {
       beforeEach(() => {
         currentFilterMock = {
-          metricType: MetricTypeValue.PointsOfDistribution,
+          metricType: MetricTypeValue.Distribution,
           dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
           premiseType: PremiseTypeValue.All,
-          distributionType: DistributionTypeValue.simple
+          distributionType: DistributionTypeValue.Simple
         };
         filterSubject.next(currentFilterMock);
         storeMock.dispatch.calls.reset();
@@ -2495,7 +2495,7 @@ describe('MyPerformanceComponent', () => {
       it('should dispatch appropriate actions and send analytics events', () => {
         const filterEventMock = {
           filterType: MyPerformanceFilterActionType.DistributionType,
-          filterValue: DistributionTypeValue.effective
+          filterValue: DistributionTypeValue.Effective
         };
         componentInstance.filterOptionSelected(filterEventMock);
 

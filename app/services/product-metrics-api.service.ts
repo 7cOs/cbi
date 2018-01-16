@@ -224,12 +224,16 @@ export class ProductMetricsApiService {
   }
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
+    const metricType: string = filter.hasOwnProperty('distributionType')
+      ? `${ filter.distributionType.toLowerCase() }PointsOfDistribution`
+      : filter.metricType === MetricTypeValue.Depletions
+        ? 'volume'
+        : filter.metricType.toLowerCase();
+
     return {
-      type: filter.hasOwnProperty('distributionType')
-        ? DistributionTypeValue[filter.distributionType] + MetricTypeValue[filter.metricType]
-        : MetricTypeValue[filter.metricType],
-      dateRangeCode: DateRangeTimePeriodValue[filter.dateRangeCode],
-      premiseType: PremiseTypeValue[filter.premiseType]
+      type: metricType,
+      dateRangeCode: filter.dateRangeCode,
+      premiseType: filter.premiseType
     };
   }
 

@@ -54,7 +54,7 @@ describe('Service: ProductMetricsApiService', () => {
     let expectedPositionId: string;
 
       filterMock = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.All
       };
@@ -128,7 +128,7 @@ describe('Service: ProductMetricsApiService', () => {
 
     beforeEach(() => {
       filterMock = {
-        metricType: MetricTypeValue.velocity,
+        metricType: MetricTypeValue.Velocity,
         dateRangeCode: DateRangeTimePeriodValue.L3CM,
         premiseType: PremiseTypeValue.Off
       };
@@ -204,7 +204,7 @@ describe('Service: ProductMetricsApiService', () => {
 
     beforeEach(() => {
       filterMock = {
-        metricType: MetricTypeValue.velocity,
+        metricType: MetricTypeValue.Velocity,
         dateRangeCode: DateRangeTimePeriodValue.L3CM,
         premiseType: PremiseTypeValue.Off
       };
@@ -280,7 +280,7 @@ describe('Service: ProductMetricsApiService', () => {
 
     beforeEach(() => {
       filterMock = {
-        metricType: MetricTypeValue.velocity,
+        metricType: MetricTypeValue.Velocity,
         dateRangeCode: DateRangeTimePeriodValue.L3CM,
         premiseType: PremiseTypeValue.Off
       };
@@ -356,8 +356,8 @@ describe('Service: ProductMetricsApiService', () => {
 
     beforeEach(() => {
       filterMock = {
-        metricType: MetricTypeValue.PointsOfDistribution,
-        distributionType: DistributionTypeValue.simple,
+        metricType: MetricTypeValue.Distribution,
+        distributionType: DistributionTypeValue.Simple,
         dateRangeCode: DateRangeTimePeriodValue.L60BDL,
         premiseType: PremiseTypeValue.On
       };
@@ -434,7 +434,7 @@ describe('Service: ProductMetricsApiService', () => {
 
     beforeEach(() => {
       filterMock = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
@@ -528,7 +528,7 @@ describe('Service: ProductMetricsApiService', () => {
 
     beforeEach(() => {
       filterMock = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };

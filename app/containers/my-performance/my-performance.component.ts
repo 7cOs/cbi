@@ -241,10 +241,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     if (this.filterState) {
       const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
-        MetricTypeValue.volume, this.userService.model.currentUser.srcTypeCd[0]);
+        MetricTypeValue.Depletions, this.userService.model.currentUser.srcTypeCd[0]);
 
       this.store.dispatch(new MyPerformanceFilterActions.SetMetricAndPremiseType({
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         premiseType: defaultUserPremiseType
       }));
       this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
@@ -436,7 +436,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.analyticsService.trackEvent(category, 'Metric', this.performanceMetric);
     this.analyticsService.trackEvent(category, 'Time Period', this.dateRange.displayCode);
     this.analyticsService.trackEvent(category, 'Premise Type', PremiseTypeValue[this.filterState.premiseType]);
-    if (this.filterState.metricType === MetricTypeValue.PointsOfDistribution) {
+    if (this.filterState.metricType === MetricTypeValue.Distribution) {
       this.analyticsService.trackEvent(category, 'Distribution Type',
         DistributionTypeValue[this.filterState.distributionType]);
     }
@@ -714,7 +714,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private getShowSalesContributionToVolume(): boolean {
     return this.salesHierarchyViewType && this.salesHierarchyViewType !== SalesHierarchyViewType.roleGroups
-           && this.filterState && this.filterState.metricType === MetricTypeValue.volume;
+           && this.filterState && this.filterState.metricType === MetricTypeValue.Depletions;
   }
 
   private dispatchRefreshAllPerformance(brandSkuCode: string, skuPackageType?: SkuPackageType) {
@@ -735,7 +735,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private getShowProductMetricsContributionToVolume(): boolean {
-    return this.filterState && this.filterState.metricType === MetricTypeValue.volume;
+    return this.filterState && this.filterState.metricType === MetricTypeValue.Depletions;
   }
 
   private shouldShowProductMetricsOpportunities(): boolean {

@@ -9,7 +9,7 @@ describe('My Performance Filter Actions', () => {
 
   describe('SetMetric action', () => {
     let action: MyPerformanceFilterActions.SetMetric;
-    const payload: MetricTypeValue = MetricTypeValue.volume;
+    const payload: MetricTypeValue = MetricTypeValue.Depletions;
 
     beforeEach(() => {
       action = new MyPerformanceFilterActions.SetMetric(payload);
@@ -63,7 +63,7 @@ describe('My Performance Filter Actions', () => {
 
   describe('SetDistributionType action', () => {
     let action: MyPerformanceFilterActions.SetDistributionType;
-    const payload: DistributionTypeValue = DistributionTypeValue.simple;
+    const payload: DistributionTypeValue = DistributionTypeValue.Simple;
 
     beforeEach(() => {
       action = new MyPerformanceFilterActions.SetDistributionType(payload);
@@ -82,7 +82,7 @@ describe('My Performance Filter Actions', () => {
   describe('SetMetricAndPremiseType', () => {
     let action: MyPerformanceFilterActions.SetMetricAndPremiseType;
     const payloadMock: SetMetricAndPremiseTypePayload = {
-      metricType: MetricTypeValue.volume,
+      metricType: MetricTypeValue.Depletions,
       premiseType: PremiseTypeValue.On
     };
 

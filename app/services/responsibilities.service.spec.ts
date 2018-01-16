@@ -931,7 +931,7 @@ describe('Responsibilities Service', () => {
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
 
       const myPerformanceFilterState: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
@@ -960,7 +960,7 @@ describe('Responsibilities Service', () => {
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
 
       const myPerformanceFilterMock: MyPerformanceFilterState = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
@@ -994,7 +994,7 @@ describe('Responsibilities Service', () => {
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
       const mockFilter = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
@@ -1021,7 +1021,7 @@ describe('Responsibilities Service', () => {
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
       const mockFilter = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
@@ -1048,7 +1048,7 @@ describe('Responsibilities Service', () => {
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
       const mockFilter = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
@@ -1078,7 +1078,7 @@ describe('Responsibilities Service', () => {
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
       const mockFilter = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };
@@ -1104,7 +1104,7 @@ describe('Responsibilities Service', () => {
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
       const mockFilter = {
-        metricType: MetricTypeValue.volume,
+        metricType: MetricTypeValue.Depletions,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
       };

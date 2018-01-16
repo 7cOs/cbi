@@ -170,13 +170,18 @@ export class MyPerformanceApiService {
   }
 
   private getParams(filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType): any {
-    let params: any = {
-      metricType: filter.hasOwnProperty('distributionType')
-        ? DistributionTypeValue[filter.distributionType] + MetricTypeValue[filter.metricType]
-        : MetricTypeValue[filter.metricType],
-      dateRangeCode: DateRangeTimePeriodValue[filter.dateRangeCode],
-      premiseType: PremiseTypeValue[filter.premiseType],
+    const metricType: string = filter.hasOwnProperty('distributionType')
+      ? `${ filter.distributionType.toLowerCase() }PointsOfDistribution`
+      : filter.metricType === MetricTypeValue.Depletions
+        ? 'volume'
+        : filter.metricType.toLowerCase();
+
+    const params: any = {
+      metricType: metricType,
+      dateRangeCode: filter.dateRangeCode,
+      premiseType: filter.premiseType,
     };
+
     if (skuPackageType) {
       skuPackageType === SkuPackageType.sku
         ? params.masterSKU = brandSkuCode
