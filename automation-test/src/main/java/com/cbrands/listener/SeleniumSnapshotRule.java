@@ -21,7 +21,7 @@ public class SeleniumSnapshotRule extends TestListenerAdapter {
 
     SeleniumUtils.snapshot(SCREENSHOTS_PATH, getScreenshotNameFor(failedMethod));
     log.info("*****************************************************");
-    log.info(String.format("TEST FAILED: %s", failedMethod));
+    log.info(String.format("TEST FAILED: %s!!", failedMethod));
     log.info("*****************************************************");
   }
 
