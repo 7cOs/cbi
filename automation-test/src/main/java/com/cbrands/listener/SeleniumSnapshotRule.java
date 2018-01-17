@@ -8,29 +8,27 @@ import org.testng.TestListenerAdapter;
 import com.cbrands.helper.SeleniumUtils;
 
 /**
- *
  * @author Kazi Hossain
- *
  */
 public class SeleniumSnapshotRule extends TestListenerAdapter {
   private static final String SCREENSHOTS_PATH = "surefire-reports/screenshots/";
 
   private Log log = LogFactory.getLog(SeleniumSnapshotRule.class);
 
-	@Override
-	public void onTestFailure(ITestResult failedTest) {
+  @Override
+  public void onTestFailure(ITestResult failedTest) {
     final String failedMethod = failedTest.getMethod().getMethodName();
 
     SeleniumUtils.snapshot(SCREENSHOTS_PATH, getScreenshotNameFor(failedMethod));
-		log.info("*****************************************************");
-		log.info("TEST FAILED: " + failedMethod + "!!");
-		log.info("*****************************************************");
-	}
+    log.info("*****************************************************");
+    log.info("TEST FAILED: " + failedMethod + "!!");
+    log.info("*****************************************************");
+  }
 
-	@Override
-	public void onTestSuccess(ITestResult tr) {
-		log.info("TEST PASSED: " + tr.getMethod().getMethodName());
-	}
+  @Override
+  public void onTestSuccess(ITestResult tr) {
+    log.info("TEST PASSED: " + tr.getMethod().getMethodName());
+  }
 
   private String getScreenshotNameFor(String failedMethodName) {
     final String browserPrefix = getBrowserPrefix();
