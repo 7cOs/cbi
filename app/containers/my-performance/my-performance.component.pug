@@ -13,6 +13,11 @@ my-performance-breadcrumb(
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
   (backButtonClicked)="handleBackButtonClicked()")
 
+compass-tooltip(
+  [title]="'Opportunity Summaries'",
+  [description]="'The opportunity counts shown here are filtered to A and B accounts and High and Medium impact ratings only.'"
+  )
+
 md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()")
   div.tables
     my-performance-table.left(
@@ -64,3 +69,4 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
       [total]="selectedOpportunitiesTotal",
       (onCloseIndicatorClicked)="toggleOpportunityTable()",
       (onOpportunityCountClicked)="handleOpportunityClicked($event)")
+
