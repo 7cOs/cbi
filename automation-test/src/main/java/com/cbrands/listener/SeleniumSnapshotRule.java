@@ -31,9 +31,9 @@ public class SeleniumSnapshotRule extends TestListenerAdapter {
   }
 
   private String getScreenshotNameFor(String failedMethodName) {
-    final String browser = System.getProperty("browser");
-    return browser != null ?
-      String.format("%s_%s.png", browser, failedMethodName) :
+    final String browserPrefix = System.getProperty("browser");
+    return browserPrefix != null ?
+      String.format("%s_%s.png", browserPrefix, failedMethodName) :
       String.format("%s.png", failedMethodName);
   }
 
