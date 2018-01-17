@@ -124,12 +124,13 @@
       md-select {
         margin-bottom: 0;
         font-family: $work-sans;
-        font-size: 0.7em;
+        font-size: 16px;
       }
     }
 
-    .md-select-placeholder {
+    .md-select-placeholder > span {
       font-style: normal;
+      font-size: 14px;
     }
 
     .dropdown-filter md-select-value .md-select-icon {
