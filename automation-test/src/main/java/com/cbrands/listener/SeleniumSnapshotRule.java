@@ -21,22 +21,20 @@ public class SeleniumSnapshotRule extends TestListenerAdapter {
 
     SeleniumUtils.snapshot(SCREENSHOTS_PATH, getScreenshotNameFor(failedMethod));
     log.info("*****************************************************");
-    log.info("TEST FAILED: " + failedMethod + "!!");
+    log.info(String.format("TEST FAILED: %s", failedMethod));
     log.info("*****************************************************");
   }
 
   @Override
-  public void onTestSuccess(ITestResult tr) {
-    log.info("TEST PASSED: " + tr.getMethod().getMethodName());
+  public void onTestSuccess(ITestResult passedTest) {
+    log.info(String.format("TEST PASSED: %s", passedTest.getMethod().getMethodName()));
   }
 
   private String getScreenshotNameFor(String failedMethodName) {
-    final String browserPrefix = getBrowserPrefix();
-    return browserPrefix + failedMethodName + ".png";
+    final String browser = System.getProperty("browser");
+    return browser != null ?
+      String.format("%s_%s.png", browser, failedMethodName) :
+      String.format("%s.png", failedMethodName);
   }
 
-  private String getBrowserPrefix() {
-    final String browser = System.getProperty("browser");
-    return browser != null ? browser + "_" : "";
-  }
 }
