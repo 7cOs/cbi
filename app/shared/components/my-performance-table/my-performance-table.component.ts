@@ -20,10 +20,11 @@ import { SortStatus } from '../../../enums/sort-status.enum';
   styles: [ require('./my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableComponent {
+  @Output() onDismissableRowXClicked = new EventEmitter<Event>();
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: MyPerformanceTableRow}>();
+  @Output() onOpportunityCountClicked = new EventEmitter<MyPerformanceTableRow>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
   @Output() onSublineClicked = new EventEmitter<MyPerformanceTableRow>();
-  @Output() onDismissableRowXClicked = new EventEmitter<any>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
