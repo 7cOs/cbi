@@ -505,7 +505,6 @@ module.exports = /*  @ngInject */
     }
 
     function getAppliedFilters(type) {
-      debugger;
       // get applied filters
       var filterPayload = {type: type};
       for (var key in service.model.selected) {

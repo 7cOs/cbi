@@ -353,7 +353,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
           vm.filtersService.model.selected.account = '';
           chipsService.removeChip('account');
         }
-        // debugger;
         $state.go('opportunities', {
           resetFiltersOnLoad: false,
           applyFiltersOnLoad: true,
