@@ -19,6 +19,7 @@ import { GoogleAnalyticsTrackerService } from './services/google-analytics-track
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
+import { OpportunitiesSearchHandoffService } from './services/opportunities-search-handoff.service';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
@@ -68,7 +69,8 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     DateRangeApiService,
     DateRangeService,
     DateRangeTransformerService,
-    GoogleAnalyticsTrackerService
+    GoogleAnalyticsTrackerService,
+    OpportunitiesSearchHandoffService
   ]
 })
 export class AppModule {

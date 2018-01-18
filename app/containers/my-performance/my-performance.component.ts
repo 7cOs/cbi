@@ -42,6 +42,7 @@ import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { WindowService } from '../../services/window.service';
 import { UpperCasePipe } from '@angular/common/src/pipes';
 import { FormatOpportunitiesTypePipe } from '../../pipes/formatOpportunitiesType.pipe';
+import { OpportunitiesSearchHandoffService } from '../../services/opportunities-search-handoff.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -132,7 +133,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     private myPerformanceService: MyPerformanceService,
     private titleService: Title,
     private windowService: WindowService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private opportunitiesSearchHandoffService: OpportunitiesSearchHandoffService
   ) { }
 
   ngOnInit() {
@@ -442,83 +444,53 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const viewType = this.salesHierarchyViewType;
     const subAccountID = this.selectedSubaccountCode;
     const opportunityType = new FormatOpportunitiesTypePipe().transform(opportunity.name);
-    const productType = 'masterSKU';
     const premiseType = `${PremiseTypeValue[this.filterState.premiseType].toUpperCase()} PREMISE`;
     const distributorCode = this.selectedDistributorCode;
     const skuPackageType = this.opportunitiesSkuPackageType;
     const skuPackageCode = this.opportunitiesSkuPackageCode;
     const opportunitiesBrandSkuCode = this.opportunitiesBrandSkuCode;
-    this.filtersService.model.selected.opportunityType = [opportunityType];
 
     if (viewType === SalesHierarchyViewType.subAccounts) {
-      this.filtersService.model.selected.subaccount = [subAccountID];
       const type = 'subaccounts';
       const name = this.selectedSalesHierarchyEntityName;
-      this.chipsService.applyFilterArr(
-        [],
-        {
-          name: name,
-          ids: [subAccountID],
-          type: type,
-          premiseType: premiseType
-        },
+      this.opportunitiesSearchHandoffService.setSubAccountChipsAndFilters(
+        name,
+        subAccountID,
         type,
-        name
+        premiseType
       );
     } else if (viewType === SalesHierarchyViewType.distributors) {
       const type = 'distributor';
       const name = this.selectedSalesHierarchyEntityName;
-      this.filtersService.model.selected.distributor = [this.selectedDistributorCode];
-      this.chipsService.applyFilterArr(
-        [],
-        {
-          name: name,
-          premiseType: premiseType,
-          type: type,
-          id: distributorCode
-        },
+      this.opportunitiesSearchHandoffService.setDistributorChipsAndFilters(
+        name,
+        distributorCode,
         type,
-        name
+        premiseType
       );
     }
+
     if (skuPackageCode) {
       const name = this.selectedBrandSkuPackageName;
       const brandName = this.productMetricsState.selectedBrandCodeValues.brandDescription;
-      const skuPackageResultPayload = {
-        name: name,
-        type: skuPackageType,
-        brand: brandName,
-        brandCode: this.selectedBrandCode,
-        id: skuPackageCode
-      };
-      this.filtersService.model.selected.masterSKU = [this.opportunitiesSkuPackageCode];
-      this.chipsService.applyFilterArr([], skuPackageResultPayload, productType, name);
+      this.opportunitiesSearchHandoffService.setSkuPackageChipsAndFilters(
+        name,
+        skuPackageCode,
+        skuPackageType,
+        brandName,
+        this.selectedBrandCode,
+        this.opportunitiesSkuPackageCode
+      );
     } else {
-      const type = 'brand';
       const name = this.selectedBrandSkuPackageName;
-      const brandResultPayload = {
-        type: type,
-        brand: name,
-        brandCode: opportunitiesBrandSkuCode
-      };
-      this.chipsService.applyFilterArr([], brandResultPayload, productType);
+      const type = 'brand';
+      this.opportunitiesSearchHandoffService.setBrandChipsAndFitlers(
+        type,
+        name,
+        opportunitiesBrandSkuCode
+      );
     }
-    this.applyDefaultOpportunitiesChipsAndFilters(opportunityType);
-  }
-
-  private applyDefaultOpportunitiesChipsAndFilters(opportunityType: string): void {
-    this.chipsService.applyFilterArr([], 'A', 'segmentation', 'Segment A');
-    this.chipsService.applyFilterArr(['A'], 'B', 'segmentation', 'Segment B');
-    this.chipsService.applyFilterArr([], 'High', 'impact', 'High Impact');
-    this.chipsService.applyFilterArr(['High'], 'Medium', 'impact', 'Medium Impact');
-    this.chipsService.addChip(opportunityType, 'opportunityType', false);
-    this.filtersService.model.selected.segmentation = ['A', 'B'];
-    this.filtersService.model.selected.impact = ['High', 'Medium'];
-    this.filtersService.model.predictedImpactHigh = true;
-    this.filtersService.model.predictedImpactMedium = true;
-    this.filtersService.model.storeSegmentationA = true;
-    this.filtersService.model.storeSegmentationB = true;
-    this.filtersService.model.storeSegmentationC = null;
+    this.opportunitiesSearchHandoffService.setDefaultOpportunitiesChipsAndFilters(opportunityType);
     this.$state.go('opportunities', {
       resetFiltersOnLoad: false,
       applyFiltersOnLoad: true,
