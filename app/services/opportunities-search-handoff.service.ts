@@ -26,11 +26,12 @@ export class OpportunitiesSearchHandoffService {
     skuPackageType: string,
     subAccountID: string,
     viewType: string,
-    brandNameForSkuPackage?: string
-
+    brandNameForSkuPackage: string
   ) {
     const formattedOpportunityType: string = new FormatOpportunitiesTypePipe().transform(opportunity.name);
     const formattedPremiseType: string = `${PremiseTypeValue[premiseType].toUpperCase()} PREMISE`;
+
+    this.setInitialFiltersServiceSelectedModel();
 
     if (viewType === SalesHierarchyViewType.subAccounts) {
       const type = 'subaccounts';
@@ -97,16 +98,16 @@ export class OpportunitiesSearchHandoffService {
     brandName: string,
     brandCode: string,
     opportunitiesSkuPackageCode: string
-  ): void {
-      this.filtersService.model.selected.masterSKU = [opportunitiesSkuPackageCode];
-      const skuPackageResultPayload = {
-        name: name,
-        type: skuPackageType,
-        brand: brandName,
-        brandCode: brandCode,
-        id: skuPackageCode
-      };
-      this.chipsService.applyFilterArr([], skuPackageResultPayload, this.PRODUCT_TYPE_FILTER, name);
+    ): void {
+    this.filtersService.model.selected.masterSKU = [opportunitiesSkuPackageCode];
+    const skuPackageResultPayload = {
+      name: name,
+      type: skuPackageType,
+      brand: brandName,
+      brandCode: brandCode,
+      id: skuPackageCode
+    };
+    this.chipsService.applyFilterArr([], skuPackageResultPayload, this.PRODUCT_TYPE_FILTER, name);
   }
 
   public setBrandChipsAndFitlers(type: string, name: string, opportunitiesBrandSkuCode: string): void {
@@ -133,7 +134,44 @@ export class OpportunitiesSearchHandoffService {
       );
   }
 
-  public setDefaultOpportunitiesChipsAndFilters(opportunityType: string): void {
+  private setInitialFiltersServiceSelectedModel(): void {
+    this.filtersService.model.selected = {
+      myAccountsOnly: false,
+      simpleDistributionType: false,
+      priorityPackage: [],
+      account: [],
+      subaccount: [],
+      brand: [],
+      masterSKU: [],
+      cbbdChain: [],
+      contact: [],
+      city: [],
+      currentFilter: '',
+      distributor: [],
+      impact: [],
+      opportunityStatus: [],
+      opportunityType: [],
+      featureType: [],
+      itemAuthorizationType: [],
+      premiseType: '',
+      productType: [],
+      store: [],
+      retailer: '',
+      brandSearchText: '',
+      storeSearchText: '',
+      distributorSearchText: '',
+      segmentation: [],
+      state: [],
+      tradeChannel: [],
+      trend: '',
+      valuesVsTrend: '',
+      zipCode: [],
+      salesStatus: [],
+      storeFormat: ''
+    };
+  }
+
+  private setDefaultOpportunitiesChipsAndFilters(opportunityType: string): void {
     this.chipsService.applyFilterArr([], 'A', 'segmentation', 'Segment A');
     this.chipsService.applyFilterArr(['A'], 'B', 'segmentation', 'Segment B');
     this.chipsService.applyFilterArr([], 'High', 'impact', 'High Impact');

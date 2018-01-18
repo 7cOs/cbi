@@ -440,7 +440,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
-    console.log('Opportunity Clicked: ', opportunity);
     const brandSkuPackageName: string = this.selectedBrandSkuPackageName;
     const distributorCode: string = this.selectedDistributorCode;
     const opportunityType: string = opportunity.name;
