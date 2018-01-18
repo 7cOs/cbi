@@ -80,7 +80,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public performanceMetric: string;
 
   // Tooltip Mocks
-  private tooltipLabel: string = 'Label';
+  private tooltipLabel: string = 'With Label';
   private tooltipPosition: string = 'above';
   private tooltipPosition2: string = 'below';
   private tooltipTitle: string = 'Opportunity Summaries';

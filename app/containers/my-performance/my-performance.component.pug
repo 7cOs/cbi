@@ -67,6 +67,12 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
       (onOpportunityCountClicked)="handleOpportunityClicked($event)")
 
 compass-tooltip(
+  [title]="tooltipTitle",
+  [description]="tooltipDescription",
+  [position]="tooltipPosition"
+  )
+
+compass-tooltip(
   [label]="tooltipLabel",
   [title]="tooltipTitle",
   [description]="tooltipDescription",
