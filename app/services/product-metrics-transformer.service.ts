@@ -50,11 +50,9 @@ export class ProductMetricsTransformerService {
       };
 
       skuPackageOpportunityCounts.forEach((opportunityCount: OpportunityCount) => {
-        if (groupedBrandOpportunityCounts[opportunityCount.name]) {
-          groupedBrandOpportunityCounts[opportunityCount.name] += opportunityCount.count;
-        } else {
-          groupedBrandOpportunityCounts[opportunityCount.name] = opportunityCount.count;
-        }
+        groupedBrandOpportunityCounts[opportunityCount.name] = groupedBrandOpportunityCounts[opportunityCount.name]
+          ? groupedBrandOpportunityCounts[opportunityCount.name] += opportunityCount.count
+          : groupedBrandOpportunityCounts[opportunityCount.name] = opportunityCount.count;
       });
 
       return opportunitiesGroupedBySkuPackageCode;
@@ -75,16 +73,12 @@ export class ProductMetricsTransformerService {
   }
 
   private getOpportunityCounts(skuPackageOpportunityCountsDTO: OpportunityCountDTO[]): OpportunityCount[] {
-    return skuPackageOpportunityCountsDTO.reduce((opportunityCounts: OpportunityCount[], skuPackageOpportunity: OpportunityCountDTO) => {
-      const opportunityTypeName: string = OpportunityTypeLabel[skuPackageOpportunity.label] || skuPackageOpportunity.label;
-
-      opportunityCounts.push({
-        name: opportunityTypeName,
-        count: skuPackageOpportunity.count
-      });
-
-      return opportunityCounts;
-    }, []);
+    return skuPackageOpportunityCountsDTO.map((skuPackageOpportunityType: OpportunityCountDTO) => {
+      return {
+        name: OpportunityTypeLabel[skuPackageOpportunityType.label] || skuPackageOpportunityType.label,
+        count: skuPackageOpportunityType.count
+      };
+    });
   }
 
   private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {
