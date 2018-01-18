@@ -1,7 +1,4 @@
-// import { ActionStatus } from '../../../enums/action-status.enum';
-// import { AppState } from '../../../state/reducers/root.reducer';
-// import { Subscription } from 'rxjs';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'compass-tooltip',
@@ -11,21 +8,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export class CompassTooltipComponent {
 
-  @Output() onToolTipClicked = new EventEmitter<Event>();
-
-  @Input() title: string;
+  @Input() title?: string;
   @Input() description: string;
-  @Input() mdDirection?: string;
+  @Input() position?: string;
+  @Input() label?: string;
 
-  // constructor() {}
+  constructor() {}
 
-  public tooltipper(position: string): void {
-console.log('position ', position);
+  ngOnInit () {
   }
-
-  public toggleTooltipClicked(): void {
-    this.onToolTipClicked.emit();
-  }
-
-//   public optionMainActionClicked(): void {}
 }

@@ -34,6 +34,7 @@
     }
   }
 
+  tooltip,
   md-tooltip,
   md-tooltip.md-tooltip,
   md-tooltip.md-panel.md-tooltip {
@@ -92,6 +93,119 @@
       text-align: left;
       color: #4a4a4a;
       color: var(--cbiGrey74);
+    }
+  }
+
+
+  div {
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      // border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    }
+
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+      visibility: hidden;
+
+      background: $light-blue;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+      color: $gray-1;
+      height: auto;
+      padding: 1em;
+      text-align: center;
+      white-space: normal;
+      width: 220px;
+
+      // text-align: center;
+      // padding: 5px 0;
+      border-radius: 6px;
+
+      /* Position the tooltip text - see examples below! */
+      position: absolute;
+      overflow: visible;
+      font-size: 0.8em;
+      z-index: 999;
+
+      below {
+        top: 100%;
+        left: 50%;
+        margin-left: -110px;
+      }
+
+      above {
+        bottom: 100%;
+        left: 50%;
+        margin-left: -110px;
+      }
+
+      right {
+        top: 1em;
+        left: 105%;
+      }
+
+      left {
+        top: 1em;
+        right: 105%;
+      }
+
+      label-bold {
+        font-family: Roboto;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 1.45;
+        letter-spacing: 1;
+        text-align: left;
+        color: #4a4a4a;
+        color: var(--cbiGrey74);
+      }
+
+      body {
+        font-family: Roboto;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: left;
+        color: #4a4a4a;
+        color: var(--cbiGrey74);
+      }
+
+      label {
+        margin-bottom: -0.25em;
+      }
+
+      h2, h3 {
+        line-height: 1;
+        font-family: Roboto;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 1.45;
+        letter-spacing: 1;
+        text-align: left;
+        color: #4a4a4a;
+        color: var(--cbiGrey74);
+      }
+
+      p {
+        font-family: Roboto;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: left;
+        text-transform: none;
+        color: #4a4a4a;
+        color: var(--cbiGrey74);
+      }
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+
+    .tooltip img {
+      height: 15px;
+      width: 15px;
+      vertical-align: text-bottom;
     }
   }
 }

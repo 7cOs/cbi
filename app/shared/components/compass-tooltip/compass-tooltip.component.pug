@@ -1,9 +1,8 @@
 section.compass-tooltip
-    .tooltip-wrap
-      label {{ title }}
+    .div
       .tooltip
-        img(src="../../../assets/img/icons/help-tooltip.svg")
-        md-tooltip(md-direction="bottom")
-          label Filter Set
-          h3 {{ title }}
-          p {{ description }}
+        label {{ label }}
+          img(src="../../../assets/img/icons/help-tooltip.svg")
+          span.tooltiptext(class='{{ position }}')
+            h3(ng-if="this.title") {{ this.title }}
+            p {{ this.description }}
