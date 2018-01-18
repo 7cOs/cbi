@@ -458,38 +458,43 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         premiseType: premiseType
       };
       this.chipsService.applyFilterArr([], result, type, displayName);
-      if (this.opportunitiesSkuPackageCode) {
-        const skuPackageResultPayload = {
-          name: this.selectedBrandSkuPackageName,
-          type: this.opportunitiesSkuPackageType,
-          brand: this.productMetricsState.selectedBrandCodeValues.brandDescription,
-          brandCode: this.selectedBrandCode,
-          id: this.opportunitiesSkuPackageCode
-        };
-        const type2 = 'masterSKU';
-        this.filtersService.model.selected.masterSKU = [this.opportunitiesSkuPackageCode];
-        this.chipsService.applyFilterArr([], skuPackageResultPayload, type2, this.selectedBrandSkuPackageName);
-      } else {
-        const brand = this.selectedBrandSkuPackageName;
-        const brandSkuCode = this.opportunitiesBrandSkuCode;
-        const brandResultPayload = {
-          type: 'brand',
-          brand: brand,
-          brandCode: brandSkuCode
-        };
-        const type2 = 'masterSKU';
-        this.chipsService.applyFilterArr([], brandResultPayload, type2);
-      }
     } else if (type === 'distributors') {
+      this.filtersService.model.selected.distributor = [this.selectedDistributorCode];
       debugger;
-      // this.chipsService.applyFilterArr(
-      //   [],
-      //   {
-
-      //   }
-      // )
+      this.chipsService.applyFilterArr(
+        [],
+        {
+          name: this.selectedSalesHierarchyEntityName,
+          premiseType: `${PremiseTypeValue[this.filterState.premiseType].toUpperCase()} PREMISE`,
+          type: 'distributor',
+          id: this.selectedDistributorCode
+        },
+        'distributor',
+        this.selectedSalesHierarchyEntityName
+      );
     }
-
+    if (this.opportunitiesSkuPackageCode) {
+      const skuPackageResultPayload = {
+        name: this.selectedBrandSkuPackageName,
+        type: this.opportunitiesSkuPackageType,
+        brand: this.productMetricsState.selectedBrandCodeValues.brandDescription,
+        brandCode: this.selectedBrandCode,
+        id: this.opportunitiesSkuPackageCode
+      };
+      const type2 = 'masterSKU';
+      this.filtersService.model.selected.masterSKU = [this.opportunitiesSkuPackageCode];
+      this.chipsService.applyFilterArr([], skuPackageResultPayload, type2, this.selectedBrandSkuPackageName);
+    } else {
+      const brand = this.selectedBrandSkuPackageName;
+      const brandSkuCode = this.opportunitiesBrandSkuCode;
+      const brandResultPayload = {
+        type: 'brand',
+        brand: brand,
+        brandCode: brandSkuCode
+      };
+      const type2 = 'masterSKU';
+      this.chipsService.applyFilterArr([], brandResultPayload, type2);
+    }
     this.commonStuff(opportunityType);
   }
 
