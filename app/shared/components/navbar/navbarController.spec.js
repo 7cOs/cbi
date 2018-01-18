@@ -356,7 +356,7 @@ describe('Unit: list controller', function() {
       spyOn($mdDialog, 'hide').and.callThrough();
       spyOn(opportunitiesService, 'createOpportunity').and.callFake(function() {
         return {
-          then: function(callback) { return callback({product: {brand: 'corona'}}); }
+          then: function(callback) { return callback({id: '1234', product: {brand: 'corona'}}); }
         };
       });
       spyOn(analyticsService, 'trackEvent');
@@ -373,7 +373,7 @@ describe('Unit: list controller', function() {
       expect(analyticsService.trackEvent).toHaveBeenCalledWith(
         'Opportunities',
         'Add Opportunity',
-        '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'
+        '1234'
       );
     });
   });
