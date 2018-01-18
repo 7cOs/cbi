@@ -95,6 +95,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function addChip(chip, type, onlyOneAllowed, removable) {
+      // debugger;
       if (chip) {
         if (onlyOneAllowed) removeChip(type);
         if (removable === undefined) removable = true;
@@ -149,6 +150,7 @@ module.exports = /*  @ngInject */
         }
         opportunitiesService.model.filterApplied = true;
         filtersService.disableFilters(true, false, true, true);
+        // debugger;
       }
     }
 
@@ -343,6 +345,7 @@ module.exports = /*  @ngInject */
      */
 
     function applyFilterArr(model, result, filter, displayName) {
+      // debugger;
       //  fall back to result if displayName is undefined
       if (!displayName) {
         if (result.brand) {
@@ -383,6 +386,7 @@ module.exports = /*  @ngInject */
           case 'masterSKU':
             if (result.id === null || result.id === undefined) {
               addAutocompleteChip($filter('titlecase')(result.brand), 'brand', null, result.brandCode);
+              filtersService.model.selected.brand = filtersService.model.selected.brand || [];
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
               addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);

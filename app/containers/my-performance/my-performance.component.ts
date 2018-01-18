@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-import { includes, isEqual } from 'lodash';
+import { includes, isEqual, lowerCase } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
@@ -40,6 +40,8 @@ import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.en
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { WindowService } from '../../services/window.service';
+import { UpperCasePipe } from '@angular/common/src/pipes';
+import { FormatOpportunitiesTypePipe } from '../../pipes/formatOpportunitiesType.pipe';
 
 const CORPORATE_USER_POSITION_ID = '0';
 
@@ -113,6 +115,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private drillStatus: DrillStatus;
   private teamPerformanceTableOpportunities: TeamPerformanceTableOpportunity[];
   private selectedBrandSkuPackageName: string;
+  private opportunitiesBrandSkuCode: string;
   private selectedSalesHierarchyEntityName: string;
   private selectedOpportunityCountTotal: number;
   private clickedSalesHierarchyEntityName: string;
@@ -120,6 +123,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
+    @Inject('chipsService') private chipsService: any,
+    @Inject('filtersService') private filtersService: any,
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
@@ -423,12 +428,76 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.teamPerformanceTableOpportunities = this.productMetricsState.opportunityCounts[selectedProductCode].opportunityCounts;
     this.selectedSalesHierarchyEntityName = this.clickedSalesHierarchyEntityName;
     this.selectedBrandSkuPackageName = myPerformanceTableRow.descriptionRow0;
+    this.opportunitiesBrandSkuCode = myPerformanceTableRow.metadata.brandCode;
     this.selectedOpportunityCountTotal = myPerformanceTableRow.opportunities;
     this.isOpportunityTableExtended = true;
   }
 
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
+    // chipsService.addChip('Non-Buy', 'opportunityType', false, undefined);
+    const opportunityType = new FormatOpportunitiesTypePipe().transform(opportunity.name);
+    // chipsService.addChip(
+    // [],
+    // {id: null, name: null, type: "brand", brand: "CORONA EXTRA", brandCode: "228"},
+    // 'masterSKU')
+    this.filtersService.model.selected.opportunityType = [opportunityType];
+    this.filtersService.model.selected.subaccount = [this.selectedSubaccountCode];
+
+    const ids = [this.selectedSubaccountCode];
+    const name = this.selectedSalesHierarchyEntityName;
+    const displayName = this.selectedSalesHierarchyEntityName;
+    const type = lowerCase(this.salesHierarchyViewType).split(' ').join('');
+    const premiseType = `${PremiseTypeValue[this.filterState.premiseType].toUpperCase()} PREMISE`;
+    const result = {
+      name: name,
+      ids: ids,
+      type: type,
+      premiseType: premiseType
+    };
+
+    const brand = this.selectedBrandSkuPackageName;
+    const brandSkuCode = this.opportunitiesBrandSkuCode;
+    const result2 = {
+      type: 'brand',
+      brand: brand,
+      brandCode: brandSkuCode
+    };
+    const type2 = 'masterSKU';
+    // debugger;
+    // const distributorCode = this.currentState.selectedDistributorCode;
+    // const selectedSubaccountCode = this.currentState.selectedSubaccountCode;
+    // const opportunityType = opportunity.name;
+    // {name: "Giant Eagle", ids: Array(1), type: "subaccount", premiseType: "OFF PREMISE", $$hashKey: "object:416"}
+    // const result = {
+    //   name: ,
+    //   ids: ids,
+    //   type: ,
+    //   premiseType:
+    // };
+    // const displayName = ;
+    // const filter = ;
+    // this.chipsService.applyFilterArr([], result, filter, displayName)
+    // debugger;
+    this.chipsService.applyFilterArr([], result, type, displayName);
+    this.chipsService.applyFilterArr([], result2, type2);
+    this.chipsService.applyFilterArr([], 'A', 'segmentation', 'Segment A');
+    this.chipsService.applyFilterArr(['A'], 'B', 'segmentation', 'Segment B');
+    this.chipsService.applyFilterArr([], 'High', 'impact', 'High Impact');
+    this.chipsService.applyFilterArr(['High'], 'Medium', 'impact', 'Medium Impact');
+    this.chipsService.addChip(opportunityType, 'opportunityType', false);
+    this.filtersService.model.selected.segmentation = ['A', 'B'];
+    this.filtersService.model.selected.impact = ['High', 'Medium'];
+    this.filtersService.model.predictedImpactHigh = true;
+    this.filtersService.model.predictedImpactMedium = true;
+    this.filtersService.model.storeSegmentationA = true;
+    this.filtersService.model.storeSegmentationB = true;
+    this.filtersService.model.storeSegmentationC = null;
     console.log('Opportunity Clicked: ', opportunity);
+    this.$state.go('opportunities', {
+      resetFiltersOnLoad: false,
+      applyFiltersOnLoad: true,
+      referrer: 'team-performance'
+    });
   }
 
   private sendFilterAnalyticsEvent(): void {

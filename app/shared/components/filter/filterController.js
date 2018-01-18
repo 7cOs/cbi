@@ -354,6 +354,7 @@ module.exports = /*  @ngInject */
 
     function applyFilters() {
       sendFilterAnalytics();
+      // debugger;
       chipsService.applyFilters();
     }
 
