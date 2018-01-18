@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule }   from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MdRadioModule, MdRippleModule, MdSelectModule, MdSidenavModule, MdTooltipModule } from '@angular/material';
+import { MdRadioModule, MdRippleModule, MdSelectModule, MdSidenavModule } from '@angular/material';
 
 import { CompassCardComponent }  from './components/compass-card/compass-card.component';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
@@ -15,8 +15,7 @@ import { CompassTooltipComponent } from './components/compass-tooltip/compass-to
     CommonModule,
     FormsModule,
     MdRadioModule,
-    MdSelectModule,
-    MdTooltipModule
+    MdSelectModule
   ],
   exports: [
     CompassRadioComponent,

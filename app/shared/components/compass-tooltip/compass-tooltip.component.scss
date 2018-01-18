@@ -67,9 +67,10 @@
       height: auto;
       padding-left: 15px;
       padding-top: 10px;
+      padding-bottom: 10px;
       text-align: center;
       white-space: normal;
-      width: 50px;
+      width: 110px;
       margin: 20px;
       border-radius: 6px;
 
@@ -110,7 +111,7 @@
     .below {
       top: 100%;
       left: 50%;
-      margin-left: -110px;
+      margin-left: -50%;
     }
 
     .above {
@@ -120,12 +121,12 @@
     }
 
     .right {
-      top: -5em;
+      top: -1em;
       left: 110%;
     }
 
     .left {
-      top: -5em;
+      top: -1em;
       right: 110%;
     }
 

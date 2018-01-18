@@ -79,10 +79,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
 
-  // Mocks
+  // Tooltip Mocks
   private tooltipLabel: string = 'Label';
-  private tooltipPosition: string = 'below';
+  private tooltipPosition: string = 'above';
+  private tooltipPosition2: string = 'below';
   private tooltipTitle: string = 'Opportunity Summaries';
+  private tooltipDescription2: string = 'Small Tip';
   private tooltipDescription: string =
     'The opportunity counts shown here are filtered to A and B accounts and High and Medium impact ratings only.';
 
