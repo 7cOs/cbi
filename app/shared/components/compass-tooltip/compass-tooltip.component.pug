@@ -2,7 +2,7 @@ section.compass-tooltip
     .div
       .tooltip
         label {{ label }}
-          img(src="../../../assets/img/icons/helper-tooltip.svg")
-          span.tooltiptext(class='below')
-            h3(ng-if="this.title") {{ this.title }}
-            p {{ this.description }}
+          img(src="../../../assets/img/icons/help-circle.svg")
+          span.tooltip_text_with_title(class='{{ position }}')
+            h3 {{ title }}
+            p {{ description }}

@@ -66,8 +66,8 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
       (onOpportunityCountClicked)="handleOpportunityClicked($event)")
 
 compass-tooltip(
-  [label]="'Afo Nsi'",
-  [title]="'Opportunity Summaries'",
-  [description]="'The opportunity counts shown here are filtered to A and B accounts and High and Medium impact ratings only.'",
-  [position]="'below'"
+  [label]="tooltipLabel",
+  [title]="tooltipTitle",
+  [description]="tooltipDescription",
+  [position]="tooltipPosition"
   )

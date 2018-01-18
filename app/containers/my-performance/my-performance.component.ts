@@ -86,6 +86,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public selectedEntityNameMock: string = chance.string({ length: 20 });
   public selectedOpportunitiesTotal: number = chance.natural({ max: 999999999999 });
 
+  private tooltipLabel: string = 'Label';
+  private tooltipTitle: string = 'Opportunity Summaries';
+  private tooltipPosition: string = 'below';
+  private tooltipDescription: string =
+    'The opportunity counts shown here are filtered to A and B accounts and High and Medium impact ratings only.';
+
   private currentState: MyPerformanceEntitiesData;
   private currentUserId: string;
   private entityType: EntityType;

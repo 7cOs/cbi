@@ -1,102 +1,6 @@
 @import '../../../assets/styles/base/variables';
 
 /deep/ .compass-tooltip {
-  .tooltip-wrap {
-    display: block;
-    position: relative;
-    width: 100%;
-
-    .accent,
-    .tooltip {
-      display: inline;
-    }
-
-    .tooltip img {
-      height: 15px;
-      width: 15px;
-      vertical-align: text-bottom;
-    }
-
-    label {
-      display: inline-block;
-      position: relative;
-      width: auto;
-    }
-  }
-
-  // md-tooltip uses pointer-events to determine parent element
-  .tooltip-list-item-wrap {
-    pointer-events: auto;
-
-    .md-text,
-    .md-text span {
-      pointer-events: none;
-    }
-  }
-
-  tooltip,
-  md-tooltip,
-  md-tooltip.md-tooltip,
-  md-tooltip.md-panel.md-tooltip {
-    overflow: visible;
-    font-size: 0.8em;
-    z-index: 999;
-
-    &.md-show, &.md-show-add-active {
-      opacity: 1;
-    }
-
-    background: $light-blue;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-    color: $gray-1;
-    height: auto;
-    padding: 1em;
-    text-align: center;
-    white-space: normal;
-    width: 220px;
-
-    label {
-      margin-bottom: -0.25em;
-    }
-
-    h2, h3 {
-      font-weight: $bold;
-      line-height: 1;
-      margin: 0;
-    }
-
-    p {
-      line-height: 1.25;
-    }
-
-    ol, ul {
-      font-size: 0.75em;
-      list-style-type: default;
-      text-align: left;
-    }
-
-    label-bold {
-      font-family: Roboto;
-      font-size: 11px;
-      font-weight: bold;
-      line-height: 1.45;
-      letter-spacing: 1;
-      text-align: left;
-      color: #4a4a4a;
-      color: var(--cbiGrey74);
-    }
-
-    body {
-      font-family: Roboto;
-      font-size: 14px;
-      line-height: 1.5;
-      text-align: left;
-      color: #4a4a4a;
-      color: var(--cbiGrey74);
-    }
-  }
-
-
   div {
     /* Tooltip container */
     .tooltip {
@@ -105,7 +9,8 @@
     }
 
     /* Tooltip text */
-    .tooltip .tooltiptext {
+    .tooltip
+    .tooltip_text_with_title {
       visibility: hidden;
 
       background: $light-blue;
@@ -116,58 +21,14 @@
       text-align: center;
       white-space: normal;
       width: 220px;
-
-      // text-align: center;
-      // padding: 5px 0;
+      margin: 20px;
       border-radius: 6px;
 
-      /* Position the tooltip text - see examples below! */
+      /* Position the tooltip text */
       position: absolute;
       overflow: visible;
       font-size: 0.8em;
       z-index: 999;
-
-      .below {
-        top: 100%;
-        left: 50%;
-        margin-left: -110px;
-      }
-
-      .above {
-        bottom: 100%;
-        left: 50%;
-        margin-left: -110px;
-      }
-
-      .right {
-        top: 1em;
-        left: 110%;
-      }
-
-      .left {
-        top: 1em;
-        right: 110%;
-      }
-
-      label-bold {
-        font-family: Roboto;
-        font-size: 11px;
-        font-weight: bold;
-        line-height: 1.45;
-        letter-spacing: 1;
-        text-align: left;
-        color: #4a4a4a;
-        color: var(--cbiGrey74);
-      }
-
-      body {
-        font-family: Roboto;
-        font-size: 14px;
-        line-height: 1.5;
-        text-align: left;
-        color: #4a4a4a;
-        color: var(--cbiGrey74);
-      }
 
       label {
         margin-bottom: -0.25em;
@@ -196,8 +57,84 @@
       }
     }
 
+    .tooltip
+    .tooltip_text_no_title {
+      visibility: hidden;
+
+      background: $light-blue;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+      color: $gray-1;
+      height: auto;
+      padding-left: 15px;
+      padding-top: 10px;
+      text-align: center;
+      white-space: normal;
+      width: 50px;
+      margin: 20px;
+      border-radius: 6px;
+
+      /* Position the tooltip text */
+      position: absolute;
+      overflow: visible;
+      font-size: 0.8em;
+      z-index: 999;
+
+      label {
+        margin-bottom: -0.25em;
+      }
+
+      h2, h3 {
+        line-height: 1;
+        font-family: Roboto;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 1.45;
+        letter-spacing: 1;
+        text-align: left;
+        color: #4a4a4a;
+        color: var(--cbiGrey74);
+      }
+
+      p {
+        font-family: Roboto;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: left;
+        text-transform: none;
+        color: #4a4a4a;
+        color: var(--cbiGrey74);
+      }
+    }
+
+    /* Tooltip direction */
+    .below {
+      top: 100%;
+      left: 50%;
+      margin-left: -110px;
+    }
+
+    .above {
+      bottom: 100%;
+      left: 50%;
+      margin-left: -50%;
+    }
+
+    .right {
+      top: -5em;
+      left: 110%;
+    }
+
+    .left {
+      top: -5em;
+      right: 110%;
+    }
+
     /* Show the tooltip text when you mouse over the tooltip container */
-    .tooltip:hover .tooltiptext {
+    .tooltip:hover .tooltip_text_with_title {
+      visibility: visible;
+    }
+
+    .tooltip:hover .tooltip_text_no_title {
       visibility: visible;
     }
 
