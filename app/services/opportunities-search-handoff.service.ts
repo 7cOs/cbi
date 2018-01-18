@@ -1,18 +1,78 @@
 import { Inject, Injectable } from '@angular/core';
 
+import { FormatOpportunitiesTypePipe } from '../pipes/formatOpportunitiesType.pipe';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
+import { TeamPerformanceTableOpportunity } from '../models/my-performance-table-row.model';
+
 @Injectable()
 export class OpportunitiesSearchHandoffService {
   private PRODUCT_TYPE_FILTER: string = 'masterSKU';
 
   constructor(
     @Inject('chipsService') private chipsService: any,
-    @Inject('filtersService') private filtersService: any,
+    @Inject('filtersService') private filtersService: any
   ) { }
 
   public setOpportunitySearchChipsAndFilters(
+    brandSkuPackageName: string,
+    distributorCode: string,
+    opportunity: TeamPerformanceTableOpportunity,
+    opportunitiesBrandSkuCode: string,
+    premiseType: PremiseTypeValue,
+    salesHierarchyEntityName: string,
+    selectedBrandCode: string,
+    skuPackageCode: string,
+    skuPackageType: string,
+    subAccountID: string,
+    viewType: string,
+    brandNameForSkuPackage?: string
 
   ) {
+    const formattedOpportunityType: string = new FormatOpportunitiesTypePipe().transform(opportunity.name);
+    const formattedPremiseType: string = `${PremiseTypeValue[premiseType].toUpperCase()} PREMISE`;
 
+    if (viewType === SalesHierarchyViewType.subAccounts) {
+      const type = 'subaccounts';
+      const name = salesHierarchyEntityName;
+      this.setSubAccountChipsAndFilters(
+        name,
+        subAccountID,
+        type,
+        formattedPremiseType
+      );
+    } else if (viewType === SalesHierarchyViewType.distributors) {
+      const type = 'distributor';
+      const name = salesHierarchyEntityName;
+      this.setDistributorChipsAndFilters(
+        name,
+        distributorCode,
+        type,
+        formattedPremiseType
+      );
+    }
+
+    if (skuPackageCode) {
+      const name = brandSkuPackageName;
+      const brandName = brandNameForSkuPackage;
+      this.setSkuPackageChipsAndFilters(
+        name,
+        skuPackageCode,
+        skuPackageType,
+        brandName,
+        selectedBrandCode,
+        skuPackageCode
+      );
+    } else {
+      const name = brandSkuPackageName;
+      const type = 'brand';
+      this.setBrandChipsAndFitlers(
+        type,
+        name,
+        opportunitiesBrandSkuCode
+      );
+    }
+    this.setDefaultOpportunitiesChipsAndFilters(formattedOpportunityType);
   }
 
   public setSubAccountChipsAndFilters(name: string, subAccountID: string, type: string, premiseType: string): void {

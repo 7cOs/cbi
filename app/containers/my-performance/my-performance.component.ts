@@ -441,56 +441,36 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
     console.log('Opportunity Clicked: ', opportunity);
-    const viewType = this.salesHierarchyViewType;
-    const subAccountID = this.selectedSubaccountCode;
-    const opportunityType = new FormatOpportunitiesTypePipe().transform(opportunity.name);
-    const premiseType = `${PremiseTypeValue[this.filterState.premiseType].toUpperCase()} PREMISE`;
-    const distributorCode = this.selectedDistributorCode;
-    const skuPackageType = this.opportunitiesSkuPackageType;
-    const skuPackageCode = this.opportunitiesSkuPackageCode;
-    const opportunitiesBrandSkuCode = this.opportunitiesBrandSkuCode;
+    const brandSkuPackageName: string = this.selectedBrandSkuPackageName;
+    const distributorCode: string = this.selectedDistributorCode;
+    const opportunityType: string = opportunity.name;
+    const opportunitiesBrandSkuCode: string = this.opportunitiesBrandSkuCode;
+    const premiseType: PremiseTypeValue = this.filterState.premiseType;
+    const salesHierarchyEntityName: string = this.selectedSalesHierarchyEntityName;
+    const selectedBrandCode: string = this.selectedBrandCode;
+    const skuPackageCode: string = this.opportunitiesSkuPackageCode;
+    const skuPackageType: string = this.opportunitiesSkuPackageType;
+    const subAccountID: string = this.selectedSubaccountCode;
+    const viewType: string = this.salesHierarchyViewType;
 
-    if (viewType === SalesHierarchyViewType.subAccounts) {
-      const type = 'subaccounts';
-      const name = this.selectedSalesHierarchyEntityName;
-      this.opportunitiesSearchHandoffService.setSubAccountChipsAndFilters(
-        name,
-        subAccountID,
-        type,
-        premiseType
-      );
-    } else if (viewType === SalesHierarchyViewType.distributors) {
-      const type = 'distributor';
-      const name = this.selectedSalesHierarchyEntityName;
-      this.opportunitiesSearchHandoffService.setDistributorChipsAndFilters(
-        name,
-        distributorCode,
-        type,
-        premiseType
-      );
-    }
+    let brandNameForSkuPackage: string;
+    if (skuPackageCode) brandNameForSkuPackage = this.productMetricsState.selectedBrandCodeValues.brandDescription;
 
-    if (skuPackageCode) {
-      const name = this.selectedBrandSkuPackageName;
-      const brandName = this.productMetricsState.selectedBrandCodeValues.brandDescription;
-      this.opportunitiesSearchHandoffService.setSkuPackageChipsAndFilters(
-        name,
-        skuPackageCode,
-        skuPackageType,
-        brandName,
-        this.selectedBrandCode,
-        this.opportunitiesSkuPackageCode
-      );
-    } else {
-      const name = this.selectedBrandSkuPackageName;
-      const type = 'brand';
-      this.opportunitiesSearchHandoffService.setBrandChipsAndFitlers(
-        type,
-        name,
-        opportunitiesBrandSkuCode
-      );
-    }
-    this.opportunitiesSearchHandoffService.setDefaultOpportunitiesChipsAndFilters(opportunityType);
+    this.opportunitiesSearchHandoffService.setOpportunitySearchChipsAndFilters(
+      brandSkuPackageName,
+      distributorCode,
+      opportunity,
+      opportunitiesBrandSkuCode,
+      premiseType,
+      salesHierarchyEntityName,
+      selectedBrandCode,
+      skuPackageCode,
+      skuPackageType,
+      subAccountID,
+      viewType,
+      brandNameForSkuPackage
+    );
+
     this.$state.go('opportunities', {
       resetFiltersOnLoad: false,
       applyFiltersOnLoad: true,
