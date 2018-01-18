@@ -1017,7 +1017,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       resetStateParameters();
       setCurrentUserName();
       setTopLevelForLabel();
-      sendTopBottomAnalyticsEvent();
     }
 
     /**
