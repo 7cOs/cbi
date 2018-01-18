@@ -365,7 +365,7 @@ module.exports = /*  @ngInject */
     function sendAddOpportunityAnalyticsEvent(opportunityId) {
       analyticsService.trackEvent(
         'Opportunities',
-        'Add Opportunities',
+        'Add Opportunity',
         opportunityId
       );
     }
