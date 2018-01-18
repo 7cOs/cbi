@@ -88,7 +88,9 @@ module.exports = {
         exclude: [
           helpers.root('app/assets/fonts'),
           helpers.root('app/assets/img/logos/Compass_logo.svg'),
-          helpers.root('app/assets/img/icons/no-notes.svg')
+          helpers.root('app/assets/img/icons/no-notes.svg'),
+          helpers.root('app/assets/img/icons/edit.svg'),
+          helpers.root('app/assets/img/icons/edit-hover.svg')
         ],
         loaders: [
           'url-loader?limit=8192&mimetype=image/svg+xml&name=assets/img/[name].[hash].[ext]',
@@ -101,7 +103,9 @@ module.exports = {
         test: /\.svg$/,
         include: [
           helpers.root('app/assets/img/logos/Compass_logo.svg'),
-          helpers.root('app/assets/img/icons/no-notes.svg')
+          helpers.root('app/assets/img/icons/no-notes.svg'),
+          helpers.root('app/assets/img/icons/edit.svg'),
+          helpers.root('app/assets/img/icons/edit-hover.svg')
         ],
         loaders: [
           'url-loader?limit=1&mimetype=image/svg+xml&name=assets/img/[name].[hash].[ext]',

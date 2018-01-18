@@ -327,7 +327,7 @@ module.exports = /*  @ngInject */
         loaderService.closeLoader();
       });
 
-      toastService.showToast('reportsaved');
+      toastService.showToast('reportSaved');
     }
 
     function updateFilter() {

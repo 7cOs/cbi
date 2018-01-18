@@ -141,7 +141,7 @@ module.exports = /*  @ngInject */
         .catch(() => {
           vm.deleteReportError = true;
         });
-        toastService.showToast('reportdeleted');
+        toastService.showToast('reportDeleted');
     }
 
     function placeholderSelect(data) {
@@ -171,11 +171,11 @@ module.exports = /*  @ngInject */
           vm.updateReportError = false;
           vm.currentFilter[0].name = vm.editedFilterName;
           closeModal();
-          toastService.showToast('reportsaved');
         })
         .catch(() => {
           vm.updateReportError = true;
         });
+        toastService.showToast('reportSaved');
     }
 
     // ***************
