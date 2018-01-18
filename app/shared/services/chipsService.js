@@ -95,7 +95,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function addChip(chip, type, onlyOneAllowed, removable) {
-      // debugger;
+      debugger;
       if (chip) {
         if (onlyOneAllowed) removeChip(type);
         if (removable === undefined) removable = true;
@@ -345,7 +345,7 @@ module.exports = /*  @ngInject */
      */
 
     function applyFilterArr(model, result, filter, displayName) {
-      // debugger;
+      debugger;
       //  fall back to result if displayName is undefined
       if (!displayName) {
         if (result.brand) {

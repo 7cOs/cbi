@@ -119,6 +119,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private selectedSalesHierarchyEntityName: string;
   private selectedOpportunityCountTotal: number;
   private clickedSalesHierarchyEntityName: string;
+  private opportunitiesSkuPackageCode: string;
+  private opportunitiesSkuPackageType: string;
 
   constructor(
     private store: Store<AppState>,
@@ -425,61 +427,73 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       ? myPerformanceTableRow.metadata.brandCode
       : myPerformanceTableRow.metadata.skuPackageCode;
 
+    debugger;
     this.teamPerformanceTableOpportunities = this.productMetricsState.opportunityCounts[selectedProductCode].opportunityCounts;
     this.selectedSalesHierarchyEntityName = this.clickedSalesHierarchyEntityName;
     this.selectedBrandSkuPackageName = myPerformanceTableRow.descriptionRow0;
     this.opportunitiesBrandSkuCode = myPerformanceTableRow.metadata.brandCode;
+    this.opportunitiesSkuPackageCode = myPerformanceTableRow.metadata.skuPackageCode;
+    this.opportunitiesSkuPackageType = myPerformanceTableRow.metadata.skuPackageType;
     this.selectedOpportunityCountTotal = myPerformanceTableRow.opportunities;
     this.isOpportunityTableExtended = true;
   }
 
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
-    // chipsService.addChip('Non-Buy', 'opportunityType', false, undefined);
+    console.log('Opportunity Clicked: ', opportunity);
     const opportunityType = new FormatOpportunitiesTypePipe().transform(opportunity.name);
-    // chipsService.addChip(
-    // [],
-    // {id: null, name: null, type: "brand", brand: "CORONA EXTRA", brandCode: "228"},
-    // 'masterSKU')
     this.filtersService.model.selected.opportunityType = [opportunityType];
-    this.filtersService.model.selected.subaccount = [this.selectedSubaccountCode];
 
-    const ids = [this.selectedSubaccountCode];
-    const name = this.selectedSalesHierarchyEntityName;
-    const displayName = this.selectedSalesHierarchyEntityName;
     const type = lowerCase(this.salesHierarchyViewType).split(' ').join('');
-    const premiseType = `${PremiseTypeValue[this.filterState.premiseType].toUpperCase()} PREMISE`;
-    const result = {
-      name: name,
-      ids: ids,
-      type: type,
-      premiseType: premiseType
-    };
+    if (type === 'subaccounts') {
+      this.filtersService.model.selected.subaccount = [this.selectedSubaccountCode];
 
-    const brand = this.selectedBrandSkuPackageName;
-    const brandSkuCode = this.opportunitiesBrandSkuCode;
-    const result2 = {
-      type: 'brand',
-      brand: brand,
-      brandCode: brandSkuCode
-    };
-    const type2 = 'masterSKU';
-    // debugger;
-    // const distributorCode = this.currentState.selectedDistributorCode;
-    // const selectedSubaccountCode = this.currentState.selectedSubaccountCode;
-    // const opportunityType = opportunity.name;
-    // {name: "Giant Eagle", ids: Array(1), type: "subaccount", premiseType: "OFF PREMISE", $$hashKey: "object:416"}
-    // const result = {
-    //   name: ,
-    //   ids: ids,
-    //   type: ,
-    //   premiseType:
-    // };
-    // const displayName = ;
-    // const filter = ;
-    // this.chipsService.applyFilterArr([], result, filter, displayName)
-    // debugger;
-    this.chipsService.applyFilterArr([], result, type, displayName);
-    this.chipsService.applyFilterArr([], result2, type2);
+      const ids = [this.selectedSubaccountCode];
+      const name = this.selectedSalesHierarchyEntityName;
+      const displayName = this.selectedSalesHierarchyEntityName;
+      const premiseType = `${PremiseTypeValue[this.filterState.premiseType].toUpperCase()} PREMISE`;
+      const result = {
+        name: name,
+        ids: ids,
+        type: type,
+        premiseType: premiseType
+      };
+      this.chipsService.applyFilterArr([], result, type, displayName);
+      if (this.opportunitiesSkuPackageCode) {
+        const skuPackageResultPayload = {
+          name: this.selectedBrandSkuPackageName,
+          type: this.opportunitiesSkuPackageType,
+          brand: this.productMetricsState.selectedBrandCodeValues.brandDescription,
+          brandCode: this.selectedBrandCode,
+          id: this.opportunitiesSkuPackageCode
+        };
+        const type2 = 'masterSKU';
+        this.filtersService.model.selected.masterSKU = [this.opportunitiesSkuPackageCode];
+        this.chipsService.applyFilterArr([], skuPackageResultPayload, type2, this.selectedBrandSkuPackageName);
+      } else {
+        const brand = this.selectedBrandSkuPackageName;
+        const brandSkuCode = this.opportunitiesBrandSkuCode;
+        const brandResultPayload = {
+          type: 'brand',
+          brand: brand,
+          brandCode: brandSkuCode
+        };
+        const type2 = 'masterSKU';
+        this.chipsService.applyFilterArr([], brandResultPayload, type2);
+      }
+    } else if (type === 'distributors') {
+      debugger;
+      // this.chipsService.applyFilterArr(
+      //   [],
+      //   {
+
+      //   }
+      // )
+    }
+
+    this.commonStuff(opportunityType);
+  }
+
+  private commonStuff(opportunityType: string): void {
     this.chipsService.applyFilterArr([], 'A', 'segmentation', 'Segment A');
     this.chipsService.applyFilterArr(['A'], 'B', 'segmentation', 'Segment B');
     this.chipsService.applyFilterArr([], 'High', 'impact', 'High Impact');
@@ -492,7 +506,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.filtersService.model.storeSegmentationA = true;
     this.filtersService.model.storeSegmentationB = true;
     this.filtersService.model.storeSegmentationC = null;
-    console.log('Opportunity Clicked: ', opportunity);
     this.$state.go('opportunities', {
       resetFiltersOnLoad: false,
       applyFiltersOnLoad: true,
