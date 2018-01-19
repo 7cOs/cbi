@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { Component, Input, SimpleChange } from '@angular/core';
 import { MatRippleModule } from '@angular/material';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
@@ -7,11 +7,11 @@ import * as Chance from 'chance';
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { getDateRangeMock } from '../../../models/date-range.model.mock';
-import { getLoadingStateMock } from '../../../enums/loading-state.enum.mock';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { getProductMetricsViewTypeMock } from '../../../enums/product-metrics-view-type.enum.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { getSalesHierarchyViewTypeMock } from '../../../enums/sales-hierarchy-view-type.enum.mock';
+import { LoadingState } from '../../../enums/loading-state.enum';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -66,6 +66,7 @@ describe('MyPerformanceTableComponent', () => {
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
     componentInstance.dateRange  = getDateRangeMock();
+    componentInstance.sortingCriteria = getSortingCriteriaMock(1);
   });
 
   describe('setSortingcriteria', () => {
@@ -227,31 +228,42 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
-  describe('getTableClasses', () => {
-    describe('when viewType is one of SalesHierarchyViewType', () => {
-      it('should return the classes depending on the input parameters', () => {
-        componentInstance.loadingState = getLoadingStateMock();
-        componentInstance.viewType = getSalesHierarchyViewTypeMock();
+  describe('when viewType is updated', () => {
+    it('should set the associated view type class on the table element', () => {
+      const initialViewType = getSalesHierarchyViewTypeMock();
+      const changedViewType = getProductMetricsViewTypeMock();
+      const tableElement = fixture.debugElement.query(By.css('table'));
 
-        const tableClass = componentInstance.getTableClasses();
-        expect(tableClass).toEqual({
-          [`view-type-${componentInstance.viewType}`]: true,
-          [componentInstance.loadingState]: true
-        });
+      componentInstance.viewType = initialViewType;
+      fixture.detectChanges();
+      expect(tableElement.nativeElement.classList).toContain(`view-type-${initialViewType}`);
+
+      componentInstance.ngOnChanges({
+        viewType: new SimpleChange(null, changedViewType, true)
       });
+      fixture.detectChanges();
+      expect(tableElement.nativeElement.classList).not.toContain(`view-type-${initialViewType}`);
+      expect(tableElement.nativeElement.classList).toContain(`view-type-${changedViewType}`);
     });
+  });
 
-    describe('when viewType is one of ProductMetricsViewType', () => {
-      it('should return the classes depending on the input parameters', () => {
-        componentInstance.loadingState = getLoadingStateMock();
-        componentInstance.viewType = getProductMetricsViewTypeMock();
+  describe('when loadingState is updated', () => {
+    it('should set the associated loadingState class on the table element', () => {
+      const initialLoadingState: LoadingState = LoadingState.Loading;
+      const changedLoadingState: LoadingState = LoadingState.LoadedWithSlideLeftAnimation;
+      const tableElement = fixture.debugElement.query(By.css('table'));
 
-        const tableClass = componentInstance.getTableClasses();
-        expect(tableClass).toEqual({
-          [`view-type-${componentInstance.viewType}`]: true,
-          [componentInstance.loadingState]: true
-        });
+      componentInstance.loadingState = initialLoadingState;
+      fixture.detectChanges();
+      expect(tableElement.nativeElement.classList).toContain(initialLoadingState);
+
+      componentInstance.ngOnChanges({
+        loadingState: new SimpleChange(null, changedLoadingState, true)
       });
+      fixture.detectChanges();
+
+      expect(tableElement.nativeElement.classList).not.toContain(initialLoadingState);
+      expect(tableElement.nativeElement.classList).toContain(changedLoadingState);
     });
   });
 
