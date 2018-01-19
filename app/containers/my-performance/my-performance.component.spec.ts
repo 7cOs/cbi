@@ -3855,6 +3855,27 @@ describe('MyPerformanceComponent', () => {
         }
       );
     });
+
+    it('should call analyticsService#track event with subAccountID for label when a subAccount is selected', () => {
+      componentInstanceCopy.selectedSubaccountCode = chance.string();
+      componentInstance.handleOpportunityClicked(opportunity);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Navigation',
+        'Go To Opportunities',
+        componentInstanceCopy.selectedSubaccountCode
+      );
+    });
+
+    it('should call analyticsService#track event with distributorCode for label when a subAccount is NOT selected', () => {
+      componentInstanceCopy.selectedDistributorCode = chance.string();
+      componentInstanceCopy.selectedSubaccountCode = null;
+      componentInstance.handleOpportunityClicked(opportunity);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Navigation',
+        'Go To Opportunities',
+        componentInstanceCopy.selectedDistributorCode
+      );
+    });
   });
 
   describe('handleOpportunityCountTotalClicked', () => {
