@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService, loaderService, title) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService, loaderService, toastService, title) {
 
     // ****************
     // CONTROLLER SETUP
@@ -27,6 +27,7 @@ module.exports = /*  @ngInject */
     vm.userService = userService;
     vm.opportunitiesService = opportunitiesService;
     vm.loaderService = loaderService;
+    vm.toastService = toastService;
 
     // Expose public methods
     vm.applySavedFilter = applySavedFilter;
@@ -113,7 +114,8 @@ module.exports = /*  @ngInject */
       var parentEl = angular.element(document.body);
       vm.currentFilter = $filter('filter')(userService.model.opportunityFilters, {id: filterId});
       vm.duplicateName = false;
-
+      vm.editedFilterName = vm.currentFilter[0].name;
+      vm.filtersService.model.appliedFilter.appliedFilter = vm.currentFilter[0].filterString;
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -121,6 +123,10 @@ module.exports = /*  @ngInject */
         targetEvent: ev,
         template: require('./modal-edit-filter.pug')
       });
+
+      ev.stopPropagation();
+      $mdSelect.hide();
+
     }
 
     function deleteSavedFilter(filterId) {
@@ -135,6 +141,7 @@ module.exports = /*  @ngInject */
         .catch(() => {
           vm.deleteReportError = true;
         });
+        toastService.showToast('reportDeleted');
     }
 
     function placeholderSelect(data) {
@@ -168,6 +175,7 @@ module.exports = /*  @ngInject */
         .catch(() => {
           vm.updateReportError = true;
         });
+        toastService.showToast('reportSaved');
     }
 
     // ***************
