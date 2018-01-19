@@ -2,9 +2,11 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { CalculatorService } from './calculator.service';
 import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
+import { getOpportunityTypeMock } from '../enums/opportunity.enum.mock';
 import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCount } from '../models/opportunity-count.model';
+import { OpportunityType, OpportunityTypeLabel } from '../enums/opportunity.enum';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
 import { ProductMetrics, ProductMetricsValues, ProductMetricsDTO } from '../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
@@ -155,6 +157,33 @@ describe('Service: ProductMetricsTransformerService', () => {
             });
           });
         });
+      });
+    });
+
+    it('should return Opportunity Types with transformed names if an OpportunityTypeLabel enum is matched', () => {
+      const opportunityTypeMock: OpportunityType = getOpportunityTypeMock();
+      const expectedOpportunityTypeLabel: OpportunityTypeLabel = OpportunityTypeLabel[opportunityTypeMock];
+
+      opportunityCountDTOMock[0].items.forEach((skuPackageOpportunityCount: OpportunityCountDTO) => {
+        skuPackageOpportunityCount.items.forEach((skuPackageOpportunityType) => {
+          skuPackageOpportunityType.label = opportunityTypeMock;
+        });
+      });
+
+      const transformedOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode =
+        productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountDTOMock);
+
+      transformedOpportunityCounts[opportunityCountDTOMock[0].label].opportunityCounts.forEach((opportunityCount: OpportunityCount) => {
+        expect(opportunityCount.name).toBe(expectedOpportunityTypeLabel);
+      });
+    });
+
+    it('should not return Opportunity Types with OpportunityTypeLabel enum names if there is no match', () => {
+      const transformedOpportunityCounts: OpportunitiesGroupedByBrandSkuPackageCode =
+        productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountDTOMock);
+
+      transformedOpportunityCounts[opportunityCountDTOMock[0].label].opportunityCounts.forEach((opportunityCount: OpportunityCount) => {
+        expect(OpportunityTypeLabel[opportunityCount.name]).toBe(undefined);
       });
     });
   });
