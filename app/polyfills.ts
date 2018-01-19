@@ -15,6 +15,7 @@ import 'core-js/es6/reflect';
 // import 'core-js/es6/promise'; // zone provides its own promise polyfill
 import 'core-js/es7/reflect';
 import 'zone.js/dist/zone';
+import 'web-animations-js';
 
 // uncomment for additional debugging details
 // if (process.env.ENV !== 'production') {
