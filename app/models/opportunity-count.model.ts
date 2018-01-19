@@ -5,11 +5,13 @@ export interface OpportunityCount {
 
 export interface OpportunitiesGroupedByBrandSkuPackageCode {
   [brandSkuPackageCode: string]: {
-    brandSkuPackageOpportunityCount: number;
+    brandSkuPackageOpportunityCountTotal: number;
+    opportunityCounts: OpportunityCount[];
   };
 }
 
 export interface OpportunitiesGroupedBySkuPackageCode {
-  skuPackageOpportunityCount: number;
+  skuPackageOpportunityCountTotal: number;
   opportunitiesGroupedBySkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode;
+  brandOpportunityCounts: OpportunityCount[];
 }

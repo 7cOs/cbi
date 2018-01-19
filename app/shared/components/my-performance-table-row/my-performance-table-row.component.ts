@@ -11,12 +11,14 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
   styles: [ require('../my-performance-table/my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableRowComponent {
-  @Output() onSublineClicked = new EventEmitter<any>();
-  @Output() onDismissableRowXClicked = new EventEmitter<any>();
+  @Output() onSublineClicked = new EventEmitter<Event>();
+  @Output() onDismissableRowXClicked = new EventEmitter<Event>();
+  @Output() onOpportunityCountClicked = new EventEmitter<Event>();
 
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
+  @Input() showEmptyLastColumn: boolean = false;
   @Input() showX: boolean = false;
   @Input()
   set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
@@ -52,5 +54,10 @@ export class MyPerformanceTableRowComponent {
     if (this.isSubAcountsOrDistributors) {
       this.onSublineClicked.emit();
     }
+  }
+
+  public opportunityCountClicked(event: Event): void {
+    event.stopPropagation();
+    this.onOpportunityCountClicked.emit();
   }
 }

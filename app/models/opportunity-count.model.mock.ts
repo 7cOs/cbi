@@ -18,10 +18,12 @@ export function getOpportunityCountMocks(): Array<OpportunityCount> {
 export function getOpportunitiesGroupedByBrandSkuPackageCodeMock(): OpportunitiesGroupedByBrandSkuPackageCode {
   return {
     [chance.string()]: {
-      brandSkuPackageOpportunityCount: chance.natural()
+      brandSkuPackageOpportunityCountTotal: chance.natural(),
+      opportunityCounts: getOpportunityCountMocks()
     },
     [chance.string()]: {
-      brandSkuPackageOpportunityCount: chance.natural()
+      brandSkuPackageOpportunityCountTotal: chance.natural(),
+      opportunityCounts: getOpportunityCountMocks()
     }
   };
 }

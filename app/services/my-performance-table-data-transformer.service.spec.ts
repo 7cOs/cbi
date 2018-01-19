@@ -6,7 +6,7 @@ import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getEntityPeopleTypeMock } from '../enums/entity-responsibilities.enum.mock';
 import { getPerformanceMock } from '../models/performance.model.mock';
 import { getEntitiesWithPerformancesMock } from '../models/entity-with-performance.model.mock';
-import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../models/opportunity-count.model.mock';
+import { getOpportunityCountMocks, getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../models/opportunity-count.model.mock';
 import { getProductMetricsBrandMock,
          getProductMetricsWithBrandValuesMock,
          getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
@@ -571,11 +571,12 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       });
 
       describe('when the ProductMetricsViewType is Brands', () => {
-        it('should return a formatted row containing an opportunities column with the matched brandSkuPackageOpportunityCount value '
+        it('should return a formatted row containing an opportunities column with the matched brandSkuPackageOpportunityCountTotal value '
         + 'from the OpportunitiesGroupedByBrandSkuPackageCode based on brandCode', () => {
           products.brandValues.forEach((product: ProductMetricsValues) => {
             opportunitiesGroupedByBrandSkuPackageCodeMock[product.brandCode] = {
-              brandSkuPackageOpportunityCount: chance.natural()
+              brandSkuPackageOpportunityCountTotal: chance.natural(),
+              opportunityCounts: getOpportunityCountMocks()
             };
           });
 
@@ -585,28 +586,29 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
           transformedProductMetricsData.forEach((tableRow: MyPerformanceTableRow, index: number) => {
             expect(tableRow.opportunities).toBeDefined();
             expect(tableRow.opportunities).toBe(
-              opportunitiesGroupedByBrandSkuPackageCodeMock[products.brandValues[index].brandCode].brandSkuPackageOpportunityCount);
+              opportunitiesGroupedByBrandSkuPackageCodeMock[products.brandValues[index].brandCode].brandSkuPackageOpportunityCountTotal);
           });
         });
 
-        it('should return a formatted row containing an opportunities column containing a `-` when '
+        it('should return a formatted row containing an opportunities column containing a 0 when '
         + 'there is no key matching the brandCode in the given GroupedOpportunitiesCounts', () => {
           const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
             products, opportunitiesGroupedByBrandSkuPackageCodeMock, ProductMetricsViewType.brands);
 
           transformedProductMetricsData.forEach((tableRow: MyPerformanceTableRow) => {
             expect(tableRow.opportunities).toBeDefined();
-            expect(tableRow.opportunities).toBe('-');
+            expect(tableRow.opportunities).toBe(0);
           });
         });
       });
 
       describe('when the ProductMetricsViewType is Packages', () => {
-        it('should return a formatted row containing an opportunities column with the matched brandSkuPackageOpportunityCount value '
+        it('should return a formatted row containing an opportunities column with the matched brandSkuPackageOpportunityCountTotal value '
         + 'from the OpportunitiesGroupedByBrandSkuPackageCode based on the products beerId masterPackageSKUCode', () => {
           products.skuValues.forEach((product: ProductMetricsValues) => {
             opportunitiesGroupedByBrandSkuPackageCodeMock[product.beerId.masterPackageSKUCode] = {
-              brandSkuPackageOpportunityCount: chance.natural()
+              brandSkuPackageOpportunityCountTotal: chance.natural(),
+              opportunityCounts: getOpportunityCountMocks()
             };
           });
 
@@ -617,18 +619,18 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
             expect(tableRow.opportunities).toBeDefined();
             expect(tableRow.opportunities).toBe(
               opportunitiesGroupedByBrandSkuPackageCodeMock[products.skuValues[index].beerId.masterPackageSKUCode]
-                .brandSkuPackageOpportunityCount);
+                .brandSkuPackageOpportunityCountTotal);
           });
         });
 
-        it('should return a formatted row containing an opportunities column containing a `-` when '
+        it('should return a formatted row containing an opportunities column containing a 0 when '
         + 'there is no key matching the masterPackageSKUCode in the given GroupedOpportunitiesCounts', () => {
           const transformedProductMetricsData: MyPerformanceTableRow[] = myPerformanceTableDataTransformerService.getRightTableData(
             products, opportunitiesGroupedByBrandSkuPackageCodeMock, ProductMetricsViewType.packages);
 
           transformedProductMetricsData.forEach((tableRow: MyPerformanceTableRow) => {
             expect(tableRow.opportunities).toBeDefined();
-            expect(tableRow.opportunities).toBe('-');
+            expect(tableRow.opportunities).toBe(0);
           });
         });
       });
@@ -638,7 +640,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         + 'from the OpportunitiesGroupedByBrandSkuPackageCode based on the products beerId masterSKUCode', () => {
           products.skuValues.forEach((product: ProductMetricsValues) => {
             opportunitiesGroupedByBrandSkuPackageCodeMock[product.beerId.masterSKUCode] = {
-              brandSkuPackageOpportunityCount: chance.natural()
+              brandSkuPackageOpportunityCountTotal: chance.natural(),
+              opportunityCounts: getOpportunityCountMocks()
             };
           });
 
@@ -649,7 +652,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
             expect(tableRow.opportunities).toBeDefined();
             expect(tableRow.opportunities).toBe(
               opportunitiesGroupedByBrandSkuPackageCodeMock[products.skuValues[index].beerId.masterSKUCode]
-                .brandSkuPackageOpportunityCount);
+                .brandSkuPackageOpportunityCountTotal);
           });
         });
 
@@ -660,7 +663,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
 
           transformedProductMetricsData.forEach((tableRow: MyPerformanceTableRow) => {
             expect(tableRow.opportunities).toBeDefined();
-            expect(tableRow.opportunities).toBe('-');
+            expect(tableRow.opportunities).toBe(0);
           });
         });
       });
@@ -674,49 +677,16 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         productMetricsValuesMock = getProductMetricsBrandMock();
     });
 
-    describe('when ProductMetricsValues are passed in with no OpportunitiesGroupedByBrandSkuPackageCode', () => {
-      it('should return a formatted brandSkuPackageOpportunityCount row from brand product metrics values', () => {
+    describe('when ProductMetricsValues are passed in', () => {
+      it('should return a formatted brandSkuPackageOpportunityCountTotal row from brand product metrics values', () => {
         const rowData: MyPerformanceTableRow =
-          myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock, undefined);
+          myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetricsValuesMock);
 
         expect(rowData.descriptionRow0).toEqual(productMetricsValuesMock.brandDescription);
         expect(rowData.metricColumn0).toEqual(productMetricsValuesMock.current);
         expect(rowData.metricColumn1).toEqual(productMetricsValuesMock.yearAgo);
         expect(rowData.metricColumn2).toEqual(productMetricsValuesMock.yearAgoPercent);
         expect(rowData.ctv).toEqual(100);
-      });
-    });
-
-    describe('when ProductMetricsValues are passed in with OpportunitiesGroupedByBrandSkuPackageCode', () => {
-      let  opportunitiesGroupedByBrandSkuPackageCodeMock: OpportunitiesGroupedByBrandSkuPackageCode;
-
-      beforeEach(() => {
-        opportunitiesGroupedByBrandSkuPackageCodeMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
-      });
-
-      it('should return a formatted row containing an opportunities column with the matched brandSkuPackageOpportunityCount value '
-      + 'from the OpportunitiesGroupedByBrandSkuPackageCode based on brandCode', () => {
-        opportunitiesGroupedByBrandSkuPackageCodeMock[productMetricsValuesMock.brandCode] = {
-          brandSkuPackageOpportunityCount: chance.natural()
-        };
-
-        const rowData: MyPerformanceTableRow = myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
-          productMetricsValuesMock,
-          opportunitiesGroupedByBrandSkuPackageCodeMock);
-
-        expect(rowData.opportunities).toBeDefined();
-        expect(rowData.opportunities).toBe(
-          opportunitiesGroupedByBrandSkuPackageCodeMock[productMetricsValuesMock.brandCode].brandSkuPackageOpportunityCount);
-      });
-
-      it('should return a formatted row containing an opportunities column with a `-` value when there is no '
-      + 'key matching the brandCode in the given GroupedOpportunitiesCounts', () => {
-        const rowData: MyPerformanceTableRow = myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
-          productMetricsValuesMock,
-          opportunitiesGroupedByBrandSkuPackageCodeMock);
-
-        expect(rowData.opportunities).toBeDefined();
-        expect(rowData.opportunities).toBe('-');
       });
     });
   });
