@@ -18,11 +18,16 @@ export class TeamPerformanceOpportunitiesComponent {
   @Input() subtitle: string;
   @Input() total: number;
 
-  private tooltipLabel: string = 'Opportunities';
-  private tooltipPosition: string = 'below';
-  private tooltipTitle: string = 'Opportunity Summaries';
-  private tooltipDescription: string =
+  private tooltipPosition: string;
+  private tooltipTitle: string;
+  private tooltipDescription: string;
+
+  ngOnInit() {
+    this.tooltipTitle = 'Opportunity Summaries';
+    this.tooltipPosition = 'below';
+    this.tooltipDescription =
     'The opportunity counts shown here are filtered to A and B accounts and High and Medium impact ratings only.';
+  }
 
   public handleOpportunityCountClicked(opportunity: TeamPerformanceTableOpportunity): void {
     this.onOpportunityCountClicked.emit(opportunity);
