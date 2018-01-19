@@ -184,24 +184,24 @@ button {
 
 .saved-reports-edit-container {
   float: right;
-  height: 24px;
-  width: 24px;
+  height: 16px;
+  width: 16px;
 
   .saved-reports-edit-icon {
     background-image: url('../../img/icons/edit.svg');
     background-position: 0 center;
     background-repeat: no-repeat;
-    background-size: 24px 24px;
-    height: 24px;
-    width: 24px;
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
   }
 
   &:hover {
     background-image: url('../../img/icons/edit-hover.svg');
     background-position: 0 center;
     background-repeat: no-repeat;
-    background-size: 24px 24px;
-    height: 24px;
-    width: 24px;
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
   }
 }
