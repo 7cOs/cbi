@@ -344,10 +344,10 @@ describe('Unit: list controller', function() {
           then: function(callback) { return callback({}); }
         };
       });
-    });
-    it('should return false if the form is invalid', function() {
       var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
       ctrl.userService.model.targetLists = {owned: targetLists};
+    });
+    it('should return false if the form is invalid', function() {
       ctrl.addOpportunityForm = {$invalid: true};
       var opportunity = ctrl.addOpportunity({properties: {targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
       expect(opportunity).toEqual(false);
@@ -360,8 +360,6 @@ describe('Unit: list controller', function() {
         };
       });
       spyOn(analyticsService, 'trackEvent');
-      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
-      ctrl.userService.model.targetLists = {owned: targetLists};
       ctrl.addOpportunityForm = {$invalid: false};
       ctrl.chosenStoreObject = {id: '23423'};
       ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
@@ -384,8 +382,6 @@ describe('Unit: list controller', function() {
         };
       });
       spyOn(analyticsService, 'trackEvent');
-      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
-      ctrl.userService.model.targetLists = {owned: targetLists};
       ctrl.addOpportunityForm = {$invalid: false};
       ctrl.chosenStoreObject = {id: '23423'};
       ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
