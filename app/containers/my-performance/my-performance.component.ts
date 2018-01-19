@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-import { includes, isEqual, lowerCase } from 'lodash';
+import { includes, isEqual } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
@@ -40,8 +40,6 @@ import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.en
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { WindowService } from '../../services/window.service';
-import { UpperCasePipe } from '@angular/common/src/pipes';
-import { FormatOpportunitiesTypePipe } from '../../pipes/formatOpportunitiesType.pipe';
 import { OpportunitiesSearchHandoffService } from '../../services/opportunities-search-handoff.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
