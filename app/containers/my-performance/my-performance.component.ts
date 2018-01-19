@@ -126,8 +126,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
-    @Inject('chipsService') private chipsService: any,
-    @Inject('filtersService') private filtersService: any,
     @Inject('userService') private userService: any,
     @Inject('$state') private $state: any,
     private myPerformanceService: MyPerformanceService,
@@ -442,7 +440,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
     const brandSkuPackageName: string = this.selectedBrandSkuPackageName;
     const distributorCode: string = this.selectedDistributorCode;
-    const opportunityType: string = opportunity.name;
     const opportunitiesBrandSkuCode: string = this.opportunitiesBrandSkuCode;
     const premiseType: PremiseTypeValue = this.filterState.premiseType;
     const salesHierarchyEntityName: string = this.selectedSalesHierarchyEntityName;
