@@ -27,7 +27,6 @@ describe('Unit: opportunitiesController', function() {
       $mdDialog = _$mdDialog_;
       // Currently not required but will be in future test cases
       // filtersService = _filtersService_;
-
       spyOn(userService, 'getOpportunityFilters').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
@@ -159,11 +158,13 @@ describe('Unit: opportunitiesController', function() {
 
   it('edit filter modal', function() {
     spyOn($mdDialog, 'show').and.callThrough();
+    const event = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
     userService.model.opportunityFilters = [{id: '1234'}];
 
     expect(ctrl.duplicateName).toEqual(undefined);
     expect(ctrl.currentFilter).toEqual({});
-    ctrl.editFilterModal('1234', {});
+    ctrl.editFilterModal('1234', event);
+    expect(event.stopPropagation).toHaveBeenCalled();
     expect(ctrl.duplicateName).toEqual(false);
     expect(ctrl.currentFilter).toEqual([{id: '1234'}]);
   });
