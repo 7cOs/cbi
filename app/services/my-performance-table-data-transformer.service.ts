@@ -118,10 +118,7 @@ export class MyPerformanceTableDataTransformerService {
     return totalRow;
   }
 
-  public getProductMetricsSelectedBrandRow(
-    productMetricsValues: ProductMetricsValues,
-    opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode
-  ): MyPerformanceTableRow {
+  public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues): MyPerformanceTableRow {
     const rowTotal: MyPerformanceTableRow = {
       descriptionRow0: productMetricsValues.brandDescription,
       metricColumn0: productMetricsValues.current,
@@ -133,11 +130,6 @@ export class MyPerformanceTableDataTransformerService {
     if (productMetricsValues.brandCode) {
       rowTotal.metadata = { brandCode:  productMetricsValues.brandCode };
     }
-
-    if (opportunitiesGroupedByBrandSkuPackageCode) rowTotal.opportunities = this.matchProductMetricOpportunityCounts(
-      productMetricsValues,
-      opportunitiesGroupedByBrandSkuPackageCode,
-      ProductMetricsViewType.brands);
 
     return rowTotal;
   }
@@ -165,21 +157,22 @@ export class MyPerformanceTableDataTransformerService {
     product: ProductMetricsValues,
     opportunitiesGroupedByBrandSkuPackageCode: OpportunitiesGroupedByBrandSkuPackageCode,
     productMetricsViewType: ProductMetricsViewType
-  ): (number|string) {
-    let productOpportunityCount: (number|string);
+  ): number {
+    let productOpportunityCount: number;
 
     if (productMetricsViewType === ProductMetricsViewType.brands) {
       productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.brandCode]
-        ? opportunitiesGroupedByBrandSkuPackageCode[product.brandCode].brandSkuPackageOpportunityCount
-        : '-';
+        ? opportunitiesGroupedByBrandSkuPackageCode[product.brandCode].brandSkuPackageOpportunityCountTotal
+        : 0;
     } else {
       if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode]) {
         productOpportunityCount
-          = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCount;
+          = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterPackageSKUCode].brandSkuPackageOpportunityCountTotal;
       } else if (opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode]) {
-        productOpportunityCount = opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode].brandSkuPackageOpportunityCount;
+        productOpportunityCount =
+          opportunitiesGroupedByBrandSkuPackageCode[product.beerId.masterSKUCode].brandSkuPackageOpportunityCountTotal;
       } else {
-        productOpportunityCount = '-';
+        productOpportunityCount = 0;
       }
     }
 

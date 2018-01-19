@@ -28,5 +28,5 @@ export function getOpportunityCountDTOMock(): OpportunityCountDTO {
 }
 
 export function getOpportunityCountDTOsMock(): Array<OpportunityCountDTO> {
-  return Array(chance.natural({min: 1, max: 3})).fill('').map(() => getOpportunityCountDTOMock());
+  return Array(chance.natural({min: 2, max: 3})).fill('').map(() => getOpportunityCountDTOMock());
 }
