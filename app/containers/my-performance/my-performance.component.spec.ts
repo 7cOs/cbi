@@ -3784,19 +3784,8 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  fdescribe('handleOpportunityClicked', () => {
-    let brandSkuPackageName;
-    let distributorCode;
+  describe('handleOpportunityClicked', () => {
     let opportunity: TeamPerformanceTableOpportunity;
-    let opportunitiesBrandSkuCode;
-    let premiseType;
-    let salesHierarchyEntityName;
-    let selectedBrandCode;
-    let skuPackageCode;
-    let skuPackageType;
-    let subAccountID;
-    let viewType;
-    let brandNameForSkuPackage;
 
     beforeEach(() => {
       componentInstanceCopy.selectedBrandSkuPackageName = chance.string();
@@ -3805,8 +3794,8 @@ describe('MyPerformanceComponent', () => {
       componentInstanceCopy.filterState.premiseType = PremiseTypeValue.Off;
       componentInstanceCopy.selectedSalesHierarchyEntityName = chance.string();
       componentInstanceCopy.selectedBrandCode = chance.string();
-      componentInstanceCopy.opportunitiesSkuPackageType = undefined;
-      componentInstanceCopy.selectedSubaccountCode = undefined;
+      componentInstanceCopy.opportunitiesSkuPackageType = chance.string();
+      componentInstanceCopy.selectedSubaccountCode = chance.string();
       componentInstanceCopy.salesHierarchyViewType = SalesHierarchyViewType.distributors;
       opportunity = getTeamPerformanceTableOpportunityMock();
     });
@@ -3849,7 +3838,7 @@ describe('MyPerformanceComponent', () => {
         componentInstanceCopy.selectedBrandCode,
         componentInstanceCopy.opportunitiesSkuPackageCode,
         componentInstanceCopy.opportunitiesSkuPackageType,
-        undefined,
+        componentInstanceCopy.selectedSubaccountCode,
         componentInstanceCopy.salesHierarchyViewType,
         brandDescriptionMock
       );

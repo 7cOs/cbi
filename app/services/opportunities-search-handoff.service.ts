@@ -67,7 +67,7 @@ export class OpportunitiesSearchHandoffService {
     } else {
       const name = brandSkuPackageName;
       const type = 'brand';
-      this.setBrandChipsAndFitlers(
+      this.setBrandChipsAndFilters(
         type,
         name,
         opportunitiesBrandSkuCode
@@ -110,7 +110,7 @@ export class OpportunitiesSearchHandoffService {
     this.chipsService.applyFilterArr([], skuPackageResultPayload, this.PRODUCT_TYPE_FILTER, name);
   }
 
-  public setBrandChipsAndFitlers(type: string, name: string, opportunitiesBrandSkuCode: string): void {
+  public setBrandChipsAndFilters(type: string, name: string, opportunitiesBrandSkuCode: string): void {
     const brandResultPayload = {
       type: type,
       brand: name,
