@@ -73,7 +73,7 @@ export class OpportunitiesSearchHandoffService {
         opportunitiesBrandSkuCode
       );
     }
-    this.setDefaultOpportunitiesChipsAndFilters(formattedOpportunityType);
+    this.setDefaultChipsAndFiltersForOpportunityCounts(formattedOpportunityType);
   }
 
   public setSubAccountChipsAndFilters(name: string, subAccountID: string, type: string, premiseType: string): void {
@@ -135,43 +135,10 @@ export class OpportunitiesSearchHandoffService {
   }
 
   private setInitialFiltersServiceSelectedModel(): void {
-    this.filtersService.model.selected = {
-      myAccountsOnly: false,
-      simpleDistributionType: false,
-      priorityPackage: [],
-      account: [],
-      subaccount: [],
-      brand: [],
-      masterSKU: [],
-      cbbdChain: [],
-      contact: [],
-      city: [],
-      currentFilter: '',
-      distributor: [],
-      impact: [],
-      opportunityStatus: [],
-      opportunityType: [],
-      featureType: [],
-      itemAuthorizationType: [],
-      premiseType: '',
-      productType: [],
-      store: [],
-      retailer: '',
-      brandSearchText: '',
-      storeSearchText: '',
-      distributorSearchText: '',
-      segmentation: [],
-      state: [],
-      tradeChannel: [],
-      trend: '',
-      valuesVsTrend: '',
-      zipCode: [],
-      salesStatus: [],
-      storeFormat: ''
-    };
+    this.filtersService.resetFilters();
   }
 
-  private setDefaultOpportunitiesChipsAndFilters(opportunityType: string): void {
+  private setDefaultChipsAndFiltersForOpportunityCounts(opportunityType: string): void {
     this.chipsService.applyFilterArr([], 'A', 'segmentation', 'Segment A');
     this.chipsService.applyFilterArr(['A'], 'B', 'segmentation', 'Segment B');
     this.chipsService.applyFilterArr([], 'High', 'impact', 'High Impact');

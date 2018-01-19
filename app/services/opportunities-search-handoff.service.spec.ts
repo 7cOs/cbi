@@ -57,7 +57,8 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
     filtersServiceMock = {
       model: {
         selected: {}
-      }
+      },
+      resetFilters: jasmine.createSpy('resetFilters')
     };
 
     TestBed.configureTestingModule({
@@ -119,39 +120,12 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
         viewType,
         brandNameForSkuPackage,
       );
+      expect(filtersServiceMock.resetFilters).toHaveBeenCalled();
       expect(serviceCopy.filtersService.model.selected).toEqual({
-        myAccountsOnly: false,
-        simpleDistributionType: false,
-        priorityPackage: [],
-        account: [],
-        subaccount: [],
-        brand: [],
         masterSKU: [skuPackageCode],
-        cbbdChain: [],
-        contact: [],
-        city: [],
-        currentFilter: '',
-        distributor: [],
         impact: ['High', 'Medium'],
-        opportunityStatus: [],
         opportunityType: [formattedOpportunityTypeMock],
-        featureType: [],
-        itemAuthorizationType: [],
-        premiseType: '',
-        productType: [],
-        store: [],
-        retailer: '',
-        brandSearchText: '',
-        storeSearchText: '',
-        distributorSearchText: '',
         segmentation: ['A', 'B'],
-        state: [],
-        tradeChannel: [],
-        trend: '',
-        valuesVsTrend: '',
-        zipCode: [],
-        salesStatus: [],
-        storeFormat: ''
       });
 
       expect(serviceCopy.filtersService.model.predictedImpactHigh).toBe(true);

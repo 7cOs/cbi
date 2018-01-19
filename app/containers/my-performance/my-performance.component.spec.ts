@@ -3785,7 +3785,7 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('handleOpportunityClicked', () => {
-    let opportunity: TeamPerformanceTableOpportunity;
+    let opportunityMock: TeamPerformanceTableOpportunity;
 
     beforeEach(() => {
       componentInstanceCopy.selectedBrandSkuPackageName = chance.string();
@@ -3797,15 +3797,15 @@ describe('MyPerformanceComponent', () => {
       componentInstanceCopy.opportunitiesSkuPackageType = chance.string();
       componentInstanceCopy.selectedSubaccountCode = chance.string();
       componentInstanceCopy.salesHierarchyViewType = SalesHierarchyViewType.distributors;
-      opportunity = getTeamPerformanceTableOpportunityMock();
+      opportunityMock = getTeamPerformanceTableOpportunityMock();
     });
 
     it('should call OpportunitiesSearchHandoffService#setOpportunitySearchChipsAndFilters', () => {
-      componentInstance.handleOpportunityClicked(opportunity);
+      componentInstance.handleOpportunityClicked(opportunityMock);
       expect(opportunitiesSearchHandoffServiceMock.setOpportunitySearchChipsAndFilters).toHaveBeenCalledWith(
         componentInstanceCopy.selectedBrandSkuPackageName,
         componentInstanceCopy.selectedDistributorCode,
-        opportunity,
+        opportunityMock,
         componentInstanceCopy.opportunitiesBrandSkuCode,
         componentInstanceCopy.filterState.premiseType,
         componentInstanceCopy.selectedSalesHierarchyEntityName,
@@ -3827,11 +3827,11 @@ describe('MyPerformanceComponent', () => {
           brandDescription: brandDescriptionMock
         }
       };
-      componentInstance.handleOpportunityClicked(opportunity);
+      componentInstance.handleOpportunityClicked(opportunityMock);
       expect(opportunitiesSearchHandoffServiceMock.setOpportunitySearchChipsAndFilters).toHaveBeenCalledWith(
         componentInstanceCopy.selectedBrandSkuPackageName,
         componentInstanceCopy.selectedDistributorCode,
-        opportunity,
+        opportunityMock,
         componentInstanceCopy.opportunitiesBrandSkuCode,
         componentInstanceCopy.filterState.premiseType,
         componentInstanceCopy.selectedSalesHierarchyEntityName,
@@ -3845,7 +3845,7 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should call $state#go to navigate to opportunities search page', () => {
-      componentInstance.handleOpportunityClicked(opportunity);
+      componentInstance.handleOpportunityClicked(opportunityMock);
       expect(stateMock.go).toHaveBeenCalledWith(
         'opportunities',
         {
@@ -3853,6 +3853,27 @@ describe('MyPerformanceComponent', () => {
           applyFiltersOnLoad: true,
           referrer: 'team-performance'
         }
+      );
+    });
+
+    it('should call analyticsService#track event with subAccountID for label when a subAccount is selected', () => {
+      componentInstanceCopy.selectedSubaccountCode = chance.string();
+      componentInstance.handleOpportunityClicked(opportunityMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Navigation',
+        'Go To Opportunities',
+        componentInstanceCopy.selectedSubaccountCode
+      );
+    });
+
+    it('should call analyticsService#track event with distributorCode for label when a subAccount is NOT selected', () => {
+      componentInstanceCopy.selectedDistributorCode = chance.string();
+      componentInstanceCopy.selectedSubaccountCode = null;
+      componentInstance.handleOpportunityClicked(opportunityMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Navigation',
+        'Go To Opportunities',
+        componentInstanceCopy.selectedDistributorCode
       );
     });
   });
