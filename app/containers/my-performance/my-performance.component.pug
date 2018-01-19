@@ -56,7 +56,7 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
         img.error-icon(src="../../assets/img/icons/error-ico.svg")
         p.error-cover-message Sorry, something went wrong. Try refreshing the page or navigate back to a previous view.
 
-  md-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
+  md-sidenav.opportunities-container([align]="'end'", [opened]="1")
     team-performance-opportunities(
       [opportunities]="teamPerformanceTableOpportunities",
       [productName]="selectedBrandSkuPackageName",
@@ -66,21 +66,3 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
       (onCloseIndicatorClicked)="toggleOpportunityTable()",
       (onOpportunityCountClicked)="handleOpportunityClicked($event)")
 
-compass-tooltip(
-  [title]="tooltipTitle",
-  [description]="tooltipDescription",
-  [position]="tooltipPosition"
-  )
-
-compass-tooltip(
-  [label]="tooltipLabel",
-  [title]="tooltipTitle",
-  [description]="tooltipDescription",
-  [position]="tooltipPosition"
-  )
-
-compass-tooltip(
-  [label]="tooltipLabel",
-  [description]="tooltipDescription2",
-  [position]="tooltipPosition2"
-  )

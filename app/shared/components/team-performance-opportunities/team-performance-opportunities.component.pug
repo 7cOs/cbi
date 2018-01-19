@@ -2,7 +2,12 @@ section.opportunities-component-section
 
   .opportunities-header
     .header-summary
-      .header-title Opportunities
+      .header-title
+        Opportunities
+        compass-tooltip(
+          [title]="tooltipTitle",
+          [description]="tooltipDescription",
+          [position]="tooltipPosition")
       .header-sub-title {{ subtitle }}
     .close-indicator-container
       img.close-indicator(src="../../../assets/img/icons/thin-x.svg", (click)="onCloseIndicatorClicked.emit()")
