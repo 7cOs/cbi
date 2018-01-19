@@ -17,7 +17,6 @@ import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { getTeamPerformanceTableOpportunitiesMock } from '../../models/my-performance-table-row.model.mock';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -80,12 +79,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
 
-  // Mocks
-  public teamPerformanceTableOpportunitiesMock: Array<TeamPerformanceTableOpportunity> = getTeamPerformanceTableOpportunitiesMock();
-  public selectedProductNameMock: string = chance.string({ length: 20 });
-  public selectedEntityNameMock: string = chance.string({ length: 20 });
-  public selectedOpportunitiesTotal: number = chance.natural({ max: 999999999999 });
-
   private currentState: MyPerformanceEntitiesData;
   private currentUserId: string;
   private entityType: EntityType;
@@ -118,6 +111,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private isOpportunityTableExtended: boolean = false;
   private currentPremiseTypeLabel: string;
   private drillStatus: DrillStatus;
+  private teamPerformanceTableOpportunities: TeamPerformanceTableOpportunity[];
+  private selectedBrandSkuPackageName: string;
+  private selectedSalesHierarchyEntityName: string;
+  private selectedOpportunityCountTotal: number;
+  private clickedSalesHierarchyEntityName: string;
 
   constructor(
     private store: Store<AppState>,
@@ -191,8 +189,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           );
 
           if (this.productMetricsViewType !== ProductMetricsViewType.brands && productMetrics.selectedBrandCodeValues) {
-            this.productMetricsSelectedBrandRow = this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(
-              productMetrics.selectedBrandCodeValues, productMetrics.opportunityCounts);
+            this.productMetricsSelectedBrandRow =
+              this.myPerformanceTableDataTransformerService.getProductMetricsSelectedBrandRow(productMetrics.selectedBrandCodeValues);
           } else {
             this.productMetricsSelectedBrandRow = null;
           }
@@ -415,6 +413,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.isOpportunityTableExtended = !this.isOpportunityTableExtended;
   }
 
+  public handleOpportunityCountTotalClicked(myPerformanceTableRow: MyPerformanceTableRow): void {
+    if (myPerformanceTableRow.opportunities === 0) return;
+
+    const selectedProductCode: string = myPerformanceTableRow.metadata.brandCode
+      ? myPerformanceTableRow.metadata.brandCode
+      : myPerformanceTableRow.metadata.skuPackageCode;
+
+    this.teamPerformanceTableOpportunities = this.productMetricsState.opportunityCounts[selectedProductCode].opportunityCounts;
+    this.selectedSalesHierarchyEntityName = this.clickedSalesHierarchyEntityName;
+    this.selectedBrandSkuPackageName = myPerformanceTableRow.descriptionRow0;
+    this.selectedOpportunityCountTotal = myPerformanceTableRow.opportunities;
+    this.isOpportunityTableExtended = true;
+  }
+
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
     console.log('Opportunity Clicked: ', opportunity);
   }
@@ -437,7 +449,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
+    this.clickedSalesHierarchyEntityName = parameters.row.descriptionRow0;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
+
     if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
         this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
       this.drillStatus = DrillStatus.Down;
@@ -447,6 +461,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     } else {
       this.drillStatus = DrillStatus.Inactive;
     }
+
     this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
 
     const isMemberOfExceptionHierarchy: boolean = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
