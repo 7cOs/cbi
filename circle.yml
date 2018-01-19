@@ -62,4 +62,8 @@ experimental:
   notify:
     branches:
       only:
-        - chore/circle-ci-slack-notifications
+        - test
+        - stage
+        - master
+        - prepod
+        - ga-automation
