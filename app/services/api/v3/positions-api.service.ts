@@ -8,6 +8,8 @@ import { EntityDTO } from '../../../models/entity-dto.model';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../../models/people-responsibilities-dto.model';
 import { PerformanceDTO } from '../../../models/performance.model';
+import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
+import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 
 @Injectable()
@@ -64,13 +66,54 @@ export class PositionsApiService {
   ): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchyPerformanceTotal`;
     const params = Object.assign({},
-      { contextPositionId: alternateHierarchyId },
+      {
+        contextPositionId: alternateHierarchyId
+      },
       this.apiHelperService.getFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
       .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+  }
+
+  public getAlternateHierarchyPersonProductMetrics(
+    positionId: string,
+    contextPositionId: string,
+    aggregationLevel: ProductMetricsAggregationType,
+    filter: MyPerformanceFilterState
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/positions/${positionId}/alternateHierarchyProductMetrics`;
+    const params = Object.assign({},
+      {
+        contextPositionId: contextPositionId,
+        aggregationLevel: aggregationLevel
+      },
+      this.apiHelperService.getFilterStateParams(filter));
+
+    return this.http.get(url, { params: params })
+      .map((res: Response) => res.json())
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
+  }
+
+  public getAlternateHierarchyRoleGroupProductMetrics(
+    positionId: string,
+    entityType: string,
+    contextPositionId: string,
+    aggregationLevel: ProductMetricsAggregationType,
+    filter: MyPerformanceFilterState
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ entityType }/productMetrics`;
+    const params = Object.assign({},
+      {
+        aggregationLevel: aggregationLevel,
+        contextPositionId: contextPositionId
+      },
+      this.apiHelperService.getFilterStateParams(filter));
+
+    return this.http.get(url, { params: params })
+      .map((res: Response) => res.json())
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
   }
 
   public getDistributors(positionId: string): Observable<EntityDTO[]> {
@@ -120,5 +163,40 @@ export class PositionsApiService {
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
       .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+  }
+
+  public getPersonProductMetrics(
+    positionId: string,
+    aggregationLevel: ProductMetricsAggregationType,
+    filter: MyPerformanceFilterState
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/positions/${ positionId }/productMetrics`;
+    const params = Object.assign({},
+      {
+        aggregationLevel: aggregationLevel
+      },
+      this.apiHelperService.getFilterStateParams(filter));
+
+    return this.http.get(url, { params: params })
+      .map((res: Response) => res.json())
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
+  }
+
+  public getRoleGroupProductMetrics(
+    positionId: string,
+    entityType: string,
+    aggregationLevel: ProductMetricsAggregationType,
+    filter: MyPerformanceFilterState
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/productMetrics`;
+    const params = Object.assign({},
+      {
+        aggregationLevel: aggregationLevel
+      },
+      this.apiHelperService.getFilterStateParams(filter));
+
+    return this.http.get(url, { params: params })
+      .map((res: Response) => res.json())
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
   }
 }

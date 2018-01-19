@@ -10,7 +10,6 @@ export class DateRangeApiService {
   private GET_DATE_RANGES_URL: string = '/v3/dateRangeCodes';
   constructor(private http: Http) {}
 
-  // DONE
   getDateRanges(): Observable<DateRangeDTO[]> {
     return this.http.get(`${this.GET_DATE_RANGES_URL}`)
       .map(res => res.json())

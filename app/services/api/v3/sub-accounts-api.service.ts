@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { ApiHelperService } from '../../api-helper.service';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
+import { OpportunityCountDTO } from '../../../models/opportunity-count-dto.model';
 import { PerformanceDTO } from '../../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
@@ -18,6 +19,30 @@ export class SubAccountsApiService {
     private http: Http
   ) { }
 
+  public getSubAccountOpportunityCounts(
+    subAccountId: string,
+    positionId: string,
+    premiseType: string,
+    countStructureType: string,
+    segment: string,
+    impact: string,
+    type: string
+  ): Observable<OpportunityCountDTO[]> {
+    const url = `/v3/subAccounts/${ subAccountId }/opportunityCounts`;
+    const params = {
+      positionIds: positionId,
+      premiseType: premiseType,
+      countStructureType: countStructureType,
+      segment: segment,
+      impact: impact,
+      type: type
+    };
+
+    return this.http.get(url, { params: params })
+      .map((res: Response) => res.json())
+      .catch((error: Response) => Observable.throw(error));
+  }
+
   public getSubAccountPerformance(
     subAccountId: string,
     contextPositionId: string,
@@ -27,7 +52,9 @@ export class SubAccountsApiService {
   ): Observable<PerformanceDTO> {
     const url = `/v3/subAccounts/${ subAccountId }/performanceTotal`;
     const params = Object.assign({},
-      { positionId: contextPositionId },
+      {
+        positionId: contextPositionId
+      },
       this.apiHelperService.getFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
@@ -44,7 +71,10 @@ export class SubAccountsApiService {
   ): Observable<ProductMetricsDTO> {
     const url = `/v3/subAccounts/${ subAccountId }/productMetrics`;
     const params = Object.assign({},
-      { positionId: positionId, aggregationLevel: aggregation },
+      {
+        positionId: positionId,
+        aggregationLevel: aggregation
+      },
       this.apiHelperService.getFilterStateParams(filter));
 
     return this.http.get(url, { params: params })

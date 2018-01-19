@@ -17,7 +17,6 @@ export class MyPerformanceApiService {
 
   constructor(private http: Http) { }
 
-  // DONE
   public getResponsibilities(positionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities`;
 
@@ -26,7 +25,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  // DONE
   public getHierarchyGroupPerformance(groupType: string, filter: MyPerformanceFilterState,
                                       positionId: string, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
@@ -39,7 +37,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  // DONE
   public getAlternateHierarchyGroupPerformance(groupType: string, positionId: string,
     alternateHierarchyId: string, filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType)
   : Observable<PerformanceDTO> {
@@ -55,7 +52,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  // DONE
   public getPerformance(positionId: string, filter: MyPerformanceFilterState,
                         brandCode?: string, skuPackageType?: SkuPackageType): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
@@ -67,7 +63,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  // DONE
   public getAlternateHierarchyPersonPerformance(
     positionId: string,
     alternateHierarchyId: string,
@@ -87,7 +82,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  // DONE
   public getAccountsDistributors(entityURI: string): Observable<Array<EntityDTO>> {
     const url = `/v3${ entityURI }`;
 
@@ -96,7 +90,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(err));
   }
 
-  // DONE
   public getDistributorPerformance(
     distributorId: string,
     filter: MyPerformanceFilterState,
@@ -116,7 +109,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  // DONE
   public getAccountPerformance(
     accountId: string,
     filter: MyPerformanceFilterState,
@@ -136,7 +128,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  // DONE
   public getSubAccounts(accountId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
     const url = `/v3/accounts/${ accountId }/subAccounts`;
 
@@ -150,7 +141,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  // DONE
   public getSubAccountPerformance(
     subAccountId: string, contextPositionId: string, filter: MyPerformanceFilterState,
     brandSkuCode?: string, skuPackageType?: SkuPackageType)
@@ -165,7 +155,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handlePerformanceError(err));
   }
 
-  // DONE
   public getAlternateHierarchy(positionId: string, contextPositionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchy`;
 
@@ -178,7 +167,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  // DONE
   private getParams(filter: MyPerformanceFilterState, brandSkuCode?: string, skuPackageType?: SkuPackageType): any {
     const metricType: string = filter.hasOwnProperty('distributionType')
       ? `${ filter.distributionType.toLowerCase() }PointsOfDistribution`
@@ -203,12 +191,10 @@ export class MyPerformanceApiService {
     return params;
   }
 
-  // DONE
   private handleError(err: Error): Observable<Error> {
     return Observable.throw(err);
   }
 
-  // DONE
   private handlePerformanceError(err: any): Observable<PerformanceDTO> {
     if (err.status === 404) {
       const emptyDTO: PerformanceDTO = {

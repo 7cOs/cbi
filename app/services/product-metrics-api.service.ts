@@ -54,7 +54,6 @@ export class ProductMetricsApiService {
       .catch(err => this.handleError(err, aggregation, params.type));
   }
 
-  // DONE
   public getSubAccountProductMetrics(
     subAccountId: string,
     positionId: string,
@@ -221,7 +220,6 @@ export class ProductMetricsApiService {
       .catch(err => Observable.throw(err));
   }
 
-  // DONE
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
     const metricType: string = filter.hasOwnProperty('distributionType')
       ? `${ filter.distributionType.toLowerCase() }PointsOfDistribution`
@@ -236,7 +234,6 @@ export class ProductMetricsApiService {
     };
   }
 
-  // DONE
   private handleError(err: any, aggregation: ProductMetricsAggregationType, type: string): Observable<ProductMetricsDTO> {
     if (err.status === 404) {
       let empty: ProductMetricsDTO = { type: type };
