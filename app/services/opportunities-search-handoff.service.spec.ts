@@ -52,6 +52,7 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
       model: {},
       applyFilterArr: jasmine.createSpy('applyFilterArr'),
       addChip: jasmine.createSpy('addChip'),
+      removeChip: jasmine.createSpy('removeChip'),
       resetChipsFilters: jasmine.createSpy('resetChipsFilters')
     };
 
@@ -123,11 +124,13 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
       );
       expect(filtersServiceMock.resetFilters).toHaveBeenCalled();
       expect(chipsServiceMock.resetChipsFilters).toHaveBeenCalled();
+      expect(chipsServiceMock.removeChip).toHaveBeenCalledWith('myAccountsOnly');
       expect(serviceCopy.filtersService.model.selected).toEqual({
         masterSKU: [skuPackageCode],
         impact: ['High', 'Medium'],
         opportunityType: [formattedOpportunityTypeMock],
         segmentation: ['A', 'B'],
+        myAccountsOnly: false
       });
 
       expect(serviceCopy.filtersService.model.predictedImpactHigh).toBe(true);

@@ -137,6 +137,7 @@ export class OpportunitiesSearchHandoffService {
   private setInitialFiltersServiceSelectedModel(): void {
     this.filtersService.resetFilters();
     this.chipsService.resetChipsFilters();
+    this.chipsService.removeChip('myAccountsOnly');
   }
 
   private setDefaultChipsAndFiltersForOpportunityCounts(opportunityType: string): void {
@@ -148,6 +149,7 @@ export class OpportunitiesSearchHandoffService {
     this.filtersService.model.selected.opportunityType = [opportunityType];
     this.filtersService.model.selected.segmentation = ['A', 'B'];
     this.filtersService.model.selected.impact = ['High', 'Medium'];
+    this.filtersService.model.selected.myAccountsOnly = false;
     this.filtersService.model.predictedImpactHigh = true;
     this.filtersService.model.predictedImpactMedium = true;
     this.filtersService.model.storeSegmentationA = true;
