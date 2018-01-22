@@ -136,6 +136,7 @@ export class OpportunitiesSearchHandoffService {
 
   private setInitialFiltersServiceSelectedModel(): void {
     this.filtersService.resetFilters();
+    this.chipsService.resetChipsFilters();
   }
 
   private setDefaultChipsAndFiltersForOpportunityCounts(opportunityType: string): void {

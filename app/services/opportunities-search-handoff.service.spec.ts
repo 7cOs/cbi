@@ -51,7 +51,8 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
     chipsServiceMock = {
       model: {},
       applyFilterArr: jasmine.createSpy('applyFilterArr'),
-      addChip: jasmine.createSpy('addChip')
+      addChip: jasmine.createSpy('addChip'),
+      resetChipsFilters: jasmine.createSpy('resetChipsFilters')
     };
 
     filtersServiceMock = {
@@ -121,6 +122,7 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
         brandNameForSkuPackage,
       );
       expect(filtersServiceMock.resetFilters).toHaveBeenCalled();
+      expect(chipsServiceMock.resetChipsFilters).toHaveBeenCalled();
       expect(serviceCopy.filtersService.model.selected).toEqual({
         masterSKU: [skuPackageCode],
         impact: ['High', 'Medium'],
