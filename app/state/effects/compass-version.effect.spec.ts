@@ -3,13 +3,13 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { ReplaySubject, Subject } from 'rxjs';
 import { getAppVersionMock } from '../../models/app-version.model.mock';
 import { CompassVersionEffects } from './compass-version.effect';
-import { FetchVersionAction, FetchVersionFailureAction, FetchVersionSuccessAction } from '../actions/compass-version.action';
+import * as CompassVersionActions from '../actions/compass-version.action';
 import * as Chance from 'chance';
 let chance = new Chance();
 
 describe('Compass Version Effects', () => {
 
-  let actions$: Subject<any>;
+  let actions$: Subject<CompassVersionActions.Action>;
   let compassVersionEffects: CompassVersionEffects;
   const mockVersion = getAppVersionMock();
   let mockVersionService = {
@@ -49,14 +49,14 @@ describe('Compass Version Effects', () => {
         (_versionService: any) => {
           versionService = _versionService;
 
-          actions$.next(new FetchVersionAction());
+          actions$.next(new CompassVersionActions.FetchVersionAction());
         }
       ));
 
       it('should return a FetchVersionSuccessAction and set version results on model', (done) => {
         compassVersionEffects.fetchVersion$().subscribe(result => {
           expect(versionService.model.version).toEqual(mockVersion);
-          expect(result).toEqual(new FetchVersionSuccessAction(mockVersion));
+          expect(result).toEqual(new CompassVersionActions.FetchVersionSuccessAction(mockVersion));
           done();
         });
       });
@@ -70,13 +70,13 @@ describe('Compass Version Effects', () => {
         (versionService: any) => {
           versionService.getVersion = () => Promise.reject(error);
 
-          actions$.next(new FetchVersionAction());
+          actions$.next(new CompassVersionActions.FetchVersionAction());
         }
       ));
 
       it('should return a FetchVersionFailureAction after catching an error', (done) => {
         compassVersionEffects.fetchVersion$().subscribe(result => {
-          expect(result).toEqual(new FetchVersionFailureAction(error));
+          expect(result).toEqual(new CompassVersionActions.FetchVersionFailureAction(error));
           done();
         });
       });
@@ -88,7 +88,7 @@ describe('Compass Version Effects', () => {
     const err = new Error(chance.string());
 
     beforeEach(() => {
-      actions$.next(new FetchVersionFailureAction(err));
+      actions$.next(new CompassVersionActions.FetchVersionFailureAction(err));
       spyOn(console, 'error');
     });
 

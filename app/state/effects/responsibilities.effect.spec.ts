@@ -138,7 +138,7 @@ describe('Responsibilities Effects', () => {
     selectedEntityDescription: selectedEntityDescriptionMock
   };
 
-  let actions$: Subject<any>;
+  let actions$: Subject<ResponsibilitiesActions.Action>;
   let responsibilitiesEffects: ResponsibilitiesEffects;
   let responsibilitiesService: ResponsibilitiesService;
 

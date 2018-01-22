@@ -8,7 +8,7 @@ import { DateRangeApiService } from '../../services/date-range-api.service';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
 import { DateRangesEffects } from './date-ranges.effect';
 import { DateRangeTransformerService } from '../../services/date-range-transformer.service';
-import { FetchDateRangesAction, FetchDateRangesFailureAction, FetchDateRangesSuccessAction } from '../actions/date-ranges.action';
+import * as DateRangeActions from '../actions/date-ranges.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 
 let chance = new Chance();
@@ -19,7 +19,7 @@ describe('Date Ranges Effects', () => {
   const dateRangesMock: DateRange[] = [dateRange1, dateRange2];
   const err = new Error(chance.string());
 
-  let actions$: Subject<any>;
+  let actions$: Subject<DateRangeActions.Action>;
   let dateRangesEffects: DateRangesEffects;
   let dateRangeApiServiceMock = {
     getDateRanges() {
@@ -67,13 +67,13 @@ describe('Date Ranges Effects', () => {
         (_dateRangeApiService: DateRangeApiService) => {
           dateRangeApiService = _dateRangeApiService;
 
-          actions$.next(new FetchDateRangesAction());
+          actions$.next(new DateRangeActions.FetchDateRangesAction());
         }
       ));
 
       it('should return a FetchDateRangesSuccessAction', (done) => {
         dateRangesEffects.fetchDateRanges$().subscribe(result => {
-          expect(result).toEqual(new FetchDateRangesSuccessAction(dateRangesMock));
+          expect(result).toEqual(new DateRangeActions.FetchDateRangesSuccessAction(dateRangesMock));
           done();
         });
       });
@@ -85,14 +85,14 @@ describe('Date Ranges Effects', () => {
       beforeEach(inject([ DateRangeApiService ],
         (_dateRangeApiService: DateRangeApiService) => {
           dateRangeApiService = _dateRangeApiService;
-          actions$.next(new FetchDateRangesAction());
+          actions$.next(new DateRangeActions.FetchDateRangesAction());
         }
       ));
 
       it('should return a FetchVersionFailureAction after catching an error', (done) => {
         spyOn(dateRangeApiService, 'getDateRanges').and.returnValue(Observable.throw(err));
         dateRangesEffects.fetchDateRanges$().subscribe((result) => {
-          expect(result).toEqual(new FetchDateRangesFailureAction(err));
+          expect(result).toEqual(new DateRangeActions.FetchDateRangesFailureAction(err));
           done();
         });
       });
@@ -102,7 +102,7 @@ describe('Date Ranges Effects', () => {
   describe('when a FetchVersionFailureAction is received', () => {
 
     beforeEach(() => {
-      actions$.next(new FetchDateRangesFailureAction(err));
+      actions$.next(new DateRangeActions.FetchDateRangesFailureAction(err));
       spyOn(console, 'error');
     });
 

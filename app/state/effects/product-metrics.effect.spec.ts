@@ -33,7 +33,7 @@ describe('ProductMetrics Effects', () => {
   let selectedEntityTypeMock: EntityType = EntityType.Person;
   let productMetricsSuccessPayloadMock: ProductMetricsActions.FetchProductMetricsSuccessPayload;
   let error: Error;
-  let actions$: Subject<any>;
+  let actions$: Subject<ProductMetricsActions.Action>;
   let productMetricsEffects: ProductMetricsEffects;
   let productMetricsService: ProductMetricsService;
   let productMetricsDataMock: ProductMetricsData;
