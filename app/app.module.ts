@@ -19,6 +19,7 @@ import { GoogleAnalyticsTrackerService } from './services/google-analytics-track
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
+import { OpportunitiesSearchHandoffService } from './services/opportunities-search-handoff.service';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
@@ -35,10 +36,12 @@ const UpgradedComponents = [  // tslint:disable-line:variable-name
 // make ng1 services available to ng2 code (these are NOT passed as providers)
 AppUpgradeAdapter.upgradeNg1Provider('$state');
 AppUpgradeAdapter.upgradeNg1Provider('$transitions');
+AppUpgradeAdapter.upgradeNg1Provider('chipsService');
+AppUpgradeAdapter.upgradeNg1Provider('filtersService');
+AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
 AppUpgradeAdapter.upgradeNg1Provider('toastService');
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
-AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
 
 @NgModule({
   imports: [
@@ -66,7 +69,8 @@ AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
     DateRangeApiService,
     DateRangeService,
     DateRangeTransformerService,
-    GoogleAnalyticsTrackerService
+    GoogleAnalyticsTrackerService,
+    OpportunitiesSearchHandoffService
   ]
 })
 export class AppModule {
