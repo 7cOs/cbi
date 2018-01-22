@@ -10,7 +10,9 @@ module.exports = /*  @ngInject */
       added: false,
       deleteError: false,
       multipleTargetListsSelected: false,
-      performanceDataError: false
+      performanceDataError: false,
+      reportDeleted: false,
+      reportSaved: false
     };
 
     var service = {

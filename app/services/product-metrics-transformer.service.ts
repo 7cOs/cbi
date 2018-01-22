@@ -5,6 +5,7 @@ import { CalculatorService } from './calculator.service';
 import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCount } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
+import { OpportunityTypeLabel } from '../enums/opportunity.enum';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
 
@@ -49,11 +50,9 @@ export class ProductMetricsTransformerService {
       };
 
       skuPackageOpportunityCounts.forEach((opportunityCount: OpportunityCount) => {
-        if (groupedBrandOpportunityCounts[opportunityCount.name]) {
-          groupedBrandOpportunityCounts[opportunityCount.name] += opportunityCount.count;
-        } else {
-          groupedBrandOpportunityCounts[opportunityCount.name] = opportunityCount.count;
-        }
+        groupedBrandOpportunityCounts[opportunityCount.name] = groupedBrandOpportunityCounts[opportunityCount.name]
+          ? groupedBrandOpportunityCounts[opportunityCount.name] += opportunityCount.count
+          : groupedBrandOpportunityCounts[opportunityCount.name] = opportunityCount.count;
       });
 
       return opportunitiesGroupedBySkuPackageCode;
@@ -74,14 +73,12 @@ export class ProductMetricsTransformerService {
   }
 
   private getOpportunityCounts(skuPackageOpportunityCountsDTO: OpportunityCountDTO[]): OpportunityCount[] {
-    return skuPackageOpportunityCountsDTO.reduce((opportunityCounts: OpportunityCount[], skuPackageOpportunity: OpportunityCountDTO) => {
-      opportunityCounts.push({
-        name: skuPackageOpportunity.label,
-        count: skuPackageOpportunity.count
-      });
-
-      return opportunityCounts;
-    }, []);
+    return skuPackageOpportunityCountsDTO.map((skuPackageOpportunityType: OpportunityCountDTO) => {
+      return {
+        name: OpportunityTypeLabel[skuPackageOpportunityType.label] || skuPackageOpportunityType.label,
+        count: skuPackageOpportunityType.count
+      };
+    });
   }
 
   private transformProductMetricsDTO(dto: ProductMetricsDTO): ProductMetrics {

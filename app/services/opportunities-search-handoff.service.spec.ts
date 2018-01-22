@@ -51,13 +51,16 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
     chipsServiceMock = {
       model: {},
       applyFilterArr: jasmine.createSpy('applyFilterArr'),
-      addChip: jasmine.createSpy('addChip')
+      addChip: jasmine.createSpy('addChip'),
+      removeChip: jasmine.createSpy('removeChip'),
+      resetChipsFilters: jasmine.createSpy('resetChipsFilters')
     };
 
     filtersServiceMock = {
       model: {
         selected: {}
-      }
+      },
+      resetFilters: jasmine.createSpy('resetFilters')
     };
 
     TestBed.configureTestingModule({
@@ -119,39 +122,15 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
         viewType,
         brandNameForSkuPackage,
       );
+      expect(filtersServiceMock.resetFilters).toHaveBeenCalled();
+      expect(chipsServiceMock.resetChipsFilters).toHaveBeenCalled();
+      expect(chipsServiceMock.removeChip).toHaveBeenCalledWith('myAccountsOnly');
       expect(serviceCopy.filtersService.model.selected).toEqual({
-        myAccountsOnly: false,
-        simpleDistributionType: false,
-        priorityPackage: [],
-        account: [],
-        subaccount: [],
-        brand: [],
         masterSKU: [skuPackageCode],
-        cbbdChain: [],
-        contact: [],
-        city: [],
-        currentFilter: '',
-        distributor: [],
         impact: ['High', 'Medium'],
-        opportunityStatus: [],
         opportunityType: [formattedOpportunityTypeMock],
-        featureType: [],
-        itemAuthorizationType: [],
-        premiseType: '',
-        productType: [],
-        store: [],
-        retailer: '',
-        brandSearchText: '',
-        storeSearchText: '',
-        distributorSearchText: '',
         segmentation: ['A', 'B'],
-        state: [],
-        tradeChannel: [],
-        trend: '',
-        valuesVsTrend: '',
-        zipCode: [],
-        salesStatus: [],
-        storeFormat: ''
+        myAccountsOnly: false
       });
 
       expect(serviceCopy.filtersService.model.predictedImpactHigh).toBe(true);

@@ -31,6 +31,7 @@ import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.r
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
+import { OpportunitiesSearchHandoffService } from '../../services/opportunities-search-handoff.service';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
@@ -40,7 +41,6 @@ import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.en
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { WindowService } from '../../services/window.service';
-import { OpportunitiesSearchHandoffService } from '../../services/opportunities-search-handoff.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
 

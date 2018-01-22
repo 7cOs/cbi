@@ -327,7 +327,7 @@ module.exports = /*  @ngInject */
       filtersService.model.selected[chipType] === true ? removeChip(chipType) : addChip(displayName, chipType, true);
     }
 
-    function resetChipsFilters(chips) {
+    function resetChipsFilters() {
       filtersService.resetFilters();
       angular.copy(chipsTemplate, service.model);
     }

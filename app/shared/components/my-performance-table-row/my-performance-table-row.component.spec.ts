@@ -141,6 +141,14 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
+  describe('onOpportunityCountClicked', () => {
+    it('should stop event propagation when an opportunity count is clicked', () => {
+      const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
+      expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
+    });
+  });
+
   describe('showEmptyLastColumn Input', () => {
     beforeEach(() => {
       componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];

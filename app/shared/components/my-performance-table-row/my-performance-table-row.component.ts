@@ -11,9 +11,9 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
   styles: [ require('../my-performance-table/my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableRowComponent {
-  @Output() onSublineClicked = new EventEmitter<any>();
-  @Output() onDismissableRowXClicked = new EventEmitter<any>();
-  @Output() onOpportunityCountClicked = new EventEmitter<any>();
+  @Output() onSublineClicked = new EventEmitter<Event>();
+  @Output() onDismissableRowXClicked = new EventEmitter<Event>();
+  @Output() onOpportunityCountClicked = new EventEmitter<Event>();
 
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
