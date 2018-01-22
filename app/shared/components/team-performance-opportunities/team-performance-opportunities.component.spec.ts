@@ -18,9 +18,6 @@ describe('Team Performance Opportunities Component', () => {
   let premiseTypeMock: string;
   let productNameMock: string;
   let subtitleMock: string;
-  let titleMock: number;
-  let descriptionMock: string;
-  let positionMock: string;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,10 +32,6 @@ describe('Team Performance Opportunities Component', () => {
     productNameMock = chance.string();
     premiseTypeMock = chance.string();
     subtitleMock = chance.string();
-
-    titleMock = chance.natural();
-    descriptionMock = chance.string();
-    positionMock = chance.string();
 
     componentInstance.opportunities = opportunitiesMock;
     componentInstance.premiseType = premiseTypeMock;
