@@ -5,6 +5,7 @@ import * as Chance from 'chance';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../../models/my-performance-table-row.model.mock';
 import { TeamPerformanceOpportunitiesComponent } from './team-performance-opportunities.component';
 import { TeamPerformanceTableOpportunity } from '../../../models/my-performance-table-row.model';
+import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
 
 const chance = new Chance();
 
@@ -23,7 +24,7 @@ describe('Team Performance Opportunities Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ TeamPerformanceOpportunitiesComponent ]
+      declarations: [ TeamPerformanceOpportunitiesComponent, CompassTooltipComponent ]
     });
 
     fixture = TestBed.createComponent(TeamPerformanceOpportunitiesComponent);
