@@ -465,6 +465,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       brandNameForSkuPackage
     );
 
+    const analyticsLabel = subAccountID || distributorCode;
+    this.analyticsService.trackEvent('Navigation', 'Go To Opportunities', analyticsLabel);
+
     this.$state.go('opportunities', {
       resetFiltersOnLoad: false,
       applyFiltersOnLoad: true,
