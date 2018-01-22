@@ -8,13 +8,48 @@ import { Component, Input } from '@angular/core';
 
 export class CompassTooltipComponent {
 
-  @Input() title?: string;
+  @Input() title: string;
   @Input() description: string;
-  @Input() position?: string;
-  @Input() label?: string;
+  @Input() position: string;
+  @Input() label: string;
 
   constructor() {}
 
   ngOnInit () {
+    if (this.title) {
+      switch (this.position) {
+        case 'right':
+          this.position = 'title_right';
+          break;
+        case 'left':
+          this.position = 'title_left';
+          break;
+        case 'above':
+          this.position = 'title_above';
+          break;
+        case '':
+        case 'below':
+        case undefined:
+        default:
+          this.position = 'title_below';
+      }
+    } else {
+      switch (this.position) {
+        case 'right':
+          this.position = 'no_title_right';
+          break;
+        case 'left':
+          this.position = 'no_title_left';
+          break;
+        case 'above':
+          this.position = 'no_title_above';
+          break;
+        case '':
+        case 'below':
+        case undefined:
+        default:
+          this.position = 'no_title_below';
+      }
+    }
   }
 }
