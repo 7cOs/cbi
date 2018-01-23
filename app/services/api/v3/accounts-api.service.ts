@@ -13,7 +13,7 @@ import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 
 @Injectable()
-export class DistributorsApiService {
+export class AccountsApiService {
 
   constructor(
     private apiHelperService: ApiHelperService,
@@ -59,7 +59,11 @@ export class DistributorsApiService {
       .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
   }
 
-  public getSubAccounts(accountId: string, positionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
+  public getSubAccounts(
+    accountId: string,
+    positionId: string,
+    premiseType: PremiseTypeValue
+  ): Observable<EntitySubAccountDTO[]> {
     const url = `/v3/accounts/${ accountId }/subAccounts`;
     const params = {
       positionId: positionId,
