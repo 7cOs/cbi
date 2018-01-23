@@ -7,7 +7,7 @@ section.opportunities-component-section
     .header-tooltip
       compass-tooltip(
         [title]="tooltipTitle",
-        [description]="tooltipDescription",
+        [descriptions]="tooltipDescription",
         [position]="tooltipPosition")
     .close-indicator-container
       img.close-indicator(src="../../../assets/img/icons/thin-x.svg", (click)="onCloseIndicatorClicked.emit()")
