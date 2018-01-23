@@ -6,26 +6,26 @@ import { DateRangeApiService } from './date-range-api.service';
 import { DateRangeDTO } from '../../../models/date-range-dto.model';
 import { dateRangeDTOsMock } from '../../../models/date-range-dto-collection.model.mock';
 
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    providers: [
-      MockBackend,
-      BaseRequestOptions,
-      {
-        provide: Http,
-        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-          return new Http(backendInstance, defaultOptions);
-        },
-        deps: [ MockBackend, BaseRequestOptions ]
-      },
-     DateRangeApiService
-    ]
-  });
-});
-
 describe('Service: DateRangeApiService', () => {
   let dateRangeApiService: DateRangeApiService;
   let mockBackend: MockBackend;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        MockBackend,
+        BaseRequestOptions,
+        {
+          provide: Http,
+          useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
+            return new Http(backendInstance, defaultOptions);
+          },
+          deps: [ MockBackend, BaseRequestOptions ]
+        },
+       DateRangeApiService
+      ]
+    });
+  });
 
   beforeEach(inject([DateRangeApiService, MockBackend], (_dateRangeApiService: DateRangeApiService, _mockBackend: MockBackend) => {
     dateRangeApiService = _dateRangeApiService;
@@ -44,8 +44,8 @@ describe('Service: DateRangeApiService', () => {
         expect(connection.request.url).toEqual('/v3/dateRangeCodes');
       });
 
-      dateRangeApiService.getDateRanges().subscribe((res: DateRangeDTO[]) => {
-        expect(res).toEqual(dateRangeDTOsMock);
+      dateRangeApiService.getDateRanges().subscribe((response: DateRangeDTO[]) => {
+        expect(response).toEqual(dateRangeDTOsMock);
         done();
       });
     });
