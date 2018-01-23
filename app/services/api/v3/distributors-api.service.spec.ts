@@ -84,7 +84,7 @@ describe('DistributorsApiService', () => {
         + `&type=${ typeMock }`;
     });
 
-    it('should call the distributor opportunity counts endpoint and return OpportunityCountDTOs when successful', (done) => {
+    it('should call the distributor opportunity counts endpoint and return OpportunityCountDTO data when successful', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(opportunityCountDTOsMock)
@@ -152,7 +152,7 @@ describe('DistributorsApiService', () => {
       skuPackageTypeMock = SkuPackageType.sku;
     });
 
-    it('should call the distributor performance API endpoint and return performance data for the passed in distributor', (done) => {
+    it('should call the distributor performance endpoint and return PerformanceDTO data for the passed in distributor', (done) => {
       const expectedPerformanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
       const expectedRequestUrl: string = `/v3/distributors/${ distributorIdMock }/performanceTotal`
         + `?positionId=${ positionIdMock }`
@@ -183,7 +183,7 @@ describe('DistributorsApiService', () => {
       });
     });
 
-    it('should call the distributor performance API and return empty performance data when response is 404', (done) => {
+    it('should call the distributor performance endpoint and return empty PerformanceDTO data when response is 404', (done) => {
       const expectedEmptyPerformanceDTOResponseMock: PerformanceDTO = {
         total: 0,
         totalYearAgo: 0
@@ -212,11 +212,11 @@ describe('DistributorsApiService', () => {
   });
 
   describe('getDistributorProductMetrics', () => {
-    it('should call the distributors product metrics endpoint and return product metric data for the passed in distributor', (done) => {
+    it('should call the distributors product metrics endpoint and return ProductMetricDTO data for the passed in distributor', (done) => {
       const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
       const expectedRequestUrl: string = `/v3/distributors/${ distributorIdMock }/productMetrics`
         + `?positionId=${ positionIdMock }`
-        + `&aggregationLevel=brand`
+        + `&aggregationLevel=${ ProductMetricsAggregationType.brand }`
         + `&metricType=volume`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
@@ -244,7 +244,7 @@ describe('DistributorsApiService', () => {
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
-    + 'a brand aggregation type and the API call returns a 404 error', (done) => {
+    + ' a brand aggregation type and the API call returns a 404 error', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,
@@ -268,7 +268,7 @@ describe('DistributorsApiService', () => {
     });
 
     it('should return a response with an empty skuValues array when fetching product metrics for'
-    + 'a sku aggregation type and the API call returns a 404 error', (done) => {
+    + ' a sku aggregation type and the API call returns a 404 error', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           type: ResponseType.Error,

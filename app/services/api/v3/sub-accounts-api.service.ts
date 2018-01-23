@@ -45,7 +45,7 @@ export class SubAccountsApiService {
 
   public getSubAccountPerformance(
     subAccountId: string,
-    contextPositionId: string,
+    positionId: string,
     brandSkuCode: string,
     skuPackageType: SkuPackageType,
     filter: MyPerformanceFilterState
@@ -53,7 +53,7 @@ export class SubAccountsApiService {
     const url = `/v3/subAccounts/${ subAccountId }/performanceTotal`;
     const params = Object.assign({},
       {
-        positionId: contextPositionId
+        positionId: positionId
       },
       this.apiHelperService.getFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));

@@ -33,7 +33,7 @@ describe('Service: DateRangeApiService', () => {
   }));
 
   describe('getDateRanges', () => {
-    it('should call the search api and return all Date Ranges', (done) => {
+    it('should call the date range codes endpoint and return DateRangeDTO data', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(dateRangeDTOsMock)

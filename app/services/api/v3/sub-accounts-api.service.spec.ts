@@ -2,33 +2,31 @@ import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, Res
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
-import { AccountsApiService } from './accounts-api.service';
 import { ApiHelperService } from '../../api-helper.service';
-import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
-import { getEntitySubAccountDTOMock } from '../../../models/entity-subaccount-dto.model.mock';
+import { getOpportunityCountDTOsMock } from '../../../models/opportunity-count-dto.model.mock';
 import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
 import { getPremiseTypeMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
+import { OpportunityCountDTO } from '../../../models/opportunity-count-dto.model';
 import { PerformanceDTO } from '../../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
+import { SubAccountsApiService } from './sub-accounts-api.service';
 
 const chanceStringOptions = {
   pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
 };
 
-describe('AccountsApiService', () => {
-  let accountsApiService: AccountsApiService;
+describe('SubAccountsApiService', () => {
+  let subAccountsApiService: SubAccountsApiService;
   let mockBackend: MockBackend;
 
-  let accountIdMock: string;
+  let subAccountIdMock: string;
   let positionIdMock: string;
-  let brandSkuCodeMock: string;
-  let skuPackageTypeMock: SkuPackageType;
   let filterStateMock: MyPerformanceFilterState;
 
   beforeEach(() => {
@@ -43,20 +41,18 @@ describe('AccountsApiService', () => {
         },
         BaseRequestOptions,
         MockBackend,
-        AccountsApiService,
+        SubAccountsApiService,
         ApiHelperService
       ]
     });
   });
 
-  beforeEach(inject([AccountsApiService, MockBackend], (_accountsApiService: AccountsApiService, _mockBackend: MockBackend) => {
-    accountsApiService = _accountsApiService;
+  beforeEach(inject([SubAccountsApiService, MockBackend], (_subAccountsApiService: SubAccountsApiService, _mockBackend: MockBackend) => {
+    subAccountsApiService = _subAccountsApiService;
     mockBackend = _mockBackend;
 
-    accountIdMock = chance.string(chanceStringOptions);
+    subAccountIdMock = chance.string(chanceStringOptions);
     positionIdMock = chance.string(chanceStringOptions);
-    brandSkuCodeMock = chance.string(chanceStringOptions);
-    skuPackageTypeMock = SkuPackageType.sku;
     filterStateMock = {
       metricType: MetricTypeValue.Depletions,
       dateRangeCode: getDateRangeTimePeriodValueMock(),
@@ -64,10 +60,68 @@ describe('AccountsApiService', () => {
     };
   }));
 
-  describe('getAccountPerformance', () => {
-    it('should call the account performance endpoint and return PerformanceDTO data for the passed in account', (done) => {
-      const expectedPerformanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
-      const expectedRequestUrl: string = `/v3/accounts/${ accountIdMock }/performanceTotal`
+  describe(`getSubAccountOpportunityCounts`, () => {
+    let countStructureMock: string;
+    let segmentMock: string;
+    let impactMock: string;
+    let typeMock: string;
+    let opportunityCountDTOsMock: Array<OpportunityCountDTO>;
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      countStructureMock = chance.string(chanceStringOptions);
+      segmentMock = chance.string(chanceStringOptions);
+      impactMock = chance.string(chanceStringOptions);
+      typeMock = chance.string(chanceStringOptions);
+      opportunityCountDTOsMock = getOpportunityCountDTOsMock();
+      expectedRequestUrl = `/v3/subAccounts/${ subAccountIdMock }/opportunityCounts`
+        + `?positionIds=${ positionIdMock }`
+        + `&premiseType=${ filterStateMock.premiseType }`
+        + `&countStructureType=${ countStructureMock }`
+        + `&segment=${ segmentMock }`
+        + `&impact=${ impactMock}`
+        + `&type=${ typeMock }`;
+    });
+
+    it('should call the SubAccount Opportunity Counts endpoint and return OpportunityCountDTO data when successful', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(opportunityCountDTOsMock)
+        });
+        connection.mockRespond(new Response(options));
+
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(expectedRequestUrl);
+      });
+
+      subAccountsApiService.getSubAccountOpportunityCounts(
+        subAccountIdMock,
+        positionIdMock,
+        filterStateMock.premiseType,
+        countStructureMock,
+        segmentMock,
+        impactMock,
+        typeMock
+      )
+      .subscribe((response: ProductMetricsDTO[]) => {
+        expect(response).toEqual(opportunityCountDTOsMock);
+        done();
+      });
+    });
+  });
+
+  describe('getSubAccountPerformance', () => {
+    let brandSkuCodeMock: string;
+    let skuPackageTypeMock: SkuPackageType;
+
+    beforeEach(() => {
+      brandSkuCodeMock = chance.string(chanceStringOptions);
+      skuPackageTypeMock = SkuPackageType.sku;
+    });
+
+    it('should call the SubAccount Performance endpoint and return PerformanceDTO data for the given SubAccount', (done) => {
+      const performanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
+      const expectedRequestUrl: string = `/v3/subAccounts/${ subAccountIdMock }/performanceTotal`
         + `?positionId=${ positionIdMock }`
         + `&metricType=volume`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
@@ -76,7 +130,7 @@ describe('AccountsApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(expectedPerformanceDTOResponseMock)
+          body: JSON.stringify(performanceDTOResponseMock)
         });
         connection.mockRespond(new Response(options));
 
@@ -84,19 +138,20 @@ describe('AccountsApiService', () => {
         expect(connection.request.url).toEqual(expectedRequestUrl);
       });
 
-      accountsApiService.getAccountPerformance(
-        accountIdMock,
+      subAccountsApiService.getSubAccountPerformance(
+        subAccountIdMock,
         positionIdMock,
         brandSkuCodeMock,
         skuPackageTypeMock,
         filterStateMock
-      ).subscribe((response: PerformanceDTO) => {
-        expect(response).toEqual(expectedPerformanceDTOResponseMock);
+      )
+      .subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(performanceDTOResponseMock);
         done();
       });
     });
 
-    it('should call the account performance endpoint and return empty PerformanceDTO data when response is 404', (done) => {
+    it('should call the SubAccount Performance endpoint and return empty PerformanceDTO data when response is 404', (done) => {
       const expectedEmptyPerformanceDTOResponseMock: PerformanceDTO = {
         total: 0,
         totalYearAgo: 0
@@ -111,8 +166,8 @@ describe('AccountsApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      accountsApiService.getAccountPerformance(
-        accountIdMock,
+      subAccountsApiService.getSubAccountPerformance(
+        subAccountIdMock,
         positionIdMock,
         brandSkuCodeMock,
         skuPackageTypeMock,
@@ -124,15 +179,10 @@ describe('AccountsApiService', () => {
     });
   });
 
-  describe('getAccountProductMetrics', () => {
-    let productMetricsDTOMock: ProductMetricsDTO;
-
-    beforeEach(() => {
-      productMetricsDTOMock = getProductMetricsBrandDTOMock();
-    });
-
-    it('should call the accounts product metrics endpoint and return ProductMetricsDTO data for the passed in account', (done) => {
-      const expectedRequestUrl: string = `/v3/accounts/${ accountIdMock }/productMetrics`
+  describe('getSubAccountProductMetrics', () => {
+    it('should call the SubAccounts Product Metrics endpoint and return ProductMetricDTO data for the given SubAccount', (done) => {
+      const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
+      const expectedRequestUrl: string = `/v3/subAccounts/${ subAccountIdMock }/productMetrics`
         + `?positionId=${ positionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.brand }`
         + `&metricType=volume`
@@ -141,7 +191,7 @@ describe('AccountsApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsDTOMock)
+          body: JSON.stringify(expectedProductMetricsDTOResponseMock)
         });
         connection.mockRespond(new Response(options));
 
@@ -149,13 +199,14 @@ describe('AccountsApiService', () => {
         expect(connection.request.url).toEqual(expectedRequestUrl);
       });
 
-      accountsApiService.getAccountProductMetrics(
-        accountIdMock,
+      subAccountsApiService.getSubAccountProductMetrics(
+        subAccountIdMock,
         positionIdMock,
         ProductMetricsAggregationType.brand,
         filterStateMock
-      ).subscribe((response: ProductMetricsDTO) => {
-        expect(response).toEqual(productMetricsDTOMock);
+      )
+      .subscribe((response: ProductMetricsDTO) => {
+        expect(response).toEqual(expectedProductMetricsDTOResponseMock);
         done();
       });
     });
@@ -171,8 +222,8 @@ describe('AccountsApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      accountsApiService.getAccountProductMetrics(
-        accountIdMock,
+      subAccountsApiService.getSubAccountProductMetrics(
+        subAccountIdMock,
         positionIdMock,
         ProductMetricsAggregationType.brand,
         filterStateMock
@@ -195,8 +246,8 @@ describe('AccountsApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      accountsApiService.getAccountProductMetrics(
-        accountIdMock,
+      subAccountsApiService.getSubAccountProductMetrics(
+        subAccountIdMock,
         positionIdMock,
         ProductMetricsAggregationType.sku,
         filterStateMock
@@ -204,35 +255,6 @@ describe('AccountsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
-      });
-    });
-  });
-
-  describe('getSubAccounts', () => {
-    it('should call the accounts/subAcccount endpoint and return subAccounts under the passed in account', (done) => {
-      const subAccountsDTOMock: EntitySubAccountDTO[] = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
-      const expectedRequestUrl: string = `/v3/accounts/${ accountIdMock }/subAccounts`
-        + `?positionId=${ positionIdMock }`
-        + `&premiseType=${ filterStateMock.premiseType }`;
-
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(subAccountsDTOMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toBe(RequestMethod.Get);
-        expect(connection.request.url).toBe(expectedRequestUrl);
-      });
-
-      accountsApiService.getSubAccounts(
-        accountIdMock,
-        positionIdMock,
-        filterStateMock.premiseType
-      )
-      .subscribe((response: EntitySubAccountDTO[]) => {
-        expect(response).toEqual(subAccountsDTOMock);
         done();
       });
     });
