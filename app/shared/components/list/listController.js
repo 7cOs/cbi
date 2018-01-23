@@ -966,7 +966,7 @@ module.exports = /*  @ngInject */
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         // This logic is shared across multiple views so we have to detect where we are to fire the correct GA event.
-        if (location.href.includes('/opportunities')) {
+        if ($state.current.name.includes('opportunities')) {
           analyticsService.trackEvent(
            'Opportunities',
             `${addAction ? 'Add' : 'Copy'} to Target List`,
