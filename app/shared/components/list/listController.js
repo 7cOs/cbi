@@ -966,7 +966,7 @@ module.exports = /*  @ngInject */
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         analyticsService.trackEvent(
-          targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel, targetListService.model.currentList.archived),
+          'Opportunities',
           `${addAction ? 'Add' : 'Copy'} to Target List`,
           addAction ? targetList.id : vm.targetListService.model.currentList.id
         );
