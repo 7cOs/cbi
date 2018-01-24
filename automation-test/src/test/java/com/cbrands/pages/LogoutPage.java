@@ -1,21 +1,14 @@
 package com.cbrands.pages;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
-import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.isElementPresent;
 
 public class LogoutPage extends TestNGBasePage {
-  private Log log = LogFactory.getLog(LogoutPage.class);
+  private static final String LOGGED_OUT_MESSAGE = "//*[contains(., 'Logged Out')]";
   private final WebDriver driver;
-
-  @FindBy(how = How.XPATH, using = "//*[contains(., 'Logged Out')]")
-  private WebElement logoutMessage;
 
   public LogoutPage(WebDriver driver) {
     this.driver = driver;
@@ -29,8 +22,7 @@ public class LogoutPage extends TestNGBasePage {
 
   @Override
   public boolean isLoaded() throws Error {
-    waitForVisibleFluentWait(logoutMessage);
-    return logoutMessage.isDisplayed();
+    return isElementPresent(By.xpath(LOGGED_OUT_MESSAGE)) || PageFactory.initElements(driver, LoginPage.class).isLoaded();
   }
 
 }
