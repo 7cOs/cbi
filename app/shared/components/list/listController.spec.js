@@ -2219,11 +2219,14 @@ describe('Unit: list controller', function() {
         },
         id: 'fakeID'
       };
+
       let selectedListMock;
+
       beforeEach(() => {
         selectedListMock = chance.string();
         targetListService.model.currentList.id = selectedListMock;
       });
+
       it('should add to target list and send analytics category of opportunity Add to Target List', () => {
         $state.current.name = 'opportunities';
         expect($state.current.name).toEqual('opportunities');
@@ -2241,6 +2244,7 @@ describe('Unit: list controller', function() {
         expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Add to Target List', destTargetListMock.id);
 
       });
+
       it('should add to target list and send analytics category of opportunity Copy to Target List', () => {
         $state.current.name = 'opportunities';
         expect($state.current.name).toEqual('opportunities');
