@@ -2,6 +2,7 @@ import * as Chance from 'chance';
 
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from './my-performance-table-row.model';
+import { CompassTooltipObject } from './compass-tooltip-component.model';
 
 const chance = new Chance();
 const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
@@ -41,4 +42,12 @@ export function getTeamPerformanceTableOpportunityMock(): TeamPerformanceTableOp
 
 export function getTeamPerformanceTableOpportunitiesMock(): Array<TeamPerformanceTableOpportunity> {
   return Array(chance.natural({min: 1, max: 20})).fill('').map(() => getTeamPerformanceTableOpportunityMock());
+}
+
+export function getTooltipMock(): CompassTooltipObject {
+  return {
+    title: chance.string(),
+    position: 'below',
+    descriptions: Array(chance.natural({min: 1, max: 5})).fill('').map(() => chance.string())
+  };
 }
