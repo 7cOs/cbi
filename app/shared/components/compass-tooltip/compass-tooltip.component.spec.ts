@@ -82,7 +82,7 @@ describe('CompassTooltipComponent', () => {
       const elementPosition = fixture.debugElement.query(By.css('.no_title_below'));
       expect(elementText).not.toBe(null);
       expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions);
+      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
     });
 
     it('should select tooltip without header title, position no_title_above', () => {
@@ -93,7 +93,7 @@ describe('CompassTooltipComponent', () => {
       const elementPosition = fixture.debugElement.query(By.css('.no_title_above'));
       expect(elementText).not.toBe(null);
       expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions);
+      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
     });
 
     it('should select tooltip without header title, position no_title_right', () => {
@@ -104,7 +104,7 @@ describe('CompassTooltipComponent', () => {
       const elementPosition = fixture.debugElement.query(By.css('.no_title_right'));
       expect(elementText).not.toBe(null);
       expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions);
+      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
     });
 
     it('should select tooltip without header title, position no_title_left', () => {
@@ -115,7 +115,7 @@ describe('CompassTooltipComponent', () => {
       const elementPosition = fixture.debugElement.query(By.css('.no_title_left'));
       expect(elementText).not.toBe(null);
       expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions);
+      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
     });
   });
 
