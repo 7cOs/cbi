@@ -181,6 +181,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.updateLoaderStatus();
         this.productMetricsViewType = productMetrics.productMetricsViewType;
         this.tableHeaderRowRight[0] = this.myPerformanceService.getProductMetricsViewTypeLabel(productMetrics.productMetricsViewType);
+        this.fetchOpportunitiesError = this.isOpportunityCountError(productMetrics.opportunityCountsStatus);
 
         if (productMetrics.status === ActionStatus.Fetched && !this.fetchProductMetricsFailure) {
           this.productMetrics = this.myPerformanceTableDataTransformerService.getRightTableData(
@@ -212,7 +213,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsOpportunities = this.shouldShowProductMetricsOpportunities();
-        this.fetchOpportunitiesError = this.isOpportunityCountError();
         this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
@@ -764,8 +764,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     || this.productMetricsState.opportunityCountsStatus === ActionStatus.Fetching;
   }
 
-  private isOpportunityCountError(): boolean {
-    return this.productMetricsState.opportunityCountsStatus === ActionStatus.Error;
+  private isOpportunityCountError(status: ActionStatus): boolean {
+    return status === ActionStatus.Error;
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
