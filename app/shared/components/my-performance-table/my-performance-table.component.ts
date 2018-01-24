@@ -42,6 +42,7 @@ export class MyPerformanceTableComponent {
   @Input() performanceMetric: string;
   @Input() showDateRange: boolean = false;
   @Input() showOpportunities: boolean = false;
+  @Input() opportunitiesError: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;

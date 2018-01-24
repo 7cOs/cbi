@@ -18,6 +18,7 @@ export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
+  @Input() opportunitiesError: boolean = false;
   @Input() showEmptyLastColumn: boolean = false;
   @Input() showX: boolean = false;
   @Input()
@@ -59,5 +60,12 @@ export class MyPerformanceTableRowComponent {
   public opportunityCountClicked(event: Event): void {
     event.stopPropagation();
     this.onOpportunityCountClicked.emit();
+  }
+
+  public getOpportunityCountText(opportunityCount: string): string {
+    if (this.opportunitiesError) {
+      return '-';
+    }
+    return opportunityCount || '0';
   }
 }

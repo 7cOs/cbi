@@ -69,6 +69,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public showLeftBackButton = false;
   public showProductMetricsContributionToVolume: boolean = true;
   public showProductMetricsOpportunities: boolean = false;
+  public fetchOpportunitiesError: boolean = false;
   public showSalesContributionToVolume: boolean = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -211,7 +212,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.responsibilitiesStatus = this.getResponsibilityStatus(current.responsibilities);
         this.showSalesContributionToVolume = this.getShowSalesContributionToVolume();
         this.showProductMetricsOpportunities = this.shouldShowProductMetricsOpportunities();
-
+        this.fetchOpportunitiesError = this.isOpportunityCountError();
         this.fetchResponsibilitiesFailure = current.responsibilities && current.responsibilities.status === ActionStatus.Error;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched && !this.fetchResponsibilitiesFailure) {
@@ -761,6 +762,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private isFetchingProductMetrics(): boolean {
     return this.productMetricsState.status === ActionStatus.Fetching
     || this.productMetricsState.opportunityCountsStatus === ActionStatus.Fetching;
+  }
+
+  private isOpportunityCountError(): boolean {
+    return this.productMetricsState.opportunityCountsStatus === ActionStatus.Error;
   }
 
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {

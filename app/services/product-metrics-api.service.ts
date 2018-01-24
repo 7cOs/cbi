@@ -190,11 +190,12 @@ export class ProductMetricsApiService {
       type: type,
     };
 
-    return this.http.get(url, {
-      params: params
-    })
-      .map(res => res.json())
-      .catch(err => Observable.throw(err));
+     return Observable.throw(null, null);
+    // return this.http.get(url, {
+    //   params: params
+    // })
+    //   .map(res => res.json())
+    //   .catch(err => Observable.throw(err));
   }
 
   public getSubAccountOpportunityCounts(

@@ -317,6 +317,10 @@ tr.two-right-columns-present {
     &.opportunities {
       color: $blue;
       font-weight: normal;
+    } 
+
+    &.opportunities-error {
+      background-color: $very-light-red;
     }
   }
 
