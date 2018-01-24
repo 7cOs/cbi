@@ -7,6 +7,7 @@ import { MdRadioModule, MdRippleModule, MdSelectModule, MdSidenavModule } from '
 import { CompassCardComponent }  from './components/compass-card/compass-card.component';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
 import { CompassSelectComponent } from './components/compass-select/compass-select.component';
+import { CompassTooltipComponent } from './components/compass-tooltip/compass-tooltip.component';
 
 @NgModule({
   imports: [
@@ -19,13 +20,15 @@ import { CompassSelectComponent } from './components/compass-select/compass-sele
   exports: [
     CompassRadioComponent,
     CompassSelectComponent,
+    CompassTooltipComponent,
     MdRippleModule,
     MdSidenavModule
   ],
   declarations: [
     CompassCardComponent,
     CompassRadioComponent,
-    CompassSelectComponent
+    CompassSelectComponent,
+    CompassTooltipComponent
   ]
 })
 
