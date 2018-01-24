@@ -6,7 +6,7 @@ import { DateRangeApiService } from './date-range-api.service';
 import { DateRangeDTO } from '../../../models/date-range-dto.model';
 import { dateRangeDTOsMock } from '../../../models/date-range-dto-collection.model.mock';
 
-describe('Service: DateRangeApiService', () => {
+describe('DateRangeApiService', () => {
   let dateRangeApiService: DateRangeApiService;
   let mockBackend: MockBackend;
 

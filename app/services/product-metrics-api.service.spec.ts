@@ -17,7 +17,7 @@ import { ProductMetricsDTO } from '../models/product-metrics.model';
 
 const chance = new Chance();
 
-describe('Service: ProductMetricsApiService', () => {
+describe('ProductMetricsApiService', () => {
   let productMetricsApiService: ProductMetricsApiService;
   let mockBackend: MockBackend;
   let productMetricsDTOMock: ProductMetricsDTO;

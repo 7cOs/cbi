@@ -28,10 +28,10 @@ export class PositionsApiService {
       .catch((error: Response) => Observable.throw(error));
   }
 
-  public getAlternateHierarchy(positionId: string, contextPositionId: string): Observable<PeopleResponsibilitiesDTO> {
+  public getAlternateHierarchy(positionId: string, alternateHierarchyPositionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchy`;
     const params = {
-      contextPositionId: contextPositionId
+      contextPositionId: alternateHierarchyPositionId
     };
 
     return this.http.get(url, { params: params })
@@ -41,14 +41,17 @@ export class PositionsApiService {
 
   public getAlternateHierarchyGroupPerformance(
     positionId: string,
-    alternateHierarchyId: string,
-    groupType: string,
+    alternateHierarchyPositionId: string,
+    groupTypeCode: string,
     brandSkuCode: string,
     skuPackageType: SkuPackageType,
     filter: MyPerformanceFilterState
   ): Observable<PerformanceDTO> {
-    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ groupType }/performanceTotal`;
+    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ groupTypeCode }/performanceTotal`;
     const params = Object.assign({},
+      {
+        contextPositionId: alternateHierarchyPositionId
+      },
       this.apiHelperService.getFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
@@ -59,7 +62,7 @@ export class PositionsApiService {
 
   public getAlternateHierarchyPersonPerformance(
     positionId: string,
-    alternateHierarchyId: string,
+    alternateHierarchyPositionId: string,
     brandSkuCode: string,
     skuPackageType: SkuPackageType,
     filter: MyPerformanceFilterState
@@ -67,7 +70,7 @@ export class PositionsApiService {
     const url = `/v3/positions/${ positionId }/alternateHierarchyPerformanceTotal`;
     const params = Object.assign({},
       {
-        contextPositionId: alternateHierarchyId
+        contextPositionId: alternateHierarchyPositionId
       },
       this.apiHelperService.getFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
@@ -79,14 +82,14 @@ export class PositionsApiService {
 
   public getAlternateHierarchyPersonProductMetrics(
     positionId: string,
-    contextPositionId: string,
+    alternateHierarchyPositionId: string,
     aggregationLevel: ProductMetricsAggregationType,
     filter: MyPerformanceFilterState
   ): Observable<ProductMetricsDTO> {
     const url = `/v3/positions/${positionId}/alternateHierarchyProductMetrics`;
     const params = Object.assign({},
       {
-        contextPositionId: contextPositionId,
+        contextPositionId: alternateHierarchyPositionId,
         aggregationLevel: aggregationLevel
       },
       this.apiHelperService.getFilterStateParams(filter));
@@ -98,16 +101,16 @@ export class PositionsApiService {
 
   public getAlternateHierarchyRoleGroupProductMetrics(
     positionId: string,
-    entityType: string,
-    contextPositionId: string,
+    groupTypeCode: string,
+    alternateHierarchyPositionId: string,
     aggregationLevel: ProductMetricsAggregationType,
     filter: MyPerformanceFilterState
   ): Observable<ProductMetricsDTO> {
-    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ entityType }/productMetrics`;
+    const url = `/v3/positions/${ positionId }/alternateHierarchy/${ groupTypeCode }/productMetrics`;
     const params = Object.assign({},
       {
-        aggregationLevel: aggregationLevel,
-        contextPositionId: contextPositionId
+        contextPositionId: alternateHierarchyPositionId,
+        aggregationLevel: aggregationLevel
       },
       this.apiHelperService.getFilterStateParams(filter));
 
@@ -126,19 +129,19 @@ export class PositionsApiService {
 
   public getHierarchyGroupPerformance(
     positionId: string,
-    groupType: string,
+    groupTypeCode: string,
     brandSkuCode: string,
     skuPackageType: SkuPackageType,
     filter: MyPerformanceFilterState
   ): Observable<PerformanceDTO> {
-    const url = `/v3/positions/${ positionId }/responsibilities/${ groupType }/performanceTotal`;
+    const url = `/v3/positions/${ positionId }/responsibilities/${ groupTypeCode }/performanceTotal`;
     const params = Object.assign({},
       this.apiHelperService.getFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
-      .catch((error: Response) => Observable.throw(error));
+      .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getPeopleResponsibilities(positionId: string): Observable<PeopleResponsibilitiesDTO> {
@@ -184,11 +187,11 @@ export class PositionsApiService {
 
   public getRoleGroupProductMetrics(
     positionId: string,
-    entityType: string,
+    groupTypeCode: string,
     aggregationLevel: ProductMetricsAggregationType,
     filter: MyPerformanceFilterState
   ): Observable<ProductMetricsDTO> {
-    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/productMetrics`;
+    const url = `/v3/positions/${ positionId }/responsibilities/${ groupTypeCode }/productMetrics`;
     const params = Object.assign({},
       {
         aggregationLevel: aggregationLevel
