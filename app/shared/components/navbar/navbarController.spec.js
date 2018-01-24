@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, $mdSelect, $mdDialog, notificationsService, opportunitiesService, targetListService, notesService, filtersService, userService;
+  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, $mdSelect, $mdDialog, analyticsService, notificationsService, opportunitiesService, targetListService, notesService, filtersService, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,6 +7,12 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.navbar');
     angular.mock.module('angularMoment');
+    angular.mock.module(($provide) => {
+      analyticsService = {
+        trackEvent: () => {}
+      };
+      $provide.value('analyticsService', analyticsService);
+    });
 
     inject(function(_$rootScope_, $controller, _$q_, _$httpBackend_, _$window_, _$state_, _$mdMenu_, _$mdSelect_, _$mdDialog_, _notificationsService_, _opportunitiesService_, _userService_, _versionService_, _targetListService_, _notesService_, _filtersService_) {
       $rootScope = _$rootScope_;
@@ -338,10 +344,10 @@ describe('Unit: list controller', function() {
           then: function(callback) { return callback({}); }
         };
       });
-    });
-    it('should return false if the form is invalid', function() {
       var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
       ctrl.userService.model.targetLists = {owned: targetLists};
+    });
+    it('should return false if the form is invalid', function() {
       ctrl.addOpportunityForm = {$invalid: true};
       var opportunity = ctrl.addOpportunity({properties: {targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
       expect(opportunity).toEqual(false);
@@ -350,12 +356,10 @@ describe('Unit: list controller', function() {
       spyOn($mdDialog, 'hide').and.callThrough();
       spyOn(opportunitiesService, 'createOpportunity').and.callFake(function() {
         return {
-          then: function(callback) { return callback({product: {brand: 'corona'}}); }
+          then: function(callback) { return callback({id: '1234', product: {brand: 'corona'}}); }
         };
       });
-
-      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
-      ctrl.userService.model.targetLists = {owned: targetLists};
+      spyOn(analyticsService, 'trackEvent');
       ctrl.addOpportunityForm = {$invalid: false};
       ctrl.chosenStoreObject = {id: '23423'};
       ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
@@ -364,7 +368,46 @@ describe('Unit: list controller', function() {
       expect($mdDialog.hide).toHaveBeenCalled();
       expect(opportunity).toEqual(undefined);
       expect(ctrl.cachedOpportunity).toEqual(JSON.parse('{"properties":{"product":{"type":"sku"},"distributionType":{"type":"new"}}}'));
-
+    });
+  });
+  describe('Add Opportunity GA Events', () => {
+    beforeEach(function() {
+      spyOn(opportunitiesService, 'deleteOpportunityFeedback').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+      spyOn(analyticsService, 'trackEvent');
+      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
+      ctrl.userService.model.targetLists = {owned: targetLists};
+    });
+    it('should track event of add opportunity if there is an id returned', () => {
+      spyOn(opportunitiesService, 'createOpportunity').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({id: '1234', product: {brand: 'corona'}}); }
+        };
+      });
+      ctrl.addOpportunityForm = {$invalid: false};
+      ctrl.chosenStoreObject = {id: '23423'};
+      ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
+      ctrl.addOpportunity({id: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c', properties: {impact: {enum: ''}, rationale: {other: ''}, store: {id: '234234'}, distributionType: {type: ''}, product: {type: 'test'}, targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        'Opportunities',
+        'Add Opportunity',
+        '1234'
+      );
+    });
+    it('should not track event of add opportunity if there is no id returned', () => {
+      spyOn(opportunitiesService, 'createOpportunity').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({product: {brand: 'corona'}}); }
+        };
+      });
+      ctrl.addOpportunityForm = {$invalid: false};
+      ctrl.chosenStoreObject = {id: '23423'};
+      ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
+      ctrl.addOpportunity({id: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c', properties: {impact: {enum: ''}, rationale: {other: ''}, store: {id: '234234'}, distributionType: {type: ''}, product: {type: 'test'}, targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
+      expect(analyticsService.trackEvent).toHaveBeenCalledTimes(0);
     });
   });
   describe('[nb.closeMenus]', function() {

@@ -26,7 +26,7 @@ import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.m
 import { getMyPerformanceEntitiesDataMock,
          getMyPerformanceStateMock,
          getResponsibilitesStateMock } from '../../state/reducers/my-performance.state.mock';
-import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getMyPerformanceTableRowMock, getTeamPerformanceTableOpportunityMock } from '../../models/my-performance-table-row.model.mock';
 import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
 import { getProductMetricsBrandMock,
          getProductMetricsSkuMock,
@@ -46,6 +46,7 @@ import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../mo
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
+import { OpportunitiesSearchHandoffService } from '../../services/opportunities-search-handoff.service';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
 import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../../enums/team-performance-table-header.enum';
@@ -145,6 +146,7 @@ describe('MyPerformanceComponent', () => {
     products: {},
     productMetricsViewType: ProductMetricsViewType.brands
   };
+  let opportunitiesSearchHandoffServiceMock: any;
 
   function generateMockVersions(min: number, max: number): MyPerformanceEntitiesData[] {
     return Array(chance.natural({min: min, max: max})).fill('').map(() => getMyPerformanceEntitiesDataMock());
@@ -178,6 +180,7 @@ describe('MyPerformanceComponent', () => {
     myPerformanceProductMetricsViewType: chance.string(),
     myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: dateRangeStateMock,
+    go: jasmine.createSpy('go'),
     href: jasmine.createSpy('href'),
     current: {title: chance.string(), exceptionHierarchy: false}
   };
@@ -231,6 +234,9 @@ describe('MyPerformanceComponent', () => {
       getPremiseTypeStateLabel: jasmine.createSpy('getPremiseTypeStateLabel').and.callThrough()
     };
     analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
+    opportunitiesSearchHandoffServiceMock = {
+      setOpportunitySearchChipsAndFilters: jasmine.createSpy('setOpportunitySearchChipsAndFilters')
+    };
 
     TestBed.configureTestingModule({
       declarations: [
@@ -246,6 +252,10 @@ describe('MyPerformanceComponent', () => {
         MdSidenavModule
       ],
       providers: [
+        {
+          provide: OpportunitiesSearchHandoffService,
+          useValue: opportunitiesSearchHandoffServiceMock
+        },
         {
           provide: AnalyticsService,
           useValue: analyticsServiceMock
@@ -3771,6 +3781,100 @@ describe('MyPerformanceComponent', () => {
       componentInstance.toggleOpportunityTable();
 
       expect(componentInstanceCopy.isOpportunityTableExtended).toBeFalsy();
+    });
+  });
+
+  describe('handleOpportunityClicked', () => {
+    let opportunityMock: TeamPerformanceTableOpportunity;
+
+    beforeEach(() => {
+      componentInstanceCopy.selectedBrandSkuPackageName = chance.string();
+      componentInstanceCopy.selectedDistributorCode = chance.string();
+      componentInstanceCopy.opportunitiesBrandSkuCode = chance.string();
+      componentInstanceCopy.filterState.premiseType = PremiseTypeValue.Off;
+      componentInstanceCopy.selectedSalesHierarchyEntityName = chance.string();
+      componentInstanceCopy.selectedBrandCode = chance.string();
+      componentInstanceCopy.opportunitiesSkuPackageType = chance.string();
+      componentInstanceCopy.selectedSubaccountCode = chance.string();
+      componentInstanceCopy.salesHierarchyViewType = SalesHierarchyViewType.distributors;
+      opportunityMock = getTeamPerformanceTableOpportunityMock();
+    });
+
+    it('should call OpportunitiesSearchHandoffService#setOpportunitySearchChipsAndFilters', () => {
+      componentInstance.handleOpportunityClicked(opportunityMock);
+      expect(opportunitiesSearchHandoffServiceMock.setOpportunitySearchChipsAndFilters).toHaveBeenCalledWith(
+        componentInstanceCopy.selectedBrandSkuPackageName,
+        componentInstanceCopy.selectedDistributorCode,
+        opportunityMock,
+        componentInstanceCopy.opportunitiesBrandSkuCode,
+        componentInstanceCopy.filterState.premiseType,
+        componentInstanceCopy.selectedSalesHierarchyEntityName,
+        componentInstanceCopy.selectedBrandCode,
+        undefined,
+        componentInstanceCopy.opportunitiesSkuPackageType,
+        componentInstanceCopy.selectedSubaccountCode,
+        componentInstanceCopy.salesHierarchyViewType,
+        undefined
+      );
+    });
+
+    it('should set brandNameForSkuPackage if opportunitiesSkuPackageCode is defined', () => {
+      const brandDescriptionMock = chance.string();
+      componentInstanceCopy.opportunitiesSkuPackageType = chance.string();
+      componentInstanceCopy.opportunitiesSkuPackageCode = chance.string();
+      componentInstanceCopy.productMetricsState = {
+        selectedBrandCodeValues: {
+          brandDescription: brandDescriptionMock
+        }
+      };
+      componentInstance.handleOpportunityClicked(opportunityMock);
+      expect(opportunitiesSearchHandoffServiceMock.setOpportunitySearchChipsAndFilters).toHaveBeenCalledWith(
+        componentInstanceCopy.selectedBrandSkuPackageName,
+        componentInstanceCopy.selectedDistributorCode,
+        opportunityMock,
+        componentInstanceCopy.opportunitiesBrandSkuCode,
+        componentInstanceCopy.filterState.premiseType,
+        componentInstanceCopy.selectedSalesHierarchyEntityName,
+        componentInstanceCopy.selectedBrandCode,
+        componentInstanceCopy.opportunitiesSkuPackageCode,
+        componentInstanceCopy.opportunitiesSkuPackageType,
+        componentInstanceCopy.selectedSubaccountCode,
+        componentInstanceCopy.salesHierarchyViewType,
+        brandDescriptionMock
+      );
+    });
+
+    it('should call $state#go to navigate to opportunities search page', () => {
+      componentInstance.handleOpportunityClicked(opportunityMock);
+      expect(stateMock.go).toHaveBeenCalledWith(
+        'opportunities',
+        {
+          resetFiltersOnLoad: false,
+          applyFiltersOnLoad: true,
+          referrer: 'team-performance'
+        }
+      );
+    });
+
+    it('should call analyticsService#track event with subAccountID for label when a subAccount is selected', () => {
+      componentInstanceCopy.selectedSubaccountCode = chance.string();
+      componentInstance.handleOpportunityClicked(opportunityMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Navigation',
+        'Go To Opportunities',
+        componentInstanceCopy.selectedSubaccountCode
+      );
+    });
+
+    it('should call analyticsService#track event with distributorCode for label when a subAccount is NOT selected', () => {
+      componentInstanceCopy.selectedDistributorCode = chance.string();
+      componentInstanceCopy.selectedSubaccountCode = null;
+      componentInstance.handleOpportunityClicked(opportunityMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Navigation',
+        'Go To Opportunities',
+        componentInstanceCopy.selectedDistributorCode
+      );
     });
   });
 

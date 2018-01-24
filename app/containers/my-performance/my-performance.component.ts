@@ -31,6 +31,7 @@ import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.r
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../../state/actions/product-metrics.action';
+import { OpportunitiesSearchHandoffService } from '../../services/opportunities-search-handoff.service';
 import { ProductMetricsState } from '../../state/reducers/product-metrics.reducer';
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
@@ -113,9 +114,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private drillStatus: DrillStatus;
   private teamPerformanceTableOpportunities: TeamPerformanceTableOpportunity[];
   private selectedBrandSkuPackageName: string;
+  private opportunitiesBrandSkuCode: string;
   private selectedSalesHierarchyEntityName: string;
   private selectedOpportunityCountTotal: number;
   private clickedSalesHierarchyEntityName: string;
+  private opportunitiesSkuPackageCode: string;
+  private opportunitiesSkuPackageType: string;
 
   constructor(
     private store: Store<AppState>,
@@ -125,7 +129,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     private myPerformanceService: MyPerformanceService,
     private titleService: Title,
     private windowService: WindowService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private opportunitiesSearchHandoffService: OpportunitiesSearchHandoffService
   ) { }
 
   ngOnInit() {
@@ -423,12 +428,51 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.teamPerformanceTableOpportunities = this.productMetricsState.opportunityCounts[selectedProductCode].opportunityCounts;
     this.selectedSalesHierarchyEntityName = this.clickedSalesHierarchyEntityName;
     this.selectedBrandSkuPackageName = myPerformanceTableRow.descriptionRow0;
+    this.opportunitiesBrandSkuCode = myPerformanceTableRow.metadata.brandCode;
+    this.opportunitiesSkuPackageCode = myPerformanceTableRow.metadata.skuPackageCode;
+    this.opportunitiesSkuPackageType = myPerformanceTableRow.metadata.skuPackageType;
     this.selectedOpportunityCountTotal = myPerformanceTableRow.opportunities;
     this.isOpportunityTableExtended = true;
   }
 
   public handleOpportunityClicked(opportunity: TeamPerformanceTableOpportunity): void {
-    console.log('Opportunity Clicked: ', opportunity);
+    const brandSkuPackageName: string = this.selectedBrandSkuPackageName;
+    const distributorCode: string = this.selectedDistributorCode;
+    const opportunitiesBrandSkuCode: string = this.opportunitiesBrandSkuCode;
+    const premiseType: PremiseTypeValue = this.filterState.premiseType;
+    const salesHierarchyEntityName: string = this.selectedSalesHierarchyEntityName;
+    const selectedBrandCode: string = this.selectedBrandCode;
+    const skuPackageCode: string = this.opportunitiesSkuPackageCode;
+    const skuPackageType: string = this.opportunitiesSkuPackageType;
+    const subAccountID: string = this.selectedSubaccountCode;
+    const viewType: string = this.salesHierarchyViewType;
+
+    let brandNameForSkuPackage: string;
+    if (skuPackageCode) brandNameForSkuPackage = this.productMetricsState.selectedBrandCodeValues.brandDescription;
+
+    this.opportunitiesSearchHandoffService.setOpportunitySearchChipsAndFilters(
+      brandSkuPackageName,
+      distributorCode,
+      opportunity,
+      opportunitiesBrandSkuCode,
+      premiseType,
+      salesHierarchyEntityName,
+      selectedBrandCode,
+      skuPackageCode,
+      skuPackageType,
+      subAccountID,
+      viewType,
+      brandNameForSkuPackage
+    );
+
+    const analyticsLabel = subAccountID || distributorCode;
+    this.analyticsService.trackEvent('Navigation', 'Go To Opportunities', analyticsLabel);
+
+    this.$state.go('opportunities', {
+      resetFiltersOnLoad: false,
+      applyFiltersOnLoad: true,
+      referrer: 'team-performance'
+    });
   }
 
   private sendFilterAnalyticsEvent(): void {
