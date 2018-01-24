@@ -2,7 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
+import { AccountsApiService } from '../../services/api/v3/accounts-api.service';
+import { ApiHelperService } from '../../services/api-helper.service';
 import { BeerLoaderComponent } from '../../shared/components/beer-loader/beer-loader.component';
+import { DistributorsApiService } from '../../services/api/v3/distributors-api.service';
 import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterComponent } from '../../shared/components/my-performance-filter/my-performance-filter.component';
@@ -14,11 +17,13 @@ import { MyPerformanceApiService } from '../../services/my-performance-api.servi
 import { ProductMetricsApiService } from '../../services/product-metrics-api.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
+import { PositionsApiService } from '../../services/api/v3/positions-api.service';
 import { ProductMetricsTransformerService } from  '../../services/product-metrics-transformer.service';
 import { ResponsibilitiesTransformerService } from  '../../services/responsibilities-transformer.service';
 import { ResponsibilitiesService } from  '../../services/responsibilities.service';
 import { SharedModule } from '../../shared/shared.module';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
+import { SubAccountsApiService } from '../../services/api/v3/sub-accounts-api.service';
 import { TeamPerformanceOpportunitiesComponent }
   from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
 import { WindowService } from '../../services/window.service';
@@ -40,15 +45,20 @@ import { WindowService } from '../../services/window.service';
     TeamPerformanceOpportunitiesComponent
   ],
   providers: [
+    AccountsApiService,
+    ApiHelperService,
+    DistributorsApiService,
     MyPerformanceApiService,
     MyPerformanceTableDataTransformerService,
     MyPerformanceService,
     PerformanceTransformerService,
+    PositionsApiService,
     ProductMetricsApiService,
     ProductMetricsService,
     ProductMetricsTransformerService,
     ResponsibilitiesService,
     ResponsibilitiesTransformerService,
+    SubAccountsApiService,
     Title,
     WindowService
   ]

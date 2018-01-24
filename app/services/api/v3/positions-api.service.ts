@@ -20,15 +20,18 @@ export class PositionsApiService {
     private http: Http
   ) { }
 
-  public getAccounts(positionId: string): Observable<EntityDTO[]> {
-    const url = `/v3/positions/${ positionId }/accounts`;
+  public getAccountsOrDistributors(entityURI: string): Observable<EntityDTO[]> {
+    const url = `/v3${ entityURI }`;
 
     return this.http.get(url)
-      .map((res: Response) => res.json())
+      .map(res => res.json())
       .catch((error: Response) => Observable.throw(error));
   }
 
-  public getAlternateHierarchy(positionId: string, alternateHierarchyPositionId: string): Observable<PeopleResponsibilitiesDTO> {
+  public getAlternateHierarchy(
+    positionId: string,
+    alternateHierarchyPositionId: string
+  ): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/alternateHierarchy`;
     const params = {
       contextPositionId: alternateHierarchyPositionId
@@ -117,14 +120,6 @@ export class PositionsApiService {
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
       .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
-  }
-
-  public getDistributors(positionId: string): Observable<EntityDTO[]> {
-    const url = `/v3/positions/${ positionId }/distributors`;
-
-    return this.http.get(url)
-      .map((res: Response) => res.json())
-      .catch((error: Response) => Observable.throw(error));
   }
 
   public getHierarchyGroupPerformance(

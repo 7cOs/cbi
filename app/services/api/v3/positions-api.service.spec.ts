@@ -76,10 +76,11 @@ describe('PositionsApiService', () => {
     };
   }));
 
-  describe('getAccounts', () => {
-    it('should call the Positions Accounts endpoint and return account EntityDTO data for the given PositionId', (done) => {
+  describe('getAccountsOrDistributors', () => {
+    it('should call the passed in EntityURI endpoint and return Accounts or Distributors', (done) => {
       const expectedEntityDTOResponseMock: EntityDTO[] = [getEntityDTOMock()];
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/accounts`;
+      const entityURIMock: string = chance.string(chanceStringOptions);
+      const expectedRequestUrl: string = `/v3${entityURIMock}`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -91,7 +92,7 @@ describe('PositionsApiService', () => {
         expect(connection.request.url).toEqual(expectedRequestUrl);
       });
 
-      positionsApiService.getAccounts(positionIdMock).subscribe((response: EntityDTO[]) => {
+      positionsApiService.getAccountsOrDistributors(entityURIMock).subscribe((response: EntityDTO[]) => {
         expect(response).toEqual(expectedEntityDTOResponseMock);
         done();
       });
@@ -399,28 +400,6 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
-      });
-    });
-  });
-
-  describe('getDistributors', () => {
-    it('should call the Positions Distributors endpoint and return distributor EntityDTO data for the given PositionId', (done) => {
-      const expectedEntityDTOResponseMock: EntityDTO[] = [getEntityDTOMock()];
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/distributors`;
-
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(expectedEntityDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
-      positionsApiService.getDistributors(positionIdMock).subscribe((response: EntityDTO[]) => {
-        expect(response).toEqual(expectedEntityDTOResponseMock);
         done();
       });
     });
