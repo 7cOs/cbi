@@ -994,7 +994,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         chipsService.resetChipsFilters(chipsService.model);
       }
 
-      setUserSpecificModels();
       setStateParamModels();
 
       if (isNavigatedFromOpps) {
@@ -1006,6 +1005,9 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       } else if (isNavigatedFromScorecard) {
         setDataForNavigationFromScorecard();
       }
+
+      setUserSpecificModels();
+
       if (!isNavigatedFromMyPerformanceSubaccountRow && !isNavigatedFromScorecard) {
         getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
