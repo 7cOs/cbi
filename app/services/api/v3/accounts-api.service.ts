@@ -30,7 +30,7 @@ export class AccountsApiService {
     const url = `/v3/accounts/${ accountId }/performanceTotal`;
     const params = Object.assign({},
       {
-        positionId: positionId // TODO: Check if this needs to be explicitly added
+        positionId: positionId
       },
       this.apiHelperService.getFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));

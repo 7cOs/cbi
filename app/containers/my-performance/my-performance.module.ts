@@ -13,8 +13,6 @@ import { MyPerformanceTableComponent } from '../../shared/components/my-performa
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceService } from '../../services/my-performance.service';
-import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { ProductMetricsApiService } from '../../services/product-metrics-api.service';
 import { ProductMetricsService } from '../../services/product-metrics.service';
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { PositionsApiService } from '../../services/api/v3/positions-api.service';
@@ -48,12 +46,10 @@ import { WindowService } from '../../services/window.service';
     AccountsApiService,
     ApiHelperService,
     DistributorsApiService,
-    MyPerformanceApiService,
     MyPerformanceTableDataTransformerService,
     MyPerformanceService,
     PerformanceTransformerService,
     PositionsApiService,
-    ProductMetricsApiService,
     ProductMetricsService,
     ProductMetricsTransformerService,
     ResponsibilitiesService,

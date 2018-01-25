@@ -54,7 +54,7 @@ export class ApiHelperService {
         totalYearAgo: 0
       });
     } else {
-      return Observable.throw(new Error(error.text())); // TODO: Check what gets returned
+      return Observable.throw(new Error(error.text()));
     }
   }
 

@@ -9,7 +9,7 @@ import { AnalyticsEventDirective } from './directives/analytics-event.directive'
 import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
 import { CalculatorService } from './services/calculator.service';
-import { DateRangeApiService } from './services/date-range-api.service';
+import { DateRangeApiService } from './services/api/v3/date-range-api.service';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
 import { DateRangeTransformerService } from './services/date-range-transformer.service';

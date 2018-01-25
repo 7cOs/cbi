@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 
 import { DateRange } from '../../models/date-range.model';
-import { DateRangeApiService } from '../../services/date-range-api.service';
+import { DateRangeApiService } from '../../services/api/v3/date-range-api.service';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
 import { DateRangesEffects } from './date-ranges.effect';
 import { DateRangeTransformerService } from '../../services/date-range-transformer.service';

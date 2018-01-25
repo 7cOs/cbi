@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { DateRangeApiService } from '../../services/date-range-api.service';
+import { DateRangeApiService } from '../../services/api/v3/date-range-api.service';
 import * as DateRangesActions from '../../state/actions/date-ranges.action';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
 import { DateRangeTransformerService } from '../../services/date-range-transformer.service';
