@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 export class CompassTooltipComponent {
 
   @Input() title: string;
-  @Input() description: string;
+  @Input() descriptions: Array <string>;
   @Input() position: string;
   @Input() label: string;
 
