@@ -236,7 +236,7 @@ module.exports = /*  @ngInject */
     }
 
     function featureTypeText() {
-      return vm.filtersService.model.selected.featureType.length === vm.filtersService.model.featureType.length
+      return vm.filtersService.model.selected.featureType && vm.filtersService.model.selected.featureType.length === vm.filtersService.model.featureType.length
         ? _allTypesOption
         : vm.filtersService.model.selected.featureType
           ? vm.filtersService.model.selected.featureType.join(', ') || _noTypesSelected
@@ -244,7 +244,7 @@ module.exports = /*  @ngInject */
     }
 
     function autorizationProductTypesText() {
-      return vm.filtersService.model.selected.itemAuthorizationType.length === vm.filtersService.model.itemAuthorizationType.length
+      return vm.filtersService.model.selected.itemAuthorizationType && vm.filtersService.model.selected.itemAuthorizationType.length === vm.filtersService.model.itemAuthorizationType.length
         ? _allTypesOption
         : vm.filtersService.model.selected.itemAuthorizationType
           ? vm.filtersService.model.selected.itemAuthorizationType.join(', ') || _noTypesSelected
