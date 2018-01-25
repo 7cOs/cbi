@@ -66,6 +66,6 @@ export class MyPerformanceTableRowComponent {
     if (opportunitiesError) {
       return '-';
     }
-    return opportunityCount.toString() || '0';
+    return opportunityCount ? opportunityCount.toString() : '0';
   }
 }
