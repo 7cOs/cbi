@@ -246,5 +246,11 @@ export const dateRangeDTOsMock: DateRangeDTO[] = [
       'description': 'From First Day of Last Calendar Year to Last Closed Month',
       'startDate': '20160101',
       'endDate': '20160531'
+    },
+    {
+      'code': 'FQTD',
+      'description': 'Fiscal Quarter to Date',
+      'startDate': '20171201',
+      'endDate': '20180119'
     }
   ];

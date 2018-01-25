@@ -87,6 +87,12 @@ describe('DateRangeComponent', () => {
     expect(daterangeElement.textContent).toBe(dateRangeStateMock.CYTM.range);
   });
 
+  it('FQTD date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.FQTD;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.FQTD.range);
+  });
+
   it('LCM (Clo Mth) date-range check', () => {
     componentInstance.dateRange = DateRangeTimePeriod.LCM;
     fixture.detectChanges();

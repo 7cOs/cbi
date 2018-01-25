@@ -63,5 +63,6 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
       [premiseType]="currentPremiseTypeLabel",
       [subtitle]="selectedSalesHierarchyEntityName",
       [total]="selectedOpportunityCountTotal",
+      [tooltip]="opportunitiesTooltip",
       (onCloseIndicatorClicked)="toggleOpportunityTable()",
       (onOpportunityCountClicked)="handleOpportunityClicked($event)")
