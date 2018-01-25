@@ -42,4 +42,3 @@ export function getTeamPerformanceTableOpportunityMock(): TeamPerformanceTableOp
 export function getTeamPerformanceTableOpportunitiesMock(): Array<TeamPerformanceTableOpportunity> {
   return Array(chance.natural({min: 1, max: 20})).fill('').map(() => getTeamPerformanceTableOpportunityMock());
 }
-
