@@ -12,7 +12,7 @@ export class DateRangeTransformerService {
   private dateRangeDisplayCodes: any = {
     'FYTM': 'FYTM',
     'CYTM': 'CYTM',
-    'CQTD': ' CQTD',
+    'CQTD': 'CQTD',
     'CYTDBDL': 'CYTD',
     'FYTDBDL': 'FYTD',
     'L60BDL': 'L60 Days',
