@@ -62,10 +62,10 @@ export class MyPerformanceTableRowComponent {
     this.onOpportunityCountClicked.emit();
   }
 
-  public getOpportunityCountText(opportunityCount: string): string {
-    if (this.opportunitiesError) {
+  public getOpportunityCountText(opportunityCount: number, opportunitiesError: boolean): string {
+    if (opportunitiesError) {
       return '-';
     }
-    return opportunityCount || '0';
+    return opportunityCount.toString() || '0';
   }
 }
