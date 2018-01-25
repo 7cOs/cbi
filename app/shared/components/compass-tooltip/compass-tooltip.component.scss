@@ -27,7 +27,7 @@
       /* Position the tooltip text */
       position: absolute;
       overflow: visible;
-      font-size: 0.8em;
+      font-size: 12px;
       z-index: 999;
 
       &.tooltip_text_with_title {
@@ -40,7 +40,7 @@
     }
 
     label {
-      margin-bottom: -0.25em;
+      margin-bottom: -5.5px;
     }
 
     h2, h3 {
@@ -51,7 +51,7 @@
       line-height: 1.45;
       letter-spacing: 1;
       text-align: left;
-      color: #4a4a4a;
+      color: $gray-1;
       color: var(--cbiGrey74);
     }
 
@@ -61,7 +61,7 @@
       line-height: 1.5;
       text-align: left;
       text-transform: none;
-      color: #4a4a4a;
+      color: $gray-1;
       color: var(--cbiGrey74);
     }
 
@@ -91,22 +91,22 @@
     }
 
     .title_right {
-      top: -1em;
+      top: -16px;
       left: 110%;
     }
 
     .no_title_right {
-      top: -1em;
+      top: -16px;
       left: 60%;
     }
 
     .title_left {
-      top: -1em;
+      top: -16px;
       right: 110%;
     }
 
     .no_title_left {
-      top: -1em;
+      top: -16px;
       right: 60%;
     }
 

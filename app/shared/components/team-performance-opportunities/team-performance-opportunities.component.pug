@@ -4,11 +4,11 @@ section.opportunities-component-section
     .header-summary
       .header-title Opportunities
       .header-sub-title {{ subtitle }}
-    .header-tooltip
+    .header-tooltip(*ngIf='tooltip.descriptions')
       compass-tooltip(
-        [title]="tooltipTitle",
-        [description]="tooltipDescription",
-        [position]="tooltipPosition")
+        [title]= "tooltip.title",
+        [descriptions]="tooltip.descriptions",
+        [position]="tooltip.position")
     .close-indicator-container
       img.close-indicator(src="../../../assets/img/icons/thin-x.svg", (click)="onCloseIndicatorClicked.emit()")
 
