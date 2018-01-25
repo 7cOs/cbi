@@ -131,6 +131,12 @@ module.exports = /*  @ngInject */
           v3ApiCode: 'FQTD',
           id: 7,
           type: 'year'
+        }, {
+          name: 'CCQTD',
+          displayValue: 'Clo Cal Qtr',
+          v3ApiCode: 'CCQTD',
+          id: 8,
+          type: 'year'
         }]
       },
       distributionTimePeriod: {

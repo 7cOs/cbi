@@ -13,6 +13,7 @@ describe('Date Ranges Reducer', () => {
       CYTDBDL: initialState.CYTDBDL,
       FYTDBDL: initialState.FYTDBDL,
       FQTD: initialState.FQTD,
+      CCQTD: initialState.CCQTD,
       L60BDL: initialState.L60BDL,
       L90BDL: initialState.L90BDL,
       L120BDL: initialState.L120BDL,
@@ -41,7 +42,8 @@ describe('Date Ranges Reducer', () => {
       CMIPBDL: dateRangeCollectionMock[7],
       L120BDL: dateRangeCollectionMock[8],
       CYTDBDL: dateRangeCollectionMock[9],
-      FQTD: dateRangeCollectionMock[10]
+      FQTD: dateRangeCollectionMock[10],
+      CCQTD: dateRangeCollectionMock[11]
     };
 
     const actualState = dateRangesReducer(initialState, new DateRangesActions.FetchDateRangesSuccessAction(payload));
@@ -57,6 +59,7 @@ describe('Date Ranges Reducer', () => {
       CYTDBDL: initialState.CYTDBDL,
       FYTDBDL: initialState.FYTDBDL,
       FQTD: initialState.FQTD,
+      CCQTD: initialState.CCQTD,
       L60BDL: initialState.L60BDL,
       L90BDL: initialState.L90BDL,
       L120BDL: initialState.L120BDL,
