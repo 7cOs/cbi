@@ -56,6 +56,12 @@ export const dateRangeDTOsMock: DateRangeDTO[] = [
       'endDate': '20170531'
     },
     {
+      'code': 'CQTD',
+      'description': 'Calendar Quarter to Date',
+      'startDate': '20171001',
+      'endDate': '20172022'
+    },
+    {
       'code': 'FYTM',
       'description': 'From First Day of Current Fiscal Year to Last Closed Month',
       'startDate': '20170301',

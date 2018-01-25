@@ -6,6 +6,7 @@ export interface DateRangesState extends State {
   status: ActionStatus;
   FYTM: DateRange;
   CYTM: DateRange;
+  CQTD: DateRange;
   CYTDBDL: DateRange;
   FYTDBDL: DateRange;
   L60BDL: DateRange;
@@ -27,6 +28,7 @@ export const initialState: DateRangesState = {
   status: ActionStatus.NotFetched,
   FYTM: initialDateRangeState,
   CYTM: initialDateRangeState,
+  CQTD: initialDateRangeState,
   CYTDBDL: initialDateRangeState,
   FYTDBDL: initialDateRangeState,
   L60BDL: initialDateRangeState,
@@ -53,6 +55,7 @@ export function dateRangesReducer(
         status: ActionStatus.Fetched,
         FYTM: action.payload.find(dateRange => dateRange.code === 'FYTM'),
         CYTM: action.payload.find(dateRange => dateRange.code === 'CYTM'),
+        CQTD: action.payload.find(dateRange => dateRange.code === 'CQTD'),
         CYTDBDL: action.payload.find(dateRange => dateRange.code === 'CYTDBDL'),
         FYTDBDL: action.payload.find(dateRange => dateRange.code === 'FYTDBDL'),
         L60BDL: action.payload.find(dateRange => dateRange.code === 'L60BDL'),

@@ -63,6 +63,12 @@ describe('DateRangeComponent', () => {
     expect(daterangeElement.textContent).toBe(dateRangeStateMock.FYTDBDL.range);
   });
 
+  it('CQTD date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.CQTD;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.CQTD.range);
+  });
+
   it('CYTD date-range check', () => {
     componentInstance.dateRange = DateRangeTimePeriod.CYTDBDL;
     fixture.detectChanges();
