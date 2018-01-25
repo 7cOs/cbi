@@ -8,6 +8,7 @@ export interface DateRangesState extends State {
   CYTM: DateRange;
   CYTDBDL: DateRange;
   FYTDBDL: DateRange;
+  FQTD: DateRange;
   L60BDL: DateRange;
   L90BDL: DateRange;
   L120BDL: DateRange;
@@ -29,6 +30,7 @@ export const initialState: DateRangesState = {
   CYTM: initialDateRangeState,
   CYTDBDL: initialDateRangeState,
   FYTDBDL: initialDateRangeState,
+  FQTD: initialDateRangeState,
   L60BDL: initialDateRangeState,
   L90BDL: initialDateRangeState,
   L120BDL: initialDateRangeState,
@@ -55,6 +57,7 @@ export function dateRangesReducer(
         CYTM: action.payload.find(dateRange => dateRange.code === 'CYTM'),
         CYTDBDL: action.payload.find(dateRange => dateRange.code === 'CYTDBDL'),
         FYTDBDL: action.payload.find(dateRange => dateRange.code === 'FYTDBDL'),
+        FQTD: action.payload.find(dateRange => dateRange.code === 'FQTD'),
         L60BDL: action.payload.find(dateRange => dateRange.code === 'L60BDL'),
         L90BDL: action.payload.find(dateRange => dateRange.code === 'L90BDL'),
         L120BDL: action.payload.find(dateRange => dateRange.code === 'L120BDL'),
