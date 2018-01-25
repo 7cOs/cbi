@@ -125,8 +125,13 @@ module.exports = /*  @ngInject */
           v3ApiCode: 'FYTDBDL',
           id: 6,
           type: 'year'
-        },
-        {
+        }, {
+          name: 'FQTD',
+          displayValue: 'FQTD',
+          v3ApiCode: 'FQTD',
+          id: 7,
+          type: 'year'
+        }, {
           name: 'CQTD',
           displayValue: 'CQTD',
           v3ApiCode: 'CQTD',

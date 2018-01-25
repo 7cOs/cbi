@@ -13,10 +13,6 @@ export const dateRangeCollectionMock: DateRange[] = [
     displayCode: 'CYTM',
     description: 'From First Day of Current Calendar Year to Last Closed Month',
     range: '01/01/17 - 05/31/17' },
-  { code: 'CQTD',
-    displayCode: 'CQTD',
-    description: 'Calendar Quarter to Date',
-    range: '10/1/17 - 10/11/17' },
   { code: 'FYTM',
     displayCode: 'FYTM',
     description: 'From First Day of Current Fiscal Year to Last Closed Month',
@@ -44,5 +40,13 @@ export const dateRangeCollectionMock: DateRange[] = [
   { code: 'CYTDBDL',
     displayCode: 'CYTD',
     description: 'From First Day of Current Calendar Year to Date With Business Day Lag',
-    range: '01/01/17 - 06/02/17' }
+    range: '01/01/17 - 06/02/17' },
+  { code: 'FQTD',
+    displayCode: 'FQTD',
+    description: 'Fiscal Quarter to Date',
+    range: '12/01/17 - 01/19/18' },
+  { code: 'CQTD',
+    displayCode: 'CQTD',
+    description: 'Calendar Quarter to Date',
+    range: '10/01/17 - 10/11/17' }
 ];

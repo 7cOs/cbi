@@ -116,6 +116,17 @@ class MyPerformanceTableComponentMock {
 }
 
 @Component({
+  selector: 'compass-tooltip-component',
+  template: ''
+})
+class CompassTooltipComponentMock {
+  @Input() descriptions: Array<string>;
+  @Input() title: string;
+  @Input() position: string;
+  @Input() label: string;
+}
+
+@Component({
   selector: 'team-performance-opportunities',
   template: ''
 })
@@ -124,6 +135,7 @@ class TeamPerformanceOpportunitiesComponentMock {
   @Output() onOpportunityCountClicked = new EventEmitter<TeamPerformanceTableOpportunity>();
 
   @Input() opportunities: Array<TeamPerformanceTableOpportunity>;
+  @Input() tooltip: CompassTooltipComponentMock;
   @Input() premiseType: string;
   @Input() productName: string;
   @Input() subtitle: string;

@@ -32,6 +32,12 @@ export const dateRangeStateMock: DateRangesState = {
     description: 'Current Fiscal Year to Date With Business Day Lag',
     range: '03/01/17 - 06/02/17'
   },
+  FQTD: {
+    code: 'FQTD',
+    displayCode: 'FQTD',
+    description: 'Fiscal Quarter to Date',
+    range: '12/01/17 - 01/19/18'
+  },
   L60BDL: {
     code: 'L60BDL',
     displayCode: 'L60 Days',
