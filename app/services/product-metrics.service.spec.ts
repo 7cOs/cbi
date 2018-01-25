@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
+import { AccountsApiService } from './api/v3/accounts-api.service';
+import { DistributorsApiService } from './api/v3/distributors-api.service';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
 import { getEntityTypeMock } from '../enums/entity-responsibilities.enum.mock';
@@ -15,8 +17,8 @@ import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMoc
 import { MyPerformanceFilterState } from '../state//reducers/my-performance-filter.reducer';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
+import { PositionsApiService } from './api/v3/positions-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
@@ -24,6 +26,7 @@ import * as ProductMetricsServiceConstants from '../models/product-metrics-servi
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
+import { SubAccountsApiService } from './api/v3/sub-accounts-api.service';
 
 const chance = new Chance();
 
@@ -42,13 +45,19 @@ describe('ProductMetrics Service', () => {
   let productMetricsBrandsDTOMock: ProductMetricsDTO;
   let productMetricsSkuDTOMock: ProductMetricsDTO;
 
-  let productMetricsApiServiceMock: any;
+  let accountsApiServiceMock: any;
+  let distributorsApiServiceMock: any;
+  let positionsApiServiceMock: any;
   let productMetricsTransformerServiceMock: any;
+  let subAccountsApiServiceMock: any;
 
   let runner: EffectsRunner;
+  let accountsApiService: AccountsApiService;
+  let distributorsApiService: DistributorsApiService;
+  let positionsApiService: PositionsApiService;
   let productMetricsService: ProductMetricsService;
-  let productMetricsApiService: ProductMetricsApiService;
   let productMetricsTransformerService: ProductMetricsTransformerService;
+  let subAccountsApiService: SubAccountsApiService;
 
   beforeEach(() => {
     positionIdMock = chance.string();
@@ -65,68 +74,91 @@ describe('ProductMetrics Service', () => {
     productMetricsBrandsDTOMock = getProductMetricsBrandDTOMock();
     productMetricsSkuDTOMock = getProductMetricsSkuDTOMock();
 
-    productMetricsApiServiceMock = {
-      getAlternateHierarchyProductMetricsForPosition(
-        positionId: string,
-        filter: MyPerformanceFilterState,
-        aggregation: ProductMetricsAggregationType,
-        contextPositionId: string
-      ) {
-        return aggregation === ProductMetricsAggregationType.brand
-          ? Observable.of(productMetricsBrandsDTOMock)
-          : Observable.of(productMetricsSkuDTOMock);
-      },
-      getAlternateHierarchyProductMetrics(
-        positionId: string,
-        entityTypeCode: EntityType,
-        filter: MyPerformanceFilterState,
-        aggregation: ProductMetricsAggregationType,
-        contextPositionId: string
-      ) {
-        return aggregation === ProductMetricsAggregationType.brand
-          ? Observable.of(productMetricsBrandsDTOMock)
-          : Observable.of(productMetricsSkuDTOMock);
-      },
-      getPositionProductMetrics(
-        positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
-      ) {
-        return aggregation === ProductMetricsAggregationType.brand
-          ? Observable.of(productMetricsBrandsDTOMock)
-          : Observable.of(productMetricsSkuDTOMock);
-      },
+    accountsApiServiceMock = {
       getAccountProductMetrics(
-        accountId: string, positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
+        accountId: string,
+        positionId: string,
+        aggregationLevel: ProductMetricsAggregationType,
+        filter: MyPerformanceFilterState
       ) {
-        return aggregation === ProductMetricsAggregationType.brand
+        return aggregationLevel === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
-      },
-      getSubAccountProductMetrics(
-        accountId: string, positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
-      ) {
-        return aggregation === ProductMetricsAggregationType.brand
-          ? Observable.of(productMetricsBrandsDTOMock)
-          : Observable.of(productMetricsSkuDTOMock);
+      }
+    };
+
+    distributorsApiServiceMock = {
+      getDistributorOpportunityCounts() {
+        return Observable.of(opportunityCountDTOsMock);
       },
       getDistributorProductMetrics(
-        accountId: string, positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
+        distributorId: string,
+        positionId: string,
+        aggregationLevel: ProductMetricsAggregationType,
+        filter: MyPerformanceFilterState
       ) {
-        return aggregation === ProductMetricsAggregationType.brand
+        return aggregationLevel === ProductMetricsAggregationType.brand
+          ? Observable.of(productMetricsBrandsDTOMock)
+          : Observable.of(productMetricsSkuDTOMock);
+      }
+    };
+
+    positionsApiServiceMock = {
+      getAlternateHierarchyPersonProductMetrics(
+        positionId: string,
+        alternateHierarchyPositionId: string,
+        aggregationLevel: ProductMetricsAggregationType,
+        filter: MyPerformanceFilterState
+      ) {
+        return aggregationLevel === ProductMetricsAggregationType.brand
+          ? Observable.of(productMetricsBrandsDTOMock)
+          : Observable.of(productMetricsSkuDTOMock);
+      },
+      getAlternateHierarchyRoleGroupProductMetrics(
+        positionId: string,
+        groupTypeCode: EntityType,
+        alternateHierarchyPositionId: string,
+        aggregationLevel: ProductMetricsAggregationType,
+        filter: MyPerformanceFilterState
+      ) {
+        return aggregationLevel === ProductMetricsAggregationType.brand
+          ? Observable.of(productMetricsBrandsDTOMock)
+          : Observable.of(productMetricsSkuDTOMock);
+      },
+      getPersonProductMetrics(
+        positionId: string,
+        aggregationLevel: ProductMetricsAggregationType,
+        filter: MyPerformanceFilterState
+      ) {
+        return aggregationLevel === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
       },
       getRoleGroupProductMetrics(
-        positionId: string, entityType: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
+        positionId: string,
+        groupTypeCode: string,
+        aggregationLevel: ProductMetricsAggregationType,
+        filter: MyPerformanceFilterState
       ) {
-        return aggregation === ProductMetricsAggregationType.brand
+        return aggregationLevel === ProductMetricsAggregationType.brand
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
-      },
+      }
+    };
+
+    subAccountsApiServiceMock = {
       getSubAccountOpportunityCounts() {
         return Observable.of(opportunityCountDTOsMock);
       },
-      getDistributorOpportunityCounts() {
-        return Observable.of(opportunityCountDTOsMock);
+      getSubAccountProductMetrics(
+        subAccountId: string,
+        positionId: string,
+        aggregationLevel: ProductMetricsAggregationType,
+        filter: MyPerformanceFilterState
+      ) {
+        return aggregationLevel === ProductMetricsAggregationType.brand
+          ? Observable.of(productMetricsBrandsDTOMock)
+          : Observable.of(productMetricsSkuDTOMock);
       }
     };
 
@@ -146,28 +178,54 @@ describe('ProductMetrics Service', () => {
       providers: [
         ProductMetricsService,
         {
-          provide: ProductMetricsApiService,
-          useValue: productMetricsApiServiceMock
+          provide: AccountsApiService,
+          useValue: accountsApiServiceMock
+        },
+        {
+          provide: DistributorsApiService,
+          useValue: distributorsApiServiceMock
+        },
+        {
+          provide: PositionsApiService,
+          useValue: positionsApiServiceMock
         },
         {
           provide: ProductMetricsTransformerService,
           useValue: productMetricsTransformerServiceMock
+        },
+        {
+          provide: SubAccountsApiService,
+          useValue: subAccountsApiServiceMock
         }
       ]
     });
   });
 
-  beforeEach(inject([ EffectsRunner, ProductMetricsService, ProductMetricsApiService, ProductMetricsTransformerService ],
-    (_runner: EffectsRunner,
-      _productMetricsService: ProductMetricsService,
-      _productMetricsApiService: ProductMetricsApiService,
-      _productMetricsTransformerService: ProductMetricsTransformerService) => {
-      runner = _runner;
-      productMetricsService = _productMetricsService;
-      productMetricsApiService = _productMetricsApiService;
-      productMetricsTransformerService = _productMetricsTransformerService;
-    }
-  ));
+  beforeEach(inject([
+    EffectsRunner,
+    AccountsApiService,
+    DistributorsApiService,
+    PositionsApiService,
+    ProductMetricsService,
+    ProductMetricsTransformerService ,
+    SubAccountsApiService
+  ],
+  (_runner: EffectsRunner,
+    _accountsApiService: AccountsApiService,
+    _distributorsApiService: DistributorsApiService,
+    _positionsApiService: PositionsApiService,
+    _productMetricsService: ProductMetricsService,
+    _productMetricsTransformerService: ProductMetricsTransformerService,
+    _subAccountsApiService: SubAccountsApiService
+  ) => {
+    runner = _runner;
+    accountsApiService = _accountsApiService;
+    distributorsApiService = _distributorsApiService;
+    positionsApiService = _positionsApiService;
+    productMetricsService = _productMetricsService;
+    productMetricsTransformerService = _productMetricsTransformerService;
+    subAccountsApiService = _subAccountsApiService;
+  }));
 
   describe('when getProductMetrics is called', () => {
     let productMetricsDataMock: ProductMetricsData;
@@ -181,15 +239,16 @@ describe('ProductMetrics Service', () => {
     let getAlternateHierarchyProductMetricsForPositionSpy: jasmine.Spy;
 
     beforeEach(() => {
-      getPositionProductMetricsSpy = spyOn(productMetricsApiService, 'getPositionProductMetrics').and.callThrough();
-      getAccountProductMetricsSpy = spyOn(productMetricsApiService, 'getAccountProductMetrics').and.callThrough();
-      getSubAccountProductMetricsSpy = spyOn(productMetricsApiService, 'getSubAccountProductMetrics').and.callThrough();
-      getDistributorProductMetricsSpy = spyOn(productMetricsApiService, 'getDistributorProductMetrics').and.callThrough();
-      getRoleGroupProductMetricsSpy = spyOn(productMetricsApiService, 'getRoleGroupProductMetrics').and.callThrough();
+      getPositionProductMetricsSpy = spyOn(positionsApiService, 'getPersonProductMetrics').and.callThrough();
+      getAccountProductMetricsSpy = spyOn(accountsApiService, 'getAccountProductMetrics').and.callThrough();
+      getSubAccountProductMetricsSpy = spyOn(subAccountsApiService, 'getSubAccountProductMetrics').and.callThrough();
+      getDistributorProductMetricsSpy = spyOn(distributorsApiService, 'getDistributorProductMetrics').and.callThrough();
+      getRoleGroupProductMetricsSpy = spyOn(positionsApiService, 'getRoleGroupProductMetrics').and.callThrough();
       transformProductMetricsSpy = spyOn(productMetricsTransformerService, 'transformAndCombineProductMetricsDTOs').and.callThrough();
-      getAlternateHierarchyProductMetricsSpy = spyOn(productMetricsApiService, 'getAlternateHierarchyProductMetrics').and.callThrough();
-      getAlternateHierarchyProductMetricsForPositionSpy =
-        spyOn(productMetricsApiService, 'getAlternateHierarchyProductMetricsForPosition').and.callThrough();
+      getAlternateHierarchyProductMetricsSpy =
+        spyOn(positionsApiService, 'getAlternateHierarchyRoleGroupProductMetrics').and.callThrough();
+      getAlternateHierarchyProductMetricsForPositionSpy
+        = spyOn(positionsApiService, 'getAlternateHierarchyPersonProductMetrics').and.callThrough();
 
       productMetricsDataMock = {
         positionId: positionIdMock,
@@ -214,9 +273,9 @@ describe('ProductMetrics Service', () => {
               expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.count()).toBe(1);
               expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
-                productMetricsDataMock.filter,
+                productMetricsDataMock.contextPositionId,
                 ProductMetricsAggregationType.brand,
-                productMetricsDataMock.contextPositionId
+                productMetricsDataMock.filter
               ]);
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -262,15 +321,15 @@ describe('ProductMetrics Service', () => {
               expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.count()).toBe(2);
               expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
-                productMetricsDataMock.filter,
+                productMetricsDataMock.contextPositionId,
                 ProductMetricsAggregationType.sku,
-                productMetricsDataMock.contextPositionId
+                productMetricsDataMock.filter
               ]);
               expect(getAlternateHierarchyProductMetricsForPositionSpy.calls.argsFor(1)).toEqual([
                 productMetricsDataMock.positionId,
-                productMetricsDataMock.filter,
+                productMetricsDataMock.contextPositionId,
                 ProductMetricsAggregationType.brand,
-                productMetricsDataMock.contextPositionId
+                productMetricsDataMock.filter
               ]);
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -318,9 +377,9 @@ describe('ProductMetrics Service', () => {
               expect(getAlternateHierarchyProductMetricsSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
                 productMetricsDataMock.entityTypeCode,
-                productMetricsDataMock.filter,
+                productMetricsDataMock.contextPositionId,
                 ProductMetricsAggregationType.brand,
-                productMetricsDataMock.contextPositionId
+                productMetricsDataMock.filter
               ]);
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -365,16 +424,16 @@ describe('ProductMetrics Service', () => {
               expect(getAlternateHierarchyProductMetricsSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
                 productMetricsDataMock.entityTypeCode,
-                productMetricsDataMock.filter,
+                productMetricsDataMock.contextPositionId,
                 ProductMetricsAggregationType.sku,
-                productMetricsDataMock.contextPositionId
+                productMetricsDataMock.filter
               ]);
               expect(getAlternateHierarchyProductMetricsSpy.calls.argsFor(1)).toEqual([
                 productMetricsDataMock.positionId,
                 productMetricsDataMock.entityTypeCode,
-                productMetricsDataMock.filter,
+                productMetricsDataMock.contextPositionId,
                 ProductMetricsAggregationType.brand,
-                productMetricsDataMock.contextPositionId
+                productMetricsDataMock.filter
               ]);
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -424,8 +483,8 @@ describe('ProductMetrics Service', () => {
               expect(getDistributorProductMetricsSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
                 '0',
-                productMetricsDataMock.filter,
-                ProductMetricsAggregationType.brand
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.filter
               ]);
               expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
@@ -469,14 +528,14 @@ describe('ProductMetrics Service', () => {
               expect(getDistributorProductMetricsSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
                 '0',
-                productMetricsDataMock.filter,
-                ProductMetricsAggregationType.sku
+                ProductMetricsAggregationType.sku,
+                productMetricsDataMock.filter
               ]);
               expect(getDistributorProductMetricsSpy.calls.argsFor(1)).toEqual([
                 productMetricsDataMock.positionId,
                 '0',
-                productMetricsDataMock.filter,
-                ProductMetricsAggregationType.brand
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.filter
               ]);
               expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
@@ -524,8 +583,8 @@ describe('ProductMetrics Service', () => {
               expect(getDistributorProductMetricsSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
                 productMetricsDataMock.contextPositionId,
-                productMetricsDataMock.filter,
-                ProductMetricsAggregationType.brand
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.filter
               ]);
               expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
@@ -569,14 +628,14 @@ describe('ProductMetrics Service', () => {
               expect(getDistributorProductMetricsSpy.calls.argsFor(0)).toEqual([
                 productMetricsDataMock.positionId,
                 productMetricsDataMock.contextPositionId,
-                productMetricsDataMock.filter,
-                ProductMetricsAggregationType.sku
+                ProductMetricsAggregationType.sku,
+                productMetricsDataMock.filter
               ]);
               expect(getDistributorProductMetricsSpy.calls.argsFor(1)).toEqual([
                 productMetricsDataMock.positionId,
                 productMetricsDataMock.contextPositionId,
-                productMetricsDataMock.filter,
-                ProductMetricsAggregationType.brand
+                ProductMetricsAggregationType.brand,
+                productMetricsDataMock.filter
               ]);
               expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
@@ -620,8 +679,8 @@ describe('ProductMetrics Service', () => {
             expect(getPositionProductMetricsSpy.calls.count()).toBe(1);
             expect(getPositionProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -665,13 +724,13 @@ describe('ProductMetrics Service', () => {
             expect(getPositionProductMetricsSpy.calls.count()).toBe(2);
             expect(getPositionProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.sku
+              ProductMetricsAggregationType.sku,
+              productMetricsDataMock.filter
             ]);
             expect(getPositionProductMetricsSpy.calls.argsFor(1)).toEqual([
               productMetricsDataMock.positionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -717,8 +776,8 @@ describe('ProductMetrics Service', () => {
             expect(getPositionProductMetricsSpy.calls.count()).toBe(1);
             expect(getPositionProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -762,13 +821,13 @@ describe('ProductMetrics Service', () => {
             expect(getPositionProductMetricsSpy.calls.count()).toBe(2);
             expect(getPositionProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.sku
+              ProductMetricsAggregationType.sku,
+              productMetricsDataMock.filter
             ]);
             expect(getPositionProductMetricsSpy.calls.argsFor(1)).toEqual([
               productMetricsDataMock.positionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
@@ -818,8 +877,8 @@ describe('ProductMetrics Service', () => {
             expect(getAccountProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
@@ -864,14 +923,14 @@ describe('ProductMetrics Service', () => {
             expect(getAccountProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.sku
+              ProductMetricsAggregationType.sku,
+              productMetricsDataMock.filter
             ]);
             expect(getAccountProductMetricsSpy.calls.argsFor(1)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
@@ -917,8 +976,8 @@ describe('ProductMetrics Service', () => {
             expect(getSubAccountProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
@@ -962,14 +1021,14 @@ describe('ProductMetrics Service', () => {
             expect(getSubAccountProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.sku
+              ProductMetricsAggregationType.sku,
+              productMetricsDataMock.filter
             ]);
             expect(getSubAccountProductMetricsSpy.calls.argsFor(1)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
@@ -1015,8 +1074,8 @@ describe('ProductMetrics Service', () => {
             expect(getDistributorProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
@@ -1060,14 +1119,14 @@ describe('ProductMetrics Service', () => {
             expect(getDistributorProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.sku
+              ProductMetricsAggregationType.sku,
+              productMetricsDataMock.filter
             ]);
             expect(getDistributorProductMetricsSpy.calls.argsFor(1)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.contextPositionId,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
@@ -1115,8 +1174,8 @@ describe('ProductMetrics Service', () => {
             expect(getRoleGroupProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.entityTypeCode,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             done();
           });
@@ -1161,14 +1220,14 @@ describe('ProductMetrics Service', () => {
             expect(getRoleGroupProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.entityTypeCode,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.sku
+              ProductMetricsAggregationType.sku,
+              productMetricsDataMock.filter
             ]);
             expect(getRoleGroupProductMetricsSpy.calls.argsFor(1)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.entityTypeCode,
-              productMetricsDataMock.filter,
-              ProductMetricsAggregationType.brand
+              ProductMetricsAggregationType.brand,
+              productMetricsDataMock.filter
             ]);
             done();
           });
@@ -1354,7 +1413,7 @@ describe('ProductMetrics Service', () => {
 
       it('should call getSubAccountOpportunityCounts with the passed in subAccountId, positionId and '
       + 'a stringified lower case PremiseTypeValue', (done) => {
-        const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getSubAccountOpportunityCounts').and.callThrough();
+        const getOpportunityCountsSpy = spyOn(subAccountsApiService, 'getSubAccountOpportunityCounts').and.callThrough();
         const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
 
         productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
@@ -1409,7 +1468,7 @@ describe('ProductMetrics Service', () => {
 
         it('should call getDistributorOpportunityCounts with the passed in distributorId, positionId, and stringified lower '
         + 'case PremiseTypeValue', (done) => {
-          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
+          const getOpportunityCountsSpy = spyOn(distributorsApiService, 'getDistributorOpportunityCounts').and.callThrough();
           const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
 
           productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
@@ -1437,7 +1496,7 @@ describe('ProductMetrics Service', () => {
 
         it('should call getDistributorOpportunityCounts with the passed in distributorId, a positionId of undefined, and stringified lower '
         + 'case PremiseTypeValue', (done) => {
-          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
+          const getOpportunityCountsSpy = spyOn(distributorsApiService, 'getDistributorOpportunityCounts').and.callThrough();
           const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
 
           productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {
@@ -1465,7 +1524,7 @@ describe('ProductMetrics Service', () => {
 
         it('should call getDistributorOpportunityCounts with the passed in distributorId, alternateHierarchyId, and '
         + 'and a stringified lower case PremiseTypeValue', (done) => {
-          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callThrough();
+          const getOpportunityCountsSpy = spyOn(distributorsApiService, 'getDistributorOpportunityCounts').and.callThrough();
           const expectedPremiseTypeValue = PremiseTypeValue[fetchOpportunityCountsMock.filter.premiseType].toLowerCase();
 
           productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock).subscribe(() => {

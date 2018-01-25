@@ -3,7 +3,9 @@ import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 import { sample } from 'lodash';
 
+import { AccountsApiService } from '../services/api/v3/accounts-api.service';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
+import { DistributorsApiService } from '../services/api/v3/distributors-api.service';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { EntityPeopleType, EntityType, HierarchyGroupTypeCode } from '../enums/entity-responsibilities.enum';
@@ -24,11 +26,11 @@ import { getPeopleResponsibilitiesDTOMock } from '../models/people-responsibilit
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
-import { MyPerformanceApiService } from '../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from '../services/performance-transformer.service';
+import { PositionsApiService } from '../services/api/v3/positions-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
 import { ResponsibilitiesService,
@@ -39,6 +41,7 @@ import { ResponsibilitiesService,
          RefreshTotalPerformanceData } from './responsibilities.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
+import { SubAccountsApiService } from '../services/api/v3/sub-accounts-api.service';
 
 const chance = new Chance();
 
@@ -62,7 +65,10 @@ describe('Responsibilities Service', () => {
   let entitiesTotalPerformancesDTOMock: PerformanceDTO;
   let entityDTOMock: EntityDTO;
   let responsibilitiesService: ResponsibilitiesService;
-  let myPerformanceApiService: MyPerformanceApiService;
+  let accountsApiService: AccountsApiService;
+  let distributorsApiService: DistributorsApiService;
+  let positionsApiService: PositionsApiService;
+  let subAccountsApiService: SubAccountsApiService;
   let performanceTransformerService: PerformanceTransformerService;
   let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
   let entitySubAccountDTOMock: EntitySubAccountDTO[];
@@ -70,39 +76,48 @@ describe('Responsibilities Service', () => {
 
   const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
-  const myPerformanceApiServiceMock = {
-    getResponsibilities() {
-      return Observable.of(peopleResponsibilitiesDTOMock);
-    },
-    getHierarchyGroupPerformance() {
-      return Observable.of(performanceDTOMock);
-    },
-    getAlternateHierarchyGroupPerformance() {
-      return Observable.of(performanceDTOMock);
-    },
-    getPerformance() {
-      return Observable.of(entitiesTotalPerformancesDTOMock);
-    },
-    getAlternateHierarchyPersonPerformance() {
-      return Observable.of(entitiesTotalPerformancesDTOMock);
-    },
-    getAccountsDistributors() {
-      return Observable.of(accountsDistributorsDTOMock);
-    },
-    getDistributorPerformance() {
-      return Observable.of(entitiesTotalPerformancesDTOMock);
-    },
+  const accountsApiServiceMock = {
     getAccountPerformance() {
-      return Observable.of(entitiesTotalPerformancesDTOMock);
-    },
-    getSubAccountPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
     getSubAccounts() {
       return Observable.of(entitySubAccountDTOMock);
+    }
+  };
+
+  const distributorsApiServiceMock = {
+    getDistributorPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    }
+  };
+
+  const positionsApiServiceMock = {
+    getAccountsOrDistributors() {
+      return Observable.of(accountsDistributorsDTOMock);
     },
     getAlternateHierarchy() {
       return Observable.of(peopleResponsibilitiesDTOMock);
+    },
+    getAlternateHierarchyGroupPerformance() {
+      return Observable.of(performanceDTOMock);
+    },
+    getAlternateHierarchyPersonPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    },
+    getHierarchyGroupPerformance() {
+      return Observable.of(performanceDTOMock);
+    },
+    getPeopleResponsibilities() {
+      return Observable.of(peopleResponsibilitiesDTOMock);
+    },
+    getPersonPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    }
+  };
+
+  const subAccountsApiServiceMock = {
+    getSubAccountPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
     }
   };
 
@@ -153,16 +168,28 @@ describe('Responsibilities Service', () => {
     providers: [
       ResponsibilitiesService,
       {
-        provide: MyPerformanceApiService,
-        useValue: myPerformanceApiServiceMock
+        provide: AccountsApiService,
+        useValue: accountsApiServiceMock
+      },
+      {
+        provide: DistributorsApiService,
+        useValue: distributorsApiServiceMock
+      },
+      {
+        provide: PerformanceTransformerService,
+        useValue: performanceTransformerServiceMock
+      },
+      {
+        provide: PositionsApiService,
+        useValue: positionsApiServiceMock
       },
       {
         provide: ResponsibilitiesTransformerService,
         useValue: responsibilitiesTransformerServiceMock
       },
       {
-        provide: PerformanceTransformerService,
-        useValue: performanceTransformerServiceMock
+        provide: SubAccountsApiService,
+        useValue: subAccountsApiServiceMock
       },
       {
         provide: 'toastService',
@@ -171,46 +198,60 @@ describe('Responsibilities Service', () => {
     ]
   }));
 
-  beforeEach(inject([ResponsibilitiesService, MyPerformanceApiService, PerformanceTransformerService, ResponsibilitiesTransformerService],
-    (_responsibilitiesService: ResponsibilitiesService,
-     _myPerformanceApiService: MyPerformanceApiService,
-     _performanceTransformerService: PerformanceTransformerService,
-     _responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
-      responsibilitiesService = _responsibilitiesService;
-      myPerformanceApiService = _myPerformanceApiService;
-      performanceTransformerService = _performanceTransformerService;
-      responsibilitiesTransformerService = _responsibilitiesTransformerService;
-      positionIdMock = chance.string();
-      alternateHierarchyIdMock = chance.string();
-      contextPositionIdMock = chance.string();
-      brandCodeMock = chance.string();
-      groupedEntitiesMock = getGroupedEntitiesMock();
-      hierarchyGroupsMock = Array(chance.natural({min: 1, max: 99}))
-        .fill('').map(el => getHierarchyGroupMock());
-      entityTypeMock = getEntityTypeMock();
-      accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
-        type: EntityType.Distributor
-      })];
-      accountsDistributorsMock = {
-        [accountsDistributorsDTOMock[0].type]: [{
-          name: accountsDistributorsDTOMock[0].name,
-          positionId: accountsDistributorsDTOMock[0].id,
-          entityType: EntityType[accountsDistributorsDTOMock[0].type]
-        }]
-      };
-      peopleResponsibilitiesDTOMock = getPeopleResponsibilitiesDTOMock();
-      peopleResponsibilitiesMock = [ getEntityPeopleResponsibilitiesMock(), getEntityPeopleResponsibilitiesMock() ];
-      responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
-      entityWithPerformanceMock = getEntitiesWithPerformancesMock();
-      entitiesTotalPerformancesMock = getPerformanceMock();
-      entitiesTotalPerformancesDTOMock = getPerformanceDTOMock();
-      entityDTOMock = getEntityDTOMock();
-      accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
-        type: EntityType.Distributor
-      })];
-      toastServiceMock.showPerformanceDataErrorToast.calls.reset();
-      performanceDTOMock = getPerformanceDTOMock();
-    }));
+  beforeEach(inject([
+    AccountsApiService,
+    DistributorsApiService,
+    PerformanceTransformerService,
+    PositionsApiService,
+    ResponsibilitiesService,
+    ResponsibilitiesTransformerService,
+    SubAccountsApiService
+  ], (_accountsApiService: AccountsApiService,
+    _distributorsApiService: DistributorsApiService,
+    _performanceTransformerService: PerformanceTransformerService,
+    _positionsApiService: PositionsApiService,
+    _responsibilitiesService: ResponsibilitiesService,
+    _responsibilitiesTransformerService: ResponsibilitiesTransformerService,
+    _subAccountsApiService: SubAccountsApiService
+  ) => {
+    accountsApiService = _accountsApiService;
+    distributorsApiService = _distributorsApiService;
+    performanceTransformerService = _performanceTransformerService;
+    positionsApiService = _positionsApiService;
+    responsibilitiesService = _responsibilitiesService;
+    responsibilitiesTransformerService = _responsibilitiesTransformerService;
+    subAccountsApiService = _subAccountsApiService;
+
+    positionIdMock = chance.string();
+    alternateHierarchyIdMock = chance.string();
+    contextPositionIdMock = chance.string();
+    brandCodeMock = chance.string();
+    groupedEntitiesMock = getGroupedEntitiesMock();
+    hierarchyGroupsMock = Array(chance.natural({min: 1, max: 99})).fill('').map(el => getHierarchyGroupMock());
+    entityTypeMock = getEntityTypeMock();
+    accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
+      type: EntityType.Distributor
+    })];
+    accountsDistributorsMock = {
+      [accountsDistributorsDTOMock[0].type]: [{
+        name: accountsDistributorsDTOMock[0].name,
+        positionId: accountsDistributorsDTOMock[0].id,
+        entityType: EntityType[accountsDistributorsDTOMock[0].type]
+      }]
+    };
+    peopleResponsibilitiesDTOMock = getPeopleResponsibilitiesDTOMock();
+    peopleResponsibilitiesMock = [ getEntityPeopleResponsibilitiesMock(), getEntityPeopleResponsibilitiesMock() ];
+    responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
+    entityWithPerformanceMock = getEntitiesWithPerformancesMock();
+    entitiesTotalPerformancesMock = getPerformanceMock();
+    entitiesTotalPerformancesDTOMock = getPerformanceDTOMock();
+    entityDTOMock = getEntityDTOMock();
+    accountsDistributorsDTOMock = [ Object.assign({}, getEntityDTOMock(), {
+      type: EntityType.Distributor
+    })];
+    toastServiceMock.showPerformanceDataErrorToast.calls.reset();
+    performanceDTOMock = getPerformanceDTOMock();
+  }));
 
   describe('when getResponsibilities is called', () => {
     let responsibilitiesDataMock: ResponsibilitiesData;
@@ -221,7 +262,7 @@ describe('Responsibilities Service', () => {
       };
     });
 
-    describe('when myPerformanceApiService returns some positions', () => {
+    describe('when PositionsApiService returns some positions', () => {
 
       beforeEach(() => {
         peopleResponsibilitiesDTOMock.entityURIs = undefined;
@@ -252,7 +293,7 @@ describe('Responsibilities Service', () => {
       });
 
       it('calls getResponsibilities with the right parameters', (done) => {
-        const getResponsibilitiesSpy = spyOn(myPerformanceApiService, 'getResponsibilities').and.callThrough();
+        const getResponsibilitiesSpy = spyOn(positionsApiService, 'getPeopleResponsibilities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -275,7 +316,7 @@ describe('Responsibilities Service', () => {
       });
     });
 
-    describe('when myPerformanceApiService returns some accounts', () => {
+    describe('when the PositionsApiService returns some accounts', () => {
       beforeEach(() => {
         peopleResponsibilitiesDTOMock.positions = undefined;
         peopleResponsibilitiesDTOMock.entityURIs[0] = 'accounts';
@@ -295,7 +336,7 @@ describe('Responsibilities Service', () => {
       });
 
       it('calls getResponsibilities with the right parameters', (done) => {
-        const getResponsibilitiesSpy = spyOn(myPerformanceApiService, 'getResponsibilities').and.callThrough();
+        const getResponsibilitiesSpy = spyOn(positionsApiService, 'getPeopleResponsibilities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -317,7 +358,7 @@ describe('Responsibilities Service', () => {
       });
     });
 
-    describe('when myPerformanceApiService returns some distributors', () => {
+    describe('when the PositionsApiService returns some distributors', () => {
       beforeEach(() => {
         peopleResponsibilitiesDTOMock.positions = undefined;
         peopleResponsibilitiesDTOMock.entityURIs[0] = 'distributors';
@@ -337,7 +378,7 @@ describe('Responsibilities Service', () => {
       });
 
       it('calls getResponsibilities with the right parameters', (done) => {
-        const getResponsibilitiesSpy = spyOn(myPerformanceApiService, 'getResponsibilities').and.callThrough();
+        const getResponsibilitiesSpy = spyOn(positionsApiService, 'getPeopleResponsibilities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -370,7 +411,7 @@ describe('Responsibilities Service', () => {
       };
     });
 
-    describe('when myPerformanceApiService.getAlternateHierarchy returns positions', () => {
+    describe('when positionsApiService.getAlternateHierarchy returns positions', () => {
 
       beforeEach(() => {
         peopleResponsibilitiesDTOMock.entityURIs = undefined;
@@ -403,8 +444,8 @@ describe('Responsibilities Service', () => {
       });
     });
 
-    it('calls myPerformanceApiService.getAlternateHierarchy with the right parameters', (done) => {
-      const getAlternateHierarchySpy = spyOn(myPerformanceApiService, 'getAlternateHierarchy').and.callThrough();
+    it('calls positionsApiService.getAlternateHierarchy with the right parameters', (done) => {
+      const getAlternateHierarchySpy = spyOn(positionsApiService, 'getAlternateHierarchy').and.callThrough();
 
       responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesDataMock).subscribe(() => {
         done();
@@ -426,7 +467,7 @@ describe('Responsibilities Service', () => {
       expect(groupPeopleByGroupedEntitiesSpy.calls.argsFor(0)[0]).toBe(peopleResponsibilitiesDTOMock.positions);
     });
 
-    describe('when myPerformanceApiService.getAlternateHierarchy returns accounts', () => {
+    describe('when positionsApiService.getAlternateHierarchy returns accounts', () => {
       beforeEach(() => {
         peopleResponsibilitiesDTOMock.positions = undefined;
         peopleResponsibilitiesDTOMock.entityURIs[0] = 'accounts';
@@ -459,7 +500,7 @@ describe('Responsibilities Service', () => {
       });
     });
 
-    describe('when myPerformanceApiService returns some distributors', () => {
+    describe('when positionsApiService returns some distributors', () => {
       beforeEach(() => {
         peopleResponsibilitiesDTOMock.positions = undefined;
         peopleResponsibilitiesDTOMock.entityURIs[0] = 'distributors';
@@ -733,8 +774,8 @@ describe('Responsibilities Service', () => {
           });
       });
 
-      it('calls getAccountsDistributors with the right parameters', (done) => {
-        const getAccountsDistributorsSpy = spyOn(myPerformanceApiService, 'getAccountsDistributors').and.callThrough();
+      it('calls getAccountsOrDistributors with the right parameters', (done) => {
+        const getAccountsDistributorsSpy = spyOn(positionsApiService, 'getAccountsOrDistributors').and.callThrough();
 
         responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -750,7 +791,7 @@ describe('Responsibilities Service', () => {
         })];
         const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
 
-        spyOn(myPerformanceApiService, 'getAccountsDistributors').and.returnValue(Observable.of(accountEntityDTOResponseMock));
+        spyOn(positionsApiService, 'getAccountsOrDistributors').and.returnValue(Observable.of(accountEntityDTOResponseMock));
 
         responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -766,7 +807,7 @@ describe('Responsibilities Service', () => {
       it('gives back the original parameters if not call with accounts or distributors', (done) => {
         responsibilitiesDataMock.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
 
-        const getAccountsDistributorsSpy = spyOn(myPerformanceApiService, 'getAccountsDistributors').and.callThrough();
+        const getAccountsDistributorsSpy = spyOn(positionsApiService, 'getAccountsOrDistributors').and.callThrough();
         const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
 
         responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(
@@ -808,8 +849,8 @@ describe('Responsibilities Service', () => {
     });
 
     it('calls getHierarchyGroupPerformance with the given positionId when the given HierarchyGroup has no alternateHierarchyId', (done) => {
-      const getGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callThrough();
-      const getAlternateGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
+      const getGroupPerformanceSpy = spyOn(positionsApiService, 'getHierarchyGroupPerformance').and.callThrough();
+      const getAlternateGroupPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
 
       responsibilitiesService.getHierarchyGroupsPerformances(hierarchyGroups, performanceFilterStateMock, positionIdMock, brandCodeMock)
         .subscribe((entityWithPerformance: EntityWithPerformance[]) => {
@@ -821,11 +862,11 @@ describe('Responsibilities Service', () => {
 
       hierarchyGroups.forEach((hierarchyGroup: HierarchyGroup, index: number) => {
         expect(getGroupPerformanceSpy.calls.argsFor(index)).toEqual([
-          hierarchyGroup.type,
-          performanceFilterStateMock,
           positionIdMock,
+          hierarchyGroup.type,
           brandCodeMock,
-          skuPackageTypeMock
+          skuPackageTypeMock,
+          performanceFilterStateMock
         ]);
       });
 
@@ -834,8 +875,8 @@ describe('Responsibilities Service', () => {
 
     it('calls getAlternateHierarchyGroupPerformance with the group`s postiionId and alternateHierarchyId given HierarchyGroup has ' +
     'an alternateHierarchyId', (done) => {
-      const getGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callThrough();
-      const getAlternateGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
+      const getGroupPerformanceSpy = spyOn(positionsApiService, 'getHierarchyGroupPerformance').and.callThrough();
+      const getAlternateGroupPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
 
       hierarchyGroups = hierarchyGroups.map((hierarchyGroup: HierarchyGroup) => {
         return Object.assign({}, hierarchyGroup, {
@@ -853,12 +894,12 @@ describe('Responsibilities Service', () => {
 
       hierarchyGroups.forEach((hierarchyGroup: HierarchyGroup, index: number) => {
         expect(getAlternateGroupPerformanceSpy.calls.argsFor(index)).toEqual([
-          hierarchyGroup.type,
           positionIdMock,
           hierarchyGroups[index].alternateHierarchyId,
-          performanceFilterStateMock,
+          hierarchyGroup.type,
           brandCodeMock,
-          skuPackageTypeMock
+          skuPackageTypeMock,
+          performanceFilterStateMock
         ]);
       });
 
@@ -895,8 +936,8 @@ describe('Responsibilities Service', () => {
         });
     });
 
-    it('calls getPerformance with the right parameters', (done) => {
-      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callThrough();
+    it('calls getPersonPerformance with the right parameters', (done) => {
+      const getPerformanceSpy = spyOn(positionsApiService, 'getPersonPerformance').and.callThrough();
 
       responsibilitiesService.getPerformance(positionIdMock, performanceFilterStateMock, brandCodeMock).subscribe(() => {
         done();
@@ -905,9 +946,9 @@ describe('Responsibilities Service', () => {
       expect(getPerformanceSpy.calls.count()).toBe(1);
       expect(getPerformanceSpy.calls.argsFor(0)).toEqual([
         positionIdMock,
-        performanceFilterStateMock,
         brandCodeMock,
-        skuPackageTypeMock
+        skuPackageTypeMock,
+        performanceFilterStateMock
       ]);
     });
 
@@ -924,9 +965,9 @@ describe('Responsibilities Service', () => {
   });
 
   describe('getPositionsPerformances', () => {
-    it('should call getPerformance when no alternate hierarchy id is passed in', (done) => {
-      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callThrough();
-      const getAlternateHierarchyPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyPersonPerformance')
+    it('should call getPersonPerformance when no alternate hierarchy id is passed in', (done) => {
+      const getPerformanceSpy = spyOn(positionsApiService, 'getPersonPerformance').and.callThrough();
+      const getAlternateHierarchyPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyPersonPerformance')
         .and.callThrough();
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
 
@@ -944,7 +985,7 @@ describe('Responsibilities Service', () => {
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
 
         entities.forEach((entity: HierarchyEntity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, myPerformanceFilterState, brandCodeMock, skuPackageTypeMock);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, brandCodeMock, skuPackageTypeMock, myPerformanceFilterState);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
           expect(getAlternateHierarchyPerformanceSpy).not.toHaveBeenCalled();
         });
@@ -954,8 +995,8 @@ describe('Responsibilities Service', () => {
     });
 
     it('should call getAlternateHierarchyPersonPerformance when an alternate hierarchy id is passed in', (done) => {
-      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callThrough();
-      const getAlternateHierarchyPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyPersonPerformance')
+      const getPerformanceSpy = spyOn(positionsApiService, 'getPersonPerformance').and.callThrough();
+      const getAlternateHierarchyPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyPersonPerformance')
         .and.callThrough();
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
 
@@ -978,8 +1019,13 @@ describe('Responsibilities Service', () => {
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
 
           entities.forEach((entity: HierarchyEntity) => {
-            expect(getAlternateHierarchyPerformanceSpy).toHaveBeenCalledWith(entity.positionId,
-              alternateHierarchyIdMock, myPerformanceFilterMock, brandCodeMock, skuPackageTypeMock);
+            expect(getAlternateHierarchyPerformanceSpy).toHaveBeenCalledWith(
+              entity.positionId,
+              alternateHierarchyIdMock,
+              brandCodeMock,
+              skuPackageTypeMock,
+              myPerformanceFilterMock
+            );
             expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, entity);
             expect(getPerformanceSpy).not.toHaveBeenCalled();
           });
@@ -989,7 +1035,7 @@ describe('Responsibilities Service', () => {
     });
 
     it('should call show toast and transform null dto when getPerformance returns an error', (done) => {
-      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getPerformance').and.callFake(() => {
+      const getPerformanceSpy = spyOn(positionsApiService, 'getPersonPerformance').and.callFake(() => {
         return Observable.throw(new Error(chance.string()));
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
@@ -1006,7 +1052,7 @@ describe('Responsibilities Service', () => {
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         entities.map((entity) => {
-          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, mockFilter, brandCodeMock, skuPackageTypeMock);
+          expect(getPerformanceSpy).toHaveBeenCalledWith(entity.positionId, brandCodeMock, skuPackageTypeMock, mockFilter);
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, entity);
         });
         done();
@@ -1016,7 +1062,7 @@ describe('Responsibilities Service', () => {
 
   describe('getDistributorsPerformances', () => {
     it('should call getDistributorPerformance with the proper id for each distributor', (done) => {
-      const getDistributorPerformanceSpy = spyOn(myPerformanceApiService, 'getDistributorPerformance').and.callFake(() => {
+      const getDistributorPerformanceSpy = spyOn(distributorsApiService, 'getDistributorPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
@@ -1034,8 +1080,13 @@ describe('Responsibilities Service', () => {
         expect(getDistributorPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         distributors.map((distributor) => {
-          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId,
-            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
+          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(
+            distributor.positionId,
+            contextId,
+            brandCodeMock,
+            skuPackageTypeMock,
+            mockFilter
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, distributor);
         });
         done();
@@ -1043,7 +1094,7 @@ describe('Responsibilities Service', () => {
     });
 
     it('should call show toast and transform null dto when getDistributorPerformance returns an error', (done) => {
-      const getDistributorPerformanceSpy = spyOn(myPerformanceApiService, 'getDistributorPerformance').and.callFake(() => {
+      const getDistributorPerformanceSpy = spyOn(distributorsApiService, 'getDistributorPerformance').and.callFake(() => {
         return Observable.throw(new Error(chance.string()));
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
@@ -1062,8 +1113,13 @@ describe('Responsibilities Service', () => {
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         distributors.map((distributor) => {
-          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId,
-            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
+          expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(
+            distributor.positionId,
+            contextId,
+            brandCodeMock,
+            skuPackageTypeMock,
+            mockFilter
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, distributor);
         });
         done();
@@ -1073,7 +1129,7 @@ describe('Responsibilities Service', () => {
 
   describe('getAccountsPerformances', () => {
     it('should call getAccountPerformance total with the proper id for each account', (done) => {
-      const getAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getAccountPerformance').and.callFake(() => {
+      const getAccountPerformanceSpy = spyOn(accountsApiService, 'getAccountPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
@@ -1090,8 +1146,13 @@ describe('Responsibilities Service', () => {
         expect(getAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         accounts.map((account) => {
-          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId,
-            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
+          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(
+            account.positionId,
+            contextId,
+            brandCodeMock,
+            skuPackageTypeMock,
+            mockFilter
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, account);
         });
         done();
@@ -1099,7 +1160,7 @@ describe('Responsibilities Service', () => {
     });
 
     it('should call show toast and transform null dto when getAccountPerformance returns an error', (done) => {
-      const getAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getAccountPerformance').and.callFake(() => {
+      const getAccountPerformanceSpy = spyOn(accountsApiService, 'getAccountPerformance').and.callFake(() => {
         return Observable.throw(new Error(chance.string()));
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
@@ -1117,8 +1178,13 @@ describe('Responsibilities Service', () => {
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         accounts.map((account) => {
-          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId,
-            mockFilter, contextId, brandCodeMock, skuPackageTypeMock);
+          expect(getAccountPerformanceSpy).toHaveBeenCalledWith(
+            account.positionId,
+            contextId,
+            brandCodeMock,
+            skuPackageTypeMock,
+            mockFilter
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, account);
         });
         done();
@@ -1153,7 +1219,7 @@ describe('Responsibilities Service', () => {
 
     it('should call getSubAccountPerformance total with the proper id for each account', (done) => {
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
-      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+      const getSubAccountPerformanceSpy = spyOn(subAccountsApiService, 'getSubAccountPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
 
@@ -1161,8 +1227,13 @@ describe('Responsibilities Service', () => {
         expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
-          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            contextPositionIdMock, performanceFilterStateMock, brandCodeMock, skuPackageTypeMock);
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(
+            subAccount.positionId,
+            contextPositionIdMock,
+            brandCodeMock,
+            skuPackageTypeMock,
+            performanceFilterStateMock
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
         });
         done();
@@ -1170,7 +1241,7 @@ describe('Responsibilities Service', () => {
     });
 
     it('should call show toast and transform null dto when getSubAccountPerformance returns an error', (done) => {
-      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+      const getSubAccountPerformanceSpy = spyOn(subAccountsApiService, 'getSubAccountPerformance').and.callFake(() => {
         return Observable.throw(new Error(chance.string()));
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
@@ -1180,8 +1251,13 @@ describe('Responsibilities Service', () => {
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
-          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            contextPositionIdMock, performanceFilterStateMock, brandCodeMock, skuPackageTypeMock);
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(
+            subAccount.positionId,
+            contextPositionIdMock,
+            brandCodeMock,
+            skuPackageTypeMock,
+            performanceFilterStateMock
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
         });
         done();
@@ -1213,7 +1289,7 @@ describe('Responsibilities Service', () => {
 
     it('should call getSubAccountsRefreshedPerformances total with the proper id for each account', (done) => {
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
-      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+      const getSubAccountPerformanceSpy = spyOn(subAccountsApiService, 'getSubAccountPerformance').and.callFake(() => {
         return Observable.of(entitiesTotalPerformancesDTOMock);
       });
 
@@ -1221,8 +1297,13 @@ describe('Responsibilities Service', () => {
         expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
-          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock, skuPackageTypeMock);
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(
+            subAccount.positionId,
+            refreshAllPerformancesDataMock.positionId,
+            brandCodeMock,
+            skuPackageTypeMock,
+            refreshAllPerformancesDataMock.filter
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock, subAccount);
         });
         done();
@@ -1230,7 +1311,7 @@ describe('Responsibilities Service', () => {
     });
 
     it('should call show toast and transform null dto when getSubAccountPerformance returns an error', (done) => {
-      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountPerformance').and.callFake(() => {
+      const getSubAccountPerformanceSpy = spyOn(subAccountsApiService, 'getSubAccountPerformance').and.callFake(() => {
         return Observable.throw(new Error(chance.string()));
       });
       const transformEntityWithPerformanceSpy = spyOn(performanceTransformerService, 'transformEntityWithPerformance').and.callThrough();
@@ -1240,8 +1321,13 @@ describe('Responsibilities Service', () => {
         expect(toastServiceMock.showPerformanceDataErrorToast).toHaveBeenCalledTimes(numberOfEntities);
         expect(transformEntityWithPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
         subAccounts.map((subAccount) => {
-          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId,
-            refreshAllPerformancesDataMock.positionId, refreshAllPerformancesDataMock.filter, brandCodeMock, skuPackageTypeMock);
+          expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(
+            subAccount.positionId,
+            refreshAllPerformancesDataMock.positionId,
+            brandCodeMock,
+            skuPackageTypeMock,
+            refreshAllPerformancesDataMock.filter
+          );
           expect(transformEntityWithPerformanceSpy).toHaveBeenCalledWith(null, subAccount);
         });
         done();
@@ -1376,19 +1462,19 @@ describe('Responsibilities Service', () => {
       getPerformanceSpy = spyOn(responsibilitiesService, 'getPerformance').and.callFake(()
       : Observable<Performance> => Observable.of(entitiesTotalPerformancesMock));
 
-      getAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getAccountPerformance').and.callFake(()
+      getAccountPerformanceSpy = spyOn(accountsApiService, 'getAccountPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
       transformPerformanceDTOSpy = spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callFake(()
         : Performance => entitiesTotalPerformancesMock);
 
-      getHierarchyGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getHierarchyGroupPerformance').and.callFake(()
+      getHierarchyGroupPerformanceSpy = spyOn(positionsApiService, 'getHierarchyGroupPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
-      getAlternateHierarchyGroupPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyGroupPerformance').and.callFake(()
+      getAlternateHierarchyGroupPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyGroupPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
-      getAlternateHierarchyPersonPerformanceSpy = spyOn(myPerformanceApiService, 'getAlternateHierarchyPersonPerformance').and.callFake(()
+      getAlternateHierarchyPersonPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyPersonPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
       refreshTotalPerformanceData = {
@@ -1515,9 +1601,9 @@ describe('Responsibilities Service', () => {
             expect(getAlternateHierarchyPersonPerformanceSpy).toHaveBeenCalledWith(
               refreshTotalPerformanceData.positionId,
               refreshTotalPerformanceData.alternateHierarchyId,
-              refreshTotalPerformanceData.filter,
               refreshTotalPerformanceData.brandSkuCode,
-              refreshTotalPerformanceData.skuPackageType
+              refreshTotalPerformanceData.skuPackageType,
+              refreshTotalPerformanceData.filter
             );
 
             done();
@@ -1526,9 +1612,7 @@ describe('Responsibilities Service', () => {
 
         it('should call transformPerformanceDTOSpy with the result from getAlternateHierarchyGroupPerformance', (done) => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-            expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
-              entitiesTotalPerformancesDTOMock
-            );
+            expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock);
 
             done();
           });
@@ -1643,12 +1727,12 @@ describe('Responsibilities Service', () => {
             + ' filter, brandSkuCode, and skuPackageType', (done) => {
             responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
               expect(getAlternateHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
-                refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
                 refreshTotalPerformanceData.positionId,
                 refreshTotalPerformanceData.alternateHierarchyId,
-                refreshTotalPerformanceData.filter,
+                refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
                 refreshTotalPerformanceData.brandSkuCode,
-                refreshTotalPerformanceData.skuPackageType
+                refreshTotalPerformanceData.skuPackageType,
+                refreshTotalPerformanceData.filter
               );
 
               done();
@@ -1657,9 +1741,7 @@ describe('Responsibilities Service', () => {
 
           it('should call transformPerformanceDTOSpy with the result from getAlternateHierarchyGroupPerformance', (done) => {
             responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-              expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
-                entitiesTotalPerformancesDTOMock
-              );
+              expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock);
 
               done();
             });
@@ -1707,9 +1789,9 @@ describe('Responsibilities Service', () => {
               expect(getAlternateHierarchyPersonPerformanceSpy).toHaveBeenCalledWith(
                 refreshTotalPerformanceData.positionId,
                 refreshTotalPerformanceData.alternateHierarchyId,
-                refreshTotalPerformanceData.filter,
                 refreshTotalPerformanceData.brandSkuCode,
-                refreshTotalPerformanceData.skuPackageType
+                refreshTotalPerformanceData.skuPackageType,
+                refreshTotalPerformanceData.filter
               );
 
               done();
@@ -1718,9 +1800,7 @@ describe('Responsibilities Service', () => {
 
           it('should call transformPerformanceDTOSpy with the result from getAlternateHierarchyGroupPerformance', (done) => {
             responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-              expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
-                entitiesTotalPerformancesDTOMock
-              );
+              expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock);
 
               done();
             });
@@ -1770,10 +1850,10 @@ describe('Responsibilities Service', () => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getAccountPerformanceSpy).toHaveBeenCalledWith(
             refreshTotalPerformanceData.accountPositionId,
-            refreshTotalPerformanceData.filter,
             refreshTotalPerformanceData.positionId,
             refreshTotalPerformanceData.brandSkuCode,
-            refreshTotalPerformanceData.skuPackageType
+            refreshTotalPerformanceData.skuPackageType,
+            refreshTotalPerformanceData.filter
           );
 
           done();
@@ -1835,11 +1915,11 @@ describe('Responsibilities Service', () => {
           + 'the filter, positionId, brandSkuCode and skuPackageType', (done) => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
             expect(getHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
-              refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
-              refreshTotalPerformanceData.filter,
               refreshTotalPerformanceData.positionId,
+              refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
               refreshTotalPerformanceData.brandSkuCode,
-              refreshTotalPerformanceData.skuPackageType
+              refreshTotalPerformanceData.skuPackageType,
+              refreshTotalPerformanceData.filter
             );
 
             done();
@@ -1848,9 +1928,7 @@ describe('Responsibilities Service', () => {
 
         it('should call transformPerformanceDTOSpy with the result from getRefreshedTotalPerformance', (done) => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-            expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(
-              entitiesTotalPerformancesDTOMock
-            );
+            expect(transformPerformanceDTOSpy).toHaveBeenCalledWith(entitiesTotalPerformancesDTOMock);
 
             done();
           });
@@ -1906,12 +1984,12 @@ describe('Responsibilities Service', () => {
           + 'the filter, positionId, brandCode, skuPackageCode', (done) => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
             expect(getAlternateHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
-              refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
               refreshTotalPerformanceData.positionId,
               alternateHierarchyIdMock,
-              refreshTotalPerformanceData.filter,
+              refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
               refreshTotalPerformanceData.brandSkuCode,
-              refreshTotalPerformanceData.skuPackageType
+              refreshTotalPerformanceData.skuPackageType,
+              refreshTotalPerformanceData.filter
             );
 
             done();
@@ -1946,8 +2024,8 @@ describe('Responsibilities Service', () => {
       };
     });
 
-    it('calls getSubAccounts from the myPerformanceApiService with the right parameters', (done) => {
-      const getSubAccountsSpy = spyOn(myPerformanceApiService, 'getSubAccounts').and.callThrough();
+    it('calls getSubAccounts from the AccountsApiService with the right parameters', (done) => {
+      const getSubAccountsSpy = spyOn(accountsApiService, 'getSubAccounts').and.callThrough();
       responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe(() => {
         done();
       });
@@ -2006,8 +2084,8 @@ describe('Responsibilities Service', () => {
       };
     });
 
-    it('should call the myPerformanceApiService.getAlternateHierarchy with the provided positionId', (done) => {
-      const getAlternateHierarchySpy = spyOn(myPerformanceApiService, 'getAlternateHierarchy').and.callThrough();
+    it('should call the positionsApiService.getAlternateHierarchy with the provided positionId', (done) => {
+      const getAlternateHierarchySpy = spyOn(positionsApiService, 'getAlternateHierarchy').and.callThrough();
 
       responsibilitiesService.getAlternateHierarchy(responsibilitiesDataMock).subscribe(() => {
         expect(getAlternateHierarchySpy).toHaveBeenCalledWith(responsibilitiesDataMock.positionId, responsibilitiesDataMock.positionId);
@@ -2015,7 +2093,7 @@ describe('Responsibilities Service', () => {
       });
     });
 
-    describe('when myPerformanceApiService.getAlternateHierarchy returns positions', () => {
+    describe('when positionsApiService.getAlternateHierarchy returns positions', () => {
       beforeEach(() => {
         peopleResponsibilitiesDTOMock.entityURIs = undefined;
       });
@@ -2058,7 +2136,7 @@ describe('Responsibilities Service', () => {
       });
     });
 
-    describe('when myPerformanceApiService.getAlternateHierarchy returns an entityURIs', () => {
+    describe('when positionsApiService.getAlternateHierarchy returns an entityURIs', () => {
       beforeEach(() => {
         delete peopleResponsibilitiesDTOMock.positions;
       });
@@ -2075,9 +2153,9 @@ describe('Responsibilities Service', () => {
       });
     });
 
-    describe('when myPerformanceApiService.getAlternateHierarchy returns an empty object', () => {
+    describe('when positionsApiService.getAlternateHierarchy returns an empty object', () => {
       it('should return the passed in responsibilitiesData without making any changes', (done) => {
-        spyOn(myPerformanceApiService, 'getAlternateHierarchy').and.returnValue(Observable.of({}));
+        spyOn(positionsApiService, 'getAlternateHierarchy').and.returnValue(Observable.of({}));
 
         responsibilitiesService.getAlternateHierarchy(responsibilitiesDataMock).subscribe((actualResponsibilitiesData) => {
           expect(actualResponsibilitiesData).toEqual(responsibilitiesDataMock);
@@ -2125,8 +2203,8 @@ describe('Responsibilities Service', () => {
     });
 
     describe('when an alternateEntitiesURL is present', () => {
-      it('should reach out to myPerformanceApiService.getAccountsDistributors to get accounts or distributors', (done) => {
-        const getAccountsDistributorsSpy = spyOn(myPerformanceApiService, 'getAccountsDistributors').and.callThrough();
+      it('should reach out to positionsApiService.getAccountsOrDistributors to get accounts or distributors', (done) => {
+        const getAccountsDistributorsSpy = spyOn(positionsApiService, 'getAccountsOrDistributors').and.callThrough();
 
         responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesDataMock).subscribe((actualResponsibilitiesData) => {
           expect(getAccountsDistributorsSpy).toHaveBeenCalledWith(responsibilitiesDataMock.alternateEntitiesURL);
