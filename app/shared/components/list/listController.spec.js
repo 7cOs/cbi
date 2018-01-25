@@ -3,7 +3,7 @@ import * as Chance from 'chance';
 const chance = new Chance();
 
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService;
+  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService, $state;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
@@ -20,12 +20,13 @@ describe('Unit: list controller', function() {
       $provide.value('analyticsService', analyticsService);
     });
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
       filter = _$filter_;
+      $state = _$state_;
 
       closedOpportunitiesService = _closedOpportunitiesService_;
       filtersService = _filtersService_;
@@ -2208,6 +2209,57 @@ describe('Unit: list controller', function() {
         expect(ctrl.addToTargetList).toHaveBeenCalledWith(destTargetListMock.id);
         expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
         expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Copy to Target List', selectedListMock);
+      });
+    });
+
+    describe('When we are on the opportunities page and we add the target list', () => {
+      const destTargetListMock = {
+        opportunitiesSummary: {
+          opportunitiesCount: 300
+        },
+        id: 'fakeID'
+      };
+
+      let selectedListMock;
+
+      beforeEach(() => {
+        selectedListMock = chance.string();
+        targetListService.model.currentList.id = selectedListMock;
+      });
+
+      it('should add to target list and send analytics category of opportunity Add to Target List', () => {
+        $state.current.name = 'opportunities';
+        expect($state.current.name).toEqual('opportunities');
+        spyOn(analyticsService, 'trackEvent');
+
+        ctrl.selected = [{id: 'fake1'}];
+
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
+
+        const fakeEvent = {
+          stopPropagation: () => {}
+        };
+
+        ctrl.handleAddToTargetList(fakeEvent, destTargetListMock, 0, true);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Add to Target List', destTargetListMock.id);
+
+      });
+
+      it('should add to target list and send analytics category of opportunity Copy to Target List', () => {
+        $state.current.name = 'opportunities';
+        expect($state.current.name).toEqual('opportunities');
+        spyOn(analyticsService, 'trackEvent');
+        ctrl.selected = [{id: 'fake1'}];
+
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
+
+        const fakeEvent = {
+          stopPropagation: () => {}
+        };
+
+        ctrl.handleAddToTargetList(fakeEvent, destTargetListMock, 0, false);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Copy to Target List', selectedListMock);
+
       });
     });
 
