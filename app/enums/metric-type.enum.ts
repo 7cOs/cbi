@@ -1,5 +1,5 @@
 export enum MetricTypeValue {
-  Depletions = 'Depletions',
+  Depletions = 'Volume',
   Distribution = 'Distribution',
   Velocity = 'Velocity'
 }

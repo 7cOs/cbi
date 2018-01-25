@@ -2,7 +2,7 @@ import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, Res
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
-import { ApiHelperService } from '../../api-helper.service';
+import { ApiHelperService } from '../api-helper.service';
 import { DistributorsApiService } from './distributors-api.service';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getOpportunityCountDTOsMock } from '../../../models/opportunity-count-dto.model.mock';
@@ -156,7 +156,7 @@ describe('DistributorsApiService', () => {
       const expectedPerformanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
       const expectedRequestUrl: string = `/v3/distributors/${ distributorIdMock }/performanceTotal`
         + `?positionId=${ positionIdMock }`
-        + `&metricType=volume`
+        + `&metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
@@ -217,7 +217,7 @@ describe('DistributorsApiService', () => {
       const expectedRequestUrl: string = `/v3/distributors/${ distributorIdMock }/productMetrics`
         + `?positionId=${ positionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.brand }`
-        + `&metricType=volume`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
 

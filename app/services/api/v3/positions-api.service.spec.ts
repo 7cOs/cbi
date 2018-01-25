@@ -2,7 +2,7 @@ import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, Res
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
-import { ApiHelperService } from '../../api-helper.service';
+import { ApiHelperService } from '../api-helper.service';
 import { EntityDTO } from '../../../models/entity-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntityDTOMock } from '../../../models/entity-dto.model.mock';
@@ -132,7 +132,7 @@ describe('PositionsApiService', () => {
     + ' for the given AlternateHierarchy Group', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/performanceTotal`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
-        + `&metricType=volume`
+        + `&metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
@@ -190,7 +190,7 @@ describe('PositionsApiService', () => {
     it('should call the Positions Alternate Hierarchy Performance endpoint and return PerformanceDTO data', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchyPerformanceTotal`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
-        + `&metricType=volume`
+        + `&metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
@@ -247,7 +247,7 @@ describe('PositionsApiService', () => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchyProductMetrics`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.sku }`
-        + `&metricType=volume`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
 
@@ -327,7 +327,7 @@ describe('PositionsApiService', () => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/productMetrics`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.sku }`
-        + `&metricType=volume`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
 
@@ -408,7 +408,7 @@ describe('PositionsApiService', () => {
   describe('getHierarchyGroupPerformance', () => {
     it('should call the Positions Group Performance endpoint and return PerformanceDTO data', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/performanceTotal`
-        + `?metricType=volume`
+        + `?metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
@@ -485,7 +485,7 @@ describe('PositionsApiService', () => {
   describe('getPersonPerformance', () => {
     it('should call the Positions Performance endpoint and return PerformanceDTO data for the given PositionId', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/performanceTotal`
-        + `?metricType=volume`
+        + `?metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
@@ -539,7 +539,7 @@ describe('PositionsApiService', () => {
     it('should call the Positions Product Metrics endpoint and return ProductMetricsDTO data for the given PositionId', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/productMetrics`
         + `?aggregationLevel=${ ProductMetricsAggregationType.sku }`
-        + `&metricType=volume`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
 
@@ -615,7 +615,7 @@ describe('PositionsApiService', () => {
     it('should call the Positions Group Product Metrics endpoint and return ProductMetricsDTO data for the given PositionId', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/productMetrics`
         + `?aggregationLevel=${ ProductMetricsAggregationType.sku }`
-        + `&metricType=volume`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
 

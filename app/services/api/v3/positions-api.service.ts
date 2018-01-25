@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { ApiHelperService } from '../../api-helper.service';
+import { ApiHelperService } from '../api-helper.service';
 import { EntityDTO } from '../../../models/entity-dto.model';
+import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../../models/people-responsibilities-dto.model';
 import { PerformanceDTO } from '../../../models/performance.model';
@@ -55,7 +56,7 @@ export class PositionsApiService {
       {
         contextPositionId: alternateHierarchyPositionId
       },
-      this.apiHelperService.getFilterStateParams(filter),
+      this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
@@ -75,7 +76,7 @@ export class PositionsApiService {
       {
         contextPositionId: alternateHierarchyPositionId
       },
-      this.apiHelperService.getFilterStateParams(filter),
+      this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
@@ -95,11 +96,15 @@ export class PositionsApiService {
         contextPositionId: alternateHierarchyPositionId,
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getFilterStateParams(filter));
+      this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+        error,
+        aggregationLevel,
+        MetricTypeValue[params.metricType]
+      ));
   }
 
   public getAlternateHierarchyRoleGroupProductMetrics(
@@ -115,11 +120,15 @@ export class PositionsApiService {
         contextPositionId: alternateHierarchyPositionId,
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getFilterStateParams(filter));
+      this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+        error,
+        aggregationLevel,
+        MetricTypeValue[params.metricType]
+      ));
   }
 
   public getHierarchyGroupPerformance(
@@ -131,7 +140,7 @@ export class PositionsApiService {
   ): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ groupTypeCode }/performanceTotal`;
     const params = Object.assign({},
-      this.apiHelperService.getFilterStateParams(filter),
+      this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
@@ -155,7 +164,7 @@ export class PositionsApiService {
   ): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
     const params = Object.assign({},
-      this.apiHelperService.getFilterStateParams(filter),
+      this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
@@ -173,11 +182,15 @@ export class PositionsApiService {
       {
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getFilterStateParams(filter));
+      this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+        error,
+        aggregationLevel,
+        MetricTypeValue[params.metricType]
+      ));
   }
 
   public getRoleGroupProductMetrics(
@@ -191,10 +204,14 @@ export class PositionsApiService {
       {
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getFilterStateParams(filter));
+      this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+        error,
+        aggregationLevel,
+        MetricTypeValue[params.metricType]
+      ));
   }
 }

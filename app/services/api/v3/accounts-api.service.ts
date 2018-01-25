@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { ApiHelperService } from '../../api-helper.service';
+import { ApiHelperService } from '../api-helper.service';
 import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
+import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../../../models/performance.model';
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
@@ -32,7 +33,7 @@ export class AccountsApiService {
       {
         positionId: positionId
       },
-      this.apiHelperService.getFilterStateParams(filter),
+      this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
@@ -52,11 +53,15 @@ export class AccountsApiService {
         positionId: positionId,
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getFilterStateParams(filter));
+      this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
       .map((res: Response) => res.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(error, aggregationLevel, params.metricType));
+      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+        error,
+        aggregationLevel,
+        MetricTypeValue[params.metricType]
+      ));
   }
 
   public getSubAccounts(
