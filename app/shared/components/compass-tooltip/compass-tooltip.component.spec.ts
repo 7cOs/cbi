@@ -1,8 +1,9 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { CompassTooltipComponent } from './compass-tooltip.component';
 import { CompassTooltipObject } from '../../../models/compass-tooltip-component.model';
-import { getTooltipMock } from '../../../models/my-performance-table-row.model.mock';
+import { getTooltipMock } from '../../../models/compass-tooltip.model.mock';
 
 describe('CompassTooltipComponent', () => {
 
@@ -118,5 +119,4 @@ describe('CompassTooltipComponent', () => {
       expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
     });
   });
-
 });

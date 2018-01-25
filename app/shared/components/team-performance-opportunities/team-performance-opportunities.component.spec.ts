@@ -2,13 +2,12 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Chance from 'chance';
 
-import {
-  getTeamPerformanceTableOpportunitiesMock,
-  getTooltipMock } from '../../../models/my-performance-table-row.model.mock';
-import { TeamPerformanceOpportunitiesComponent } from './team-performance-opportunities.component';
-import { TeamPerformanceTableOpportunity } from '../../../models/my-performance-table-row.model';
 import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
 import { CompassTooltipObject } from '../../../models/compass-tooltip-component.model';
+import { getTooltipMock } from '../../../models/compass-tooltip.model.mock';
+import { getTeamPerformanceTableOpportunitiesMock } from '../../../models/my-performance-table-row.model.mock';
+import { TeamPerformanceOpportunitiesComponent } from './team-performance-opportunities.component';
+import { TeamPerformanceTableOpportunity } from '../../../models/my-performance-table-row.model';
 
 const chance = new Chance();
 
