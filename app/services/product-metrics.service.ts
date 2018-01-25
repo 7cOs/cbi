@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
@@ -37,7 +37,8 @@ export class ProductMetricsService {
 
   constructor(
     private productMetricsApiService: ProductMetricsApiService,
-    private productMetricsTransformerService: ProductMetricsTransformerService
+    private productMetricsTransformerService: ProductMetricsTransformerService,
+    @Inject('toastService') private toastService: any
   ) { }
 
   public getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
@@ -231,6 +232,10 @@ export class ProductMetricsService {
       ProductMetricsServiceConstants.opportunityType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+      })
+      .catch(() => {
+        this.toastService.showOpportunityCountErrorToast();
+        return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
       });
   }
 
@@ -253,6 +258,10 @@ export class ProductMetricsService {
       ProductMetricsServiceConstants.opportunityType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+      })
+      .catch(() => {
+        this.toastService.showOpportunityCountErrorToast();
+        return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
       });
   }
 }

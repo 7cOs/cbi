@@ -10,13 +10,15 @@ module.exports = /*  @ngInject */
       added: false,
       deleteError: false,
       multipleTargetListsSelected: false,
-      performanceDataError: false
+      performanceDataError: false,
+      opportunityCountError: false
     };
 
     var service = {
       model: model,
       showToast: showToast,
-      showPerformanceDataErrorToast: showPerformanceDataErrorToast
+      showPerformanceDataErrorToast: showPerformanceDataErrorToast,
+      showOpportunityCountErrorToast: showOpportunityCountErrorToast
     };
 
     return service;
@@ -51,6 +53,14 @@ module.exports = /*  @ngInject */
 
       $timeout(() => {
         model.performanceDataError = false;
+      }, 10000);
+    }
+
+    function showOpportunityCountErrorToast() {
+      model.opportunityCountError = true;
+
+      $timeout(() => {
+        model.opportunityCountError = false;
       }, 10000);
     }
   };
