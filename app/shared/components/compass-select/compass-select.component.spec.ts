@@ -101,7 +101,7 @@ describe('CompassSelectComponent', () => {
   });
 
   describe('component output event', () => {
-    xit('should output the value of a clicked option', (done: any) => {
+    it('should output the value of a clicked option', (done: any) => {
       componentInstance.options = optionsMockStandard;
       componentInstance.model = optionsMockStandard[0].value;
       fixture.detectChanges();
