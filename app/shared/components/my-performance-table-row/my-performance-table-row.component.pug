@@ -25,7 +25,7 @@ td.right-col(
   *ngIf="showOpportunities", colspan=1,
   [class.opportunities]="rowData.opportunities > 0",
   [class.opportunities-error]="opportunitiesError",
-  (click)="opportunityCountClicked($event)") {{getOpportunityCountText(rowData.opportunities, opportunitiesError)}}
+  (click)="opportunityCountClicked($event)") {{opportunityCountText}}
 
 //- Temporary td column to act as an empty filler until a Simple Opportunities column is implemented
 td.right-col(*ngIf="showEmptyLastColumn", colspan=1)

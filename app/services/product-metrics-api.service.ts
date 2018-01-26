@@ -190,8 +190,7 @@ export class ProductMetricsApiService {
       type: type,
     };
 
-    //  return Observable.throw(new Error());
-    return this.http.get('gibjab', {
+    return this.http.get('foo', {
       params: params
     })
       .map(res => res.json())
@@ -217,12 +216,11 @@ export class ProductMetricsApiService {
       type: type
     };
 
-    return Observable.throw(new Error());
-    // return this.http.get(url, {
-    //   params: params
-    // })
-    //   .map(res => res.json())
-    //   .catch(err => Observable.throw(err));
+    return this.http.get('foo', {
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => Observable.throw(err));
   }
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {

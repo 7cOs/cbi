@@ -172,24 +172,24 @@ describe('MyPerformanceTableComponent', () => {
       const opportunitiesError = true;
       const opportunityCount: number = null;
 
-      const oppCountText = componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
-      expect(oppCountText).toEqual('-');
+      componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      expect(componentInstance.opportunityCountText).toEqual('-');
     });
 
     it('should return "0" when opportunitiesError is false, but opportunityCount is null', () => {
       const opportunitiesError = false;
       const opportunityCount: number = null;
 
-      const oppCountText = componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
-      expect(oppCountText).toEqual('0');
+      componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      expect(componentInstance.opportunityCountText).toEqual('0');
     });
 
     it('should return correct opportunity count when opportunitiesError is false and count has value', () => {
       const opportunitiesError = false;
       const opportunityCount: number = 10;
 
-      const oppCountText = componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
-      expect(oppCountText).toEqual('10');
+      componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      expect(componentInstance.opportunityCountText).toEqual('10');
     });
   });
 });
