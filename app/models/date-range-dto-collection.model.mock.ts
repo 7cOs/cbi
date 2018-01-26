@@ -261,7 +261,7 @@ export const dateRangeDTOsMock: DateRangeDTO[] = [
     },
     {
       'code': 'CCQTD',
-      'description': 'Last Closed Calendar Quarter',
+      'description': 'Current Closed Quarter to Date',
       'startDate': '20170701',
       'endDate': '20170930'
     }
