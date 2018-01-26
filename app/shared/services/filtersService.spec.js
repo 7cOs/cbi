@@ -924,7 +924,7 @@ describe('Unit: filter service', function() {
     expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[8])).toEqual(resetModelObject.depletionsTimePeriod.year[5]);
     expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[9])).toBe(null);
 
-    const depletionTimePeriodsAPI = ['LCM', 'CYTM', 'FYTM', 'CMIPBDL', 'CYTDBDL', 'FYTDBDL', 'FQTD', 'CQTD','CCQTD', 'NotDepletionTimePeriod'];
+    const depletionTimePeriodsAPI = ['LCM', 'CYTM', 'FYTM', 'CMIPBDL', 'CYTDBDL', 'FYTDBDL', 'FQTD', 'CQTD', 'CCQTD', 'NotDepletionTimePeriod'];
     expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[0])).toEqual(resetModelObject.depletionsTimePeriod.month[0]);
     expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[1])).toEqual(resetModelObject.depletionsTimePeriod.month[1]);
     expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[2])).toEqual(resetModelObject.depletionsTimePeriod.month[2]);

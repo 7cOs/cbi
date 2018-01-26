@@ -51,6 +51,6 @@ export const dateRangeCollectionMock: DateRange[] = [
     range: '10/01/17 - 10/11/17' },
   { code: 'CCQTD',
     displayCode: 'Clo Cal Qtr',
-    description: 'Current Closed Quarter to Date ',
+    description: 'Current Closed Quarter to Date',
     range: '07/01/17 - 09/30/17'}
 ];

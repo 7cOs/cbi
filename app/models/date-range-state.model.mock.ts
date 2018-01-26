@@ -41,7 +41,7 @@ export const dateRangeStateMock: DateRangesState = {
   CCQTD: {
     code: 'CCQTD',
     displayCode: 'Clo Cal Qtr',
-    description: 'Current Closed Quarter to Date ',
+    description: 'Current Closed Quarter to Date',
     range: '07/01/17 - 09/30/17'
   },
   L60BDL: {

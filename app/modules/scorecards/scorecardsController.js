@@ -217,15 +217,6 @@ module.exports = /*  @ngInject */
         vm.filtersService.lastEndingTimePeriod.endingPeriodType = endingPeriod;
       }
 
-      if (distirbutionPeriod) {
-        var distObj = filtersService.model.distributionTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
-        var matchedDistObj = distObj.filter(function(val) {
-          return val.name === distirbutionPeriod;
-        });
-        vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
-        vm.depletionSelectDisplayName = matchedDistObj[0].displayValue;
-      }
-
       if (depletionPeriod) {
         var depletionObj = filtersService.model.depletionsTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
         var matchedObj = depletionObj.filter(function(val) {
@@ -234,6 +225,14 @@ module.exports = /*  @ngInject */
 
         vm.filtersService.lastEndingTimePeriod.depletionValue = matchedObj[0];
         vm.depletionSelectDisplayName = matchedObj[0].displayValue;
+      }
+
+      if (distirbutionPeriod) {
+        var distObj = filtersService.model.distributionTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
+        var matchedDistObj = distObj.filter(function(val) {
+          return val.name === distirbutionPeriod;
+        });
+        vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
       }
     }
 
