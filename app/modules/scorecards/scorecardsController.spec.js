@@ -482,6 +482,34 @@ describe('Unit: scorecardsController', function() {
     });
   });
 
+  describe('[Method] updatedSelectionValuesInFilter', function () {
+    beforeEach(function() {
+      ctrl.filtersService.model.scorecardDistributionTimePeriod = {
+        'year': [
+          {'name': 'L90', 'displayValue': 'L90', displayCode: 'L90 Days', v3ApiCode: 'L90BDL', 'id': 2, '$$hashKey': 'object:37'}],
+        'month': [{'name': 'L03', 'displayValue': 'L03', displayCode: 'L03 Mth', v3ApiCode: 'L3CM', 'id': 4}]};
+      ctrl.filtersService.model.depletionsTimePeriod = {
+        month: [
+          {'name': 'CMTH', 'displayValue': 'Clo Mth', v3ApiCode: 'LCM', 'id': 1, type: 'month'},
+          { 'name': 'CYTM', 'displayValue': 'CYTM', v3ApiCode: 'CYTM', 'id': 2, type: 'month' },
+          {'name': 'FYTM', 'displayValue': 'FYTM', v3ApiCode: 'FYTM', 'id': 3, type: 'month'}],
+        year: [
+          {'name': 'MTD', 'displayValue': 'MTD', v3ApiCode: 'CMIPBDL', 'id': 4, type: 'year', '$$hashKey': 'object:81 '},
+          {'name': 'CYTD', 'displayValue': 'CYTD', v3ApiCode: 'CYTDBDL', 'id': 5, type: 'year', '$$hashKey': 'object:82 '},
+          {'name': 'FYTD', 'displayValue': 'FYTD', v3ApiCode: 'FYTDBDL', 'id': 6, type: 'year'},
+          {'name': 'CCQTD', 'displayValue': 'Clo Cal Qtr', v3ApiCode: 'CCQTD', 'id': 7, type: 'year'}
+        ]};
+    });
+
+    it('should update to new selected filter value', function() {
+      ctrl.updatedSelectionValuesInFilter('year', 'CCQTD', 'L90');
+
+      expect(ctrl.filtersService.model.depletionsTimePeriod['year'][3].name).toEqual('CCQTD');
+      expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({name: 'CCQTD', displayValue: 'Clo Cal Qtr', v3ApiCode: 'CCQTD', id: 7, type: 'year'});
+      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][3].displayValue);
+    });
+  });
+
   describe('[Method] changeDistributionTimePeriod', function() {
     it('should update the distribution time period', function() {
       ctrl.changeDistributionTimePeriod('L90');

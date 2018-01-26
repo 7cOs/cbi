@@ -91,6 +91,7 @@ module.exports = /*  @ngInject */
     vm.setSortQuery = setSortQuery;
     vm.getFilteredValue = getFilteredValue;
     vm.scorecardsFilter = scorecardsFilter;
+    vm.updatedSelectionValuesInFilter = updatedSelectionValuesInFilter;
 
     init();
 
