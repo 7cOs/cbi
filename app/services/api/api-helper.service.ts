@@ -3,9 +3,11 @@ import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../../models/performance.model';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsAggregationType } from '../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsValues } from '../../models/product-metrics.model';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
@@ -13,8 +15,8 @@ import { SkuPackageType } from '../../enums/sku-package-type.enum';
 export interface FilterStateParameters {
   type?: string;
   metricType?: string;
-  dateRangeCode: string;
-  premiseType: string;
+  dateRangeCode: DateRangeTimePeriodValue;
+  premiseType: PremiseTypeValue;
 }
 
 export interface BrandSkuPackageCodeParam {
