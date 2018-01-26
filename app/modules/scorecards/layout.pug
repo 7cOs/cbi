@@ -29,7 +29,7 @@ div.my-scorecards
     div.scorecard-header.clearfix
       div.scorecard-header-left
         h2 My Depletions Scorecard
-        h3 {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
+        h3 {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : (s.depletionSelect === 'CCQTD' ? 'Clo Cal Qtr': s.depletionSelect)}}
         p {{s.dateRanges[s.depletionSelectApiCode].range}}
       div.scorecard-header-right
         p.accent Total Depletions / vs YA %

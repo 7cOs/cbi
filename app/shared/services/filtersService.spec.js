@@ -908,7 +908,8 @@ describe('Unit: filter service', function() {
     expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[4])).toEqual(resetModelObject.depletionsTimePeriod.year[1]);
     expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[5])).toEqual(resetModelObject.depletionsTimePeriod.year[2]);
     expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[6])).toEqual(resetModelObject.depletionsTimePeriod.year[3]);
-    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[7])).toBe(null);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[7])).toEqual(resetModelObject.depletionsTimePeriod.year[4]);
+    expect(filtersService.depletionsTimePeriodFromName(depletionTimePeriods[8])).toBe(null);
 
     const depletionTimePeriodsAPI = ['LCM', 'CYTM', 'FYTM', 'CMIPBDL', 'CYTDBDL', 'FYTDBDL', 'FQTD', 'CCQTD', 'NotDepletionTimePeriod'];
     expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[0])).toEqual(resetModelObject.depletionsTimePeriod.month[0]);
@@ -918,7 +919,8 @@ describe('Unit: filter service', function() {
     expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[4])).toEqual(resetModelObject.depletionsTimePeriod.year[1]);
     expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[5])).toEqual(resetModelObject.depletionsTimePeriod.year[2]);
     expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[6])).toEqual(resetModelObject.depletionsTimePeriod.year[3]);
-    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[7])).toBe(null);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[7])).toEqual(resetModelObject.depletionsTimePeriod.year[4]);
+    expect(filtersService.depletionsTimePeriodFromV3APICode(depletionTimePeriodsAPI[8])).toBe(null);
 
     const distributionTimePeriodsAPI = ['L60BDL', 'L90BDL', 'L120BDL', 'L3CM', 'NotDistributionTimePeriod'];
     expect(filtersService.distributionTimePeriodFromV3APICode(distributionTimePeriodsAPI[0])).toEqual(resetModelObject.distributionTimePeriod.year[0]);
