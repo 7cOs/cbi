@@ -37,6 +37,7 @@ class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean;
   @Input() showOpportunities: boolean;
+  @Input() opportunitiesError: boolean;
   @Input() showEmptyLastColumn: boolean;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() showX: boolean;

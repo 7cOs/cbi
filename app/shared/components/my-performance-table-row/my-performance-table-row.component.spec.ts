@@ -8,6 +8,7 @@ import { getMyPerformanceTableRowMock } from '../../../models/my-performance-tab
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
+import { Component } from '@angular/core/src/metadata/directives';
 
 const chance = new Chance();
 
@@ -163,6 +164,32 @@ describe('MyPerformanceTableComponent', () => {
       const rightColumnElement = fixture.debugElement.query(By.css('.right-col'));
 
       expect(rightColumnElement).toBe(null);
+    });
+  });
+
+  fdescribe('when getOpportunityCountText is called', () => {
+    it('should return "-" when opportunitiesError is true', () => {
+      const opportunitiesError = true;
+      const opportunityCount: number = null;
+
+      const oppCountText = componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      expect(oppCountText).toEqual('-');
+    });
+
+    it('should return "0" when opportunitiesError is false, but opportunityCount is null', () => {
+      const opportunitiesError = false;
+      const opportunityCount: number = null;
+
+      const oppCountText = componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      expect(oppCountText).toEqual('0');
+    });
+
+    it('should return correct opportunity count when opportunitiesError is false and count has value', () => {
+      const opportunitiesError = false;
+      const opportunityCount: number = 10;
+
+      const oppCountText = componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      expect(oppCountText).toEqual('10');
     });
   });
 });

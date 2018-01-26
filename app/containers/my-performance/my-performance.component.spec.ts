@@ -65,6 +65,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
+import { ProductMetrics } from '../../models/product-metrics.model';
 
 const chance = new Chance();
 
@@ -105,6 +106,7 @@ class MyPerformanceTableComponentMock {
   @Input() showBackButton: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = true;
+  @Input() opportunitiesError: boolean = false;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
   @Input() dismissableTotalRow: MyPerformanceTableRow;
@@ -3849,6 +3851,30 @@ describe('MyPerformanceComponent', () => {
         expect(componentInstanceCopy.teamPerformanceTableOpportunities)
           .toBe(groupedOpportunityCountsMock[tableRowMock.metadata.skuPackageCode].opportunityCounts);
       });
+    });
+  });
+
+  fdescribe('when fetching opportunity counts', () => {
+    it('should set fetchOpportunityCountsFailure to false when fetch is successful', () => {
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetched,
+        opportunityCountsStatus: ActionStatus.Fetched,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.brands
+      };
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.fetchOpportunitiesError).toBe(false);
+    });
+
+    it('should set fetchOpportunityCountsFailure to true when fetch is unsuccessful', () => {
+      myPerformanceProductMetricsMock = {
+        status: ActionStatus.Fetched,
+        opportunityCountsStatus: ActionStatus.Error,
+        products: {brandValues: []},
+        productMetricsViewType: ProductMetricsViewType.brands
+      };
+      productMetricsSubject.next(myPerformanceProductMetricsMock);
+      expect(componentInstance.fetchOpportunitiesError).toBe(true);
     });
   });
 });
