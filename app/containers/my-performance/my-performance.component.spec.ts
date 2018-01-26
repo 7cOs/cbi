@@ -65,7 +65,6 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
-import { ProductMetrics } from '../../models/product-metrics.model';
 
 const chance = new Chance();
 

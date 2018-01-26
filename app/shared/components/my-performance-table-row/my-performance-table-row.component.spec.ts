@@ -8,7 +8,6 @@ import { getMyPerformanceTableRowMock } from '../../../models/my-performance-tab
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
-import { Component } from '@angular/core/src/metadata/directives';
 
 const chance = new Chance();
 
