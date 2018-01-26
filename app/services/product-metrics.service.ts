@@ -235,7 +235,6 @@ export class ProductMetricsService {
       })
       .catch((err: Error) => {
         this.toastService.showOpportunityCountErrorToast();
-        // return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
         return Observable.throw(err);
       });
   }
@@ -262,7 +261,6 @@ export class ProductMetricsService {
       })
       .catch((err: Error) => {
         this.toastService.showOpportunityCountErrorToast();
-        // return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
         return Observable.throw(err);
       });
   }
