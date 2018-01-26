@@ -40,7 +40,7 @@ export class DistributorsApiService {
     };
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => Observable.throw(error));
   }
 
@@ -60,7 +60,7 @@ export class DistributorsApiService {
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
@@ -79,7 +79,7 @@ export class DistributorsApiService {
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,

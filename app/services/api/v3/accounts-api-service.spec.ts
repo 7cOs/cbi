@@ -8,7 +8,7 @@ import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntitySubAccountDTOMock } from '../../../models/entity-subaccount-dto.model.mock';
 import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
-import { getPremiseTypeMock } from '../../../enums/premise-type.enum.mock';
+import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
@@ -60,7 +60,7 @@ describe('AccountsApiService', () => {
     filterStateMock = {
       metricType: MetricTypeValue.Depletions,
       dateRangeCode: getDateRangeTimePeriodValueMock(),
-      premiseType: getPremiseTypeMock()
+      premiseType: getPremiseTypeValueMock()
     };
   }));
 

@@ -7,20 +7,26 @@ import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../enums/product-metrics-aggregation-type.enum';
-import { ProductMetricsDTO } from '../../models/product-metrics.model';
+import { ProductMetricsValues } from '../../models/product-metrics.model';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
-interface FilterStateParameters {
+export interface FilterStateParameters {
   type?: string;
   metricType?: string;
   dateRangeCode: string;
   premiseType: string;
 }
 
-interface BrandSkuPackageCodeParam {
+export interface BrandSkuPackageCodeParam {
   brandCode?: string;
   masterPackageSKU?: string;
   masterSKU?: string;
+}
+
+export interface ProductMetricsNotFoundData {
+  brandValues?: ProductMetricsValues[];
+  skuValues?: ProductMetricsValues[];
+  type: MetricTypeValue;
 }
 
 @Injectable()
@@ -56,7 +62,7 @@ export class ApiHelperService {
     };
   }
 
-  public handlePerformanceNotFoundError(error: Response): Observable<PerformanceDTO> {
+  public handlePerformanceNotFoundError(error: Response): Observable<PerformanceDTO|Error> {
     if (error.status === 404) {
       return Observable.of({
         total: 0,
@@ -71,9 +77,9 @@ export class ApiHelperService {
     error: Response,
     aggregationLevel: ProductMetricsAggregationType,
     metricType: MetricTypeValue
-  ): Observable<ProductMetricsDTO> {
+  ): Observable<ProductMetricsNotFoundData|Error> {
     if (error.status === 404) {
-      const emptyProductMetricDTO: ProductMetricsDTO = {
+      const emptyProductMetricDTO: ProductMetricsNotFoundData = {
         type: metricType
       };
 

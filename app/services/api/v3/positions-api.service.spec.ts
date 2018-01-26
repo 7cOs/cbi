@@ -8,7 +8,7 @@ import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-
 import { getEntityDTOMock } from '../../../models/entity-dto.model.mock';
 import { getPeopleResponsibilitiesDTOMock } from '../../../models/people-responsibilities-dto.model.mock';
 import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
-import { getPremiseTypeMock } from '../../../enums/premise-type.enum.mock';
+import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
@@ -72,7 +72,7 @@ describe('PositionsApiService', () => {
     filterStateMock = {
       metricType: MetricTypeValue.Depletions,
       dateRangeCode: getDateRangeTimePeriodValueMock(),
-      premiseType: getPremiseTypeMock()
+      premiseType: getPremiseTypeValueMock()
     };
   }));
 

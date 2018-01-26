@@ -25,7 +25,7 @@ export class PositionsApiService {
     const url = `/v3${ entityURI }`;
 
     return this.http.get(url)
-      .map(res => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => Observable.throw(error));
   }
 
@@ -39,7 +39,7 @@ export class PositionsApiService {
     };
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => Observable.throw(error));
   }
 
@@ -60,7 +60,7 @@ export class PositionsApiService {
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
@@ -80,7 +80,7 @@ export class PositionsApiService {
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
@@ -99,7 +99,7 @@ export class PositionsApiService {
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
@@ -123,7 +123,7 @@ export class PositionsApiService {
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
@@ -144,7 +144,7 @@ export class PositionsApiService {
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
@@ -152,7 +152,7 @@ export class PositionsApiService {
     const url = `/v3/positions/${ positionId }/responsibilities`;
 
     return this.http.get(url)
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => Observable.throw(error));
   }
 
@@ -168,7 +168,7 @@ export class PositionsApiService {
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
@@ -185,7 +185,7 @@ export class PositionsApiService {
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
@@ -207,7 +207,7 @@ export class PositionsApiService {
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get(url, { params: params })
-      .map((res: Response) => res.json())
+      .map((response: Response) => response.json())
       .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
