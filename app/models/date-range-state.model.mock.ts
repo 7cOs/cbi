@@ -20,6 +20,12 @@ export const dateRangeStateMock: DateRangesState = {
     description: 'From First Day of Current Calendar Year to Date With Business Day Lag',
     range: '01/01/17 - 06/02/17'
   },
+  CQTD: {
+    code: 'CQTD',
+    displayCode: 'CQTD',
+    description: 'Calendar Quarter to Date',
+    range: '10/1/17 - 10/11/17'
+  },
   FYTDBDL: {
     code: 'FYTDBDL',
     displayCode: 'FYTD',

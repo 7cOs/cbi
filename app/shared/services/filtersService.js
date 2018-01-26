@@ -131,6 +131,12 @@ module.exports = /*  @ngInject */
           v3ApiCode: 'FQTD',
           id: 7,
           type: 'year'
+        }, {
+          name: 'CQTD',
+          displayValue: 'CQTD',
+          v3ApiCode: 'CQTD',
+          id: 8,
+          type: 'year'
         }]
       },
       distributionTimePeriod: {

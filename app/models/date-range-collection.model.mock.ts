@@ -44,5 +44,9 @@ export const dateRangeCollectionMock: DateRange[] = [
   { code: 'FQTD',
     displayCode: 'FQTD',
     description: 'Fiscal Quarter to Date',
-    range: '12/01/17 - 01/19/18' }
+    range: '12/01/17 - 01/19/18' },
+  { code: 'CQTD',
+    displayCode: 'CQTD',
+    description: 'Calendar Quarter to Date',
+    range: '10/01/17 - 10/11/17' }
 ];

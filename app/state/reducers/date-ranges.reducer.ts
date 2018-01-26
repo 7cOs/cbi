@@ -6,6 +6,7 @@ export interface DateRangesState extends State {
   status: ActionStatus;
   FYTM: DateRange;
   CYTM: DateRange;
+  CQTD: DateRange;
   CYTDBDL: DateRange;
   FYTDBDL: DateRange;
   FQTD: DateRange;
@@ -36,7 +37,8 @@ export const initialState: DateRangesState = {
   L120BDL: initialDateRangeState,
   LCM: initialDateRangeState,
   L3CM: initialDateRangeState,
-  CMIPBDL: initialDateRangeState
+  CMIPBDL: initialDateRangeState,
+  CQTD: initialDateRangeState
 };
 
 export function dateRangesReducer(
@@ -63,7 +65,8 @@ export function dateRangesReducer(
         L120BDL: action.payload.find(dateRange => dateRange.code === 'L120BDL'),
         LCM: action.payload.find(dateRange => dateRange.code === 'LCM'),
         L3CM: action.payload.find(dateRange => dateRange.code === 'L3CM'),
-        CMIPBDL: action.payload.find(dateRange => dateRange.code === 'CMIPBDL')
+        CMIPBDL: action.payload.find(dateRange => dateRange.code === 'CMIPBDL'),
+        CQTD: action.payload.find(dateRange => dateRange.code === 'CQTD')
       };
 
     case DateRangesActions.FETCH_DATE_RANGES_FAILURE_ACTION:
