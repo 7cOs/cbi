@@ -1,4 +1,3 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpModule } from '@angular/http';
@@ -52,7 +51,6 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     MyPerformanceModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
-    BrowserAnimationsModule,
     Environment.isLocal() ? StoreDevtoolsModule.instrument({maxAge: 25}) : []
   ],
   declarations: [
