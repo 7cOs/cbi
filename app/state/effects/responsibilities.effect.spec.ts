@@ -144,7 +144,6 @@ describe('Responsibilities Effects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ ],
       providers: [
         ResponsibilitiesEffects,
         provideMockActions(() => actions$),

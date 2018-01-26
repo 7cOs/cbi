@@ -19,7 +19,6 @@ describe('Compass Version Effects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ ],
       providers: [
         CompassVersionEffects,
         provideMockActions(() => actions$),

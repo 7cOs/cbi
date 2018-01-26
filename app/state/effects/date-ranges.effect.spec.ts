@@ -34,7 +34,6 @@ describe('Date Ranges Effects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [],
       providers: [
         DateRangesEffects,
         provideMockActions(() => actions$),

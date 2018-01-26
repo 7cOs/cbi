@@ -138,7 +138,6 @@ describe('ProductMetrics Service', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [ ],
       providers: [
         ProductMetricsService,
         {

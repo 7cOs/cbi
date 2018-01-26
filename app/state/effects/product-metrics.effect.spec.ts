@@ -72,7 +72,6 @@ describe('ProductMetrics Effects', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [ ],
       providers: [
         ProductMetricsEffects,
         provideMockActions(() => actions$),
