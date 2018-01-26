@@ -1,6 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MdCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material';
 import * as Chance from 'chance';
 
 import { AnalyticsService } from '../../../services/analytics.service';
@@ -16,7 +16,7 @@ describe('Compass Card Component', () => {
   beforeEach(() => {
     analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
     TestBed.configureTestingModule({
-      imports: [ MdCardModule ],
+      imports: [ MatCardModule ],
       declarations: [ CompassCardComponent ],
       providers: [
         {
@@ -45,9 +45,9 @@ describe('Compass Card Component', () => {
       componentInstance.iconVisible = mockInputs.iconVisible;
       fixture.detectChanges();
 
-      const titleElement = fixture.debugElement.query(By.css('md-card-title h3')).nativeElement;
+      const titleElement = fixture.debugElement.query(By.css('mat-card-title h3')).nativeElement;
       const iconClassElement = fixture.debugElement.query(By.css('.icon')).nativeElement;
-      const mainActionElement = fixture.debugElement.queryAll(By.css('md-card-actions div'))[0].nativeElement;
+      const mainActionElement = fixture.debugElement.queryAll(By.css('mat-card-actions div'))[0].nativeElement;
 
       expect(titleElement.textContent).toBe(mockInputs.title);
       expect(iconClassElement.nodeName).toBe('H3');
@@ -70,7 +70,7 @@ describe('Compass Card Component', () => {
         done();
       });
 
-      fixture.debugElement.queryAll(By.css('md-card-actions div'))[0].triggerEventHandler('click', null);
+      fixture.debugElement.queryAll(By.css('mat-card-actions div'))[0].triggerEventHandler('click', null);
     });
   });
 

@@ -33,7 +33,7 @@ export class CompassVersionEffects {
   fetchVersionFailure$(): Observable<Action> {
     return this.actions$
       .ofType(CompassVersionActions.FETCH_VERSION_FAILURE_ACTION)
-      .do(action => {
+      .do((action: CompassVersionActions.FetchVersionFailureAction) => {
         console.error('Version fetch failure:', action.payload);
       });
   }

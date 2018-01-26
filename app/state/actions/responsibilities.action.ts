@@ -54,7 +54,7 @@ export interface RefreshAllPerformancesPayload {
   filter: MyPerformanceFilterState;
   brandSkuCode?: string;
   skuPackageType?: SkuPackageType;
-  entityType?: EntityType; // TODO: Check use of entityType vs selectedEntityType
+  entityType: EntityType; // TODO: Check use of entityType vs selectedEntityType
   alternateHierarchyId?: string;
   accountPositionId?: string;
   isMemberOfExceptionHierarchy?: boolean;

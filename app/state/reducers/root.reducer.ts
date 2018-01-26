@@ -1,5 +1,4 @@
-import { ActionReducer, combineReducers } from '@ngrx/store';
-import { compose } from '@ngrx/core/compose';
+import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
 
 import { compassVersionReducer, CompassVersionState } from './compass-version.reducer';
@@ -17,7 +16,7 @@ export interface AppState {
   myPerformanceFilter: MyPerformanceFilterState;
 }
 
-const allReducers = {
+export const reducers: ActionReducerMap<AppState> = {
   compassVersion: compassVersionReducer,
   dateRanges: dateRangesReducer,
   myPerformance: myPerformanceReducer,
@@ -25,6 +24,4 @@ const allReducers = {
   myPerformanceFilter: myPerformanceFilterReducer
 };
 
-const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combineReducers)(allReducers);
-const productionReducer: ActionReducer<AppState> = combineReducers(allReducers);
-export const rootReducer: ActionReducer<AppState> = Environment.isLocal() ? developmentReducer : productionReducer;
+export const metaReducers: MetaReducer<AppState>[] = Environment.isLocal() ? [storeFreeze] : [];

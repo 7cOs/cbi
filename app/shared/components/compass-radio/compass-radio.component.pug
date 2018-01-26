@@ -1,8 +1,8 @@
 section.compass-radio
   p.title(*ngIf="title") {{ title }}
 
-  md-radio-group.compass-radio-group([ngModel]="model")
-    md-radio-button.compass-radio-button(
+  mat-radio-group.compass-radio-group([ngModel]="model")
+    mat-radio-button.compass-radio-button(
       *ngFor="let option of options",
       [ngClass]="stacked === true ? 'stacked' : 'inline'",
       [value]="option.value",

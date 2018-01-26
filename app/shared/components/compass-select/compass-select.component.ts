@@ -13,16 +13,17 @@ export class CompassSelectComponent {
 
   @Input() set model(modelValue: any) {
     this.componentModel = modelValue;
-    this.initSubValue();
+    this.initValues();
   }
   @Input() set options(optionCollection: Array<CompassSelectOption>) {
     this.optionData = optionCollection;
-    this.initSubValue();
+    this.initValues();
   }
   @Input() title?: string;
 
   private componentModel: any;
-  private currentSubValue: string;
+  private currentValueDisplay: string;
+  private currentSubValueDisplay: string;
   private isSelectOpen: boolean = false;
   private optionData: Array<CompassSelectOption> = [];
 
@@ -30,14 +31,22 @@ export class CompassSelectComponent {
     // Setting 'isSelectOpen' to false here updates styles earlier when select is closing, fixing a style issue.
     // This is also set to false in the markup to handle select closing when off clicking.
     this.isSelectOpen = false;
-    this.currentSubValue = option.subDisplay;
+    this.currentValueDisplay = option.display;
+    this.currentSubValueDisplay = option.subDisplay;
     this.onOptionSelected.emit(option.value);
   }
 
-  private initSubValue(): void {
-    if (this.optionData.length && this.optionData[0].subDisplay) {
+  public toggleOpen(open: boolean): void {
+    this.isSelectOpen = open;
+  }
+
+  private initValues(): void {
+    if (this.optionData.length) {
       this.optionData.forEach(option => {
-        if (option.value === this.componentModel) this.currentSubValue = option.subDisplay;
+        if (option.value === this.componentModel) {
+          this.currentValueDisplay = option.display;
+          if (option.subDisplay) this.currentSubValueDisplay = option.subDisplay;
+        }
       });
     }
   }
