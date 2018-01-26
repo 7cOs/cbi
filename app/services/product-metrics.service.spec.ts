@@ -44,6 +44,7 @@ describe('ProductMetrics Service', () => {
 
   let productMetricsApiServiceMock: any;
   let productMetricsTransformerServiceMock: any;
+  let toastServiceMock: any;
 
   let runner: EffectsRunner;
   let productMetricsService: ProductMetricsService;
@@ -139,6 +140,12 @@ describe('ProductMetrics Service', () => {
       }
     };
 
+    toastServiceMock = {
+      showToast(targetListAction: any, selectedTargetLists: any) { },
+      showPerformanceDataErrorToast() { },
+      showOpportunityCountErrorToast() { }
+    };
+
     TestBed.configureTestingModule({
       imports: [
         EffectsTestingModule
@@ -152,6 +159,10 @@ describe('ProductMetrics Service', () => {
         {
           provide: ProductMetricsTransformerService,
           useValue: productMetricsTransformerServiceMock
+        },
+        {
+          provide: 'toastService',
+          useValue: toastServiceMock
         }
       ]
     });
