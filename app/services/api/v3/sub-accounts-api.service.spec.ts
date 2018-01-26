@@ -4,11 +4,11 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { ApiHelperService } from '../api-helper.service';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
+import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getOpportunityCountDTOsMock } from '../../../models/opportunity-count-dto.model.mock';
 import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
 import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
-import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { OpportunityCountDTO } from '../../../models/opportunity-count-dto.model';
 import { PerformanceDTO } from '../../../models/performance.model';
@@ -54,7 +54,7 @@ describe('SubAccountsApiService', () => {
     subAccountIdMock = chance.string(chanceStringOptions);
     positionIdMock = chance.string(chanceStringOptions);
     filterStateMock = {
-      metricType: MetricTypeValue.Depletions,
+      metricType: getMetricTypeValueMock(),
       dateRangeCode: getDateRangeTimePeriodValueMock(),
       premiseType: getPremiseTypeValueMock()
     };

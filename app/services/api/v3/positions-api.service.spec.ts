@@ -6,11 +6,11 @@ import { ApiHelperService } from '../api-helper.service';
 import { EntityDTO } from '../../../models/entity-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntityDTOMock } from '../../../models/entity-dto.model.mock';
+import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getPeopleResponsibilitiesDTOMock } from '../../../models/people-responsibilities-dto.model.mock';
 import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
 import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
-import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../../models/people-responsibilities-dto.model';
 import { PerformanceDTO } from '../../../models/performance.model';
@@ -70,7 +70,7 @@ describe('PositionsApiService', () => {
     performanceDTOResponseMock = getPerformanceDTOMock();
     productMetricsDTOResponseMock = getProductMetricsBrandDTOMock();
     filterStateMock = {
-      metricType: MetricTypeValue.Depletions,
+      metricType: getMetricTypeValueMock(),
       dateRangeCode: getDateRangeTimePeriodValueMock(),
       premiseType: getPremiseTypeValueMock()
     };

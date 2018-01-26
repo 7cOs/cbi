@@ -7,10 +7,10 @@ import { ApiHelperService } from '../api-helper.service';
 import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntitySubAccountDTOMock } from '../../../models/entity-subaccount-dto.model.mock';
+import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
 import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
-import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
@@ -58,7 +58,7 @@ describe('AccountsApiService', () => {
     brandSkuCodeMock = chance.string(chanceStringOptions);
     skuPackageTypeMock = SkuPackageType.sku;
     filterStateMock = {
-      metricType: MetricTypeValue.Depletions,
+      metricType: getMetricTypeValueMock(),
       dateRangeCode: getDateRangeTimePeriodValueMock(),
       premiseType: getPremiseTypeValueMock()
     };

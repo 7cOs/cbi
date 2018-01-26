@@ -235,7 +235,7 @@ export class ProductMetricsService {
 
   private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
   : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
-    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
+    const premiseTypeValue: string = fetchOpportunityCountsData.filter.premiseType.toLowerCase();
 
     return this.subAccountsApiService.getSubAccountOpportunityCounts(
       fetchOpportunityCountsData.subAccountId,
@@ -258,7 +258,7 @@ export class ProductMetricsService {
       : fetchOpportunityCountsData.alternateHierarchyId
         ? undefined
         : fetchOpportunityCountsData.positionId;
-    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
+    const premiseTypeValue: string = fetchOpportunityCountsData.filter.premiseType.toLowerCase();
 
     return this.distributorsApiService.getDistributorOpportunityCounts(
       fetchOpportunityCountsData.distributorId,
