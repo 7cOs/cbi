@@ -12,6 +12,7 @@ module.exports = /*  @ngInject */
     let dateRangeSubscription;
 
     vm.depletionSelect;
+    vm.depletionSelectDisplayName;
     vm.depletionSelectApiCode;
     vm.depletionRadio;
     vm.distributionSelectOptions = {
@@ -129,7 +130,10 @@ module.exports = /*  @ngInject */
     }
 
     function changeDepletionScorecard(bool) {
-      if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
+      if (bool) {
+        vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
+        vm.depletionSelectDisplayName = vm.depletionSelectOptions[vm.depletionRadio][0].displayValue;
+      }
       updateTotalRowDepletions();
       userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
       vm.calculatingDepletionTotals = false;
@@ -198,6 +202,7 @@ module.exports = /*  @ngInject */
       vm.distributionSelectOptions.selected = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].name;
       vm.distributionSelectOptions.v3ApiCode = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].v3ApiCode;
       vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][2].name;
+      vm.depletionSelectDisplayName = vm.filtersService.model.depletionsTimePeriod[value][2].displayValue;
       vm.depletionSelectApiCode = vm.filtersService.model.depletionsTimePeriod[value][2].v3ApiCode;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
       updateTotalRowDepletions();
@@ -212,6 +217,15 @@ module.exports = /*  @ngInject */
         vm.filtersService.lastEndingTimePeriod.endingPeriodType = endingPeriod;
       }
 
+      if (distirbutionPeriod) {
+        var distObj = filtersService.model.distributionTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
+        var matchedDistObj = distObj.filter(function(val) {
+          return val.name === distirbutionPeriod;
+        });
+        vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
+        vm.depletionSelectDisplayName = matchedDistObj[0].displayValue;
+      }
+
       if (depletionPeriod) {
         var depletionObj = filtersService.model.depletionsTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
         var matchedObj = depletionObj.filter(function(val) {
@@ -219,14 +233,7 @@ module.exports = /*  @ngInject */
         });
 
         vm.filtersService.lastEndingTimePeriod.depletionValue = matchedObj[0];
-      }
-
-      if (distirbutionPeriod) {
-        var distObj = filtersService.model.distributionTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
-        var matchedDistObj = distObj.filter(function(val) {
-          return val.name === distirbutionPeriod;
-        });
-        vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
+        vm.depletionSelectDisplayName = matchedObj[0].displayValue;
       }
     }
 
@@ -292,6 +299,7 @@ module.exports = /*  @ngInject */
         // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
+        vm.depletionSelectDisplayName = 'FYTD';
         vm.depletionSelectApiCode = 'FYTDBDL';
         vm.distributionSelectOptions = {
           selected: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].name,
