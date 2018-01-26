@@ -233,9 +233,10 @@ export class ProductMetricsService {
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
       })
-      .catch(() => {
+      .catch((err: Error) => {
         this.toastService.showOpportunityCountErrorToast();
-        return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
+        // return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
+        return Observable.throw(err);
       });
   }
 
@@ -259,9 +260,10 @@ export class ProductMetricsService {
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
       })
-      .catch(() => {
+      .catch((err: Error) => {
         this.toastService.showOpportunityCountErrorToast();
-        return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
+        // return Observable.of(this.productMetricsTransformerService.transformAndGroupOpportunityCounts(null));
+        return Observable.throw(err);
       });
   }
 }
