@@ -3854,7 +3854,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  fdescribe('when fetching opportunity counts', () => {
+  describe('when fetching opportunity counts', () => {
     it('should set fetchOpportunityCountsFailure to false when fetch is successful', () => {
       myPerformanceProductMetricsMock = {
         status: ActionStatus.Fetched,

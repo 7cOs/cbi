@@ -167,7 +167,7 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
-  fdescribe('when getOpportunityCountText is called', () => {
+  describe('when getOpportunityCountText is called', () => {
     it('should return "-" when opportunitiesError is true', () => {
       const opportunitiesError = true;
       const opportunityCount: number = null;
