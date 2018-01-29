@@ -107,7 +107,7 @@ export class PositionsApiService {
       ));
   }
 
-  public getAlternateHierarchyRoleGroupProductMetrics(
+  public getAlternateHierarchyGroupProductMetrics(
     positionId: string,
     groupTypeCode: string,
     alternateHierarchyPositionId: string,
@@ -193,7 +193,7 @@ export class PositionsApiService {
       ));
   }
 
-  public getRoleGroupProductMetrics(
+  public getGroupProductMetrics(
     positionId: string,
     groupTypeCode: string,
     aggregationLevel: ProductMetricsAggregationType,

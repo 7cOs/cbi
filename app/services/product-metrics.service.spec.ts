@@ -112,7 +112,7 @@ describe('ProductMetrics Service', () => {
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
       },
-      getAlternateHierarchyRoleGroupProductMetrics(
+      getAlternateHierarchyGroupProductMetrics(
         positionId: string,
         groupTypeCode: EntityType,
         alternateHierarchyPositionId: string,
@@ -132,7 +132,7 @@ describe('ProductMetrics Service', () => {
           ? Observable.of(productMetricsBrandsDTOMock)
           : Observable.of(productMetricsSkuDTOMock);
       },
-      getRoleGroupProductMetrics(
+      getGroupProductMetrics(
         positionId: string,
         groupTypeCode: string,
         aggregationLevel: ProductMetricsAggregationType,
@@ -224,7 +224,7 @@ describe('ProductMetrics Service', () => {
     let getAccountProductMetricsSpy: jasmine.Spy;
     let getSubAccountProductMetricsSpy: jasmine.Spy;
     let getDistributorProductMetricsSpy: jasmine.Spy;
-    let getRoleGroupProductMetricsSpy: jasmine.Spy;
+    let getGroupProductMetricsSpy: jasmine.Spy;
     let transformProductMetricsSpy: jasmine.Spy;
     let getAlternateHierarchyProductMetricsSpy: jasmine.Spy;
     let getAlternateHierarchyProductMetricsForPositionSpy: jasmine.Spy;
@@ -234,10 +234,9 @@ describe('ProductMetrics Service', () => {
       getAccountProductMetricsSpy = spyOn(accountsApiService, 'getAccountProductMetrics').and.callThrough();
       getSubAccountProductMetricsSpy = spyOn(subAccountsApiService, 'getSubAccountProductMetrics').and.callThrough();
       getDistributorProductMetricsSpy = spyOn(distributorsApiService, 'getDistributorProductMetrics').and.callThrough();
-      getRoleGroupProductMetricsSpy = spyOn(positionsApiService, 'getRoleGroupProductMetrics').and.callThrough();
+      getGroupProductMetricsSpy = spyOn(positionsApiService, 'getGroupProductMetrics').and.callThrough();
       transformProductMetricsSpy = spyOn(productMetricsTransformerService, 'transformAndCombineProductMetricsDTOs').and.callThrough();
-      getAlternateHierarchyProductMetricsSpy =
-        spyOn(positionsApiService, 'getAlternateHierarchyRoleGroupProductMetrics').and.callThrough();
+      getAlternateHierarchyProductMetricsSpy = spyOn(positionsApiService, 'getAlternateHierarchyGroupProductMetrics').and.callThrough();
       getAlternateHierarchyProductMetricsForPositionSpy
         = spyOn(positionsApiService, 'getAlternateHierarchyPersonProductMetrics').and.callThrough();
 
@@ -271,7 +270,7 @@ describe('ProductMetrics Service', () => {
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -325,7 +324,7 @@ describe('ProductMetrics Service', () => {
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -375,7 +374,7 @@ describe('ProductMetrics Service', () => {
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -429,7 +428,7 @@ describe('ProductMetrics Service', () => {
               expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
               expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -477,7 +476,7 @@ describe('ProductMetrics Service', () => {
                 ProductMetricsAggregationType.brand,
                 productMetricsDataMock.filter
               ]);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -528,7 +527,7 @@ describe('ProductMetrics Service', () => {
                 ProductMetricsAggregationType.brand,
                 productMetricsDataMock.filter
               ]);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -577,7 +576,7 @@ describe('ProductMetrics Service', () => {
                 ProductMetricsAggregationType.brand,
                 productMetricsDataMock.filter
               ]);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -628,7 +627,7 @@ describe('ProductMetrics Service', () => {
                 ProductMetricsAggregationType.brand,
                 productMetricsDataMock.filter
               ]);
-              expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+              expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
               done();
             });
           });
@@ -676,7 +675,7 @@ describe('ProductMetrics Service', () => {
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -726,7 +725,7 @@ describe('ProductMetrics Service', () => {
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -773,7 +772,7 @@ describe('ProductMetrics Service', () => {
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -823,7 +822,7 @@ describe('ProductMetrics Service', () => {
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -871,7 +870,7 @@ describe('ProductMetrics Service', () => {
               ProductMetricsAggregationType.brand,
               productMetricsDataMock.filter
             ]);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -923,7 +922,7 @@ describe('ProductMetrics Service', () => {
               ProductMetricsAggregationType.brand,
               productMetricsDataMock.filter
             ]);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -970,7 +969,7 @@ describe('ProductMetrics Service', () => {
               ProductMetricsAggregationType.brand,
               productMetricsDataMock.filter
             ]);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -1021,7 +1020,7 @@ describe('ProductMetrics Service', () => {
               ProductMetricsAggregationType.brand,
               productMetricsDataMock.filter
             ]);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -1068,7 +1067,7 @@ describe('ProductMetrics Service', () => {
               ProductMetricsAggregationType.brand,
               productMetricsDataMock.filter
             ]);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -1119,7 +1118,7 @@ describe('ProductMetrics Service', () => {
               ProductMetricsAggregationType.brand,
               productMetricsDataMock.filter
             ]);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(0);
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(0);
             done();
           });
         });
@@ -1155,14 +1154,14 @@ describe('ProductMetrics Service', () => {
       });
 
       describe('when no selectedBrandCode is present', () => {
-        it('should call getRoleGroupProductMetrics for brand level aggregation', (done) => {
+        it('should call getGroupProductMetrics for brand level aggregation', (done) => {
           productMetricsService.getProductMetrics(productMetricsDataMock).subscribe(() => {
             expect(getPositionProductMetricsSpy.calls.count()).toBe(0);
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(1);
-            expect(getRoleGroupProductMetricsSpy.calls.argsFor(0)).toEqual([
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(1);
+            expect(getGroupProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.entityTypeCode,
               ProductMetricsAggregationType.brand,
@@ -1207,14 +1206,14 @@ describe('ProductMetrics Service', () => {
             expect(getAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getSubAccountProductMetricsSpy.calls.count()).toBe(0);
             expect(getDistributorProductMetricsSpy.calls.count()).toBe(0);
-            expect(getRoleGroupProductMetricsSpy.calls.count()).toBe(2);
-            expect(getRoleGroupProductMetricsSpy.calls.argsFor(0)).toEqual([
+            expect(getGroupProductMetricsSpy.calls.count()).toBe(2);
+            expect(getGroupProductMetricsSpy.calls.argsFor(0)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.entityTypeCode,
               ProductMetricsAggregationType.sku,
               productMetricsDataMock.filter
             ]);
-            expect(getRoleGroupProductMetricsSpy.calls.argsFor(1)).toEqual([
+            expect(getGroupProductMetricsSpy.calls.argsFor(1)).toEqual([
               productMetricsDataMock.positionId,
               productMetricsDataMock.entityTypeCode,
               ProductMetricsAggregationType.brand,

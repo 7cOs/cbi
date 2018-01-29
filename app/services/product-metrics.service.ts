@@ -89,7 +89,7 @@ export class ProductMetricsService {
           ));
         }
       } else {
-        apiCalls.push(this.positionsApiService.getAlternateHierarchyRoleGroupProductMetrics(
+        apiCalls.push(this.positionsApiService.getAlternateHierarchyGroupProductMetrics(
           productMetricsData.positionId,
           productMetricsData.entityTypeCode,
           productMetricsData.contextPositionId,
@@ -98,7 +98,7 @@ export class ProductMetricsService {
         ));
 
         if (aggregationLevel === ProductMetricsAggregationType.sku) {
-          apiCalls.push(this.positionsApiService.getAlternateHierarchyRoleGroupProductMetrics(
+          apiCalls.push(this.positionsApiService.getAlternateHierarchyGroupProductMetrics(
             productMetricsData.positionId,
             productMetricsData.entityTypeCode,
             productMetricsData.contextPositionId,
@@ -140,7 +140,7 @@ export class ProductMetricsService {
         ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.RoleGroup) {
-      apiCalls.push(this.positionsApiService.getRoleGroupProductMetrics(
+      apiCalls.push(this.positionsApiService.getGroupProductMetrics(
         productMetricsData.positionId,
         productMetricsData.entityTypeCode,
         aggregationLevel,
@@ -148,7 +148,7 @@ export class ProductMetricsService {
       ));
 
       if (aggregationLevel === ProductMetricsAggregationType.sku) {
-        apiCalls.push(this.positionsApiService.getRoleGroupProductMetrics(
+        apiCalls.push(this.positionsApiService.getGroupProductMetrics(
           productMetricsData.positionId,
           productMetricsData.entityTypeCode,
           ProductMetricsAggregationType.brand,

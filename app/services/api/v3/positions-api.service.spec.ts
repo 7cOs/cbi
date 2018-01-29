@@ -322,7 +322,7 @@ describe('PositionsApiService', () => {
     });
   });
 
-  describe('getAlternateHierarchyRoleGroupProductMetrics', () => {
+  describe('getAlternateHierarchyGroupProductMetrics', () => {
     it('should call the Positions Alternate Hierarchy Group Product Metrics endpoint and return ProductMetricDTO data', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/productMetrics`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
@@ -341,7 +341,7 @@ describe('PositionsApiService', () => {
         expect(connection.request.url).toEqual(expectedRequestUrl);
       });
 
-      positionsApiService.getAlternateHierarchyRoleGroupProductMetrics(
+      positionsApiService.getAlternateHierarchyGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
         alternateHierarchyPositionIdMock,
@@ -365,7 +365,7 @@ describe('PositionsApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      positionsApiService.getAlternateHierarchyRoleGroupProductMetrics(
+      positionsApiService.getAlternateHierarchyGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
         alternateHierarchyPositionIdMock,
@@ -390,7 +390,7 @@ describe('PositionsApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      positionsApiService.getAlternateHierarchyRoleGroupProductMetrics(
+      positionsApiService.getAlternateHierarchyGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
         alternateHierarchyPositionIdMock,
@@ -611,7 +611,7 @@ describe('PositionsApiService', () => {
     });
   });
 
-  describe('getRoleGroupProductMetrics', () => {
+  describe('getGroupProductMetrics', () => {
     it('should call the Positions Group Product Metrics endpoint and return ProductMetricsDTO data for the given PositionId', (done) => {
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/productMetrics`
         + `?aggregationLevel=${ ProductMetricsAggregationType.sku }`
@@ -629,7 +629,7 @@ describe('PositionsApiService', () => {
         expect(connection.request.url).toEqual(expectedRequestUrl);
       });
 
-      positionsApiService.getRoleGroupProductMetrics(
+      positionsApiService.getGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
         ProductMetricsAggregationType.sku,
@@ -652,7 +652,7 @@ describe('PositionsApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      positionsApiService.getRoleGroupProductMetrics(
+      positionsApiService.getGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
         ProductMetricsAggregationType.brand,
@@ -676,7 +676,7 @@ describe('PositionsApiService', () => {
         connection.mockError(new Response(options) as Response & Error);
       });
 
-      positionsApiService.getRoleGroupProductMetrics(
+      positionsApiService.getGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
         ProductMetricsAggregationType.sku,
