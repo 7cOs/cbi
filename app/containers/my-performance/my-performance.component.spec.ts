@@ -2,7 +2,8 @@ import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { MdSidenavModule } from '@angular/material';
+import { MatSidenavModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, Subject } from 'rxjs';
 import { sample } from 'lodash';
 import { Store } from '@ngrx/store';
@@ -261,7 +262,8 @@ describe('MyPerformanceComponent', () => {
         TeamPerformanceOpportunitiesComponentMock
       ],
       imports: [
-        MdSidenavModule
+        NoopAnimationsModule,
+        MatSidenavModule
       ],
       providers: [
         {

@@ -36,7 +36,7 @@ export class DateRangesEffects {
   fetchVersionFailure$(): Observable<Action> {
     return this.actions$
       .ofType(DateRangesActions.FETCH_DATE_RANGES_FAILURE_ACTION)
-      .do(action => {
+      .do((action: DateRangesActions.FetchDateRangesFailureAction) => {
         console.error('Date ranges fetch failure:', action.payload);
       });
   }

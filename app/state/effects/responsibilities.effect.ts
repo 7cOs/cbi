@@ -31,7 +31,8 @@ export class ResponsibilitiesEffects {
   fetchResponsibilities$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES)
-      .switchMap((action: Action): Observable<FetchResponsibilitiesPayload> => Observable.of(action.payload))
+      .switchMap((action: ResponsibilitiesActions.FetchResponsibilities): Observable<FetchResponsibilitiesPayload> =>
+        Observable.of(action.payload))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getResponsibilities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchy(responsibilitiesData))
@@ -46,7 +47,8 @@ export class ResponsibilitiesEffects {
   fetchAlternateHierarchyResponsibilities$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES)
-      .switchMap((action: Action): Observable<FetchAlternateHierarchyResponsibilitiesPayload> => Observable.of(action.payload))
+      .switchMap((action: ResponsibilitiesActions.FetchAlternateHierarchyResponsibilities):
+        Observable<FetchAlternateHierarchyResponsibilitiesPayload> => Observable.of(action.payload))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAlternateHierarchyResponsibilities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.checkEmptyResponsibilitiesResponse(responsibilitiesData))
@@ -59,7 +61,8 @@ export class ResponsibilitiesEffects {
   FetchEntityWithPerformance$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
-      .switchMap((action: Action): Observable<FetchEntityWithPerformanceData> => Observable.of(action.payload))
+      .switchMap((action: ResponsibilitiesActions.FetchEntityWithPerformance): Observable<FetchEntityWithPerformanceData> =>
+        Observable.of(action.payload))
       .switchMap((fetchEntityWithPerformanceData: FetchEntityWithPerformanceData) =>
         this.responsibilitiesService.getEntitiesWithPerformanceForGroup(fetchEntityWithPerformanceData))
       .switchMap((fetchEntityWithPerformanceData: FetchEntityWithPerformanceData) => {
@@ -83,7 +86,8 @@ export class ResponsibilitiesEffects {
   RefreshAllPerformances$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES)
-      .switchMap((action: Action): Observable<RefreshAllPerformancesData> => Observable.of(action.payload))
+      .switchMap((action: ResponsibilitiesActions.RefreshAllPerformances): Observable<RefreshAllPerformancesData> =>
+        Observable.of(action.payload))
       .switchMap((refreshAllPerformancesData: RefreshAllPerformancesData) =>
         this.responsibilitiesService.getRefreshedPerformances(refreshAllPerformancesData))
       .switchMap((refreshAllPerformancesData: RefreshAllPerformancesData) =>
@@ -94,10 +98,8 @@ export class ResponsibilitiesEffects {
   @Effect()
   RefreshTotalPerformance$(): Observable<Action> {
   return this.actions$
-    .ofType(
-      ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES
-    )
-    .switchMap((action: Action) => Observable.of(action.payload))
+    .ofType(ResponsibilitiesActions.REFRESH_ALL_PERFORMANCES)
+    .switchMap((action: ResponsibilitiesActions.RefreshAllPerformances) => Observable.of(action.payload))
     .switchMap((refreshTotalPerformanceData: RefreshTotalPerformanceData) =>
       this.responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData))
     .switchMap((refreshTotalPerformanceData: RefreshTotalPerformanceData) => {
@@ -111,7 +113,7 @@ export class ResponsibilitiesEffects {
   @Effect() fetchSubAccounts$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS)
-      .switchMap((action: Action): Observable<FetchSubAccountsPayload> => Observable.of(action.payload))
+      .switchMap((action: ResponsibilitiesActions.FetchSubAccounts): Observable<FetchSubAccountsPayload> => Observable.of(action.payload))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.checkEmptySubaccountsResponse(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
@@ -123,7 +125,7 @@ export class ResponsibilitiesEffects {
   fetchResponsibilitiesFailure$(): Observable<Action> {
     return this.actions$
     .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE)
-    .do((action: Action) => {
+    .do((action: ResponsibilitiesActions.FetchResponsibilitiesFailure) => {
       console.error('Responsibilities fetch failure:', action.payload);
     });
   }
@@ -135,7 +137,7 @@ export class ResponsibilitiesEffects {
         ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE,
         ResponsibilitiesActions.FETCH_RESPONSIBILITIES
       )
-      .switchMap((action: Action) => {
+      .switchMap((action: ResponsibilitiesActions.FetchTotalPerformance | ResponsibilitiesActions.FetchResponsibilities) => {
         const { positionId, filter, brandSkuCode, skuPackageType } = action.payload;
 
         return this.responsibilitiesService.getPerformance(positionId, filter, brandSkuCode, skuPackageType)
@@ -150,7 +152,7 @@ export class ResponsibilitiesEffects {
   fetchPerformanceFailure$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE)
-      .do(action => {
+      .do((action: ResponsibilitiesActions.FetchTotalPerformanceFailure) => {
         console.error('Failed fetching performance total data', action.payload);
       });
   }

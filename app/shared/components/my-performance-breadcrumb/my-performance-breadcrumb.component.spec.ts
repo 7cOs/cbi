@@ -1,6 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MdCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material';
 import * as Chance from 'chance';
 
 import { BreadcrumbEntityClickedEvent } from '../../../models/breadcrumb-entity-clicked-event.model';
@@ -19,7 +19,7 @@ describe('Breadcrumb Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ MdCardModule ],
+      imports: [ MatCardModule ],
       declarations: [ MyPerformanceBreadcrumbComponent ],
       providers: []
     });
