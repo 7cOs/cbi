@@ -48,5 +48,9 @@ export const dateRangeCollectionMock: DateRange[] = [
   { code: 'CQTD',
     displayCode: 'CQTD',
     description: 'Calendar Quarter to Date',
-    range: '10/01/17 - 10/11/17' }
+    range: '10/01/17 - 10/11/17' },
+  { code: 'CCQTD',
+    displayCode: 'Clo Cal Qtr',
+    description: 'Current Closed Quarter to Date',
+    range: '07/01/17 - 09/30/17'}
 ];

@@ -16,6 +16,7 @@ export class DateRangeTransformerService {
     'CYTDBDL': 'CYTD',
     'FYTDBDL': 'FYTD',
     'FQTD': 'FQTD',
+    'CCQTD': 'Clo Cal Qtr',
     'L60BDL': 'L60 Days',
     'L90BDL': 'L90 Days',
     'L120BDL': 'L120 Days',
