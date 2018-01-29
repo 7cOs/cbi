@@ -990,11 +990,11 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       const isNavigatedFromMyPerformanceSubaccountRow = $state.params.subaccountid;
       const isSettingNotes = $state.params.openNotesOnLoad;
 
-      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
-
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
         chipsService.resetChipsFilters(chipsService.model);
       }
+
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
 
       setUserSpecificModels();
       setStateParamModels();

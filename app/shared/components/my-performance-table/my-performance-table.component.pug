@@ -9,7 +9,7 @@ div.performance-table-wrapper
     div.summary-date-range
       span(*ngIf='dateRange && showDateRange') {{ dateRange.range }}
 
-  table.my-performance-table.col-100-pct.view-type([ngClass]="getTableClasses()")
+  table.my-performance-table.col-100-pct.view-type([ngClass]="tableClasses")
 
     thead.col-100-pct
 
@@ -64,8 +64,8 @@ div.performance-table-wrapper
         *ngFor="let rowData of sortedTableData, let rowIndex = index",
         [ngClass]="getEntityRowClasses(rowData)",
         my-performance-table-row,
-        mdRipple,
-        mdRippleColor="{{rippleColor}}",
+        matRipple,
+        matRippleColor="{{rippleColor}}",
         [rowData]="rowData",
         [showContributionToVolume]="showContributionToVolume",
         [showOpportunities]="showOpportunities",

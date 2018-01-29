@@ -1,12 +1,13 @@
 section.compass-select
-  p.title(*ngIf="title") {{ title }}
+  h2.select-title(*ngIf="title") {{ title }}
 
-  md-select([ngModel]="componentModel", (onOpen)="isSelectOpen = true", (onClose)="isSelectOpen = false")
-    md-option.compass-select-option(*ngFor="let option of optionData", [value]="option.value", (click)="optionClicked(option)")
+  mat-select([ngModel]="componentModel", (openedChange)="toggleOpen($event)")
+    mat-select-trigger {{ currentValueDisplay }}
+    mat-option.compass-select-option(*ngFor="let option of optionData", [value]="option.value", (click)="optionClicked(option)")
       div.option-container(*ngIf="!option.subDisplay")
         p.option-text {{ option.display }}
       div.option-container(*ngIf="option.subDisplay")
-        p.option-top-text {{ option.display }}
-        p.option-sub-text(*ngIf="option.subDisplay && isSelectOpen") {{ option.subDisplay }}
+        p.option-text {{ option.display }}
+        p.option-sub-text {{ option.subDisplay }}
 
-  p.subtitle(*ngIf="currentSubValue") {{ currentSubValue }}
+  h3.select-subtitle(*ngIf="currentSubValueDisplay") {{ currentSubValueDisplay }}
