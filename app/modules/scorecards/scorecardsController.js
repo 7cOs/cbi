@@ -130,8 +130,8 @@ module.exports = /*  @ngInject */
       updatedSelectionValuesInFilter(null, value, null);
     }
 
-    function changeDepletionScorecard(bool) {
-      if (bool) {
+    function changeDepletionScorecard(changeDepletions) {
+      if (changeDepletions) {
         vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
         vm.depletionSelectDisplayName = vm.depletionSelectOptions[vm.depletionRadio][0].displayValue;
       }

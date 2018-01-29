@@ -491,7 +491,7 @@ describe('Unit: scorecardsController', function() {
       ctrl.filtersService.model.depletionsTimePeriod = {
         month: [
           {'name': 'CMTH', 'displayValue': 'Clo Mth', v3ApiCode: 'LCM', 'id': 1, type: 'month'},
-          { 'name': 'CYTM', 'displayValue': 'CYTM', v3ApiCode: 'CYTM', 'id': 2, type: 'month' },
+          {'name': 'CYTM', 'displayValue': 'CYTM', v3ApiCode: 'CYTM', 'id': 2, type: 'month'},
           {'name': 'FYTM', 'displayValue': 'FYTM', v3ApiCode: 'FYTM', 'id': 3, type: 'month'}],
         year: [
           {'name': 'MTD', 'displayValue': 'MTD', v3ApiCode: 'CMIPBDL', 'id': 4, type: 'year', '$$hashKey': 'object:81 '},
@@ -499,13 +499,16 @@ describe('Unit: scorecardsController', function() {
           {'name': 'FYTD', 'displayValue': 'FYTD', v3ApiCode: 'FYTDBDL', 'id': 6, type: 'year'},
           {'name': 'CCQTD', 'displayValue': 'Clo Cal Qtr', v3ApiCode: 'CCQTD', 'id': 7, type: 'year'}
         ]};
+      ctrl.initialized = true;
+      ctrl.depletionSelect = 'FYTD';
+      ctrl.depletionSelectDisplayName = 'FYTD';
     });
 
-    it('should update to new selected filter value', function() {
+    it('should update to new selected filter value CCQTD', function() {
+      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][2].displayValue);
+
       ctrl.updatedSelectionValuesInFilter('year', 'CCQTD', 'L90');
 
-      expect(ctrl.filtersService.model.depletionsTimePeriod['year'][3].name).toEqual('CCQTD');
-      expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({name: 'CCQTD', displayValue: 'Clo Cal Qtr', v3ApiCode: 'CCQTD', id: 7, type: 'year'});
       expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][3].displayValue);
     });
   });
