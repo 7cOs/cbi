@@ -497,7 +497,8 @@ describe('Unit: scorecardsController', function() {
           {'name': 'MTD', 'displayValue': 'MTD', v3ApiCode: 'CMIPBDL', 'id': 4, type: 'year', '$$hashKey': 'object:81 '},
           {'name': 'CYTD', 'displayValue': 'CYTD', v3ApiCode: 'CYTDBDL', 'id': 5, type: 'year', '$$hashKey': 'object:82 '},
           {'name': 'FYTD', 'displayValue': 'FYTD', v3ApiCode: 'FYTDBDL', 'id': 6, type: 'year'},
-          {'name': 'CCQTD', 'displayValue': 'Clo Cal Qtr', v3ApiCode: 'CCQTD', 'id': 7, type: 'year'}
+          {'name': 'CCQTD', 'displayValue': 'Clo Cal Qtr', v3ApiCode: 'CCQTD', 'id': 7, type: 'year'},
+          {'name': 'FCQTD', 'displayValue': 'Clo Fiscal Qtr', v3ApiCode: 'FCQTD', 'id': 8, type: 'year'}
         ]};
       ctrl.initialized = true;
       ctrl.depletionSelect = 'FYTD';
@@ -510,6 +511,14 @@ describe('Unit: scorecardsController', function() {
       ctrl.updatedSelectionValuesInFilter('year', 'CCQTD', 'L90');
 
       expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][3].displayValue);
+    });
+
+    it('should update to new selected filter value FCQTD', function() {
+      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][2].displayValue);
+
+      ctrl.updatedSelectionValuesInFilter('year', 'FCQTD', 'L90');
+
+      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][4].displayValue);
     });
   });
 
