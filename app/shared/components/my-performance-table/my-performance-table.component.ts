@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { findIndex } from 'lodash';
 
 import { CalculatorService } from '../../../services/calculator.service';
@@ -19,7 +19,7 @@ import { SortStatus } from '../../../enums/sort-status.enum';
   template: require('./my-performance-table.component.pug'),
   styles: [ require('./my-performance-table.component.scss') ]
 })
-export class MyPerformanceTableComponent {
+export class MyPerformanceTableComponent implements OnInit, OnChanges {
   @Output() onDismissableRowXClicked = new EventEmitter<Event>();
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: MyPerformanceTableRow}>();
   @Output() onOpportunityCountClicked = new EventEmitter<MyPerformanceTableRow>();
@@ -60,17 +60,21 @@ export class MyPerformanceTableComponent {
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
   public rippleColor: string = 'rgba(17, 119, 184, 0.05)';
+  public tableClasses: CssClasses = {};
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
 
   constructor (private calculatorService: CalculatorService) { }
 
-  public getTableClasses(): CssClasses {
-    return {
-      [`view-type-${this.viewType}`]: true,
-      [this.loadingState]: true
-    };
+  public ngOnInit() {
+    this.tableClasses = this.getTableClasses(this.viewType, this.loadingState);
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    const viewType = changes.viewType ? changes.viewType.currentValue : this.viewType;
+    const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
+    this.tableClasses = this.getTableClasses(viewType, loadingState);
   }
 
   public getTableBodyClasses(): string {
@@ -167,6 +171,13 @@ export class MyPerformanceTableComponent {
     }
 
     return classes;
+  }
+
+  private getTableClasses(viewType: SalesHierarchyViewType | ProductMetricsViewType, loadingState: LoadingState): CssClasses {
+    return {
+      [`view-type-${viewType}`]: true,
+      [loadingState]: true
+    };
   }
 
   private updateSortingFunction() {

@@ -2,7 +2,8 @@ import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { MdSidenavModule } from '@angular/material';
+import { MatSidenavModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, Subject } from 'rxjs';
 import { sample } from 'lodash';
 import { Store } from '@ngrx/store';
@@ -116,6 +117,17 @@ class MyPerformanceTableComponentMock {
 }
 
 @Component({
+  selector: 'compass-tooltip-component',
+  template: ''
+})
+class CompassTooltipComponentMock {
+  @Input() descriptions: Array<string>;
+  @Input() title: string;
+  @Input() position: string;
+  @Input() label: string;
+}
+
+@Component({
   selector: 'team-performance-opportunities',
   template: ''
 })
@@ -124,6 +136,7 @@ class TeamPerformanceOpportunitiesComponentMock {
   @Output() onOpportunityCountClicked = new EventEmitter<TeamPerformanceTableOpportunity>();
 
   @Input() opportunities: Array<TeamPerformanceTableOpportunity>;
+  @Input() tooltip: CompassTooltipComponentMock;
   @Input() premiseType: string;
   @Input() productName: string;
   @Input() subtitle: string;
@@ -249,7 +262,8 @@ describe('MyPerformanceComponent', () => {
         TeamPerformanceOpportunitiesComponentMock
       ],
       imports: [
-        MdSidenavModule
+        NoopAnimationsModule,
+        MatSidenavModule
       ],
       providers: [
         {

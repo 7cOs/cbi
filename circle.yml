@@ -57,3 +57,13 @@ deployment:
     branch: master
     commands:
       - bash scripts/ci-deploy-to-heroku.sh app-orion-prod.git
+
+experimental:
+  notify:
+    branches:
+      only:
+        - test
+        - stage
+        - master
+        - prepod
+        - ga-automation

@@ -40,5 +40,13 @@ export const dateRangeCollectionMock: DateRange[] = [
   { code: 'CYTDBDL',
     displayCode: 'CYTD',
     description: 'From First Day of Current Calendar Year to Date With Business Day Lag',
-    range: '01/01/17 - 06/02/17' }
+    range: '01/01/17 - 06/02/17' },
+  { code: 'FQTD',
+    displayCode: 'FQTD',
+    description: 'Fiscal Quarter to Date',
+    range: '12/01/17 - 01/19/18' },
+  { code: 'CQTD',
+    displayCode: 'CQTD',
+    description: 'Calendar Quarter to Date',
+    range: '10/01/17 - 10/11/17' }
 ];

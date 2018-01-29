@@ -2,10 +2,12 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Chance from 'chance';
 
+import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
+import { CompassTooltipObject } from '../../../models/compass-tooltip-component.model';
+import { getTooltipMock } from '../../../models/compass-tooltip.model.mock';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../../models/my-performance-table-row.model.mock';
 import { TeamPerformanceOpportunitiesComponent } from './team-performance-opportunities.component';
 import { TeamPerformanceTableOpportunity } from '../../../models/my-performance-table-row.model';
-import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
 
 const chance = new Chance();
 
@@ -14,6 +16,7 @@ describe('Team Performance Opportunities Component', () => {
   let componentInstance: TeamPerformanceOpportunitiesComponent;
 
   let opportunitiesMock: Array<TeamPerformanceTableOpportunity>;
+  let tooltipMock: CompassTooltipObject;
   let opportunitiesTotalMock: number;
   let premiseTypeMock: string;
   let productNameMock: string;
@@ -28,6 +31,7 @@ describe('Team Performance Opportunities Component', () => {
     componentInstance = fixture.componentInstance;
 
     opportunitiesMock = getTeamPerformanceTableOpportunitiesMock();
+    tooltipMock = getTooltipMock();
     opportunitiesTotalMock = chance.natural();
     productNameMock = chance.string();
     premiseTypeMock = chance.string();
@@ -38,6 +42,7 @@ describe('Team Performance Opportunities Component', () => {
     componentInstance.productName = productNameMock;
     componentInstance.subtitle = subtitleMock;
     componentInstance.total = opportunitiesTotalMock;
+    componentInstance.tooltip = tooltipMock;
 
     fixture.detectChanges();
   });

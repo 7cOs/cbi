@@ -994,6 +994,8 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         chipsService.resetChipsFilters(chipsService.model);
       }
 
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+
       setUserSpecificModels();
       setStateParamModels();
 
@@ -1006,6 +1008,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       } else if (isNavigatedFromScorecard) {
         setDataForNavigationFromScorecard();
       }
+
       if (!isNavigatedFromMyPerformanceSubaccountRow && !isNavigatedFromScorecard) {
         getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }

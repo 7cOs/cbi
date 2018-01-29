@@ -120,9 +120,9 @@ module.exports = {
       }
     }),
 
-    // https://github.com/angular/angular/issues/11580#issuecomment-282705332
+    // https://github.com/angular/angular/issues/11580#issuecomment-327338189
     new webpack.ContextReplacementPlugin(
-      /angular(\\|\/)core(\\|\/)@angular/,
+      /(.+)?angular(\\|\/)core(.+)?/,
       helpers.root('app')
     ),
 

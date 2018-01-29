@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
-import { Observable } from 'rxjs';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -44,6 +44,7 @@ import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyGroup } from '../../models/hierarchy-group.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { Performance } from '../../models/performance.model';
+import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
 import { SetSalesHierarchyViewType } from '../actions/sales-hierarchy-view-type.action';
@@ -137,28 +138,27 @@ describe('Responsibilities Effects', () => {
     selectedEntityDescription: selectedEntityDescriptionMock
   };
 
-  let runner: EffectsRunner;
+  let actions$: Subject<ResponsibilitiesActions.Action>;
   let responsibilitiesEffects: ResponsibilitiesEffects;
   let responsibilitiesService: ResponsibilitiesService;
 
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      EffectsTestingModule
-    ],
-    providers: [
-      ResponsibilitiesEffects,
-      {
-        provide: ResponsibilitiesService,
-        useValue: responsibilitiesServiceMock
-      }
-    ]
-  }));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        ResponsibilitiesEffects,
+        provideMockActions(() => actions$),
+        {
+          provide: ResponsibilitiesService,
+          useValue: responsibilitiesServiceMock
+        }
+      ]
+    });
 
-  beforeEach(inject([ EffectsRunner, ResponsibilitiesEffects, ResponsibilitiesService ],
-    (_runner: EffectsRunner,
-      _responsibilitiesEffects: ResponsibilitiesEffects,
-      _responsibilitiesService: ResponsibilitiesService) => {
-      runner = _runner;
+    actions$ = new ReplaySubject(1);
+  });
+
+  beforeEach(inject([ ResponsibilitiesEffects, ResponsibilitiesService ],
+    (_responsibilitiesEffects: ResponsibilitiesEffects, _responsibilitiesService: ResponsibilitiesService) => {
       responsibilitiesEffects = _responsibilitiesEffects;
       responsibilitiesService = _responsibilitiesService;
     }
@@ -166,7 +166,7 @@ describe('Responsibilities Effects', () => {
 
   describe('when a FetchResponsibilities is received', () => {
     beforeEach(() => {
-      runner.queue(new FetchResponsibilities({
+      actions$.next(new FetchResponsibilities({
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
         selectedEntityDescription: selectedEntityDescriptionMock
@@ -317,7 +317,7 @@ describe('Responsibilities Effects', () => {
     describe('when a FetchResponsibilitiesFailure is received', () => {
 
       beforeEach(() => {
-        runner.queue(new FetchResponsibilitiesFailure(error));
+        actions$.next(new FetchResponsibilitiesFailure(error));
         spyOn(console, 'error');
       });
 
@@ -342,7 +342,7 @@ describe('Responsibilities Effects', () => {
     };
 
     beforeEach(() => {
-      runner.queue(new FetchEntityWithPerformance(fetchEntityPerformancePayloadMock));
+      actions$.next(new FetchEntityWithPerformance(fetchEntityPerformancePayloadMock));
     });
 
     it('should call getEntitiesWithPerformanceForGroup with the right arguments', (done) => {
@@ -414,7 +414,7 @@ describe('Responsibilities Effects', () => {
     };
 
     beforeEach(() => {
-      runner.queue(new RefreshAllPerformances(refreshAllPerformancesPayloadMock));
+      actions$.next(new RefreshAllPerformances(refreshAllPerformancesPayloadMock));
     });
 
     describe('refresh all performances', () => {
@@ -522,7 +522,7 @@ describe('Responsibilities Effects', () => {
 
   describe('when a fetch performance total or responsibilities action is dispatched', () => {
     beforeEach(() => {
-      runner.queue(new FetchTotalPerformance({
+      actions$.next(new FetchTotalPerformance({
         positionId: positionIdMock,
         filter: performanceFilterStateMock,
         brandSkuCode: brandCodeMock,
@@ -568,11 +568,11 @@ describe('Responsibilities Effects', () => {
 
       responsibilitiesEffects.fetchPerformance$().subscribe(result => {
         expect(result).toEqual(new FetchTotalPerformanceFailure(error));
-        runner.queue(new FetchTotalPerformanceFailure(error));
+        actions$.next(new FetchTotalPerformanceFailure(error));
         done();
       });
 
-      responsibilitiesEffects.fetchPerformanceFailure$().subscribe((result) => {
+      responsibilitiesEffects.fetchPerformanceFailure$().subscribe((result: ResponsibilitiesActions.FetchTotalPerformanceFailure) => {
         expect(result).toEqual(new FetchTotalPerformanceFailure(error));
         expect(console.error).toHaveBeenCalledWith('Failed fetching performance total data', result.payload);
         done();
@@ -595,7 +595,7 @@ describe('Responsibilities Effects', () => {
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
 
-        runner.queue(new FetchSubAccounts(fetchSubAccountsPayloadMock));
+        actions$.next(new FetchSubAccounts(fetchSubAccountsPayloadMock));
       });
 
       describe('when everything returns successfully', () => {
@@ -703,7 +703,7 @@ describe('Responsibilities Effects', () => {
     let alternateResponsibilitiesDataMock: ResponsibilitiesData;
 
     beforeEach(() => {
-      runner.queue(new FetchAlternateHierarchyResponsibilities({
+      actions$.next(new FetchAlternateHierarchyResponsibilities({
         positionId: positionIdMock,
         alternateHierarchyId: alternateHierarchyIdMock,
         filter: performanceFilterStateMock,

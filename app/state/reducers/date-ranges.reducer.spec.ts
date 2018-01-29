@@ -9,9 +9,11 @@ describe('Date Ranges Reducer', () => {
     const expectedState = {
       status: ActionStatus.Fetching,
       FYTM: initialState.FYTM,
+      CQTD: initialState.CQTD,
       CYTM: initialState.CYTM,
       CYTDBDL: initialState.CYTDBDL,
       FYTDBDL: initialState.FYTDBDL,
+      FQTD: initialState.FQTD,
       L60BDL: initialState.L60BDL,
       L90BDL: initialState.L90BDL,
       L120BDL: initialState.L120BDL,
@@ -39,7 +41,9 @@ describe('Date Ranges Reducer', () => {
       LCM: dateRangeCollectionMock[6],
       CMIPBDL: dateRangeCollectionMock[7],
       L120BDL: dateRangeCollectionMock[8],
-      CYTDBDL: dateRangeCollectionMock[9]
+      CYTDBDL: dateRangeCollectionMock[9],
+      FQTD: dateRangeCollectionMock[10],
+      CQTD: dateRangeCollectionMock[11]
     };
 
     const actualState = dateRangesReducer(initialState, new DateRangesActions.FetchDateRangesSuccessAction(payload));
@@ -54,12 +58,14 @@ describe('Date Ranges Reducer', () => {
       CYTM: initialState.CYTM,
       CYTDBDL: initialState.CYTDBDL,
       FYTDBDL: initialState.FYTDBDL,
+      FQTD: initialState.FQTD,
       L60BDL: initialState.L60BDL,
       L90BDL: initialState.L90BDL,
       L120BDL: initialState.L120BDL,
       LCM: initialState.LCM,
       L3CM: initialState.L3CM,
-      CMIPBDL: initialState.CMIPBDL
+      CMIPBDL: initialState.CMIPBDL,
+      CQTD: initialState.CQTD
     };
 
     const actualState = dateRangesReducer(initialState, new DateRangesActions.FetchDateRangesFailureAction(new Error()));

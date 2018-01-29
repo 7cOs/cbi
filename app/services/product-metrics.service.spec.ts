@@ -1,4 +1,3 @@
-import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
@@ -51,7 +50,6 @@ describe('ProductMetrics Service', () => {
   let productMetricsTransformerServiceMock: any;
   let subAccountsApiServiceMock: any;
 
-  let runner: EffectsRunner;
   let accountsApiService: AccountsApiService;
   let distributorsApiService: DistributorsApiService;
   let positionsApiService: PositionsApiService;
@@ -172,9 +170,6 @@ describe('ProductMetrics Service', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [
-        EffectsTestingModule
-      ],
       providers: [
         ProductMetricsService,
         {
@@ -202,23 +197,19 @@ describe('ProductMetrics Service', () => {
   });
 
   beforeEach(inject([
-    EffectsRunner,
     AccountsApiService,
     DistributorsApiService,
     PositionsApiService,
     ProductMetricsService,
     ProductMetricsTransformerService ,
     SubAccountsApiService
-  ],
-  (_runner: EffectsRunner,
-    _accountsApiService: AccountsApiService,
+  ], (_accountsApiService: AccountsApiService,
     _distributorsApiService: DistributorsApiService,
     _positionsApiService: PositionsApiService,
     _productMetricsService: ProductMetricsService,
     _productMetricsTransformerService: ProductMetricsTransformerService,
     _subAccountsApiService: SubAccountsApiService
   ) => {
-    runner = _runner;
     accountsApiService = _accountsApiService;
     distributorsApiService = _distributorsApiService;
     positionsApiService = _positionsApiService;
