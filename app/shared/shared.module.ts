@@ -8,7 +8,7 @@ import { CompassCardComponent }  from './components/compass-card/compass-card.co
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
 import { CompassSelectComponent } from './components/compass-select/compass-select.component';
 import { CompassTooltipComponent } from './components/compass-tooltip/compass-tooltip.component';
-import { DismissableXComponent } from './components/dismissable-x/dismissable-x.component';
+import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
 
 @NgModule({
   imports: [
@@ -23,7 +23,7 @@ import { DismissableXComponent } from './components/dismissable-x/dismissable-x.
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
-    DismissableXComponent,
+    DismissibleXComponent,
     MatRippleModule,
     MatSidenavModule
   ],
@@ -32,7 +32,7 @@ import { DismissableXComponent } from './components/dismissable-x/dismissable-x.
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
-    DismissableXComponent
+    DismissibleXComponent
   ]
 })
 

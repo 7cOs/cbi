@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DismissableXComponent } from './dismissable-x.component';
+import { DismissibleXComponent } from './dismissible-x.component';
 
-describe('DismissableXComponent', () => {
+describe('DismissibleXComponent', () => {
 
-  let fixture: ComponentFixture<DismissableXComponent>;
-  let componentInstance: DismissableXComponent;
+  let fixture: ComponentFixture<DismissibleXComponent>;
+  let componentInstance: DismissibleXComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ DismissableXComponent ]
+      declarations: [ DismissibleXComponent ]
     });
 
-    fixture = TestBed.createComponent(DismissableXComponent);
+    fixture = TestBed.createComponent(DismissibleXComponent);
     componentInstance = fixture.componentInstance;
   });
 
@@ -21,13 +21,13 @@ describe('DismissableXComponent', () => {
 
   it('displays the standard X when hoverX is false', () => {
     fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.querySelector('img').className).toBe('dismissable-row-X');
+    expect(fixture.debugElement.nativeElement.querySelector('img').className).toBe('dismissible-row-X');
   });
 
   it('displays the hover X when hoverX is true', () => {
     componentInstance.hoverX = true;
     fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.querySelector('img').className).toBe('dismissable-row-X dismissable-X-hover');
+    expect(fixture.debugElement.nativeElement.querySelector('img').className).toBe('dismissible-row-X dismissible-X-hover');
   });
 
   describe('setHoverX', () => {

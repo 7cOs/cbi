@@ -1,13 +1,13 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'dismissable-x',
-  template: require('./dismissable-x.component.pug'),
-  styles: [ require('./dismissable-x.component.scss') ]
+  selector: 'dismissible-x',
+  template: require('./dismissible-x.component.pug'),
+  styles: [ require('./dismissible-x.component.scss') ]
 })
 
-export class DismissableXComponent {
-    @Output() onDismissableRowXClicked = new EventEmitter<Event>();
+export class DismissibleXComponent {
+    @Output() onDismissibleRowXClicked = new EventEmitter<Event>();
 
     public hoverX: boolean = false;
 

@@ -24,10 +24,10 @@ export class NumberPipeMock implements Pipe {
 }
 
 @Component({
-  selector: 'dismissable-x',
+  selector: 'dismissible-x',
   template: ''
 })
-class DismissableXComponent { }
+class DismissibleXComponent { }
 
 describe('MyPerformanceTableComponent', () => {
 
@@ -37,7 +37,7 @@ describe('MyPerformanceTableComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        DismissableXComponent,
+        DismissibleXComponent,
         MyPerformanceTableRowComponent,
         NumberPipeMock
       ]

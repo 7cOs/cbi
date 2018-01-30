@@ -44,10 +44,10 @@ class MockMyPerformanceTableRowComponent {
 }
 
 @Component({
-  selector: 'dismissable-x',
+  selector: 'dismissible-x',
   template: ''
 })
-class DismissableXComponent { }
+class DismissibleXComponent { }
 
 describe('MyPerformanceTableComponent', () => {
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
@@ -59,7 +59,7 @@ describe('MyPerformanceTableComponent', () => {
       imports: [ MatRippleModule ],
       declarations: [
         BeerLoaderComponentMock,
-        DismissableXComponent,
+        DismissibleXComponent,
         MockMyPerformanceTableRowComponent,
         MyPerformanceTableComponent,
         SortIndicatorComponent
@@ -277,19 +277,19 @@ describe('MyPerformanceTableComponent', () => {
   describe('getTableBodyClasses', () => {
     it('should return the total-row-present class when total row is present', () => {
       const totalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      const dismissableTotalRowMock: MyPerformanceTableRow = null;
+      const dismissibleTotalRowMock: MyPerformanceTableRow = null;
       componentInstance.totalRow = totalRowMock;
-      componentInstance.dismissableTotalRow = dismissableTotalRowMock;
+      componentInstance.dismissibleTotalRow = dismissibleTotalRowMock;
 
       const tableBodyClass = componentInstance.getTableBodyClasses();
       expect(tableBodyClass).toBe('total-row-present');
     });
 
-    it('should return the total-row-present class when dismissable total row is present', () => {
+    it('should return the total-row-present class when dismissible total row is present', () => {
       const totalRowMock: MyPerformanceTableRow = null;
-      const dismissableTotalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      const dismissibleTotalRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
       componentInstance.totalRow = totalRowMock;
-      componentInstance.dismissableTotalRow = dismissableTotalRowMock;
+      componentInstance.dismissibleTotalRow = dismissibleTotalRowMock;
 
       const tableBodyClass = componentInstance.getTableBodyClasses();
       expect(tableBodyClass).toBe('total-row-present');
@@ -297,9 +297,9 @@ describe('MyPerformanceTableComponent', () => {
 
     it('should return the total-row-absent class when total row is absent', () => {
       const totalRowMock: MyPerformanceTableRow = null;
-      const dismissableTotalRowMock: MyPerformanceTableRow = null;
+      const dismissibleTotalRowMock: MyPerformanceTableRow = null;
       componentInstance.totalRow = totalRowMock;
-      componentInstance.dismissableTotalRow = dismissableTotalRowMock;
+      componentInstance.dismissibleTotalRow = dismissibleTotalRowMock;
 
       const tableBodyClass = componentInstance.getTableBodyClasses();
       expect(tableBodyClass).toBe('total-row-absent');
@@ -506,34 +506,34 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
-  describe('getDismissableTotalRowClasses', () => {
+  describe('getDismissibleTotalRowClasses', () => {
     let getColumnWidthClassSpy: jasmine.Spy;
 
     beforeEach(() => {
       getColumnWidthClassSpy = spyOn(componentInstance, 'getColumnWidthClass').and.returnValue('');
     });
 
-    it('should return selected true if there is a dismissableTotalRow but no selectedSkuPackageCode', () => {
-      componentInstance.dismissableTotalRow = getMyPerformanceTableRowMock(1)[0];
+    it('should return selected true if there is a dismissibleTotalRow but no selectedSkuPackageCode', () => {
+      componentInstance.dismissibleTotalRow = getMyPerformanceTableRowMock(1)[0];
       componentInstance.selectedSkuPackageCode = null;
-      const classObject = componentInstance.getDismissableTotalRowClasses();
+      const classObject = componentInstance.getDismissibleTotalRowClasses();
       expect(classObject).toEqual({
         'selected': true
       });
     });
 
-    it('should return selected false if there is a dismissableTotalRow but there is also a selectedSkuPackageCode', () => {
-      componentInstance.dismissableTotalRow = getMyPerformanceTableRowMock(1)[0];
+    it('should return selected false if there is a dismissibleTotalRow but there is also a selectedSkuPackageCode', () => {
+      componentInstance.dismissibleTotalRow = getMyPerformanceTableRowMock(1)[0];
       componentInstance.selectedSkuPackageCode = chance.string();
-      const classObject = componentInstance.getDismissableTotalRowClasses();
+      const classObject = componentInstance.getDismissibleTotalRowClasses();
       expect(classObject).toEqual({
         'selected': false
       });
     });
 
-    it('should return selected false if there is no dismissableTotalRow', () => {
+    it('should return selected false if there is no dismissibleTotalRow', () => {
       componentInstance.selectedSkuPackageCode = chance.string();
-      const classObject = componentInstance.getDismissableTotalRowClasses();
+      const classObject = componentInstance.getDismissibleTotalRowClasses();
       expect(classObject).toEqual({
         'selected': false
       });
@@ -542,7 +542,7 @@ describe('MyPerformanceTableComponent', () => {
     it('should include column width class when value is returned from getColumnWidthClass', () => {
       const columnWidthClassMock = chance.string();
       getColumnWidthClassSpy.and.returnValue(columnWidthClassMock);
-      const classObject = componentInstance.getDismissableTotalRowClasses();
+      const classObject = componentInstance.getDismissibleTotalRowClasses();
       expect(classObject).toEqual({
         'selected': false,
         [columnWidthClassMock]: true

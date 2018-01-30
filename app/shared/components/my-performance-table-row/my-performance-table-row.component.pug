@@ -1,6 +1,6 @@
 td.left-col(colspan=1)
   div.left-col-content([ngClass]="{'showing-image': showX || isRolegroups}")
-    dismissable-x(*ngIf="showX")
+    dismissible-x(*ngIf="showX")
     div.rolegroup-icon-container(*ngIf="isRolegroups")
       div.rolegroup-icon-background([ngClass]="getRolegroupIconClass()")
 
