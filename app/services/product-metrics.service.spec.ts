@@ -1531,6 +1531,22 @@ describe('ProductMetrics Service', () => {
             done();
           });
         });
+        it('should call showOpportunityCountErrorToast and return an error in the case of an error', (done) => {
+          const errorText = chance.string();
+          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callFake(() => {
+            return Observable.throw(new Error(errorText));
+          });
+
+          expect(productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock)
+            .subscribe(
+              () => { },
+              (response: Error) => {
+                expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+                expect(toastServiceMock.showOpportunityCountErrorToast).toHaveBeenCalled();
+                expect(response.message).toBe(errorText);
+                done();
+            }));
+        });
       });
     });
   });
