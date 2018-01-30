@@ -1,8 +1,6 @@
 td.left-col(colspan=1)
   div.left-col-content([ngClass]="{'showing-image': showX || isRolegroups}")
-
-    div.dismissable-row-X-container(*ngIf="showX", (click)="onDismissableRowXClicked.emit()")
-      img.dismissable-row-X(src="../../../assets/img/icons/thin-x.svg")
+    dismissable-x(*ngIf="showX")
     div.rolegroup-icon-container(*ngIf="isRolegroups")
       div.rolegroup-icon-background([ngClass]="getRolegroupIconClass()")
 

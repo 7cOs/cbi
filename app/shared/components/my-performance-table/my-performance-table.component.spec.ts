@@ -43,6 +43,12 @@ class MockMyPerformanceTableRowComponent {
   @Input() showX: boolean;
 }
 
+@Component({
+  selector: 'dismissable-x',
+  template: ''
+})
+class DismissableXComponent { }
+
 describe('MyPerformanceTableComponent', () => {
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
   let componentInstance: MyPerformanceTableComponent;
@@ -53,8 +59,9 @@ describe('MyPerformanceTableComponent', () => {
       imports: [ MatRippleModule ],
       declarations: [
         BeerLoaderComponentMock,
-        MyPerformanceTableComponent,
+        DismissableXComponent,
         MockMyPerformanceTableRowComponent,
+        MyPerformanceTableComponent,
         SortIndicatorComponent
       ],
       providers: [

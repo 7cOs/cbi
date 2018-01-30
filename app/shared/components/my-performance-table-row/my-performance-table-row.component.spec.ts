@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Pipe } from '@angular/core';
+import { Component, Pipe } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -23,6 +23,12 @@ export class NumberPipeMock implements Pipe {
   }
 }
 
+@Component({
+  selector: 'dismissable-x',
+  template: ''
+})
+class DismissableXComponent { }
+
 describe('MyPerformanceTableComponent', () => {
 
   let fixture: ComponentFixture<MyPerformanceTableRowComponent>;
@@ -31,6 +37,7 @@ describe('MyPerformanceTableComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
+        DismissableXComponent,
         MyPerformanceTableRowComponent,
         NumberPipeMock
       ]

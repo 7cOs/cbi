@@ -1,0 +1,3 @@
+div.dismissable-row-X-container((mouseenter)="setHoverX()",(mouseleave)="unsetHoverX()", (click)="onDismissableRowXClicked.emit()")
+  img.dismissable-row-X(src="../../../assets/img/icons/thin-x.svg",*ngIf="!hoverX")
+  img.dismissable-row-X.dismissable-X-hover(src="../../../assets/img/icons/hover-x.svg",*ngIf="hoverX")

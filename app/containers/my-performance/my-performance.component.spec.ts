@@ -143,6 +143,12 @@ class TeamPerformanceOpportunitiesComponentMock {
   @Input() total: number;
 }
 
+@Component({
+  selector: 'dismissable-x',
+  template: ''
+})
+class DismissableXComponent { }
+
 describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
@@ -253,6 +259,7 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        DismissableXComponent,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
         MyPerformanceTableComponentMock,
