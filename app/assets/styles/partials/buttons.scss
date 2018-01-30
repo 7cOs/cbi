@@ -181,3 +181,27 @@ button {
     width: 14px;
   }
 }
+
+.saved-reports-edit-container {
+  float: right;
+  height: 16px;
+  width: 16px;
+
+  .saved-reports-edit-icon {
+    background-image: url('../../img/icons/edit.svg');
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
+  }
+
+  &:hover {
+    background-image: url('../../img/icons/edit-hover.svg');
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
+  }
+}

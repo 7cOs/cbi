@@ -63,6 +63,12 @@ describe('DateRangeComponent', () => {
     expect(daterangeElement.textContent).toBe(dateRangeStateMock.FYTDBDL.range);
   });
 
+  it('CQTD date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.CQTD;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.CQTD.range);
+  });
+
   it('CYTD date-range check', () => {
     componentInstance.dateRange = DateRangeTimePeriod.CYTDBDL;
     fixture.detectChanges();
@@ -85,6 +91,24 @@ describe('DateRangeComponent', () => {
     componentInstance.dateRange = DateRangeTimePeriod.CYTM;
     fixture.detectChanges();
     expect(daterangeElement.textContent).toBe(dateRangeStateMock.CYTM.range);
+  });
+
+  it('FQTD date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.FQTD;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.FQTD.range);
+  });
+
+  it('CCQTD date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.CCQTD;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.CCQTD.range);
+  });
+
+  it('FCQTD date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.FCQTD;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.FCQTD.range);
   });
 
   it('LCM (Clo Mth) date-range check', () => {

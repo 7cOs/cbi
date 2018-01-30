@@ -11,7 +11,9 @@ module.exports = /*  @ngInject */
       deleteError: false,
       multipleTargetListsSelected: false,
       performanceDataError: false,
-      opportunityCountError: false
+      opportunityCountError: false,
+      reportDeleted: false,
+      reportSaved: false
     };
 
     var service = {

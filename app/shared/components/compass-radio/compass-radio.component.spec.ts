@@ -2,7 +2,7 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MdRadioModule } from '@angular/material';
+import { MatRadioModule } from '@angular/material';
 import * as Chance from 'chance';
 
 import { getCompassRadioOptionMock } from '../../../models/compass-radio-options.model.mock';
@@ -18,7 +18,7 @@ describe('CompassRadioComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ BrowserAnimationsModule, FormsModule, MdRadioModule ],
+      imports: [ BrowserAnimationsModule, FormsModule, MatRadioModule ],
       declarations: [ CompassRadioComponent ]
     });
 

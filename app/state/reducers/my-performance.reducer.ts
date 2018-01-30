@@ -83,12 +83,13 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.SET_ALTERNATE_HIERARCHY_ID:
     case ResponsibilitiesActions.SET_EXCEPTION_HIERARCHY:
     case ResponsibilitiesActions.FETCH_ALTERNATE_HIERARCHY_RESPONSIBILITIES:
-      action.payload = action.payload || {};
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
           salesHierarchyViewType: state.current.salesHierarchyViewType,
-          selectedEntityDescription: action.payload.selectedEntityDescription || state.current.selectedEntityDescription,
+          selectedEntityDescription: ((<any>action).payload && (<any>action).payload.selectedEntityDescription)
+            ? (<any>action).payload.selectedEntityDescription
+            : state.current.selectedEntityDescription,
           selectedEntityType: state.current.selectedEntityType,
           selectedBrandCode: state.current.selectedBrandCode,
           selectedSkuPackageCode: state.current.selectedSkuPackageCode,

@@ -13,7 +13,7 @@ my-performance-breadcrumb(
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)",
   (backButtonClicked)="handleBackButtonClicked()")
 
-md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()")
+mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()")
   div.tables
     my-performance-table.left(
       [tableData]="salesHierarchy",
@@ -57,12 +57,13 @@ md-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()"
         img.error-icon(src="../../assets/img/icons/error-ico.svg")
         p.error-cover-message Sorry, something went wrong. Try refreshing the page or navigate back to a previous view.
 
-  md-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
+  mat-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
     team-performance-opportunities(
       [opportunities]="teamPerformanceTableOpportunities",
       [productName]="selectedBrandSkuPackageName",
       [premiseType]="currentPremiseTypeLabel",
       [subtitle]="selectedSalesHierarchyEntityName",
       [total]="selectedOpportunityCountTotal",
+      [tooltip]="opportunitiesTooltip",
       (onCloseIndicatorClicked)="toggleOpportunityTable()",
       (onOpportunityCountClicked)="handleOpportunityClicked($event)")

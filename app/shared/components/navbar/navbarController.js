@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $transitions, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment, ENV_VARS) {
+  function navbarController($rootScope, $scope, $state, $transitions, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $location, analyticsService, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment, ENV_VARS) {
 
     // ****************
     // CONTROLLER SETUP
@@ -106,6 +106,8 @@ module.exports = /*  @ngInject */
       vm.added = newVal.added;
       vm.copied = newVal.copied;
       vm.deleteError = newVal.deleteError;
+      vm.reportDeleted = newVal.reportDeleted;
+      vm.reportSaved = newVal.reportSaved;
       vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
       vm.performanceDataError = newVal.performanceDataError;
       vm.opportunityCountError = newVal.opportunityCountError;
@@ -348,6 +350,9 @@ module.exports = /*  @ngInject */
           toastService.showToast('added');
           vm.newOpportunity = vm.newOpportunityTemplate;
           resetFormModels();
+          if (success.id) {
+            sendAddOpportunityAnalyticsEvent(success.id);
+          }
         }, function(error) {
           console.log(error);
           vm.duplicateOpportunity = opportunity;
@@ -358,6 +363,14 @@ module.exports = /*  @ngInject */
         });
 
       return true;
+    }
+
+    function sendAddOpportunityAnalyticsEvent(opportunityId) {
+      analyticsService.trackEvent(
+        'Opportunities',
+        'Add Opportunity',
+        opportunityId
+      );
     }
 
     function addToTargetList(targetList, opportunity) {

@@ -12,6 +12,7 @@ module.exports = /*  @ngInject */
     let dateRangeSubscription;
 
     vm.depletionSelect;
+    vm.depletionSelectDisplayName;
     vm.depletionSelectApiCode;
     vm.depletionRadio;
     vm.distributionSelectOptions = {
@@ -90,6 +91,7 @@ module.exports = /*  @ngInject */
     vm.setSortQuery = setSortQuery;
     vm.getFilteredValue = getFilteredValue;
     vm.scorecardsFilter = scorecardsFilter;
+    vm.updatedSelectionValuesInFilter = updatedSelectionValuesInFilter;
 
     init();
 
@@ -128,8 +130,11 @@ module.exports = /*  @ngInject */
       updatedSelectionValuesInFilter(null, value, null);
     }
 
-    function changeDepletionScorecard(bool) {
-      if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
+    function changeDepletionScorecard(changeDepletions) {
+      if (changeDepletions) {
+        vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
+        vm.depletionSelectDisplayName = vm.depletionSelectOptions[vm.depletionRadio][0].displayValue;
+      }
       updateTotalRowDepletions();
       userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
       vm.calculatingDepletionTotals = false;
@@ -198,6 +203,7 @@ module.exports = /*  @ngInject */
       vm.distributionSelectOptions.selected = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].name;
       vm.distributionSelectOptions.v3ApiCode = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].v3ApiCode;
       vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][2].name;
+      vm.depletionSelectDisplayName = vm.filtersService.model.depletionsTimePeriod[value][2].displayValue;
       vm.depletionSelectApiCode = vm.filtersService.model.depletionsTimePeriod[value][2].v3ApiCode;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
       updateTotalRowDepletions();
@@ -219,6 +225,7 @@ module.exports = /*  @ngInject */
         });
 
         vm.filtersService.lastEndingTimePeriod.depletionValue = matchedObj[0];
+        vm.depletionSelectDisplayName = matchedObj[0].displayValue;
       }
 
       if (distirbutionPeriod) {
@@ -292,6 +299,7 @@ module.exports = /*  @ngInject */
         // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
+        vm.depletionSelectDisplayName = 'FYTD';
         vm.depletionSelectApiCode = 'FYTDBDL';
         vm.distributionSelectOptions = {
           selected: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].name,

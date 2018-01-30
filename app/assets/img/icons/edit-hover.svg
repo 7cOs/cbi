@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/actionable/edit/hover</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0.0134072214,23.038 C0.0134072214,23.038 1.55640722,16.488 1.57740722,16.451 L7.20240722,22.076 C7.16440722,22.096 0.614407221,23.639 0.614407221,23.639 C0.438407221,23.68 0.264407221,23.625 0.146407221,23.506 C0.0244072214,23.383 -0.0265927786,23.206 0.0134072214,23.038 Z M15.4979395,2.497069 L16.2053395,1.790169 L21.8605395,7.449369 L21.1531395,8.156269 L15.4979395,2.497069 Z M2.26807752,15.7267281 L14.7886972,3.2061084 L20.4454972,8.8629084 L7.92487752,21.3835281 L2.26807752,15.7267281 Z M22.5674072,6.742 L16.9104072,1.085 L17.2644072,0.733 C17.7364072,0.26 18.3644072,-3.55271368e-15 19.0324072,-3.55271368e-15 C19.7004072,-3.55271368e-15 20.3284072,0.259 20.8004072,0.733 L22.9214072,2.853 C23.8964072,3.828 23.8964072,5.414 22.9214072,6.388 L22.5674072,6.742 Z" id="path-1"></path>
+    </defs>
+    <g id="Polaris-Actionable-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-647.000000, -148.000000)">
+        <g id="Actionable-Icons" transform="translate(93.000000, 98.000000)">
+            <g id="Group-23-Copy-2" transform="translate(553.000000, 13.000000)">
+                <g id="icons/actionable/edit/hover" transform="translate(1.000000, 37.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Mask" fill="#002D62" fill-rule="nonzero" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
