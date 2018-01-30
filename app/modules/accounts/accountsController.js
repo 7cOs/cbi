@@ -994,7 +994,9 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         chipsService.resetChipsFilters(chipsService.model);
       }
 
-      vm.filtersService.model.selected.myAccountsOnly = !!($state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true');
+      if (isNavigatedFromMyPerformanceDistributorRow) {
+        vm.filtersService.model.selected.myAccountsOnly = !!($state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true');
+      }
 
       setUserSpecificModels();
       setStateParamModels();
