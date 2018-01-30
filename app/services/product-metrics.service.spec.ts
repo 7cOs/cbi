@@ -44,12 +44,15 @@ describe('ProductMetrics Service', () => {
 
   let productMetricsApiServiceMock: any;
   let productMetricsTransformerServiceMock: any;
-  let toastServiceMock: any;
 
   let runner: EffectsRunner;
   let productMetricsService: ProductMetricsService;
   let productMetricsApiService: ProductMetricsApiService;
   let productMetricsTransformerService: ProductMetricsTransformerService;
+
+  const toastServiceMock = {
+    showOpportunityCountErrorToast: jasmine.createSpy('showOpportunityCountErrorToast')
+  };
 
   beforeEach(() => {
     positionIdMock = chance.string();
@@ -138,12 +141,6 @@ describe('ProductMetrics Service', () => {
       transformAndGroupOpportunityCounts(dtos: OpportunityCountDTO[]): OpportunitiesGroupedByBrandSkuPackageCode {
         return opportunitiesGroupedByBrandSkuPackageCodeMock;
       }
-    };
-
-    toastServiceMock = {
-      showToast(targetListAction: any, selectedTargetLists: any) { },
-      showPerformanceDataErrorToast() { },
-      showOpportunityCountErrorToast() { }
     };
 
     TestBed.configureTestingModule({
@@ -1403,6 +1400,23 @@ describe('ProductMetrics Service', () => {
           expect(response).toEqual(opportunitiesGroupedByBrandSkuPackageCodeMock);
           done();
         });
+      });
+
+      it('should call showOpportunityCountErrorToast and return an error in the case of an error', (done) => {
+        const errorText = chance.string();
+        const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getSubAccountOpportunityCounts').and.callFake(() => {
+          return Observable.throw(new Error(errorText));
+        });
+
+        expect(productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock)
+          .subscribe(
+            () => { },
+            (response: Error) => {
+              expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+              expect(toastServiceMock.showOpportunityCountErrorToast).toHaveBeenCalled();
+              expect(response.message).toBe(errorText);
+              done();
+          }));
       });
     });
 
