@@ -36,7 +36,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is OFF_SPEC and Metric is velocity', () => {
       it('should return PremiseTypeValue Off when OFF_SPEC', () => {
         userType = 'OFF_SPEC';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Velocity, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
     });
@@ -44,7 +44,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is OFF_HIER and Metric is velocity', () => {
       it('should return PremiseTypeValue Off when OFF_HIER', () => {
         userType = 'OFF_HIER';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Velocity, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
     });
@@ -52,7 +52,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is ON_HIER and Metric is velocity', () => {
       it('should return PremiseTypeValue On when ON_HIER', () => {
         userType = 'ON_HIER';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Velocity, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.On);
       });
     });
@@ -60,7 +60,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is SALES_HIER and Metric is velocity', () => {
       it('should return PremiseTypeValue Off when SALES_HIER', () => {
         userType = 'SALES_HIER';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Velocity, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
     });
@@ -68,7 +68,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is empty and Metric is velocity', () => {
       it('should return PremiseTypeValue Off when empty or Corporate', () => {
         userType = '';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Velocity, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
     });
@@ -76,7 +76,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is empty and Metric is velocity', () => {
       it('should return PremiseTypeValue Off when undefined or Corporate', () => {
         userType = undefined;
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Velocity, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
     });
@@ -84,7 +84,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is OFF_SPEC and Metric is volume', () => {
       it('should return PremiseTypeValue Off when OFF_SPEC', () => {
         userType = 'OFF_SPEC';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Depletions, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
     });
@@ -92,7 +92,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is OFF_HIER and Metric is volume', () => {
       it('should return PremiseTypeValue Off when OFF_HIER', () => {
         userType = 'OFF_HIER';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Depletions, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
       });
     });
@@ -100,7 +100,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is ON_HIER and Metric is volume', () => {
       it('should return PremiseTypeValue On when ON_HIER', () => {
         userType = 'ON_HIER';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Depletions, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.On);
       });
     });
@@ -108,7 +108,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is SALES_HIER and Metric is volume', () => {
       it('should return PremiseTypeValue All when SALES_HIER', () => {
         userType = 'SALES_HIER';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Depletions, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.All);
       });
     });
@@ -116,7 +116,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is empty and Metric is volume', () => {
       it('should return PremiseTypeValue All when empty or Corporate', () => {
         userType = '';
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Depletions, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.All);
       });
     });
@@ -124,7 +124,7 @@ describe('Service: MyPerformanceService', () => {
     describe('when userType is empty and Metric is volume', () => {
       it('should return PremiseTypeValue All when undefined or Corporate', () => {
         userType = undefined;
-        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.volume, userType);
+        const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.Depletions, userType);
         expect(newPremiseValueState).toEqual(PremiseTypeValue.All);
       });
     });
@@ -134,17 +134,17 @@ describe('Service: MyPerformanceService', () => {
 
     describe('metricKey is Velocity', () => {
       it('should return Velocity', () => {
-        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.velocity);
+        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.Velocity);
         expect(newPremiseValueState).toEqual('Velocity');
       });
 
       it('should return Distribution', () => {
-        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.PointsOfDistribution);
+        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.Distribution);
         expect(newPremiseValueState).toEqual('Distribution');
       });
 
       it('should return Volume', () => {
-        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.volume);
+        const newPremiseValueState =  myPerformanceService.getMetricValueName(MetricTypeValue.Depletions);
         expect(newPremiseValueState).toEqual('Depletions');
       });
     });
@@ -175,7 +175,7 @@ describe('Service: MyPerformanceService', () => {
     });
 
     it('should return the correct option when metric type is depletions and entityType is distributor', () => {
-      filterMock.metricType = MetricTypeValue.volume;
+      filterMock.metricType = MetricTypeValue.Depletions;
       rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
@@ -193,7 +193,7 @@ describe('Service: MyPerformanceService', () => {
 
     it('should return the correct option when metric type is distribution and entityType ' +
       'is distributor with no alternate hierarchy', () => {
-      filterMock.metricType = MetricTypeValue.PointsOfDistribution;
+      filterMock.metricType = MetricTypeValue.Distribution;
       rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
@@ -210,7 +210,7 @@ describe('Service: MyPerformanceService', () => {
     });
 
     it('should return the correct option when metric type is velocity and entityType is distributor with alternate hierarchy', () => {
-      filterMock.metricType = MetricTypeValue.velocity;
+      filterMock.metricType = MetricTypeValue.Velocity;
       rowMock.metadata.entityType = EntityType.Distributor;
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
@@ -227,7 +227,7 @@ describe('Service: MyPerformanceService', () => {
     });
 
     it('should return the correct option when metric type is depletions and entityType is subAccount', () => {
-      filterMock.metricType = MetricTypeValue.volume;
+      filterMock.metricType = MetricTypeValue.Depletions;
       rowMock.metadata.entityType = EntityType.SubAccount;
       const premiseType = premiseTypeValues[chance.integer({min: 0, max: premiseTypeValues.length - 1})];
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(

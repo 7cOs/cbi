@@ -5,20 +5,23 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+import { AccountsApiService } from './api/v3/accounts-api.service';
+import { DistributorsApiService } from './api/v3/distributors-api.service';
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
+import { PositionsApiService } from './api/v3/positions-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetrics } from '../models/product-metrics.model';
-import { ProductMetricsApiService } from '../services/product-metrics-api.service';
 import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
 import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
 import { ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { SubAccountsApiService } from './api/v3/sub-accounts-api.service';
 
 export interface ProductMetricsData {
   positionId: string;
@@ -37,8 +40,11 @@ export interface ProductMetricsData {
 export class ProductMetricsService {
 
   constructor(
-    private productMetricsApiService: ProductMetricsApiService,
+    private accountsApiService: AccountsApiService,
+    private distributorsApiService: DistributorsApiService,
+    private positionsApiService: PositionsApiService,
     private productMetricsTransformerService: ProductMetricsTransformerService,
+    private subAccountsApiService: SubAccountsApiService,
     @Inject('toastService') private toastService: any
   ) { }
 
@@ -49,128 +55,138 @@ export class ProductMetricsService {
 
     if (productMetricsData.inAlternateHierarchy) {
       if (productMetricsData.selectedEntityType === EntityType.Person) {
-        apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+        apiCalls.push(this.positionsApiService.getAlternateHierarchyPersonProductMetrics(
           productMetricsData.positionId,
-          productMetricsData.filter,
+          productMetricsData.contextPositionId,
           aggregationLevel,
-          productMetricsData.contextPositionId
+          productMetricsData.filter
         ));
+
         if (aggregationLevel === ProductMetricsAggregationType.sku) {
-          apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetricsForPosition(
+          apiCalls.push(this.positionsApiService.getAlternateHierarchyPersonProductMetrics(
             productMetricsData.positionId,
-            productMetricsData.filter,
+            productMetricsData.contextPositionId,
             ProductMetricsAggregationType.brand,
-            productMetricsData.contextPositionId
+            productMetricsData.filter
           ));
         }
       } else if (productMetricsData.selectedEntityType === EntityType.Distributor) {
-          const contextPositionId = productMetricsData.isMemberOfExceptionHierarchy
-            ? productMetricsData.contextPositionId
-            : '0';
-          apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+        const contextPositionId = productMetricsData.isMemberOfExceptionHierarchy
+          ? productMetricsData.contextPositionId
+          : '0';
+
+        apiCalls.push(this.distributorsApiService.getDistributorProductMetrics(
+          productMetricsData.positionId,
+          contextPositionId,
+          aggregationLevel,
+          productMetricsData.filter
+        ));
+
+        if (aggregationLevel === ProductMetricsAggregationType.sku) {
+          apiCalls.push(this.distributorsApiService.getDistributorProductMetrics(
             productMetricsData.positionId,
             contextPositionId,
-            productMetricsData.filter,
-            aggregationLevel
+            ProductMetricsAggregationType.brand,
+            productMetricsData.filter
           ));
-          if (aggregationLevel === ProductMetricsAggregationType.sku) {
-            apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
-              productMetricsData.positionId,
-              contextPositionId,
-              productMetricsData.filter,
-              ProductMetricsAggregationType.brand
-            ));
-          }
-        } else {
-          apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
+        }
+      } else {
+        apiCalls.push(this.positionsApiService.getAlternateHierarchyGroupProductMetrics(
+          productMetricsData.positionId,
+          productMetricsData.entityTypeCode,
+          productMetricsData.contextPositionId,
+          aggregationLevel,
+          productMetricsData.filter
+        ));
+
+        if (aggregationLevel === ProductMetricsAggregationType.sku) {
+          apiCalls.push(this.positionsApiService.getAlternateHierarchyGroupProductMetrics(
             productMetricsData.positionId,
             productMetricsData.entityTypeCode,
-            productMetricsData.filter,
-            aggregationLevel,
-            productMetricsData.contextPositionId
+            productMetricsData.contextPositionId,
+            ProductMetricsAggregationType.brand,
+            productMetricsData.filter
           ));
-          if (aggregationLevel === ProductMetricsAggregationType.sku) {
-            apiCalls.push(this.productMetricsApiService.getAlternateHierarchyProductMetrics(
-              productMetricsData.positionId,
-              productMetricsData.entityTypeCode,
-              productMetricsData.filter,
-              ProductMetricsAggregationType.brand,
-              productMetricsData.contextPositionId
-            ));
-          }
         }
+      }
     } else if (productMetricsData.selectedEntityType === EntityType.Person
       || productMetricsData.selectedEntityType === EntityType.AccountGroup) {
-      apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
+
+      apiCalls.push(this.positionsApiService.getPersonProductMetrics(
         productMetricsData.positionId,
-        productMetricsData.filter,
-        aggregationLevel
+        aggregationLevel,
+        productMetricsData.filter
       ));
+
       if (aggregationLevel === ProductMetricsAggregationType.sku) {
-        apiCalls.push(this.productMetricsApiService.getPositionProductMetrics(
+        apiCalls.push(this.positionsApiService.getPersonProductMetrics(
           productMetricsData.positionId,
+          ProductMetricsAggregationType.brand,
           productMetricsData.filter,
-          ProductMetricsAggregationType.brand
         ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.Account) {
-      apiCalls.push(this.productMetricsApiService.getAccountProductMetrics(
+      apiCalls.push(this.accountsApiService.getAccountProductMetrics(
         productMetricsData.positionId,
         productMetricsData.contextPositionId,
-        productMetricsData.filter,
-        aggregationLevel
+        aggregationLevel,
+        productMetricsData.filter
       ));
+
       if (aggregationLevel === ProductMetricsAggregationType.sku) {
-        apiCalls.push(this.productMetricsApiService.getAccountProductMetrics(
+        apiCalls.push(this.accountsApiService.getAccountProductMetrics(
           productMetricsData.positionId,
           productMetricsData.contextPositionId,
-          productMetricsData.filter,
-          ProductMetricsAggregationType.brand
+          ProductMetricsAggregationType.brand,
+          productMetricsData.filter
         ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.RoleGroup) {
-      apiCalls.push(this.productMetricsApiService.getRoleGroupProductMetrics(
+      apiCalls.push(this.positionsApiService.getGroupProductMetrics(
         productMetricsData.positionId,
         productMetricsData.entityTypeCode,
-        productMetricsData.filter,
-        aggregationLevel
+        aggregationLevel,
+        productMetricsData.filter
       ));
+
       if (aggregationLevel === ProductMetricsAggregationType.sku) {
-        apiCalls.push(this.productMetricsApiService.getRoleGroupProductMetrics(
+        apiCalls.push(this.positionsApiService.getGroupProductMetrics(
           productMetricsData.positionId,
           productMetricsData.entityTypeCode,
-          productMetricsData.filter,
-          ProductMetricsAggregationType.brand
+          ProductMetricsAggregationType.brand,
+          productMetricsData.filter
         ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.SubAccount) {
-      apiCalls.push(this.productMetricsApiService.getSubAccountProductMetrics(
+      apiCalls.push(this.subAccountsApiService.getSubAccountProductMetrics(
         productMetricsData.positionId,
         productMetricsData.contextPositionId,
-        productMetricsData.filter,
-        aggregationLevel
+        aggregationLevel,
+        productMetricsData.filter
       ));
+
       if (aggregationLevel === ProductMetricsAggregationType.sku) {
-        apiCalls.push(this.productMetricsApiService.getSubAccountProductMetrics(
+        apiCalls.push(this.subAccountsApiService.getSubAccountProductMetrics(
           productMetricsData.positionId,
           productMetricsData.contextPositionId,
-          productMetricsData.filter,
-          ProductMetricsAggregationType.brand
+          ProductMetricsAggregationType.brand,
+          productMetricsData.filter
         ));
       }
     } else if (productMetricsData.selectedEntityType === EntityType.Distributor) {
-      apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+      apiCalls.push(this.distributorsApiService.getDistributorProductMetrics(
         productMetricsData.positionId,
         productMetricsData.contextPositionId,
-        productMetricsData.filter,
-        aggregationLevel
+        aggregationLevel,
+        productMetricsData.filter
       ));
+
       if (aggregationLevel === ProductMetricsAggregationType.sku) {
-        apiCalls.push(this.productMetricsApiService.getDistributorProductMetrics(
+        apiCalls.push(this.distributorsApiService.getDistributorProductMetrics(
           productMetricsData.positionId,
           productMetricsData.contextPositionId,
-          productMetricsData.filter,
-          ProductMetricsAggregationType.brand
+          ProductMetricsAggregationType.brand,
+          productMetricsData.filter
         ));
       }
     }
@@ -221,22 +237,23 @@ export class ProductMetricsService {
 
   private getSubAccountOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
   : Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
-    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
+    const premiseTypeValue: string = fetchOpportunityCountsData.filter.premiseType.toLowerCase();
 
-    return this.productMetricsApiService.getSubAccountOpportunityCounts(
+    return this.subAccountsApiService.getSubAccountOpportunityCounts(
       fetchOpportunityCountsData.subAccountId,
       fetchOpportunityCountsData.positionId,
       premiseTypeValue,
       ProductMetricsServiceConstants.opportunityCountStructureType,
       ProductMetricsServiceConstants.opportunitySegment,
       ProductMetricsServiceConstants.opportunityImpact,
-      ProductMetricsServiceConstants.opportunityType)
-      .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
-        return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
-      })
-      .catch((err: Error) => {
-        return this.handleOpportunityCountError(err);
-      });
+      ProductMetricsServiceConstants.opportunityType
+    )
+    .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
+      return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+    })
+    .catch((err: Error) => {
+      return this.handleOpportunityCountError(err);
+    });
   }
 
   private getDistributorOpportunityCounts(fetchOpportunityCountsData: FetchOpportunityCountsPayload)
@@ -246,22 +263,23 @@ export class ProductMetricsService {
       : fetchOpportunityCountsData.alternateHierarchyId
         ? undefined
         : fetchOpportunityCountsData.positionId;
-    const premiseTypeValue: string = PremiseTypeValue[fetchOpportunityCountsData.filter.premiseType].toLowerCase();
+    const premiseTypeValue: string = fetchOpportunityCountsData.filter.premiseType.toLowerCase();
 
-    return this.productMetricsApiService.getDistributorOpportunityCounts(
+    return this.distributorsApiService.getDistributorOpportunityCounts(
       fetchOpportunityCountsData.distributorId,
       positionId,
       premiseTypeValue,
       ProductMetricsServiceConstants.opportunityCountStructureType,
       ProductMetricsServiceConstants.opportunitySegment,
       ProductMetricsServiceConstants.opportunityImpact,
-      ProductMetricsServiceConstants.opportunityType)
-      .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
-        return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
-      })
-      .catch((err: Error) => {
-        return this.handleOpportunityCountError(err);
-      });
+      ProductMetricsServiceConstants.opportunityType
+    )
+    .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
+      return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+    })
+    .catch((err: Error) => {
+      return this.handleOpportunityCountError(err);
+    });
   }
 
   private handleOpportunityCountError(err: Error): ErrorObservable {

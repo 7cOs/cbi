@@ -23,7 +23,7 @@ export class MyPerformanceService {
   public getUserDefaultPremiseType(metric: MetricTypeValue, userType: string): PremiseTypeValue {
     let  defaultPremiseType: PremiseTypeValue = PremiseTypeValue.Off;
 
-    if (metric === MetricTypeValue.volume) {
+    if (metric === MetricTypeValue.Depletions) {
       switch (userType) {
         case 'ON_HIER':
           defaultPremiseType = PremiseTypeValue.On;
@@ -61,13 +61,13 @@ export class MyPerformanceService {
     let metricName: string;
 
     switch (metricKey) {
-      case MetricTypeValue.PointsOfDistribution:
+      case MetricTypeValue.Distribution:
         metricName = 'Distribution';
         break;
-      case MetricTypeValue.velocity:
+      case MetricTypeValue.Velocity:
         metricName = 'Velocity';
         break;
-      case MetricTypeValue.volume:
+      case MetricTypeValue.Depletions:
       default:
         metricName = 'Depletions';
     }
@@ -97,11 +97,11 @@ export class MyPerformanceService {
     }
 
     switch (filter.metricType) {
-      case MetricTypeValue.volume:
+      case MetricTypeValue.Depletions:
           accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
           break;
-      case MetricTypeValue.PointsOfDistribution:
-      case MetricTypeValue.velocity:
+      case MetricTypeValue.Distribution:
+      case MetricTypeValue.Velocity:
           accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
           break;
       default:

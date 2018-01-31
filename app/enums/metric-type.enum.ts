@@ -1,5 +1,5 @@
 export enum MetricTypeValue {
-  volume,
-  PointsOfDistribution,
-  velocity
+  Depletions = 'Volume',
+  Distribution = 'Distribution',
+  Velocity = 'Velocity'
 }

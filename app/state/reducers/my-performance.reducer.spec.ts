@@ -269,17 +269,17 @@ describe('My Performance Reducer', () => {
 
   describe('when a my performance filter action is received', () => {
     it('should call the MyPerformanceFilter reducer', () => {
-      myPerformanceReducer(initialState, new MyPerformanceFilterActions.SetMetric(MetricTypeValue.volume));
+      myPerformanceReducer(initialState, new MyPerformanceFilterActions.SetMetric(MetricTypeValue.Depletions));
       myPerformanceReducer(initialState, new MyPerformanceFilterActions.SetTimePeriod(DateRangeTimePeriodValue.FYTDBDL));
       myPerformanceReducer(initialState, new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.Off));
-      myPerformanceReducer(initialState, new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.effective));
+      myPerformanceReducer(initialState, new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.Effective));
 
       expect(myPerformanceFilterReducerSpy).toHaveBeenCalled();
       expect(myPerformanceFilterReducerSpy.calls.count()).toBe(4);
 
       expect(myPerformanceFilterReducerSpy.calls.argsFor(0)).toEqual([
         MyPerformanceFilterReducer.initialState,
-        new MyPerformanceFilterActions.SetMetric(MetricTypeValue.volume)]);
+        new MyPerformanceFilterActions.SetMetric(MetricTypeValue.Depletions)]);
       expect(myPerformanceFilterReducerSpy.calls.argsFor(1)).toEqual([
         MyPerformanceFilterReducer.initialState,
         new MyPerformanceFilterActions.SetTimePeriod(DateRangeTimePeriodValue.FYTDBDL)]);
@@ -288,7 +288,7 @@ describe('My Performance Reducer', () => {
         new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.Off)]);
       expect(myPerformanceFilterReducerSpy.calls.argsFor(3)).toEqual([
         MyPerformanceFilterReducer.initialState,
-        new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.effective)]);
+        new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.Effective)]);
 
       expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
       expect(responsibilitiesReducerSpy).not.toHaveBeenCalled();
@@ -298,7 +298,7 @@ describe('My Performance Reducer', () => {
     it('should update current.filter of MyPerformanceState', () => {
       const actualState: MyPerformanceState = myPerformanceReducer(
         initialState,
-        new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.effective));
+        new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.Effective));
 
       const expectedState: MyPerformanceState = {
         current: {

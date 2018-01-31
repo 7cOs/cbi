@@ -14,16 +14,16 @@ import { MyPerformanceFilterState } from '../../../state/reducers/my-performance
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 
 const initialFilterStateMock: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.volume,
+  metricType: MetricTypeValue.Depletions,
   dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
   premiseType: PremiseTypeValue.All,
-  distributionType: DistributionTypeValue.simple
+  distributionType: DistributionTypeValue.Simple
 };
 const updatedFilterStateMock: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.PointsOfDistribution,
+  metricType: MetricTypeValue.Distribution,
   dateRangeCode: DateRangeTimePeriodValue.L90BDL,
   premiseType: PremiseTypeValue.Off,
-  distributionType: DistributionTypeValue.simple
+  distributionType: DistributionTypeValue.Simple
 };
 
 describe('My Performance Filter Component', () => {
@@ -52,7 +52,7 @@ describe('My Performance Filter Component', () => {
       let mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));
       let premiseTypeRadio = mockRadioComponents[0].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
-      expect(metricCompassSelect.model).toEqual(MetricTypeValue.volume);
+      expect(metricCompassSelect.model).toEqual(MetricTypeValue.Depletions);
       expect(timePeriodCompassSelect.model).toEqual(DateRangeTimePeriodValue.CYTDBDL);
       expect(premiseTypeRadio.model).toEqual(PremiseTypeValue.All);
 
@@ -67,10 +67,10 @@ describe('My Performance Filter Component', () => {
       premiseTypeRadio = mockRadioComponents[0].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
       const distributionTypeRadio = mockRadioComponents[1].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
-      expect(metricCompassSelect.model).toEqual(MetricTypeValue.PointsOfDistribution);
+      expect(metricCompassSelect.model).toEqual(MetricTypeValue.Distribution);
       expect(timePeriodCompassSelect.model).toEqual(DateRangeTimePeriodValue.L90BDL);
       expect(premiseTypeRadio.model).toEqual(PremiseTypeValue.Off);
-      expect(distributionTypeRadio.model).toEqual(DistributionTypeValue.simple);
+      expect(distributionTypeRadio.model).toEqual(DistributionTypeValue.Simple);
     });
   });
 
@@ -80,13 +80,13 @@ describe('My Performance Filter Component', () => {
       componentInstance.dateRangeState = dateRangeStateMock;
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
-        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.Metric, filterValue: MetricTypeValue.volume });
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.Metric, filterValue: MetricTypeValue.Depletions });
       });
 
       const mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
       const metricCompassSelect = mockSelectComponents[0].injector.get(MockCompassSelectComponent) as MockCompassSelectComponent;
 
-      metricCompassSelect.onOptionSelected.emit(MetricTypeValue.volume);
+      metricCompassSelect.onOptionSelected.emit(MetricTypeValue.Depletions);
     });
 
     it('should emit value outputed by time period select dropdown child component', () => {
@@ -125,13 +125,13 @@ describe('My Performance Filter Component', () => {
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
-        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.DistributionType, filterValue: DistributionTypeValue.simple });
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.DistributionType, filterValue: DistributionTypeValue.Simple });
       });
 
       const mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));
       const distributionTypeRadio = mockRadioComponents[1].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
-      distributionTypeRadio.onRadioClicked.emit(DistributionTypeValue.simple);
+      distributionTypeRadio.onRadioClicked.emit(DistributionTypeValue.Simple);
     });
   });
 });
