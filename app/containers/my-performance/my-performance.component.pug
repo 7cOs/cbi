@@ -39,7 +39,7 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
       [tableHeaderRow]="tableHeaderRowRight",
       [totalRow]="displayRightTotalRow() ? totalRowData : null",
       [performanceMetric]="'Product Snapshot'",
-      [dismissableTotalRow]="productMetricsSelectedBrandRow",
+      [dismissibleTotalRow]="productMetricsSelectedBrandRow",
       [sortingCriteria]="sortingCriteria",
       [selectedSkuPackageCode]="selectedSkuPackageCode",
       [showContributionToVolume]="showProductMetricsContributionToVolume",
@@ -48,7 +48,7 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
       [viewType]="productMetricsViewType",
       (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
       (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})",
-      (onDismissableRowXClicked)="handleDismissableRowXClicked()",
+      (onDismissibleRowXClicked)="handleDismissibleRowXClicked()",
       (onOpportunityCountClicked)="handleOpportunityCountTotalClicked($event)")
 
     div.error-cover(*ngIf="fetchResponsibilitiesFailure || fetchProductMetricsFailure")

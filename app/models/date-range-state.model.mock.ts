@@ -38,6 +38,18 @@ export const dateRangeStateMock: DateRangesState = {
     description: 'Fiscal Quarter to Date',
     range: '12/01/17 - 01/19/18'
   },
+  CCQTD: {
+    code: 'CCQTD',
+    displayCode: 'Clo Cal Qtr',
+    description: 'Current Closed Quarter to Date',
+    range: '07/01/17 - 09/30/17'
+  },
+  FCQTD: {
+    code: 'FCQTD',
+    displayCode: 'Clo Fiscal Qtr',
+    description: 'Fiscal Closed Quarter to Date',
+    range: '09/01/17 - 10/19/17'
+  },
   L60BDL: {
     code: 'L60BDL',
     displayCode: 'L60 Days',

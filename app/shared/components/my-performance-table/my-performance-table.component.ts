@@ -20,7 +20,7 @@ import { SortStatus } from '../../../enums/sort-status.enum';
   styles: [ require('./my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableComponent implements OnInit, OnChanges {
-  @Output() onDismissableRowXClicked = new EventEmitter<Event>();
+  @Output() onDismissibleRowXClicked = new EventEmitter<Event>();
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: MyPerformanceTableRow}>();
   @Output() onOpportunityCountClicked = new EventEmitter<MyPerformanceTableRow>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
@@ -48,7 +48,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   @Input() showContributionToVolume: boolean = false;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
-  @Input() dismissableTotalRow: MyPerformanceTableRow;
+  @Input() dismissibleTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSkuPackageCode: string;
   @Input() selectedSubaccountCode: string;
@@ -78,7 +78,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   }
 
   public getTableBodyClasses(): string {
-    return (this.totalRow || this.dismissableTotalRow) ? 'total-row-present' : 'total-row-absent';
+    return (this.totalRow || this.dismissibleTotalRow) ? 'total-row-present' : 'total-row-absent';
   }
 
   public getSortStatus(columnType: ColumnType): SortStatus {
@@ -160,9 +160,9 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     return classes;
   }
 
-  public getDismissableTotalRowClasses(): CssClasses {
+  public getDismissibleTotalRowClasses(): CssClasses {
     let classes: CssClasses = {
-      'selected': (!this.selectedSkuPackageCode && this.dismissableTotalRow) ? true : false
+      'selected': (!this.selectedSkuPackageCode && this.dismissibleTotalRow) ? true : false
     };
 
     const columnWidthClass = this.getColumnWidthClass();

@@ -1,0 +1,12 @@
+$left-col-icon-width: 24px;
+
+.dismissible-row-X-container {
+  width: $left-col-icon-width;
+  height: 18px;
+  box-sizing: border-box;
+
+  .dismissible-row-X {
+    width: 100%;
+    height: 100%;
+  }
+}
