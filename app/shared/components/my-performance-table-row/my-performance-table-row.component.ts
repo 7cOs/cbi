@@ -28,10 +28,12 @@ export class MyPerformanceTableRowComponent {
   }
   @Input()
   set opportunitiesError(opportunitiesError: boolean) {
+    this.isOpportunitiesError = opportunitiesError;
     this.opportunityCountText = this.getOpportunityCountText(this.rowData.opportunities, opportunitiesError);
   }
 
   public opportunityCountText: string;
+  public isOpportunitiesError: boolean = false;
 
   private isRolegroups: boolean;
   private isSubAcountsOrDistributors: boolean;
