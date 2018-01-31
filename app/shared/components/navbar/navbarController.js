@@ -110,6 +110,7 @@ module.exports = /*  @ngInject */
       vm.reportSaved = newVal.reportSaved;
       vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
       vm.performanceDataError = newVal.performanceDataError;
+      vm.opportunityCountError = newVal.opportunityCountError;
     }, true);
 
     init();

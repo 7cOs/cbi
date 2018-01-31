@@ -26,6 +26,14 @@ export class MyPerformanceTableRowComponent {
       || viewType === SalesHierarchyViewType.subAccounts;
     this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
   }
+  @Input()
+  set opportunitiesError(opportunitiesError: boolean) {
+    this.isOpportunitiesError = opportunitiesError;
+    this.opportunityCountText = this.getOpportunityCountText(this.rowData.opportunities, opportunitiesError);
+  }
+
+  public opportunityCountText: string;
+  public isOpportunitiesError: boolean = false;
 
   private isRolegroups: boolean;
   private isSubAcountsOrDistributors: boolean;
@@ -59,5 +67,12 @@ export class MyPerformanceTableRowComponent {
   public opportunityCountClicked(event: Event): void {
     event.stopPropagation();
     this.onOpportunityCountClicked.emit();
+  }
+
+  public getOpportunityCountText(opportunityCount: number, opportunitiesError: boolean): string {
+    if (opportunitiesError) {
+      return '-';
+    }
+    return opportunityCount ? opportunityCount.toString() : '0';
   }
 }

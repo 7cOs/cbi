@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, Pipe } from '@angular/core';
+import { Component } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -8,20 +8,9 @@ import { getMyPerformanceTableRowMock } from '../../../models/my-performance-tab
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
+import { NumberPipeMock } from '../../../pipes/number.pipe.mock';
 
 const chance = new Chance();
-
-@Pipe({
-  name: 'number',
-  pure: false
-})
-export class NumberPipeMock implements Pipe {
-  name: string = 'number';
-
-  transform(query: number, ...args: any[]): any {
-    return query;
-  }
-}
 
 @Component({
   selector: 'dismissible-x',
@@ -178,6 +167,28 @@ describe('MyPerformanceTableComponent', () => {
       const rightColumnElement = fixture.debugElement.query(By.css('.right-col'));
 
       expect(rightColumnElement).toBe(null);
+    });
+  });
+
+  describe('when getOpportunityCountText is called', () => {
+    beforeEach(() => {
+      componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];
+    });
+
+    it('should return "-" when opportunitiesError is true', () => {
+      componentInstance.opportunitiesError = true;
+      expect(componentInstance.opportunityCountText).toEqual('-');
+    });
+
+    it('should return "0" when opportunitiesError is false, but opportunityCount is null', () => {
+      componentInstance.opportunitiesError = false;
+      expect(componentInstance.opportunityCountText).toEqual('0');
+    });
+
+    it('should return correct opportunity count when opportunitiesError is false and count has value', () => {
+      componentInstance.rowData.opportunities = 10;
+      componentInstance.opportunitiesError = false;
+      expect(componentInstance.opportunityCountText).toEqual('10');
     });
   });
 });

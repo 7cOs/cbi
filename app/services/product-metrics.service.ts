@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 import { AccountsApiService } from './api/v3/accounts-api.service';
 import { DistributorsApiService } from './api/v3/distributors-api.service';
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { FetchOpportunityCountsPayload } from '../state/actions/product-metrics.action';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
@@ -43,7 +44,8 @@ export class ProductMetricsService {
     private distributorsApiService: DistributorsApiService,
     private positionsApiService: PositionsApiService,
     private productMetricsTransformerService: ProductMetricsTransformerService,
-    private subAccountsApiService: SubAccountsApiService
+    private subAccountsApiService: SubAccountsApiService,
+    @Inject('toastService') private toastService: any
   ) { }
 
   public getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
@@ -248,6 +250,9 @@ export class ProductMetricsService {
     )
     .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
       return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+    })
+    .catch((err: Error) => {
+      return this.handleOpportunityCountError(err);
     });
   }
 
@@ -271,6 +276,14 @@ export class ProductMetricsService {
     )
     .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
       return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+    })
+    .catch((err: Error) => {
+      return this.handleOpportunityCountError(err);
     });
+  }
+
+  private handleOpportunityCountError(err: Error): ErrorObservable {
+    this.toastService.showOpportunityCountErrorToast();
+    return Observable.throw(err);
   }
 }
