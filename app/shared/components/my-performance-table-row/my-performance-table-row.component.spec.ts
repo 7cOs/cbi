@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, Pipe } from '@angular/core';
+import { Component } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -8,20 +8,9 @@ import { getMyPerformanceTableRowMock } from '../../../models/my-performance-tab
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
+import { NumberPipeMock } from '../../../pipes/number.pipe.mock';
 
 const chance = new Chance();
-
-@Pipe({
-  name: 'number',
-  pure: false
-})
-export class NumberPipeMock implements Pipe {
-  name: string = 'number';
-
-  transform(query: number, ...args: any[]): any {
-    return query;
-  }
-}
 
 @Component({
   selector: 'dismissible-x',
