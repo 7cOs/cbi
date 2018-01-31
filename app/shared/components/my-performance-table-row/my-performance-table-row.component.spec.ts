@@ -180,4 +180,26 @@ describe('MyPerformanceTableComponent', () => {
       expect(rightColumnElement).toBe(null);
     });
   });
+
+  describe('when getOpportunityCountText is called', () => {
+    beforeEach(() => {
+      componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];
+    });
+
+    it('should return "-" when opportunitiesError is true', () => {
+      componentInstance.opportunitiesError = true;
+      expect(componentInstance.opportunityCountText).toEqual('-');
+    });
+
+    it('should return "0" when opportunitiesError is false, but opportunityCount is null', () => {
+      componentInstance.opportunitiesError = false;
+      expect(componentInstance.opportunityCountText).toEqual('0');
+    });
+
+    it('should return correct opportunity count when opportunitiesError is false and count has value', () => {
+      componentInstance.rowData.opportunities = 10;
+      componentInstance.opportunitiesError = false;
+      expect(componentInstance.opportunityCountText).toEqual('10');
+    });
+  });
 });

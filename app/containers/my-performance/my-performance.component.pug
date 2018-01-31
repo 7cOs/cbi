@@ -44,6 +44,7 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
       [selectedSkuPackageCode]="selectedSkuPackageCode",
       [showContributionToVolume]="showProductMetricsContributionToVolume",
       [showOpportunities]="showProductMetricsOpportunities",
+      [opportunitiesError]="fetchOpportunitiesError",
       [loadingState]="productMetricsLoadingState",
       [viewType]="productMetricsViewType",
       (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
