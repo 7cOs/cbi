@@ -174,7 +174,7 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
-  fdescribe('when getOpportunityCountText is called', () => {
+  describe('when getOpportunityCountText is called', () => {
     beforeEach(() => {
       componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];
     });
