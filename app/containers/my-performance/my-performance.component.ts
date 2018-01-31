@@ -335,7 +335,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public handleElementClicked(parameters: HandleElementClickedParameters): void {
     switch (parameters.type) {
       case RowType.data:
-      case RowType.dismissableTotal:
+      case RowType.dismissibleTotal:
         if (parameters.leftSide) {
           this.handleLeftRowDataElementClicked(parameters);
         } else {
@@ -376,7 +376,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.handlePreviousStateVersion(clickedState, stepsBack);
   }
 
-  public handleDismissableRowXClicked(): void {
+  public handleDismissibleRowXClicked(): void {
     this.analyticsService.trackEvent('Product Snapshot', 'Link Click', 'All Brands');
     this.deselectAllProductMetrics();
   }
@@ -887,7 +887,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceSelectedBrandCode());
     this.store.dispatch(new ProductMetricsActions.DeselectBrandValues());
-    this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissableTotal, index: 0});
+    this.fetchProductMetricsWhenClick({leftSide: false, type: RowType.dismissibleTotal, index: 0});
 
     this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
       positionId: this.currentState.responsibilities.positionId,
