@@ -110,7 +110,7 @@ class MyPerformanceTableComponentMock {
   @Input() opportunitiesError: boolean = false;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
-  @Input() dismissableTotalRow: MyPerformanceTableRow;
+  @Input() dismissibleTotalRow: MyPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSubaccountCode: string;
   @Input() selectedDistributorCode: string;
@@ -143,6 +143,12 @@ class TeamPerformanceOpportunitiesComponentMock {
   @Input() subtitle: string;
   @Input() total: number;
 }
+
+@Component({
+  selector: 'dismissible-x',
+  template: ''
+})
+class DismissibleXComponent { }
 
 describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
@@ -254,6 +260,7 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        DismissibleXComponent,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
         MyPerformanceTableComponentMock,
@@ -1476,7 +1483,7 @@ describe('MyPerformanceComponent', () => {
         storeMock.dispatch.calls.reset();
         params = {
           leftSide: false,
-          type: RowType.dismissableTotal,
+          type: RowType.dismissibleTotal,
           index: 0,
           row: rowMock
         };
@@ -1725,8 +1732,8 @@ describe('MyPerformanceComponent', () => {
         expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
       });
 
-      it('should call the analytics service with the correct params when the rowtype is dismissableTotal', () => {
-        params = { leftSide: false, type: RowType.dismissableTotal, index: 0, row: rowMock };
+      it('should call the analytics service with the correct params when the rowtype is dismissibleTotal', () => {
+        params = { leftSide: false, type: RowType.dismissibleTotal, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
         expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual(['Product Snapshot', 'Link Click', rowMock.descriptionRow0]);
       });
@@ -2619,7 +2626,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('handleDismissableRowXClicked', () => {
+  describe('handleDismissibleRowXClicked', () => {
     let currentMock: MyPerformanceEntitiesData;
 
     beforeEach(() => {
@@ -2633,7 +2640,7 @@ describe('MyPerformanceComponent', () => {
     it('should update the drillStatus indicator to BrandDeselected', () => {
       componentInstanceCopy.drillStatus = getDrillStatusMock();
 
-      componentInstance.handleDismissableRowXClicked();
+      componentInstance.handleDismissibleRowXClicked();
 
       expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.BrandDeselected);
     });
@@ -2643,7 +2650,7 @@ describe('MyPerformanceComponent', () => {
       currentMock.responsibilities.alternateHierarchyId = null;
       currentSubject.next(currentMock);
       componentInstanceCopy.selectedBrandCode = chance.string();
-      componentInstance.handleDismissableRowXClicked();
+      componentInstance.handleDismissibleRowXClicked();
       expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
         'Product Snapshot',
         'Link Click',

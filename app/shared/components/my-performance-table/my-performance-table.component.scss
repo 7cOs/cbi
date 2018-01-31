@@ -275,7 +275,7 @@ tr.two-right-columns-present {
   }
 }
 
-.dismissable-total-row {
+.dismissible-total-row {
   height: $row-height;
   border-bottom: 1px solid $gray-10;
   border-right: 1px solid $gray-10;
@@ -799,12 +799,12 @@ div.ctv {
   }
 }
 
-.dismissable-row-X-container {
+.dismissible-row-X-container {
   width: $left-col-icon-width;
   height: 18px;
   box-sizing: border-box;
 
-  .dismissable-row-X {
+  .dismissible-row-X {
     width: 100%;
     height: 100%;
   }

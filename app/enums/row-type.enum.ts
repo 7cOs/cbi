@@ -1,5 +1,5 @@
 export enum RowType {
   total,
-  dismissableTotal,
+  dismissibleTotal,
   data
 }

@@ -12,7 +12,7 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
 })
 export class MyPerformanceTableRowComponent {
   @Output() onSublineClicked = new EventEmitter<Event>();
-  @Output() onDismissableRowXClicked = new EventEmitter<Event>();
+  @Output() onDismissibleRowXClicked = new EventEmitter<Event>();
   @Output() onOpportunityCountClicked = new EventEmitter<Event>();
 
   @Input() rowData: MyPerformanceTableRow;
