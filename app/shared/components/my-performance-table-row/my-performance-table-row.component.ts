@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
@@ -10,7 +10,7 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
   template: require('./my-performance-table-row.component.pug'),
   styles: [ require('../my-performance-table/my-performance-table.component.scss') ]
 })
-export class MyPerformanceTableRowComponent implements OnInit {
+export class MyPerformanceTableRowComponent {
   @Output() onSublineClicked = new EventEmitter<Event>();
   @Output() onDismissableRowXClicked = new EventEmitter<Event>();
   @Output() onOpportunityCountClicked = new EventEmitter<Event>();
@@ -18,7 +18,6 @@ export class MyPerformanceTableRowComponent implements OnInit {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showContributionToVolume: boolean = false;
   @Input() showOpportunities: boolean = false;
-  @Input() opportunitiesError: boolean = false;
   @Input() showEmptyLastColumn: boolean = false;
   @Input() showX: boolean = false;
   @Input()
@@ -27,14 +26,16 @@ export class MyPerformanceTableRowComponent implements OnInit {
       || viewType === SalesHierarchyViewType.subAccounts;
     this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
   }
+  @Input()
+  set opportunitiesError(opportunitiesError: boolean) {
+    this.opportunityCountText = this.getOpportunityCountText(this.rowData.opportunities, opportunitiesError);
+  }
 
   public opportunityCountText: string;
 
   private isRolegroups: boolean;
   private isSubAcountsOrDistributors: boolean;
-  ngOnInit(): void {
-    this.getOpportunityCountText(this.rowData.opportunities, this.opportunitiesError);
-  }
+
   public getTrendClass(num: number): string {
     return num >= 0 ? 'positive' : 'negative';
   }
@@ -66,11 +67,10 @@ export class MyPerformanceTableRowComponent implements OnInit {
     this.onOpportunityCountClicked.emit();
   }
 
-  public getOpportunityCountText(opportunityCount: number, opportunitiesError: boolean): void {
+  public getOpportunityCountText(opportunityCount: number, opportunitiesError: boolean): string {
     if (opportunitiesError) {
-      this.opportunityCountText = '-';
-    } else {
-      this.opportunityCountText = opportunityCount ? opportunityCount.toString() : '0';
+      return '-';
     }
+    return opportunityCount ? opportunityCount.toString() : '0';
   }
 }

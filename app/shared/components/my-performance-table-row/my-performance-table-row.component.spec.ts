@@ -174,28 +174,24 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
-  describe('when getOpportunityCountText is called', () => {
-    it('should return "-" when opportunitiesError is true', () => {
-      const opportunitiesError = true;
-      const opportunityCount: number = null;
+  fdescribe('when getOpportunityCountText is called', () => {
+    beforeEach(() => {
+      componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];
+    });
 
-      componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+    it('should return "-" when opportunitiesError is true', () => {
+      componentInstance.opportunitiesError = true;
       expect(componentInstance.opportunityCountText).toEqual('-');
     });
 
     it('should return "0" when opportunitiesError is false, but opportunityCount is null', () => {
-      const opportunitiesError = false;
-      const opportunityCount: number = null;
-
-      componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      componentInstance.opportunitiesError = false;
       expect(componentInstance.opportunityCountText).toEqual('0');
     });
 
     it('should return correct opportunity count when opportunitiesError is false and count has value', () => {
-      const opportunitiesError = false;
-      const opportunityCount: number = 10;
-
-      componentInstance.getOpportunityCountText(opportunityCount, opportunitiesError);
+      componentInstance.rowData.opportunities = 10;
+      componentInstance.opportunitiesError = false;
       expect(componentInstance.opportunityCountText).toEqual('10');
     });
   });
