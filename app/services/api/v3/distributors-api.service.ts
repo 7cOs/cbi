@@ -23,7 +23,7 @@ export class DistributorsApiService {
   public getDistributorOpportunityCounts(
     distributorId: string,
     positionId: string,
-    premiseType: string,
+    premiseType: string, // Endpoint requires custom lower-case string instead of PremiseType enum
     countStructureType: string,
     segment: string,
     impact: string,
