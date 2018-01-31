@@ -23,8 +23,8 @@ section.opportunities-component-section
 
     .opportunity-row(*ngFor="let opportunity of opportunities")
       div {{ opportunity.name }}
-      div((click)="handleOpportunityCountClicked(opportunity)") {{ opportunity.count }}
+      div((click)="handleOpportunityCountClicked(opportunity)") {{ opportunity.count | number }}
 
     .opportunity-row.total-row
       .total-row-label Total
-      .total-row-value {{ total }}
+      .total-row-value {{ total | number }}
