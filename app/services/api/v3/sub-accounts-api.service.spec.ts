@@ -1,6 +1,5 @@
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType } from '@angular/http';
-import { inject, TestBed } from '@angular/core/testing';
-import { MockBackend, MockConnection } from '@angular/http/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 import { ApiHelperService } from '../api-helper.service';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
@@ -22,8 +21,9 @@ const chanceStringOptions = {
 };
 
 describe('SubAccountsApiService', () => {
+  let testBed: TestBed;
+  let http: HttpTestingController;
   let subAccountsApiService: SubAccountsApiService;
-  let mockBackend: MockBackend;
 
   let subAccountIdMock: string;
   let positionIdMock: string;
@@ -31,25 +31,13 @@ describe('SubAccountsApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: Http,
-          useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-            return new Http(backendInstance, defaultOptions);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
-        BaseRequestOptions,
-        MockBackend,
-        SubAccountsApiService,
-        ApiHelperService
-      ]
+      imports: [ HttpClientTestingModule ],
+      providers: [ ApiHelperService, SubAccountsApiService ]
     });
-  });
 
-  beforeEach(inject([SubAccountsApiService, MockBackend], (_subAccountsApiService: SubAccountsApiService, _mockBackend: MockBackend) => {
-    subAccountsApiService = _subAccountsApiService;
-    mockBackend = _mockBackend;
+    testBed = getTestBed();
+    http = testBed.get(HttpTestingController);
+    subAccountsApiService = testBed.get(SubAccountsApiService);
 
     subAccountIdMock = chance.string(chanceStringOptions);
     positionIdMock = chance.string(chanceStringOptions);
@@ -58,7 +46,11 @@ describe('SubAccountsApiService', () => {
       dateRangeCode: getDateRangeTimePeriodValueMock(),
       premiseType: getPremiseTypeValueMock()
     };
-  }));
+  });
+
+  afterEach(() => {
+    http.verify();
+  });
 
   describe(`getSubAccountOpportunityCounts`, () => {
     let countStructureMock: string;
@@ -83,17 +75,7 @@ describe('SubAccountsApiService', () => {
         + `&type=${ typeMock }`;
     });
 
-    it('should call the SubAccount Opportunity Counts endpoint and return OpportunityCountDTO data when successful', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(opportunityCountDTOsMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the SubAccount Opportunity Counts endpoint and return OpportunityCountDTO data when successful', () => {
       subAccountsApiService.getSubAccountOpportunityCounts(
         subAccountIdMock,
         positionIdMock,
@@ -105,38 +87,33 @@ describe('SubAccountsApiService', () => {
       )
       .subscribe((response: ProductMetricsDTO[]) => {
         expect(response).toEqual(opportunityCountDTOsMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(opportunityCountDTOsMock);
+
+      expect(req.request.method).toBe('GET');
     });
   });
 
   describe('getSubAccountPerformance', () => {
     let brandSkuCodeMock: string;
     let skuPackageTypeMock: SkuPackageType;
+    let expectedRequestUrl: string;
 
     beforeEach(() => {
       brandSkuCodeMock = chance.string(chanceStringOptions);
       skuPackageTypeMock = SkuPackageType.sku;
-    });
-
-    it('should call the SubAccount Performance endpoint and return PerformanceDTO data for the given SubAccount', (done) => {
-      const performanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
-      const expectedRequestUrl: string = `/v3/subAccounts/${ subAccountIdMock }/performanceTotal`
+      expectedRequestUrl = `/v3/subAccounts/${ subAccountIdMock }/performanceTotal`
         + `?positionId=${ positionIdMock }`
         + `&metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(performanceDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
+    it('should call the SubAccount Performance endpoint and return PerformanceDTO data for the given SubAccount', () => {
+      const performanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
 
       subAccountsApiService.getSubAccountPerformance(
         subAccountIdMock,
@@ -147,24 +124,19 @@ describe('SubAccountsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(performanceDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
-    it('should call the SubAccount Performance endpoint and return empty PerformanceDTO data when response is 404', (done) => {
+    it('should call the SubAccount Performance endpoint and return empty PerformanceDTO data when response is 404', () => {
       const expectedEmptyPerformanceDTOResponseMock: PerformanceDTO = {
         total: 0,
         totalYearAgo: 0
       };
-
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
 
       subAccountsApiService.getSubAccountPerformance(
         subAccountIdMock,
@@ -174,30 +146,27 @@ describe('SubAccountsApiService', () => {
         filterStateMock
       ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getSubAccountProductMetrics', () => {
-    it('should call the SubAccounts Product Metrics endpoint and return ProductMetricDTO data for the given SubAccount', (done) => {
-      const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
-      const expectedRequestUrl: string = `/v3/subAccounts/${ subAccountIdMock }/productMetrics`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/subAccounts/${ subAccountIdMock }/productMetrics`
         + `?positionId=${ positionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.brand }`
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(expectedProductMetricsDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
+    it('should call the SubAccounts Product Metrics endpoint and return ProductMetricDTO data for the given SubAccount', () => {
+      const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
 
       subAccountsApiService.getSubAccountProductMetrics(
         subAccountIdMock,
@@ -207,21 +176,16 @@ describe('SubAccountsApiService', () => {
       )
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toEqual(expectedProductMetricsDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedProductMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
-    + ' a brand aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    + ' a brand aggregation type and the API call returns a 404 error', () => {
       subAccountsApiService.getSubAccountProductMetrics(
         subAccountIdMock,
         positionIdMock,
@@ -231,20 +195,20 @@ describe('SubAccountsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.brandValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
 
     it('should return a response with an empty skuValues array when fetching product metrics for'
-    + ' a sku aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
+    + ' a sku aggregation type and the API call returns a 404 error', () => {
+      expectedRequestUrl = `/v3/subAccounts/${ subAccountIdMock }/productMetrics`
+        + `?positionId=${ positionIdMock }`
+        + `&aggregationLevel=${ ProductMetricsAggregationType.sku }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
 
       subAccountsApiService.getSubAccountProductMetrics(
         subAccountIdMock,
@@ -255,8 +219,10 @@ describe('SubAccountsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 });

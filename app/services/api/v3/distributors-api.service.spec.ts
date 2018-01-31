@@ -1,6 +1,5 @@
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType } from '@angular/http';
-import { inject, TestBed } from '@angular/core/testing';
-import { MockBackend, MockConnection } from '@angular/http/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 import { ApiHelperService } from '../api-helper.service';
 import { DistributorsApiService } from './distributors-api.service';
@@ -22,8 +21,9 @@ const chanceStringOptions = {
 };
 
 describe('DistributorsApiService', () => {
+  let testBed: TestBed;
+  let http: HttpTestingController;
   let distributorsApiService: DistributorsApiService;
-  let mockBackend: MockBackend;
 
   let distributorIdMock: string;
   let positionIdMock: string;
@@ -31,25 +31,13 @@ describe('DistributorsApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: Http,
-          useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-            return new Http(backendInstance, defaultOptions);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
-        BaseRequestOptions,
-        MockBackend,
-        DistributorsApiService,
-        ApiHelperService
-      ]
+      imports: [ HttpClientTestingModule ],
+      providers: [ ApiHelperService, DistributorsApiService ]
     });
-  });
 
-  beforeEach(inject([DistributorsApiService, MockBackend], (_distributorsApiService: DistributorsApiService, _mockBackend: MockBackend) => {
-    distributorsApiService = _distributorsApiService;
-    mockBackend = _mockBackend;
+    testBed = getTestBed();
+    http = testBed.get(HttpTestingController);
+    distributorsApiService = testBed.get(DistributorsApiService);
 
     distributorIdMock = chance.string(chanceStringOptions);
     positionIdMock = chance.string(chanceStringOptions);
@@ -58,7 +46,11 @@ describe('DistributorsApiService', () => {
       dateRangeCode: getDateRangeTimePeriodValueMock(),
       premiseType: getPremiseTypeValueMock()
     };
-  }));
+  });
+
+  afterEach(() => {
+    http.verify();
+  });
 
   describe('getDistributorOpportunityCounts', () => {
     let countStructureTypeMock: string;
@@ -84,17 +76,7 @@ describe('DistributorsApiService', () => {
         + `&type=${ typeMock }`;
     });
 
-    it('should call the distributor opportunity counts endpoint and return OpportunityCountDTO data when successful', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(opportunityCountDTOsMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl + expectedRequestParams);
-      });
-
+    it('should call the distributor opportunity counts endpoint and return OpportunityCountDTO data when successful', () => {
       distributorsApiService.getDistributorOpportunityCounts(
         distributorIdMock,
         positionIdMock,
@@ -106,26 +88,21 @@ describe('DistributorsApiService', () => {
       )
       .subscribe((response: OpportunityCountDTO[]) => {
         expect(response).toEqual(opportunityCountDTOsMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl + expectedRequestParams);
+      req.flush(opportunityCountDTOsMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
     it('should call the distirbutor opportunity counts endpoint with no `positionIds` query param when'
-    + ' no positionId is passed in', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(opportunityCountDTOsMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl
-          + `?premiseType=${ filterStateMock.premiseType }`
-          + `&countStructureType=${ countStructureTypeMock }`
-          + `&segment=${ segmentMock }`
-          + `&impact=${ impactMock }`
-          + `&type=${ typeMock }`);
-      });
+    + ' no positionId is passed in', () => {
+      expectedRequestParams = `?premiseType=${ filterStateMock.premiseType }`
+        + `&countStructureType=${ countStructureTypeMock }`
+        + `&segment=${ segmentMock }`
+        + `&impact=${ impactMock }`
+        + `&type=${ typeMock }`;
 
       distributorsApiService.getDistributorOpportunityCounts(
         distributorIdMock,
@@ -138,38 +115,33 @@ describe('DistributorsApiService', () => {
       )
       .subscribe((response: Array<OpportunityCountDTO>) => {
         expect(response).toEqual(opportunityCountDTOsMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl + expectedRequestParams);
+      req.flush(opportunityCountDTOsMock);
+
+      expect(req.request.method).toBe('GET');
     });
   });
 
   describe('getDistributorPerformance', () => {
     let brandSkuCodeMock: string;
     let skuPackageTypeMock: SkuPackageType;
+    let expectedRequestUrl: string;
 
     beforeEach(() => {
       brandSkuCodeMock = chance.string(chanceStringOptions);
       skuPackageTypeMock = SkuPackageType.sku;
-    });
-
-    it('should call the distributor performance endpoint and return PerformanceDTO data for the passed in distributor', (done) => {
-      const expectedPerformanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
-      const expectedRequestUrl: string = `/v3/distributors/${ distributorIdMock }/performanceTotal`
+      expectedRequestUrl = `/v3/distributors/${ distributorIdMock }/performanceTotal`
         + `?positionId=${ positionIdMock }`
         + `&metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(expectedPerformanceDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
+    it('should call the distributor performance endpoint and return PerformanceDTO data for the passed in distributor', () => {
+      const expectedPerformanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
 
       distributorsApiService.getDistributorPerformance(
         distributorIdMock,
@@ -179,24 +151,19 @@ describe('DistributorsApiService', () => {
         filterStateMock
       ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expectedPerformanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedPerformanceDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
-    it('should call the distributor performance endpoint and return empty PerformanceDTO data when response is 404', (done) => {
+    it('should call the distributor performance endpoint and return empty PerformanceDTO data when response is 404', () => {
       const expectedEmptyPerformanceDTOResponseMock: PerformanceDTO = {
         total: 0,
         totalYearAgo: 0
       };
-
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
 
       distributorsApiService.getDistributorPerformance(
         distributorIdMock,
@@ -206,30 +173,27 @@ describe('DistributorsApiService', () => {
         filterStateMock
       ).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getDistributorProductMetrics', () => {
-    it('should call the distributors product metrics endpoint and return ProductMetricDTO data for the passed in distributor', (done) => {
-      const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
-      const expectedRequestUrl: string = `/v3/distributors/${ distributorIdMock }/productMetrics`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/distributors/${ distributorIdMock }/productMetrics`
         + `?positionId=${ positionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.brand }`
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(expectedProductMetricsDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
+    it('should call the distributors product metrics endpoint and return ProductMetricDTO data for the passed in distributor', () => {
+      const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
 
       distributorsApiService.getDistributorProductMetrics(
         distributorIdMock,
@@ -239,21 +203,16 @@ describe('DistributorsApiService', () => {
       )
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toEqual(expectedProductMetricsDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedProductMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
-    + ' a brand aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    + ' a brand aggregation type and the API call returns a 404 error', () => {
       distributorsApiService.getDistributorProductMetrics(
         distributorIdMock,
         positionIdMock,
@@ -263,20 +222,20 @@ describe('DistributorsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.brandValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
 
     it('should return a response with an empty skuValues array when fetching product metrics for'
-    + ' a sku aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
+    + ' a sku aggregation type and the API call returns a 404 error', () => {
+      expectedRequestUrl = `/v3/distributors/${ distributorIdMock }/productMetrics`
+        + `?positionId=${ positionIdMock }`
+        + `&aggregationLevel=${ ProductMetricsAggregationType.sku }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
 
       distributorsApiService.getDistributorProductMetrics(
         distributorIdMock,
@@ -287,8 +246,10 @@ describe('DistributorsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 });

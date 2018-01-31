@@ -104,7 +104,7 @@ describe('Responsibilities Service', () => {
     getAlternateHierarchyPersonPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
-    getHierarchyGroupPerformance() {
+    getGroupPerformance() {
       return Observable.of(performanceDTOMock);
     },
     getPeopleResponsibilities() {
@@ -848,8 +848,8 @@ describe('Responsibilities Service', () => {
         });
     });
 
-    it('calls getHierarchyGroupPerformance with the given positionId when the given HierarchyGroup has no alternateHierarchyId', (done) => {
-      const getGroupPerformanceSpy = spyOn(positionsApiService, 'getHierarchyGroupPerformance').and.callThrough();
+    it('calls getGroupPerformance with the given positionId when the given HierarchyGroup has no alternateHierarchyId', (done) => {
+      const getGroupPerformanceSpy = spyOn(positionsApiService, 'getGroupPerformance').and.callThrough();
       const getAlternateGroupPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
 
       responsibilitiesService.getHierarchyGroupsPerformances(hierarchyGroups, performanceFilterStateMock, positionIdMock, brandCodeMock)
@@ -875,7 +875,7 @@ describe('Responsibilities Service', () => {
 
     it('calls getAlternateHierarchyGroupPerformance with the group`s postiionId and alternateHierarchyId given HierarchyGroup has ' +
     'an alternateHierarchyId', (done) => {
-      const getGroupPerformanceSpy = spyOn(positionsApiService, 'getHierarchyGroupPerformance').and.callThrough();
+      const getGroupPerformanceSpy = spyOn(positionsApiService, 'getGroupPerformance').and.callThrough();
       const getAlternateGroupPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyGroupPerformance').and.callThrough();
 
       hierarchyGroups = hierarchyGroups.map((hierarchyGroup: HierarchyGroup) => {
@@ -1454,7 +1454,7 @@ describe('Responsibilities Service', () => {
     let getPerformanceSpy: jasmine.Spy;
     let getAccountPerformanceSpy: jasmine.Spy;
     let transformPerformanceDTOSpy: jasmine.Spy;
-    let getHierarchyGroupPerformanceSpy: jasmine.Spy;
+    let getGroupPerformanceSpy: jasmine.Spy;
     let getAlternateHierarchyGroupPerformanceSpy: jasmine.Spy;
     let getAlternateHierarchyPersonPerformanceSpy: jasmine.Spy;
 
@@ -1468,7 +1468,7 @@ describe('Responsibilities Service', () => {
       transformPerformanceDTOSpy = spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callFake(()
         : Performance => entitiesTotalPerformancesMock);
 
-      getHierarchyGroupPerformanceSpy = spyOn(positionsApiService, 'getHierarchyGroupPerformance').and.callFake(()
+      getGroupPerformanceSpy = spyOn(positionsApiService, 'getGroupPerformance').and.callFake(()
         : Observable<PerformanceDTO> => Observable.of(entitiesTotalPerformancesDTOMock));
 
       getAlternateHierarchyGroupPerformanceSpy = spyOn(positionsApiService, 'getAlternateHierarchyGroupPerformance').and.callFake(()
@@ -1511,7 +1511,7 @@ describe('Responsibilities Service', () => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
           expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
-          expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+          expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
           expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
           expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
 
@@ -1562,7 +1562,7 @@ describe('Responsibilities Service', () => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
             expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
             expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
-            expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
             expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
             expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
 
@@ -1622,7 +1622,7 @@ describe('Responsibilities Service', () => {
           + ' nor alternate hierarchy totals for group', (done) => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
             expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
-            expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
             expect(getPerformanceSpy).not.toHaveBeenCalled();
             expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
 
@@ -1675,7 +1675,7 @@ describe('Responsibilities Service', () => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
             expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
             expect(transformPerformanceDTOSpy).not.toHaveBeenCalled();
-            expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+            expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
             expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
             expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
 
@@ -1750,7 +1750,7 @@ describe('Responsibilities Service', () => {
           it('should NOT get totals for accounts nor totals for people nor totals for standard hierarchy', (done) => {
             responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
               expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
-              expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+              expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
               expect(getPerformanceSpy).not.toHaveBeenCalled();
               expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
 
@@ -1810,7 +1810,7 @@ describe('Responsibilities Service', () => {
             + ' nor alternate hierarchy totals for group', (done) => {
             responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
               expect(getAccountPerformanceSpy).not.toHaveBeenCalled();
-              expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+              expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
               expect(getPerformanceSpy).not.toHaveBeenCalled();
               expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
 
@@ -1871,7 +1871,7 @@ describe('Responsibilities Service', () => {
       it('should NOT get totals for groups nor people nor alternate hierarchy totals', (done) => {
         responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
           expect(getPerformanceSpy).not.toHaveBeenCalled();
-          expect(getHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
+          expect(getGroupPerformanceSpy).not.toHaveBeenCalled();
           expect(getAlternateHierarchyGroupPerformanceSpy).not.toHaveBeenCalled();
           expect(getAlternateHierarchyPersonPerformanceSpy).not.toHaveBeenCalled();
 
@@ -1910,11 +1910,11 @@ describe('Responsibilities Service', () => {
       });
 
       describe('when refreshTotalPerformanceData DOES NOT contain an alternateHierarchyId', () => {
-        it('should call getHierarchyGroupPerformance with '
+        it('should call getGroupPerformance with '
           + 'the hierarchyGroup.type of the group that has for name the key of the first of groupedEntities, '
           + 'the filter, positionId, brandSkuCode and skuPackageType', (done) => {
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {
-            expect(getHierarchyGroupPerformanceSpy).toHaveBeenCalledWith(
+            expect(getGroupPerformanceSpy).toHaveBeenCalledWith(
               refreshTotalPerformanceData.positionId,
               refreshTotalPerformanceData.hierarchyGroups[randomIndex].type,
               refreshTotalPerformanceData.brandSkuCode,
@@ -1963,8 +1963,8 @@ describe('Responsibilities Service', () => {
           });
         });
 
-        it('should call show toast and transform null dto when getHierarchyGroupPerformance returns an error', (done) => {
-          getHierarchyGroupPerformanceSpy.and.callFake(() => {
+        it('should call show toast and transform null dto when getGroupPerformance returns an error', (done) => {
+          getGroupPerformanceSpy.and.callFake(() => {
             return Observable.throw(new Error(chance.string()));
           });
           responsibilitiesService.getRefreshedTotalPerformance(refreshTotalPerformanceData).subscribe(() => {

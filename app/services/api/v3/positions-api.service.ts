@@ -1,4 +1,4 @@
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -18,15 +18,14 @@ export class PositionsApiService {
 
   constructor(
     private apiHelperService: ApiHelperService,
-    private http: Http
+    private http: HttpClient
   ) { }
 
   public getAccountsOrDistributors(entityURI: string): Observable<EntityDTO[]> {
     const url = `/v3${ entityURI }`;
 
-    return this.http.get(url)
-      .map((response: Response) => response.json())
-      .catch((error: Response) => Observable.throw(error));
+    return this.http.get<EntityDTO[]>(url)
+      .catch((error: HttpErrorResponse) => Observable.throw(error));
   }
 
   public getAlternateHierarchy(
@@ -38,9 +37,8 @@ export class PositionsApiService {
       contextPositionId: alternateHierarchyPositionId
     };
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => Observable.throw(error));
+    return this.http.get<PeopleResponsibilitiesDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => Observable.throw(error));
   }
 
   public getAlternateHierarchyGroupPerformance(
@@ -59,9 +57,8 @@ export class PositionsApiService {
       this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+    return this.http.get<PerformanceDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getAlternateHierarchyPersonPerformance(
@@ -79,9 +76,8 @@ export class PositionsApiService {
       this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+    return this.http.get<PerformanceDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getAlternateHierarchyPersonProductMetrics(
@@ -98,9 +94,8 @@ export class PositionsApiService {
       },
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+    return this.http.get<ProductMetricsDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
         MetricTypeValue[params.metricType]
@@ -122,16 +117,15 @@ export class PositionsApiService {
       },
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+    return this.http.get<ProductMetricsDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
         MetricTypeValue[params.metricType]
       ));
   }
 
-  public getHierarchyGroupPerformance(
+  public getGroupPerformance(
     positionId: string,
     groupTypeCode: string,
     brandSkuCode: string,
@@ -139,21 +133,19 @@ export class PositionsApiService {
     filter: MyPerformanceFilterState
   ): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ groupTypeCode }/performanceTotal`;
-    const params = Object.assign({},
+    const params: any = Object.assign({},
       this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+    return this.http.get<PerformanceDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getPeopleResponsibilities(positionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities`;
 
-    return this.http.get(url)
-      .map((response: Response) => response.json())
-      .catch((error: Response) => Observable.throw(error));
+    return this.http.get<PeopleResponsibilitiesDTO>(url)
+      .catch((error: HttpErrorResponse) => Observable.throw(error));
   }
 
   public getPersonPerformance(
@@ -163,13 +155,12 @@ export class PositionsApiService {
     filter: MyPerformanceFilterState
   ): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
-    const params = Object.assign({},
+    const params: any = Object.assign({},
       this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+    return this.http.get<PerformanceDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getPersonProductMetrics(
@@ -184,9 +175,8 @@ export class PositionsApiService {
       },
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+    return this.http.get<ProductMetricsDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
         MetricTypeValue[params.metricType]
@@ -206,9 +196,8 @@ export class PositionsApiService {
       },
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+    return this.http.get<ProductMetricsDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
         MetricTypeValue[params.metricType]

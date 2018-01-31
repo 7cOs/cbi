@@ -171,7 +171,7 @@ export class ResponsibilitiesService {
             skuPackageType,
             filter
           )
-        : this.positionsApiService.getHierarchyGroupPerformance(
+        : this.positionsApiService.getGroupPerformance(
             positionId,
             group.type,
             brandSkuCode,
@@ -710,7 +710,7 @@ export class ResponsibilitiesService {
           brandSkuCode,
           skuPackageType,
           filter)
-      : this.positionsApiService.getHierarchyGroupPerformance(
+      : this.positionsApiService.getGroupPerformance(
           positionId,
           hierarchyGroupType,
           brandSkuCode,

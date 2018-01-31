@@ -1,6 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
@@ -9,7 +9,7 @@ import { MyPerformanceFilterState } from '../../state/reducers/my-performance-fi
 import { PerformanceDTO } from '../../models/performance.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsAggregationType } from '../../enums/product-metrics-aggregation-type.enum';
-import { ProductMetricsValues } from '../../models/product-metrics.model';
+import { ProductMetricsDTO } from '../../models/product-metrics.model';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 
 export interface FilterStateParameters {
@@ -25,16 +25,12 @@ export interface BrandSkuPackageCodeParam {
   masterSKU?: string;
 }
 
-export interface ProductMetricsNotFoundData {
-  brandValues?: ProductMetricsValues[];
-  skuValues?: ProductMetricsValues[];
-  type: MetricTypeValue;
-}
-
 @Injectable()
 export class ApiHelperService {
 
   public getBrandSkuPackageCodeParam(brandSkuCode: string, skuPackageType: SkuPackageType): BrandSkuPackageCodeParam {
+    if (!brandSkuCode) return;
+
     const brandSkuPackageCodeParam: BrandSkuPackageCodeParam = {};
 
     if (skuPackageType) {
@@ -64,24 +60,24 @@ export class ApiHelperService {
     };
   }
 
-  public handlePerformanceNotFoundError(error: Response): Observable<PerformanceDTO|Error> {
+  public handlePerformanceNotFoundError(error: HttpErrorResponse): Observable<PerformanceDTO> {
     if (error.status === 404) {
       return Observable.of({
         total: 0,
         totalYearAgo: 0
       });
     } else {
-      return Observable.throw(new Error(error.text()));
+      return Observable.throw(new Error(error.error));
     }
   }
 
   public handleProductMetricsNotFoundError(
-    error: Response,
+    error: HttpErrorResponse,
     aggregationLevel: ProductMetricsAggregationType,
     metricType: MetricTypeValue
-  ): Observable<ProductMetricsNotFoundData|Error> {
+  ): Observable<ProductMetricsDTO> {
     if (error.status === 404) {
-      const emptyProductMetricDTO: ProductMetricsNotFoundData = {
+      const emptyProductMetricDTO: ProductMetricsDTO = {
         type: metricType
       };
 
@@ -91,7 +87,7 @@ export class ApiHelperService {
 
       return Observable.of(emptyProductMetricDTO);
     } else {
-      return Observable.throw(new Error(error.text()));
+      return Observable.throw(new Error(error.error));
     }
   }
 

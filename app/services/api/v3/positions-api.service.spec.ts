@@ -1,6 +1,5 @@
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType } from '@angular/http';
-import { inject, TestBed } from '@angular/core/testing';
-import { MockBackend, MockConnection } from '@angular/http/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 import { ApiHelperService } from '../api-helper.service';
 import { EntityDTO } from '../../../models/entity-dto.model';
@@ -28,8 +27,9 @@ const expectedEmptyPerformanceDTOResponseMock: PerformanceDTO = {
 };
 
 describe('PositionsApiService', () => {
+  let testBed: TestBed;
+  let http: HttpTestingController;
   let positionsApiService: PositionsApiService;
-  let mockBackend: MockBackend;
 
   let positionIdMock: string;
   let alternateHierarchyPositionIdMock: string;
@@ -42,25 +42,13 @@ describe('PositionsApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: Http,
-          useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-            return new Http(backendInstance, defaultOptions);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
-        BaseRequestOptions,
-        MockBackend,
-        PositionsApiService,
-        ApiHelperService
-      ]
+      imports: [ HttpClientTestingModule ],
+      providers: [ ApiHelperService, PositionsApiService ]
     });
-  });
 
-  beforeEach(inject([PositionsApiService, MockBackend], (_positionsApiService: PositionsApiService, _mockBackend: MockBackend) => {
-    positionsApiService = _positionsApiService;
-    mockBackend = _mockBackend;
+    testBed = getTestBed();
+    http = testBed.get(HttpTestingController);
+    positionsApiService = testBed.get(PositionsApiService);
 
     positionIdMock = chance.string(chanceStringOptions);
     alternateHierarchyPositionIdMock = chance.string(chanceStringOptions);
@@ -74,47 +62,35 @@ describe('PositionsApiService', () => {
       dateRangeCode: getDateRangeTimePeriodValueMock(),
       premiseType: getPremiseTypeValueMock()
     };
-  }));
+  });
+
+  afterEach(() => {
+    http.verify();
+  });
 
   describe('getAccountsOrDistributors', () => {
-    it('should call the passed in EntityURI endpoint and return Accounts or Distributors', (done) => {
+    it('should call the passed in EntityURI endpoint and return Accounts or Distributors', () => {
       const expectedEntityDTOResponseMock: EntityDTO[] = [getEntityDTOMock()];
       const entityURIMock: string = chance.string(chanceStringOptions);
       const expectedRequestUrl: string = `/v3${entityURIMock}`;
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(expectedEntityDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
       positionsApiService.getAccountsOrDistributors(entityURIMock).subscribe((response: EntityDTO[]) => {
         expect(response).toEqual(expectedEntityDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedEntityDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
   });
 
   describe('getAlternateHierarchy', () => {
     it('should call the Positions AlternateHierarchy endpoint and return PeopleResponsibilitiesDTO data for the given'
-    + ' PositionId and ContextPositionId', (done) => {
+    + ' PositionId and ContextPositionId', () => {
       const expectedPeopleResponsibilitiesDTOResponseMock: PeopleResponsibilitiesDTO = getPeopleResponsibilitiesDTOMock();
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchy`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`;
-
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(expectedPeopleResponsibilitiesDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
 
       positionsApiService.getAlternateHierarchy(
         positionIdMock,
@@ -122,31 +98,29 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PeopleResponsibilitiesDTO) => {
         expect(response).toEqual(expectedPeopleResponsibilitiesDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedPeopleResponsibilitiesDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
   });
 
   describe('getAlternateHierarchyGroupPerformance', () => {
-    it('should call the Positions Alternate Hierarchy Performance endpoint and return PerformanceDTO data'
-    + ' for the given AlternateHierarchy Group', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/performanceTotal`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/performanceTotal`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
         + `&metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(performanceDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the Positions Alternate Hierarchy Performance endpoint and return PerformanceDTO data'
+    + ' for the given AlternateHierarchy Group', () => {
       positionsApiService.getAlternateHierarchyGroupPerformance(
         positionIdMock,
         alternateHierarchyPositionIdMock,
@@ -157,20 +131,15 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(performanceDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
-    it('should return empty PerformanceDTO data when the API responds with a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
       positionsApiService.getAlternateHierarchyGroupPerformance(
         positionIdMock,
         alternateHierarchyPositionIdMock,
@@ -181,30 +150,26 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getAlternateHierarchyPersonPerformance', () => {
-    it('should call the Positions Alternate Hierarchy Performance endpoint and return PerformanceDTO data', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchyPerformanceTotal`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/alternateHierarchyPerformanceTotal`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
         + `&metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(performanceDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the Positions Alternate Hierarchy Performance endpoint and return PerformanceDTO data', () => {
       positionsApiService.getAlternateHierarchyPersonPerformance(
         positionIdMock,
         alternateHierarchyPositionIdMock,
@@ -214,20 +179,15 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(performanceDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
-    it('should return empty PerformanceDTO data when the API responds with a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
       positionsApiService.getAlternateHierarchyPersonPerformance(
         positionIdMock,
         alternateHierarchyPositionIdMock,
@@ -237,30 +197,26 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getAlternateHierarchyPersonProductMetrics', () => {
-    it('should call the Positions Alternate Hierarchy Product Metrics endpoint and return ProductMetricDTO data', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchyProductMetrics`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/alternateHierarchyProductMetrics`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.sku }`
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the Positions Alternate Hierarchy Product Metrics endpoint and return ProductMetricDTO data', () => {
       positionsApiService.getAlternateHierarchyPersonProductMetrics(
         positionIdMock,
         alternateHierarchyPositionIdMock,
@@ -269,20 +225,22 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toEqual(productMetricsDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(productMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
-    + ' a brand aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
+    + ' a brand aggregation type and the API call returns a 404 error', () => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/alternateHierarchyProductMetrics`
+        + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
+        + `&aggregationLevel=${ ProductMetricsAggregationType.brand }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
 
       positionsApiService.getAlternateHierarchyPersonProductMetrics(
         positionIdMock,
@@ -293,21 +251,14 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.brandValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
 
     it('should return a response with an empty skuValues array when fetching product metrics for'
-    + ' a sku aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    + ' a sku aggregation type and the API call returns a 404 error', () => {
       positionsApiService.getAlternateHierarchyPersonProductMetrics(
         positionIdMock,
         alternateHierarchyPositionIdMock,
@@ -317,30 +268,26 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getAlternateHierarchyGroupProductMetrics', () => {
-    it('should call the Positions Alternate Hierarchy Group Product Metrics endpoint and return ProductMetricDTO data', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/productMetrics`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/productMetrics`
         + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
         + `&aggregationLevel=${ ProductMetricsAggregationType.sku }`
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the Positions Alternate Hierarchy Group Product Metrics endpoint and return ProductMetricDTO data', () => {
       positionsApiService.getAlternateHierarchyGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
@@ -350,20 +297,22 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toEqual(productMetricsDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(productMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
-    + ' a brand aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
+    + ' a brand aggregation type and the API call returns a 404 error', () => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy/${ groupTypeCodeMock }/productMetrics`
+        + `?contextPositionId=${ alternateHierarchyPositionIdMock }`
+        + `&aggregationLevel=${ ProductMetricsAggregationType.brand }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
 
       positionsApiService.getAlternateHierarchyGroupProductMetrics(
         positionIdMock,
@@ -375,21 +324,14 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.brandValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
 
     it('should return a response with an empty skuValues array when fetching product metrics for'
-    + ' a sku aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    + ' a sku aggregation type and the API call returns a 404 error', () => {
       positionsApiService.getAlternateHierarchyGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
@@ -400,30 +342,26 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
-  describe('getHierarchyGroupPerformance', () => {
-    it('should call the Positions Group Performance endpoint and return PerformanceDTO data', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/performanceTotal`
+  describe('getGroupPerformance', () => {
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/performanceTotal`
         + `?metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(performanceDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
-      positionsApiService.getHierarchyGroupPerformance(
+    it('should call the Positions Group Performance endpoint and return PerformanceDTO data', () => {
+      positionsApiService.getGroupPerformance(
         positionIdMock,
         groupTypeCodeMock,
         brandSkuCodeMock,
@@ -432,21 +370,16 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(performanceDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
-    it('should return empty PerformanceDTO data when the API responds with a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
-      positionsApiService.getHierarchyGroupPerformance(
+    it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
+      positionsApiService.getGroupPerformance(
         positionIdMock,
         groupTypeCodeMock,
         brandSkuCodeMock,
@@ -455,51 +388,41 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getPeopleResponsibilities', () => {
-    it('should call the Positions Responsibilities endpoint and return PeopleResponsibilitiesDTO data for the PositionId', (done) => {
+    it('should call the Positions Responsibilities endpoint and return PeopleResponsibilitiesDTO data for the PositionId', () => {
       const expectedPeopleResponsibilitiesDTOResponseMock: PeopleResponsibilitiesDTO = getPeopleResponsibilitiesDTOMock();
       const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/responsibilities`;
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(expectedPeopleResponsibilitiesDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
       positionsApiService.getPeopleResponsibilities(positionIdMock).subscribe((response: PeopleResponsibilitiesDTO) => {
         expect(response).toEqual(expectedPeopleResponsibilitiesDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedPeopleResponsibilitiesDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
   });
 
   describe('getPersonPerformance', () => {
-    it('should call the Positions Performance endpoint and return PerformanceDTO data for the given PositionId', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/performanceTotal`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/performanceTotal`
         + `?metricType=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`
         + `&masterSKU=${ brandSkuCodeMock }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(performanceDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the Positions Performance endpoint and return PerformanceDTO data for the given PositionId', () => {
       positionsApiService.getPersonPerformance(
         positionIdMock,
         brandSkuCodeMock,
@@ -508,20 +431,15 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(performanceDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
-    it('should return empty PerformanceDTO data when the API responds with a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
       positionsApiService.getPersonPerformance(
         positionIdMock,
         brandSkuCodeMock,
@@ -530,29 +448,25 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getPersonProductMetrics', () => {
-    it('should call the Positions Product Metrics endpoint and return ProductMetricsDTO data for the given PositionId', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/productMetrics`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/productMetrics`
         + `?aggregationLevel=${ ProductMetricsAggregationType.sku }`
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the Positions Product Metrics endpoint and return ProductMetricsDTO data for the given PositionId', () => {
       positionsApiService.getPersonProductMetrics(
         positionIdMock,
         ProductMetricsAggregationType.sku,
@@ -560,20 +474,21 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toEqual(productMetricsDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(productMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
-    + ' a brand aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
+    + ' a brand aggregation type and the API call returns a 404 error', () => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/productMetrics`
+        + `?aggregationLevel=${ ProductMetricsAggregationType.brand }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
 
       positionsApiService.getPersonProductMetrics(
         positionIdMock,
@@ -583,21 +498,14 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.brandValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
 
     it('should return a response with an empty skuValues array when fetching product metrics for'
-    + ' a sku aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    + ' a sku aggregation type and the API call returns a 404 error', () => {
       positionsApiService.getPersonProductMetrics(
         positionIdMock,
         ProductMetricsAggregationType.sku,
@@ -606,29 +514,25 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 
   describe('getGroupProductMetrics', () => {
-    it('should call the Positions Group Product Metrics endpoint and return ProductMetricsDTO data for the given PositionId', (done) => {
-      const expectedRequestUrl: string = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/productMetrics`
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/productMetrics`
         + `?aggregationLevel=${ ProductMetricsAggregationType.sku }`
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+    });
 
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(productMetricsDTOResponseMock)
-        });
-        connection.mockRespond(new Response(options));
-
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual(expectedRequestUrl);
-      });
-
+    it('should call the Positions Group Product Metrics endpoint and return ProductMetricsDTO data for the given PositionId', () => {
       positionsApiService.getGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
@@ -637,20 +541,21 @@ describe('PositionsApiService', () => {
       )
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toEqual(productMetricsDTOResponseMock);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(productMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
-    + ' a brand aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
+    + ' a brand aggregation type and the API call returns a 404 error', () => {
+      expectedRequestUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ groupTypeCodeMock }/productMetrics`
+        + `?aggregationLevel=${ ProductMetricsAggregationType.brand }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
 
       positionsApiService.getGroupProductMetrics(
         positionIdMock,
@@ -661,21 +566,14 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.brandValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
 
     it('should return a response with an empty skuValues array when fetching product metrics for'
-    + ' a sku aggregation type and the API call returns a 404 error', (done) => {
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          type: ResponseType.Error,
-          status: 404,
-          statusText: 'No performance totals found with given parameters'
-        });
-        connection.mockError(new Response(options) as Response & Error);
-      });
-
+    + ' a sku aggregation type and the API call returns a 404 error', () => {
       positionsApiService.getGroupProductMetrics(
         positionIdMock,
         groupTypeCodeMock,
@@ -685,8 +583,10 @@ describe('PositionsApiService', () => {
       .subscribe((response: ProductMetricsDTO) => {
         expect(response).toBeDefined();
         expect(response.skuValues).toEqual([]);
-        done();
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush({}, { status: 404, statusText: chance.string() });
     });
   });
 });

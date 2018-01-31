@@ -1,4 +1,4 @@
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -17,7 +17,7 @@ export class SubAccountsApiService {
 
   constructor(
     private apiHelperService: ApiHelperService,
-    private http: Http
+    private http: HttpClient
   ) { }
 
   public getSubAccountOpportunityCounts(
@@ -39,9 +39,8 @@ export class SubAccountsApiService {
       type: type
     };
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => Observable.throw(error));
+    return this.http.get<OpportunityCountDTO[]>(url, { params: params })
+      .catch((error: HttpErrorResponse) => Observable.throw(error));
   }
 
   public getSubAccountPerformance(
@@ -59,9 +58,8 @@ export class SubAccountsApiService {
       this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+    return this.http.get<PerformanceDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getSubAccountProductMetrics(
@@ -78,9 +76,8 @@ export class SubAccountsApiService {
       },
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+    return this.http.get<ProductMetricsDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregation,
         MetricTypeValue[params.metricType]

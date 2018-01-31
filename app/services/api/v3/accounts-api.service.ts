@@ -1,4 +1,4 @@
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -18,7 +18,7 @@ export class AccountsApiService {
 
   constructor(
     private apiHelperService: ApiHelperService,
-    private http: Http
+    private http: HttpClient
   ) { }
 
   public getAccountPerformance(
@@ -36,9 +36,8 @@ export class AccountsApiService {
       this.apiHelperService.getHierarchyFilterStateParams(filter),
       this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handlePerformanceNotFoundError(error));
+    return this.http.get<PerformanceDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getAccountProductMetrics(
@@ -55,9 +54,8 @@ export class AccountsApiService {
       },
       this.apiHelperService.getProductMetricsFilterStateParams(filter));
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => this.apiHelperService.handleProductMetricsNotFoundError(
+    return this.http.get<ProductMetricsDTO>(url, { params: params })
+      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregationLevel,
         MetricTypeValue[params.metricType]
@@ -75,8 +73,7 @@ export class AccountsApiService {
       premiseType: premiseType
     };
 
-    return this.http.get(url, { params: params })
-      .map((response: Response) => response.json())
-      .catch((error: Response) => Observable.throw(error));
+    return this.http.get<EntitySubAccountDTO[]>(url, { params: params })
+      .catch((error: HttpErrorResponse) => Observable.throw(error));
   }
 }
