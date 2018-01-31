@@ -18,6 +18,7 @@ import { ProductMetricsTransformerService } from '../services/product-metrics-tr
 import { ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 export interface ProductMetricsData {
   positionId: string;
@@ -234,8 +235,7 @@ export class ProductMetricsService {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
       })
       .catch((err: Error) => {
-        this.toastService.showOpportunityCountErrorToast();
-        return Observable.throw(err);
+        return this.handleOpportunityCountError(err);
       });
   }
 
@@ -260,8 +260,12 @@ export class ProductMetricsService {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
       })
       .catch((err: Error) => {
-        this.toastService.showOpportunityCountErrorToast();
-        return Observable.throw(err);
+        return this.handleOpportunityCountError(err);
       });
+  }
+
+  private handleOpportunityCountError(err: Error): ErrorObservable {
+    this.toastService.showOpportunityCountErrorToast();
+    return Observable.throw(err);
   }
 }
