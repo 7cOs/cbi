@@ -1,7 +1,6 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
-import { ApiHelperService } from '../api-helper.service';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getOpportunityCountDTOsMock } from '../../../models/opportunity-count-dto.model.mock';
@@ -15,6 +14,7 @@ import { ProductMetricsAggregationType } from '../../../enums/product-metrics-ag
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 import { SubAccountsApiService } from './sub-accounts-api.service';
+import { V3ApiHelperService } from './v3-api-helper.service';
 
 const chanceStringOptions = {
   pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
@@ -32,7 +32,7 @@ describe('SubAccountsApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ ApiHelperService, SubAccountsApiService ]
+      providers: [ SubAccountsApiService, V3ApiHelperService ]
     });
 
     testBed = getTestBed();
@@ -155,6 +155,7 @@ describe('SubAccountsApiService', () => {
 
   describe('getSubAccountProductMetrics', () => {
     let expectedRequestUrl: string;
+    let productMetricsDTOResponseMock: ProductMetricsDTO;
 
     beforeEach(() => {
       expectedRequestUrl = `/v3/subAccounts/${ subAccountIdMock }/productMetrics`
@@ -163,11 +164,10 @@ describe('SubAccountsApiService', () => {
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+      productMetricsDTOResponseMock = getProductMetricsBrandDTOMock();
     });
 
     it('should call the SubAccounts Product Metrics endpoint and return ProductMetricDTO data for the given SubAccount', () => {
-      const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
-
       subAccountsApiService.getSubAccountProductMetrics(
         subAccountIdMock,
         positionIdMock,
@@ -175,11 +175,34 @@ describe('SubAccountsApiService', () => {
         filterStateMock
       )
       .subscribe((response: ProductMetricsDTO) => {
-        expect(response).toEqual(expectedProductMetricsDTOResponseMock);
+        expect(response).toEqual(productMetricsDTOResponseMock);
       });
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
-      req.flush(expectedProductMetricsDTOResponseMock);
+      req.flush(productMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
+    });
+
+    it('should call the SubAccounts Product Metrics endpoint without a positionId query param when no positionId is passed in', () => {
+      expectedRequestUrl = `/v3/subAccounts/${ subAccountIdMock }/productMetrics`
+        + `?aggregationLevel=${ ProductMetricsAggregationType.brand }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
+
+      subAccountsApiService.getSubAccountProductMetrics(
+        subAccountIdMock,
+        undefined,
+        ProductMetricsAggregationType.brand,
+        filterStateMock
+      )
+      .subscribe((response: ProductMetricsDTO) => {
+        expect(response).toEqual(productMetricsDTOResponseMock);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(productMetricsDTOResponseMock);
 
       expect(req.request.method).toBe('GET');
     });

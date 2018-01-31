@@ -1,7 +1,6 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
-import { ApiHelperService } from '../api-helper.service';
 import { DistributorsApiService } from './distributors-api.service';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
@@ -15,6 +14,7 @@ import { PerformanceDTO } from '../../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
+import { V3ApiHelperService } from './v3-api-helper.service';
 
 const chanceStringOptions = {
   pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
@@ -32,7 +32,7 @@ describe('DistributorsApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ ApiHelperService, DistributorsApiService ]
+      providers: [ DistributorsApiService, V3ApiHelperService ]
     });
 
     testBed = getTestBed();
@@ -182,6 +182,7 @@ describe('DistributorsApiService', () => {
 
   describe('getDistributorProductMetrics', () => {
     let expectedRequestUrl: string;
+    let productMetricsDTOResponseMock: ProductMetricsDTO;
 
     beforeEach(() => {
       expectedRequestUrl = `/v3/distributors/${ distributorIdMock }/productMetrics`
@@ -190,11 +191,10 @@ describe('DistributorsApiService', () => {
         + `&type=${ filterStateMock.metricType.toLowerCase() }`
         + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
         + `&premiseType=${ filterStateMock.premiseType }`;
+      productMetricsDTOResponseMock = getProductMetricsBrandDTOMock();
     });
 
     it('should call the distributors product metrics endpoint and return ProductMetricDTO data for the passed in distributor', () => {
-      const expectedProductMetricsDTOResponseMock: ProductMetricsDTO = getProductMetricsBrandDTOMock();
-
       distributorsApiService.getDistributorProductMetrics(
         distributorIdMock,
         positionIdMock,
@@ -202,11 +202,34 @@ describe('DistributorsApiService', () => {
         filterStateMock
       )
       .subscribe((response: ProductMetricsDTO) => {
-        expect(response).toEqual(expectedProductMetricsDTOResponseMock);
+        expect(response).toEqual(productMetricsDTOResponseMock);
       });
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
-      req.flush(expectedProductMetricsDTOResponseMock);
+      req.flush(productMetricsDTOResponseMock);
+
+      expect(req.request.method).toBe('GET');
+    });
+
+    it('should call the distributors product metrics endpoint with no positionId query param when no positionId is passed in', () => {
+      expectedRequestUrl = `/v3/distributors/${ distributorIdMock }/productMetrics`
+        + `?aggregationLevel=${ ProductMetricsAggregationType.brand }`
+        + `&type=${ filterStateMock.metricType.toLowerCase() }`
+        + `&dateRangeCode=${ filterStateMock.dateRangeCode }`
+        + `&premiseType=${ filterStateMock.premiseType }`;
+
+      distributorsApiService.getDistributorProductMetrics(
+        distributorIdMock,
+        undefined,
+        ProductMetricsAggregationType.brand,
+        filterStateMock
+      )
+      .subscribe((response: ProductMetricsDTO) => {
+        expect(response).toEqual(productMetricsDTOResponseMock);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(productMetricsDTOResponseMock);
 
       expect(req.request.method).toBe('GET');
     });

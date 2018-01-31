@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
-import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { PerformanceDTO } from '../../models/performance.model';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { ProductMetricsAggregationType } from '../../enums/product-metrics-aggregation-type.enum';
-import { ProductMetricsDTO } from '../../models/product-metrics.model';
-import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
+import { MetricTypeValue } from '../../../enums/metric-type.enum';
+import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
+import { PerformanceDTO } from '../../../models/performance.model';
+import { PremiseTypeValue } from '../../../enums/premise-type.enum';
+import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
+import { ProductMetricsDTO } from '../../../models/product-metrics.model';
+import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 
 export interface FilterStateParameters {
   type?: string;
@@ -26,7 +26,7 @@ export interface BrandSkuPackageCodeParam {
 }
 
 @Injectable()
-export class ApiHelperService {
+export class V3ApiHelperService {
 
   public getBrandSkuPackageCodeParam(brandSkuCode: string, skuPackageType: SkuPackageType): BrandSkuPackageCodeParam {
     if (!brandSkuCode) return;
@@ -60,23 +60,23 @@ export class ApiHelperService {
     };
   }
 
-  public handlePerformanceNotFoundError(error: HttpErrorResponse): Observable<PerformanceDTO> {
-    if (error.status === 404) {
+  public handlePerformanceNotFoundError(httpErrorResponse: HttpErrorResponse): Observable<PerformanceDTO> {
+    if (httpErrorResponse.status === 404) {
       return Observable.of({
         total: 0,
         totalYearAgo: 0
       });
     } else {
-      return Observable.throw(new Error(error.error));
+      return Observable.throw(httpErrorResponse.message);
     }
   }
 
   public handleProductMetricsNotFoundError(
-    error: HttpErrorResponse,
+    httpErrorResponse: HttpErrorResponse,
     aggregationLevel: ProductMetricsAggregationType,
     metricType: MetricTypeValue
   ): Observable<ProductMetricsDTO> {
-    if (error.status === 404) {
+    if (httpErrorResponse.status === 404) {
       const emptyProductMetricDTO: ProductMetricsDTO = {
         type: metricType
       };
@@ -87,7 +87,7 @@ export class ApiHelperService {
 
       return Observable.of(emptyProductMetricDTO);
     } else {
-      return Observable.throw(new Error(error.error));
+      return Observable.throw(httpErrorResponse.message);
     }
   }
 

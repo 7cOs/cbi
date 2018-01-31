@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { ApiHelperService } from '../api-helper.service';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { OpportunityCountDTO } from '../../../models/opportunity-count-dto.model';
@@ -11,12 +10,13 @@ import { PerformanceDTO } from '../../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
+import { V3ApiHelperService } from './v3-api-helper.service';
 
 @Injectable()
 export class SubAccountsApiService {
 
   constructor(
-    private apiHelperService: ApiHelperService,
+    private v3ApiHelperService: V3ApiHelperService,
     private http: HttpClient
   ) { }
 
@@ -55,11 +55,11 @@ export class SubAccountsApiService {
       {
         positionId: positionId
       },
-      this.apiHelperService.getHierarchyFilterStateParams(filter),
-      this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
+      this.v3ApiHelperService.getHierarchyFilterStateParams(filter),
+      this.v3ApiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get<PerformanceDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
+      .catch((error: HttpErrorResponse) => this.v3ApiHelperService.handlePerformanceNotFoundError(error));
   }
 
   public getSubAccountProductMetrics(
@@ -74,10 +74,12 @@ export class SubAccountsApiService {
         positionId: positionId,
         aggregationLevel: aggregation
       },
-      this.apiHelperService.getProductMetricsFilterStateParams(filter));
+      this.v3ApiHelperService.getProductMetricsFilterStateParams(filter));
+
+    if (!positionId) delete params.positionId;
 
     return this.http.get<ProductMetricsDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
+      .catch((error: HttpErrorResponse) => this.v3ApiHelperService.handleProductMetricsNotFoundError(
         error,
         aggregation,
         MetricTypeValue[params.metricType]

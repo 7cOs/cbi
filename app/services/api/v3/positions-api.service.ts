@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { ApiHelperService } from '../api-helper.service';
 import { EntityDTO } from '../../../models/entity-dto.model';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
@@ -12,12 +11,13 @@ import { PerformanceDTO } from '../../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
+import { V3ApiHelperService } from './v3-api-helper.service';
 
 @Injectable()
 export class PositionsApiService {
 
   constructor(
-    private apiHelperService: ApiHelperService,
+    private v3ApiHelperService: V3ApiHelperService,
     private http: HttpClient
   ) { }
 
@@ -25,7 +25,7 @@ export class PositionsApiService {
     const url = `/v3${ entityURI }`;
 
     return this.http.get<EntityDTO[]>(url)
-      .catch((error: HttpErrorResponse) => Observable.throw(error));
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
   public getAlternateHierarchy(
@@ -38,7 +38,7 @@ export class PositionsApiService {
     };
 
     return this.http.get<PeopleResponsibilitiesDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => Observable.throw(error));
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
   public getAlternateHierarchyGroupPerformance(
@@ -54,11 +54,11 @@ export class PositionsApiService {
       {
         contextPositionId: alternateHierarchyPositionId
       },
-      this.apiHelperService.getHierarchyFilterStateParams(filter),
-      this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
+      this.v3ApiHelperService.getHierarchyFilterStateParams(filter),
+      this.v3ApiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get<PerformanceDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handlePerformanceNotFoundError(httpErrorResponse));
   }
 
   public getAlternateHierarchyPersonPerformance(
@@ -73,11 +73,11 @@ export class PositionsApiService {
       {
         contextPositionId: alternateHierarchyPositionId
       },
-      this.apiHelperService.getHierarchyFilterStateParams(filter),
-      this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
+      this.v3ApiHelperService.getHierarchyFilterStateParams(filter),
+      this.v3ApiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get<PerformanceDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handlePerformanceNotFoundError(httpErrorResponse));
   }
 
   public getAlternateHierarchyPersonProductMetrics(
@@ -92,11 +92,11 @@ export class PositionsApiService {
         contextPositionId: alternateHierarchyPositionId,
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getProductMetricsFilterStateParams(filter));
+      this.v3ApiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get<ProductMetricsDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
-        error,
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handleProductMetricsNotFoundError(
+        httpErrorResponse,
         aggregationLevel,
         MetricTypeValue[params.metricType]
       ));
@@ -115,11 +115,11 @@ export class PositionsApiService {
         contextPositionId: alternateHierarchyPositionId,
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getProductMetricsFilterStateParams(filter));
+      this.v3ApiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get<ProductMetricsDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
-        error,
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handleProductMetricsNotFoundError(
+        httpErrorResponse,
         aggregationLevel,
         MetricTypeValue[params.metricType]
       ));
@@ -134,18 +134,18 @@ export class PositionsApiService {
   ): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ groupTypeCode }/performanceTotal`;
     const params: any = Object.assign({},
-      this.apiHelperService.getHierarchyFilterStateParams(filter),
-      this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
+      this.v3ApiHelperService.getHierarchyFilterStateParams(filter),
+      this.v3ApiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get<PerformanceDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handlePerformanceNotFoundError(httpErrorResponse));
   }
 
   public getPeopleResponsibilities(positionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities`;
 
     return this.http.get<PeopleResponsibilitiesDTO>(url)
-      .catch((error: HttpErrorResponse) => Observable.throw(error));
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
   public getPersonPerformance(
@@ -156,11 +156,11 @@ export class PositionsApiService {
   ): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
     const params: any = Object.assign({},
-      this.apiHelperService.getHierarchyFilterStateParams(filter),
-      this.apiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
+      this.v3ApiHelperService.getHierarchyFilterStateParams(filter),
+      this.v3ApiHelperService.getBrandSkuPackageCodeParam(brandSkuCode, skuPackageType));
 
     return this.http.get<PerformanceDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handlePerformanceNotFoundError(error));
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handlePerformanceNotFoundError(httpErrorResponse));
   }
 
   public getPersonProductMetrics(
@@ -173,11 +173,11 @@ export class PositionsApiService {
       {
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getProductMetricsFilterStateParams(filter));
+      this.v3ApiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get<ProductMetricsDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
-        error,
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handleProductMetricsNotFoundError(
+        httpErrorResponse,
         aggregationLevel,
         MetricTypeValue[params.metricType]
       ));
@@ -194,11 +194,11 @@ export class PositionsApiService {
       {
         aggregationLevel: aggregationLevel
       },
-      this.apiHelperService.getProductMetricsFilterStateParams(filter));
+      this.v3ApiHelperService.getProductMetricsFilterStateParams(filter));
 
     return this.http.get<ProductMetricsDTO>(url, { params: params })
-      .catch((error: HttpErrorResponse) => this.apiHelperService.handleProductMetricsNotFoundError(
-        error,
+      .catch((httpErrorResponse: HttpErrorResponse) => this.v3ApiHelperService.handleProductMetricsNotFoundError(
+        httpErrorResponse,
         aggregationLevel,
         MetricTypeValue[params.metricType]
       ));

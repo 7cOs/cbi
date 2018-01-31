@@ -2,7 +2,6 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 import { AccountsApiService } from './accounts-api.service';
-import { ApiHelperService } from '../api-helper.service';
 import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntitySubAccountDTOMock } from '../../../models/entity-subaccount-dto.model.mock';
@@ -15,6 +14,7 @@ import { PerformanceDTO } from '../../../models/performance.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
+import { V3ApiHelperService } from './v3-api-helper.service';
 
 const chanceStringOptions = {
   pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
@@ -34,7 +34,7 @@ describe('AccountsApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ AccountsApiService, ApiHelperService ]
+      providers: [ AccountsApiService, V3ApiHelperService ]
     });
 
     testBed = getTestBed();

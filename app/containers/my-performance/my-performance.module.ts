@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AccountsApiService } from '../../services/api/v3/accounts-api.service';
-import { ApiHelperService } from '../../services/api/api-helper.service';
 import { BeerLoaderComponent } from '../../shared/components/beer-loader/beer-loader.component';
 import { DistributorsApiService } from '../../services/api/v3/distributors-api.service';
 import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
@@ -24,6 +23,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SubAccountsApiService } from '../../services/api/v3/sub-accounts-api.service';
 import { TeamPerformanceOpportunitiesComponent }
   from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
+import { V3ApiHelperService } from '../../services/api/v3/v3-api-helper.service';
 import { WindowService } from '../../services/window.service';
 
 @NgModule({
@@ -44,7 +44,6 @@ import { WindowService } from '../../services/window.service';
   ],
   providers: [
     AccountsApiService,
-    ApiHelperService,
     DistributorsApiService,
     MyPerformanceTableDataTransformerService,
     MyPerformanceService,
@@ -56,6 +55,7 @@ import { WindowService } from '../../services/window.service';
     ResponsibilitiesTransformerService,
     SubAccountsApiService,
     Title,
+    V3ApiHelperService,
     WindowService
   ]
 })

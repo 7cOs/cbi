@@ -1,7 +1,6 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
-import { ApiHelperService } from '../api-helper.service';
 import { EntityDTO } from '../../../models/entity-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntityDTOMock } from '../../../models/entity-dto.model.mock';
@@ -17,6 +16,7 @@ import { PositionsApiService } from './positions-api.service';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
+import { V3ApiHelperService } from './v3-api-helper.service';
 
 const chanceStringOptions = {
   pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
@@ -43,7 +43,7 @@ describe('PositionsApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ ApiHelperService, PositionsApiService ]
+      providers: [ PositionsApiService, V3ApiHelperService ]
     });
 
     testBed = getTestBed();
