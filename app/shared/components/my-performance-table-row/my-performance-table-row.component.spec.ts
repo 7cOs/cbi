@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, Pipe } from '@angular/core';
+import { Component } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
