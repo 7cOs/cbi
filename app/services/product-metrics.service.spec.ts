@@ -48,6 +48,10 @@ describe('ProductMetrics Service', () => {
   let productMetricsApiService: ProductMetricsApiService;
   let productMetricsTransformerService: ProductMetricsTransformerService;
 
+  const toastServiceMock = {
+    showOpportunityCountErrorToast: jasmine.createSpy('showOpportunityCountErrorToast')
+  };
+
   beforeEach(() => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
@@ -147,6 +151,10 @@ describe('ProductMetrics Service', () => {
         {
           provide: ProductMetricsTransformerService,
           useValue: productMetricsTransformerServiceMock
+        },
+        {
+          provide: 'toastService',
+          useValue: toastServiceMock
         }
       ]
     });
@@ -1386,6 +1394,23 @@ describe('ProductMetrics Service', () => {
           done();
         });
       });
+
+      it('should call showOpportunityCountErrorToast and return an error in the case of an error', (done) => {
+        const errorText = chance.string();
+        const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getSubAccountOpportunityCounts').and.callFake(() => {
+          return Observable.throw(new Error(errorText));
+        });
+
+        expect(productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock)
+          .subscribe(
+            () => { },
+            (response: Error) => {
+              expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+              expect(toastServiceMock.showOpportunityCountErrorToast).toHaveBeenCalled();
+              expect(response.message).toBe(errorText);
+              done();
+          }));
+      });
     });
 
     describe('when fetching opportunity counts for a Distributor', () => {
@@ -1498,6 +1523,22 @@ describe('ProductMetrics Service', () => {
             expect(response).toEqual(opportunitiesGroupedByBrandSkuPackageCodeMock);
             done();
           });
+        });
+        it('should call showOpportunityCountErrorToast and return an error in the case of an error', (done) => {
+          const errorText = chance.string();
+          const getOpportunityCountsSpy = spyOn(productMetricsApiService, 'getDistributorOpportunityCounts').and.callFake(() => {
+            return Observable.throw(new Error(errorText));
+          });
+
+          expect(productMetricsService.getOpportunityCounts(fetchOpportunityCountsMock)
+            .subscribe(
+              () => { },
+              (response: Error) => {
+                expect(getOpportunityCountsSpy.calls.count()).toBe(1);
+                expect(toastServiceMock.showOpportunityCountErrorToast).toHaveBeenCalled();
+                expect(response.message).toBe(errorText);
+                done();
+            }));
         });
       });
     });

@@ -11,6 +11,7 @@ module.exports = /*  @ngInject */
       deleteError: false,
       multipleTargetListsSelected: false,
       performanceDataError: false,
+      opportunityCountError: false,
       reportDeleted: false,
       reportSaved: false
     };
@@ -18,8 +19,13 @@ module.exports = /*  @ngInject */
     var service = {
       model: model,
       showToast: showToast,
-      showPerformanceDataErrorToast: showPerformanceDataErrorToast
+      showPerformanceDataErrorToast: showPerformanceDataErrorToast,
+      showOpportunityCountErrorToast: showOpportunityCountErrorToast
     };
+
+    const threeSeconds = 3000;
+    const sixSeconds = 6000;
+    const tenSeconds = 10000;
 
     return service;
 
@@ -41,11 +47,11 @@ module.exports = /*  @ngInject */
       // Reset defaults
       $timeout(function () {
         model[targetListAction] = false;
-      }, 3000);
+      }, threeSeconds);
 
       $timeout(function () {
         model.multipleTargetListsSelected = false;
-      }, 6000);
+      }, sixSeconds);
     }
 
     function showPerformanceDataErrorToast() {
@@ -53,6 +59,14 @@ module.exports = /*  @ngInject */
 
       $timeout(() => {
         model.performanceDataError = false;
-      }, 10000);
+      }, tenSeconds);
+    }
+
+    function showOpportunityCountErrorToast() {
+      model.opportunityCountError = true;
+
+      $timeout(() => {
+        model.opportunityCountError = false;
+      }, tenSeconds);
     }
   };

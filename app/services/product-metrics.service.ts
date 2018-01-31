@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
@@ -18,6 +18,7 @@ import { ProductMetricsTransformerService } from '../services/product-metrics-tr
 import { ProductMetricsDTO, ProductMetricsValues } from '../models/product-metrics.model';
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 export interface ProductMetricsData {
   positionId: string;
@@ -37,7 +38,8 @@ export class ProductMetricsService {
 
   constructor(
     private productMetricsApiService: ProductMetricsApiService,
-    private productMetricsTransformerService: ProductMetricsTransformerService
+    private productMetricsTransformerService: ProductMetricsTransformerService,
+    @Inject('toastService') private toastService: any
   ) { }
 
   public getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
@@ -231,6 +233,9 @@ export class ProductMetricsService {
       ProductMetricsServiceConstants.opportunityType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+      })
+      .catch((err: Error) => {
+        return this.handleOpportunityCountError(err);
       });
   }
 
@@ -253,6 +258,14 @@ export class ProductMetricsService {
       ProductMetricsServiceConstants.opportunityType)
       .map((opportunityCountResponse: Array<OpportunityCountDTO>) => {
         return this.productMetricsTransformerService.transformAndGroupOpportunityCounts(opportunityCountResponse);
+      })
+      .catch((err: Error) => {
+        return this.handleOpportunityCountError(err);
       });
+  }
+
+  private handleOpportunityCountError(err: Error): ErrorObservable {
+    this.toastService.showOpportunityCountErrorToast();
+    return Observable.throw(err);
   }
 }
