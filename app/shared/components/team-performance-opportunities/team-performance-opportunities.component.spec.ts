@@ -6,6 +6,7 @@ import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.comp
 import { CompassTooltipObject } from '../../../models/compass-tooltip-component.model';
 import { getTooltipMock } from '../../../models/compass-tooltip.model.mock';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../../models/my-performance-table-row.model.mock';
+import { NumberPipeMock } from '../my-performance-table-row/my-performance-table-row.component.spec';
 import { TeamPerformanceOpportunitiesComponent } from './team-performance-opportunities.component';
 import { TeamPerformanceTableOpportunity } from '../../../models/my-performance-table-row.model';
 
@@ -24,7 +25,7 @@ describe('Team Performance Opportunities Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ TeamPerformanceOpportunitiesComponent, CompassTooltipComponent ]
+      declarations: [ CompassTooltipComponent, NumberPipeMock, TeamPerformanceOpportunitiesComponent ]
     });
 
     fixture = TestBed.createComponent(TeamPerformanceOpportunitiesComponent);
