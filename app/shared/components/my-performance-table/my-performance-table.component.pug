@@ -46,18 +46,18 @@ div.performance-table-wrapper
         [showContributionToVolume]="showContributionToVolume",
         (click)="onElementClicked.emit({type: rowType.total, index: $event})")
 
-      tr.dismissable-total-row.col-100-pct(
-        *ngIf="dismissableTotalRow",
-        [ngClass]="getDismissableTotalRowClasses()",
+      tr.dismissible-total-row.col-100-pct(
+        *ngIf="dismissibleTotalRow",
+        [ngClass]="getDismissibleTotalRowClasses()",
         my-performance-table-row,
-        [rowData]="dismissableTotalRow",
+        [rowData]="dismissibleTotalRow",
         [showX]=true,
         [showContributionToVolume]="showContributionToVolume",
         [showOpportunities]="false",
         [showEmptyLastColumn]="showOpportunities",
-        (click)="onElementClicked.emit({type: rowType.dismissableTotal, index: $event, row: dismissableTotalRow})",
-        (onDismissableRowXClicked)="onDismissableRowXClicked.emit()",
-        (onOpportunityCountClicked)="onOpportunityCountClicked.emit(dismissableTotalRow)")
+        (click)="onElementClicked.emit({type: rowType.dismissibleTotal, index: $event, row: dismissibleTotalRow})",
+        (onDismissibleRowXClicked)="onDismissibleRowXClicked.emit()",
+        (onOpportunityCountClicked)="onOpportunityCountClicked.emit(dismissibleTotalRow)")
 
     tbody([ngClass]="getTableBodyClasses()")
       tr.entity-row.col-100-pct(
