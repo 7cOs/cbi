@@ -376,7 +376,14 @@ module.exports = /*  @ngInject */
     function addToTargetList(targetList, opportunity) {
       var storeExists = false;
 
-      targetListService.addTargetListOpportunities(targetList, [opportunity.id]);
+      targetListService.addTargetListOpportunities(targetList, [opportunity.id]).then(function(success) {
+        analyticsService.trackEvent(
+          'Opportunities',
+          'Add To Target List',
+          targetList
+        );
+      });
+
       opportunity.brands = [];
       opportunity.brands.push(opportunity.product.brand.toLowerCase());
 
