@@ -1,6 +1,8 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
+import { ApiRequestType } from '../../../enums/api-request-type.enum';
+import { chanceStringOptions } from '../../../lib/spec-util';
 import { EntityDTO } from '../../../models/entity-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntityDTOMock } from '../../../models/entity-dto.model.mock';
@@ -18,9 +20,6 @@ import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 import { V3ApiHelperService } from './v3-api-helper.service';
 
-const chanceStringOptions = {
-  pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
-};
 const expectedEmptyPerformanceDTOResponseMock: PerformanceDTO = {
   total: 0,
   totalYearAgo: 0
@@ -81,7 +80,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedEntityDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
 
@@ -103,7 +102,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedPeopleResponsibilitiesDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
 
@@ -136,7 +135,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(performanceDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
@@ -184,7 +183,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(performanceDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
@@ -230,7 +229,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
@@ -302,7 +301,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
@@ -375,7 +374,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(performanceDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
@@ -407,7 +406,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedPeopleResponsibilitiesDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
 
@@ -436,7 +435,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(performanceDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return empty PerformanceDTO data when the API responds with a 404 error', () => {
@@ -479,7 +478,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
@@ -546,7 +545,7 @@ describe('PositionsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
