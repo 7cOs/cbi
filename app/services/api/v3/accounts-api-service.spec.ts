@@ -2,6 +2,8 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 import { AccountsApiService } from './accounts-api.service';
+import { ApiRequestType } from '../../../enums/api-request-type.enum';
+import { chanceStringOptions } from '../../../lib/spec-util';
 import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntitySubAccountDTOMock } from '../../../models/entity-subaccount-dto.model.mock';
@@ -15,10 +17,6 @@ import { ProductMetricsAggregationType } from '../../../enums/product-metrics-ag
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 import { V3ApiHelperService } from './v3-api-helper.service';
-
-const chanceStringOptions = {
-  pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
-};
 
 describe('AccountsApiService', () => {
   let testBed: TestBed;
@@ -84,7 +82,7 @@ describe('AccountsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedPerformanceDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should call the account performance endpoint and return empty PerformanceDTO data when response is 404', () => {
@@ -135,7 +133,7 @@ describe('AccountsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
@@ -199,7 +197,7 @@ describe('AccountsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(subAccountsDTOMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
 });
