@@ -1,6 +1,8 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
+import { ApiRequestType } from '../../../enums/api-request-type.enum';
+import { chanceStringOptions } from '../../../lib/spec-util';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getOpportunityCountDTOsMock } from '../../../models/opportunity-count-dto.model.mock';
@@ -15,10 +17,6 @@ import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 import { SubAccountsApiService } from './sub-accounts-api.service';
 import { V3ApiHelperService } from './v3-api-helper.service';
-
-const chanceStringOptions = {
-  pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
-};
 
 describe('SubAccountsApiService', () => {
   let testBed: TestBed;
@@ -92,7 +90,7 @@ describe('SubAccountsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(opportunityCountDTOsMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
 
@@ -129,7 +127,7 @@ describe('SubAccountsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(performanceDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should call the SubAccount Performance endpoint and return empty PerformanceDTO data when response is 404', () => {
@@ -181,7 +179,7 @@ describe('SubAccountsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should call the SubAccounts Product Metrics endpoint without a positionId query param when no positionId is passed in', () => {
@@ -204,7 +202,7 @@ describe('SubAccountsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'

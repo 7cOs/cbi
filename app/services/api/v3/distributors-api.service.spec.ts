@@ -1,6 +1,8 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
+import { ApiRequestType } from '../../../enums/api-request-type.enum';
+import { chanceStringOptions } from '../../../lib/spec-util';
 import { DistributorsApiService } from './distributors-api.service';
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
@@ -15,10 +17,6 @@ import { ProductMetricsAggregationType } from '../../../enums/product-metrics-ag
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 import { V3ApiHelperService } from './v3-api-helper.service';
-
-const chanceStringOptions = {
-  pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
-};
 
 describe('DistributorsApiService', () => {
   let testBed: TestBed;
@@ -93,7 +91,7 @@ describe('DistributorsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl + expectedRequestParams);
       req.flush(opportunityCountDTOsMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should call the distirbutor opportunity counts endpoint with no `positionIds` query param when'
@@ -120,7 +118,7 @@ describe('DistributorsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl + expectedRequestParams);
       req.flush(opportunityCountDTOsMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
 
@@ -156,7 +154,7 @@ describe('DistributorsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedPerformanceDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should call the distributor performance endpoint and return empty PerformanceDTO data when response is 404', () => {
@@ -208,7 +206,7 @@ describe('DistributorsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should call the distributors product metrics endpoint with no positionId query param when no positionId is passed in', () => {
@@ -231,7 +229,7 @@ describe('DistributorsApiService', () => {
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(productMetricsDTOResponseMock);
 
-      expect(req.request.method).toBe('GET');
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
 
     it('should return a response with an empty brandValues array when fetching product metrics for'
