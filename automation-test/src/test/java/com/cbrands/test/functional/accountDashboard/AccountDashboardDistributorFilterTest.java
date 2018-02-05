@@ -50,7 +50,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     accountDashboardPage
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName);
+      .selectDistributorFilterContaining(distributorName);
 
     Assert.assertEquals(
       accountDashboardPage.getDistributorFieldText(),
@@ -94,7 +94,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     accountDashboardPage
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName)
+      .selectDistributorFilterContaining(distributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
@@ -118,7 +118,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     accountDashboardPage
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName)
+      .selectDistributorFilterContaining(distributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()

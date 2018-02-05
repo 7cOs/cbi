@@ -43,7 +43,7 @@ public class AccountDashboardTest extends BaseTestCase {
   public void searchAccounts(String distributorSearchText, String fullDistributorName) {
     accountDashboardPage.enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(fullDistributorName)
+      .selectDistributorFilterContaining(fullDistributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();

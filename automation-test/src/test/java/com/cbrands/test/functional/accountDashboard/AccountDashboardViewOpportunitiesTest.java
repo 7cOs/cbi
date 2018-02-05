@@ -53,7 +53,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .selectPremiseType(premiseType)
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName);
+      .selectDistributorFilterContaining(distributorName);
 
     Assert.assertFalse(
       accountDashboardPage.isOpportunitiesLinkEnabled(),
@@ -80,7 +80,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .selectPremiseType(premiseType)
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName)
+      .selectDistributorFilterContaining(distributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
