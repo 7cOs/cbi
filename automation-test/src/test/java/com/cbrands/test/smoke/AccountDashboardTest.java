@@ -40,10 +40,10 @@ public class AccountDashboardTest extends BaseTestCase {
   }
 
   @Test(description = "Search for accounts", dataProvider = "searchData")
-  public void searchAccounts(String distributorName) {
-    accountDashboardPage.enterDistributorSearchText(distributorName)
+  public void searchAccounts(String distributorSearchText, String fullDistributorName) {
+    accountDashboardPage.enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName(distributorName)
+      .selectDistributorFilterByName(fullDistributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
@@ -153,7 +153,7 @@ public class AccountDashboardTest extends BaseTestCase {
 
   @DataProvider public static Object[][] searchData() {
     return new Object[][] {
-      {"COASTAL BEV CO-NC (WILMINGTON)"}
+      {"coastal", "COASTAL BEV CO - NC (WILMINGTON)"}
     };
   }
 }
