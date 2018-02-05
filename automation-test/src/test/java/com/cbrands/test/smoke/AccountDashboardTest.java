@@ -58,7 +58,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
   }
 
-  @Test(description = "Drill all the way down the account hierarchy and drill back up")
+  @Test(description = "Account hierarchy - Drill all the way down and drill back up")
   public void drillDownUpAccounts() {
     drillRightPanelToBottom();
     drillRightPanelToTop();
@@ -128,7 +128,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
   }
 
-  @Test(description = "Drill all the way down the brands hierarchy and drill back up")
+  @Test(description = "Brands hierarchy - Drill all the way down and drill back up")
   public void drillDownDrillUpBrands() {
     accountDashboardPage.drillIntoFirstRowInLeftPanel();
     Assert.assertTrue(
