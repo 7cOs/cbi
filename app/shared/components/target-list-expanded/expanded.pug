@@ -13,7 +13,7 @@
   .target-action-buttons
     button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.archiveTargetList(expanded.selected)").btn-action Archive
     button(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList(expanded.selected)").btn-action Delete
-    button.btn-action(ng-disabled="expanded.loaderService.model.loadingFilters" ng-click="expanded.createTargetList($event)") Create a New List
+    button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom md-selected="expanded.selectedTab")
