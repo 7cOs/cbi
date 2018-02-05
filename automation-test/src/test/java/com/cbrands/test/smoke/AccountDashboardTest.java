@@ -11,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
@@ -38,11 +39,11 @@ public class AccountDashboardTest extends BaseTestCase {
     this.shutDownBrowser();
   }
 
-  @Test(description = "Search for accounts")
-  public void searchAccounts() {
-    accountDashboardPage.enterDistributorSearchText("Coastal")
+  @Test(description = "Search for accounts", dataProvider = "searchData")
+  public void searchAccounts(String distributorName) {
+    accountDashboardPage.enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
+      .selectDistributorFilterByName(distributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
@@ -148,5 +149,11 @@ public class AccountDashboardTest extends BaseTestCase {
       accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
       "Right accounts panel failed to reload for Brands"
     );
+  }
+
+  @DataProvider public static Object[][] searchData() {
+    return new Object[][] {
+      {"COASTAL BEV CO-NC (WILMINGTON)"}
+    };
   }
 }
