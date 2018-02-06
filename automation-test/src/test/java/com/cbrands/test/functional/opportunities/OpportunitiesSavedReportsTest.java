@@ -33,6 +33,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
   }
 
   @AfterMethod
@@ -89,7 +90,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "deleteReportData"
   )
   public void deleteSavedReport(String reportNameToDelete, String distributor) {
-    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
     opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
     opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
