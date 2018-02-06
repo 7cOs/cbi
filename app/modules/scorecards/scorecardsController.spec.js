@@ -1,7 +1,7 @@
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
-fdescribe('Unit: scorecardsController', function() {
+describe('Unit: scorecardsController', function() {
   var scope, ctrl, $state, filtersService, userService, title;
   let remodeledDepletion, remodeledDistribution;
 
