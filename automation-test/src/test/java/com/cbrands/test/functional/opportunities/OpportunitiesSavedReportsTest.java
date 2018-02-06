@@ -73,6 +73,41 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
+    description = "Running an Opportunities Saved Report from the Opportunities page",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "runReportData"
+  )
+  public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
+    this.setUpNewSavedReport(reportName + " from Opportunities page", distributor);
+
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .selectSavedReportWithName(reportName)
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
+    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
+  @Test(
+    description = "Running an Opportunities Saved Report from the Home page",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "runReportData"
+  )
+  public void runSavedReportFromHomePage(String reportName, String distributor) {
+    this.setUpNewSavedReport(reportName + " from Home page", distributor);
+
+    homePage.goToPage();
+    opportunitiesPage = homePage
+      .clickSavedReportsDropdown()
+      .selectSavedReportWithName(reportName)
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
+    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
+  @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
     dataProvider = "distributorData"
@@ -119,36 +154,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Saved Report with name " + reportNameToDelete +
         " failed to be removed from the dropdown on the Home page."
     );
-  }
-
-  @Test(
-    description = "Running an Opportunities Saved Report from the Opportunities page",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "createRunReportData"
-  )
-  public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .selectSavedReportWithName(reportName)
-      .waitForLoaderToDisappear();
-
-    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
-    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
-  }
-
-  @Test(
-    description = "Running an Opportunities Saved Report from the Home page",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "createRunReportData"
-  )
-  public void runSavedReportFromHomePage(String reportName, String distributor) {
-    homePage.goToPage();
-    opportunitiesPage = homePage
-      .clickSavedReportsDropdown()
-      .selectSavedReportWithName(reportName)
-      .waitForLoaderToDisappear();
-    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
-    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
   }
 
   @Test(
@@ -216,7 +221,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @DataProvider
-  public static Object[][] createRunReportData() {
+  public static Object[][] runReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
       {"Run " + testReportName, "Healy Wholesale"}
