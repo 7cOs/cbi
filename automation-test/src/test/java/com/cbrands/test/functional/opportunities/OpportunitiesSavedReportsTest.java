@@ -307,7 +307,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   private void setUpMaxNumberOfSavedReports(String distributor) {
     for(int i = this.getExistingNumberOfSavedReports() + 1; i <= MAX_SAVED_REPORT_LIMIT; i++) {
-      this.setUpNewSavedReport("Test Max Limit - Report #" + i, distributor);
+      final String reportName = String.format("Test Max Limit - Report #%s - %s", i, current_time_stamp);
+      this.setUpNewSavedReport(reportName, distributor);
     }
   }
 
