@@ -316,7 +316,7 @@ public class OpportunitiesPage extends TestNGBasePage {
       final OpportunitiesPage opportunitiesPage;
 
       if (!isPlaceholderForNoOptions(this.getFirstSavedReportOption())) {
-        opportunitiesPage = deleteAllReportsAndResetFilters();
+        opportunitiesPage = deleteAllReports();
       } else {
         opportunitiesPage = this.closeDropdown();
       }
@@ -324,7 +324,7 @@ public class OpportunitiesPage extends TestNGBasePage {
       return opportunitiesPage;
     }
 
-    private OpportunitiesPage deleteAllReportsAndResetFilters() {
+    private OpportunitiesPage deleteAllReports() {
       WebElement savedReportOption = this.getFirstSavedReportOption();
 
       while (!isPlaceholderForNoOptions(savedReportOption)) {
@@ -336,7 +336,7 @@ public class OpportunitiesPage extends TestNGBasePage {
             .getFirstSavedReportOption();
       }
 
-      return this.closeDropdown().clickResetFilters();
+      return this.closeDropdown();
     }
 
     private boolean isPlaceholderForNoOptions(WebElement savedReportOption) {
