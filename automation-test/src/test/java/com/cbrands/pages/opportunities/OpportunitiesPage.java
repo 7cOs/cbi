@@ -6,7 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
@@ -308,8 +307,8 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     public SavedReportModal openModalForSavedReportWithName(String reportName) {
       final WebElement savedReportOption = findElement(this.getHandleForSavedReportWithName(reportName));
+      this.openEditModalFor(savedReportOption);
 
-      this.clickSavedReportHoverArrow(savedReportOption);
       return PageFactory.initElements(driver, SavedReportModal.class);
     }
 
@@ -330,7 +329,7 @@ public class OpportunitiesPage extends TestNGBasePage {
 
       while (!isPlaceholderForNoOptions(savedReportOption)) {
         savedReportOption =
-          this.clickSavedReportHoverArrow(savedReportOption)
+          this.openEditModalFor(savedReportOption)
             .clickSavedReportDeleteLink()
             .waitForModalToClose()
             .clickSavedReportsDropdown()
@@ -355,7 +354,12 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
 
     private By getHandleForSavedReportWithName(String name) {
-      return By.xpath(SAVED_REPORT_OPTION_XPATH + "[contains(., '" + name + "')]");
+      final String savedReportXPath = String.format(
+        "%s[contains(., '%s')]",
+        SAVED_REPORT_OPTION_XPATH,
+        name
+      );
+      return By.xpath(savedReportXPath);
     }
 
     private WebElement getFirstSavedReportOption() {
@@ -365,28 +369,20 @@ public class OpportunitiesPage extends TestNGBasePage {
       );
     }
 
-    private SavedReportModal clickSavedReportHoverArrow(WebElement savedReport) {
-      this.clickHoverArrowFor(savedReport).waitForLoaderToDisappear();
-      return PageFactory.initElements(driver, SavedReportModal.class);
-    }
-
-    private OpportunitiesPage clickHoverArrowFor(WebElement savedReport) {
-      waitForElementToClickable(savedReport, true);
-      final Actions action = new Actions(driver);
-      action.moveToElement(savedReport).perform();
-
+    private SavedReportModal openEditModalFor(WebElement savedReport) {
       scrollToAndClick(
-        findElement(By.xpath("//div[contains(@class, 'saved-reports-arrow')][@role='button']"))
+        savedReport.findElement(By.xpath("//div[contains(@class, 'saved-reports-edit-icon')][@role='button']"))
       );
+      waitForLoaderToDisappear();
 
-      return PageFactory.initElements(driver, OpportunitiesPage.class);
+      return PageFactory.initElements(driver, SavedReportModal.class);
     }
 
     public int getNumberOfSavedReports() {
       final int numberOfSavedReports;
       final List<WebElement> list = findElements(By.xpath(SAVED_REPORT_OPTION_XPATH));
 
-      if(1 == list.size() && isPlaceholderForNoOptions(list.get(0))) {
+      if (1 == list.size() && isPlaceholderForNoOptions(list.get(0))) {
         numberOfSavedReports = 0;
       } else {
         numberOfSavedReports = list.size();
