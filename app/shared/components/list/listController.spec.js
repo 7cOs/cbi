@@ -519,7 +519,8 @@ describe('Unit: list controller', function() {
         'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
         'storeSegmentation': opportunities[0].store.segmentation,
         'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
-        'productName': opportunities[0].product.name,
+        'productBrand': opportunities[0].product.brand,
+        'productSku': opportunities[0].product.name,
         'itemAuthorization': opportunities[0].isItemAuthorization,
         'chainMandate': opportunities[0].isChainMandate,
         'onFeature': opportunities[0].isOnFeature,
@@ -539,7 +540,8 @@ describe('Unit: list controller', function() {
         'Volume Trend for Store CYTD vs CYTD Last Year',
         'Segmentation',
         'Opportunity Type',
-        'Product',
+        'Product Brand',
+        'Product Sku',
         'Item Authorization',
         'Chain Mandate',
         'On Feature',
@@ -565,7 +567,8 @@ describe('Unit: list controller', function() {
         'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
         'storeSegmentation': opportunities[0].store.segmentation,
         'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
-        'productName': opportunities[0].product.name,
+        'productBrand': opportunities[0].product.brand,
+        'productSku': opportunities[0].product.name,
         'itemAuthorization': opportunities[0].isItemAuthorization,
         'chainMandate': opportunities[0].isChainMandate,
         'onFeature': opportunities[0].isOnFeature,
@@ -586,7 +589,8 @@ describe('Unit: list controller', function() {
         'Volume Trend for Store CYTD vs CYTD Last Year',
         'Segmentation',
         'Opportunity Type',
-        'Product',
+        'Product Brand',
+        'Product Sku',
         'Item Authorization',
         'Chain Mandate',
         'On Feature',
@@ -613,7 +617,8 @@ describe('Unit: list controller', function() {
         'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
         'storeSegmentation': opportunities[0].store.segmentation,
         'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
-        'productName': opportunities[0].product.name,
+        'productBrand': opportunities[0].product.brand,
+        'productSku': opportunities[0].product.name,
         'itemAuthorization': opportunities[0].isItemAuthorization,
         'chainMandate': opportunities[0].isChainMandate,
         'onFeature': opportunities[0].isOnFeature,
@@ -634,7 +639,8 @@ describe('Unit: list controller', function() {
         'Volume Trend for Store CYTD vs CYTD Last Year',
         'Segmentation',
         'Opportunity Type',
-        'Product',
+        'Product Brand',
+        'Product Sku',
         'Item Authorization',
         'Chain Mandate',
         'On Feature',
@@ -692,7 +698,8 @@ describe('Unit: list controller', function() {
         'storeDepletionsCTDYAPercent': opportunities[1].store.depletionsCurrentYearToDateYAPercent,
         'storeSegmentation': opportunities[1].store.segmentation,
         'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[1])),
-        'productName': opportunities[1].product.brand,
+        'productBrand': opportunities[1].product.brand,
+        'productSku': 'Any',
         'itemAuthorization': opportunities[1].isItemAuthorization,
         'chainMandate': opportunities[1].isChainMandate,
         'onFeature': opportunities[1].isOnFeature,
@@ -701,7 +708,7 @@ describe('Unit: list controller', function() {
       }]);
     });
 
-    it('should take the brand as product name if the product name is null', () => {
+    it('should use ANY as productSku when SIMPLE is selected or product.name is null', () => {
       ctrl.selected = [opportunities[1]];
       ctrl.csvDownloadOption = 'WithoutRationales';
       const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
@@ -718,7 +725,8 @@ describe('Unit: list controller', function() {
         'storeDepletionsCTDYAPercent': opportunities[1].store.depletionsCurrentYearToDateYAPercent,
         'storeSegmentation': opportunities[1].store.segmentation,
         'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[1])),
-        'productName': opportunities[1].product.brand,
+        'productBrand': opportunities[1].product.brand,
+        'productSku': 'Any',
         'itemAuthorization': opportunities[1].isItemAuthorization,
         'chainMandate': opportunities[1].isChainMandate,
         'onFeature': opportunities[1].isOnFeature,
