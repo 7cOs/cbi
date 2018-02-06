@@ -120,9 +120,10 @@ module.exports = /*  @ngInject */
       'Volume Trend for Store CYTD vs CYTD Last Year',
       'Segmentation'
     ];
-    vm.csvHeaderNoStores = [
+    vm.csvHeaderProductsAndOthers = [
       'Opportunity Type',
-      'Product',
+      'Product Brand',
+      'Product Sku',
       'Item Authorization',
       'Chain Mandate',
       'On Feature',
@@ -734,7 +735,8 @@ module.exports = /*  @ngInject */
 
         if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
           csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
-          csvItem.productName = item.product.name || item.product.brand;
+          csvItem.productBrand = item.product.brand;
+          csvItem.productSku = item.product.name || 'Any';
           csvItem.itemAuthorization = item.isItemAuthorization;
           csvItem.chainMandate = item.isChainMandate;
           csvItem.onFeature = item.isOnFeature;
@@ -760,7 +762,7 @@ module.exports = /*  @ngInject */
       let localCSVHeader;
 
       if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
-        localCSVHeader = vm.csvHeader.concat(vm.csvHeaderNoStores);
+        localCSVHeader = vm.csvHeader.concat(vm.csvHeaderProductsAndOthers);
       } else {
         localCSVHeader = angular.copy(vm.csvHeader);
       }

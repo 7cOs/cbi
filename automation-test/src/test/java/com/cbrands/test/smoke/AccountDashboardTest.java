@@ -9,25 +9,25 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class AccountDashboardTest extends BaseTestCase {
   private AccountDashboardPage accountDashboardPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Smoke - AccountDashboard Test");
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
-  }
-
   @BeforeMethod
-  public void setUp() {
+  public void setUp(Method testMethod) throws MalformedURLException {
+    final String testName = String.format(
+      "Smoke - AccountDashboard Test - %s",
+      testMethod.getAnnotation(Test.class).description()
+    );
+    this.startUpBrowser(testName);
+
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
     accountDashboardPage.goToPage();
@@ -36,19 +36,20 @@ public class AccountDashboardTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
-  @Test(description = "Search for accounts")
-  public void searchAccounts() {
-    accountDashboardPage.enterDistributorSearchText("Coastal")
+  @Test(description = "Search for accounts", dataProvider = "searchData")
+  public void searchAccounts(String distributorSearchText, String secondarySearchText) {
+    accountDashboardPage.enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
+      .selectDistributorFilterContaining(secondarySearchText)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
 
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      accountDashboardPage.waitForLeftLoaderToDisappear().isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to load results"
     );
     Assert.assertTrue(
@@ -57,7 +58,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
   }
 
-  @Test(description = "Drill all the way down the account hierarchy and drill back up")
+  @Test(description = "Account hierarchy - Drill all the way down and drill back up")
   public void drillDownUpAccounts() {
     drillRightPanelToBottom();
     drillRightPanelToTop();
@@ -70,7 +71,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right panel failed to load accounts for selected distributor"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      accountDashboardPage.waitForLeftLoaderToDisappear().isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to load results"
     );
 
@@ -90,7 +91,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load stores for selected subaccount"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      accountDashboardPage.waitForLeftLoaderToDisappear().isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for stores"
     );
   }
@@ -102,7 +103,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load subaccounts"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      accountDashboardPage.waitForLeftLoaderToDisappear().isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
 
@@ -112,7 +113,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load accounts"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      accountDashboardPage.waitForLeftLoaderToDisappear().isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for accounts"
     );
 
@@ -122,14 +123,16 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load distributors"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      accountDashboardPage.waitForLeftLoaderToDisappear().isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for distributors"
     );
   }
 
-  @Test(description = "Drill all the way down the brands hierarchy and drill back up")
+  @Test(description = "Brands hierarchy - Drill all the way down and drill back up")
   public void drillDownDrillUpBrands() {
-    accountDashboardPage.drillIntoFirstRowInLeftPanel();
+    accountDashboardPage
+      .drillIntoFirstRowInLeftPanel()
+      .waitForLeftLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.SkuPackage),
       "Left brands panel failed to load for SKU/Packages"
@@ -139,7 +142,9 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to reload for SKU/Packages"
     );
 
-    accountDashboardPage.drillUpLeftPanel();
+    accountDashboardPage
+      .drillUpLeftPanel()
+      .waitForLeftLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to load for Brands"
@@ -148,5 +153,11 @@ public class AccountDashboardTest extends BaseTestCase {
       accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
       "Right accounts panel failed to reload for Brands"
     );
+  }
+
+  @DataProvider public static Object[][] searchData() {
+    return new Object[][] {
+      {"COASTAL BEV CO", "WILMINGTON"}
+    };
   }
 }

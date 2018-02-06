@@ -43,7 +43,8 @@ export class AnalyticsService {
     const properties = this.buildHitDimensions(category, action, label);
     this.gaTracker('send', 'event', category, action, label, properties);
     if (Environment.debugGoogleAnalytics()) {
-      console.log('DEBUG GA (Analytics Service) - Send EVENT (category / action / label / props):', category, action, label, properties);
+      console.log('DEBUG GA (Analytics Service) - Send EVENT (category @@@ action @@@ label @@@ props):',
+        category, action, label, properties);
     }
   }
 
@@ -53,7 +54,7 @@ export class AnalyticsService {
     };
 
     if (category && action && label) {
-      hitDimensions['dimension11'] = `${category}/${action}/${label}`;
+      hitDimensions['dimension11'] = `${category}@@@${action}@@@${label}`;
     }
 
     return hitDimensions;

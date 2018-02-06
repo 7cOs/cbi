@@ -351,7 +351,7 @@ module.exports = /*  @ngInject */
           vm.newOpportunity = vm.newOpportunityTemplate;
           resetFormModels();
           if (success.id) {
-            sendAddOpportunityAnalyticsEvent(success.id);
+            sendAddOpportunityAnalyticsEvent(success.id, null);
           }
         }, function(error) {
           console.log(error);
@@ -365,18 +365,29 @@ module.exports = /*  @ngInject */
       return true;
     }
 
-    function sendAddOpportunityAnalyticsEvent(opportunityId) {
-      analyticsService.trackEvent(
-        'Opportunities',
-        'Add Opportunity',
-        opportunityId
-      );
+    function sendAddOpportunityAnalyticsEvent(opportunityId, targetListId) {
+      if (opportunityId) {
+        analyticsService.trackEvent(
+          'Opportunities',
+          'Add Opportunity',
+          opportunityId
+        );
+      } else if (targetListId) {
+        analyticsService.trackEvent(
+          'Opportunities',
+          'Add To Target List',
+          targetListId
+        );
+      }
     }
 
     function addToTargetList(targetList, opportunity) {
       var storeExists = false;
 
-      targetListService.addTargetListOpportunities(targetList, [opportunity.id]);
+      targetListService.addTargetListOpportunities(targetList, [opportunity.id]).then(function(success) {
+        sendAddOpportunityAnalyticsEvent(null, targetList);
+      });
+
       opportunity.brands = [];
       opportunity.brands.push(opportunity.product.brand.toLowerCase());
 

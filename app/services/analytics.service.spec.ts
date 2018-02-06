@@ -249,7 +249,7 @@ describe('Service: AnalyticsService', () => {
     it('should send event with correct parameters', () => {
       expect(trackerMock).toHaveBeenCalledWith('send', 'event', testCategory, testAction, testLabel, {
         dimension8: formattedMomentMock,
-        dimension11: `${testCategory}/${testAction}/${testLabel}`
+        dimension11: `${testCategory}@@@${testAction}@@@${testLabel}`
       });
     });
   });
