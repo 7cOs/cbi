@@ -63,6 +63,16 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
+    description = "Creating an Opportunities Saved Report",
+    dependsOnMethods = "enableSavedReport",
+    dataProvider = "createReportData"
+  )
+  public void createSavedReport(String reportName, String distributorSearchText) {
+    testCreateASingleSavedReport(reportName + " #1", distributorSearchText);
+    testCreateASingleSavedReport(reportName + " #2", distributorSearchText);
+  }
+
+  @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
     dataProvider = "distributorData"
@@ -108,26 +118,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
       "Saved Report with name " + reportNameToDelete +
         " failed to be removed from the dropdown on the Home page."
-    );
-  }
-
-  @Test(
-    description = "Creating an Opportunities Saved Report",
-    dependsOnMethods = "deleteSavedReport",
-    dataProvider = "createRunReportData"
-  )
-  public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage = this.setUpNewSavedReport(name, distributorSearchText);
-
-    Assert.assertTrue(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(name),
-      "Saved Report with name " + name + " failed to appear in the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertTrue(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(name),
-      "Saved Report with name " + name + " failed to appear in the dropdown on the Home page."
     );
   }
 
@@ -218,10 +208,18 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @DataProvider
+  public static Object[][] createReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Create " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
   public static Object[][] createRunReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {"Create & Run " + testReportName, "Healy Wholesale"}
+      {"Run " + testReportName, "Healy Wholesale"}
     };
   }
 
@@ -247,6 +245,29 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     return new Object[][]{
       {"Delete Me " + testReportName, "Healy Wholesale"}
     };
+  }
+
+  private void testCreateASingleSavedReport(String reportName, String distributorSearchText) {
+    opportunitiesPage = this.setUpNewSavedReport(reportName, distributorSearchText);
+
+    Assert.assertTrue(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportName),
+      getCreateFailureMessage(reportName, "Opportunities")
+    );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportName),
+      getCreateFailureMessage(reportName, "Home")
+    );
+  }
+
+  private String getCreateFailureMessage(String reportName, String pageName) {
+    return String.format(
+      "Saved Report with name %s failed to appear in the dropdown on the %s page.",
+      reportName,
+      pageName
+    );
   }
 
   private OpportunitiesPage setUpNewSavedReport(String reportName, String distributorSearchText) {
