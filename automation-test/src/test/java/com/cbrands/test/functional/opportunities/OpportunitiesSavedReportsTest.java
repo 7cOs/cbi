@@ -139,6 +139,32 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
+    description = "Deleting a Saved Report",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "deleteReportData"
+  )
+  public void deleteSavedReport(String reportNameToDelete, String distributor) {
+    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
+
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportNameToDelete)
+      .clickSavedReportDeleteLink()
+      .waitForModalToClose();
+
+    Assert.assertFalse(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      getDeleteFailureMessage(reportNameToDelete, "Opportunities")
+    );
+
+    homePage.goToPage();
+    Assert.assertFalse(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      getDeleteFailureMessage(reportNameToDelete, "Home")
+    );
+  }
+
+  @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
     dataProvider = "distributorData"
@@ -157,33 +183,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     Assert.assertTrue(
       savedReportModal.isMaxSavedReportsLimitErrorDisplayed(),
       "Failed to display error message when max limit of Saved Reports already reached."
-    );
-  }
-
-  @Test(
-    description = "Deleting a Saved Report",
-    dependsOnMethods = "createAfterMaxLimit",
-    dataProvider = "deleteReportData"
-  )
-  public void deleteSavedReport(String reportNameToDelete, String distributor) {
-    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportNameToDelete)
-      .clickSavedReportDeleteLink()
-      .waitForModalToClose();
-
-    Assert.assertFalse(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertFalse(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Home page."
     );
   }
 
@@ -266,6 +265,13 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     return  String.format(
       "Saved Report with edited name %s failed to appear in the dropdown on the %s page.",
       editedReportName,
+      pageName
+    );
+  }
+
+  private String getDeleteFailureMessage(String reportNameToDelete, String pageName) {
+    return String.format("Saved Report with name %s failed to be removed from the dropdown on the %s page.",
+      reportNameToDelete,
       pageName
     );
   }
