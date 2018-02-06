@@ -9,25 +9,25 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class AccountDashboardTest extends BaseTestCase {
   private AccountDashboardPage accountDashboardPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Smoke - AccountDashboard Test");
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
-  }
-
   @BeforeMethod
-  public void setUp() {
+  public void setUp(Method testMethod) throws MalformedURLException {
+    final String testName = String.format(
+      "Smoke - AccountDashboard Test - %s",
+      testMethod.getAnnotation(Test.class).description()
+    );
+    this.startUpBrowser(testName);
+
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
     accountDashboardPage.goToPage();
@@ -36,13 +36,14 @@ public class AccountDashboardTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
-  @Test(description = "Search for accounts")
-  public void searchAccounts() {
-    accountDashboardPage.enterDistributorSearchText("Coastal")
+  @Test(description = "Search for accounts", dataProvider = "searchData")
+  public void searchAccounts(String distributorSearchText, String secondarySearchText) {
+    accountDashboardPage.enterDistributorSearchText(distributorSearchText)
       .clickSearchForDistributor()
-      .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
+      .selectDistributorFilterContaining(secondarySearchText)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
@@ -148,5 +149,11 @@ public class AccountDashboardTest extends BaseTestCase {
       accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
       "Right accounts panel failed to reload for Brands"
     );
+  }
+
+  @DataProvider public static Object[][] searchData() {
+    return new Object[][] {
+      {"COASTAL BEV CO", "WILMINGTON"}
+    };
   }
 }

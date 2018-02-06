@@ -103,7 +103,7 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public AccountDashboardPage selectDistributorFilterByName(String name) {
+  public AccountDashboardPage selectDistributorFilterContaining(String text) {
     final WebElement resultsContainer = distributorFilter
       .findElement(By.xpath(".//div[contains(@class, 'results-container')]"));
     waitForVisibleFluentWait(resultsContainer);
@@ -111,8 +111,8 @@ public class AccountDashboardPage extends TestNGBasePage {
     final List<WebElement> results = resultsContainer.findElements(By.xpath(".//li"));
     waitForElementsVisibleFluentWait(results);
 
-    final WebElement distributor = getFirstElementTextMatchByName(name, results);
-    Assert.assertNotNull(distributor, "No distributor found by the name of " + name);
+    final WebElement distributor = getFirstElementContainingText(text, results);
+    Assert.assertNotNull(distributor, "No distributor found with name containing " + text);
     waitForElementToClickable(distributor, true).click();
 
     return this;
@@ -163,12 +163,12 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  private WebElement getFirstElementTextMatchByName(String accountName, List<WebElement> results) {
+  private WebElement getFirstElementContainingText(String text, List<WebElement> elements) {
     WebElement retailer = null;
 
-    for (WebElement result : results) {
+    for (WebElement result : elements) {
       final String resultText = result.getText().trim();
-      if (resultText.toUpperCase().contains(accountName.toUpperCase())) {
+      if (resultText.toUpperCase().contains(text.toUpperCase())) {
         retailer = result;
         break;
       }
