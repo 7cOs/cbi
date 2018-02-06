@@ -9,8 +9,12 @@ import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
@@ -21,8 +25,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeMethod
-  public void setUp() throws MalformedURLException {
-    this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
+  public void setUp(Method method) throws MalformedURLException {
+    final String testCaseName = method.getAnnotation(Test.class).description();
+    final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
+    this.startUpBrowser(sauceTitle);
 
     homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
