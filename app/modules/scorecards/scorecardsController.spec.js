@@ -1,7 +1,7 @@
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
-describe('Unit: scorecardsController', function() {
+fdescribe('Unit: scorecardsController', function() {
   var scope, ctrl, $state, filtersService, userService, title;
   let remodeledDepletion, remodeledDistribution;
 
@@ -492,13 +492,13 @@ describe('Unit: scorecardsController', function() {
         month: [
           {'name': 'CMTH', 'displayValue': 'Clo Mth', v3ApiCode: 'LCM', 'id': 1, type: 'month'},
           {'name': 'CYTM', 'displayValue': 'CYTM', v3ApiCode: 'CYTM', 'id': 2, type: 'month'},
-          {'name': 'FYTM', 'displayValue': 'FYTM', v3ApiCode: 'FYTM', 'id': 3, type: 'month'}],
+          {'name': 'FYTM', 'displayValue': 'FYTM', v3ApiCode: 'FYTM', 'id': 3, type: 'month'},
+          {'name': 'CCQTD', 'displayValue': 'Clo Cal Qtr', v3ApiCode: 'CCQTD', 'id': 4, type: 'month'},
+          {'name': 'FCQTD', 'displayValue': 'Clo Fiscal Qtr', v3ApiCode: 'FCQTD', 'id': 5, type: 'month'}],
         year: [
           {'name': 'MTD', 'displayValue': 'MTD', v3ApiCode: 'CMIPBDL', 'id': 4, type: 'year', '$$hashKey': 'object:81 '},
           {'name': 'CYTD', 'displayValue': 'CYTD', v3ApiCode: 'CYTDBDL', 'id': 5, type: 'year', '$$hashKey': 'object:82 '},
-          {'name': 'FYTD', 'displayValue': 'FYTD', v3ApiCode: 'FYTDBDL', 'id': 6, type: 'year'},
-          {'name': 'CCQTD', 'displayValue': 'Clo Cal Qtr', v3ApiCode: 'CCQTD', 'id': 7, type: 'year'},
-          {'name': 'FCQTD', 'displayValue': 'Clo Fiscal Qtr', v3ApiCode: 'FCQTD', 'id': 8, type: 'year'}
+          {'name': 'FYTD', 'displayValue': 'FYTD', v3ApiCode: 'FYTDBDL', 'id': 6, type: 'year'}
         ]};
       ctrl.initialized = true;
       ctrl.depletionSelect = 'FYTD';
@@ -508,17 +508,17 @@ describe('Unit: scorecardsController', function() {
     it('should update to new selected filter value CCQTD', function() {
       expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][2].displayValue);
 
-      ctrl.updatedSelectionValuesInFilter('year', 'CCQTD', 'L90');
+      ctrl.updatedSelectionValuesInFilter('month', 'CCQTD', 'L90');
 
-      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][3].displayValue);
+      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['month'][3].displayValue);
     });
 
     it('should update to new selected filter value FCQTD', function() {
       expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][2].displayValue);
 
-      ctrl.updatedSelectionValuesInFilter('year', 'FCQTD', 'L90');
+      ctrl.updatedSelectionValuesInFilter('month', 'FCQTD', 'L90');
 
-      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['year'][4].displayValue);
+      expect(ctrl.depletionSelectDisplayName).toEqual(ctrl.filtersService.model.depletionsTimePeriod['month'][4].displayValue);
     });
   });
 
