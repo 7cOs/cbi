@@ -434,9 +434,9 @@ describe('Unit: scorecardsController', function() {
 
  describe('[Method] changeDepletionOption', function() {
    it('should update the distribution', function() {
-     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'FYTD', displayValue: 'FYTD', v3ApiCode: 'FYTDBDL', id: 6, type: 'year' });
+     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'FYTD', displayValue: 'FYTD', v3ApiCode: 'FYTDBDL', id: 8, type: 'year' });
      ctrl.changeDepletionOption('CYTD');
-     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'CYTD', displayValue: 'CYTD', v3ApiCode: 'CYTDBDL', id: 5, type: 'year' });
+     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'CYTD', displayValue: 'CYTD', v3ApiCode: 'CYTDBDL', id: 7, type: 'year' });
    });
  });
 
