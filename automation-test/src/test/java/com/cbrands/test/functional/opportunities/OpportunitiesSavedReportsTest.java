@@ -20,8 +20,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
+  @BeforeMethod
+  public void setUp() throws MalformedURLException {
     this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
 
     homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
@@ -29,15 +29,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage.goToPage();
   }
 
-  @AfterClass
-  public void tearDownClass() {
+  @AfterMethod
+  public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
     this.shutDownBrowser();
-  }
-
-  @BeforeMethod
-  public void setUp() {
-    opportunitiesPage.goToPage();
   }
 
   @Test(description = "Enabling/Disabling Save Report link", dataProvider = "distributorData")
