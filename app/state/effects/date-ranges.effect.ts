@@ -26,6 +26,11 @@ export class DateRangesEffects {
       .switchMap(() => {
         return this.dateRangeApiService.getDateRanges()
           .map((response: DateRangeDTO[]) => {
+            // TODO: Remove this
+            response.forEach((dateRangeDTO: DateRangeDTO) => {
+              if (dateRangeDTO.code === 'CQTD' || dateRangeDTO.code === 'FQTD') dateRangeDTO['extendedName'] = 'Q1 17';
+            });
+
             return new DateRangesActions.FetchDateRangesSuccessAction(this.dateRangeTransformerService.transformDateRanges(response));
           })
           .catch((err: Error) => Observable.of(new DateRangesActions.FetchDateRangesFailureAction(err)));

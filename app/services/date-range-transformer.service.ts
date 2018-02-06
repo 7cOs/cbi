@@ -38,7 +38,7 @@ export class DateRangeTransformerService {
   private formatDateRange(dateRangeDTO: DateRangeDTO): DateRange {
     return {
       code: dateRangeDTO.code,
-      displayCode: this.mapDateRangeDisplayCode(dateRangeDTO.code),
+      displayCode: this.mapDateRangeDisplayCode(dateRangeDTO),
       description: dateRangeDTO.description,
       range: `${this.formatDate(dateRangeDTO.startDate)} - ${this.formatDate(dateRangeDTO.endDate)}`
     };
@@ -49,7 +49,14 @@ export class DateRangeTransformerService {
     return moment(date).format(_format);
   }
 
-  private mapDateRangeDisplayCode(rawType: string): string {
-    return this.dateRangeDisplayCodes[rawType] || rawType;
+  private mapDateRangeDisplayCode(dateRangeDTO: DateRangeDTO): string {
+    if (!this.dateRangeDisplayCodes[dateRangeDTO.code]) return dateRangeDTO.code;
+
+    if (dateRangeDTO.extendedName) {
+      const formattedQuarterLabel: string = dateRangeDTO.extendedName.replace(' ', `'`);
+      return `${ this.dateRangeDisplayCodes[dateRangeDTO.code] } (${ formattedQuarterLabel })`;
+    } else {
+      return this.dateRangeDisplayCodes[dateRangeDTO.code];
+    }
   }
 }
