@@ -69,6 +69,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   )
   public void createSavedReport(String reportName, String distributorSearchText) {
     testCreateASingleSavedReport(reportName + " #1", distributorSearchText);
+
+    opportunitiesPage.goToPage();
+
     testCreateASingleSavedReport(reportName + " #2", distributorSearchText);
   }
 
@@ -105,6 +108,34 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
     Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
+  @Test(
+    description = "Editing a Saved Report",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "editReportData"
+  )
+  public void editSavedReport(String originalReportName, String distributor) {
+    opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
+
+    final String editedReportName = "EDITED " + originalReportName;
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(originalReportName)
+      .enterNewReportName(editedReportName)
+      .clickSave()
+      .waitForModalToClose();
+
+    Assert.assertTrue(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+      getEditFailureMessage(editedReportName, "Opportunities")
+    );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+      getEditFailureMessage(editedReportName, "Home")
+    );
   }
 
   @Test(
@@ -176,35 +207,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
-  @Test(
-    description = "Editing a Saved Report",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "editReportData"
-  )
-  public void editSavedReport(String originalReportName, String distributor) {
-    opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
-
-    final String editedReportName = "EDITED " + originalReportName;
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(originalReportName)
-      .enterNewReportName(editedReportName)
-      .clickSave()
-      .waitForModalToClose();
-
-    Assert.assertTrue(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
-      "Saved Report with edited name " + editedReportName +
-        " failed to appear in the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertTrue(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
-      "Saved Report with edited  name " + editedReportName + " failed to appear in the dropdown on the Home page."
-    );
-  }
-
   @DataProvider
   public static Object[][] distributorData() {
     return new Object[][]{
@@ -252,6 +254,22 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     };
   }
 
+  private String getCreateFailureMessage(String reportName, String pageName) {
+    return String.format(
+      "Saved Report with name %s failed to appear in the dropdown on the %s page.",
+      reportName,
+      pageName
+    );
+  }
+
+  private String getEditFailureMessage(String editedReportName, String pageName) {
+    return  String.format(
+      "Saved Report with edited name %s failed to appear in the dropdown on the %s page.",
+      editedReportName,
+      pageName
+    );
+  }
+
   private void testCreateASingleSavedReport(String reportName, String distributorSearchText) {
     opportunitiesPage = this.setUpNewSavedReport(reportName, distributorSearchText);
 
@@ -264,14 +282,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     Assert.assertTrue(
       homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportName),
       getCreateFailureMessage(reportName, "Home")
-    );
-  }
-
-  private String getCreateFailureMessage(String reportName, String pageName) {
-    return String.format(
-      "Saved Report with name %s failed to appear in the dropdown on the %s page.",
-      reportName,
-      pageName
     );
   }
 
