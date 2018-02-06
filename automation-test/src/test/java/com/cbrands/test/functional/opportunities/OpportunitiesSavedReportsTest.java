@@ -165,6 +165,26 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
+    description = "Attempting to edit a Saved Report to an existing name",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "editDuplicateReportData"
+  )
+  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
+    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
+
+    final SavedReportModal savedReportModal = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(existingReportName)
+      .enterNewReportName(existingReportName)
+      .clickSave();
+
+    Assert.assertTrue(
+      savedReportModal.isDuplicateNameErrorDisplayed(),
+      "Failed to display error when attempting to use the name of an existing report."
+    );
+  }
+
+  @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
     dataProvider = "distributorData"
@@ -183,26 +203,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     Assert.assertTrue(
       savedReportModal.isMaxSavedReportsLimitErrorDisplayed(),
       "Failed to display error message when max limit of Saved Reports already reached."
-    );
-  }
-
-  @Test(
-    description = "Attempting to edit a Saved Report to an existing name",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "editDuplicateReportData"
-  )
-  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
-    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
-
-    final SavedReportModal savedReportModal = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(existingReportName)
-      .enterNewReportName(existingReportName)
-      .clickSave();
-
-    Assert.assertTrue(
-      savedReportModal.isDuplicateNameErrorDisplayed(),
-      "Failed to display error when attempting to use the name of an existing list."
     );
   }
 
