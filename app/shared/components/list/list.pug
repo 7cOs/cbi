@@ -138,10 +138,12 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         .title-row(row)
           div(column='1') &nbsp;
           div(column='2')
-            label.bold Product
-          div(column='2')
+            label.bold Brand
+          div(column='1')
+            label.bold Sku/Package
+          div(column='1')
             label.bold Type
-          div(column='4')
+          div(column='3')
             label.bold Rationale
           div(column='1')
             label.bold Status
@@ -165,10 +167,11 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 .sub-item-select(column='1' ng-class="{'flag-yellow': product.featureTypeCode === null && list.showItemAuthorizationFlag(product.itemAuthorizationCode, product.depletionsCurrentYearToDate), 'flag-green': product.featureTypeCode !== null && product.itemAuthorizationDesc === null, 'flag-both': product.featureTypeCode !== null && list.showItemAuthorizationFlag(product.itemAuthorizationCode, product.depletionsCurrentYearToDate)}")
                   md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
-                  span.product-title {{::product.product.brand}} <br>
-                  | {{::product.product.name}}
-                div.type(column='2') {{list.opportunityTypeOrSubtype(product) | formatOpportunitiesType}}
-                div(column='4') {{::product.rationale}}
+                  span.product-title {{::product.product.brand}}
+                div(column='1')
+                  span {{::product.product.name || 'ANY'}}
+                div.type(column='1') {{list.opportunityTypeOrSubtype(product) | formatOpportunitiesType}}
+                div(column='3') {{::product.rationale}}
                 div(column='1')
                   .tooltip-wrap
                     p(class="tooltip") {{product.status | titlecase}}

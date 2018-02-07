@@ -210,11 +210,15 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
+  public AccountDashboardPage waitForLeftLoaderToDisappear() {
+    waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
+    return this;
+  }
+
   public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
     boolean resultsAreLoaded;
 
     try {
-      waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
       waitForVisibleFluentWait(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
       final WebElement panelHeader = leftPanel.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
       resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
