@@ -386,8 +386,8 @@ module.exports = /*  @ngInject */
               filtersService.model.selected.brand = filtersService.model.selected.brand || [];
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
-              addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
-              if (service.model.indexOf(result.id) === -1) pushUniqueValue(result.id, model);
+              addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id + '@' + result.brandCode);
+              if (service.model.indexOf(result.id) === -1) pushUniqueValue(result.id + '@' + result.brandCode, model);
             }
             break;
           case 'tradeChannel':
