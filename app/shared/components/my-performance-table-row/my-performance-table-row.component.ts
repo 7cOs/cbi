@@ -22,6 +22,7 @@ export class MyPerformanceTableRowComponent {
   @Input() showX: boolean = false;
   @Input()
   set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
+    this.isBrands = viewType === ProductMetricsViewType.brands;
     this.isSubAcountsOrDistributors = viewType === SalesHierarchyViewType.distributors
       || viewType === SalesHierarchyViewType.subAccounts;
     this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
@@ -35,6 +36,7 @@ export class MyPerformanceTableRowComponent {
   public opportunityCountText: string;
   public isOpportunitiesError: boolean = false;
 
+  private isBrands: boolean;
   private isRolegroups: boolean;
   private isSubAcountsOrDistributors: boolean;
 
