@@ -12,14 +12,14 @@ div.my-scorecards
         label Depletions Time Period
         md-select(ng-model="s.depletionSelect" md-on-open="s.depletionSelectOpen = true" md-on-close="s.changeDepletionScorecard(false); s.depletionSelectOpen = false" aria-label="Depletion Select")
           md-option(ng-repeat="filter in s.filtersService.model.depletionsTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDepletionOption(filter.name, filter.v3ApiCode)")
-            div {{ s.dateRanges[filter.v3ApiCode].displayCode }}
+            div {{ s.dateRanges[filter.v3ApiCode].displayCodeQuarterDate }}
             div.dropdown-subtext(ng-if="s.depletionSelectOpen") {{s.dateRanges[filter.v3ApiCode].range}}
         p.dropdown-subtext {{s.dateRanges[s.depletionSelectApiCode].range}}
       div.dropdown
         label Distribution Time Period
         md-select(ng-model="s.distributionSelectOptions.selected" aria-label="Distirbution Select" md-on-open="s.distributionSelectOpen = true" md-on-close="s.distributionSelectOpen = false")
           md-option(ng-repeat="filter in s.filtersService.model.scorecardDistributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name, filter.v3ApiCode)")
-            div {{ s.dateRanges[filter.v3ApiCode].displayCode }}
+            div {{ s.dateRanges[filter.v3ApiCode].displayCodeQuarterDate }}
             div.dropdown-subtext(ng-if="s.distributionSelectOpen") {{s.dateRanges[filter.v3ApiCode].range}}
         p.dropdown-subtext {{s.dateRanges[s.distributionSelectOptions.v3ApiCode].range}}
 
@@ -29,7 +29,7 @@ div.my-scorecards
     div.scorecard-header.clearfix
       div.scorecard-header-left
         h2 My Depletions Scorecard
-        h3 {{ s.dateRanges[s.depletionSelectApiCode].displayCode }}
+        h3 {{ s.dateRanges[s.depletionSelectApiCode].displayCodeQuarterDate }}
         p {{s.dateRanges[s.depletionSelectApiCode].range}}
       div.scorecard-header-right
         p.accent Total Depletions / vs YA %
@@ -57,7 +57,7 @@ div.my-scorecards
           tr
             th.accent.border &nbsp;
             th.accent
-              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'timeFrameTotal')") {{ s.dateRanges[s.depletionSelectApiCode].displayCode }}
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'timeFrameTotal')") {{ s.dateRanges[s.depletionSelectApiCode].displayCodeQuarterDate }}
                 span.sort-header(ng-class="{active: s.depletionSort.query === 'timeFrameTotal', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'vsYa')") VS YA
@@ -100,7 +100,7 @@ div.my-scorecards
     div.scorecard-header.clearfix
       div.scorecard-header-left
         h2 My Distribution Scorecard
-        h3 {{ s.dateRanges[s.distributionSelectOptions.v3ApiCode].displayCode }}
+        h3 {{ s.dateRanges[s.distributionSelectOptions.v3ApiCode].displayCodeQuarterDate }}
         p {{s.dateRanges[s.distributionSelectOptions.v3ApiCode].range}}
       div.scorecard-header-right
         p.accent Total PODs / vs YA %
@@ -142,7 +142,7 @@ div.my-scorecards
           tr
             th.accent.border &nbsp;
             th.accent
-              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'timeFrameTotal')") {{ s.dateRanges[s.distributionSelectOptions.v3ApiCode].displayCode }}
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'timeFrameTotal')") {{ s.dateRanges[s.distributionSelectOptions.v3ApiCode].displayCodeQuarterDate }}
                 span.sort-header(ng-class="{active: s.distributionSort.query === 'timeFrameTotal', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'vsYa')") VS YA

@@ -40,27 +40,45 @@ export class MyPerformanceFilterComponent {
   public metricOptions: Array<CompassSelectOption> = metricOptionsModel;
   public metricTypeValue = MetricTypeValue;
 
+  private depletionDateRangeCodes: Array<DateRangeTimePeriodValue> = [
+    DateRangeTimePeriodValue.CYTDBDL,
+    DateRangeTimePeriodValue.FYTDBDL,
+    DateRangeTimePeriodValue.CMIPBDL,
+    DateRangeTimePeriodValue.LCM,
+    DateRangeTimePeriodValue.CYTM,
+    DateRangeTimePeriodValue.FYTM,
+    DateRangeTimePeriodValue.CQTD,
+    DateRangeTimePeriodValue.FQTD,
+    DateRangeTimePeriodValue.CCQTD,
+    DateRangeTimePeriodValue.FCQTD
+  ];
+  private distributionDateRangeCodes: Array<DateRangeTimePeriodValue> = [
+    DateRangeTimePeriodValue.L60BDL,
+    DateRangeTimePeriodValue.L90BDL,
+    DateRangeTimePeriodValue.L120BDL,
+    DateRangeTimePeriodValue.L3CM
+  ];
+
   public filterSelected(filterType: MyPerformanceFilterActionType, filterValue: any): void {
     this.onFilterChange.emit({ filterType, filterValue });
   }
 
   private initDateRanges(dateType: string, dateRangeState: DateRangesState): Array<CompassSelectOption> {
-    const depletionDateRangeCodes: Array<string> = ['CYTDBDL', 'FYTDBDL', 'CMIPBDL', 'LCM', 'CYTM', 'FYTM',
-                                                    'CQTD', 'FQTD', 'CCQTD', 'FCQTD'];
-    const distributionDateRangeCodes: Array<string> = ['L60BDL', 'L90BDL', 'L120BDL', 'L3CM'];
-
-    const initDateRangeData = (dateRangeCodes: Array<string>, dateRangeObject: DateRangesState): Array<CompassSelectOption> => {
-      return dateRangeCodes.map(dateCode => {
+    const initDateRangeData = (
+      dateRangeTimePeriods: Array<DateRangeTimePeriodValue>,
+      dateRangeObject: DateRangesState
+    ): Array<CompassSelectOption> => {
+      return dateRangeTimePeriods.map(dateRangeTimePeriod => {
         return {
-          display: dateRangeObject[dateCode].displayCode,
-          subDisplay: dateRangeObject[dateCode].range,
-          value: DateRangeTimePeriodValue[dateRangeObject[dateCode].code]
+          display: dateRangeObject[dateRangeTimePeriod].displayCodeQuarterDate,
+          subDisplay: dateRangeObject[dateRangeTimePeriod].range,
+          value: DateRangeTimePeriodValue[dateRangeObject[dateRangeTimePeriod].code]
         };
       });
     };
 
     return dateType === 'depletions'
-      ? initDateRangeData(depletionDateRangeCodes, dateRangeState)
-      : initDateRangeData(distributionDateRangeCodes, dateRangeState);
+      ? initDateRangeData(this.depletionDateRangeCodes, dateRangeState)
+      : initDateRangeData(this.distributionDateRangeCodes, dateRangeState);
   }
 }

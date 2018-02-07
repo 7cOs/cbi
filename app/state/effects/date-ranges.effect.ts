@@ -28,7 +28,11 @@ export class DateRangesEffects {
           .map((response: DateRangeDTO[]) => {
             // TODO: Remove this
             response.forEach((dateRangeDTO: DateRangeDTO) => {
-              if (dateRangeDTO.code === 'CQTD' || dateRangeDTO.code === 'FQTD') dateRangeDTO['extendedName'] = 'Q1 17';
+              if (dateRangeDTO.code === 'CQTD'
+                || dateRangeDTO.code === 'FQTD'
+                || dateRangeDTO.code === 'CCQTD'
+                || dateRangeDTO.code === 'CCQTDYA'
+              ) dateRangeDTO['extendedName'] = 'Q1 17';
             });
 
             return new DateRangesActions.FetchDateRangesSuccessAction(this.dateRangeTransformerService.transformDateRanges(response));

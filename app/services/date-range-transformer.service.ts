@@ -36,12 +36,20 @@ export class DateRangeTransformerService {
   }
 
   private formatDateRange(dateRangeDTO: DateRangeDTO): DateRange {
-    return {
+    const dateRange: DateRange = {
       code: dateRangeDTO.code,
-      displayCode: this.mapDateRangeDisplayCode(dateRangeDTO),
+      displayCode: this.mapDateRangeDisplayCode(dateRangeDTO.code),
+      displayCodeQuarterDate: this.mapDateRangeDisplayCode(dateRangeDTO.code),
       description: dateRangeDTO.description,
       range: `${this.formatDate(dateRangeDTO.startDate)} - ${this.formatDate(dateRangeDTO.endDate)}`
     };
+
+    if (dateRangeDTO.extendedName) {
+      dateRange.quarterDateLabel = `(${ dateRangeDTO.extendedName.replace(' ', `'`) })`;
+      dateRange.displayCodeQuarterDate = `${ dateRange.displayCode } ${ dateRange.quarterDateLabel }`;
+    }
+
+    return dateRange;
   }
 
   private formatDate(date: string, format?: string) {
@@ -49,14 +57,7 @@ export class DateRangeTransformerService {
     return moment(date).format(_format);
   }
 
-  private mapDateRangeDisplayCode(dateRangeDTO: DateRangeDTO): string {
-    if (!this.dateRangeDisplayCodes[dateRangeDTO.code]) return dateRangeDTO.code;
-
-    if (dateRangeDTO.extendedName) {
-      const formattedQuarterLabel: string = dateRangeDTO.extendedName.replace(' ', `'`);
-      return `${ this.dateRangeDisplayCodes[dateRangeDTO.code] } (${ formattedQuarterLabel })`;
-    } else {
-      return this.dateRangeDisplayCodes[dateRangeDTO.code];
-    }
+  private mapDateRangeDisplayCode(rawType: string): string {
+    return this.dateRangeDisplayCodes[rawType] || rawType;
   }
 }
