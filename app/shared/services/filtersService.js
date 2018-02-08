@@ -106,47 +106,47 @@ module.exports = /*  @ngInject */
           v3ApiCode: 'FYTM',
           id: 3,
           type: 'month'
+        }, {
+          name: 'CCQTD',
+          displayValue: 'Clo Cal Qtr',
+          v3ApiCode: 'CCQTD',
+          id: 4,
+          type: 'month'
+        }, {
+          name: 'FCQTD',
+          displayValue: 'Clo Fiscal Qtr',
+          v3ApiCode: 'FCQTD',
+          id: 5,
+          type: 'month'
         }],
         year: [{
           name: 'MTD',
           displayValue: 'MTD',
           v3ApiCode: 'CMIPBDL',
-          id: 4,
+          id: 6,
           type: 'year'
         }, {
           name: 'CYTD',
           displayValue: 'CYTD',
           v3ApiCode: 'CYTDBDL',
-          id: 5,
+          id: 7,
           type: 'year'
         }, {
           name: 'FYTD',
           displayValue: 'FYTD',
           v3ApiCode: 'FYTDBDL',
-          id: 6,
-          type: 'year'
-        }, {
-          name: 'FQTD',
-          displayValue: 'FQTD',
-          v3ApiCode: 'FQTD',
-          id: 7,
+          id: 8,
           type: 'year'
         }, {
           name: 'CQTD',
           displayValue: 'CQTD',
           v3ApiCode: 'CQTD',
-          id: 8,
-          type: 'year'
-        }, {
-          name: 'CCQTD',
-          displayValue: 'Clo Cal Qtr',
-          v3ApiCode: 'CCQTD',
           id: 9,
           type: 'year'
         }, {
-          name: 'FCQTD',
-          displayValue: 'Clo Fiscal Qtr',
-          v3ApiCode: 'FCQTD',
+          name: 'FQTD',
+          displayValue: 'FQTD',
+          v3ApiCode: 'FQTD',
           id: 10,
           type: 'year'
         }]
