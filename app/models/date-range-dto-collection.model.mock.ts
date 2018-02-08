@@ -62,6 +62,18 @@ export const dateRangeDTOsMock: DateRangeDTO[] = [
       'endDate': '20170531'
     },
     {
+      'code': 'CCQTD',
+      'description': 'Current Closed Quarter to Date',
+      'startDate': '20170701',
+      'endDate': '20170930'
+    },
+    {
+      'code': 'FCQTD',
+      'description': 'Fiscal Closed Quarter to Date',
+      'startDate': '20170901',
+      'endDate': '20171019'
+    },
+    {
       'code': 'FYTDBDL',
       'description': 'Current Fiscal Year to Date With Business Day Lag',
       'startDate': '20170301',
@@ -248,27 +260,15 @@ export const dateRangeDTOsMock: DateRangeDTO[] = [
       'endDate': '20160531'
     },
     {
-      'code': 'FQTD',
-      'description': 'Fiscal Quarter to Date',
-      'startDate': '20171201',
-      'endDate': '20180119'
-    },
-    {
       'code': 'CQTD',
       'description': 'Calendar Quarter to Date',
       'startDate': '20171001',
       'endDate': '20171011'
     },
     {
-      'code': 'CCQTD',
-      'description': 'Current Closed Quarter to Date',
-      'startDate': '20170701',
-      'endDate': '20170930'
-    },
-    {
-      'code': 'FCQTD',
-      'description': 'Fiscal Closed Quarter to Date',
-      'startDate': '20170901',
-      'endDate': '20171019'
+      'code': 'FQTD',
+      'description': 'Fiscal Quarter to Date',
+      'startDate': '20171201',
+      'endDate': '20180119'
     }
   ];
