@@ -93,7 +93,7 @@ module.exports = /*  @ngInject */
       if (!userService.model.currentUser.corporateUser && $state.current.name === 'accounts') {
         url = apiHelperService.request('/v2/search/stores?allVersions=true&searchTerm=' + encodeURIComponent(searchTerm));
       } else {
-        url = apiHelperService.request('/v2/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
+        url = apiHelperService.request('/v2/search/stores?allVersions=true&searchTerm=' + encodeURIComponent(searchTerm));
       }
 
       $http.get(url, {
