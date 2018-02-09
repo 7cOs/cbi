@@ -8,9 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
-import static com.cbrands.helper.SeleniumUtils.isElementPresent;
-import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
-import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.*;
 
 public class HomePage extends TestNGBasePage {
   private final WebDriver driver;
@@ -34,6 +32,7 @@ public class HomePage extends TestNGBasePage {
   @Override
   public boolean isLoaded() {
     waitForVisibleFluentWait(greeting);
+    waitForElementToDisappear(By.xpath("//div[@class='loader']"));
     return greeting.isDisplayed();
   }
 
