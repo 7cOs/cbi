@@ -271,7 +271,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
 
     this.opportunitiesTooltip = {
-      title: 'Opportunities Summaries',
+      title: 'Opportunities Summary',
       position: 'below',
       descriptions: [
         'The opportunity counts shown here are filtered to A and B accounts with High and Medium impact ratings only.',

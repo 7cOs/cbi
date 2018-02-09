@@ -422,13 +422,13 @@ public class SeleniumUtils {
    * @param element the element
    */
   @SuppressWarnings("unchecked")
-  public static void waitForElementStalenessFluentWait(WebElement element) {
+  private static void waitForElementStalenessFluentWait(WebElement element) {
     Wait<WebDriver> wait = new FluentWait(driver)
       .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
       .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS)
       .ignoring(NoSuchElementException.class)
       .ignoring(ElementNotVisibleException.class);
-		waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
+		wait.until(ExpectedConditions.stalenessOf(element));
 	}
 
   /**

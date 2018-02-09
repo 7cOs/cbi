@@ -140,12 +140,12 @@ module.exports = /*  @ngInject */
 
       switch (vm.type) {
         case 'user':
-          vm.input = result.firstName + ' ' + result.lastName;
+          vm.input = `${result.firstName} ${result.lastName}`;
           break;
         case 'chain':
         case 'distributor':
         case 'product':
-          result.name ? vm.input = result.name : vm.input = result.brand;
+          vm.input = result.name || result.brand;
           break;
         case 'location':
         case 'store':
