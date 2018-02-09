@@ -16,18 +16,10 @@ public class TargetListTest extends BaseTestCase {
 
   private TargetListListingsPage targetListListingPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Smoke - TargetList Test");
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
-  }
-
   @BeforeMethod
-  public void setUp() {
+  public void setUp() throws MalformedURLException {
+    this.startUpBrowser("Smoke - TargetList Test");
+
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     targetListListingPage = PageFactory.initElements(driver, TargetListListingsPage.class);
     targetListListingPage.goToPage();
@@ -36,6 +28,7 @@ public class TargetListTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
   @Test(dataProvider = "targetListData", description = "Create a new Target List")
