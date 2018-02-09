@@ -1,12 +1,14 @@
-import { DateRangeDTO } from './date-range-dto.model';
 import * as Chance from 'chance';
-let chance = new Chance();
+import { DateRangeDTO } from './date-range-dto.model';
+import * as moment from 'moment';
+
+const chance = new Chance();
 
 export function getDateRangeDTOMock(): DateRangeDTO {
   return {
-    code: chance.string(),
+    code: 'FYTM',
     description: chance.sentence(),
-    startDate: chance.string(),
-    endDate: chance.string()
+    startDate: moment().format('YYYYMMDD'),
+    endDate: moment().format('YYYYMMDD')
   };
 }
