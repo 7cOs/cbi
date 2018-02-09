@@ -17,6 +17,7 @@ module.exports = /*  @ngInject */
     vm.applyFiltersOnLoad = $state.params.applyFiltersOnLoad;
     vm.updateReportError = false;
     vm.deleteReportError = false;
+    vm.savedReportsOpen = false;
 
     // Set page title for head and nav
     title.setTitle($state.current.title);
