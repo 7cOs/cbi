@@ -47,14 +47,14 @@ notes
           label Depletions Time Period
           md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true); a.depletionSelectOpen = true" md-on-close="a.openSelect(false); a.depletionSelectOpen = false" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
             md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter); a.disableApplyFilter(false);")
-              div {{filter.displayValue}}
+              div {{ a.dateRanges[filter.v3ApiCode].displayCodeQuarterDate }}
               div.dropdown-subtext(ng-if="a.depletionSelectOpen") {{a.dateRanges[filter.v3ApiCode].range}}
           p.dropdown-subtext {{a.dateRanges[a.filterModel.depletionsTimePeriod.v3ApiCode].range}}
         div(column='6').dropdown
           label Distribution Time Period
           md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true); a.distributionSelectOpen = true" md-on-close="a.openSelect(false); a.distributionSelectOpen = false" aria-label="Select a distribution time period")
             md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter); a.disableApplyFilter(false);")
-              div {{filter.displayCode}}
+              div {{ a.dateRanges[filter.v3ApiCode].displayCodeQuarterDate }}
               div.dropdown-subtext(ng-if="a.distributionSelectOpen") {{a.dateRanges[filter.v3ApiCode].range}}
           p.dropdown-subtext {{a.dateRanges[a.filterModel.distributionTimePeriod.v3ApiCode].range}}
 
@@ -141,11 +141,11 @@ div(row)
             th
               p.accent &nbsp;
             th.dark
-              p.accent.no-transform {{a.filterModel.depletionsTimePeriod.displayValue}}
+              p.accent.no-transform {{ a.dateRanges[a.filterModel.depletionsTimePeriod.v3ApiCode].displayCodeQuarterDate }}
             th.dark
               p.accent {{a.filterModel.trend.name + '%'}}
             th
-              p.accent {{a.filterModel.distributionTimePeriod.displayValue}}
+              p.accent {{ a.dateRanges[a.filterModel.distributionTimePeriod.v3ApiCode].displayCodeQuarterDate }}
             th
               p.accent {{a.filterModel.trend.name + '%'}}
         tbody
@@ -244,10 +244,10 @@ div(row)
         p.accent.bold &nbsp;
       .widget-subheader-item.text-center
         p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
-        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.filterModel.depletionsTimePeriod.displayValue : a.filterModel.distributionTimePeriod.displayValue }}
+        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.dateRanges[a.filterModel.depletionsTimePeriod.v3ApiCode].displayCodeQuarterDate : a.dateRanges[a.filterModel.distributionTimePeriod.v3ApiCode].displayCodeQuarterDate }}
       .widget-subheader-item.text-center
         p.accent.bold Trend ({{a.filterModel.trend.name}}%)
-        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.filterModel.depletionsTimePeriod.displayValue : a.filterModel.distributionTimePeriod.displayValue }}
+        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.dateRanges[a.filterModel.depletionsTimePeriod.v3ApiCode].displayCodeQuarterDate : a.dateRanges[a.filterModel.distributionTimePeriod.v3ApiCode].displayCodeQuarterDate }}
 
     //- Top Bottom Content
     .widget-content.clearfix

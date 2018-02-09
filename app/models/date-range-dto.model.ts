@@ -3,4 +3,5 @@ export interface DateRangeDTO {
   description: string;
   startDate: string;
   endDate: string;
+  extendedName?: string;
 }
