@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class TargetListTest extends BaseTestCase {
@@ -17,8 +18,8 @@ public class TargetListTest extends BaseTestCase {
   private TargetListListingsPage targetListListingPage;
 
   @BeforeMethod
-  public void setUp() throws MalformedURLException {
-    this.startUpBrowser("Smoke - TargetList Test");
+  public void setUp(Method method) throws MalformedURLException {
+    this.startUpBrowser(String.format("Smoke - TargetList Test - %s", method.getAnnotation(Test.class).description()));
 
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     targetListListingPage = PageFactory.initElements(driver, TargetListListingsPage.class);
@@ -57,7 +58,7 @@ public class TargetListTest extends BaseTestCase {
 
   @DataProvider(name = "targetListData")
   public static Object[][] targetListData() {
-    return new Object[][] { { "Smoke Test " + current_time_stamp, "test" } };
+    return new Object[][]{{"Smoke Test " + current_time_stamp, "test"}};
   }
 
 }
