@@ -302,7 +302,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .enterReportName(reportName)
       .clickSave()
       .waitForModalToClose()
-      .clickResetFilters();
+      .clickResetFilters()
+      .waitForChipToDisappear(distributorSearchText);
   }
 
   private void setUpMaxNumberOfSavedReports(String distributor) {
