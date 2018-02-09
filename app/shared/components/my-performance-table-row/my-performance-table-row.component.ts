@@ -35,8 +35,8 @@ export class MyPerformanceTableRowComponent {
 
   public opportunityCountText: string;
   public isOpportunitiesError: boolean = false;
+  public isBrands: boolean;
 
-  private isBrands: boolean;
   private isRolegroups: boolean;
   private isSubAcountsOrDistributors: boolean;
 
@@ -66,9 +66,11 @@ export class MyPerformanceTableRowComponent {
     }
   }
 
-  public opportunityCountClicked(event: Event): void {
-    event.stopPropagation();
-    this.onOpportunityCountClicked.emit();
+  public opportunityCountClicked(event: Event, opportunityCountText: string): void {
+    if (!this.isBrands || opportunityCountText === '0') {
+      event.stopPropagation();
+      this.onOpportunityCountClicked.emit();
+    }
   }
 
   public getOpportunityCountText(opportunityCount: number, opportunitiesError: boolean): string {

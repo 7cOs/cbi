@@ -138,9 +138,18 @@ describe('MyPerformanceTableComponent', () => {
   });
 
   describe('onOpportunityCountClicked', () => {
-    it('should stop event propagation when an opportunity count is clicked', () => {
+    it('should stop event propagation when an opportunity count is clicked when it is not on brands level', () => {
       const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
-      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy, componentInstance.opportunityCountText);
+      componentInstance.opportunityCountText = '123';
+      componentInstance.isBrands = false;
+      expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('should stop event propagation when an opportunity count is clicked when opportunity count is "0"', () => {
+      const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy, '123');
+      componentInstance.opportunityCountText = '0';
       expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
     });
   });
