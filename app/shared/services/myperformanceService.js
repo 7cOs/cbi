@@ -254,13 +254,8 @@ module.exports = /*  @ngInject */
       if (currentTopBottomFilters.stores) {
         var storeIdCollection = angular.copy(currentTopBottomFilters.stores.id);
         if (storeIdCollection.length === 2) {
-          if (myAccountsOnly === true && userService.model.currentUser.corporateUser === false) {
-            // Setting 9 digit id
-            storeIdCollection.splice(1, 1);
-          } else {
-            // Setting 7 digit id
-            storeIdCollection.splice(0, 1);
-          }
+          // Set 9 digit versioned store id
+          storeIdCollection.splice(1, 1);
           params.store = storeIdCollection;
         } else {
           params.store = currentTopBottomFilters.stores.id;

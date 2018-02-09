@@ -264,8 +264,7 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public SavedReportDropdown clickSavedReportsDropdown() {
-    waitForVisibleFluentWait(savedReportsDropdown);
-    waitForElementToClickable(savedReportsDropdown, true).click();
+    scrollToAndClick(savedReportsDropdown);
     return new SavedReportDropdown();
   }
 
