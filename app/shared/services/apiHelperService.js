@@ -193,11 +193,20 @@ module.exports = /*  @ngInject */
       if (filters && filters.simpleDistributionType === true) {
         query = '&brandOpportunityType=true';
         if (filters.masterSKU) {
-          let masterSKUarray = (filters.masterSKU).toString().split('@');
-          if (masterSKUarray.length > 1) {
-            filters.brand = masterSKUarray[1];
-            delete filters.masterSKU;
+          let masterSKUarray = (filters.masterSKU).toString().split(',');
+          if (masterSKUarray.length > 0) {
+            for (let str in masterSKUarray) {
+              let strArray = (masterSKUarray)[str].toString().split('@');
+              if (strArray.length > 0) {
+                if (!filters.brand) {
+                  filters.brand = [strArray[1]];
+                } else {
+                  (filters.brand).push(strArray[1]);
+                }
+              }
+            }
           }
+          delete filters.masterSKU;
         }
       }
 
@@ -278,7 +287,9 @@ module.exports = /*  @ngInject */
                 }
               } else if (key2 === 'masterSKU') {
                 let masterSKUarray = (obj[key2][k]).toString().split('@');
-                queryParams += masterSKUarray[0];
+                if (masterSKUarray.length > 0) {
+                  queryParams += masterSKUarray[0];
+                }
               } else {
                 queryParams += obj[key2][k];
               }
