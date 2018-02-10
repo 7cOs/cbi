@@ -36,12 +36,20 @@ export class DateRangeTransformerService {
   }
 
   private formatDateRange(dateRangeDTO: DateRangeDTO): DateRange {
-    return {
+    const dateRange: DateRange = {
       code: dateRangeDTO.code,
       displayCode: this.mapDateRangeDisplayCode(dateRangeDTO.code),
+      displayCodeQuarterDate: this.mapDateRangeDisplayCode(dateRangeDTO.code),
       description: dateRangeDTO.description,
       range: `${this.formatDate(dateRangeDTO.startDate)} - ${this.formatDate(dateRangeDTO.endDate)}`
     };
+
+    if (dateRangeDTO.extendedName) {
+      dateRange.quarterDateLabel = `(${ dateRangeDTO.extendedName.replace(' ', `'`) })`;
+      dateRange.displayCodeQuarterDate = `${ dateRange.displayCode } ${ dateRange.quarterDateLabel }`;
+    }
+
+    return dateRange;
   }
 
   private formatDate(date: string, format?: string) {

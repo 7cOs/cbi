@@ -9,8 +9,12 @@ import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
@@ -20,24 +24,22 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Functional - Opportunities - Saved Reports Test");
+  @BeforeMethod
+  public void setUp(Method method) throws MalformedURLException {
+    final String testCaseName = method.getAnnotation(Test.class).description();
+    final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
+    this.startUpBrowser(sauceTitle);
 
     homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
+    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
   }
 
-  @AfterClass
-  public void tearDownClass() {
+  @AfterMethod
+  public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
     this.shutDownBrowser();
-  }
-
-  @BeforeMethod
-  public void setUp() {
-    opportunitiesPage.goToPage();
   }
 
   @Test(description = "Enabling/Disabling Save Report link", dataProvider = "distributorData")
@@ -57,6 +59,128 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     Assert.assertTrue(
       opportunitiesPage.isSaveReportButtonEnabled(),
       "Save Report link failed to be enabled after filters applied."
+    );
+  }
+
+  @Test(
+    description = "Creating an Opportunities Saved Report",
+    dependsOnMethods = "enableSavedReport",
+    dataProvider = "createReportData"
+  )
+  public void createSavedReport(String reportName, String distributorSearchText) {
+    testCreateASingleSavedReport(reportName + " #1", distributorSearchText);
+
+    opportunitiesPage.goToPage();
+
+    testCreateASingleSavedReport(reportName + " #2", distributorSearchText);
+  }
+
+  @Test(
+    description = "Running an Opportunities Saved Report from the Opportunities page",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "runReportData"
+  )
+  public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
+    this.setUpNewSavedReport(reportName + " from Opportunities page", distributor);
+
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .selectSavedReportWithName(reportName)
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
+    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
+  @Test(
+    description = "Running an Opportunities Saved Report from the Home page",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "runReportData"
+  )
+  public void runSavedReportFromHomePage(String reportName, String distributor) {
+    this.setUpNewSavedReport(reportName + " from Home page", distributor);
+
+    homePage.goToPage();
+    opportunitiesPage = homePage
+      .clickSavedReportsDropdown()
+      .selectSavedReportWithName(reportName)
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
+    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+  }
+
+  @Test(
+    description = "Editing a Saved Report",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "editReportData"
+  )
+  public void editSavedReport(String originalReportName, String distributor) {
+    opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
+
+    final String editedReportName = "EDITED " + originalReportName;
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(originalReportName)
+      .enterNewReportName(editedReportName)
+      .clickSave()
+      .waitForModalToClose();
+
+    Assert.assertTrue(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+      getEditFailureMessage(editedReportName, "Opportunities")
+    );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+      getEditFailureMessage(editedReportName, "Home")
+    );
+  }
+
+  @Test(
+    description = "Deleting a Saved Report",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "deleteReportData"
+  )
+  public void deleteSavedReport(String reportNameToDelete, String distributor) {
+    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
+
+    opportunitiesPage = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(reportNameToDelete)
+      .clickSavedReportDeleteLink()
+      .waitForModalToClose();
+
+    Assert.assertFalse(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      getDeleteFailureMessage(reportNameToDelete, "Opportunities")
+    );
+
+    homePage.goToPage();
+    Assert.assertFalse(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
+      getDeleteFailureMessage(reportNameToDelete, "Home")
+    );
+  }
+
+  @Test(
+    description = "Attempting to edit a Saved Report to an existing name",
+    dependsOnMethods = "createSavedReport",
+    dataProvider = "editDuplicateReportData"
+  )
+  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
+    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
+
+    final SavedReportModal savedReportModal = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(existingReportName)
+      .enterNewReportName(existingReportName)
+      .clickSave();
+
+    Assert.assertTrue(
+      savedReportModal.isDuplicateNameErrorDisplayed(),
+      "Failed to display error when attempting to use the name of an existing report."
     );
   }
 
@@ -82,133 +206,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
 
-  @Test(
-    description = "Deleting a Saved Report",
-    dependsOnMethods = "createAfterMaxLimit",
-    dataProvider = "deleteReportData"
-  )
-  public void deleteSavedReport(String reportNameToDelete, String distributor) {
-    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
-    opportunitiesPage = this.setUpNewSavedReport(reportNameToDelete, distributor);
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(reportNameToDelete)
-      .clickSavedReportDeleteLink()
-      .waitForModalToClose();
-
-    Assert.assertFalse(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertFalse(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportNameToDelete),
-      "Saved Report with name " + reportNameToDelete +
-        " failed to be removed from the dropdown on the Home page."
-    );
-  }
-
-  @Test(
-    description = "Creating an Opportunities Saved Report",
-    dependsOnMethods = "deleteSavedReport",
-    dataProvider = "createRunReportData"
-  )
-  public void createSavedReport(String name, String distributorSearchText) {
-    opportunitiesPage = this.setUpNewSavedReport(name, distributorSearchText);
-
-    Assert.assertTrue(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(name),
-      "Saved Report with name " + name + " failed to appear in the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertTrue(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(name),
-      "Saved Report with name " + name + " failed to appear in the dropdown on the Home page."
-    );
-  }
-
-  @Test(
-    description = "Running an Opportunities Saved Report from the Opportunities page",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "createRunReportData"
-  )
-  public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .selectSavedReportWithName(reportName)
-      .waitForLoaderToDisappear();
-
-    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
-    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
-  }
-
-  @Test(
-    description = "Running an Opportunities Saved Report from the Home page",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "createRunReportData"
-  )
-  public void runSavedReportFromHomePage(String reportName, String distributor) {
-    homePage.goToPage();
-    opportunitiesPage = homePage
-      .clickSavedReportsDropdown()
-      .selectSavedReportWithName(reportName)
-      .waitForLoaderToDisappear();
-    Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
-    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
-  }
-
-  @Test(
-    description = "Attempting to edit a Saved Report to an existing name",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "editDuplicateReportData"
-  )
-  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
-    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
-
-    final SavedReportModal savedReportModal = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(existingReportName)
-      .enterNewReportName(existingReportName)
-      .clickSave();
-
-    Assert.assertTrue(
-      savedReportModal.isDuplicateNameErrorDisplayed(),
-      "Failed to display error when attempting to use the name of an existing list."
-    );
-  }
-
-  @Test(
-    description = "Editing a Saved Report",
-    dependsOnMethods = "createSavedReport",
-    dataProvider = "editReportData"
-  )
-  public void editSavedReport(String originalReportName, String distributor) {
-    opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
-
-    final String editedReportName = "EDITED " + originalReportName;
-    opportunitiesPage = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(originalReportName)
-      .enterNewReportName(editedReportName)
-      .clickSave()
-      .waitForModalToClose();
-
-    Assert.assertTrue(
-      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
-      "Saved Report with edited name " + editedReportName +
-        " failed to appear in the dropdown on the Opportunities page."
-    );
-
-    homePage.goToPage();
-    Assert.assertTrue(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
-      "Saved Report with edited  name " + editedReportName + " failed to appear in the dropdown on the Home page."
-    );
-  }
-
   @DataProvider
   public static Object[][] distributorData() {
     return new Object[][]{
@@ -217,10 +214,18 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @DataProvider
-  public static Object[][] createRunReportData() {
+  public static Object[][] createReportData() {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
-      {"Create & Run " + testReportName, "Healy Wholesale"}
+      {"Create " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] runReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Run " + testReportName, "Healy Wholesale"}
     };
   }
 
@@ -248,6 +253,44 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     };
   }
 
+  private String getCreateFailureMessage(String reportName, String pageName) {
+    return String.format(
+      "Saved Report with name %s failed to appear in the dropdown on the %s page.",
+      reportName,
+      pageName
+    );
+  }
+
+  private String getEditFailureMessage(String editedReportName, String pageName) {
+    return  String.format(
+      "Saved Report with edited name %s failed to appear in the dropdown on the %s page.",
+      editedReportName,
+      pageName
+    );
+  }
+
+  private String getDeleteFailureMessage(String reportNameToDelete, String pageName) {
+    return String.format("Saved Report with name %s failed to be removed from the dropdown on the %s page.",
+      reportNameToDelete,
+      pageName
+    );
+  }
+
+  private void testCreateASingleSavedReport(String reportName, String distributorSearchText) {
+    opportunitiesPage = this.setUpNewSavedReport(reportName, distributorSearchText);
+
+    Assert.assertTrue(
+      opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportName),
+      getCreateFailureMessage(reportName, "Opportunities")
+    );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(reportName),
+      getCreateFailureMessage(reportName, "Home")
+    );
+  }
+
   private OpportunitiesPage setUpNewSavedReport(String reportName, String distributorSearchText) {
     return opportunitiesPage
       .enterDistributorSearchText(distributorSearchText)
@@ -259,12 +302,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       .enterReportName(reportName)
       .clickSave()
       .waitForModalToClose()
-      .clickResetFilters();
+      .clickResetFilters()
+      .waitForChipToDisappear(distributorSearchText);
   }
 
   private void setUpMaxNumberOfSavedReports(String distributor) {
     for(int i = this.getExistingNumberOfSavedReports() + 1; i <= MAX_SAVED_REPORT_LIMIT; i++) {
-      this.setUpNewSavedReport("Test Max Limit - Report #" + i, distributor);
+      final String reportName = String.format("Test Max Limit - Report #%s - %s", i, current_time_stamp);
+      this.setUpNewSavedReport(reportName, distributor);
     }
   }
 
