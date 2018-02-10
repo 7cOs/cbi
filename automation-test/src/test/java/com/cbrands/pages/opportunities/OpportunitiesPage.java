@@ -158,12 +158,12 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage clickFirstChainRetailerResult() {
-    clickFirstSearchFilterResult(chainRetailerFilter);
+    clickFirstSearchFilterResultFor(chainRetailerFilter);
     return this;
   }
 
   public OpportunitiesPage clickFirstDistributorResult() {
-    clickFirstSearchFilterResult(distributorFilter);
+    clickFirstSearchFilterResultFor(distributorFilter);
     return this;
   }
 
@@ -177,19 +177,24 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  private void clickFirstSearchFilterResult(WebElement searchFilter) {
-    final WebElement result = getSearchFilterResults(searchFilter)
-      .findElement(By.xpath(".//li"));
+  private void clickFirstSearchFilterResultFor(WebElement searchFilter) {
+    final WebElement searchFilterResultDropdown = getSearchFilterResultDropdownContainer(searchFilter);
+    waitForElementToClickable(
+      waitForVisibleFluentWait(searchFilterResultDropdown),
+      true
+    );
+
+    final WebElement result = searchFilterResultDropdown.findElement(By.xpath(".//li"));
     waitForElementToClickable(result, true).click();
   }
 
   private void clickFirstResultInFilterContaining(WebElement searchFilter, String name) {
-    final WebElement result = getSearchFilterResults(searchFilter)
+    final WebElement result = getSearchFilterResultDropdownContainer(searchFilter)
       .findElement(By.xpath(".//li[contains(., '" + name + "')]"));
     waitForElementToClickable(result, true).click();
   }
 
-  private WebElement getSearchFilterResults(WebElement searchFilter) {
+  private WebElement getSearchFilterResultDropdownContainer(WebElement searchFilter) {
     return searchFilter.findElement(By.xpath(".//div[@class='results-container open']"));
   }
 
