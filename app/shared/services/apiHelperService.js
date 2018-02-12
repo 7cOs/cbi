@@ -190,22 +190,16 @@ module.exports = /*  @ngInject */
      */
     function applySimpleDist(filters) {
       let query = '';
-      if (filters && filters.simpleDistributionType === true) {
+
+      if (filters && filters.simpleDistributionType) {
         query = '&brandOpportunityType=true';
         if (filters.masterSKU) {
           let masterSKUarray = (filters.masterSKU).toString().split(',');
-          if (masterSKUarray.length > 0) {
-            for (let str in masterSKUarray) {
-              let strArray = (masterSKUarray)[str].toString().split('@');
-              if (strArray.length > 0) {
-                if (!filters.brand) {
-                  filters.brand = [strArray[1]];
-                } else {
-                  (filters.brand).push(strArray[1]);
-                }
-              }
-            }
-          }
+          masterSKUarray.forEach(function(sku) {
+            (filters.brand)
+              ? (filters.brand).push(sku.slice(sku.search('@') + 1, sku.length))
+              : filters.brand = [sku.slice(sku.search('@') + 1, sku.length)];
+          });
           delete filters.masterSKU;
         }
       }
@@ -286,10 +280,7 @@ module.exports = /*  @ngInject */
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
               } else if (key2 === 'masterSKU') {
-                let masterSKUarray = (obj[key2][k]).toString().split('@');
-                if (masterSKUarray.length > 0) {
-                  queryParams += masterSKUarray[0];
-                }
+                queryParams += obj[key2][k].slice(0, obj[key2][k].search('@'));
               } else {
                 queryParams += obj[key2][k];
               }
