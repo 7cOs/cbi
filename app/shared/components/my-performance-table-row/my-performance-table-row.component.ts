@@ -67,7 +67,7 @@ export class MyPerformanceTableRowComponent {
   }
 
   public opportunityCountClicked(event: Event): void {
-    if (!this.isBrands || this.opportunityCountText === '0') {
+    if (this.viewType !== ProductMetricsViewType.brands ||  this.opportunityCountText === '0') {
       event.stopPropagation();
       this.onOpportunityCountClicked.emit();
     }
