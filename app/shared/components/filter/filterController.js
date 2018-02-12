@@ -320,14 +320,18 @@ module.exports = /*  @ngInject */
         filtersService.disableFilters(true, false, true, false);
         loaderService.closeLoader();
         closeModal();
+        toastService.showToast('reportSaved');
       })
       .catch(error => {
-        if (error.data[0].message.includes('already exists')) vm.duplicateName = true;
-        console.error('Error saving report: ', error);
         loaderService.closeLoader();
-      });
 
-      toastService.showToast('reportSaved');
+        if (error.data[0].message.includes('already exists')) {
+          vm.duplicateName = true;
+        } else {
+          closeModal();
+          toastService.showToast('reportSavedError');
+        }
+      });
     }
 
     function updateFilter() {
