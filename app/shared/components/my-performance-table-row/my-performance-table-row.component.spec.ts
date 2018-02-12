@@ -139,18 +139,55 @@ describe('MyPerformanceTableComponent', () => {
   });
 
   describe('onOpportunityCountClicked', () => {
+
+    beforeEach(() => {
+      let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      rowData.descriptionRow0 = 'STANDARD BEV CORP';
+      componentInstance.rowData = rowData;
+    });
+
+    it('should not stop event propagation when an opportunity count is clicked when it is on brands level', () => {
+      const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
+      componentInstance.viewType = ProductMetricsViewType.brands;
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
+      fixture.detectChanges();
+      expect(opportunityCountClickedEventSpy.stopPropagation).not.toHaveBeenCalled();
+    });
+
     it('should stop event propagation when an opportunity count is clicked when it is not on brands level', () => {
       const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
-      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
-      componentInstance.opportunityCountText = '123';
       componentInstance.viewType = ProductMetricsViewType.skus;
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
+      fixture.detectChanges();
       expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
     });
 
     it('should stop event propagation when an opportunity count is clicked when opportunity count is "0"', () => {
       const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
-      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
       componentInstance.opportunityCountText = '0';
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
+      fixture.detectChanges();
+      expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('should stop event propagation when an opportunity count is clicked when the view type is sku and' +
+      'when opportunity count is "0"', () => {
+      const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
+      componentInstance.viewType = ProductMetricsViewType.skus;
+      componentInstance.opportunityCountText = '0';
+      fixture.detectChanges();
+      expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('should stop event propagation when an opportunity count is clicked when the view type is sku and' +
+      'when opportunity count is not "0"', () => {
+      const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
+      componentInstance.viewType = ProductMetricsViewType.skus;
+      componentInstance.opportunityCountText = '123';
+      fixture.detectChanges();
+
+      componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
       expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
     });
   });
