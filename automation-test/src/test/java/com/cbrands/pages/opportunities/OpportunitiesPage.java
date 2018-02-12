@@ -158,12 +158,12 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage clickFirstChainRetailerResult() {
-    clickFirstSearchFilterResult(chainRetailerFilter);
+    clickFirstSearchFilterResultFor(chainRetailerFilter);
     return this;
   }
 
   public OpportunitiesPage clickFirstDistributorResult() {
-    clickFirstSearchFilterResult(distributorFilter);
+    clickFirstSearchFilterResultFor(distributorFilter);
     return this;
   }
 
@@ -177,19 +177,24 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  private void clickFirstSearchFilterResult(WebElement searchFilter) {
-    final WebElement result = getSearchFilterResults(searchFilter)
-      .findElement(By.xpath(".//li"));
+  private void clickFirstSearchFilterResultFor(WebElement searchFilter) {
+    final WebElement searchFilterResultDropdown = getSearchFilterResultDropdownContainer(searchFilter);
+    waitForElementToClickable(
+      waitForVisibleFluentWait(searchFilterResultDropdown),
+      true
+    );
+
+    final WebElement result = searchFilterResultDropdown.findElement(By.xpath(".//li"));
     waitForElementToClickable(result, true).click();
   }
 
   private void clickFirstResultInFilterContaining(WebElement searchFilter, String name) {
-    final WebElement result = getSearchFilterResults(searchFilter)
+    final WebElement result = getSearchFilterResultDropdownContainer(searchFilter)
       .findElement(By.xpath(".//li[contains(., '" + name + "')]"));
     waitForElementToClickable(result, true).click();
   }
 
-  private WebElement getSearchFilterResults(WebElement searchFilter) {
+  private WebElement getSearchFilterResultDropdownContainer(WebElement searchFilter) {
     return searchFilter.findElement(By.xpath(".//div[@class='results-container open']"));
   }
 
@@ -215,6 +220,50 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
+  public OpportunitiesPage removeAccountScopeChip() {
+    removeChipContaining("My Accounts Only");
+    return this;
+  }
+
+  public OpportunitiesPage removeChipContaining(String substring) {
+    final String xpathExpression = String.format(
+      "%s//div[contains(@md-chip-remove, 'md-chip-remove')]",
+      getXPathForQueryChipContaining(substring)
+    );
+    WebElement chipToBeRemoved = findElement(
+      By.xpath(xpathExpression)
+    );
+    waitForElementToClickable(chipToBeRemoved, true).click();
+
+    return this;
+  }
+
+  public OpportunitiesPage waitForChipToDisappear(String text) {
+    waitForElementToDisappear(By.xpath(getXPathForQueryChipContaining(text)));
+
+    return this;
+  }
+
+  public boolean doesPremiseTypeChipMatch(PremiseType premiseType) {
+    return isChipPresent(premiseType.name() + "-premise");
+  }
+
+  public boolean isAccountScopeChipPresent() {
+    return isChipPresent("My Accounts Only");
+  }
+
+  public boolean isQueryChipPresent(String chipTitle) {
+    return isChipPresent(chipTitle);
+  }
+
+  private boolean isChipPresent(String chipTitle) {
+    return isElementPresent(By.xpath(getXPathForQueryChipContaining(chipTitle)));
+  }
+
+  private String getXPathForQueryChipContaining(String chipTitle) {
+    return String.format("//md-chip[contains(., '%s')]", chipTitle);
+  }
+
   public OpportunitiesPage waitForLoaderToDisappear() {
     waitForElementToDisappear(By.xpath("//div[contains(@class, 'loader-wrap')]"));
     return this;
@@ -231,36 +280,6 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
 
     return hasResults;
-  }
-
-  public boolean doesPremiseTypeChipMatch(PremiseType premiseType) {
-    return isChipPresent(premiseType.name() + "-premise");
-  }
-
-  public boolean isAccountScopeChipPresent() {
-    return isChipPresent("My Accounts Only");
-  }
-
-  public boolean isQueryChipPresent(String chipTitle) {
-    return isChipPresent(chipTitle);
-  }
-
-  private boolean isChipPresent(String chipTitle) {
-    return isElementPresent(By.xpath("//md-chip[contains(., '" + chipTitle + "')]"));
-  }
-
-  public OpportunitiesPage removeAccountScopeChip() {
-    removeChipContaining("My Accounts Only");
-    return this;
-  }
-
-  public OpportunitiesPage removeChipContaining(String substring) {
-    WebElement chipToBeRemoved = findElement(
-      By.xpath("//md-chip[contains(., '" + substring + "')]//div[contains(@md-chip-remove, 'md-chip-remove')]")
-    );
-    waitForElementToClickable(chipToBeRemoved, true).click();
-
-    return this;
   }
 
   public SavedReportDropdown clickSavedReportsDropdown() {
