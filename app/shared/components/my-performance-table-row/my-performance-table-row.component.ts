@@ -79,6 +79,6 @@ export class MyPerformanceTableRowComponent {
     } else if (opportunityCount && this.isBrands) {
       return 'View';
     }
-    return !opportunityCount ? '0' : opportunityCount.toString();
+    return opportunityCount ? opportunityCount.toString() : '0';
   }
 }
