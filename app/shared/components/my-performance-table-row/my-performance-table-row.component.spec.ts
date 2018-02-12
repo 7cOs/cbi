@@ -7,6 +7,7 @@ import { CssClasses } from '../../../models/css-classes.model';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from './my-performance-table-row.component';
+import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { NumberPipeMock } from '../../../pipes/number.pipe.mock';
 
@@ -138,13 +139,13 @@ describe('MyPerformanceTableComponent', () => {
   });
 
   describe('onOpportunityCountClicked', () => {
-    /*it('should stop event propagation when an opportunity count is clicked when it is not on brands level', () => {
+    it('should stop event propagation when an opportunity count is clicked when it is not on brands level', () => {
       const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
       componentInstance.opportunityCountClicked(opportunityCountClickedEventSpy);
       componentInstance.opportunityCountText = '123';
-      componentInstance.isBrands = false;
+      componentInstance.viewType = ProductMetricsViewType.skus;
       expect(opportunityCountClickedEventSpy.stopPropagation).toHaveBeenCalled();
-    });*/
+    });
 
     it('should stop event propagation when an opportunity count is clicked when opportunity count is "0"', () => {
       const opportunityCountClickedEventSpy = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
