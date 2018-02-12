@@ -10,3 +10,11 @@ export function getEntitySubAccountDTOMock(): EntitySubAccountDTO {
     premiseTypes: [chance.string()]
   };
 }
+
+export function getEntitySubAccountMultiPremiseTypesDTOMock(): EntitySubAccountDTO {
+  return {
+    id: chance.string(),
+    name: chance.string(),
+    premiseTypes: [chance.string(), chance.string()]
+  };
+}
