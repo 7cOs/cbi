@@ -327,9 +327,6 @@ describe('Unit: filter controller (opportunities)', function() {
 
       expect(chipsService.resetChipsFilters).toHaveBeenCalled();
       expect(chipsService.resetChipsFilters.calls.count()).toEqual(1);
-
-      expect(filtersService.resetFilters).toHaveBeenCalled();
-      expect(filtersService.resetFilters.calls.count()).toEqual(1);
     });
 
     it('should call resetTradeChannels', function() {
