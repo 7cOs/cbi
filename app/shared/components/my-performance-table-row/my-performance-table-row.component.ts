@@ -76,7 +76,9 @@ export class MyPerformanceTableRowComponent {
   public getOpportunityCountText(opportunityCount: number, opportunitiesError: boolean): string {
     if (opportunitiesError) {
       return '-';
+    } else if (opportunityCount && this.isBrands) {
+      return 'View';
     }
-    return !opportunityCount ? '0' : this.isBrands ? 'View' : opportunityCount.toString();
+    return !opportunityCount ? '0' : opportunityCount.toString();
   }
 }
