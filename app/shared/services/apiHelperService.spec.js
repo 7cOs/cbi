@@ -88,7 +88,7 @@ describe('[Services.apiHelperService]', function() {
     it('should return opportunities with brands when type is opportunities, simple distribution is selected and sku is selected', function() {
       const mockObject = {
         'myAccountsOnly': true,
-        'masterSKU': '80014006@228',
+        'masterSKU': ['80014006@228'],
         'opportunityType': ['At Risk'],
         'premiseType': 'on',
         'simpleDistributionType': true,
@@ -173,7 +173,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when store format of general market is selected', function() {
       const mockObject = {
-        masterSKU: '112154@234',
+        masterSKU: ['112154@234'],
         opportunityType: ['At Risk'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -190,7 +190,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when ALL feature types is selected', function() {
       const mockObject = {
-        masterSKU: '112154@234',
+        masterSKU: ['112154@234'],
         featureType: ['All Types', 'Happy Hour'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -207,7 +207,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when some feature types is selected', function() {
       const mockObject = {
-        masterSKU: '112154@234',
+        masterSKU: ['112154@234'],
         featureType: ['Happy Hour', 'Beer of the Month'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -224,7 +224,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when ALL item authorization types is selected', function() {
       const mockObject = {
-        masterSKU: '112154@234',
+        masterSKU: ['112154@234'],
         itemAuthorizationType: ['All Types', 'Authorized-Select Planogram', 'Authorized-Optional (Sell-In)'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -257,7 +257,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when priority package is selected', function() {
       const mockObject = {
-        masterSKU: '112154@234',
+        masterSKU: ['112154@234'],
         priorityPackage: ['Gaintain'],
         premiseType: 'on',
         simpleDistributionType: true,
