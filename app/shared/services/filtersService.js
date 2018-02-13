@@ -574,10 +574,11 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       service.model.selected = angular.copy(service.model.selectedTemplate);
-      resetModel(); // reset view model bindings
       service.model.states = [];
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
+      service.model.disableReset = false;
+      service.model.disableSaveFilter = false;
       service.model.filtersValidCount = 0;
     }
 
@@ -597,14 +598,6 @@ module.exports = /*  @ngInject */
       service.model.appliedFilter.sort.sortArr = [];
       service.model.appliedFilter.sort.sortArr.push(
         angular.copy(service.model.defaultSort));
-    }
-
-    function resetModel() {
-      for (var prop in service.model) {
-        if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true && prop !== 'expanded') {
-          service.model[prop] = false;
-        }
-      }
     }
 
     function depletionsTimePeriodFromName(name) {
