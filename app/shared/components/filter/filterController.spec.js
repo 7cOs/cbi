@@ -3,7 +3,7 @@ import * as Chance from 'chance';
 const chance = new Chance();
 
 describe('Unit: filter controller (opportunities)', function() {
-  var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService, analyticsService;
+  var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService, analyticsService, toastService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -18,7 +18,7 @@ describe('Unit: filter controller (opportunities)', function() {
       $provide.value('analyticsService', analyticsService);
     });
 
-    inject(function($controller, _$mdDialog_, _$mdSelect_, _$q_, $rootScope, _chipsService_, _filtersService_, _loaderService_, _opportunityFiltersService_, _userService_) {
+    inject(function($controller, _$mdDialog_, _$mdSelect_, _$q_, $rootScope, _chipsService_, _filtersService_, _loaderService_, _opportunityFiltersService_, _userService_, _toastService_) {
       scope = $rootScope.$new();
       q = _$q_;
       state = {
@@ -35,6 +35,7 @@ describe('Unit: filter controller (opportunities)', function() {
       loaderService = _loaderService_;
       opportunityFiltersService = _opportunityFiltersService_;
       userService = _userService_;
+      toastService = _toastService_;
 
       ctrl = $controller('filterController', {$scope: scope, $state: state});
     });
@@ -739,59 +740,129 @@ describe('Unit: filter controller (opportunities)', function() {
   });
 
   describe('[method.saveFilter]', () => {
-    let saveOpportunityFilterResponseMock;
 
-    beforeEach(() => {
-      saveOpportunityFilterResponseMock = {
-        id: chance.string(),
-        description: chance.string()
-      };
+    describe('when saveFilter is called', () => {
+      it('should call loaderService.openLoader and userService.saveOpportunityFilter', () => {
+        spyOn(loaderService, 'openLoader').and.callThrough();
+        spyOn(userService, 'saveOpportunityFilter').and.callThrough();
 
-      spyOn(loaderService, 'openLoader').and.callFake(() => {
-        return true;
-      });
+        expect(loaderService.openLoader).not.toHaveBeenCalled();
+        expect(loaderService.openLoader.calls.count()).toEqual(0);
+        expect(userService.saveOpportunityFilter).not.toHaveBeenCalled();
+        expect(userService.saveOpportunityFilter.calls.count()).toEqual(0);
 
-      spyOn(userService, 'saveOpportunityFilter').and.callFake(() => {
-        const defer = q.defer();
-        defer.resolve(saveOpportunityFilterResponseMock);
-        return defer.promise;
+        ctrl.saveFilter();
+
+        expect(loaderService.openLoader).toHaveBeenCalledWith(true);
+        expect(loaderService.openLoader.calls.count()).toEqual(1);
+        expect(userService.saveOpportunityFilter).toHaveBeenCalled();
+        expect(userService.saveOpportunityFilter.calls.count()).toEqual(1);
       });
     });
 
-    it('should call loaderService.openLoader and userService.saveOpportunityFilter', () => {
-      expect(loaderService.openLoader).not.toHaveBeenCalled();
-      expect(loaderService.openLoader.calls.count()).toEqual(0);
-      expect(userService.saveOpportunityFilter).not.toHaveBeenCalled();
-      expect(userService.saveOpportunityFilter.calls.count()).toEqual(0);
+    describe('when saving the opportunity filter is successful', () => {
+      let saveOpportunityFilterResponseMock;
+      let newOpportunityReportNameMock;
+      let appliedFilterStringMock;
 
-      ctrl.saveFilter();
+      beforeEach(() => {
+        saveOpportunityFilterResponseMock = {
+          id: chance.string(),
+          description: chance.string()
+        };
+        newOpportunityReportNameMock = chance.string();
+        appliedFilterStringMock = chance.string();
 
-      expect(loaderService.openLoader).toHaveBeenCalledWith(true);
-      expect(loaderService.openLoader.calls.count()).toEqual(1);
-      expect(userService.saveOpportunityFilter).toHaveBeenCalled();
-      expect(userService.saveOpportunityFilter.calls.count()).toEqual(1);
+        filtersService.model.newServiceName = newOpportunityReportNameMock;
+        filtersService.model.appliedFilter.appliedFilter = appliedFilterStringMock;
+        userService.model.opportunityFilters = [];
+
+        spyOn(userService, 'saveOpportunityFilter').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve(saveOpportunityFilterResponseMock);
+          return defer.promise;
+        });
+      });
+
+      it('should add the new opportunity report to the userService.model.opportunityFilters using the name ' +
+      'in filtersService.model.newServiceName', () => {
+        const expectedOpportunityFiltersModel = [{
+          name: newOpportunityReportNameMock,
+          id: saveOpportunityFilterResponseMock.id,
+          description: saveOpportunityFilterResponseMock.description,
+          filterString: encodeURIComponent(appliedFilterStringMock)
+        }];
+
+        ctrl.saveFilter();
+        scope.$apply();
+
+        expect(userService.model.opportunityFilters).toEqual(expectedOpportunityFiltersModel);
+      });
+
+      it('should called disableFilters, loaderService.closeLoader, close the modal, and show a success toast', () => {
+        spyOn(filtersService, 'disableFilters');
+        spyOn(loaderService, 'closeLoader');
+        spyOn(mdDialog, 'hide');
+        spyOn(toastService, 'showToast');
+
+        ctrl.saveFilter();
+        scope.$apply();
+
+        expect(filtersService.disableFilters).toHaveBeenCalledWith(true, false, true, false);
+        expect(loaderService.closeLoader).toHaveBeenCalled();
+        expect(mdDialog.hide).toHaveBeenCalled();
+        expect(toastService.showToast).toHaveBeenCalledWith('reportSaved');
+      });
     });
 
-    it('should add the new opportunity report to the userService.model.opportunityFilters using the name ' +
-    'in filtersService.model.newServiceName', () => {
-      const newOpportunityReportNameMock = chance.string();
-      const appliedFilterStringMock = chance.string();
+    describe('when the opportunity filter is not successfully saved', () => {
+      let errorMessageMock;
+      let errorResponseMock;
 
-      filtersService.model.newServiceName = newOpportunityReportNameMock;
-      filtersService.model.appliedFilter.appliedFilter = appliedFilterStringMock;
-      userService.model.opportunityFilters = [];
+      beforeEach(() => {
+        errorMessageMock = chance.string();
+        errorResponseMock = {
+          data: [{
+            message: errorMessageMock
+          }]
+        };
 
-      const expectedOpportunityFiltersModel = [{
-        name: newOpportunityReportNameMock,
-        id: saveOpportunityFilterResponseMock.id,
-        description: saveOpportunityFilterResponseMock.description,
-        filterString: encodeURIComponent(appliedFilterStringMock)
-      }];
+        spyOn(userService, 'saveOpportunityFilter').and.callFake(() => {
+          const defer = q.defer();
+          defer.reject(errorResponseMock);
+          return defer.promise;
+        });
+      });
 
-      ctrl.saveFilter();
-      scope.$apply();
+      it('should call loaderService.closeLoader regardless of the error type', () => {
+        spyOn(loaderService, 'closeLoader');
 
-      expect(userService.model.opportunityFilters).toEqual(expectedOpportunityFiltersModel);
+        ctrl.saveFilter();
+        scope.$apply();
+
+        expect(loaderService.closeLoader).toHaveBeenCalled();
+      });
+
+      it('should set the duplicateName variable to true when the error message contains `already exists` text', () => {
+        errorResponseMock.data[0].message = `${chance.string()} already exists ${chance.string()}`;
+        ctrl.duplicateName = false;
+
+        ctrl.saveFilter();
+        scope.$apply();
+
+        expect(ctrl.duplicateName).toBe(true);
+      });
+
+      it('should close the modal and show a reportSavedError toast when the error is not due to a duplicate report', () => {
+        spyOn(mdDialog, 'hide');
+        spyOn(toastService, 'showToast');
+
+        ctrl.saveFilter();
+        scope.$apply();
+
+        expect(mdDialog.hide).toHaveBeenCalled();
+        expect(toastService.showToast).toHaveBeenCalledWith('reportSavedError');
+      });
     });
   });
 
@@ -856,14 +927,12 @@ describe('Unit: filter controller (opportunities)', function() {
         return defer.promise;
       });
       spyOn(analyticsService, 'trackEvent');
-      spyOn(console, 'error');
 
       ctrl.saveFilter();
       scope.$apply();
 
       expect(userService.saveOpportunityFilter).toHaveBeenCalled();
       expect(analyticsService.trackEvent).not.toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalled();
     });
   });
 });
