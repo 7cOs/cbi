@@ -7,7 +7,8 @@ import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntityPeopleResponsibilitiesMock,
          getHierarchyEntityDTO,
          mockHierarchyEntityDTOCollection } from '../models/hierarchy-entity.model.mock';
-import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
+import { getEntitySubAccountDTOMock,
+         getEntitySubAccountMultiPremiseTypesDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
@@ -126,6 +127,25 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         name: entitySubAccountDTOMock[1].name,
         entityType: EntityType.SubAccount,
         premiseType: PremiseTypeValue[entitySubAccountDTOMock[1].premiseTypes[0]]
+      });
+    });
+
+    it('should return Grouped HierarchyEntity given EntitySubAccountDTO ' +
+      'objects under the given entityType for multiple PremiseTypeValues', () => {
+      spyOn(responsibilitiesTransformerService, 'transformSubAccountsDTO').and.callThrough();
+
+      const entitySubAccountDTOMock: Array<EntitySubAccountDTO> = [getEntitySubAccountMultiPremiseTypesDTOMock()];
+      const entityTypeMock: string = chance.string();
+
+      const groupedSubAccounts: GroupedEntities =
+        responsibilitiesTransformerService.transformSubAccountsDTO(entitySubAccountDTOMock, entityTypeMock);
+
+      expect(groupedSubAccounts).toBeDefined();
+      expect(groupedSubAccounts[entityTypeMock][0]).toEqual({
+        positionId: entitySubAccountDTOMock[0].id,
+        name: entitySubAccountDTOMock[0].name,
+        entityType: EntityType.SubAccount,
+        premiseType: PremiseTypeValue.All
       });
     });
   });

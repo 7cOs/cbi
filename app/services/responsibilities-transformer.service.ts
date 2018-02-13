@@ -57,7 +57,7 @@ export class ResponsibilitiesTransformerService {
           positionId: subAccount.id,
           name: subAccount.name,
           entityType: EntityType.SubAccount,
-          premiseType: PremiseTypeValue[subAccount.premiseTypes[0]]
+          premiseType: (subAccount.premiseTypes.length > 1) ?  PremiseTypeValue.All : PremiseTypeValue[subAccount.premiseTypes[0]]
         };
       })
     };
