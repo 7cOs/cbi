@@ -100,17 +100,20 @@ module.exports = /*  @ngInject */
     vm.onAccountDashboardPage = onAccountDashboardPage;
     vm.onMyScorecardsPage = onMyScorecardsPage;
 
-    $scope.$watch(function() { return toastService.model; }, function(newVal) {
-      vm.archived = newVal.archived;
-      vm.deleted = newVal.deleted;
-      vm.added = newVal.added;
-      vm.copied = newVal.copied;
-      vm.deleteError = newVal.deleteError;
-      vm.reportDeleted = newVal.reportDeleted;
-      vm.reportSaved = newVal.reportSaved;
-      vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
-      vm.performanceDataError = newVal.performanceDataError;
-      vm.opportunityCountError = newVal.opportunityCountError;
+    $scope.$watch(() => {
+      return toastService.model;
+    }, (newWatchValues) => {
+      vm.archived = newWatchValues.archived;
+      vm.deleted = newWatchValues.deleted;
+      vm.added = newWatchValues.added;
+      vm.copied = newWatchValues.copied;
+      vm.deleteError = newWatchValues.deleteError;
+      vm.reportDeleted = newWatchValues.reportDeleted;
+      vm.reportSaved = newWatchValues.reportSaved;
+      vm.reportSavedError = newWatchValues.reportSavedError;
+      vm.multipleTargetListsSelected = newWatchValues.multipleTargetListsSelected;
+      vm.performanceDataError = newWatchValues.performanceDataError;
+      vm.opportunityCountError = newWatchValues.opportunityCountError;
     }, true);
 
     init();
