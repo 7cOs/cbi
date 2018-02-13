@@ -194,8 +194,7 @@ module.exports = /*  @ngInject */
       if (filters && filters.simpleDistributionType) {
         query = '&brandOpportunityType=true';
         if (filters.masterSKU) {
-          let masterSKUarray = (filters.masterSKU).toString().split(',');
-          masterSKUarray.forEach(function(sku) {
+          filters.masterSKU.forEach(function(sku) {
             (filters.brand)
               ? (filters.brand).push(sku.slice(sku.search('@') + 1, sku.length))
               : filters.brand = [sku.slice(sku.search('@') + 1, sku.length)];
