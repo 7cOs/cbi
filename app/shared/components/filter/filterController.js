@@ -258,9 +258,6 @@ module.exports = /*  @ngInject */
     function resetFilters() {
       // reset all chips and filters
       chipsService.resetChipsFilters(chipsService.model);
-
-      filtersService.resetFilters();
-
       resetTradeChannels('on');
       resetTradeChannels('off');
     }
