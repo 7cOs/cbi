@@ -131,9 +131,9 @@ describe('MyPerformanceTableComponent', () => {
   });
 
   describe('getOpportunityCountClass', () => {
-    it('should return "opportunities" class when opportunity count is greater than 0 for either brand or sku', () => {
+    fit('should return "opportunities" class when opportunity count is greater than 0 for either brand or sku', () => {
       const rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      rowData.opportunities = chance.natural();
+      rowData.opportunities = chance.natural({min: 1});
       componentInstance.rowData = rowData;
       const opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
       expect(opportunityCountClass).toEqual({'opportunities': true , 'opportunities-error': false});
