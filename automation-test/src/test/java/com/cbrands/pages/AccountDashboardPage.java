@@ -210,11 +210,6 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public AccountDashboardPage waitForLeftLoaderToDisappear() {
-    waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
-    return this;
-  }
-
   public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
     boolean resultsAreLoaded;
 
