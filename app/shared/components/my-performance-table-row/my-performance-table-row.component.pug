@@ -21,7 +21,7 @@ td.right-col(*ngIf="showContributionToVolume", colspan=1)
   span.ctv {{rowData.ctv | number:'1.1-1'}}%
 td.right-col(
   *ngIf="showOpportunities", colspan=1,
-  [ngClass]="getOpportunityCountClass()",
+  [ngClass]="opportunityCountClass",
   (click)="opportunityCountClicked($event)") {{(opportunityCountText === '-' || opportunityCountText === 'View') ? opportunityCountText : opportunityCountText | number}}
 
 //- Temporary td column to act as an empty filler until a Simple Opportunities column is implemented

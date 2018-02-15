@@ -35,6 +35,7 @@ export class MyPerformanceTableRowComponent {
 
   public opportunityCountText: string;
   public isOpportunitiesError: boolean = false;
+  public opportunityCountClass: CssClasses = this.getOpportunityCountClass();
 
   private isBrands: boolean;
   private isRolegroups: boolean;
