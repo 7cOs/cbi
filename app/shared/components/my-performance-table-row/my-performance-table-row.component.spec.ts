@@ -130,6 +130,45 @@ describe('MyPerformanceTableComponent', () => {
     });
   });
 
+  describe('getOpportunityCountClass', () => {
+    it('should return proper class when opportunity count is greater than 0 for either brand or sku', () => {
+      let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      rowData.opportunities = 10;
+      componentInstance.rowData = rowData;
+      let opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
+      expect(opportunityCountClass).toEqual({'opportunities': true , 'opportunities-error': false});
+    });
+
+    it('should return proper class when it is brand level and opportunity count is 0', () => {
+      let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      rowData.opportunities = 0;
+      componentInstance.rowData = rowData;
+      componentInstance.viewType = ProductMetricsViewType.brands;
+      let opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
+      expect(opportunityCountClass).toEqual({'opportunities': true , 'opportunities-error': false});
+    });
+
+    it('should return proper class when it is sku level there is opportunity error', () => {
+      let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      rowData.opportunities = undefined;
+      componentInstance.rowData = rowData;
+      componentInstance.isOpportunitiesError = true;
+      componentInstance.viewType = ProductMetricsViewType.skus;
+      let opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
+      expect(opportunityCountClass).toEqual({'opportunities': false, 'opportunities-error': true});
+    });
+
+    it('should return proper class when it is brand level there is opportunity error', () => {
+      let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      rowData.opportunities = undefined;
+      componentInstance.rowData = rowData;
+      componentInstance.isOpportunitiesError = true;
+      componentInstance.viewType = ProductMetricsViewType.brands;
+      let opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
+      expect(opportunityCountClass).toEqual({'opportunities': false, 'opportunities-error': true});
+    });
+  });
+
   describe('when subline is clicked', () => {
     it('should stop event propogation when subline is clicked', () => {
       const event = jasmine.createSpyObj('event', [ 'stopPropagation' ]);
