@@ -51,6 +51,13 @@ export class MyPerformanceTableRowComponent {
     };
   }
 
+  public getOpportunityCountClass(): CssClasses {
+    return {
+      ['opportunities']: (this.rowData.opportunities > 0) || (this.isBrands && this.rowData.opportunities === 0),
+      ['opportunities-error']: this.isOpportunitiesError
+    };
+  }
+
   public getRolegroupIconClass(): CssClasses {
     return {
       ['geography-group-icon']: this.rowData.descriptionRow0 === 'GEOGRAPHY',
@@ -76,7 +83,7 @@ export class MyPerformanceTableRowComponent {
   public getOpportunityCountText(opportunityCount: number, opportunitiesError: boolean): string {
     if (opportunitiesError) {
       return '-';
-    } else if (opportunityCount && this.isBrands) {
+    } else if (this.isBrands) {
       return 'View';
     }
     return opportunityCount ? opportunityCount.toString() : '0';
