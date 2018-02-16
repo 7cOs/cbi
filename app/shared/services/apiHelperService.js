@@ -191,16 +191,8 @@ module.exports = /*  @ngInject */
     function applySimpleDist(filters) {
       let query = '';
 
-      if (filters && filters.simpleDistributionType) {
+      if (filters && filters.simpleDistributionType === true) {
         query = '&brandOpportunityType=true';
-        if (filters.masterSKU) {
-          filters.masterSKU.forEach(function(sku) {
-            (filters.brand)
-              ? (filters.brand).push(sku.slice(sku.search('@') + 1, sku.length))
-              : filters.brand = [sku.slice(sku.search('@') + 1, sku.length)];
-          });
-          delete filters.masterSKU;
-        }
       }
 
       return query;
@@ -278,8 +270,6 @@ module.exports = /*  @ngInject */
                 for (var l = 0; l < tradeChannelValue.length; l++) {
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
-              } else if (key2 === 'masterSKU') {
-                queryParams += obj[key2][k].slice(0, obj[key2][k].search('@'));
               } else {
                 queryParams += obj[key2][k];
               }
