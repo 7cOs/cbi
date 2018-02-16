@@ -59,10 +59,12 @@ export class MyPerformanceTableRowComponent {
   }
 
   public getOpportunityCountClass(): CssClasses {
-    return {
-      ['opportunities']: (this.tableRowData.opportunities > 0) || (this.isBrands && this.tableRowData.opportunities === 0),
-      ['opportunities-error']: this.isOpportunitiesError
-    };
+    if (this.tableRowData.opportunities) {
+      return {
+        ['opportunities']: (this.tableRowData.opportunities > 0) || (this.isBrands && this.tableRowData.opportunities === 0),
+        ['opportunities-error']: this.isOpportunitiesError
+      };
+    }
   }
 
   public getRolegroupIconClass(): CssClasses {

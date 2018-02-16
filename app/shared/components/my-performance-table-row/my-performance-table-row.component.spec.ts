@@ -48,7 +48,6 @@ describe('MyPerformanceTableComponent', () => {
         fit('should return the geography-group CSS class', () => {
           let tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
           tableRowData.descriptionRow0 = 'GEOGRAPHY';
-          tableRowData.opportunities = undefined;
 
           componentInstance.viewType = SalesHierarchyViewType.roleGroups;
           componentInstance.tableRowData = tableRowData;
