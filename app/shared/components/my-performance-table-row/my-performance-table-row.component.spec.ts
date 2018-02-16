@@ -45,12 +45,13 @@ describe('MyPerformanceTableComponent', () => {
 
     describe('when viewtype is rolegroups', () => {
       describe('when descriptionRow0 is GEOGRAPHY', () => {
-        it('should return the geography-group CSS class', () => {
-          let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-          rowData.descriptionRow0 = 'GEOGRAPHY';
+        fit('should return the geography-group CSS class', () => {
+          let tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+          tableRowData.descriptionRow0 = 'GEOGRAPHY';
+          tableRowData.opportunities = undefined;
 
           componentInstance.viewType = SalesHierarchyViewType.roleGroups;
-          componentInstance.rowData = rowData;
+          componentInstance.tableRowData = tableRowData;
           let iconCSS: CssClasses = componentInstance.getRolegroupIconClass();
           expect(iconCSS).toEqual({'geography-group-icon': true, 'rolegroup-icon': false, 'account-group-icon': false});
         });
@@ -58,11 +59,11 @@ describe('MyPerformanceTableComponent', () => {
 
       describe('when descriptionRow0 is neither GEOGRAPHY nor ACCOUNTS', () => {
         it('should return the geography-group CSS class', () => {
-          let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-          rowData.descriptionRow0 = chance.string({length: 15});
+          let tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+          tableRowData.descriptionRow0 = chance.string({length: 15});
 
           componentInstance.viewType = SalesHierarchyViewType.roleGroups;
-          componentInstance.rowData = rowData;
+          componentInstance.tableRowData = tableRowData;
           let iconCSS: CssClasses = componentInstance.getRolegroupIconClass();
           expect(iconCSS).toEqual({'geography-group-icon': false, 'rolegroup-icon': true, 'account-group-icon': false});
         });
@@ -70,11 +71,11 @@ describe('MyPerformanceTableComponent', () => {
 
       describe('when descriptionRow0 is ACCOUNTS', () => {
         it('should return the account-group CSS class', () => {
-          let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-          rowData.descriptionRow0 = 'ACCOUNTS';
+          let tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+          tableRowData.descriptionRow0 = 'ACCOUNTS';
 
           componentInstance.viewType = SalesHierarchyViewType.roleGroups;
-          componentInstance.rowData = rowData;
+          componentInstance.tableRowData = tableRowData;
           let iconCSS: CssClasses = componentInstance.getRolegroupIconClass();
           expect(iconCSS).toEqual({'geography-group-icon': false, 'rolegroup-icon': false, 'account-group-icon': true});
         });
@@ -132,26 +133,26 @@ describe('MyPerformanceTableComponent', () => {
 
   describe('getOpportunityCountClass', () => {
     it('should return "opportunities" class when opportunity count is greater than 0 for either brand or sku', () => {
-      const rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      rowData.opportunities = chance.natural({min: 1});
-      componentInstance.rowData = rowData;
+      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      tableRowData.opportunities = chance.natural({min: 1});
+      componentInstance.tableRowData = tableRowData;
       const opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
       expect(opportunityCountClass).toEqual({'opportunities': true , 'opportunities-error': false});
     });
 
     it('should return "opportunities" class when it is brand level and opportunity count is 0', () => {
-      const rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      rowData.opportunities = 0;
-      componentInstance.rowData = rowData;
+      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      tableRowData.opportunities = 0;
+      componentInstance.tableRowData = tableRowData;
       componentInstance.viewType = ProductMetricsViewType.brands;
       const opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
       expect(opportunityCountClass).toEqual({'opportunities': true , 'opportunities-error': false});
     });
 
     it('should return "opportunities-error" class when it is sku level there is opportunity error', () => {
-      const rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      rowData.opportunities = undefined;
-      componentInstance.rowData = rowData;
+      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      tableRowData.opportunities = undefined;
+      componentInstance.tableRowData = tableRowData;
       componentInstance.isOpportunitiesError = true;
       componentInstance.viewType = ProductMetricsViewType.skus;
       const opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
@@ -159,9 +160,9 @@ describe('MyPerformanceTableComponent', () => {
     });
 
     it('should return "opportunities-error" class when it is brand level there is opportunity error', () => {
-      const rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      rowData.opportunities = undefined;
-      componentInstance.rowData = rowData;
+      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      tableRowData.opportunities = undefined;
+      componentInstance.tableRowData = tableRowData;
       componentInstance.isOpportunitiesError = true;
       componentInstance.viewType = ProductMetricsViewType.brands;
       const opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
@@ -180,9 +181,9 @@ describe('MyPerformanceTableComponent', () => {
   describe('onOpportunityCountClicked', () => {
 
     beforeEach(() => {
-      let rowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-      rowData.descriptionRow0 = 'STANDARD BEV CORP';
-      componentInstance.rowData = rowData;
+      let tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+      tableRowData.descriptionRow0 = 'STANDARD BEV CORP';
+      componentInstance.tableRowData = tableRowData;
     });
 
     it('should not stop event propagation when an opportunity count is clicked when it is on brands level', () => {
@@ -233,7 +234,7 @@ describe('MyPerformanceTableComponent', () => {
 
   describe('showEmptyLastColumn Input', () => {
     beforeEach(() => {
-      componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.tableRowData = getMyPerformanceTableRowMock(1)[0];
     });
 
     it('should contain a .right-col td element with no content when showEmptyLastColumn is true', () => {
@@ -258,7 +259,7 @@ describe('MyPerformanceTableComponent', () => {
 
   describe('when getOpportunityCountText is called', () => {
     beforeEach(() => {
-      componentInstance.rowData = getMyPerformanceTableRowMock(1)[0];
+      componentInstance.tableRowData = getMyPerformanceTableRowMock(1)[0];
     });
 
     it('should return "-" when opportunitiesError is true', () => {
@@ -272,7 +273,7 @@ describe('MyPerformanceTableComponent', () => {
     });
 
     it('should return correct opportunity count when opportunitiesError is false and count has value', () => {
-      componentInstance.rowData.opportunities = 10;
+      componentInstance.tableRowData.opportunities = 10;
       componentInstance.opportunitiesError = false;
       expect(componentInstance.opportunityCountText).toEqual('10');
     });
