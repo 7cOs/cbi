@@ -1,4 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { isUndefined } from 'lodash';
 
 import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
@@ -59,12 +60,17 @@ export class MyPerformanceTableRowComponent {
   }
 
   public getOpportunityCountClass(): CssClasses {
-    if (this.tableRowData.opportunities) {
-      return {
-        ['opportunities']: (this.tableRowData.opportunities > 0) || (this.isBrands && this.tableRowData.opportunities === 0),
-        ['opportunities-error']: this.isOpportunitiesError
-      };
-    }
+    let opportunitiesClass: boolean;
+
+    if (this.tableRowData && !isUndefined(this.tableRowData.opportunities)) {
+      opportunitiesClass = (this.tableRowData.opportunities > 0) || (this.isBrands && this.tableRowData.opportunities === 0);
+    } else
+      opportunitiesClass = false;
+
+    return {
+      ['opportunities']: opportunitiesClass,
+      ['opportunities-error']: this.isOpportunitiesError
+    };
   }
 
   public getRolegroupIconClass(): CssClasses {

@@ -45,7 +45,7 @@ describe('MyPerformanceTableComponent', () => {
 
     describe('when viewtype is rolegroups', () => {
       describe('when descriptionRow0 is GEOGRAPHY', () => {
-        fit('should return the geography-group CSS class', () => {
+        it('should return the geography-group CSS class', () => {
           let tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
           tableRowData.descriptionRow0 = 'GEOGRAPHY';
 
