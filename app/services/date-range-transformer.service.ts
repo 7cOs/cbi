@@ -44,7 +44,7 @@ export class DateRangeTransformerService {
       range: `${this.formatDate(dateRangeDTO.startDate)} - ${this.formatDate(dateRangeDTO.endDate)}`
     };
 
-    if (dateRangeDTO.extendedName) {
+    if (dateRange && dateRangeDTO.extendedName) {
       dateRange.quarterDateLabel = `(${ dateRangeDTO.extendedName.replace(' ', `'`) })`;
       dateRange.displayCodeQuarterDate = `${ dateRange.displayCode } ${ dateRange.quarterDateLabel }`;
     }
