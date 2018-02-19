@@ -279,7 +279,8 @@ module.exports = /*  @ngInject */
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
               } else if (key2 === 'masterSKU') {
-                queryParams += obj[key2][k].slice(0, obj[key2][k].search('@'));
+                var index = obj[key2][k].search('@');
+                index === -1 ? queryParams += obj[key2][k] : queryParams += obj[key2][k].slice(0, index);
               } else {
                 queryParams += obj[key2][k];
               }
