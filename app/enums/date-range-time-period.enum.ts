@@ -29,5 +29,6 @@ export enum DateRangeTimePeriodValue {
   L120BDL = 'L120BDL',
   L3CM = 'L3CM',
   LCM = 'LCM',
-  CMIPBDL = 'CMIPBDL'
+  CMIPBDL = 'CMIPBDL',
+  asd = 'asd'
 }
