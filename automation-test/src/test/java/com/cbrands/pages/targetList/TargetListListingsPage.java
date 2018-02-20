@@ -57,14 +57,9 @@ public class TargetListListingsPage extends TestNGBasePage {
     return this;
   }
 
-  public TargetListListingsPage clickCreateNewListButton() {
+  public TargetListSwitchModal clickCreateNewListButton() {
     waitForVisibleFluentWait(createNewListButton).click();
-    return this;
-  }
-
-  public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
-    waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
-    return PageFactory.initElements(driver, EditTargetListModal.class);
+    return new TargetListSwitchModal();
   }
 
   public boolean doesTargetListExist(String listname) {
@@ -122,4 +117,10 @@ public class TargetListListingsPage extends TestNGBasePage {
     return targetListElement;
   }
 
+  public class TargetListSwitchModal {
+    public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
+      waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
+      return PageFactory.initElements(driver, EditTargetListModal.class);
+    }
+  }
 }
