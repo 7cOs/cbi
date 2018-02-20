@@ -6,22 +6,22 @@ td.left-col(colspan=1)
 
     div.left-col-text-content
       div.description-line-0
-        span {{rowData.descriptionRow0}}
-      div.description-line-1(*ngIf="rowData.descriptionRow1",
+        span {{tableRowData.descriptionRow0}}
+      div.description-line-1(*ngIf="tableRowData.descriptionRow1",
                             [ngClass]="getSublineClass()",
                             (click)="sublineClicked($event)")
-        span.description-line-1 {{rowData.descriptionRow1}}
+        span.description-line-1 {{tableRowData.descriptionRow1}}
 
-td.center-col(colspan=1) {{rowData.metricColumn0 | number}}
+td.center-col(colspan=1) {{tableRowData.metricColumn0 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn1 | number}}
+  span([ngClass]="getTrendClass(tableRowData.metricColumn1)") {{tableRowData.metricColumn1 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn2 | number:'1.1-1'}}%
+  span([ngClass]="getTrendClass(tableRowData.metricColumn1)") {{tableRowData.metricColumn2 | number:'1.1-1'}}%
 td.right-col(*ngIf="showContributionToVolume", colspan=1)
-  span.ctv {{rowData.ctv | number:'1.1-1'}}%
+  span.ctv {{tableRowData.ctv | number:'1.1-1'}}%
 td.right-col(
   *ngIf="showOpportunities", colspan=1,
-  [ngClass]="getOpportunityCountClass()",
+  [ngClass]="opportunityCountClass",
   (click)="opportunityCountClicked($event)") {{(opportunityCountText === '-' || opportunityCountText === 'View') ? opportunityCountText : opportunityCountText | number}}
 
 //- Temporary td column to act as an empty filler until a Simple Opportunities column is implemented
