@@ -2,7 +2,7 @@
 const DateRangeTimePeriod = require('../../enums/date-range-time-period.enum').DateRangeTimePeriod;
 
 module.exports = /*  @ngInject */
-  function landingController($rootScope, $state, $filter, $mdSelect, $window, filtersService, chipsService, myperformanceService, userService, title) {
+  function landingController($rootScope, $state, $filter, $mdSelect, $window, filtersService, chipsService, myperformanceService, userService, title, $timeout) {
 
     // ****************
     // CONTROLLER SETUP
@@ -80,9 +80,11 @@ module.exports = /*  @ngInject */
       filtersService.model.currentFilter.ev = ev;
       filtersService.model.selected.currentFilter = filter.id;
 
-      $state.go('opportunities', {
-        resetFiltersOnLoad: false
-      });
+      $timeout(() => {
+        $state.go('opportunities', {
+          resetFiltersOnLoad: false
+        });
+      }, 500);
     }
 
     function selectPremiseType(data) {
