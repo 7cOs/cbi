@@ -104,10 +104,10 @@ describe('My Performance Filter Component', () => {
       timePeriodSelect.onOptionSelected.emit(DateRangeTimePeriodValue.CYTDBDL);
     });
 
-    fit('should emit empty string outputed by time period select dropdown child component when time period is not defined', () => {
+    it('should emit empty string outputed by time period select dropdown child component when time period is not defined', () => {
       const errorStateMock: MyPerformanceFilterState = {
         metricType: MetricTypeValue.Depletions,
-        dateRangeCode: DateRangeTimePeriodValue.asd,
+        dateRangeCode: chance.string() as DateRangeTimePeriodValue,
         premiseType: PremiseTypeValue.All,
         distributionType: DistributionTypeValue.Simple
       };
