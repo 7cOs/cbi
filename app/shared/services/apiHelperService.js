@@ -280,7 +280,7 @@ module.exports = /*  @ngInject */
                 }
               } else if (key2 === 'masterSKU') {
                 let index = obj[key2][k].search('@');
-                index === -1 ? queryParams += obj[key2][k] : queryParams += obj[key2][k].slice(0, index);
+                queryParams += index === -1 ? obj[key2][k] : obj[key2][k].slice(0, index);
               } else {
                 queryParams += obj[key2][k];
               }
