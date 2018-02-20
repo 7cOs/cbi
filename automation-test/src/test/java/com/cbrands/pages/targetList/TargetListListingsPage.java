@@ -114,6 +114,11 @@ public class TargetListListingsPage extends TestNGBasePage {
   }
 
   public class TargetListSwitchModal {
+    public TargetListSwitchModal waitForListCreationChoiceModal() {
+      waitForVisible(By.xpath("//div[@class='modal target-list-switch-modal']"));
+      return this;
+    }
+
     public EditTargetListModal chooseCreateNewList() {
       final List<WebElement> listCreationChoiceButtons = findElements(By.cssSelector(
         "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"));
