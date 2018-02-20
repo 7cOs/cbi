@@ -984,11 +984,14 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       initDefaultModelValues();
       initDateRanges();
 
+      const unversionedStoreID = $state.params.storeid;
+      const premiseType = $state.params.premiseType;
+
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
-      const isNavigatedFromOpps = $state.params.storeid;
       const isNavigatedFromMyPerformanceDistributorRow = $state.params.distributorid;
       const isNavigatedFromMyPerformanceSubaccountRow = $state.params.subaccountid;
       const isSettingNotes = $state.params.openNotesOnLoad;
+      const isNavigatedFromOpps = !!unversionedStoreID;
 
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
         chipsService.resetChipsFilters(chipsService.model);
@@ -1012,7 +1015,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       }
 
       if (!isNavigatedFromMyPerformanceSubaccountRow && !isNavigatedFromScorecard) {
-        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
+        getBrandsAndTopbottomDataOnInit(unversionedStoreID || isSettingNotes, premiseType);
       }
 
       if (isSettingNotes) {
@@ -1058,7 +1061,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     function setDataForNavigationFromOpps() {
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-      var storeData = {id: $state.params.storeid};
+      const storeData = {id: $state.params.versionedStoreID};
       vm.currentTopBottomFilters.stores = storeData;
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
@@ -1130,9 +1133,9 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
-    function getBrandsAndTopbottomDataOnInit(isNavigatedToNextLevel) {
-      var params = getUpdatedFilterQueryParamsForBrand();
-      var promiseArr = [];
+    function getBrandsAndTopbottomDataOnInit(unversionedStoreID, premiseType) {
+      let params = getUpdatedFilterQueryParamsForBrand();
+      let promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
       params.type = 'brandSnapshot';
@@ -1140,8 +1143,11 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
       vm.loadingUnsoldStore = true;
       promiseArr.push(userService.getPerformanceBrand(params));
 
-      const id = vm.currentTopBottomFilters.stores.id;
-      if (id) promiseArr.push(storesService.getStores(id));
+      if (vm.currentTopBottomFilters.stores.id) {
+        promiseArr.push(storesService.getStores(unversionedStoreID));
+        vm.premiseTypeValue = premiseType;
+        vm.filtersService.model.selected.premiseType = premiseType;
+      }
 
       $q.all(promiseArr).then(function(data) {
         const performanceData = data[0];
@@ -1165,7 +1171,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
             }
           });
 
-          if (isNavigatedToNextLevel) {
+          if (unversionedStoreID) {
             var topBottomFilterForCurrentLevel = vm.currentTopBottomFilters[vm.currentTopBottomObj.currentLevelName];
             navigateTopBottomLevels(topBottomFilterForCurrentLevel);
           }
@@ -1173,8 +1179,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
 
         if (storeData && storeData.account) {
           setFilter(storeData, 'store');
-          vm.premiseTypeValue = storeData.premiseTypeDesc;
-          vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
         }
 
         vm.loadingUnsoldStore = false;
