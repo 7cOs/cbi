@@ -51,56 +51,73 @@ module.exports = function (config) {
   config.auth = {
     strategy: 'no-auth',
     user: {
-      'personId': 5579,
-      'positionId': '4903',
-      'buPositionId': '0',
-      'employeeID': '1002705',
-      'firstName': 'JOHN',
-      'lastName': 'UTTER',
-      'email': 'JOHN.UTTER@CBRANDS.COM',
-      'srcTypeCd': [
-        'SALES_HIER'
+      "personId": 5608,
+      "employeeID": "1009609",
+      "firstName": "STASH",
+      "lastName": "ROWLEY",
+      "email": "STASH.ROWLEY@CBRANDS.COM",
+      "expiresAt": {
+          "era": 1,
+          "dayOfYear": 110,
+          "dayOfWeek": 5,
+          "dayOfMonth": 20,
+          "year": 2018,
+          "millisOfDay": 56336477,
+          "secondOfMinute": 56,
+          "secondOfDay": 56336,
+          "minuteOfHour": 38,
+          "minuteOfDay": 938,
+          "hourOfDay": 15,
+          "centuryOfEra": 20,
+          "yearOfEra": 2018,
+          "yearOfCentury": 18,
+          "weekyear": 2018,
+          "monthOfYear": 4,
+          "weekOfWeekyear": 16,
+          "millisOfSecond": 477,
+          "chronology": {
+              "zone": {
+                  "fixed": true,
+                  "id": "Etc/UTC"
+              }
+          },
+          "zone": {
+              "fixed": true,
+              "id": "Etc/UTC"
+          },
+          "millis": 1524238736477,
+          "beforeNow": false,
+          "equalNow": false,
+          "afterNow": true
+      },
+      "srcTypeCd": [
+          "SALES_HIER"
       ],
-      'corporateUser': false,
-      'userGroup': [
-        'cbi-role-iq-app-users',
-        'ug-cbigdc-role-abpanaplancorporateview',
-        'cbi employees',
-        'ug-cbigdc-biz-role-busunitvp',
-        'ug-cbigdc-triana-role-ecrownappuser',
-        'cbi users',
-        'cbi-adenabledaccounts',
-        'ug-cbigdc-role-ecrownappusercimemployeeview'
-      ],
-      'issuer': 'https://orion.cbrands.com',
-      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IlVUVEVSIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiIxMDAyNzA1IiwiZmlyc3ROYW1lIjoiSk9ITiIsImNvcnBvcmF0ZVVzZXIiOmZhbHNlLCJwb3NpdGlvbklkIjoiNDkwMyIsInBlcnNvbklEIjo1NTc5LCJleHAiOjE1MTk1NzMxMTkwMDgsImlhdCI6MTUxNDM4OTExOTAwOCwidXNlckdyb3VwIjpbXSwiZW1haWwiOiJKT0hOLlVUVEVSQENCUkFORFMuQ09NIiwic3JjVHlwZUNkIjpbIlNBTEVTX0hJRVIiXSwiYnVQb3NpdGlvbklkIjoiMCJ9.GvkyFHlee9lVIoFCzIfpQ5zZOlFOWscAry4N_NU-DPE',
-      'jwtmap': {
-        'firstName': 'JOHN',
-        'lastName': 'UTTER',
-        'corporateUser': false,
-        'iss': 'https://orion.cbrands.com',
-        'personId': 5579,
-        'positionId': '4903',
-        'buPositionId': '0',
-        'employeeID': '1002705',
-        'exp': 1509132101428,
-        'iat': 1503948101433,
-        'userGroup': [
-          'cbi-role-iq-app-users',
-          'ug-cbigdc-role-abpanaplancorporateview',
-          'cbi employees',
-          'ug-cbigdc-biz-role-busunitvp',
-          'ug-cbigdc-triana-role-ecrownappuser',
-          'cbi users',
-          'cbi-adenabledaccounts',
-          'ug-cbigdc-role-ecrownappusercimemployeeview'
-        ],
-        'email': 'JOHN.UTTER@CBRANDS.COM',
-        'srcTypeCd': [
-          'SALES_HIER'
-        ]
+      "positionId": "4503",
+      "buPositionId": "0",
+      "corporateUser": false,
+      "userGroup": [],
+      "issuer": "https://orion.cbrands.com",
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IlJPV0xFWSIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwOTYwOSIsImZpcnN0TmFtZSI6IlNUQVNIIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBvc2l0aW9uSWQiOiI0NTAzIiwicGVyc29uSUQiOjU2MDgsImV4cCI6MTUyNDIzODczNjQ3NywiaWF0IjoxNTE5MDU0NzM2NDc3LCJ1c2VyR3JvdXAiOltdLCJlbWFpbCI6IlNUQVNILlJPV0xFWUBDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJTQUxFU19ISUVSIl0sImJ1UG9zaXRpb25JZCI6IjAifQ.vN-dRwM5ikrPeSXEtdQSlOAHUZksBJsmrxWm1dA-TEM",
+      "issuedAt": 1519054736479,
+      "jwtmap": {
+          "lastName": "ROWLEY",
+          "iss": "https://orion.cbrands.com",
+          "employeeID": "1009609",
+          "firstName": "STASH",
+          "corporateUser": false,
+          "positionId": "4503",
+          "personID": 5608,
+          "exp": 1524238736477,
+          "iat": 1519054736479,
+          "userGroup": [],
+          "email": "STASH.ROWLEY@CBRANDS.COM",
+          "srcTypeCd": [
+              "SALES_HIER"
+          ],
+          "buPositionId": "0"
       }
-    }
+  }
   };
 
   // directories
