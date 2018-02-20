@@ -85,7 +85,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   public TargetListDetailPage clickTargetListByName(String listName) {
     WebElement targetListElement = getTargetListByName(listName);
 
-    if(null != targetListElement) {
+    if (null != targetListElement) {
       targetListElement.click();
     } else {
       log.info("Cannot click Target List. No target list found by the following name: " + listName);
@@ -97,7 +97,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   public TargetListListingsPage selectTargetListByName(String listName) {
     final WebElement targetList = getTargetListByName(listName);
 
-    if(null != targetList) {
+    if (null != targetList) {
       final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox/div[1]"));
       targetListCheckBox.click();
     } else {
