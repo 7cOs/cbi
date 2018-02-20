@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
@@ -29,9 +28,6 @@ public class TargetListListingsPage extends TestNGBasePage {
 
   @FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
   private WebElement createNewListButton;
-
-  @FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
-  private List<WebElement> listCreationChoiceModalButtons;
 
   @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
   private List<WebElement> targetListElements;
@@ -119,7 +115,9 @@ public class TargetListListingsPage extends TestNGBasePage {
 
   public class TargetListSwitchModal {
     public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
-      waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
+      final List<WebElement> listCreationChoiceButtons = findElements(By.cssSelector(
+        "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"));
+      waitForVisibleFluentWait(listCreationChoiceButtons.get(0)).click();
       return PageFactory.initElements(driver, EditTargetListModal.class);
     }
   }
