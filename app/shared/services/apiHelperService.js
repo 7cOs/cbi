@@ -233,7 +233,7 @@ module.exports = /*  @ngInject */
 
       for (var key2 in obj) {
         var somethingAdded = false;
-        if (obj[key2].constructor === Array && obj[key2].length > 0) {
+        if (obj[key2] && obj[key2].constructor === Array && obj[key2].length > 0) {
           if (key2 === 'cbbdChain') { // Both selected and None, leave blank
             if (obj[key2].length === 1 && obj[key2][0] === 'Independent') {
               queryParams += 'cbbdChain:false';
