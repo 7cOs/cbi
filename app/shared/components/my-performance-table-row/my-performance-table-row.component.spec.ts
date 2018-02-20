@@ -131,8 +131,13 @@ describe('MyPerformanceTableComponent', () => {
   });
 
   describe('getOpportunityCountClass', () => {
+
+    let tableRowData: MyPerformanceTableRow;
+    beforeEach(() => {
+      tableRowData = getMyPerformanceTableRowMock(1)[0];
+    });
+
     it('should return "opportunities" class when opportunity count is greater than 0 for either brand or sku', () => {
-      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
       tableRowData.opportunities = chance.natural({min: 1});
       componentInstance.tableRowData = tableRowData;
       const opportunityCountClass: CssClasses = componentInstance.getOpportunityCountClass();
@@ -140,7 +145,6 @@ describe('MyPerformanceTableComponent', () => {
     });
 
     it('should return "opportunities" class when it is brand level and opportunity count is 0', () => {
-      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
       tableRowData.opportunities = 0;
       componentInstance.tableRowData = tableRowData;
       componentInstance.viewType = ProductMetricsViewType.brands;
@@ -149,7 +153,6 @@ describe('MyPerformanceTableComponent', () => {
     });
 
     it('should return "opportunities-error" class when it is sku level there is opportunity error', () => {
-      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
       tableRowData.opportunities = undefined;
       componentInstance.tableRowData = tableRowData;
       componentInstance.isOpportunitiesError = true;
@@ -159,7 +162,6 @@ describe('MyPerformanceTableComponent', () => {
     });
 
     it('should return "opportunities-error" class when it is brand level there is opportunity error', () => {
-      const tableRowData: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
       tableRowData.opportunities = undefined;
       componentInstance.tableRowData = tableRowData;
       componentInstance.isOpportunitiesError = true;
