@@ -11,6 +11,7 @@ export class CompassCardComponent {
 
   @Output() onMainActionClicked = new EventEmitter<any>();
 
+  @Input() img: string;
   @Input() analyticsProperties?: {label: string, category: string};
   @Input() title: string;
   @Input() mainAction: string;

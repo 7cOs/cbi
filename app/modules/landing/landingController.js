@@ -29,6 +29,7 @@ module.exports = /*  @ngInject */
     vm.goToSavedFilter = goToSavedFilter;
     vm.selectPremiseType = selectPremiseType;
     vm.openViewJobAides = openViewJobAides;
+    vm.openWebPage = openWebPage;
 
     // Set values
     vm.greetingName = userService.model.currentUser.firstName;
@@ -107,6 +108,10 @@ module.exports = /*  @ngInject */
 
     function openViewJobAides() {
       $window.open('https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx?', '_blank');
+    }
+
+    function openWebPage() {
+      $window.open('https://constel1.sharepoint.com/sites/goldnetwork/SitePages/General%20Information.aspx?RootFolder=%2Fsites%2Fgoldnetwork%2FGeneral%20Information%20Documents%2FCorona%20Premier%20Fast%20Start&FolderCTID=0x0120009A7F0B58AFC54C4F9822FBDA90FBAB61&View=%7BC8268790-72D5-453C-B2FB-27A6DFC93F7C%7D', '_blank');
     }
 
     // ***************
