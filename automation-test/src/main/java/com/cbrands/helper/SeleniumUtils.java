@@ -432,9 +432,11 @@ public class SeleniumUtils {
    * @param by the element handle
    */
   public static void waitForElementToDisappear(By by) {
-    try {
-      waitForElementStalenessFluentWait(findElement(by));
-    } catch (NoSuchElementException e) {
+    try{
+      final WebElement element = findElement(by);
+      waitForCondition(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)), DEFAULT_WAIT_TIME);
+      waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
+    } catch (NoSuchElementException | StaleElementReferenceException e) {
       // Success. Element not present.
     }
   }
