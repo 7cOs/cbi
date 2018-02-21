@@ -74,8 +74,14 @@
       }
     }
 
-    &.tooltip {
-      float: left;
+    span.tooltip {
+      display: inline-block;
+      padding: 1px;
+      margin-left: 2px;
+
+      .compass-tooltip {
+        padding: 0px;
+      }
     }
   }
 
