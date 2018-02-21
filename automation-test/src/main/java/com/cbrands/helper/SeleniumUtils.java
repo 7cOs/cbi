@@ -512,6 +512,17 @@ public class SeleniumUtils {
 		return element;
 	}
 
+  /**
+	 * Wait for element attribute to contain a value.
+	 *
+	 * @param element the element
+	 * @return the web element
+	 */
+	public static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
+    waitForCondition(ExpectedConditions.attributeContains(element, attribute, expectedValue), DEFAULT_WAIT_TIME);
+		return element;
+	}
+
 	/**
 	 * Wait for value present.
 	 *
