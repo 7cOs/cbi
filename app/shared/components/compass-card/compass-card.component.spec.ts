@@ -34,7 +34,7 @@ describe('Compass Card Component', () => {
     it('should pass input data to its template', () => {
       const inputMock = {
         analyticsProperties: {label: 'mockLabel', category: 'mockCategory'},
-        image: 'product',
+        image: chance.string(),
         title: chance.string(),
         mainAction: chance.string()
       };
