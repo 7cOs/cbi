@@ -32,32 +32,26 @@ describe('Compass Card Component', () => {
 
   describe('component inputs', () => {
     it('should pass input data to its template', () => {
-      const mockInputs = {
+      const inputMock = {
         analyticsProperties: {label: 'mockLabel', category: 'mockCategory'},
+        image: 'product',
         title: chance.string(),
-        mainAction: chance.string(),
-        iconVisible: true
+        mainAction: chance.string()
       };
 
-      componentInstance.analyticsProperties = mockInputs.analyticsProperties;
-      componentInstance.title = mockInputs.title;
-      componentInstance.mainAction = mockInputs.mainAction;
-      componentInstance.iconVisible = mockInputs.iconVisible;
+      componentInstance.analyticsProperties = inputMock.analyticsProperties;
+      componentInstance.title = inputMock.title;
+      componentInstance.mainAction = inputMock.mainAction;
+      componentInstance.image = inputMock.image;
       fixture.detectChanges();
 
-      const titleElement = fixture.debugElement.query(By.css('mat-card-title h3')).nativeElement;
-      const iconClassElement = fixture.debugElement.query(By.css('.icon')).nativeElement;
+      const titleElement = fixture.debugElement.query(By.css('mat-card-title')).nativeElement;
       const mainActionElement = fixture.debugElement.queryAll(By.css('mat-card-actions div'))[0].nativeElement;
 
-      expect(titleElement.textContent).toBe(mockInputs.title);
-      expect(iconClassElement.nodeName).toBe('H3');
-      expect(mainActionElement.textContent).toBe(mockInputs.mainAction.toUpperCase());
+      expect(titleElement.textContent).toBe(inputMock.title);
+      expect(mainActionElement.textContent).toBe(inputMock.mainAction.toUpperCase());
 
-      componentInstance.iconVisible = !mockInputs.iconVisible;
       fixture.detectChanges();
-
-      const iconClassElementHidden = fixture.debugElement.query(By.css('.icon'));
-      expect(iconClassElementHidden).toBe(null);
     });
   });
 
