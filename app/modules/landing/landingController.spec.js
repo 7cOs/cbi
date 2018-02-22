@@ -1,3 +1,7 @@
+import * as Chance from 'chance';
+
+const chance = new Chance();
+
 describe('Unit: landingController', function() {
   var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q, title, $timeout, $httpBackend;
 
@@ -293,32 +297,38 @@ describe('Unit: landingController', function() {
     });
 
     describe('[landing.goToSavedFilter]', () => {
+      let idPayloadMock;
+
       beforeEach(() => {
         spyOn($state, 'go').and.callFake(() => {
           const deferredState = $q.defer();
           return deferredState.promise;
         });
+
+        idPayloadMock = chance.string();
       });
 
       it('should exist', () => {
         expect(typeof ctrl.goToSavedFilter).toEqual('function');
       });
 
-      it('should call $state.go', () => {
-        ctrl.goToSavedFilter({}, { id: 23423 });
+      it('should set savedReportsOpen to false and state change to the opportunities page with no reset on page load', () => {
+        ctrl.savedReportsOpen = false;
+        ctrl.goToSavedFilter({}, { id: idPayloadMock });
 
         $httpBackend.expectGET(/.*performance\/summary/).respond([]);
         $httpBackend.expectGET(/.*opportunityFilters\//).respond([]);
         $timeout.flush();
 
-        expect($state.go).toHaveBeenCalled();
+        expect(ctrl.savedReportsOpen).toBeFalsy();
+        expect($state.go).toHaveBeenCalledWith('opportunities', { resetFiltersOnLoad: false });
       });
 
       it('should set filter data', () => {
-        ctrl.goToSavedFilter({event: 'mouse'}, {id: 23423});
+        ctrl.goToSavedFilter({ event: 'mouse' }, { id: idPayloadMock });
 
-        expect(filtersService.model.currentFilter).toEqual({id: 23423, ev: { event: 'mouse' }});
-        expect(filtersService.model.selected.currentFilter).toEqual(23423);
+        expect(filtersService.model.currentFilter).toEqual({id: idPayloadMock, ev: { event: 'mouse' }});
+        expect(filtersService.model.selected.currentFilter).toEqual(idPayloadMock);
       });
     });
   });

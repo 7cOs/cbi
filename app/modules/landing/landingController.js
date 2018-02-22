@@ -9,7 +9,8 @@ module.exports = /*  @ngInject */
     // ****************
 
     // Initial variables
-    var vm = this;
+    const vm = this;
+    const goToSavedFilterTimeoutLength = 500;
 
     // Set page title for head and nav
     title.setTitle($state.current.title);
@@ -34,6 +35,7 @@ module.exports = /*  @ngInject */
     vm.greetingName = userService.model.currentUser.firstName;
     vm.fytdDateRange = DateRangeTimePeriod.FYTDBDL;
     vm.l90DateRange = DateRangeTimePeriod.L90BDL;
+    vm.savedReportsOpen = false;
 
     init();
 
@@ -76,6 +78,7 @@ module.exports = /*  @ngInject */
     }
 
     function goToSavedFilter(ev, filter) {
+      vm.savedReportsOpen = false;
       filtersService.model.currentFilter = filter;
       filtersService.model.currentFilter.ev = ev;
       filtersService.model.selected.currentFilter = filter.id;
@@ -84,7 +87,7 @@ module.exports = /*  @ngInject */
         $state.go('opportunities', {
           resetFiltersOnLoad: false
         });
-      }, 500);
+      }, goToSavedFilterTimeoutLength);
     }
 
     function selectPremiseType(data) {
