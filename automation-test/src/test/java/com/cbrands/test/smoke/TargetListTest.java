@@ -36,7 +36,8 @@ public class TargetListTest extends BaseTestCase {
   public void createTargetList(String targetListName, String targetListDescription) throws InterruptedException {
     targetListListingPage
       .clickCreateNewListButton()
-      .chooseCreateNewListInListCreationChoiceModal()
+      .waitForListCreationChoiceModal()
+      .chooseCreateNewList()
       .enterListName(targetListName)
       .enterDescription(targetListDescription)
       .clickSaveButton();
