@@ -36,7 +36,7 @@ deployment:
     branch: test
     commands:
       - bash scripts/ci-deploy-to-heroku.sh app-orion-qa.git
-      - bash scripts/ci-run-automation-tests.sh $runTestSuite $runTestSuiteEnvt:
+      - cd automation-test && bash ../scripts/ci-run-automation-tests.sh $runTestSuite $runTestSuiteEnvt:
           timeout: 1200
 
   ga-automation:

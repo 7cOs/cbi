@@ -6,8 +6,6 @@ TEST_SUITE=${1:-smoke-test}
 # default to qa envt
 TEST_SUITE_ENVT=${2:-qa}
 
-cd automation-test
-
 echo INSTALLING MAVEN DEPENDENCIES FOR AT SUITE RUN
 mvn install -DskipTests=true
 
