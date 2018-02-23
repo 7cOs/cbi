@@ -513,11 +513,12 @@ public class SeleniumUtils {
 	}
 
   /**
-	 * Wait for element attribute to contain a value.
-	 *
-	 * @param element the element
-	 * @return the web element
-	 */
+   * Wait for a given element's attribute to contain a value
+   * @param element the element to inspect
+   * @param attribute the name of the attribute to inspect
+   * @param expectedValue the value the attribute should contain
+   * @return
+   */
 	public static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
     waitForCondition(ExpectedConditions.attributeContains(element, attribute, expectedValue), DEFAULT_WAIT_TIME);
 		return element;
