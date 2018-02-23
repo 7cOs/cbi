@@ -1,5 +1,9 @@
+import * as Chance from 'chance';
+
+const chance = new Chance();
+
 describe('Unit: landingController', function() {
-  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q, title;
+  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q, title, $timeout, $httpBackend;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -16,7 +20,9 @@ describe('Unit: landingController', function() {
       $provide.value('title', title);
     });
 
-    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_, _$state_, _$q_) {
+    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_, _$state_,
+      _$q_, _$timeout_, _$httpBackend_) {
+
       // Create scope
       scope = $rootScope.$new();
 
@@ -27,6 +33,8 @@ describe('Unit: landingController', function() {
       userService = _userService_;
       $state = _$state_;
       $q = _$q_;
+      $timeout = _$timeout_;
+      $httpBackend = _$httpBackend_;
 
       // Create Controller
       ctrl = $controller('landingController', {$scope: scope});
@@ -271,6 +279,7 @@ describe('Unit: landingController', function() {
         expect(resultOffPremise.distribution).toEqual('offPremise');
       });
     });
+
     describe('[landing.findOpportunities]', function() {
       it('should exist', function() {
         expect(typeof ctrl.findOpportunities).toEqual('function');
@@ -286,28 +295,40 @@ describe('Unit: landingController', function() {
 
       });
     });
-    describe('[landing.goToSavedFilter]', function() {
-      beforeEach(function() {
-        var deferredState = $q.defer();
-        spyOn($state, 'go').and.callFake(function() {
+
+    describe('[landing.goToSavedFilter]', () => {
+      let idPayloadMock;
+
+      beforeEach(() => {
+        spyOn($state, 'go').and.callFake(() => {
+          const deferredState = $q.defer();
           return deferredState.promise;
         });
+
+        idPayloadMock = chance.string();
       });
-      it('should exist', function() {
+
+      it('should exist', () => {
         expect(typeof ctrl.goToSavedFilter).toEqual('function');
       });
 
-      it('should call $state.go', function() {
-        ctrl.goToSavedFilter({}, {id: 23423});
-        expect($state.go).toHaveBeenCalled();
+      it('should set savedReportsOpen to false and state change to the opportunities page with no reset on page load', () => {
+        ctrl.savedReportsOpen = false;
+        ctrl.goToSavedFilter({}, { id: idPayloadMock });
 
+        $httpBackend.expectGET(/.*performance\/summary/).respond([]);
+        $httpBackend.expectGET(/.*opportunityFilters\//).respond([]);
+        $timeout.flush();
+
+        expect(ctrl.savedReportsOpen).toBeFalsy();
+        expect($state.go).toHaveBeenCalledWith('opportunities', { resetFiltersOnLoad: false });
       });
-      it('should set filter data', function() {
-        ctrl.goToSavedFilter({event: 'mouse'}, {id: 23423});
 
-        expect(filtersService.model.currentFilter).toEqual({id: 23423, ev: { event: 'mouse' }});
-        expect(filtersService.model.selected.currentFilter).toEqual(23423);
+      it('should set filter data', () => {
+        ctrl.goToSavedFilter({ event: 'mouse' }, { id: idPayloadMock });
 
+        expect(filtersService.model.currentFilter).toEqual({id: idPayloadMock, ev: { event: 'mouse' }});
+        expect(filtersService.model.selected.currentFilter).toEqual(idPayloadMock);
       });
     });
   });
