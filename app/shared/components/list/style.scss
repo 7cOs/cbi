@@ -180,6 +180,10 @@ list {
     font-size: 1em;
     margin-left: 3px;
   }
+
+  .opportunities-selected {
+    visibility: hidden;
+  }
 }
 
 .more-wrapper {
@@ -668,6 +672,6 @@ list {
   font-size: 10px;
 }
 
-.download-button {
+.action-button-spacing {
   margin-left: 8px;
 }
