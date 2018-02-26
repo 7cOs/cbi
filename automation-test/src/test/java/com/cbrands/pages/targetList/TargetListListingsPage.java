@@ -89,8 +89,9 @@ public class TargetListListingsPage extends TestNGBasePage {
     final WebElement targetList = getTargetListByName(listName);
 
     if (null != targetList) {
-      final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox/div[1]"));
+      final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox"));
       targetListCheckBox.click();
+      waitForElementAttributeToContain(targetListCheckBox, "aria-checked", "true");
     } else {
       log.info("Cannot select Target List checkbox. No target list found by the following name: " + listName);
     }
