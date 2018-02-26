@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
@@ -29,9 +28,6 @@ public class TargetListListingsPage extends TestNGBasePage {
 
   @FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
   private WebElement createNewListButton;
-
-  @FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
-  private List<WebElement> listCreationChoiceModalButtons;
 
   @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
   private List<WebElement> targetListElements;
@@ -57,14 +53,9 @@ public class TargetListListingsPage extends TestNGBasePage {
     return this;
   }
 
-  public TargetListListingsPage clickCreateNewListButton() {
+  public TargetListSwitchModal clickCreateNewListButton() {
     waitForVisibleFluentWait(createNewListButton).click();
-    return this;
-  }
-
-  public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
-    waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
-    return PageFactory.initElements(driver, EditTargetListModal.class);
+    return new TargetListSwitchModal();
   }
 
   public boolean doesTargetListExist(String listname) {
@@ -85,7 +76,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   public TargetListDetailPage clickTargetListByName(String listName) {
     WebElement targetListElement = getTargetListByName(listName);
 
-    if(null != targetListElement) {
+    if (null != targetListElement) {
       targetListElement.click();
     } else {
       log.info("Cannot click Target List. No target list found by the following name: " + listName);
@@ -97,9 +88,10 @@ public class TargetListListingsPage extends TestNGBasePage {
   public TargetListListingsPage selectTargetListByName(String listName) {
     final WebElement targetList = getTargetListByName(listName);
 
-    if(null != targetList) {
-      final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox/div[1]"));
+    if (null != targetList) {
+      final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox"));
       targetListCheckBox.click();
+      waitForElementAttributeToContain(targetListCheckBox, "aria-checked", "true");
     } else {
       log.info("Cannot select Target List checkbox. No target list found by the following name: " + listName);
     }
@@ -122,4 +114,17 @@ public class TargetListListingsPage extends TestNGBasePage {
     return targetListElement;
   }
 
+  public class TargetListSwitchModal {
+    public TargetListSwitchModal waitForListCreationChoiceModal() {
+      waitForVisible(By.xpath("//div[@class='modal target-list-switch-modal']"));
+      return this;
+    }
+
+    public EditTargetListModal chooseCreateNewList() {
+      final List<WebElement> listCreationChoiceButtons = findElements(By.cssSelector(
+        "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"));
+      waitForVisibleFluentWait(listCreationChoiceButtons.get(0)).click();
+      return PageFactory.initElements(driver, EditTargetListModal.class);
+    }
+  }
 }
