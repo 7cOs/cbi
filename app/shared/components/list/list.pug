@@ -4,7 +4,7 @@
 .total-opportunities
   h4.opportunities-count(ng-if="!list.opportunitiesService.model.filterApplied || !list.opportunitiesService.model.opportunities.length") 0 opportunities <span>across 0 stores</span>
   h4.opportunities-count(ng-if="list.opportunitiesService.model.filterApplied && list.opportunitiesService.model.opportunities.length") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
-  span.opportunities-selected-count(ng-hide="!list.selected || list.selected.length === 0")
+  span.opportunities-selected-count(ng-Class="{'opportunities-selected': !list.selected.length}")
     ng-pluralize(count="list.selected.length" when="{'1' : '1 opportunity selected', 'other': '{{list.isAllOpportunitiesSelected ? list.filtersService.model.appliedFilter.pagination.totalOpportunities : list.selected.length}} opportunities selected'}")
 
 .action-buttons
@@ -12,8 +12,8 @@
     span(ng-switch-when="true")
       button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showAddToTargetList" ng-disabled="true") Add to Target List
       button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showCopyToTargetList" ng-disabled="true") Copy to Target List
-      button.btn-action(ng-disabled="true") Download
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showRemoveButton" ng-disabled="true" ) Remove
+      button.btn-action.action-button-spacing(ng-disabled="true") Download
+      button.btn-action.action-button-spacing(ng-if="!list.targetListService.model.currentList.archived && list.showRemoveButton" ng-disabled="true" ) Remove
 
     span(ng-switch-when="false")
       md-menu(md-offset="0 45" ng-if="list.showAddToTargetList")
@@ -30,9 +30,9 @@
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index, false)")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
-      button.btn-action.download-button(ng-click="list.downloadModal(product.id, $event)" ng-disabled="list.selected < 1") Download
+      button.btn-action.action-button-spacing(ng-click="list.downloadModal(product.id, $event)" ng-disabled="list.selected < 1") Download
 
-      button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton && !list.targetListService.model.currentList.archived") Remove
+      button.btn-action.action-button-spacing(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton && !list.targetListService.model.currentList.archived") Remove
 
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()" analytics-event-on="click" category="Opportunities" action="Expand Store" label="All") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
