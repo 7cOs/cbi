@@ -50,8 +50,6 @@ describe('Compass Card Component', () => {
 
       expect(titleElement.textContent).toBe(inputMock.title);
       expect(mainActionElement.textContent).toBe(inputMock.mainAction.toUpperCase());
-
-      fixture.detectChanges();
     });
   });
 
