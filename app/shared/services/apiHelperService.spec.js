@@ -72,45 +72,14 @@ describe('[Services.apiHelperService]', function() {
 
     it('it should return opportunities specific formatting when type = opportunities and simple distribution is selected', function() {
       const mockObject = {
+        'masterSKU': '112154',
         'opportunityType': ['At Risk'],
         'premiseType': 'on',
         'simpleDistributionType': true,
         'type': 'opportunities'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&filter=opportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
-
-      const result = APIHelper.request(url, mockObject);
-
-      expect(result).toEqual(resultExpectation);
-    });
-
-    it('should return opportunities with brands when type is opportunities, simple distribution is selected and sku is selected', function() {
-      const mockObject = {
-        'myAccountsOnly': true,
-        'masterSKU': ['80014006@228'],
-        'opportunityType': ['At Risk'],
-        'premiseType': 'on',
-        'simpleDistributionType': true,
-        'type': 'opportunities'
-      };
-      const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&filter=myAccountsOnly%3Atrue%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2Cbrand%3A228';
-
-      const result = APIHelper.request(url, mockObject);
-
-      expect(result).toEqual(resultExpectation);
-    });
-
-    it('should return opportunities with sku when type is opportunities, sku is selected', function() {
-      const mockObject = {
-        'myAccountsOnly': true,
-        'masterSKU': '80014006@228',
-        'premiseType': 'on',
-        'type': 'opportunities'
-      };
-      const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CmasterSKU%3A80014006%40228%2CpremiseType%3Aon';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -158,13 +127,15 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when store format of hispanic is selected', function() {
       const mockObject = {
+        masterSKU: '112154',
         opportunityType: ['At Risk'],
         premiseType: 'on',
+        simpleDistributionType: true,
         type: 'opportunities',
         storeFormat: 'HISPANIC'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&hispanicMarketType=HISPANIC&filter=opportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=HISPANIC&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -173,7 +144,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when store format of general market is selected', function() {
       const mockObject = {
-        masterSKU: ['112154@234'],
+        masterSKU: '112154',
         opportunityType: ['At Risk'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -181,7 +152,7 @@ describe('[Services.apiHelperService]', function() {
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=opportunityType%3AAT_RISK%2CpremiseType%3Aon%2Cbrand%3A234';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -190,7 +161,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when ALL feature types is selected', function() {
       const mockObject = {
-        masterSKU: ['112154@234'],
+        masterSKU: '112154',
         featureType: ['All Types', 'Happy Hour'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -198,7 +169,7 @@ describe('[Services.apiHelperService]', function() {
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=featureType%3AHH%2CpremiseType%3Aon%2Cbrand%3A234';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CfeatureType%3AHH%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -207,7 +178,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when some feature types is selected', function() {
       const mockObject = {
-        masterSKU: ['112154@234'],
+        masterSKU: '112154',
         featureType: ['Happy Hour', 'Beer of the Month'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -215,7 +186,7 @@ describe('[Services.apiHelperService]', function() {
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=featureType%3AHH%7CBE%2CpremiseType%3Aon%2Cbrand%3A234';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CfeatureType%3AHH%7CBE%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -224,7 +195,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when ALL item authorization types is selected', function() {
       const mockObject = {
-        masterSKU: ['112154@234'],
+        masterSKU: '112154',
         itemAuthorizationType: ['All Types', 'Authorized-Select Planogram', 'Authorized-Optional (Sell-In)'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -232,7 +203,7 @@ describe('[Services.apiHelperService]', function() {
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=itemAuthorizationType%3ASP%7COS%2CpremiseType%3Aon%2Cbrand%3A234';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CitemAuthorizationType%3ASP%7COS%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -241,14 +212,15 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when item authorization types is selected', function() {
       const mockObject = {
-        brand: '215',
+        masterSKU: '112154',
         itemAuthorizationType: ['Authorized-Select Planogram', 'Authorized-Optional (Sell-In)'],
         premiseType: 'on',
+        simpleDistributionType: true,
         type: 'opportunities',
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&hispanicMarketType=GM&filter=brand%3A215%2CitemAuthorizationType%3ASP%7COS%2CpremiseType%3Aon%2C';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CitemAuthorizationType%3ASP%7COS%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 
@@ -257,7 +229,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should return opportunities specific formatting when priority package is selected', function() {
       const mockObject = {
-        masterSKU: ['112154@234'],
+        masterSKU: '112154',
         priorityPackage: ['Gaintain'],
         premiseType: 'on',
         simpleDistributionType: true,
@@ -265,7 +237,7 @@ describe('[Services.apiHelperService]', function() {
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&priorityPackageGroups=GAINTAIN&filter=premiseType%3Aon%2Cbrand%3A234';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&priorityPackageGroups=GAINTAIN&filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 

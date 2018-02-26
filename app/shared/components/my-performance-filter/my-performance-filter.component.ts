@@ -69,10 +69,18 @@ export class MyPerformanceFilterComponent {
       dateRangeObject: DateRangesState
     ): Array<CompassSelectOption> => {
       return dateRangeTimePeriods.map(dateRangeTimePeriod => {
+        let displayValue = '';
+        let subDisplayValue = '';
+        let codeValue = '';
+        if (dateRangeObject[dateRangeTimePeriod]) {
+          displayValue = dateRangeObject[dateRangeTimePeriod].displayCodeQuarterDate;
+          subDisplayValue = dateRangeObject[dateRangeTimePeriod].range;
+          codeValue = DateRangeTimePeriodValue[dateRangeObject[dateRangeTimePeriod].code];
+        }
         return {
-          display: dateRangeObject[dateRangeTimePeriod].displayCodeQuarterDate,
-          subDisplay: dateRangeObject[dateRangeTimePeriod].range,
-          value: DateRangeTimePeriodValue[dateRangeObject[dateRangeTimePeriod].code]
+          display: displayValue,
+          subDisplay: subDisplayValue,
+          value: codeValue
         };
       });
     };
