@@ -37,6 +37,8 @@ module.exports = /*  @ngInject */
     vm.l90DateRange = DateRangeTimePeriod.L90BDL;
     vm.savedReportsOpen = false;
 
+    vm.reportLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=68EAC36211E80AA173FA0080EF351071&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1';
+    vm.newOpportunityLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=784BE7A011E80AA12F260080EFC53274&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1';
     vm.tooltip = {
       title: 'Premier "Fast Start" Dashboards',
       descriptions: [
@@ -46,14 +48,12 @@ module.exports = /*  @ngInject */
         'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have CX placements (for a greater number of opportunities vs CL), but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a Target List in Compass.'],
       position: 'below'
     };
-
     vm.salesCompassCard = {
       image: 'product',
       title: 'Sales Priority Spotlight',
       mainActionName: 'GET MORE INFORMATION',
       webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx?'
     };
-
     vm.enhancementCompassCard = {
       image: 'tool',
       title: 'Compass Enhancements',
