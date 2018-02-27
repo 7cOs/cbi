@@ -115,9 +115,13 @@ public class TargetListListingsPage extends TestNGBasePage {
   }
 
   public class TargetListSwitchModal {
-    public TargetListSwitchModal waitForListCreationChoiceModal() {
-      waitForVisible(By.xpath("//div[@class='modal target-list-switch-modal']"));
-      return this;
+    private static final String MODAL_XPATH = "//div[@class='modal target-list-switch-modal']";
+
+    private WebElement modal;
+
+    public TargetListSwitchModal() {
+      final By modalHandle = By.xpath(MODAL_XPATH);
+      modal = waitForVisibleFluentWait(modalHandle);
     }
 
     public EditTargetListModal chooseCreateNewList() {
