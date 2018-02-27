@@ -70,15 +70,14 @@ section.landing-page
              [title]= "l.tooltip.title",
              [descriptions]= "l.tooltip.descriptions",
              [position]="l.tooltip.position")
-
-        img(src='../../assets/img/icons/report.svg')
-        a(href="l.reportLink", target='_blank')
-          <b>Incentive Tracking</b>
-        p High-level performance by BU against incentive targets
-        img(src='../../assets/img/icons/new-opportunity.svg')
-        a(href="l.newOpportunityLink", target='_blank')
-          <b>GM/MDM Opportunities</b>
-        p Distribution relative to CL comp SKUs at GM and MDM levels, as well as associated opportunities
+        div
+          img(src='../../assets/img/icons/report.svg')
+          a(href="l.reportLink", target='_blank') <b>Incentive Tracking</b>
+          p.top High-level performance by BU against incentive targets
+        div
+          img(src='../../assets/img/icons/new-opportunity.svg')
+          a(href="l.newOpportunityLink", target='_blank') <b>GM/MDM Opportunities</b>
+          p.top Distribution relative to CL comp SKUs at GM and MDM levels, as well as associated opportunities
       compass-card(
         [image]="l.enhancementCompassCard.image",
         [title]="l.enhancementCompassCard.title",
