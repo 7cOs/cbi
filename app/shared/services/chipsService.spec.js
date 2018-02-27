@@ -585,9 +585,10 @@ describe('[Services.chipsService]', function() {
 
       chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', id: '80013438', name: 'CORONA EX 12PK CAN PROMO', type: 'sku'}, 'masterSKU');
 
-      expect(chipsService.model).toEqual([{name: 'Corona Ex 12pk Can Promo', id: '80013438@228', type: 'masterSKU', search: true, applied: false, removable: true, tradeChannel: false}]);
+      expect(chipsService.model).toEqual([{name: 'Corona Ex 12pk Can Promo', id: '80013438', type: 'masterSKU', search: true, applied: false, removable: true, tradeChannel: false}]);
       expect(chipsService.model.length).toEqual(1);
     });
+
     it('should apply arr filters for a MASTER SKU with no ID', function() {
       expect(chipsService.model).toEqual([]);
       filtersService.model.selected = {brand: []};

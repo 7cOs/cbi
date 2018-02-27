@@ -191,16 +191,8 @@ module.exports = /*  @ngInject */
     function applySimpleDist(filters) {
       let query = '';
 
-      if (filters && filters.simpleDistributionType) {
+      if (filters && filters.simpleDistributionType === true) {
         query = '&brandOpportunityType=true';
-        if (filters.masterSKU) {
-          filters.masterSKU.forEach(function(sku) {
-            (filters.brand)
-              ? (filters.brand).push(sku.slice(sku.search('@') + 1, sku.length))
-              : filters.brand = [sku.slice(sku.search('@') + 1, sku.length)];
-          });
-          delete filters.masterSKU;
-        }
       }
 
       return query;
@@ -233,7 +225,7 @@ module.exports = /*  @ngInject */
 
       for (var key2 in obj) {
         var somethingAdded = false;
-        if (obj[key2].constructor === Array && obj[key2].length > 0) {
+        if (obj[key2] && obj[key2].constructor === Array && obj[key2].length > 0) {
           if (key2 === 'cbbdChain') { // Both selected and None, leave blank
             if (obj[key2].length === 1 && obj[key2][0] === 'Independent') {
               queryParams += 'cbbdChain:false';

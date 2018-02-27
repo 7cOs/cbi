@@ -23,8 +23,6 @@ module.exports = /*  @ngInject */
         .catch(getversionFail);
 
       function getversionSuccess(response) {
-        // versionsPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
         versionsPromise.resolve(response.data);
       }
 
