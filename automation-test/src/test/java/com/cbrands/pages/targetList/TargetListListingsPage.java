@@ -125,9 +125,7 @@ public class TargetListListingsPage extends TestNGBasePage {
     }
 
     public EditTargetListModal chooseCreateNewList() {
-      final List<WebElement> listCreationChoiceButtons = findElements(By.cssSelector(
-        "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"));
-      waitForVisibleFluentWait(listCreationChoiceButtons.get(0)).click();
+      waitForElementToClickable(modal.findElement(By.xpath("//button[contains(., 'Create New List')]")), true).click();
       return PageFactory.initElements(driver, EditTargetListModal.class);
     }
   }
