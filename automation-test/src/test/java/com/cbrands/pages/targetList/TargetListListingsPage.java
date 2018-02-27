@@ -26,7 +26,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//button[contains(., 'Delete')]")
   private WebElement deleteButton;
 
-  @FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
+  @FindBy(how = How.XPATH, using = "//button[contains(., 'Create a New List')]")
   private WebElement createNewListButton;
 
   @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
