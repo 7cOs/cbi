@@ -1,5 +1,9 @@
+import * as Chance from 'chance';
+
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
+
+const chance = new Chance();
 
 describe('Unit: accountsController', function() {
   var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter, analyticsService, title;
@@ -557,30 +561,36 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should get the store information when passed in params', function () {
-      $state.params.storeid = 'storeID';
+      const mockUnversionedStoreID = chance.string();
+      const mockVersionedStoreID = chance.string();
+      const mockPremiseType = chance.bool() ? 'on' : 'off';
+      $state.params.premiseType = mockPremiseType;
+      $state.params.storeid = mockUnversionedStoreID;
+      $state.params.versionedStoreID = mockVersionedStoreID;
       $state.params.depletiontimeperiod = 'CYTD';
 
       promiseGetStores.and.callFake((id) => {
-        expect(id).toEqual('storeID');
+        expect(id).toEqual(mockUnversionedStoreID);
 
         return {
           account: 'An account',
-          tdlinx_number: '123',
+          tdlinx_number: mockUnversionedStoreID,
           store_name: 'testStore',
           store_number: '456',
           premise_type: 'ON PREMISE',
-          id: '123',
+          id: mockUnversionedStoreID,
           name: 'testStore',
           storeNumber: '456',
-          premiseTypeDesc: 'on'
+          premiseTypeDesc: mockPremiseType
         };
       });
 
       ctrl = $controller('accountsController', {$scope: scope, dateRangeService: mockDateRangeService});
+      expect(ctrl.currentTopBottomFilters.stores.id).toBe(mockVersionedStoreID);
 
       scope.$digest();
 
-      expect(filtersService.model.selected.premiseType).toEqual('on');
+      expect(filtersService.model.selected.premiseType).toEqual(mockPremiseType);
     });
 
   });
