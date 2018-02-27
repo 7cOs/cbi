@@ -26,7 +26,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//button[contains(., 'Delete')]")
   private WebElement deleteButton;
 
-  @FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
+  @FindBy(how = How.XPATH, using = "//button[contains(., 'Create a New List')]")
   private WebElement createNewListButton;
 
   @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
@@ -115,15 +115,17 @@ public class TargetListListingsPage extends TestNGBasePage {
   }
 
   public class TargetListSwitchModal {
-    public TargetListSwitchModal waitForListCreationChoiceModal() {
-      waitForVisible(By.xpath("//div[@class='modal target-list-switch-modal']"));
-      return this;
+    private static final String MODAL_XPATH = "//div[@class='modal target-list-switch-modal']";
+
+    private WebElement modal;
+
+    public TargetListSwitchModal() {
+      final By modalHandle = By.xpath(MODAL_XPATH);
+      modal = waitForVisibleFluentWait(modalHandle);
     }
 
     public EditTargetListModal chooseCreateNewList() {
-      final List<WebElement> listCreationChoiceButtons = findElements(By.cssSelector(
-        "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"));
-      waitForVisibleFluentWait(listCreationChoiceButtons.get(0)).click();
+      waitForElementToClickable(modal.findElement(By.xpath("//button[contains(., 'Create New List')]")), true).click();
       return PageFactory.initElements(driver, EditTargetListModal.class);
     }
   }
