@@ -32,6 +32,7 @@
   }
 
   mat-card-content {
+    margin-top: 24px;
     padding-left: 0;
     padding-right: 0;
 
@@ -43,6 +44,7 @@
     a {
       text-transform: uppercase;
       font-size: 11px;
+      font-weight: 500;
       padding-left: 5px;
       letter-spacing: 1px;
       position: relative;
@@ -52,6 +54,7 @@
     p, & {
       font-size: 12px;
       padding-left: 0;
+      line-height: 18px;
 
       /deep/.top {
         margin-top: 3px;
