@@ -490,8 +490,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   private sendFilterAnalyticsEvent(): void {
     const category = 'Team Performance Filters';
+    const dateRangeDisplayCode = (this.dateRange ? this.dateRange.displayCode : '');
     this.analyticsService.trackEvent(category, 'Metric', this.performanceMetric);
-    this.analyticsService.trackEvent(category, 'Time Period', this.dateRange.displayCode);
+    this.analyticsService.trackEvent(category, 'Time Period', dateRangeDisplayCode);
     this.analyticsService.trackEvent(category, 'Premise Type', PremiseTypeValue[this.filterState.premiseType]);
     if (this.filterState.metricType === MetricTypeValue.Distribution) {
       this.analyticsService.trackEvent(category, 'Distribution Type',
