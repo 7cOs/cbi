@@ -72,11 +72,11 @@ section.landing-page
              [position]="l.tooltip.position")
         div
           img(src='../../assets/img/icons/report.svg')
-          a(href="{{l.reportLink}}", target='_blank') <b>Incentive Tracking</b>
+          a(href="{{ l.reportLink }}", target='_blank', analyticsEvent="click", category="Navigation", action="Link Click", label="Incentive Tracking") <b>Incentive Tracking</b>
           p.top High-level performance by BU against incentive targets
         div
           img(src='../../assets/img/icons/new-opportunity.svg')
-          a(href="{{l.newOpportunityLink}}", target='_blank') <b>GM/MDM Opportunities</b>
+          a(href="{{ l.newOpportunityLink }}", target='_blank', analyticsEvent="click", category="Navigation", action="Link Click", label="GM/MDM Opportunities") <b>GM/MDM Opportunities</b>
           p.top Distribution relative to CL comp SKUs at GM and MDM levels, as well as associated opportunities
       compass-card(
         [image]="l.enhancementCompassCard.image",
