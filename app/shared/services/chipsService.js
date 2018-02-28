@@ -386,8 +386,8 @@ module.exports = /*  @ngInject */
               filtersService.model.selected.brand = filtersService.model.selected.brand || [];
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
-              addAutocompleteChip($filter('titlecase')(result.name), filter, null, getMasterSku(result));
-              if (service.model.indexOf(result.id) === -1) pushUniqueValue(getMasterSku(result), model);
+              addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
+              if (service.model.indexOf(result.id) === -1) pushUniqueValue(result.id, model);
             }
             break;
           case 'tradeChannel':
@@ -539,16 +539,5 @@ module.exports = /*  @ngInject */
           removeChip('distributor');
           break;
       }
-    }
-
-    /**
-     * @name getMasterSku
-     * @desc Returns sku id and it's brandcode
-     * @params {Object} item
-     * @returns String
-     * @memberOf cf.common.services
-     */
-    function getMasterSku(item) {
-      return item.id + '@' + item.brandCode;
     }
   };

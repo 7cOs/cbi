@@ -104,6 +104,27 @@ describe('My Performance Filter Component', () => {
       timePeriodSelect.onOptionSelected.emit(DateRangeTimePeriodValue.CYTDBDL);
     });
 
+    it('should emit empty string outputed by time period select dropdown child component when time period is not defined', () => {
+      const errorStateMock: MyPerformanceFilterState = {
+        metricType: MetricTypeValue.Depletions,
+        dateRangeCode: chance.string() as DateRangeTimePeriodValue,
+        premiseType: PremiseTypeValue.All,
+        distributionType: DistributionTypeValue.Simple
+      };
+      componentInstance.filterState = errorStateMock;
+      componentInstance.dateRangeState = dateRangeStateMock;
+      fixture.detectChanges();
+
+      componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.TimePeriod, filterValue: '' });
+      });
+
+      const mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
+      const timePeriodSelect = mockSelectComponents[1].injector.get(MockCompassSelectComponent) as MockCompassSelectComponent;
+
+      timePeriodSelect.onOptionSelected.emit('');
+    });
+
     it('should emit value outputed by premise type child component radio button', () => {
       componentInstance.filterState = initialFilterStateMock;
       componentInstance.dateRangeState = dateRangeStateMock;

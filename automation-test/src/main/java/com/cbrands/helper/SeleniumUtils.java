@@ -1,18 +1,13 @@
 package com.cbrands.helper;
 
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * The Class SeleniumUtils.
@@ -390,6 +385,23 @@ public class SeleniumUtils {
 	}
 
 	/**
+	 * Wait for visible fluent wait.
+	 *
+	 * @param by the element locator
+	 * @return the web element
+	 */
+	@SuppressWarnings("unchecked")
+	public static WebElement waitForVisibleFluentWait(By by) {
+		Wait<WebDriver> wait = new FluentWait(driver)
+	              .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
+	              .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.MILLISECONDS)
+	              .ignoring(NoSuchElementException.class)
+	              .ignoring(ElementNotVisibleException.class);
+	   wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+	   return findElement(by);
+	}
+
+	/**
 	 * Wait for elements visible fluent wait.
 	 *
 	 * @param elements the elements
@@ -437,9 +449,11 @@ public class SeleniumUtils {
    * @param by the element handle
    */
   public static void waitForElementToDisappear(By by) {
-    try {
-      waitForElementStalenessFluentWait(findElement(by));
-    } catch (NoSuchElementException e) {
+    try{
+      final WebElement element = findElement(by);
+      waitForCondition(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)), DEFAULT_WAIT_TIME);
+      waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
+    } catch (NoSuchElementException | StaleElementReferenceException e) {
       // Success. Element not present.
     }
   }
@@ -512,6 +526,18 @@ public class SeleniumUtils {
 			waitForCondition(ExpectedConditions.elementToBeClickable(element),DEFAULT_WAIT_TIME);
 		else
 			waitForCondition(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)), DEFAULT_WAIT_TIME);
+		return element;
+	}
+
+  /**
+   * Wait for a given element's attribute to contain a value
+   * @param element the element to inspect
+   * @param attribute the name of the attribute to inspect
+   * @param expectedValue the value the attribute should contain
+   * @return
+   */
+	public static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
+    waitForCondition(ExpectedConditions.attributeContains(element, attribute, expectedValue), DEFAULT_WAIT_TIME);
 		return element;
 	}
 
