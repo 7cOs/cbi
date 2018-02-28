@@ -144,7 +144,7 @@ export class MyPerformanceTableDataTransformerService {
     switch (entityType) {
       case EntityType.RoleGroup:
       case EntityType.AccountGroup:
-        return PluralizedRoleGroup[name];
+        return PluralizedRoleGroup[name] || name;
       case EntityType.Account:
       case EntityType.SubAccount:
         return SpecializedAccountName[name] || name;

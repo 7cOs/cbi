@@ -385,6 +385,23 @@ public class SeleniumUtils {
 	}
 
 	/**
+	 * Wait for visible fluent wait.
+	 *
+	 * @param by the element locator
+	 * @return the web element
+	 */
+	@SuppressWarnings("unchecked")
+	public static WebElement waitForVisibleFluentWait(By by) {
+		Wait<WebDriver> wait = new FluentWait(driver)
+	              .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
+	              .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.MILLISECONDS)
+	              .ignoring(NoSuchElementException.class)
+	              .ignoring(ElementNotVisibleException.class);
+	   wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+	   return findElement(by);
+	}
+
+	/**
 	 * Wait for elements visible fluent wait.
 	 *
 	 * @param elements the elements
