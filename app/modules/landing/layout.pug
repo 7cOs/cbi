@@ -58,37 +58,32 @@ section.landing-page
         target
     section(column="4")
       compass-card(
-        [img]="'product'",
-        [title]="'Sales Priority Spotlight'",
-        [main-action]="'GET MORE INFORMATION'",
-        [icon-visible]="true",
+        [image]="l.salesCompassCard.image",
+        [title]="l.salesCompassCard.title",
+        [main-action]="l.salesCompassCard.mainActionName",
         [analytics-properties]="{category: 'Navigation', label: 'Get More Information'}",
-        (on-main-action-clicked)="l.openViewJobAides()"
+        (on-main-action-clicked)="l.openWebPage(l.salesCompassCard.webPage)"
       )
-        p.bold The Corona Premier 'Fast Start' Incentive is underway through April 30!  Are you ALL IN? Track performance against this initiative via the following dashboards
-          span
-            compass-tooltip(
-              [title]= "'Premier \"Fast Start\" Dashboards'",
-              [descriptions]=`['Incentive Tracking', 'Use this to get an at-a-glance view of whether your BU is meeting the incentive targets.',
-                'GM/MDM Opportunities', 'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have CX placements (for a greater number of opportunities vs CL), but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a Target List in Compass.']`,
-              [position]="'below'")
-        img(src='../../assets/img/icons/report.svg')
-        a(href="http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=68EAC36211E80AA173FA0080EF351071&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1", target='_blank',
-          analyticsEvent="click", category="Navigation", action="Link Click", label="Incentive Tracking")
-          <b>Incentive Tracking</b>:
-        p High-level performance by BU against incentive targets
-        img(src='../../assets/img/icons/new-opportunity.svg')
-        a(href="http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=784BE7A011E80AA12F260080EFC53274&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1", target='_blank',
-        analyticsEvent="click", category="Navigation", action="Link Click", label="GM/MDM Opportunities")
-          <b>GM/MDM Opportunities</b>:
-        p Distribution relative to CL comp SKUs at GM and MDM levels, as well as associated opportunities
+        p.bold The Corona Premier 'Fast Start' Incentive is underway through April 30!  Are you ALL IN? Track performance against this initiative via the following dashboards:
+         span.tooltip
+           compass-tooltip(
+             [title]= "l.tooltip.title",
+             [descriptions]= "l.tooltip.descriptions",
+             [position]="l.tooltip.position")
+        div
+          img(src='../../assets/img/icons/report.svg')
+          a(href="l.reportLink", target='_blank', analyticsEvent="click", category="Navigation", action="Link Click", label="Incentive Tracking") <b>Incentive Tracking</b>
+          p.top High-level performance by BU against incentive targets
+        div
+          img(src='../../assets/img/icons/new-opportunity.svg')
+          a(href="l.newOpportunityLink", target='_blank', analyticsEvent="click", category="Navigation", action="Link Click", label="GM/MDM Opportunities") <b>GM/MDM Opportunities</b>
+          p.top Distribution relative to CL comp SKUs at GM and MDM levels, as well as associated opportunities
       compass-card(
-        [img]="'tool'",
-        [title]="'Compass Enhancements'",
-        [main-action]="'View job aides'",
-        [icon-visible]="true",
+        [image]="l.enhancementCompassCard.image",
+        [title]="l.enhancementCompassCard.title",
+        [main-action]="l.enhancementCompassCard.mainActionName",
         [analytics-properties]="{category: 'Navigation', label: 'View Job Aides'}",
-        (on-main-action-clicked)="l.openViewJobAides()"
+        (on-main-action-clicked)="l.openWebPage(l.enhancementCompassCard.webPage)"
       )
         p.bold What's new in February 2018:
           ul <b>Web only</b>:

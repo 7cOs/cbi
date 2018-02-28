@@ -29,7 +29,6 @@ module.exports = /*  @ngInject */
     vm.findOpportunities = findOpportunities;
     vm.goToSavedFilter = goToSavedFilter;
     vm.selectPremiseType = selectPremiseType;
-    vm.openViewJobAides = openViewJobAides;
     vm.openWebPage = openWebPage;
 
     // Set values
@@ -37,6 +36,30 @@ module.exports = /*  @ngInject */
     vm.fytdDateRange = DateRangeTimePeriod.FYTDBDL;
     vm.l90DateRange = DateRangeTimePeriod.L90BDL;
     vm.savedReportsOpen = false;
+
+    vm.reportLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=68EAC36211E80AA173FA0080EF351071&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1';
+    vm.newOpportunityLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=784BE7A011E80AA12F260080EFC53274&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1';
+    vm.tooltip = {
+      title: 'Premier "Fast Start" Dashboards',
+      descriptions: [
+        'Incentive Tracking',
+        'Use this to get an at-a-glance view of whether your BU is meeting the incentive targets.',
+        'GM/MDM Opportunities',
+        'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have CX placements (for a greater number of opportunities vs CL), but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a Target List in Compass.'],
+      position: 'below'
+    };
+    vm.salesCompassCard = {
+      image: 'product',
+      title: 'Sales Priority Spotlight',
+      mainActionName: 'GET MORE INFORMATION',
+      webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx?'
+    };
+    vm.enhancementCompassCard = {
+      image: 'tool',
+      title: 'Compass Enhancements',
+      mainActionName: 'View job aides',
+      webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/General%20Information.aspx?RootFolder=%2Fsites%2Fgoldnetwork%2FGeneral%20Information%20Documents%2FCorona%20Premier%20Fast%20Start&FolderCTID=0x0120009A7F0B58AFC54C4F9822FBDA90FBAB61&View=%7BC8268790-72D5-453C-B2FB-27A6DFC93F7C%7D'
+    };
 
     init();
 
@@ -111,12 +134,8 @@ module.exports = /*  @ngInject */
       return data;
     }
 
-    function openViewJobAides() {
-      $window.open('https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx?', '_blank');
-    }
-
-    function openWebPage() {
-      $window.open('https://constel1.sharepoint.com/sites/goldnetwork/SitePages/General%20Information.aspx?RootFolder=%2Fsites%2Fgoldnetwork%2FGeneral%20Information%20Documents%2FCorona%20Premier%20Fast%20Start&FolderCTID=0x0120009A7F0B58AFC54C4F9822FBDA90FBAB61&View=%7BC8268790-72D5-453C-B2FB-27A6DFC93F7C%7D', '_blank');
+    function openWebPage(webLink) {
+      $window.open(webLink, '_blank');
     }
 
     // ***************

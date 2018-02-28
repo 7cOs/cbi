@@ -1,18 +1,14 @@
 @import '../../../assets/styles/base/variables';
 
-// .#{$fa-css-img}-2x { background-image: url('../../../assets/img/icons/tool-updates.svg');}
-// .#{$fa-css-img}-3x { background-image: url('../../../assets/img/icons/product.svg');}
-
 /deep/mat-card.compass-card {
   color: $gray-1;
   background-color: $white;
-  font-family: $work-sans;
+  font-family: $roboto;
   margin: 8px;
-  // padding: 10px 20px;
 
   mat-card-title {
     font-size: 18px;
-    padding: 10px 0 0;
+    padding: 10px 0 15px;
     pointer-events: none;
 
     .no-left-padding {
@@ -20,22 +16,23 @@
     }
 
     img {
-      height: 33px;
-      width: 33px;
-      vertical-align: text-bottom;
+      height: 30px;
+      width: 30px;
     }
 
     .title {
       float: left;
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 300;
       margin-top: 0;
-      padding-left: 15px;
-      padding-bottom: 15px;
+      padding-left: 12px;
+      position: relative;
+      top: 5px;
     }
   }
 
   mat-card-content {
+    margin-top: 24px;
     padding-left: 0;
     padding-right: 0;
 
@@ -44,24 +41,28 @@
       width: 15px;
     }
 
-    h2, h3 {
-      font-family: $roboto;
+    a {
+      text-transform: uppercase;
       font-size: 11px;
-      font-weight: bold;
-      line-height: 1.45;
-      letter-spacing: normal;
-      text-align: left;
-      color: $gray-1;
-      color: var(--cbiGrey74);
+      font-weight: 500;
+      padding-left: 5px;
+      letter-spacing: 1px;
+      position: relative;
+      top: -3px;
     }
 
     p, & {
       font-size: 12px;
-    }
+      padding-left: 0;
+      line-height: 18px;
 
-    a {
-      text-transform: uppercase;
-      padding-left: 5px;
+      /deep/.top {
+        margin-top: 3px;
+      }
+
+      &.bold {
+        padding-top: 10px;
+      }
     }
 
     li {
@@ -74,14 +75,21 @@
       }
     }
 
-    &.tooltip {
-      float: left;
+    span.tooltip {
+      display: inline-block;
+      padding: 1px;
+      margin-left: 2px;
+
+      .compass-tooltip {
+        padding: 0;
+      }
     }
   }
 
   mat-card-actions {
-    font-size: 11px;
+    font-size: 12px;
     font-family: $rajdhani;
+    letter-spacing: 1px;
     color: $hyperlink;
     font-weight: $semibold;
     padding: 0;
