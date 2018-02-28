@@ -1,6 +1,10 @@
 mat-card.compass-card
   mat-card-title(*ngIf="title")
-    h3([ngClass]="{ 'icon' : iconVisible }") {{ title }}
+    div.no-left-padding(*ngIf='image === "product"' column=1)
+      img(src='../../../assets/img/icons/product.svg')
+    div.no-left-padding(*ngIf='image === "tool"' column=1)
+      img(src='../../../assets/img/icons/tool-updates.svg')
+    div.title(column=11) {{ title }}
   mat-card-content
     ng-content
   mat-card-actions(*ngIf="mainAction")
