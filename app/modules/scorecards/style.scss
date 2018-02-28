@@ -186,6 +186,12 @@
     th.top {
       padding-bottom: 0;
     }
+
+    th.header-padding {
+      padding-bottom: 0;
+      padding-top: 8px;
+      margin-top: -2px;
+    }
   }
 
   .column-total {
