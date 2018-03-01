@@ -580,6 +580,12 @@ module.exports = /*  @ngInject */
       service.model.disableReset = false;
       service.model.disableSaveFilter = false;
       service.model.filtersValidCount = 0;
+      service.model.predictedImpactHigh = false;
+      service.model.predictedImpactMedium = false;
+      service.model.predictedImpactLow = false;
+      service.model.storeSegmentationA = false;
+      service.model.storeSegmentationB = false;
+      service.model.storeSegmentationC = false;
     }
 
     function resetPagination() {

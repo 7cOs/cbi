@@ -337,6 +337,12 @@ describe('Unit: filter service', function() {
             filtersApplied: false,
             filtersDefault: true,
             disableSaveFilter: false,
+            predictedImpactHigh: false,
+            predictedImpactMedium: false,
+            predictedImpactLow: false,
+            storeSegmentationA: false,
+            storeSegmentationB: false,
+            storeSegmentationC: false,
             filtersValidCount: 0,
             impact: '',
             opportunitiesType: [
@@ -808,6 +814,8 @@ describe('Unit: filter service', function() {
       filtersService.model.disableSaveFilter = true;
       filtersService.model.states = ['OH', 'WA'];
       filtersService.model.filtersValidCount = 1000;
+      filtersService.model.predictedImpactHigh = true;
+      filtersService.model.storeSegmentationA = true;
 
       expect(filtersService.model).not.toEqual(resetModelObject);
       filtersService.resetFilters();
