@@ -52,13 +52,13 @@ module.exports = /*  @ngInject */
       image: 'product',
       title: 'Sales Priority Spotlight',
       mainActionName: 'GET MORE INFORMATION',
-      webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx?'
+      webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/General%20Information.aspx?RootFolder=%2Fsites%2Fgoldnetwork%2FGeneral%20Information%20Documents%2FCorona%20Premier%20Fast%20Start&FolderCTID=0x0120009A7F0B58AFC54C4F9822FBDA90FBAB61&View=%7BC8268790-72D5-453C-B2FB-27A6DFC93F7C%7D'
     };
     vm.enhancementCompassCard = {
       image: 'tool',
       title: 'Compass Enhancements',
       mainActionName: 'View job aides',
-      webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/General%20Information.aspx?RootFolder=%2Fsites%2Fgoldnetwork%2FGeneral%20Information%20Documents%2FCorona%20Premier%20Fast%20Start&FolderCTID=0x0120009A7F0B58AFC54C4F9822FBDA90FBAB61&View=%7BC8268790-72D5-453C-B2FB-27A6DFC93F7C%7D'
+      webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx?'
     };
 
     init();
