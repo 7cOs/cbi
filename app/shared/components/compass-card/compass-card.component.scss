@@ -52,6 +52,7 @@
     }
 
     p, & {
+      font-family: $roboto;
       font-size: 12px;
       padding-left: 0;
       line-height: 18px;
@@ -87,9 +88,8 @@
   }
 
   mat-card-actions {
-    font-size: 12px;
-    font-family: $rajdhani;
-    letter-spacing: 1px;
+    font-size: 11px;
+    font-family: $roboto;
     color: $hyperlink;
     font-weight: $semibold;
     padding: 0;
