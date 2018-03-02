@@ -38,14 +38,14 @@ module.exports = /*  @ngInject */
     vm.savedReportsOpen = false;
 
     vm.reportLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=68EAC36211E80AA173FA0080EF351071&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1';
-    vm.newOpportunityLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=784BE7A011E80AA12F260080EFC53274&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1';
+    vm.newOpportunityLink = 'https://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=20066AEA11E81D6411150080EF9592AF&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=';
     vm.tooltip = {
       title: 'Premier "Fast Start" Dashboards',
       descriptions: [
         'Incentive Tracking',
         'Use this to get an at-a-glance view of whether your BU is meeting the incentive targets.',
         'GM/MDM Opportunities',
-        'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have CX placements (for a greater number of opportunities vs CL), but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a Target List in Compass.'],
+        'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have any CBI placements, but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a Target List in Compass.'],
       position: 'below'
     };
     vm.salesCompassCard = {
