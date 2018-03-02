@@ -815,7 +815,11 @@ describe('Unit: filter service', function() {
       filtersService.model.states = ['OH', 'WA'];
       filtersService.model.filtersValidCount = 1000;
       filtersService.model.predictedImpactHigh = true;
+      filtersService.model.predictedImpactMedium = true;
+      filtersService.model.predictedImpactLow = true;
       filtersService.model.storeSegmentationA = true;
+      filtersService.model.storeSegmentationB = true;
+      filtersService.model.storeSegmentationC = true;
 
       expect(filtersService.model).not.toEqual(resetModelObject);
       filtersService.resetFilters();
