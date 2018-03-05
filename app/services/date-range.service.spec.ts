@@ -2,15 +2,10 @@ import { inject, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { DateRange } from '../models/date-range.model';
 import { DateRangeService } from './date-range.service';
 import { dateRangeStateMock } from '../models/date-range-state.model.mock';
-import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
-import { getDateRangeMock } from '../models/date-range.model.mock';
 
 describe('Service: DateRangeService', () => {
-  const dateRangeMock: DateRange = getDateRangeMock();
-
   const storeMock = {
     select: jasmine.createSpy('select').and.returnValue(Observable.of(dateRangeStateMock))
   };
