@@ -13,4 +13,8 @@ export class Environment {
   static getIQLink(): string {
     return ENV_VARS.IQ_LINK;
   }
+
+  static getSurveyIQLink(): string {
+    return ENV_VARS.SURVEY_IQ_LINK;
+  }
 }
