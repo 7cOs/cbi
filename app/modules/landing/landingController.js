@@ -45,7 +45,7 @@ module.exports = /*  @ngInject */
         'Incentive Tracking',
         'Use this to get an at-a-glance view of whether your BU is meeting the incentive targets.',
         'GM/MDM Opportunities',
-        'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have any CBI placements, but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a Target List in Compass.'],
+        'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have any CBI placements, but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a List in Compass.'],
       position: 'below'
     };
     vm.salesCompassCard = {

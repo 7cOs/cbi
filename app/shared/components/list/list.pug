@@ -10,14 +10,14 @@
 .action-buttons
   span(ng-switch="list.selected < 1")
     span(ng-switch-when="true")
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showAddToTargetList" ng-disabled="true") Add to Target List
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showCopyToTargetList" ng-disabled="true") Copy to Target List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showAddToTargetList" ng-disabled="true") Add to List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showCopyToTargetList" ng-disabled="true") Copy to List
       button.btn-action.action-button-spacing(ng-disabled="true") Download
       button.btn-action.action-button-spacing(ng-if="!list.targetListService.model.currentList.archived && list.showRemoveButton" ng-disabled="true" ) Remove
 
     span(ng-switch-when="false")
       md-menu(md-offset="0 45" ng-if="list.showAddToTargetList")
-        button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to Target List
+        button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to List
         md-menu-content.target-list-menu
           md-menu-item(ng-click="list.createNewList($event)")
             p Create New List
@@ -25,7 +25,7 @@
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
       md-menu(md-offset="0 45" ng-if="list.showCopyToTargetList && !list.targetListService.model.currentList.archived")
-        button.btn-action(ng-click="$mdOpenMenu($event)") Copy to Target List
+        button.btn-action(ng-click="$mdOpenMenu($event)") Copy to List
         md-menu-content.target-list-menu
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index, false)")
             p {{::targetList.name | truncateText:18}}
