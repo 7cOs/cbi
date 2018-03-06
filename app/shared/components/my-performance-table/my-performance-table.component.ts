@@ -37,7 +37,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
       const sortedTableData: Array<MyPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-      this.sortedTableData = this.sortGeographyRowToBottom(sortedTableData);
+      this.sortedTableData = this.sortRoleGroups(sortedTableData);
     }
   }
 
@@ -65,6 +65,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
+  private updatedRowData: Array<MyPerformanceTableRow>;
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -203,17 +204,48 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
       const sortedData: Array<MyPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
-      this.sortedTableData = this.sortGeographyRowToBottom(sortedData);
+      this.sortedTableData = this.sortRoleGroups(sortedData);
     }
   }
 
-  private sortGeographyRowToBottom (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
+  private sortRoleGroups (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
     const index = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
+    const nsoRolesArray = ['GEO BUSINESS UNITS', 'NATIONAL SALES ORG', 'DRAFT MANAGERS'];
+    const descriptionsArray = rowData.map(obj => obj.descriptionRow0);
     if (index !== -1) {
       const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(index, 1);
       return rowData.concat(geographyTableRow);
-    } else {
+    } else if (nsoRolesArray.some(val => descriptionsArray.indexOf(val) !== -1)) {
+        if (rowData.some(obj => obj.descriptionRow0 === 'GEO BUSINESS UNITS')) {
+          this.updatedRowData = this.sortGeoBusinessUnit(rowData);
+        }
+        if (rowData.some(obj => obj.descriptionRow0 === 'NATIONAL SALES ORG')) {
+          this.updatedRowData = this.sortNationalSalesOrg(this.updatedRowData);
+        }
+        if (rowData.some(obj => obj.descriptionRow0 === 'DRAFT MANAGERS')) {
+          this.updatedRowData = this.sortDrafts(this.updatedRowData);
+        }
+        return this.updatedRowData;
+      } else {
       return rowData;
     }
+  }
+
+  private sortGeoBusinessUnit (rowData: Array<MyPerformanceTableRow>) {
+    const geoBusinessIndex = findIndex(rowData , data => data.descriptionRow0 === 'GEO BUSINESS UNITS');
+    const geoBusinessRow: Array<MyPerformanceTableRow> = rowData.splice(geoBusinessIndex, 1);
+    return rowData.concat(geoBusinessRow);
+  }
+
+  private sortNationalSalesOrg (rowData: Array<MyPerformanceTableRow>) {
+    const nsuIndex = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']);
+    const nsuRow: Array<MyPerformanceTableRow> = rowData.splice(nsuIndex, 1);
+    return rowData.concat(nsuRow);
+  }
+
+  private sortDrafts (rowData: Array<MyPerformanceTableRow>) {
+    const draftIndex = findIndex(rowData , data => data.descriptionRow0 === 'DRAFT MANAGERS');
+    const draftIndexRow: Array<MyPerformanceTableRow> = rowData.splice(draftIndex, 1);
+    return rowData.concat(draftIndexRow);
   }
 }
