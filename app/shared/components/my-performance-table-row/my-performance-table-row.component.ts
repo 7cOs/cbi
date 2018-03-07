@@ -22,6 +22,10 @@ export class MyPerformanceTableRowComponent {
   @Input() showX: boolean = false;
   @Input() set rowData(rowData: MyPerformanceTableRow) {
     this.tableRowData = rowData;
+    if (this.tableRowData.metadata && this.tableRowData.metadata.positionId === '0' &&
+      this.tableRowData.descriptionRow0 === 'DRAFT MANAGERS') {
+      this.tableRowData.descriptionRow0 = 'DRAFT';
+    }
     this.opportunityCountClass = this.getOpportunityCountClass();
   }
   @Input()
