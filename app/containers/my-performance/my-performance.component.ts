@@ -16,7 +16,6 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
@@ -542,7 +541,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (parameters.row.descriptionRow0 === 'NATIONAL SALES ORG' || parameters.row.descriptionRow0 === 'DRAFT') {
           const nextLevelEntityGroup = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
-   
+
           this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
             positionId: parameters.row.metadata.positionId,
             alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
@@ -557,7 +556,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
             isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
           }));
         } else {
-          const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
+          const entityTypeGroupName = parameters.row.metadata.entityName;
 
           this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
             positionId: parameters.row.metadata.positionId,
