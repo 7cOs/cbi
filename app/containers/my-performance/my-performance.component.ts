@@ -520,15 +520,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
+    if (parameters.row.descriptionRow0 === 'NATIONAL SALES ORG' || parameters.row.descriptionRow0 === 'DRAFT') {
+      const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
+      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
+    } else {
+      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
+    }
 
     const isMemberOfExceptionHierarchy: boolean = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
 
     switch (this.salesHierarchyViewType) {
 
       case SalesHierarchyViewType.roleGroups:
-        const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
-
         if (parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
 
@@ -537,19 +540,39 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
-          positionId: parameters.row.metadata.positionId,
-          alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-          entityTypeGroupName: entityTypeGroupName,
-          entityTypeCode: parameters.row.metadata.entityTypeCode,
-          entityType: parameters.row.metadata.entityType,
-          entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-          filter: this.filterState,
-          selectedEntityDescription: parameters.row.descriptionRow0,
-          brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-          skuPackageType: this.selectedSkuPackageType,
-          isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
-        }));
+        if (parameters.row.descriptionRow0 === 'NATIONAL SALES ORG' || parameters.row.descriptionRow0 === 'DRAFT') {
+          const nextLevelEntityGroup = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
+   
+          this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
+            positionId: parameters.row.metadata.positionId,
+            alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+            entityTypeGroupName: entityTypeGroupName,
+            entityTypeCode: parameters.row.metadata.entityTypeCode,
+            entityType: parameters.row.metadata.entityType,
+            entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+            filter: this.filterState,
+            selectedEntityDescription: parameters.row.descriptionRow0,
+            brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
+            skuPackageType: this.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
+          }));
+        } else {
+          const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
+
+          this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
+            positionId: parameters.row.metadata.positionId,
+            alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+            entityTypeGroupName: entityTypeGroupName,
+            entityTypeCode: parameters.row.metadata.entityTypeCode,
+            entityType: parameters.row.metadata.entityType,
+            entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+            filter: this.filterState,
+            selectedEntityDescription: parameters.row.descriptionRow0,
+            brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
+            skuPackageType: this.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
+          }));
+        }
 
         this.fetchProductMetricsWhenClick(parameters);
         break;
