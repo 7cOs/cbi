@@ -27,7 +27,7 @@ export interface FetchResponsibilitiesSuccessPayload {
 }
 
 export interface FetchEntityWithPerformancePayload {
-  entityTypeGroupName: EntityPeopleType;
+  entityTypeGroupName: string;
   entityTypeCode: string;
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
@@ -132,7 +132,7 @@ export const GET_PEOPLE_BY_ROLE_GROUP = '[Responsibilities] GET_PEOPLE_BY_ROLE_G
 export class GetPeopleByRoleGroup implements Action {
   readonly type = GET_PEOPLE_BY_ROLE_GROUP;
 
-  constructor(public payload: EntityPeopleType) { }
+  constructor(public payload: string) { }
 }
 
 export const FETCH_SUBACCOUNTS = '[Responsibilities] FETCH_SUBACCOUNTS';
