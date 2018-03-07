@@ -46,7 +46,7 @@ export interface ResponsibilitiesData {
 }
 
 export interface FetchEntityWithPerformanceData {
-  entityTypeGroupName: EntityPeopleType;
+  entityTypeGroupName: string;
   entityTypeCode: string;
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;

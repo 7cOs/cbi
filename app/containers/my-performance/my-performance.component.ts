@@ -16,7 +16,6 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
@@ -527,7 +526,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     switch (this.salesHierarchyViewType) {
 
       case SalesHierarchyViewType.roleGroups:
-        const entityTypeGroupName = EntityPeopleType[parameters.row.metadata.entityName];
+        const entityTypeGroupName = parameters.row.metadata.entityName;
 
         if (parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
