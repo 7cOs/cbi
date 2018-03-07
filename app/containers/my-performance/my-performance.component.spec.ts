@@ -18,7 +18,7 @@ import { dateRangeStateMock } from '../../models/date-range-state.model.mock';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
-import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetrics,
          SelectBrandValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
@@ -752,11 +752,11 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: undefined,
         isMemberOfExceptionHierarchy: false,
-        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeGroupName: rowMock.metadata.entityName,
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
-        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.descriptionRow0],
         filter: stateMock.myPerformanceFilter as any,
         brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
         skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
@@ -790,11 +790,11 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: undefined,
         isMemberOfExceptionHierarchy: false,
-        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeGroupName: rowMock.metadata.entityName,
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
-        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.descriptionRow0],
         filter: stateMock.myPerformanceFilter as any,
         brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
         skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
@@ -933,11 +933,11 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: undefined,
         isMemberOfExceptionHierarchy: false,
-        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeGroupName: rowMock.metadata.entityName,
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
-        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.descriptionRow0],
         filter: stateMock.myPerformanceFilter as any,
         brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
         skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType
@@ -966,11 +966,11 @@ describe('MyPerformanceComponent', () => {
         positionId: rowMock.metadata.positionId,
         alternateHierarchyId: currentMock.responsibilities.alternateHierarchyId,
         isMemberOfExceptionHierarchy: false,
-        entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+        entityTypeGroupName: rowMock.metadata.entityName,
         entityTypeCode: rowMock.metadata.entityTypeCode,
         entityType: rowMock.metadata.entityType,
         selectedEntityDescription: rowMock.descriptionRow0,
-        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+        entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.descriptionRow0],
         filter: stateMock.myPerformanceFilter as any,
         brandSkuCode: currentMock.selectedSkuPackageCode,
         skuPackageType: currentMock.selectedSkuPackageType
