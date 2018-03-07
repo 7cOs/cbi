@@ -209,8 +209,8 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   }
 
   private sortRoleGroups (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
-    const index = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
-    const nsoRolesArray = ['GEO BUSINESS UNITS', 'NATIONAL SALES ORG', 'DRAFT MANAGERS'];
+    const index: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
+    const nsoRolesArray: Array<string> = ['GEO BUSINESS UNITS', 'NATIONAL SALES ORG', 'DRAFT MANAGERS'];
     const descriptionsArray = rowData.map(obj => obj.descriptionRow0);
     if (index !== -1) {
       const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(index, 1);
@@ -232,19 +232,19 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   }
 
   private sortGeoBusinessUnit (rowData: Array<MyPerformanceTableRow>) {
-    const geoBusinessIndex = findIndex(rowData , data => data.descriptionRow0 === 'GEO BUSINESS UNITS');
+    const geoBusinessIndex: number = findIndex(rowData , data => data.descriptionRow0 === 'GEO BUSINESS UNITS');
     const geoBusinessRow: Array<MyPerformanceTableRow> = rowData.splice(geoBusinessIndex, 1);
     return rowData.concat(geoBusinessRow);
   }
 
   private sortNationalSalesOrg (rowData: Array<MyPerformanceTableRow>) {
-    const nsuIndex = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']);
+    const nsuIndex: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']);
     const nsuRow: Array<MyPerformanceTableRow> = rowData.splice(nsuIndex, 1);
     return rowData.concat(nsuRow);
   }
 
   private sortDrafts (rowData: Array<MyPerformanceTableRow>) {
-    const draftIndex = findIndex(rowData , data => data.descriptionRow0 === 'DRAFT MANAGERS');
+    const draftIndex: number = findIndex(rowData , data => data.descriptionRow0 === 'DRAFT MANAGERS');
     const draftIndexRow: Array<MyPerformanceTableRow> = rowData.splice(draftIndex, 1);
     return rowData.concat(draftIndexRow);
   }
