@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
-import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { HierarchyGroup } from '../../models/hierarchy-group.model';
