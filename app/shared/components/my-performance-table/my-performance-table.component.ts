@@ -219,7 +219,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
         if (rowData.some(obj => obj.descriptionRow0 === 'GEO BUSINESS UNITS')) {
           this.updatedRowData = this.sortGeoBusinessUnit(rowData);
         }
-        if (rowData.some(obj => obj.descriptionRow0 === 'NATIONAL SALES ORG')) {
+        if (rowData.some(obj => obj.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'])) {
           this.updatedRowData = this.sortNationalSalesOrg(this.updatedRowData);
         }
         if (rowData.some(obj => obj.descriptionRow0 === 'DRAFT MANAGERS')) {
