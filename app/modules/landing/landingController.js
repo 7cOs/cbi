@@ -10,7 +10,6 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     const vm = this;
-    const goToSavedFilterTimeoutLength = 500;
 
     // Set page title for head and nav
     title.setTitle($state.current.title);
@@ -107,11 +106,9 @@ module.exports = /*  @ngInject */
       filtersService.model.currentFilter.ev = ev;
       filtersService.model.selected.currentFilter = filter.id;
 
-      $timeout(() => {
-        $state.go('opportunities', {
-          resetFiltersOnLoad: false
-        });
-      }, goToSavedFilterTimeoutLength);
+      $state.go('opportunities', {
+        resetFiltersOnLoad: false
+      });
     }
 
     function selectPremiseType(data) {
