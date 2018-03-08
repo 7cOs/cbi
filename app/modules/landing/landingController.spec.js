@@ -3,7 +3,7 @@ import * as Chance from 'chance';
 const chance = new Chance();
 
 describe('Unit: landingController', function() {
-  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q, title, $timeout, $httpBackend;
+  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q, title;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -20,8 +20,7 @@ describe('Unit: landingController', function() {
       $provide.value('title', title);
     });
 
-    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_, _$state_,
-      _$q_, _$timeout_, _$httpBackend_) {
+    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_, _$state_, _$q_) {
 
       // Create scope
       scope = $rootScope.$new();
@@ -33,8 +32,6 @@ describe('Unit: landingController', function() {
       userService = _userService_;
       $state = _$state_;
       $q = _$q_;
-      $timeout = _$timeout_;
-      $httpBackend = _$httpBackend_;
 
       // Create Controller
       ctrl = $controller('landingController', {$scope: scope});
@@ -315,10 +312,6 @@ describe('Unit: landingController', function() {
       it('should set savedReportsOpen to false and state change to the opportunities page with no reset on page load', () => {
         ctrl.savedReportsOpen = false;
         ctrl.goToSavedFilter({}, { id: idPayloadMock });
-
-        $httpBackend.expectGET(/.*performance\/summary/).respond([]);
-        $httpBackend.expectGET(/.*opportunityFilters\//).respond([]);
-        $timeout.flush();
 
         expect(ctrl.savedReportsOpen).toBeFalsy();
         expect($state.go).toHaveBeenCalledWith('opportunities', { resetFiltersOnLoad: false });

@@ -27,7 +27,7 @@ module.exports = /*  @ngInject */
     // tab names
     vm.types = {
       'mine': {
-        'name': 'My Target Lists',
+        'name': 'My Lists',
         'records': [],
         'total': 0,
         'index': 0
