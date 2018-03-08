@@ -2,15 +2,12 @@ import { inject, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { DateRange } from '../models/date-range.model';
 import { DateRangeService } from './date-range.service';
-import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
-import { getDateRangeMock } from '../models/date-range.model.mock';
+import { dateRangeStateMock } from '../models/date-range-state.model.mock';
 
 describe('Service: DateRangeService', () => {
-  const dateRangeMock: DateRange = getDateRangeMock();
-  const mockStore = {
-    select: jasmine.createSpy('select').and.returnValue(Observable.of(dateRangeMock))
+  const storeMock = {
+    select: jasmine.createSpy('select').and.returnValue(Observable.of(dateRangeStateMock))
   };
 
   beforeEach(() => TestBed.configureTestingModule({
@@ -18,7 +15,7 @@ describe('Service: DateRangeService', () => {
       DateRangeService,
       {
         provide: Store,
-        useValue: mockStore
+        useValue: storeMock
       }
     ]
   }));
@@ -33,11 +30,11 @@ describe('Service: DateRangeService', () => {
     }));
 
     it('should return an observable of a date range from the store', (done) => {
-      spyOn(dateRangeService, 'getDateRange').and.callThrough();
-      let result = dateRangeService.getDateRange(DateRangeTimePeriod.CMIPBDL);
-      expect(dateRangeService.getDateRange).toHaveBeenCalledWith(13);
+      spyOn(dateRangeService, 'getDateRanges').and.callThrough();
+      let result = dateRangeService.getDateRanges();
+      expect(dateRangeService.getDateRanges).toHaveBeenCalled();
       expect(store.select).toHaveBeenCalled();
-      expect(result).toEqual(Observable.of(dateRangeMock));
+      expect(result).toEqual(Observable.of(dateRangeStateMock));
       done();
     });
   });
