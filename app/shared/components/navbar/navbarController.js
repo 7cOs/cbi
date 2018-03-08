@@ -10,7 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.linkToIQ = ENV_VARS.iqURL;
-    vm.linkToSurveyIQ = ENV_VARS.surveyiqurl;
+    vm.linkToSurveyIQ = ENV_VARS.surveyIqURL;
 
     // User Agent Detection for IE fixes
     $rootScope.isIE = ieHackService.isIE;

@@ -12,5 +12,5 @@ module.exports =
   .controller('navbarController', require('./navbarController'))
   .constant('ENV_VARS', {
     iqURL: Environment.getIQLink(),
-    surveyiqurl: Environment.getSurveyIQLink()
+    surveyIqURL: Environment.getSurveyIQLink()
   });
