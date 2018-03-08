@@ -31,11 +31,11 @@ export class NotificationsComponent {
   private allNotificationRead: boolean = true;
   private _notifications: Notification[] = [];
   private notificationActionAnalyticsMapping = {
-    'TARGET_LIST': 'Shared Target List',
-    'OPPORTUNITY': 'Shared Opportunity',
-    'ACCOUNT': 'Shared Note',
-    'STORE': 'Shared Note',
-    'DISTRIBUTOR': 'Shared Note'
+    'TARGET_LIST': 'Read Target List Notifications',
+    'OPPORTUNITY': 'Read Opportunity Notifications',
+    'ACCOUNT': 'Read Note Notifications',
+    'STORE': 'Read Note Notifications',
+    'DISTRIBUTOR': 'Read Note Notifications'
   };
 
   constructor(
@@ -43,10 +43,11 @@ export class NotificationsComponent {
   ) { }
 
   clickOn(notification: Notification) {
-    const analyticsLabel = this.notificationActionAnalyticsMapping[notification.objectType];
+    const analyticsAction = this.notificationActionAnalyticsMapping[notification.objectType];
+    const analyticsLabel = notification.objectId ? notification.objectId : 'Not Available';
     this.analyticsService.trackEvent(
-      'Notifications',
-      'Read Notification',
+      'Navigation',
+      analyticsAction,
       analyticsLabel
     );
 
