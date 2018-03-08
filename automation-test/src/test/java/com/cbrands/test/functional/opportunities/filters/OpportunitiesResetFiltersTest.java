@@ -24,7 +24,7 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
     distributor = "Healy Wholesale";
 
     this.startUpBrowser(String.format("Functional - Opportunities Reset Filter Test - %s",
-        method.getAnnotation(Test.class).description()));
+      method.getAnnotation(Test.class).description()));
 
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
@@ -43,12 +43,52 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
     opportunitiesPage.enterDistributorSearchText(distributor).clickSearchForDistributor().clickFirstDistributorResult();
 
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor),
-        "Selected distributor chip IS NOT present post distributor select");
+      "Selected distributor chip IS NOT present post distributor select");
 
     opportunitiesPage.clickResetFilters();
 
     Assert.assertFalse(opportunitiesPage.isQueryChipPresent(distributor),
-        "Selected distributor chip IS present post distributor select");
+      "Selected distributor chip IS present post distributor select");
   }
 
+  @Test(
+    description = "US23293 - Apply Filters then Reset Opportunites page filters",
+    dataProvider = "US23293Data", priority = 2, invocationCount = 1 )
+  public void applyFiltersThenReset( TestUser usr, String dist ) {
+
+    loginToOpportunitiesPage( usr );
+
+    selectDistributor( opportunitiesPage, dist );
+
+    Assert.assertTrue( opportunitiesPage.isQueryChipPresent( dist ),
+      "Selected distributor chip IS NOT present post distributer select" );
+
+    opportunitiesPage.clickApplyFiltersButton().waitForLoaderToDisappear();
+
+    opportunitiesPage.clickResetFilters();
+
+    Assert.assertFalse( opportunitiesPage.isQueryChipPresent( dist ),
+      "Selected distributor chip IS present post distributer select" );
+  }
+
+  public static void selectDistributor(
+    OpportunitiesPage oppsPg, String dist ) {
+    oppsPg.enterDistributorSearchText( dist )
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult();
+  }
+
+
+  @DataProvider
+  public static Object[][] US23293Data() {
+    return new Object[][]{
+      {TestUser.ACTOR4, "Chicago Bev Systems - Il"}
+    };
+  }
+
+  private void loginToOpportunitiesPage(TestUser user) {
+    PageFactory.initElements(driver, LoginPage.class).loginAs(user);
+    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
+    opportunitiesPage.goToPage();
+  }
 }
