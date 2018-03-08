@@ -53,12 +53,12 @@ div.modal.add-opportunity
         div(ng-show="nb.addOpportunityForm.impactDropdown.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="../../../assets/img/icons/error.svg">Please select an impact level.
     div.modal-input.clearfix
-      label Add to target list (optional)
+      label Add to list (optional)
       .horizontal-layout
         .dropdown-filter
           .dropdown
-            md-checkbox(ng-model="nb.newOpportunity.properties.targetListStatus" ng-init="nb.newOpportunity.properties.targetListStatus = false" ngChange="if(nb.newOpportunity.properties.targetList){nb.newOpportunity.properties.targetList = ''}") Add to target list
-            md-select.left(ng-if="nb.newOpportunity.properties.targetListStatus" ng-init="nb.newOpportunity.properties.targetList = ''" ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a target list" name="targetListDropdown")
+            md-checkbox(ng-model="nb.newOpportunity.properties.targetListStatus" ng-init="nb.newOpportunity.properties.targetListStatus = false" ngChange="if(nb.newOpportunity.properties.targetList){nb.newOpportunity.properties.targetList = ''}") Add to list
+            md-select.left(ng-if="nb.newOpportunity.properties.targetListStatus" ng-init="nb.newOpportunity.properties.targetList = ''" ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a list" name="targetListDropdown")
               md-option(ng-repeat="targetList in nb.targetLists | filter:{archived:false, deleted: false}:true | orderBy:'-dateOpportunitiesUpdated'" aria-label="{{targetList.name}}" value="{{targetList.id}}") {{targetList.name}}
     button(type="submit" ng-click="nb.addOpportunity(nb.newOpportunity)").btn-action Add
     p.cancel.accent(ng-click="nb.closeModal()") X Cancel
