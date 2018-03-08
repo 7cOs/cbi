@@ -540,20 +540,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
 
         if (parameters.row.descriptionRow0 === 'NATIONAL SALES ORG' || parameters.row.descriptionRow0 === 'DRAFT') {
-          const nextLevelEntityGroup = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
+          const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
+          const isExceptionHierarchy = nextLevelEntity.hierarchyType === 'EXCPN_HIER';
 
-          this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
-            positionId: parameters.row.metadata.positionId,
-            alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-            entityTypeGroupName: entityTypeGroupName,
-            entityTypeCode: parameters.row.metadata.entityTypeCode,
-            entityType: parameters.row.metadata.entityType,
-            entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+          this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
+            positionId: nextLevelEntity.positionId,
             filter: this.filterState,
-            selectedEntityDescription: parameters.row.descriptionRow0,
+            selectedEntityDescription: nextLevelEntity.description,
             brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
             skuPackageType: this.selectedSkuPackageType,
-            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
+            isMemberOfExceptionHierarchy: isExceptionHierarchy
           }));
         } else {
           const entityTypeGroupName = parameters.row.metadata.entityName;
