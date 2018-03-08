@@ -1,6 +1,7 @@
 import * as DateRangesActions from '../actions/date-ranges.action';
 import { ActionStatus, State } from '../../enums/action-status.enum';
 import { DateRange } from '../../models/date-range.model';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 
 export interface DateRangesState extends State {
   status: ActionStatus;
@@ -60,20 +61,20 @@ export function dateRangesReducer(
     case DateRangesActions.FETCH_DATE_RANGES_SUCCESS_ACTION:
       return {
         status: ActionStatus.Fetched,
-        FYTM: action.payload.find(dateRange => dateRange.code === 'FYTM'),
-        CYTM: action.payload.find(dateRange => dateRange.code === 'CYTM'),
-        CCQTD: action.payload.find(dateRange => dateRange.code === 'CCQTD'),
-        FCQTD: action.payload.find(dateRange => dateRange.code === 'FCQTD'),
-        CYTDBDL: action.payload.find(dateRange => dateRange.code === 'CYTDBDL'),
-        FYTDBDL: action.payload.find(dateRange => dateRange.code === 'FYTDBDL'),
-        CQTD: action.payload.find(dateRange => dateRange.code === 'CQTD'),
-        L60BDL: action.payload.find(dateRange => dateRange.code === 'L60BDL'),
-        L90BDL: action.payload.find(dateRange => dateRange.code === 'L90BDL'),
-        L120BDL: action.payload.find(dateRange => dateRange.code === 'L120BDL'),
-        LCM: action.payload.find(dateRange => dateRange.code === 'LCM'),
-        L3CM: action.payload.find(dateRange => dateRange.code === 'L3CM'),
-        CMIPBDL: action.payload.find(dateRange => dateRange.code === 'CMIPBDL'),
-        FQTD: action.payload.find(dateRange => dateRange.code === 'FQTD')
+        FYTM: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.FYTM),
+        CYTM: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.CYTM),
+        CCQTD: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.CCQTD),
+        FCQTD: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.FCQTD),
+        CYTDBDL: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.CYTDBDL),
+        FYTDBDL: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.FYTDBDL),
+        CQTD: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.CQTD),
+        L60BDL: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.L60BDL),
+        L90BDL: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.L90BDL),
+        L120BDL: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.L120BDL),
+        LCM: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.LCM),
+        L3CM: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.L3CM),
+        CMIPBDL: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.CMIPBDL),
+        FQTD: action.payload.find(dateRange => dateRange.code === DateRangeTimePeriodValue.FQTD)
       };
 
     case DateRangesActions.FETCH_DATE_RANGES_FAILURE_ACTION:
