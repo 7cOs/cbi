@@ -51,24 +51,22 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
       "Selected distributor chip IS present post distributor select");
   }
 
-  @Test(
-    description = "US23293 - Apply Filters then Reset Opportunites page filters",
-    dataProvider = "US23293Data", priority = 2, invocationCount = 1 )
+  @Test(description = "Apply Filters then Reset Opportunites page filters",
+    dataProvider = "applyFiltersResetData", priority = 2, invocationCount = 1 )
   public void applyFiltersThenReset( TestUser usr, String dist ) {
-
     loginToOpportunitiesPage( usr );
 
     selectDistributor( opportunitiesPage, dist );
 
     Assert.assertTrue( opportunitiesPage.isQueryChipPresent( dist ),
-      "Selected distributor chip IS NOT present post distributer select" );
+      "Selected distributor chip IS NOT present post distributor select" );
 
     opportunitiesPage.clickApplyFiltersButton().waitForLoaderToDisappear();
 
     opportunitiesPage.clickResetFilters();
 
     Assert.assertFalse( opportunitiesPage.isQueryChipPresent( dist ),
-      "Selected distributor chip IS present post distributer select" );
+      "Selected distributor chip IS present post distributor select" );
   }
 
   public static void selectDistributor(
@@ -80,7 +78,7 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
 
 
   @DataProvider
-  public static Object[][] US23293Data() {
+  public static Object[][] applyFiltersResetData() {
     return new Object[][]{
       {TestUser.ACTOR4, "Chicago Bev Systems - Il"}
     };
