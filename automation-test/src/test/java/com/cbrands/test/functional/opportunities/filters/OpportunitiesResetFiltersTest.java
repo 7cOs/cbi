@@ -1,11 +1,9 @@
 package com.cbrands.test.functional.opportunities.filters;
 
-
 import com.cbrands.TestUser;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
-import com.cbrands.pages.targetList.TargetListListingsPage;
 import com.cbrands.test.BaseTestCase;
 
 import java.lang.reflect.Method;
