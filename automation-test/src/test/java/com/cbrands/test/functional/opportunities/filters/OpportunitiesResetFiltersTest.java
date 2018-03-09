@@ -21,11 +21,13 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
   private OpportunitiesPage opportunitiesPage;
   private String distributor;
 
+ 
   @AfterClass
   public void tearDownClass() {
     this.shutDownBrowser();
   }
 
+  @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
 	
 	distributor = "Healy Wholesale"; 
