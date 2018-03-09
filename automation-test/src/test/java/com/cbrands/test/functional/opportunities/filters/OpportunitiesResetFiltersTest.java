@@ -47,7 +47,7 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
   }
 
   
-  @Test( description = "Reset filters before clicking Applying Filters button", priority = 1, invocationCount = 1 )
+  @Test( description = "Reset filters before clicking Applying Filters button" )
   public void resetBeforeApplyingFilters() {
 	  
 	  opportunitiesPage.enterDistributorSearchText( distributor )
