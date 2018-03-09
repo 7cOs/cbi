@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
 import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
@@ -22,7 +22,7 @@ export class MyPerformanceTableDataTransformerService {
 
     return entities.map((entity: EntityWithPerformance) => {
       const transformedEntity: MyPerformanceTableRow = {
-        descriptionRow0: this.getDisplayName(entity.name, entity.entityType),
+        descriptionRow0: this.getDisplayName(entity.name, entity.entityType, entity.positionId),
         metricColumn0: entity.performance.total,
         metricColumn1: entity.performance.totalYearAgo,
         metricColumn2: entity.performance.totalYearAgoPercent,
@@ -140,7 +140,11 @@ export class MyPerformanceTableDataTransformerService {
       : 0;
   }
 
-  private getDisplayName(name: string, entityType: EntityType): string {
+  private getDisplayName(name: string, entityType: EntityType, positionId: string): string {
+    if (positionId === '0' && name === EntityPeopleType['DRAFT MANAGER']) {
+      return EntityPeopleType.DRAFT;
+    }
+
     switch (entityType) {
       case EntityType.RoleGroup:
       case EntityType.AccountGroup:

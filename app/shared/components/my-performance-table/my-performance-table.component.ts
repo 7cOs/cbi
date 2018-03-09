@@ -210,7 +210,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
 
   private sortRoleGroups (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
     const index: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
-    const nsoRolesArray: Array<string> = ['GEO BUSINESS UNITS', 'NATIONAL SALES ORG', 'DRAFT MANAGERS', 'DRAFT'];
+    const nsoRolesArray: Array<string> = ['GEO BUSINESS UNITS', 'NATIONAL SALES ORG', 'DRAFT'];
     const descriptionsArray = rowData.map(obj => obj.descriptionRow0);
     if (index !== -1) {
       const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(index, 1);
@@ -222,12 +222,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
         if (rowData.some(obj => obj.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'])) {
           this.updatedRowData = this.sortNationalSalesOrg(this.updatedRowData);
         }
-        /*For initial Sort on the page load since 'DRAFT' is still returned as 'DRAFT MANAGERS'*/
-        if (rowData.some(obj => obj.descriptionRow0 === 'DRAFT MANAGERS')) {
-          this.updatedRowData = this.sortDrafts(this.updatedRowData);
-        }
-        /*After sorting criteria is applied*/
-        if (rowData.some(obj => obj.descriptionRow0 === 'DRAFT')) {
+        if (rowData.some(obj => obj.descriptionRow0 === EntityPeopleType.DRAFT)) {
           this.updatedRowData = this.sortDraftsRole(this.updatedRowData);
         }
         return this.updatedRowData;
@@ -248,14 +243,8 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     return rowData.concat(nsuRow);
   }
 
-  private sortDrafts (rowData: Array<MyPerformanceTableRow>) {
-    const draftIndex: number = findIndex(rowData , data => data.descriptionRow0 === 'DRAFT MANAGERS');
-    const draftIndexRow: Array<MyPerformanceTableRow> = rowData.splice(draftIndex, 1);
-    return rowData.concat(draftIndexRow);
-  }
-
   private sortDraftsRole (rowData: Array<MyPerformanceTableRow>) {
-    const draftIndex: number = findIndex(rowData , data => data.descriptionRow0 === 'DRAFT');
+    const draftIndex: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.DRAFT);
     const draftIndexRow: Array<MyPerformanceTableRow> = rowData.splice(draftIndex, 1);
     return rowData.concat(draftIndexRow);
   }
