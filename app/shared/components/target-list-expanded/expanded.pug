@@ -1,6 +1,6 @@
 .target-lists-header
   div(row)
-    h1(column='12') Target Lists
+    h1(column='12') Lists
 
 .clearfix
   button(ng-if="expanded.buttonState === 'named'" ng-click="expanded.toggleAll(expanded.buttonState)").icon.select-all
@@ -17,7 +17,7 @@
 
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom md-selected="expanded.selectedTab")
-    md-tab(label='My Target Lists' md-on-select="expanded.selector('named')")
+    md-tab(label='My Lists' md-on-select="expanded.selector('named')")
     md-tab(label='Shared with Me' md-on-select="expanded.selector('shared')")
     md-tab(label='Archived' md-on-select="expanded.selector('archived')")
 
@@ -111,7 +111,7 @@ div.expanded-target-lists
         .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
           loader
         div(ng-show="expanded.userService.model.targetLists.sharedNotArchivedCount === 0").no-opportunities
-          p It seems that you haven't been invited to any shared Target Lists yet. In the meantime, you can invite others to collaborate on your Target Lists.
+          p It seems that you haven't been invited to any shared Lists yet. In the meantime, you can invite others to collaborate on your Lists.
           a(ng-click="expanded.selectedTab = 0") Ok, show me my lists
         ul
           li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
@@ -168,7 +168,7 @@ div.expanded-target-lists
         .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
           loader
         div.no-opportunities(ng-show="expanded.userService.model.targetLists.sharedArchivedCount === 0 && expanded.userService.model.targetLists.ownedArchived === 0")
-          h4 It seems that you don’t have any Archived Target Lists.
+          h4 It seems that you don’t have any Archived Lists.
         ul
           li(ng-repeat="list in expanded.userService.model.targetLists.archived | filter:{deleted:false}| orderBy:expanded.sortProperty:expanded.reverse").clearfix
             div.checkbox-wrapper(ng-click="expanded.toggle(list, expanded.selected)")
