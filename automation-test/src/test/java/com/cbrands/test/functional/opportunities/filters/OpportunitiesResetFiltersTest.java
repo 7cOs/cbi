@@ -21,7 +21,7 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
 
-    distributor = "Healy Wholesale";
+	distributor = "Chicago Bev Systems - Il";
 
     this.startUpBrowser(String.format("Functional - Opportunities Reset Filter Test - %s",
       method.getAnnotation(Test.class).description()));
@@ -51,42 +51,23 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
       "Selected distributor chip IS present post distributor select");
   }
 
-  @Test(description = "Apply Filters then Reset Opportunites page filters",
-    dataProvider = "applyFiltersResetData", priority = 2, invocationCount = 1 )
-  public void applyFiltersThenReset( TestUser usr, String dist ) {
-    loginToOpportunitiesPage( usr );
+  @Test(description = "Apply Filters then Reset Opportunites page filters" )
+  public void applyFiltersThenReset() {
 
-    selectDistributor( opportunitiesPage, dist );
+    opportunitiesPage.enterDistributorSearchText( distributor )
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult();
 
-    Assert.assertTrue( opportunitiesPage.isQueryChipPresent( dist ),
+    Assert.assertTrue( opportunitiesPage.isQueryChipPresent( distributor ),
       "Selected distributor chip IS NOT present post distributor select" );
 
-    opportunitiesPage.clickApplyFiltersButton().waitForLoaderToDisappear();
+    opportunitiesPage
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickResetFilters();
 
-    opportunitiesPage.clickResetFilters();
-
-    Assert.assertFalse( opportunitiesPage.isQueryChipPresent( dist ),
+    Assert.assertFalse( opportunitiesPage.isQueryChipPresent( distributor ),
       "Selected distributor chip IS present post distributor select" );
   }
 
-  public static void selectDistributor(
-    OpportunitiesPage oppsPg, String dist ) {
-    oppsPg.enterDistributorSearchText( dist )
-      .clickSearchForDistributor()
-      .clickFirstDistributorResult();
-  }
-
-
-  @DataProvider
-  public static Object[][] applyFiltersResetData() {
-    return new Object[][]{
-      {TestUser.ACTOR4, "Chicago Bev Systems - Il"}
-    };
-  }
-
-  private void loginToOpportunitiesPage(TestUser user) {
-    PageFactory.initElements(driver, LoginPage.class).loginAs(user);
-    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
-    opportunitiesPage.goToPage();
-  }
 }
