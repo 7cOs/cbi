@@ -21,7 +21,7 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
 
-	distributor = "Chicago Bev Systems - Il";
+    distributor = "Chicago Bev Systems - Il";
 
     this.startUpBrowser(String.format("Functional - Opportunities Reset Filter Test - %s",
       method.getAnnotation(Test.class).description()));
