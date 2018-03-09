@@ -5,7 +5,12 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
+import com.cbrands.pages.targetList.TargetListListingsPage;
 import com.cbrands.test.BaseTestCase;
+
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -13,61 +18,47 @@ import org.testng.annotations.*;
 
 public class OpportunitiesResetFiltersTest extends BaseTestCase {
 
-  private OpportunitiesPage oppsPg;
-
-  @BeforeClass
-  public void setUpClass() throws Exception  {
-	
-	 this.startUpBrowser( "Functional - OpportunitiesResetFiltersTest" );
-  }
+  private OpportunitiesPage opportunitiesPage;
+  private String distributor;
 
   @AfterClass
   public void tearDownClass() {
     this.shutDownBrowser();
   }
 
+  public void setUp(Method method) throws MalformedURLException {
+	
+	distributor = "Healy Wholesale"; 
+	  
+    this.startUpBrowser(String.format("Functional - Opportunities Reset Filter Test - %s", 
+    		method.getAnnotation(Test.class).description()));
+    
+    PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
+    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
+    opportunitiesPage.goToPage();
+  }
+  
+  
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
   }
 
   
-  @Test( description = "Reset filters before clicking Applying Filters button", 
-	  dataProvider = "resetFiltersData", priority = 1, invocationCount = 1 )
-  public void resetBeforeApplyingFilters( TestUser usr, String dist ) {
+  @Test( description = "Reset filters before clicking Applying Filters button", priority = 1, invocationCount = 1 )
+  public void resetBeforeApplyingFilters() {
 	  
-	 loginToOpportunitiesPage( usr );
+	  opportunitiesPage.enterDistributorSearchText( distributor )
+  		.clickSearchForDistributor()
+  		.clickFirstDistributorResult();
 
-	 selectDistributor( oppsPg, dist );
-
-	 Assert.assertTrue( oppsPg.isQueryChipPresent( dist ), 
+	 Assert.assertTrue( opportunitiesPage.isQueryChipPresent( distributor ), 
 			  "Selected distributor chip IS NOT present post distributor select" );
 	  
-	 oppsPg.clickResetFilters();
+	 opportunitiesPage.clickResetFilters();
 	  
-	  Assert.assertFalse( oppsPg.isQueryChipPresent( dist ), 
+	  Assert.assertFalse( opportunitiesPage.isQueryChipPresent( distributor ), 
 				  "Selected distributor chip IS present post distributor select" );	  
   }
-
-
-  public static void selectDistributor( OpportunitiesPage oppsPg, String dist ) {
-	 oppsPg.enterDistributorSearchText( dist )
-     	.clickSearchForDistributor()
-     	.clickFirstDistributorResult();
-  }
   
-  
-  @DataProvider
-  public static Object[][] resetFiltersData() {
-    return new Object[][]{
-      {TestUser.ACTOR4, "Healy Wholesale"}
-    };
-  }
-  
-  private void loginToOpportunitiesPage(TestUser user) {
-    PageFactory.initElements(driver, LoginPage.class).loginAs(user);
-    oppsPg = PageFactory.initElements(driver, OpportunitiesPage.class);
-    oppsPg.goToPage();
-  }
-
 }
