@@ -7,9 +7,9 @@ module.exports = /*  @ngInject */
   ])
   .config(function ($stateProvider) {
     $stateProvider
-    .state('target-lists', {
-      url: '/target-lists',
-      title: 'Target Lists',
+    .state('lists', {
+      url: '/lists',
+      title: 'Lists',
       params: {
         obj: 0
       },
@@ -17,7 +17,7 @@ module.exports = /*  @ngInject */
       controller: 'targetListsController',
       controllerAs: 't',
       analyticsData: {
-        pageTitle: 'Target Lists'
+        pageTitle: 'Lists'
       }
     });
   })
