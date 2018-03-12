@@ -529,7 +529,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const isMemberOfExceptionHierarchy: boolean = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
 
     switch (this.salesHierarchyViewType) {
-
       case SalesHierarchyViewType.roleGroups:
         if (parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
