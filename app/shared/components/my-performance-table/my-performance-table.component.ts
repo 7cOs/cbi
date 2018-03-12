@@ -209,11 +209,11 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   }
 
   private sortRoleGroups (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
-    const index: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
+    const geographyIndex: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
     const nsoRolesArray: Array<string> = ['GEO BUSINESS UNITS', 'NATIONAL SALES ORG', 'DRAFT'];
     const descriptionsArray = rowData.map(obj => obj.descriptionRow0);
-    if (index !== -1) {
-      const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(index, 1);
+    if (geographyIndex !== -1) {
+      const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(geographyIndex, 1);
       return rowData.concat(geographyTableRow);
     } else if (nsoRolesArray.some(val => descriptionsArray.indexOf(val) !== -1)) {
         if (rowData.some(obj => obj.descriptionRow0 === 'GEO BUSINESS UNITS')) {
