@@ -18,11 +18,6 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
   private OpportunitiesPage opportunitiesPage;
   private String distributor;
 
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
-  }
-
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
 
@@ -39,6 +34,7 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
   @Test(description = "Reset filters before clicking Applying Filters button")
