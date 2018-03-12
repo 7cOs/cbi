@@ -16,6 +16,7 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
+import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
@@ -519,7 +520,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    if (parameters.row.descriptionRow0 === 'NATIONAL SALES ORG' || parameters.row.descriptionRow0 === 'DRAFT') {
+    if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'] ||
+      parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
       const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
       this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
     } else {
@@ -538,7 +540,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           }
         }
 
-        if (parameters.row.descriptionRow0 === 'NATIONAL SALES ORG' || parameters.row.descriptionRow0 === 'DRAFT') {
+        if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'] ||
+          parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
           const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
           const isExceptionHierarchy = nextLevelEntity.hierarchyType === 'EXCPN_HIER';
 
