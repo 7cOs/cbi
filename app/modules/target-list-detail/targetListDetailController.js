@@ -201,7 +201,7 @@ module.exports = /*  @ngInject */
     }
 
     function navigateToTL() {
-      $window.location.href = '/target-lists';
+      $window.location.href = '/lists';
     }
 
     function removeCollaborator(collaboratorIds) {

@@ -144,37 +144,37 @@ describe('NotificationsComponent', () => {
 
       component.clickOn(notificationsMock[0]);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(0)).toEqual([
-        'Notifications',
-        'Read Notification',
-        'Shared Opportunity'
+        'Navigation',
+        'Read Opportunity Notifications',
+        notificationsMock[0].objectId
       ]);
 
       component.clickOn(notificationsMock[1]);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(1)).toEqual([
-        'Notifications',
-        'Read Notification',
-        'Shared Target List'
+        'Navigation',
+        'Read Target List Notifications',
+        notificationsMock[1].objectId
       ]);
 
       component.clickOn(notificationsMock[2]);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
-        'Notifications',
-        'Read Notification',
-        'Shared Note'
+        'Navigation',
+        'Read Note Notifications',
+        notificationsMock[2].objectId
       ]);
 
       component.clickOn(notificationsMock[3]);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(3)).toEqual([
-        'Notifications',
-        'Read Notification',
-        'Shared Note'
+        'Navigation',
+        'Read Note Notifications',
+        notificationsMock[3].objectId
       ]);
 
       component.clickOn(notificationsMock[4]);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(4)).toEqual([
-        'Notifications',
-        'Read Notification',
-        'Shared Note'
+        'Navigation',
+        'Read Note Notifications',
+        notificationsMock[4].objectId
       ]);
     }));
 
