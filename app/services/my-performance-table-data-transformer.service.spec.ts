@@ -215,6 +215,28 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       });
     });
 
+    describe('when given an EntityWithPerformance of an entityType of RoleGroup and the description if "DRAFT MANAGER', () => {
+      beforeEach(() => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.entityType = EntityType.RoleGroup;
+        });
+      });
+
+      it('should return a transformed table row with the "DRAFT" in the descriptionRow0 when positionId is "0"', () => {
+        responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
+          entityWithPerformance.name = EntityPeopleType['DRAFT MANAGER'];
+          entityWithPerformance.positionId = '0';
+        });
+
+        const tableRows: Array<MyPerformanceTableRow> = myPerformanceTableDataTransformerService
+          .getLeftTableData(responsibilityEntitiesPerformanceMock);
+
+        tableRows.forEach((row: MyPerformanceTableRow) => {
+          expect(row.descriptionRow0).toBe(EntityPeopleType.DRAFT);
+        });
+      });
+    });
+
     describe('when given an EntityWithPerformance of an entityType of AccountGroup', () => {
       beforeEach(() => {
         responsibilityEntitiesPerformanceMock.forEach((entityWithPerformance: EntityWithPerformance) => {
