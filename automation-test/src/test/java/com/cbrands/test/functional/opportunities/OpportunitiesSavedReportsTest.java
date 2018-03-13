@@ -7,6 +7,12 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -42,7 +48,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     this.shutDownBrowser();
   }
 
-  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "distributorData")
+  @Test(description = "Enabling/Disabling Save Report link", 
+      dataProvider = "distributorData", invocationCount=1)
   public void enableSavedReport(String distributorSearchText) {
     Assert.assertFalse(
       opportunitiesPage.isSaveReportButtonEnabled(),
@@ -50,9 +57,12 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
 
     opportunitiesPage = opportunitiesPage
-      .enterDistributorSearchText(distributorSearchText)
-      .clickSearchForDistributor()
-      .clickFirstDistributorResult()
+     .enterDistributorSearchText(distributorSearchText);
+    
+      WebElement b = driver.findElement(By.xpath("//*[@class='']"));
+    
+      // .clickSearchForDistributor()
+     opportunitiesPage.clickFirstDistributorResult()
       .clickApplyFiltersButton()
       .waitForLoaderToDisappear();
 
@@ -60,8 +70,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       opportunitiesPage.isSaveReportButtonEnabled(),
       "Save Report link failed to be enabled after filters applied."
     );
+
   }
 
+  /* -- Disable comment -- /
   @Test(
     description = "Creating an Opportunities Saved Report",
     dependsOnMethods = "enableSavedReport",
@@ -74,7 +86,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     testCreateASingleSavedReport(reportName + " #2", distributorSearchText);
   }
+ */
 
+  
+  /*
   @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
@@ -163,7 +178,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       getDeleteFailureMessage(reportNameToDelete, "Home")
     );
   }
-
+*/
+  
+  
+  /* -- Disable comment -- /
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
@@ -183,7 +201,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Failed to display error when attempting to use the name of an existing report."
     );
   }
-
+  */
+  
+  
+  /*
   @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
@@ -205,6 +226,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Failed to display error message when max limit of Saved Reports already reached."
     );
   }
+  */
 
   @DataProvider
   public static Object[][] distributorData() {
@@ -322,5 +344,5 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     return existingNumberOfSavedReports;
   }
-
+  
 }

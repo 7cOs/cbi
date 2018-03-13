@@ -113,7 +113,17 @@ public class OpportunitiesPage extends TestNGBasePage {
     final WebElement searchField = getSearchFilterTextBox(searchFilter);
     waitForElementToClickable(searchField, true).click();
     searchField.sendKeys(searchText);
+    
+    ensureSendKeys( searchField, searchText );
   }
+  
+  private void ensureSendKeys( WebElement field, String value ) {
+    field.clear(); 
+    for( String c : value.split( "," ) ) {
+        field.sendKeys( c );
+    }
+  }
+  
 
   public OpportunitiesPage clickSearchForChainRetailer() {
     clickSearchInFilter(chainRetailerFilter);
@@ -408,5 +418,6 @@ public class OpportunitiesPage extends TestNGBasePage {
 
       return numberOfSavedReports;
     }
+
   }
 }
