@@ -283,6 +283,16 @@ describe('Responsibilities Service', () => {
             name: 'MARKET DEVELOPMENT MANAGER',
             positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
             entityType: EntityType.RoleGroup
+          }, {
+            type: groupedEntitiesMock['NATIONAL SALES ORG'][0].type,
+            name: 'NATIONAL SALES ORG',
+            positionDescription: groupedEntitiesMock['NATIONAL SALES ORG'][0].positionDescription,
+            entityType: EntityType.RoleGroup
+          }, {
+            type: groupedEntitiesMock['DRAFT'][0].type,
+            name: 'DRAFT',
+            positionDescription: groupedEntitiesMock['DRAFT'][0].positionDescription,
+            entityType: EntityType.RoleGroup
           }]
         };
 
@@ -432,6 +442,16 @@ describe('Responsibilities Service', () => {
             type: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].type,
             name: 'MARKET DEVELOPMENT MANAGER',
             positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
+            entityType: EntityType.RoleGroup
+          }, {
+            type: groupedEntitiesMock['NATIONAL SALES ORG'][0].type,
+            name: 'NATIONAL SALES ORG',
+            positionDescription: groupedEntitiesMock['NATIONAL SALES ORG'][0].positionDescription,
+            entityType: EntityType.RoleGroup
+          }, {
+            type: groupedEntitiesMock['DRAFT'][0].type,
+            name: 'DRAFT',
+            positionDescription: groupedEntitiesMock['DRAFT'][0].positionDescription,
             entityType: EntityType.RoleGroup
           }]
         };
