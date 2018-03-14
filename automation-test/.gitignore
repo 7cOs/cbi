@@ -4,3 +4,6 @@
 /.project
 /test-output/
 /testng-functional-test.xml
+.project
+.classpath
+.settings/
