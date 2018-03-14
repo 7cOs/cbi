@@ -365,6 +365,7 @@ module.exports = /*  @ngInject */
       } else {
         // adding
         switch (filter) {
+          case 'subaccount':
           case 'subaccounts':
           case 'account':
           case 'distributor':
