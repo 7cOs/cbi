@@ -62,7 +62,7 @@ import { ClearMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedDistributorCode,
          SkuPackagePayload } from '../../state/actions/my-performance-version.action';
-import { SalesHierarchyType } from "../../enums/sales-hierarchy-type.enum";
+import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
