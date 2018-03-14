@@ -38,6 +38,7 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
+import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -543,7 +544,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'] ||
           parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
           const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
-          const isExceptionHierarchy = nextLevelEntity.hierarchyType === 'EXCPN_HIER';
+          const isExceptionHierarchy = nextLevelEntity.hierarchyType === SalesHierarchyType.EXCPN_HIER;
 
           this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
             positionId: nextLevelEntity.positionId,
