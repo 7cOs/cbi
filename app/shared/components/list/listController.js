@@ -10,7 +10,6 @@ module.exports = /*  @ngInject */
     // Initial variables
     const vm = this;
     const maxOpportunities = 1000;
-    const values = require('lodash/values');
 
     // Services
     vm.opportunitiesService = opportunitiesService;
@@ -110,6 +109,8 @@ module.exports = /*  @ngInject */
     vm.csvHeader = [
       'Distributor',
       'TDLinx',
+      'Distributor Customer Code',
+      'Distributor Sales Route (Primary)',
       'Store Name',
       'Store Number',
       'Address',
@@ -700,62 +701,59 @@ module.exports = /*  @ngInject */
           ? targetListService.getFormattedTargetListOpportunities(targetListService.model.currentList.id)
           : vm.opportunitiesService.getFormattedOpportunities(true);
 
-        getOpportunitiesPromise
-          .then(opportunities => {
-            csvDataPromise.resolve(createCSVData(opportunities));
-            loaderService.closeLoader();
-          })
-          .catch(() => {
-            loaderService.closeLoader();
-          });
+        getOpportunitiesPromise.then(opportunities => {
+          csvDataPromise.resolve(createCSVData(opportunities));
+          loaderService.closeLoader();
+        })
+        .catch(() => {
+          loaderService.closeLoader();
+        });
       } else {
         csvDataPromise.resolve(createCSVData(vm.selected));
       }
+
       sendDownloadEvent();
+
       return csvDataPromise.promise;
     }
 
     function createCSVData(opportunities) {
-      const csvData = {};
-      opportunities.reduce((data, opportunity, idx) => {
-        const item = {};
-        const csvItem = {};
-        angular.copy(opportunity, item);
-        csvItem.storeDistributor = item.store.distributors ? item.store.distributors[0] : '';
-        csvItem.TDLinx = item.store.id;
-        csvItem.storeName = item.store.name;
-        csvItem.storeNumber = item.store.storeNumber;
-        csvItem.storeAddress = item.store.streetAddress;
-        csvItem.storeCity = item.store.city;
-        csvItem.storeZip = item.store.zip;
-        csvItem.storeDepletionsCTD = item.store.depletionsCurrentYearToDate;
-        csvItem.storeDepletionsCTDYA = item.store.depletionsCurrentYearToDateYA;
-        csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
-        csvItem.storeSegmentation = item.store.segmentation;
+      return opportunities.reduce((opportunityCSVDataArray, opportunity) => {
+        const opportunityCSVData = {
+          storeDistributor: opportunity.store.distributors ? opportunity.store.distributors[0] : '',
+          TDLinx: opportunity.store.id,
+          distributorCustomerCode: getDistributorCustomerCode(opportunity.store.distributorsSalesInfo),
+          primaryDistributorSalesRoute: getDistributorSalesRoute(opportunity.store.distributorsSalesInfo),
+          storeName: opportunity.store.name,
+          storeNumber: opportunity.store.storeNumber,
+          storeAddress: opportunity.store.streetAddress,
+          storeCity: opportunity.store.city,
+          storeZip: opportunity.store.zip,
+          storeDepletionsCTD: opportunity.store.depletionsCurrentYearToDate,
+          storeDepletionsCTDYA: opportunity.store.depletionsCurrentYearToDateYA,
+          storeDepletionsCTDYAPercent: opportunity.store.depletionsCurrentYearToDateYAPercent,
+          storeSegmentation: opportunity.store.segmentation
+        };
 
         if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
-          csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
-          csvItem.productBrand = item.product.brand;
-          csvItem.productSku = item.product.name || 'Any';
-          csvItem.itemAuthorization = item.isItemAuthorization;
-          csvItem.chainMandate = item.isChainMandate;
-          csvItem.onFeature = item.isOnFeature;
-          csvItem.opportunityStatus = item.status;
-          csvItem.impactPredicted = item.impactDescription;
+          opportunityCSVData.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(opportunity));
+          opportunityCSVData.productBrand = opportunity.product.brand;
+          opportunityCSVData.productSku = opportunity.product.name || 'Any';
+          opportunityCSVData.itemAuthorization = opportunity.isItemAuthorization;
+          opportunityCSVData.chainMandate = opportunity.isChainMandate;
+          opportunityCSVData.onFeature = opportunity.isOnFeature;
+          opportunityCSVData.opportunityStatus = opportunity.status;
+          opportunityCSVData.impactPredicted = opportunity.impactDescription;
         }
 
         if (vm.csvDownloadOption === filtersService.csvDownloadOptions[0].value) {
-          csvItem.rationale = item.rationale;
+          opportunityCSVData.rationale = opportunity.rationale;
         }
 
-        if (vm.csvDownloadOption === filtersService.csvDownloadOptions[2].value) {
-          csvData[csvItem.TDLinx] = csvItem;
-        } else {
-          csvData[idx] = csvItem;
-        }
-        return;
+        opportunityCSVDataArray.push(opportunityCSVData);
+
+        return opportunityCSVDataArray;
       }, []);
-      return values(csvData);
     }
 
     function getCSVHeader() {
@@ -945,6 +943,22 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function getDistributorCustomerCode(distributorsSalesInfo) {
+      return distributorsSalesInfo.reduce((customerCode, salesInfo) => {
+        if (salesInfo.primaryFlag === 'Y') customerCode = salesInfo.distributorCustomerCd;
+        return customerCode;
+      }, '');
+    }
+
+    function getDistributorSalesRoute(distributorsSalesInfo) {
+      return distributorsSalesInfo.reduce((salesRoute, salesInfo) => {
+        if (salesInfo.primaryFlag === 'Y') {
+          salesRoute = salesInfo.salespersonName.length ? salesInfo.salespersonName : 'Unknown';
+        }
+        return salesRoute;
+      }, '');
+    }
+
     function impactSort (item) {
       let result;
       switch (item.impact) {
@@ -1073,8 +1087,6 @@ module.exports = /*  @ngInject */
     function getStoreToBePassedToAcct(storeDetails) {
       return {
         storeid: storeDetails.id,
-        premiseType: storeDetails.onPremise ? 'on' : 'off',
-        versionedStoreID: storeDetails.versionedId,
         myaccountsonly: false,
         depletiontimeperiod: 'CYTD'
       };
