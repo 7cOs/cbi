@@ -18,7 +18,7 @@ import { dateRangeStateMock } from '../../models/date-range-state.model.mock';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetrics,
          SelectBrandValues } from '../../state/actions/product-metrics.action';
 import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
@@ -62,6 +62,7 @@ import { ClearMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedDistributorCode,
          SkuPackagePayload } from '../../state/actions/my-performance-version.action';
+import { SalesHierarchyType } from "../../enums/sales-hierarchy-type.enum";
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -774,11 +775,11 @@ describe('MyPerformanceComponent', () => {
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
       'does NOT contain alternateHierarchyId when "NATIONAL SALES ORG" description is clicked', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
-      rowMock.descriptionRow0 = 'NATIONAL SALES ORG';
-      rowMock.metadata.entityName = 'NATIONAL SALES ORG';
+      rowMock.descriptionRow0 = EntityPeopleType['NATIONAL SALES ORG'];
+      rowMock.metadata.entityName = EntityPeopleType['NATIONAL SALES ORG'];
 
       const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
-      nextLevelEntity.hierarchyType = 'EXCPN_HIER';
+      nextLevelEntity.hierarchyType = SalesHierarchyType.EXCPN_HIER;
 
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
@@ -807,11 +808,11 @@ describe('MyPerformanceComponent', () => {
     it('should trigger appropriate actions when current salesHierarchyViewType is roleGroups and the row metadata ' +
       'does NOT contain alternateHierarchyId when "DRAFT" description is clicked', () => {
       componentInstance.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
-      rowMock.descriptionRow0 = 'DRAFT';
-      rowMock.metadata.entityName = 'DRAFT';
+      rowMock.descriptionRow0 = EntityPeopleType.DRAFT;
+      rowMock.metadata.entityName = EntityPeopleType.DRAFT;
 
       const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
-      nextLevelEntity.hierarchyType = 'OFF_HIER';
+      nextLevelEntity.hierarchyType = SalesHierarchyType.OFF_HIER;
 
       const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
       componentInstance.handleElementClicked(params);
