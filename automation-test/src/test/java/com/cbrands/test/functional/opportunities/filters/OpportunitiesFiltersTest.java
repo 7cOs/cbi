@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.opportunities;
+package com.cbrands.test.functional.opportunities.filters;
 
 import com.cbrands.PremiseType;
 import com.cbrands.TestUser;

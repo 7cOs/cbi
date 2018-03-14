@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
-import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { HierarchyGroup } from '../../models/hierarchy-group.model';
@@ -27,7 +27,7 @@ export interface FetchResponsibilitiesSuccessPayload {
 }
 
 export interface FetchEntityWithPerformancePayload {
-  entityTypeGroupName: EntityPeopleType;
+  entityTypeGroupName: string;
   entityTypeCode: string;
   entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
@@ -132,7 +132,7 @@ export const GET_PEOPLE_BY_ROLE_GROUP = '[Responsibilities] GET_PEOPLE_BY_ROLE_G
 export class GetPeopleByRoleGroup implements Action {
   readonly type = GET_PEOPLE_BY_ROLE_GROUP;
 
-  constructor(public payload: EntityPeopleType) { }
+  constructor(public payload: string) { }
 }
 
 export const FETCH_SUBACCOUNTS = '[Responsibilities] FETCH_SUBACCOUNTS';
