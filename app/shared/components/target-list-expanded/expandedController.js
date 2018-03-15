@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService) {
+  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService, compassModalService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -14,6 +14,7 @@ module.exports = /*  @ngInject */
     vm.userService = userService;
     vm.targetListService = targetListService;
     vm.loaderService = loaderService;
+    vm.compassModalService = compassModalService;
 
     // Defaults
     vm.allowDelete = true;
@@ -41,6 +42,7 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
+    vm.dialogRef;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -60,6 +62,7 @@ module.exports = /*  @ngInject */
     vm.sortBy = sortBy;
     vm.toggle = toggle;
     vm.toggleAll = toggleAll;
+    vm.showModal = showModal;
 
     init();
 
@@ -410,5 +413,9 @@ module.exports = /*  @ngInject */
           }
         }
       });
+    }
+
+    function showModal() {
+      vm.dialogRef = compassModalService.showModalDialog({}, {});
     }
   };

@@ -19,7 +19,6 @@ export class CompassModalService {
 
   public showModalDialog(
     modalInputs: CompassModalInputs,
-    compassPositionConfig: CompassOverlayPositionConfig,
     compassOverlayConfig: CompassOverlayConfig
   ): CompassModalOverlayRef {
     const overlayPortalHost: OverlayRef = this.compassOverlayService.getCenteredOverlayPortalHost(compassOverlayConfig);

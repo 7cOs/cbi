@@ -10,6 +10,7 @@ export class CompassModalOverlayRef {
   constructor(private overlayRef: OverlayRef) { }
 
   closeModal(): void {
+    // this.modalInstance.modalEventEmitter.subscribe(() => this.overlayRef.dispose() );
     this.overlayRef.dispose();
   }
 }

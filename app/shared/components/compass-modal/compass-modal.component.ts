@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, Inject } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, Inject, EventEmitter } from '@angular/core';
 
 import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
 import { CompassModalInputs } from '../../../models/compass-modal-inputs.model';
@@ -9,13 +9,14 @@ import { COMPASS_MODAL_INPUTS } from '../../components/compass-modal/compass-mod
 
 @Component({
   selector: 'compass-modal',
-  template: `<ng-content><div>test</div></ng-content>`,
+  template: `<div (click)='hideModal(true)'>TEST</div>`,
 })
 
 export class CompassModalComponent implements OnInit, OnDestroy {
   @Input() body: string;
   @Input() title: string;
 
+  public modalEventEmitter = new EventEmitter<any>();
   private overlayConfig: CompassOverlayConfig = {
     hasBackdrop: true
   };
@@ -47,12 +48,13 @@ export class CompassModalComponent implements OnInit, OnDestroy {
   public showModal(): void {
     this.modalOverlayRef = this.compassModalService.showModalDialog(
       this.modalInputData,
-      this.positionConfig,
       this.overlayConfig
     );
   }
 
   public hideModal(): void {
-    if (this.modalOverlayRef) this.modalOverlayRef.closeModal();
+    console.log('foo');
+    this.modalOverlayRef.closeModal();
+    this.modalEventEmitter.emit(true);
   }
 }
