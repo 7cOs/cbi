@@ -343,6 +343,16 @@ describe('Unit: filter service', function() {
             storeSegmentationA: false,
             storeSegmentationB: false,
             storeSegmentationC: false,
+            opportunityStatusOpen: false,
+            opportunityStatusTargeted: false,
+            cbbdChainIndependent: false,
+            cbbdChainCbbd: false,
+            salesStatusSold: false,
+            salesStatusUnSold: false,
+            priorityPackageGaintain: false,
+            priorityPackageImpact: false,
+            priorityPackageInnovation: false,
+            'priorityPackageAdditional CA': false,
             filtersValidCount: 0,
             impact: '',
             opportunitiesType: [
@@ -820,6 +830,16 @@ describe('Unit: filter service', function() {
       filtersService.model.storeSegmentationA = true;
       filtersService.model.storeSegmentationB = true;
       filtersService.model.storeSegmentationC = true;
+      filtersService.model.opportunityStatusOpen = false;
+      filtersService.model.opportunityStatusTargeted = false;
+      filtersService.model.cbbdChainIndependent = false;
+      filtersService.model.cbbdChainCbbd = false;
+      filtersService.model.salesStatusSold = false;
+      filtersService.model.salesStatusUnSold = false;
+      filtersService.model.priorityPackageGaintain = false;
+      filtersService.model.priorityPackageImpact = false;
+      filtersService.model.priorityPackageInnovation = false;
+      filtersService.model['priorityPackageAdditional CA'] = false;
 
       expect(filtersService.model).not.toEqual(resetModelObject);
       filtersService.resetFilters();
