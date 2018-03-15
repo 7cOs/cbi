@@ -65,6 +65,12 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
+  private specializedRoleGroupWeights = {
+    'GEO BUSINESS UNITS': 995,
+    [EntityPeopleType['NATIONAL SALES ORG']]: 996,
+    [EntityPeopleType.DRAFT]: 997,
+    [EntityPeopleType.GEOGRAPHY]: 998
+  };
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -208,15 +214,15 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   }
 
   private sortRoleGroups(rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
-    const roleGroup = {
-      'GEO BUSINESS UNITS': 995,
-      [EntityPeopleType['NATIONAL SALES ORG']]: 996,
-      [EntityPeopleType.DRAFT]: 997,
-      [EntityPeopleType.GEOGRAPHY]: 998
-    };
-    rowData.map((obj, index) => {
-      obj['weight'] = obj['descriptionRow0'] in roleGroup ? roleGroup[obj['descriptionRow0']] : index;
+    const rowDataMapping: any = rowData.map((row: MyPerformanceTableRow, index: number) => {
+      return {
+        index: index,
+        sortWeight: this.specializedRoleGroupWeights[row.descriptionRow0] || index
+      };
     });
-    return sortBy(rowData, ['weight']);
+    const sortedRowDataMapping = sortBy(rowDataMapping, ['sortWeight']);
+    return sortedRowDataMapping.map((row: MyPerformanceTableRow) => {
+      return rowData[row.index];
+    });
   }
 }

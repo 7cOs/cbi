@@ -29,5 +29,5 @@ export interface MyPerformanceTableRow {
   metadata?: MyPerformanceTableRowMetadata;
   opportunities?: number;
   performanceError?: boolean;
-  weight?: number;
+  index?: number;
 }
