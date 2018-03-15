@@ -586,6 +586,16 @@ module.exports = /*  @ngInject */
       service.model.storeSegmentationA = false;
       service.model.storeSegmentationB = false;
       service.model.storeSegmentationC = false;
+      service.model.opportunityStatusOpen = false;
+      service.model.opportunityStatusTargeted = false;
+      service.model.cbbdChainIndependent = false;
+      service.model.cbbdChainCbbd = false;
+      service.model.salesStatusSold = false;
+      service.model.salesStatusUnSold = false;
+      service.model.priorityPackageGaintain = false;
+      service.model.priorityPackageImpact = false;
+      service.model.priorityPackageInnovation = false;
+      service.model['priorityPackageAdditional CA'] = false;
     }
 
     function resetPagination() {
