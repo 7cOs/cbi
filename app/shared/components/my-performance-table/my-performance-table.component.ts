@@ -216,7 +216,6 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     rowData.map((obj, index) => {
       obj['weight'] = obj['descriptionRow0'] in roleGroup ? roleGroup[obj['descriptionRow0']] : index;
     });
-    const sortedData = sortBy(rowData, ['weight']);
-    return sortedData;
+    return sortBy(rowData, ['weight']);
   }
 }
