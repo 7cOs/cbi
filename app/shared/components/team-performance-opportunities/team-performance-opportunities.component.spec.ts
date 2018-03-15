@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
-import { CompassTooltipObject } from '../../../models/compass-tooltip-component.model';
-import { getTooltipMock } from '../../../models/compass-tooltip.model.mock';
+import { CompassTooltipPopupInputs } from '../../../models/compass-tooltip-popup-inputs.model';
+import { CompassTooltipService } from '../../../services/compass-tooltip.service';
 import { getTeamPerformanceTableOpportunitiesMock } from '../../../models/my-performance-table-row.model.mock';
 import { NumberPipeMock } from '../../../pipes/number.pipe.mock';
 import { TeamPerformanceOpportunitiesComponent } from './team-performance-opportunities.component';
@@ -15,35 +15,47 @@ const chance = new Chance();
 describe('Team Performance Opportunities Component', () => {
   let fixture: ComponentFixture<TeamPerformanceOpportunitiesComponent>;
   let componentInstance: TeamPerformanceOpportunitiesComponent;
-
   let opportunitiesMock: Array<TeamPerformanceTableOpportunity>;
-  let tooltipMock: CompassTooltipObject;
   let opportunitiesTotalMock: number;
   let premiseTypeMock: string;
   let productNameMock: string;
   let subtitleMock: string;
+  let tooltipInputsMock: CompassTooltipPopupInputs;
+
+  const compassTooltipServiceMock = {
+    showTooltip: jasmine.createSpy('showTooltip')
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompassTooltipComponent, NumberPipeMock, TeamPerformanceOpportunitiesComponent ]
+      declarations: [
+        CompassTooltipComponent,
+        NumberPipeMock,
+        TeamPerformanceOpportunitiesComponent
+      ],
+      providers: [{
+        provide: CompassTooltipService,
+        useValue: compassTooltipServiceMock
+      }]
     });
 
     fixture = TestBed.createComponent(TeamPerformanceOpportunitiesComponent);
     componentInstance = fixture.componentInstance;
 
     opportunitiesMock = getTeamPerformanceTableOpportunitiesMock();
-    tooltipMock = getTooltipMock();
     opportunitiesTotalMock = chance.natural();
     productNameMock = chance.string();
     premiseTypeMock = chance.string();
     subtitleMock = chance.string();
+    tooltipInputsMock = {
+      title: chance.string()
+    };
 
     componentInstance.opportunities = opportunitiesMock;
     componentInstance.premiseType = premiseTypeMock;
     componentInstance.productName = productNameMock;
     componentInstance.subtitle = subtitleMock;
     componentInstance.total = opportunitiesTotalMock;
-    componentInstance.tooltip = tooltipMock;
 
     fixture.detectChanges();
   });
@@ -88,6 +100,21 @@ describe('Team Performance Opportunities Component', () => {
           expect(childDivs[1].nativeElement.textContent).toBe(opportunitiesMock[index].count.toString());
         }
       });
+    });
+
+    it('should NOT contain a compass-tooltip element if no tooltip inputs are passed in', () => {
+      const compassTooltipElement = fixture.debugElement.query(By.css('.header-tooltip'));
+
+      expect(compassTooltipElement).toBeNull();
+    });
+
+    it('should contain a compass-tooltip element if a tooltip input is passed in', () => {
+      componentInstance.tooltip = tooltipInputsMock;
+      fixture.detectChanges();
+
+      const compassTooltipElement = fixture.debugElement.query(By.css('.header-tooltip'));
+
+      expect(compassTooltipElement).not.toBeNull();
     });
   });
 

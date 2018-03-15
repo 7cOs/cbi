@@ -53,6 +53,21 @@ module.exports = /*  @ngInject */
     vm.selectAllToastVisible = false;
     vm.maxOpportunities = maxOpportunities;
     vm.csvDownloadOption = filtersService.csvDownloadOptions[0].value;
+    vm.inactiveStatusTooltipInputData = {
+      title: 'Inactive Status',
+      text: [
+        'This opportunity recommendation is no longer supported by data analytics (see Compass user guide for more details).',
+        'Consider removing this opportunity from your list to ensure your list stays actionable and relevant.'
+      ]
+    };
+    vm.velocityTooltipInputData = {
+      title: 'Velocity',
+      text: [
+        'Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90)' +
+        ' and dividing by number of 30 day periods (3).',
+        '“vs YA %” indicates the trend of velocity this year vs. same time period last year.'
+      ]
+    };
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;

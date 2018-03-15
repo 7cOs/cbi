@@ -1,0 +1,8 @@
+section.compass-tooltip-popup-section(
+  [@scaleAnimation]="currentScaleAnimation",
+  (@scaleAnimation.done)="onScaleAnimationDone($event)"
+)
+  .compass-tooltip-popup-title(*ngIf="tooltipInputs.title") {{ tooltipInputs.title }}
+  .compass-tooltip-popup-content(*ngIf="tooltipInputs.text")
+    .compass-tooltip-popup-text(*ngFor="let text of tooltipInputs.text") {{ text }}
+  .compass-tooltip-markup-content(*ngIf="tooltipInputs.markupString", [innerHTML]="tooltipInputs.markupString")

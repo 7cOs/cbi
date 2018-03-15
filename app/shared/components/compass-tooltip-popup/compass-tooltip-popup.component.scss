@@ -1,0 +1,31 @@
+@import '../../../assets/styles/base/variables';
+
+/deep/.compass-tooltip-popup-section {
+  background: $light-blue;
+  border-radius: 6px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  color: $gray-1;
+  font-family: $roboto;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 15px;
+  padding: 30px;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+  width: 220px;
+
+  .compass-tooltip-popup-title {
+    font-weight: bold;
+    letter-spacing: 0;
+  }
+
+  .compass-tooltip-popup-text {
+    font-weight: normal;
+    margin-top: 15px;
+  }
+
+  .compass-tooltip-markup-content {
+    margin-top: 15px;
+  }
+}
