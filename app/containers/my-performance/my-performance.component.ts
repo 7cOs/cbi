@@ -521,8 +521,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'] ||
-      parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
+    if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
+      || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
       const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
       this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
     } else {
@@ -541,8 +541,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           }
         }
 
-        if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'] ||
-          parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
+        if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
+          || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
           const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
           const isExceptionHierarchy = nextLevelEntity.hierarchyType === SalesHierarchyType.EXCPN_HIER;
 
