@@ -236,10 +236,6 @@ describe('MyPerformanceTableComponent', () => {
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
 
-      expect(rowComponent0.rowData).toBeTruthy();
-      expect(rowComponent1.rowData).toBeTruthy();
-      expect(rowComponent2.rowData).toBeTruthy();
-
       expect(rowComponent0.rowData).toBe(tableData[1]);
       expect(rowComponent1.rowData).toBe(tableData[2]);
       expect(rowComponent2.rowData).toBe(tableData[0]);

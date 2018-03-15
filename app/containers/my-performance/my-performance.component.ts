@@ -44,7 +44,7 @@ import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { WindowService } from '../../services/window.service';
 
-const CORPORATE_USER_POSITION_ID = '0';
+export const CORPORATE_USER_POSITION_ID = '0';
 
 export interface HandleElementClickedParameters {
   leftSide: boolean;

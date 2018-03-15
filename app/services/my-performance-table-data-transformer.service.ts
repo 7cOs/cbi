@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
+import { CORPORATE_USER_POSITION_ID } from '../containers/my-performance/my-performance.component';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
@@ -141,7 +142,7 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   private getDisplayName(name: string, entityType: EntityType, positionId: string): string {
-    if (positionId === '0' && name === EntityPeopleType['DRAFT MANAGER']) {
+    if (positionId === CORPORATE_USER_POSITION_ID && name === EntityPeopleType['DRAFT MANAGER']) {
       return EntityPeopleType.DRAFT;
     }
 
