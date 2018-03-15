@@ -24,6 +24,7 @@ import { NotificationsComponent } from './shared/components/Notifications/notifi
 import { OpportunitiesSearchHandoffService } from './services/opportunities-search-handoff.service';
 import { reducers, metaReducers } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
+import { SharedModule } from './shared/shared.module';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
@@ -51,7 +52,8 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     MyPerformanceModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
-    Environment.isLocal() ? StoreDevtoolsModule.instrument({maxAge: 25}) : []
+    Environment.isLocal() ? StoreDevtoolsModule.instrument({maxAge: 25}) : [],
+    SharedModule
   ],
   declarations: [
     AnalyticsEventDirective,

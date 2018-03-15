@@ -20,6 +20,24 @@ module.exports = /*  @ngInject */
     vm.opportunities = true;
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.showSaveButton = true;
+    vm.opportunityTypeTooltipInputData = {
+      title: 'Opportunity Type',
+      markupString: '<div class="compass-tooltip-popup-text"><span class="bold">Non-buy:</span> No depletions within L90' +
+        ' (or L60 for draft packages) AND reporting depletions at similar stores</div>' +
+        '<div class="compass-tooltip-popup-text"><span class="bold">At Risk:</span> Reported depletions within L90 but not L60</div>' +
+        '<div class="compass-tooltip-popup-text"><span class="bold">New Placement (Quality):</span> First depletion within' +
+        ' L90 but not L60</div>' +
+        '<div class="compass-tooltip-popup-text"><span class="bold">New Placement (No Rebuy):</span> First depletion' +
+        ' within L60-90 AND has been reordered</div>' +
+        '<div class="compass-tooltip-popup-text"><span class="bold">Low Velocity:</span> Velocity in bottom 25% percentile vs.' +
+        ' similar stores</div>' +
+        '<div class="compass-tooltip-popup-text"><span class="bold">Custom:</span> Field-generated opportunity</div>'
+    };
+    vm.storeStatusTooltipInputData = {
+      title: 'Store Status',
+      markupString: '<div class="compass-tooltip-popup-text"><span class="bold">Unsold Store:</span>' +
+        ' Store with no CBBD depletions within  L365 and a beer license</div>'
+    };
 
     // Expose Needed Services
     vm.chipsService = chipsService;

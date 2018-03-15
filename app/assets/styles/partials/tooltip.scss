@@ -19,6 +19,13 @@
     position: relative;
     width: auto;
   }
+
+  .tooltip-image {
+    height: 15px;
+    margin-left: 5px;
+    width: 15px;
+    vertical-align: text-bottom;
+  }
 }
 
 // md-tooltip uses pointer-events to determine parent element

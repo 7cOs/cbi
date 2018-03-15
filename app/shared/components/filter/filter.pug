@@ -61,16 +61,11 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       .tooltip-wrap
         label Opportunity Type
           .tooltip
-            img(src="../../../assets/img/icons/help-tooltip.svg")
-            md-tooltip(md-direction="bottom")
-              label Filter Set
-              h3 Opportunity Type
-              p #[strong Non-buy:] No depletions within L90 (or L60 for draft packages) AND reporting depletions at Similar Stores
-              p #[strong At Risk:] Reported depletions within L90 but not L60
-              p #[strong New Placement (Quality):] First depletion within L60-90 AND has been reordered
-              p #[strong New Placement (No Rebuy):] First depletion within L60-90 AND has not been reordered
-              p #[strong Low Velocity:] Velocity in bottom 25% percentile vs. Similar Stores
-              p #[strong Custom:] Field-generated opportunity
+          compass-tooltip(
+            [title]="filter.opportunityTypeTooltipInputData.title",
+            [markup-string]="filter.opportunityTypeTooltipInputData.markupString"
+          )
+            img.tooltip-image(src="../../../assets/img/icons/help-circle.svg")
       .dropdown-filter
         .dropdown
           md-select(
@@ -187,11 +182,11 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
         .tooltip-wrap
           label Store Status
             .tooltip
-              img(src="../../../assets/img/icons/help-tooltip.svg")
-              md-tooltip(md-direction="bottom")
-                label Filter Set
-                h3 Store Status
-                p #[strong Unsold Store:] Store with no CBBD depletions within L365 and a Beer License
+              compass-tooltip(
+                [title]="filter.storeStatusTooltipInputData.title",
+                [markup-string]="filter.storeStatusTooltipInputData.markupString"
+              )
+                img.tooltip-image(src="../../../assets/img/icons/help-circle.svg")
         md-checkbox(ng-model="filter.filtersService.model.salesStatusSold" aria-label="Sold" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.salesStatus, 'Sold', 'salesStatus', 'Sold')") Sold
         md-checkbox(ng-model="filter.filtersService.model.salesStatusUnsold" aria-label="Unsold" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.salesStatus, 'Unsold', 'salesStatus', 'Unsold')") Unsold
 

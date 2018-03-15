@@ -78,6 +78,20 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     vm.depletionSelectOpen = false;
     vm.distributionSelectOpen = false;
     vm.dateRanges = {};
+    vm.premiseTypeTooltipInputData = {
+      title: 'Premise Type',
+      text: [
+        'Premise type classification as provided by TDLinx.',
+        '"All" contains Off-Premise, On-Premise, Non Retail, and Unknown (if applicable).'
+      ]
+    };
+    vm.storeTypeTooltipInputData = {
+      title: 'Store Type',
+      text: [
+        'Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)',
+        'Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams'
+      ]
+    };
 
     // top bottom public methods
     vm.topBottomData = {
