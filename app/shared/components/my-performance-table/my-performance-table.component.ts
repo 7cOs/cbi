@@ -5,6 +5,7 @@ import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
+import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
 import { LoadingState } from '../../../enums/loading-state.enum';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -209,9 +210,9 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   private sortRoleGroups(rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
     const roleGroup = {
       'GEO BUSINESS UNITS': 995,
-      'NATIONAL SALES ORG': 996,
-      'DRAFT': 997,
-      'GEOGRAPHY': 998
+      [EntityPeopleType['NATIONAL SALES ORG']]: 996,
+      [EntityPeopleType.DRAFT]: 997,
+      [EntityPeopleType.GEOGRAPHY]: 998
     };
     rowData.map((obj, index) => {
       obj['weight'] = obj['descriptionRow0'] in roleGroup ? roleGroup[obj['descriptionRow0']] : index;
