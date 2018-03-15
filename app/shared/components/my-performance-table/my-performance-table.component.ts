@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { findIndex } from 'lodash';
+import { sortBy } from 'lodash';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
-import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
 import { LoadingState } from '../../../enums/loading-state.enum';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
@@ -65,7 +64,6 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
-  private updatedRowData: Array<MyPerformanceTableRow>;
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -208,44 +206,17 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     }
   }
 
-  private sortRoleGroups (rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
-    const geographyIndex: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.GEOGRAPHY);
-    const nsoRolesArray: Array<string> = ['GEO BUSINESS UNITS', 'NATIONAL SALES ORG', 'DRAFT'];
-    const descriptionsArray = rowData.map(obj => obj.descriptionRow0);
-    if (geographyIndex !== -1) {
-      const geographyTableRow: Array<MyPerformanceTableRow> = rowData.splice(geographyIndex, 1);
-      return rowData.concat(geographyTableRow);
-    } else if (nsoRolesArray.some(val => descriptionsArray.indexOf(val) !== -1)) {
-        if (rowData.some(obj => obj.descriptionRow0 === 'GEO BUSINESS UNITS')) {
-          this.updatedRowData = this.sortGeoBusinessUnit(rowData);
-        }
-        if (rowData.some(obj => obj.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG'])) {
-          this.updatedRowData = this.sortNationalSalesOrg(this.updatedRowData);
-        }
-        if (rowData.some(obj => obj.descriptionRow0 === EntityPeopleType.DRAFT)) {
-          this.updatedRowData = this.sortDraftsRole(this.updatedRowData);
-        }
-        return this.updatedRowData;
-      } else {
-      return rowData;
-    }
-  }
-
-  private sortGeoBusinessUnit (rowData: Array<MyPerformanceTableRow>) {
-    const geoBusinessIndex: number = findIndex(rowData , data => data.descriptionRow0 === 'GEO BUSINESS UNITS');
-    const geoBusinessRow: Array<MyPerformanceTableRow> = rowData.splice(geoBusinessIndex, 1);
-    return rowData.concat(geoBusinessRow);
-  }
-
-  private sortNationalSalesOrg (rowData: Array<MyPerformanceTableRow>) {
-    const nsuIndex: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']);
-    const nsuRow: Array<MyPerformanceTableRow> = rowData.splice(nsuIndex, 1);
-    return rowData.concat(nsuRow);
-  }
-
-  private sortDraftsRole (rowData: Array<MyPerformanceTableRow>) {
-    const draftIndex: number = findIndex(rowData , data => data.descriptionRow0 === EntityPeopleType.DRAFT);
-    const draftIndexRow: Array<MyPerformanceTableRow> = rowData.splice(draftIndex, 1);
-    return rowData.concat(draftIndexRow);
+  private sortRoleGroups(rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
+    const roleGroup = {
+      'GEO BUSINESS UNITS': 995,
+      'NATIONAL SALES ORG': 996,
+      'DRAFT': 997,
+      'GEOGRAPHY': 998
+    };
+    rowData.map((obj, index) => {
+      obj['weight'] = obj['descriptionRow0'] in roleGroup ? roleGroup[obj['descriptionRow0']] : index;
+    });
+    const sortedData = sortBy(rowData, ['weight']);
+    return sortedData;
   }
 }
