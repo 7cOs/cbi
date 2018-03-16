@@ -2,7 +2,8 @@ export enum NotificationObjectType {
   'TARGET_LIST' = 'TARGET_LIST',
   'OPPORTUNITY' = 'OPPORTUNITY',
   'STORE' = 'STORE',
-  'ACCOUNT' = 'ACCOUNT'
+  'ACCOUNT' = 'ACCOUNT',
+  'DISTRIBUTOR' = 'DISTRIBUTOR'
 }
 
 export enum NotificationAction {
