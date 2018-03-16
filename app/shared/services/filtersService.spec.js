@@ -348,7 +348,7 @@ describe('Unit: filter service', function() {
             cbbdChainIndependent: false,
             cbbdChainCbbd: false,
             salesStatusSold: false,
-            salesStatusUnSold: false,
+            salesStatusUnsold: false,
             priorityPackageGaintain: false,
             priorityPackageImpact: false,
             priorityPackageInnovation: false,
@@ -835,7 +835,7 @@ describe('Unit: filter service', function() {
       filtersService.model.cbbdChainIndependent = false;
       filtersService.model.cbbdChainCbbd = false;
       filtersService.model.salesStatusSold = false;
-      filtersService.model.salesStatusUnSold = false;
+      filtersService.model.salesStatusUnsold = false;
       filtersService.model.priorityPackageGaintain = false;
       filtersService.model.priorityPackageImpact = false;
       filtersService.model.priorityPackageInnovation = false;
