@@ -2,4 +2,4 @@ span([ngClass]="getBackButtonClass()", (click)="backButtonClicked.emit()")
 .breadcrumb-container
   span.breadcrumb-entity(
     *ngFor="let entityDescription of breadcrumbTrail",
-    (click)="handleEntityClicked(entityDescription)") {{ entityDescription }}
+    (click)="handleEntityClicked(entityDescription)") {{ entityDescription === 'DRAFT MANAGER' ? 'DRAFT' : entityDescription }}
