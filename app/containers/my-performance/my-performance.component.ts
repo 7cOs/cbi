@@ -16,6 +16,7 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
+import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
@@ -37,12 +38,13 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
+import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { WindowService } from '../../services/window.service';
 
-const CORPORATE_USER_POSITION_ID = '0';
+export const CORPORATE_USER_POSITION_ID = '0';
 
 export interface HandleElementClickedParameters {
   leftSide: boolean;
@@ -519,15 +521,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
+    if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
+      || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
+      const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
+      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
+    } else {
+      this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(parameters.row.metadata.entityType));
+    }
 
     const isMemberOfExceptionHierarchy: boolean = this.selectedEntityIsMemberOfExceptionHierarchy(parameters);
 
     switch (this.salesHierarchyViewType) {
-
       case SalesHierarchyViewType.roleGroups:
-        const entityTypeGroupName = parameters.row.metadata.entityName;
-
         if (parameters.row.metadata.alternateHierarchyId) {
           this.store.dispatch(new ResponsibilitiesActions.SetAlternateHierarchyId(parameters.row.metadata.alternateHierarchyId));
 
@@ -536,19 +541,36 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
-          positionId: parameters.row.metadata.positionId,
-          alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
-          entityTypeGroupName: entityTypeGroupName,
-          entityTypeCode: parameters.row.metadata.entityTypeCode,
-          entityType: parameters.row.metadata.entityType,
-          entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
-          filter: this.filterState,
-          selectedEntityDescription: parameters.row.descriptionRow0,
-          brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
-          skuPackageType: this.selectedSkuPackageType,
-          isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
-        }));
+        if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
+          || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
+          const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
+          const isExceptionHierarchy = nextLevelEntity.hierarchyType === SalesHierarchyType.EXCPN_HIER;
+
+          this.store.dispatch(new ResponsibilitiesActions.FetchResponsibilities({
+            positionId: nextLevelEntity.positionId,
+            filter: this.filterState,
+            selectedEntityDescription: nextLevelEntity.description,
+            brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
+            skuPackageType: this.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: isExceptionHierarchy
+          }));
+        } else {
+          const entityTypeGroupName = parameters.row.metadata.entityName;
+
+          this.store.dispatch(new ResponsibilitiesActions.FetchEntityWithPerformance({
+            positionId: parameters.row.metadata.positionId,
+            alternateHierarchyId: this.currentState.responsibilities.alternateHierarchyId,
+            entityTypeGroupName: entityTypeGroupName,
+            entityTypeCode: parameters.row.metadata.entityTypeCode,
+            entityType: parameters.row.metadata.entityType,
+            entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+            filter: this.filterState,
+            selectedEntityDescription: parameters.row.descriptionRow0,
+            brandSkuCode: this.selectedSkuPackageCode || this.selectedBrandCode,
+            skuPackageType: this.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: isMemberOfExceptionHierarchy
+          }));
+        }
 
         this.fetchProductMetricsWhenClick(parameters);
         break;

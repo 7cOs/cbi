@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material';
 import * as Chance from 'chance';
 
 import { BreadcrumbEntityClickedEvent } from '../../../models/breadcrumb-entity-clicked-event.model';
+import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
 import { getMyPerformanceEntitiesDataMock } from '../../../state/reducers/my-performance.state.mock';
 import { MyPerformanceEntitiesData } from '../../../state/reducers/my-performance.reducer';
 import { MyPerformanceBreadcrumbComponent } from './my-performance-breadcrumb.component';
@@ -163,6 +164,23 @@ describe('Breadcrumb Component', () => {
       expect(breadcrumbContainer.textContent).toBe(expectedChangedTrail);
       breadcrumbEntities = fixture.debugElement.queryAll(By.css('.breadcrumb-entity'));
       expect(breadcrumbEntities.length).toBe(changedVersionsMock.length + 1);
+    });
+  });
+
+  describe('display proper description', () => {
+    it('should display DRAFT even though the selected entityDescription is set as DRAFT MANAGERS ', () => {
+      componentInstance.currentPerformanceState = currentStateMock;
+      componentInstance.performanceStateVersions = versionsMock;
+      componentInstance.showBackButton = true;
+      currentStateMock.selectedEntityDescription = EntityPeopleType['DRAFT MANAGER'];
+      fixture.detectChanges();
+      const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
+
+      const expectedVersionTrail: string = versionsMock.reduce((trail: string, version: MyPerformanceEntitiesData) => {
+        return trail + version.selectedEntityDescription;
+      }, '');
+      const expectedTrail = expectedVersionTrail + EntityPeopleType.DRAFT;
+      expect(breadcrumbContainer.textContent).toBe(expectedTrail);
     });
   });
 
