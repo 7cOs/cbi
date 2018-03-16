@@ -1,0 +1,2 @@
+# Do not treat binary file(s) as text
+*.png binary
