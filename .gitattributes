@@ -1,2 +1,2 @@
-# Do not treat binary file(s) as text
+# Treat binary file(s) as binary
 automation-test/images/*.png -text -diff
