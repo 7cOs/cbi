@@ -1,9 +1,8 @@
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
-import { ComponentRef, ElementRef, Injectable } from '@angular/core';
+import { ComponentRef, Injectable } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 
 import { CompassOverlayConfig } from '../models/compass-overlay-config.model';
-import { CompassOverlayPositionConfig } from '../models/compass-overlay-position-config.model';
 import { CompassOverlayService } from './compass-overlay.service';
 import { CompassModalComponent } from '../shared/components/compass-modal/compass-modal.component';
 import { CompassModalInputs } from '../models/compass-modal-inputs.model';
@@ -22,15 +21,17 @@ export class CompassModalService {
     compassOverlayConfig: CompassOverlayConfig
   ): CompassModalOverlayRef {
     const overlayPortalHost: OverlayRef = this.compassOverlayService.getCenteredOverlayPortalHost(compassOverlayConfig);
-
     const modalInputPortalInjector: PortalInjector = this.compassOverlayService.getInputPortalInjector(
       COMPASS_MODAL_INPUTS,
       modalInputs
     );
     const overlayModal: CompassModalComponent = this.attachModalComponent(overlayPortalHost, modalInputPortalInjector);
-
     const modalOverlayRef: CompassModalOverlayRef = new CompassModalOverlayRef(overlayPortalHost);
+
+    overlayPortalHost.backdropClick().subscribe(() => modalOverlayRef.closeModal());
+
     modalOverlayRef.modalInstance = overlayModal;
+    overlayModal.modalOverlayRef = modalOverlayRef;
 
     return modalOverlayRef;
   }

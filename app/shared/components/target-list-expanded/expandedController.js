@@ -42,7 +42,6 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
-    vm.dialogRef;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -416,6 +415,8 @@ module.exports = /*  @ngInject */
     }
 
     function showModal() {
-      vm.dialogRef = compassModalService.showModalDialog({}, {});
+      compassModalService.showModalDialog({}, {
+        hasBackdrop: true
+      });
     }
   };
