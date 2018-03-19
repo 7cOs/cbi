@@ -10,14 +10,14 @@
 .action-buttons
   span(ng-switch="list.selected < 1")
     span(ng-switch-when="true")
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showAddToTargetList" ng-disabled="true") Add to Target List
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showCopyToTargetList" ng-disabled="true") Copy to Target List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showAddToTargetList" ng-disabled="true") Add to List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showCopyToTargetList" ng-disabled="true") Copy to List
       button.btn-action.action-button-spacing(ng-disabled="true") Download
       button.btn-action.action-button-spacing(ng-if="!list.targetListService.model.currentList.archived && list.showRemoveButton" ng-disabled="true" ) Remove
 
     span(ng-switch-when="false")
       md-menu(md-offset="0 45" ng-if="list.showAddToTargetList")
-        button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to Target List
+        button.btn-action(aria-label="Add to List" ng-click="$mdOpenMenu($event)") Add to List
         md-menu-content.target-list-menu
           md-menu-item(ng-click="list.createNewList($event)")
             p Create New List
@@ -25,7 +25,7 @@
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
       md-menu(md-offset="0 45" ng-if="list.showCopyToTargetList && !list.targetListService.model.currentList.archived")
-        button.btn-action(ng-click="$mdOpenMenu($event)") Copy to Target List
+        button.btn-action(ng-click="$mdOpenMenu($event)") Copy to List
         md-menu-content.target-list-menu
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index, false)")
             p {{::targetList.name | truncateText:18}}
@@ -118,11 +118,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               .tooltip-wrap
                 label Velocity (VS YA%)
                   .tooltip
-                    img(src="../../../assets/img/icons/help-tooltip.svg")
-                    md-tooltip(md-direction="bottom")
-                      label Opportunity List
-                      h3 Velocity
-                      p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “vs YA %” indicates the trend of velocity this year vs. same time period last year.
+                    compass-tooltip([title]="list.velocityTooltipInputData.title", [text]="list.velocityTooltipInputData.text")
+                      img.tooltip-image(src="../../../assets/img/icons/help-circle.svg")
               div(row)
                 div(column='12') {{::opportunity.store.velocity | number:0}}
                   span.percentage {{list.vsYAGrowthPercent(opportunity.store.velocity, opportunity.store.velocityYA) | number:1}}%
@@ -174,13 +171,10 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='3') {{::product.rationale}}
                 div(column='1')
                   .tooltip-wrap
-                    p(class="tooltip") {{product.status | titlecase}}
+                    p(class="tooltip") {{ product.status | titlecase }}
                     span.tooltip(ng-if="product.status.toUpperCase() === 'INACTIVE'")
-                      img(src="../../../assets/img/icons/help-tooltip.svg")
-                      md-tooltip(md-direction="bottom")
-                        label Opportunity List
-                        h3 Inactive Status
-                        p This opportunity recommendation is no longer supported by data analytics (see Compass user guide for more details). Consider 'removing' this opportunity from your list to ensure your list stays actionable and relevant.
+                      compass-tooltip([title]="list.inactiveStatusTooltipInputData.title", [text]="list.inactiveStatusTooltipInputData.text")
+                        img(src="../../../assets/img/icons/help-circle.svg")
                 div(column='1' class="impact {{product.impactDescription | lowercase}}")
                 div(column='1' ng-show="product.status.toUpperCase() !== 'INACTIVE'").bottom.dismiss-product
                   div.more-wrapper

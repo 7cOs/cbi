@@ -1,55 +1,68 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+
+import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
+import { CompassTooltipPopupInputs } from '../../../models/compass-tooltip-popup-inputs.model';
+import { CompassTooltipPopupOverlayRef } from '../compass-tooltip-popup/compass-tooltip-popup.overlayref';
+import { CompassOverlayPositionConfig } from '../../../models/compass-overlay-position-config.model';
+import { CompassTooltipService } from '../../../services/compass-tooltip.service';
 
 @Component({
   selector: 'compass-tooltip',
-  template: require('./compass-tooltip.component.pug'),
-  styles: [require('./compass-tooltip.component.scss')]
+  template: `<ng-content></ng-content>`,
 })
 
-export class CompassTooltipComponent {
-
+export class CompassTooltipComponent implements OnInit, OnDestroy {
+  @Input() markupString: string;
+  @Input() text: string[];
   @Input() title: string;
-  @Input() descriptions: Array <string>;
-  @Input() position: string;
-  @Input() label: string;
 
-  constructor() {}
+  private overlayConfig: CompassOverlayConfig = {
+    hasBackdrop: false
+  };
+  private positionConfig: CompassOverlayPositionConfig = {
+    originConnectionPosition: { originX: 'center', originY: 'bottom' },
+    overlayConnectionPosition: { overlayX: 'center', overlayY: 'top' },
+    overlayOffsetX: 0,
+    overlayOffsetY: 5
+  };
+  private tooltipPopupInputData: CompassTooltipPopupInputs;
+  private tooltipPopupOverlayRef: CompassTooltipPopupOverlayRef;
 
-  ngOnInit () {
-    if (this.title) {
-      switch (this.position) {
-        case 'right':
-          this.position = 'title_right';
-          break;
-        case 'left':
-          this.position = 'title_left';
-          break;
-        case 'above':
-          this.position = 'title_above';
-          break;
-        case '':
-        case 'below':
-        case undefined:
-        default:
-          this.position = 'title_below';
-      }
-    } else {
-      switch (this.position) {
-        case 'right':
-          this.position = 'no_title_right';
-          break;
-        case 'left':
-          this.position = 'no_title_left';
-          break;
-        case 'above':
-          this.position = 'no_title_above';
-          break;
-        case '':
-        case 'below':
-        case undefined:
-        default:
-          this.position = 'no_title_below';
-      }
-    }
+  constructor(
+    private compassTooltipService: CompassTooltipService,
+    private elementRef: ElementRef
+  ) { }
+
+  ngOnInit(): void {
+    this.tooltipPopupInputData = {
+      markupString: this.markupString,
+      text: this.text,
+      title: this.title
+    };
+  }
+
+  ngOnDestroy(): void {
+    this.hideTooltip();
+  }
+
+  @HostListener('mouseenter') onMouseEnter(): void {
+    this.showTooltip();
+  }
+
+  @HostListener('mouseleave') onMouseLeave(): void {
+    this.hideTooltip();
+  }
+
+  public showTooltip(): void {
+    this.tooltipPopupOverlayRef = this.compassTooltipService.showTooltip(
+      this.elementRef,
+      this.tooltipPopupInputData,
+      this.positionConfig,
+      this.overlayConfig
+    );
+  }
+
+  public hideTooltip(): void {
+    if (this.tooltipPopupOverlayRef) this.tooltipPopupOverlayRef.closeTooltip();
   }
 }

@@ -44,7 +44,7 @@ describe('Unit: target list controller', function() {
 
   it('should have updated the model', function() {
       expect(ctrl.types.mine.total).toEqual(2);
-      expect(ctrl.types.mine.name).toEqual('My Target Lists');
+      expect(ctrl.types.mine.name).toEqual('My Lists');
       expect(ctrl.types.mine.records).toEqual([
                      {id: '1', deleted: false, archived: false},
                      {id: '2', deleted: false, archived: false}
@@ -79,7 +79,7 @@ describe('Unit: target list controller', function() {
   it('test tab filter', function() {
       expect(ctrl.tabFilter({name: 'Archived'})).toEqual(false);
       expect(ctrl.tabFilter({name: 'Shared with Me'})).toEqual(true);
-      expect(ctrl.tabFilter({name: 'My Target Lists'})).toEqual(true);
+      expect(ctrl.tabFilter({name: 'My Lists'})).toEqual(true);
   });
 
 });
