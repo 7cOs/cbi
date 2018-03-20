@@ -42,6 +42,7 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
+    vm.modalArchiveResult = false;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -61,7 +62,8 @@ module.exports = /*  @ngInject */
     vm.sortBy = sortBy;
     vm.toggle = toggle;
     vm.toggleAll = toggleAll;
-    vm.showModal = showModal;
+    vm.showArchiveModal = showArchiveModal;
+    vm.showDeleteModal = showDeleteModal;
 
     init();
 
@@ -414,7 +416,19 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function showModal() {
+    function showArchiveModal() {
+      let ref = compassModalService.showModalDialog(
+        {'title': 'Are you sure?',
+        'body': 'By archiving this list, only limited set functionality will remain available.'},
+        { hasBackdrop: true });
+      let eventPromise = compassModalService.modalActionBtnContainerEvent(ref.modalInstance);
+      console.log(eventPromise);
+      eventPromise.then((value) => {
+        console.log('Promise return: ' + value);
+      });
+    }
+
+    function showDeleteModal() {
       compassModalService.showModalDialog({}, {
         hasBackdrop: true
       });

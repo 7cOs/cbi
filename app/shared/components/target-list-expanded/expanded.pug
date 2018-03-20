@@ -11,7 +11,7 @@
     | Select All
 
   .target-action-buttons
-    button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.showModal()").btn-action Archive
+    button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.showArchiveModal()").btn-action Archive
     button.btn-action.action-button-spacing(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList(expanded.selected)").btn-action Delete
     button.btn-action.action-button-spacing(ng-click="expanded.createTargetList($event)") Create a New List
 

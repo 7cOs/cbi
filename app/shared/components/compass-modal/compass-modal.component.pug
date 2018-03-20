@@ -1,1 +1,6 @@
-div.compass-modal-test((click)='hideModal()') CLICK ME!
+div.compass-modal
+  h1.compass-modal-title {{ modalInputs.title }}
+  div.compass-modal-body {{ modalInputs.body }}
+  div.compass-modal-action-bar
+    span.compass-modal-btn((click)='hideModal()') Cancel
+    button.btn-action((click)='acceptButtonClick()') Archive
