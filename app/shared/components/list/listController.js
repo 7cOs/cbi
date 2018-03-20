@@ -1102,6 +1102,8 @@ module.exports = /*  @ngInject */
     function getStoreToBePassedToAcct(storeDetails) {
       return {
         storeid: storeDetails.id,
+        premiseType: storeDetails.onPremise ? 'on' : 'off',
+        versionedStoreID: storeDetails.versionedId,
         myaccountsonly: false,
         depletiontimeperiod: 'CYTD'
       };
