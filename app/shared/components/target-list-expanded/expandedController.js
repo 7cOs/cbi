@@ -42,7 +42,6 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
-    vm.modalArchiveResult = false;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -62,8 +61,7 @@ module.exports = /*  @ngInject */
     vm.sortBy = sortBy;
     vm.toggle = toggle;
     vm.toggleAll = toggleAll;
-    vm.showArchiveModal = showArchiveModal;
-    vm.showDeleteModal = showDeleteModal;
+    vm.showActionModal = showActionModal;
 
     init();
 
@@ -416,21 +414,31 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function showArchiveModal() {
-      let ref = compassModalService.showModalDialog(
-        {'title': 'Are you sure?',
-        'body': 'By archiving this list, only limited set functionality will remain available.'},
-        { hasBackdrop: true });
-      let eventPromise = compassModalService.modalActionBtnContainerEvent(ref.modalInstance);
-      console.log(eventPromise);
-      eventPromise.then((value) => {
-        console.log('Promise return: ' + value);
-      });
-    }
+    function showActionModal(actionLabel) {
+      let compassModalOverlayRef;
+      if (actionLabel === 'archive') {
+        compassModalOverlayRef = compassModalService.showModalDialog(
+          {'title': 'Are you sure?',
+          'body': 'By archiving this list, only limited set functionality will remain available.',
+          'rejectLabel': 'Cancel',
+          'acceptLabel': 'Archive'},
+          { hasBackdrop: true });
+      } else if (actionLabel === 'delete') {
+        compassModalOverlayRef = compassModalService.showModalDialog(
+          {'title': 'Are you sure?',
+          'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
+          'rejectLabel': 'Cancel',
+          'acceptLabel': 'Delete'},
+          { hasBackdrop: true });
+      }
 
-    function showDeleteModal() {
-      compassModalService.showModalDialog({}, {
-        hasBackdrop: true
+      let eventPromise = compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance);
+      eventPromise.then((value) => {
+        if (value === 'archive') {
+          archiveTargetList();
+        } else if (value === 'delete') {
+          deleteTargetList();
+        }
       });
     }
   };

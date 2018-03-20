@@ -38,8 +38,7 @@ export class CompassModalService {
   }
 
   public modalActionBtnContainerEvent(modalComponentInstance: CompassModalComponent): Promise<{}> {
-    return modalComponentInstance.buttonContainerEvent.first().mergeMap( (result: any) => {
-      console.log(result);
+    return modalComponentInstance.buttonContainerEvent.first( (result: any) => {
       return result;
     } ).toPromise();
   }

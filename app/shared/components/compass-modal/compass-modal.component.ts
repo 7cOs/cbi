@@ -10,7 +10,7 @@ import { COMPASS_MODAL_INPUTS } from '../../components/compass-modal/compass-mod
   styles: [require('./compass-modal.component.scss')]
 })
 
-export class CompassModalComponent implements OnInit {
+export class CompassModalComponent {
   @Input() body: string;
   @Input() title: string;
   @Output() buttonContainerEvent = new EventEmitter<string>();
@@ -25,26 +25,14 @@ export class CompassModalComponent implements OnInit {
     @Inject(COMPASS_MODAL_INPUTS) public modalInputs: CompassModalInputs
   ) { }
 
-  ngOnInit(): void {
-    this.modalInputData = {
-      body: this.body,
-      title: this.title
-    };
-  }
-
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
     if (event.keyCode === this.ESCKEY) {
       this.modalOverlayRef.closeModal();
     }
   }
 
-  public hideModal(): void {
-    this.buttonContainerEvent.emit('cancel');
-    this.modalOverlayRef.closeModal();
-  }
-
-  public acceptButtonClick(): void {
-    console.log(this.buttonContainerEvent.emit('ok'));
+  public hideModal(buttonLabel: string): void {
+    this.buttonContainerEvent.emit(buttonLabel);
     this.modalOverlayRef.closeModal();
   }
 }
