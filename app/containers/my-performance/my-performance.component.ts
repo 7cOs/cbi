@@ -42,8 +42,6 @@ import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { WindowService } from '../../services/window.service';
 
-import { CompassModalService } from '../../services/compass-modal.service';
-
 const CORPORATE_USER_POSITION_ID = '0';
 
 export interface HandleElementClickedParameters {
@@ -142,8 +140,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private windowService: WindowService,
     private analyticsService: AnalyticsService,
-    private opportunitiesSearchHandoffService: OpportunitiesSearchHandoffService,
-    private compassModalService: CompassModalService
+    private opportunitiesSearchHandoffService: OpportunitiesSearchHandoffService
   ) { }
 
   ngOnInit() {
@@ -485,12 +482,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       resetFiltersOnLoad: false,
       applyFiltersOnLoad: true,
       referrer: 'team-performance'
-    });
-  }
-
-  public showModalTest() {
-    this.compassModalService.showModalDialog({}, {
-      hasBackdrop: true
     });
   }
 

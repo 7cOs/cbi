@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state, analyticsService, title;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state, analyticsService, title, compassModalService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -21,7 +21,7 @@ describe('Unit: targetListDetailController', function() {
       $provide.value('analyticsService', analyticsService);
     });
 
-    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_, _$state_) {
+    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_, _compassModalService_, _$state_) {
       scope = $rootScope.$new();
       ctrl = $controller('targetListDetailController', {$scope: scope});
       $mdDialog = _$mdDialog_;
@@ -33,6 +33,7 @@ describe('Unit: targetListDetailController', function() {
       opportunitiesService = _opportunitiesService_;
       userService = _userService_;
       $state = _$state_;
+      compassModalService = _compassModalService_;
     });
 
     deferred = $q.defer();
@@ -211,6 +212,7 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.userService).not.toBeUndefined();
     expect(typeof (ctrl.userService)).toEqual('object');
+
   });
 
   it('should not expose private services', function() {
@@ -218,12 +220,14 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.filtersService).toBeUndefined();
     expect(ctrl.opportunitiesService).toBeUndefined();
     expect(ctrl.addCollaborators).toBeUndefined();
+    expect(ctrl.compassModalService).toBeUndefined();
   });
 
   it('should have access to private services', function() {
     expect(chipsService).not.toBeUndefined();
     expect(filtersService).not.toBeUndefined();
     expect(opportunitiesService).not.toBeUndefined();
+    expect(ctrl.compassModalService).not.toBeUndefined();
   });
 
   it('should expose public methods', function() {
@@ -286,6 +290,9 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.sendGoogleAnalytics).not.toBeUndefined();
     expect(typeof (ctrl.sendGoogleAnalytics)).toEqual('function');
+
+    expect(ctrl.showActionModal).not.toBeUndefined();
+    expect(typeof (ctrl.showActionModal)).toEqual('function');
   });
 
   describe('Public Methods', function() {
@@ -934,6 +941,9 @@ describe('Unit: targetListDetailController', function() {
             '111'
           );
         });
+      });
+      describe('when the show action modal is called', function () {
+        expect(compassModalService.showActionModal).toHaveBeenCalled();
       });
 
       describe('when the list author is not the current user', function() {

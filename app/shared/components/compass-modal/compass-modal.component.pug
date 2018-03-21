@@ -2,5 +2,5 @@ div.compass-modal
   h1.compass-modal-title {{ modalInputs.title }}
   div.compass-modal-body {{ modalInputs.body }}
   div.compass-modal-action-bar
-    span.compass-modal-btn((click)='hideModal("cancel")') {{ modalInputs.rejectLabel }}
-    button.btn-action((click)='hideModal("archive")') {{ modalInputs.acceptLabel }}
+    span.compass-modal-btn((click)='hideModal(modalInputs.rejectLabel)') {{ modalInputs.rejectLabel }}
+    button.btn-action((click)='hideModal(modalInputs.acceptLabel)') {{ modalInputs.acceptLabel }}

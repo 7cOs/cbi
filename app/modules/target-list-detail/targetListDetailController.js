@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title, compassModalService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -28,10 +28,23 @@ module.exports = /*  @ngInject */
     vm.selectedCollaboratorId = '';
     vm.stayOnPage = true;
     vm.targetListAuthor = '';
+    vm.archiveModalStringInputs = {
+      'title': 'Are you sure?',
+      'body': 'By archiving this list, only limited set functionality will remain available.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Archive'};
+    vm.deleteModalStringInputs =  {
+      'title': 'Are you sure?',
+      'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Delete'
+    };
+    vm.modalSettings = { backdrop: true };
 
     // Services
     vm.targetListService = targetListService;
     vm.userService = userService;
+    vm.compassModalService = compassModalService;
 
     // Set page title for head and nav
     title.setTitle($state.current.title);
@@ -58,6 +71,7 @@ module.exports = /*  @ngInject */
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
     vm.sendGoogleAnalytics = sendGoogleAnalytics;
+    vm.showActionModal = showActionModal;
 
     init();
 
@@ -312,6 +326,24 @@ module.exports = /*  @ngInject */
         event + ' Target List',
         vm.listID
       );
+    }
+
+    function showActionModal(actionLabel) {
+        let compassModalOverlayRef;
+        if (actionLabel === 'archive') {
+          compassModalOverlayRef = compassModalService.showModalDialog(vm.archiveModalStringInputs, vm.modalSettings);
+        } else if (actionLabel === 'delete') {
+          compassModalOverlayRef = compassModalService.showModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
+        }
+
+        let eventPromise = compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance);
+        eventPromise.then((value) => {
+          if (value === vm.archiveModalStringInputs.acceptLabel) {
+            updateList('archive');
+          } else if (value === vm.deleteModalStringInputs.acceptLabel) {
+            pendingCheck();
+          }
+        });
     }
 
     // **************

@@ -42,6 +42,18 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
+    vm.archiveModalStringInputs = {
+      'title': 'Are you sure?',
+      'body': 'By archiving this list, only limited set functionality will remain available.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Archive'};
+    vm.deleteModalStringInputs =  {
+      'title': 'Are you sure?',
+      'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Delete'
+    };
+    vm.modalSettings = { backdrop: true };
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -417,26 +429,16 @@ module.exports = /*  @ngInject */
     function showActionModal(actionLabel) {
       let compassModalOverlayRef;
       if (actionLabel === 'archive') {
-        compassModalOverlayRef = compassModalService.showModalDialog(
-          {'title': 'Are you sure?',
-          'body': 'By archiving this list, only limited set functionality will remain available.',
-          'rejectLabel': 'Cancel',
-          'acceptLabel': 'Archive'},
-          { hasBackdrop: true });
+        compassModalOverlayRef = compassModalService.showModalDialog(vm.archiveModalStringInputs, vm.modalSettings);
       } else if (actionLabel === 'delete') {
-        compassModalOverlayRef = compassModalService.showModalDialog(
-          {'title': 'Are you sure?',
-          'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
-          'rejectLabel': 'Cancel',
-          'acceptLabel': 'Delete'},
-          { hasBackdrop: true });
+        compassModalOverlayRef = compassModalService.showModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
       }
 
       let eventPromise = compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance);
       eventPromise.then((value) => {
-        if (value === 'archive') {
+        if (value === vm.archiveModalStringInputs.acceptLabel) {
           archiveTargetList();
-        } else if (value === 'delete') {
+        } else if (value === vm.deleteModalStringInputs.acceptLabel) {
           deleteTargetList();
         }
       });

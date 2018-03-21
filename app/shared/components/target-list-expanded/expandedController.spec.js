@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService;
+  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService, compassModalService;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -18,7 +18,7 @@ describe('Unit: expanded target list controller', function() {
       $provide.value('analyticsService', analyticsService);
     });
 
-    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_) {
+    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_, _compassModalService_) {
       state = {
         current: {
           name: 'opportunities'
@@ -35,6 +35,7 @@ describe('Unit: expanded target list controller', function() {
       userService = _userService_;
       targetListService = _targetListService_;
       toastService = _toastService_;
+      compassModalService = _compassModalService_;
       q = _$q_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
@@ -50,6 +51,10 @@ describe('Unit: expanded target list controller', function() {
 
     expect(ctrl.loaderService).not.toBeUndefined();
     expect(typeof (ctrl.loaderService)).toEqual('object');
+
+    expect(ctrl.compassModalService).not.toBeUndefined();
+    expect(typeof (ctrl.compassModalService)).toEqual('object');
+
   });
 
   it('should expose public methods', function() {
@@ -529,7 +534,8 @@ describe('Unit: expanded target list controller', function() {
             ]
           }
         ];
-
+        expect(ctrl.showActionModal).toHaveBeenCalled();
+        expect(compassModalService.showModalDialog).toHaveBeenCalled();
         httpBackend.expectGET('/v2/targetLists').respond(200);
 
         spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
