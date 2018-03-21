@@ -216,7 +216,12 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage clickResetFilters() {
-    waitForElementToClickable(resetFiltersButton, true).click();
+    if (!isBrowserTypeIE()) {
+      waitForElementToClickable(resetFiltersButton, true).click();
+    } else {
+      waitForElementToClickable(resetFiltersButton, true).click();
+      waitForElementToClickable(resetFiltersButton, true).click();
+    }
     return this;
   }
 
