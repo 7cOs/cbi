@@ -30,6 +30,9 @@ public class SavedReportModal extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH + "//button[contains(., 'Save')]")
   private WebElement saveButton;
+  
+  @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH + "//*[@role='button' and contains(@class,'cancel')]")
+  private WebElement cancelButton;
 
   public SavedReportModal(WebDriver driver) {
     this.driver = driver;
@@ -50,7 +53,7 @@ public class SavedReportModal extends TestNGBasePage {
   public SavedReportModal enterReportName(String name) {
     waitForElementToClickable(nameField, true).click();
     nameField.sendKeys(name);
-
+    ensureSendKeys( nameField, name );
     return this;
   }
 
@@ -64,6 +67,11 @@ public class SavedReportModal extends TestNGBasePage {
 
   public SavedReportModal clickSave() {
     waitForElementToClickable(saveButton, true).click();
+    return this;
+  }
+  
+  public SavedReportModal clickCancel() {
+    waitForElementToClickable(cancelButton, true).click();
     return this;
   }
 

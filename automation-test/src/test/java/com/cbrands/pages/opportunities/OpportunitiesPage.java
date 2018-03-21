@@ -113,18 +113,9 @@ public class OpportunitiesPage extends TestNGBasePage {
     final WebElement searchField = getSearchFilterTextBox(searchFilter);
     waitForElementToClickable(searchField, true).click();
     searchField.sendKeys(searchText);
-    
     ensureSendKeys( searchField, searchText );
   }
   
-  private void ensureSendKeys( WebElement field, String value ) {
-    field.clear(); 
-    for( String c : value.split( "," ) ) {
-        field.sendKeys( c );
-    }
-  }
-  
-
   public OpportunitiesPage clickSearchForChainRetailer() {
     clickSearchInFilter(chainRetailerFilter);
     return this;
@@ -142,7 +133,8 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private void clickSearchInFilter(WebElement filter) {
     waitForElementToClickable(
-      filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]")),
+      // filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]")),
+      filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn') and contains(@class, 'visible')]")),
       true
     ).click();
   }

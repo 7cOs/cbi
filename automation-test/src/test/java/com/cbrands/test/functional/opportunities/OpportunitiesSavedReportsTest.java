@@ -7,12 +7,9 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
+import com.cbrands.helper.SeleniumUtils;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -40,8 +37,11 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
     opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
-  }
 
+    Assert.assertEquals( SeleniumUtils.resetFocus( driver.findElement(By.xpath("//body")) ), 
+        true, "Error resetting focus to element" ); 
+  }
+  
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
@@ -57,14 +57,11 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
 
     opportunitiesPage = opportunitiesPage
-     .enterDistributorSearchText(distributorSearchText);
-    
-      WebElement b = driver.findElement(By.xpath("//*[@class='']"));
-    
-      // .clickSearchForDistributor()
-     opportunitiesPage.clickFirstDistributorResult()
-      .clickApplyFiltersButton()
-      .waitForLoaderToDisappear();
+     .enterDistributorSearchText(distributorSearchText)
+     .clickSearchForDistributor()
+     .clickFirstDistributorResult()
+     .clickApplyFiltersButton()
+     .waitForLoaderToDisappear();
 
     Assert.assertTrue(
       opportunitiesPage.isSaveReportButtonEnabled(),
@@ -73,23 +70,20 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   }
 
-  /* -- Disable comment -- /
   @Test(
     description = "Creating an Opportunities Saved Report",
     dependsOnMethods = "enableSavedReport",
     dataProvider = "createReportData"
   )
   public void createSavedReport(String reportName, String distributorSearchText) {
+    
     testCreateASingleSavedReport(reportName + " #1", distributorSearchText);
 
     opportunitiesPage.goToPage();
 
     testCreateASingleSavedReport(reportName + " #2", distributorSearchText);
   }
- */
 
-  
-  /*
   @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
@@ -178,16 +172,15 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       getDeleteFailureMessage(reportNameToDelete, "Home")
     );
   }
-*/
   
   
-  /* -- Disable comment -- /
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
     dataProvider = "editDuplicateReportData"
   )
   public void attemptToEditWithExistingName(String existingReportName, String distributor) {
+    
     opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
@@ -200,11 +193,15 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       savedReportModal.isDuplicateNameErrorDisplayed(),
       "Failed to display error when attempting to use the name of an existing report."
     );
+    
+    savedReportModal.clickCancel();
+    
+    Assert.assertEquals(opportunitiesPage.isQueryChipPresent( distributor ), 
+        false, "Opportunites filtered when attempting to use name of existing report");
+    
   }
-  */
   
   
-  /*
   @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
@@ -226,7 +223,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Failed to display error message when max limit of Saved Reports already reached."
     );
   }
-  */
+
 
   @DataProvider
   public static Object[][] distributorData() {
