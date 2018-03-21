@@ -271,7 +271,7 @@ module.exports = /*  @ngInject */
     function isChecked() {
       // If the promise isn't resolved returns false
       if (vm.userService.model.targetLists) {
-        return vm.selected.length === vm.userService.model.targetLists.ownedNotArchivedTargetLists.length;
+        return vm.selected && vm.userService.model.targetLists.ownedNotArchivedTargetLists && vm.selected.length === vm.userService.model.targetLists.ownedNotArchivedTargetLists.length;
       } else {
         return false;
       }
