@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DebugElement, ElementRef } from '@angular/core';
+import { DebugElement } from '@angular/core';
 
 import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
 import { CompassOverlayPositionConfig } from '../../../models/compass-overlay-position-config.model';

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output, OnInit, Inject } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output, Inject } from '@angular/core';
 
 import { CompassModalInputs } from '../../../models/compass-modal-inputs.model';
 import { CompassModalOverlayRef } from './compass-modal.overlayref';
@@ -14,9 +14,6 @@ export class CompassModalComponent {
   @Output() buttonContainerEvent = new EventEmitter<string>();
 
   public modalOverlayRef: CompassModalOverlayRef;
-
-  private modalEventEmitter = new EventEmitter<any>();
-  private modalInputData: CompassModalInputs;
   private ESCKEY = 27;
 
   constructor(
