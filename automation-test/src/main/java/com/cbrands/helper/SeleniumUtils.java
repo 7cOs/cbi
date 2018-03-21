@@ -608,7 +608,6 @@ public class SeleniumUtils {
 	
     /**
      * Clicks element to set focus to element
-     * 
      * @param WebElement
      * @author SKARNEH
      * @category WORKAROUND
