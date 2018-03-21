@@ -39,7 +39,7 @@ module.exports = /*  @ngInject */
       'rejectLabel': 'Cancel',
       'acceptLabel': 'Delete'
     };
-    vm.modalSettings = { backdrop: true };
+    vm.modalSettings = { hasBackdrop: true };
 
     // Services
     vm.targetListService = targetListService;

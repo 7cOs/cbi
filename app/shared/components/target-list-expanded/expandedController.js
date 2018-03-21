@@ -53,7 +53,7 @@ module.exports = /*  @ngInject */
       'rejectLabel': 'Cancel',
       'acceptLabel': 'Delete'
     };
-    vm.modalSettings = { backdrop: true };
+    vm.modalSettings = { hasBackdrop: true };
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
