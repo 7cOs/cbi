@@ -11,8 +11,6 @@ import { COMPASS_MODAL_INPUTS } from '../../components/compass-modal/compass-mod
 })
 
 export class CompassModalComponent {
-  @Input() body: string;
-  @Input() title: string;
   @Output() buttonContainerEvent = new EventEmitter<string>();
 
   public modalOverlayRef: CompassModalOverlayRef;
