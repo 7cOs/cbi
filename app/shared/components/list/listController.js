@@ -10,7 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     const vm = this;
     const maxOpportunities = 1000;
-
+    const maxChars = 255;
     // Services
     vm.opportunitiesService = opportunitiesService;
     vm.userService = userService;
@@ -68,6 +68,7 @@ module.exports = /*  @ngInject */
         '“vs YA %” indicates the trend of velocity this year vs. same time period last year.'
       ]
     };
+    vm.maxChars = maxChars;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -119,7 +120,7 @@ module.exports = /*  @ngInject */
     vm.sendDownloadEvent = sendDownloadEvent;
     vm.retrieveStoreCountForSelectedOpportunities = retrieveStoreCountForSelectedOpportunities;
     vm.retrieveOpportunityCountFromSelection = retrieveOpportunityCountFromSelection;
-
+    vm.moreThanMaxChars = moreThanMaxChars;
     // Custom Headers for CSV export
     vm.csvHeader = [
       'Distributor',
@@ -316,6 +317,10 @@ module.exports = /*  @ngInject */
         targetEvent: e,
         template: require('./create-target-list-modal.pug')
       });
+    }
+
+    function moreThanMaxChars(descriptionLength, max) {
+      return descriptionLength > max;
     }
 
     function closeCreateTargetListModal() {

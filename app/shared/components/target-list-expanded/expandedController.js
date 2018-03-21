@@ -9,6 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    const maxChars = 255;
 
     // Services
     vm.userService = userService;
@@ -41,6 +42,7 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
+    vm.maxChars = maxChars;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -60,6 +62,7 @@ module.exports = /*  @ngInject */
     vm.sortBy = sortBy;
     vm.toggle = toggle;
     vm.toggleAll = toggleAll;
+    vm.moreThanMaxChars = moreThanMaxChars;
 
     init();
 
@@ -116,6 +119,10 @@ module.exports = /*  @ngInject */
         targetEvent: e,
         template: require('./create-target-list-modal.pug')
       });
+    }
+
+    function moreThanMaxChars(descriptionLength, max) {
+      return descriptionLength > max;
     }
 
     function createTargetList(e) {

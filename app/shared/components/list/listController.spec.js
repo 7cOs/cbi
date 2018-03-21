@@ -397,6 +397,15 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('[expanded.moreThanMaxChars] method', function() {
+    it('Should return true/false if more than 255/less than 255 respectively', function() {
+      const descriptionLength = [256, 254];
+      const max = 255;
+      expect(ctrl.moreThanMaxChars(descriptionLength[0], max)).toBeTruthy();
+      expect(ctrl.moreThanMaxChars(descriptionLength[1], max)).toBeFalsy();
+    });
+  });
+
   describe('[list.displayBrandIcon] method', function() {
     it('should return true if brand name is in brands array', function() {
       var brandsArray = ['corona', 'modelo'];

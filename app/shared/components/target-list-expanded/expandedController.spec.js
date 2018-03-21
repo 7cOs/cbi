@@ -100,6 +100,9 @@ describe('Unit: expanded target list controller', function() {
 
     expect(ctrl.toggleAll).not.toBeUndefined();
     expect(typeof (ctrl.toggleAll)).toEqual('function');
+
+    expect(ctrl.moreThanMaxChars).not.toBeUndefined();
+    expect(typeof (ctrl.moreThanMaxChars)).toEqual('function');
   });
 
   describe('Public Methods', function() {
@@ -148,6 +151,15 @@ describe('Unit: expanded target list controller', function() {
 
         expect(mdDialog.show).toHaveBeenCalled();
         expect(mdDialog.show.calls.count()).toEqual(1);
+      });
+    });
+
+   describe('[expanded.moreThanMaxChars] method', function() {
+      it('Should return true/false if more than 255/less than 255 respectively', function() {
+        var descriptionLength = [256, 254];
+        var maxChars = 255;
+        expect(ctrl.moreThanMaxChars(descriptionLength[0], maxChars)).toBeTruthy();
+        expect(ctrl.moreThanMaxChars(descriptionLength[1], maxChars)).toBeFalsy();
       });
     });
 
