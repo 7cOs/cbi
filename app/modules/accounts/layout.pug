@@ -68,12 +68,8 @@ notes
       .tooltip-wrap
         label Premise Type
         .tooltip
-          img(src="../../assets/img/icons/help-tooltip.svg")
-          md-tooltip(md-direction="bottom")
-            label Filter Set
-            h3 Premise Type
-            p Premise type classification as provided by TDLinx.
-            p "All" contains Off-Premise, On-Premise, Non Retail, and Unknown (if applicable).
+          compass-tooltip([title]="a.premiseTypeTooltipInputData.title", [text]="a.premiseTypeTooltipInputData.text")
+            img.tooltip-image(src="../../assets/img/icons/help-circle.svg")
       md-radio-group(ng-model="a.premiseTypeValue")
         md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="a.updateChip(p.name, 'premiseType')" ng-disabled="a.premiseTypeDisabled") {{p.name}}
     div(column='2')
@@ -82,13 +78,9 @@ notes
     div(column='2')
       .tooltip-wrap
         label Store Type
-          .tooltip
-            img(src="../../assets/img/icons/help-tooltip.svg")
-            md-tooltip(md-direction="bottom")
-              label Filter Set
-              h3 Store Type
-              p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
-              p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
+        .tooltip
+          compass-tooltip([title]="a.storeTypeTooltipInputData.title", [text]="a.storeTypeTooltipInputData.text")
+            img.tooltip-image(src="../../assets/img/icons/help-circle.svg")
       md-checkbox(ng-model="a.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain'); a.disableApplyFilter(false)" ng-disabled="a.disableStoreType()") Independent
       md-checkbox(ng-model="a.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain'); a.disableApplyFilter(false)" ng-disabled="a.disableStoreType()") CBBD Chain
     div(column='4')

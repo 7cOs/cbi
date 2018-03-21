@@ -1,122 +1,106 @@
-import { By } from '@angular/platform-browser';
+import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DebugElement, ElementRef } from '@angular/core';
 
+import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
+import { CompassOverlayPositionConfig } from '../../../models/compass-overlay-position-config.model';
 import { CompassTooltipComponent } from './compass-tooltip.component';
-import { CompassTooltipObject } from '../../../models/compass-tooltip-component.model';
-import { getTooltipMock } from '../../../models/compass-tooltip.model.mock';
+import { CompassTooltipPopupInputs } from '../../../models/compass-tooltip-popup-inputs.model';
+import { CompassTooltipService } from '../../../services/compass-tooltip.service';
 
-describe('CompassTooltipComponent', () => {
+const chance = new Chance();
 
+describe('Compass Tooltip Component', () => {
   let fixture: ComponentFixture<CompassTooltipComponent>;
   let componentInstance: CompassTooltipComponent;
+  let fixtureDebugElement: DebugElement;
+  let fixtureElementRef: ElementRef;
 
-  let tooltipMock: CompassTooltipObject;
+  let titleInputMock: string;
+  let textInputMock: string[];
+  let markupStringInputMock: string;
+
+  const compassTooltipPopupOverlayMock = {
+    closeTooltip: jasmine.createSpy('closeTooltip')
+  };
+
+  const compassTooltipServiceMock = {
+    showTooltip: jasmine.createSpy('showTooltip').and.callFake(() => compassTooltipPopupOverlayMock)
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompassTooltipComponent ]
+      declarations: [ CompassTooltipComponent ],
+      providers: [{
+        provide: CompassTooltipService,
+        useValue: compassTooltipServiceMock
+      }]
     });
 
     fixture = TestBed.createComponent(CompassTooltipComponent);
     componentInstance = fixture.componentInstance;
+    fixtureDebugElement = fixture.debugElement;
+    fixtureElementRef = fixture.elementRef;
 
-    tooltipMock = getTooltipMock();
+    titleInputMock = chance.string();
+    textInputMock = [chance.string(), chance.string()];
+    markupStringInputMock = chance.string();
+
+    componentInstance.title = titleInputMock;
+    componentInstance.text = textInputMock;
+    componentInstance.markupString = markupStringInputMock;
+
+    fixture.detectChanges();
+
+    compassTooltipServiceMock.showTooltip.calls.reset();
+    compassTooltipPopupOverlayMock.closeTooltip.calls.reset();
   });
 
-  describe('TooltipComponent with title', () => {
-    it('should contain tooltip with header title and position = title_below', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.title = tooltipMock.title;
-      componentInstance.position = tooltipMock.position;
+  describe('Compass Tooltip Mouse Events', () => {
+    it('should reach out to the CompassTooltipService and call showTooltip with its own element reference and a CompassTooltipInputs'
+      + ' object containing all the inputs on mouse enter events', () => {
+      const expectedTooltipInputs: CompassTooltipPopupInputs = {
+        title: titleInputMock,
+        text: textInputMock,
+        markupString: markupStringInputMock
+      };
+      const expectedPositionConfig: CompassOverlayPositionConfig = {
+        originConnectionPosition: { originX: 'center', originY: 'bottom' },
+        overlayConnectionPosition: { overlayX: 'center', overlayY: 'top' },
+        overlayOffsetX: 0,
+        overlayOffsetY: 5
+      };
+      const expectedOverlayConfig: CompassOverlayConfig = {
+        hasBackdrop: false
+      };
+
+      fixtureDebugElement.triggerEventHandler('mouseenter', null);
       fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_with_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.title_below'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.title + componentInstance.descriptions.toString());
+
+      expect(compassTooltipServiceMock.showTooltip).toHaveBeenCalledWith(
+        fixtureElementRef,
+        expectedTooltipInputs,
+        expectedPositionConfig,
+        expectedOverlayConfig
+      );
     });
 
-    it('should select tooltip with header title, position title_above', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.title = tooltipMock.title;
-      componentInstance.position = 'above';
+    it('should call closeTooltip on a mouse leave event only after a mouse enter event has happened previously', () => {
+      fixtureDebugElement.triggerEventHandler('mouseleave', null);
       fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_with_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.title_above'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.title + componentInstance.descriptions);
-    });
 
-    it('should select tooltip with header title, position title_right', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.title = tooltipMock.title;
-      componentInstance.position = 'right';
+      expect(compassTooltipPopupOverlayMock.closeTooltip).not.toHaveBeenCalled();
+
+      fixtureDebugElement.triggerEventHandler('mouseenter', null);
       fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_with_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.title_right'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.title + componentInstance.descriptions);
-    });
 
-    it('should select tooltip with header title, position title_left', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.title = tooltipMock.title;
-      componentInstance.position = 'left';
+      expect(compassTooltipPopupOverlayMock.closeTooltip).not.toHaveBeenCalled();
+
+      compassTooltipPopupOverlayMock.closeTooltip.calls.reset();
+      fixtureDebugElement.triggerEventHandler('mouseleave', null);
       fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_with_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.title_left'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.title + componentInstance.descriptions);
-    });
 
-  });
-
-  describe('TooltipComponent without title', () => {
-    it('should select tooltip with no title, position no_title_below', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.position = tooltipMock.position;
-      fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_no_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.no_title_below'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
-    });
-
-    it('should select tooltip without header title, position no_title_above', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.position = 'above';
-      fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_no_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.no_title_above'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
-    });
-
-    it('should select tooltip without header title, position no_title_right', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.position = 'right';
-      fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_no_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.no_title_right'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
-    });
-
-    it('should select tooltip without header title, position no_title_left', () => {
-      componentInstance.descriptions = [tooltipMock.descriptions[0]];
-      componentInstance.position = 'left';
-      fixture.detectChanges();
-      const elementText = fixture.debugElement.query(By.css('.tooltip_text_no_title'));
-      const elementPosition = fixture.debugElement.query(By.css('.no_title_left'));
-      expect(elementText).not.toBe(null);
-      expect(elementPosition).not.toBe(null);
-      expect(elementText.nativeElement.textContent).toBe(componentInstance.descriptions[0]);
+      expect(compassTooltipPopupOverlayMock.closeTooltip).toHaveBeenCalled();
     });
   });
 });
