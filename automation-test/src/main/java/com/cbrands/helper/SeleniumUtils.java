@@ -608,6 +608,7 @@ public class SeleniumUtils {
 	
     /**
      * Clicks element to set focus to element
+     * 
      * @param WebElement
      * @author SKARNEH
      * @category WORKAROUND
@@ -621,15 +622,16 @@ public class SeleniumUtils {
       }
       return false;
     }
-	    
-	/**
-	 * Ensure field value is entered into field by 
-	 * entering a single character at a time
-	 * @param WebElement
-	 * @param String
-	 * @author SKARNEH
+  
+    /**
+     * Ensure field value is entered into field by entering a single character at a
+     * time
+     * 
+     * @param WebElement
+     * @param String
+     * @author SKARNEH
      * @category WORKAROUND
-	 */
+     */
     public static void ensureSendKeys(WebElement field, String value) {
       field.clear();
       for (String c : value.split(",")) {
