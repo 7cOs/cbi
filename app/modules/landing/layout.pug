@@ -65,11 +65,9 @@ section.landing-page
         (on-main-action-clicked)="l.openWebPage(l.salesCompassCard.webPage)"
       )
         p.bold The Corona Premier 'Fast Start' Incentive is underway through April 30!  Are you ALL IN? Track performance against this initiative via the following dashboards:
-         span.tooltip
-           compass-tooltip(
-             [title]= "l.tooltip.title",
-             [descriptions]= "l.tooltip.descriptions",
-             [position]="l.tooltip.position")
+          span.sales-priority-tooltip
+            compass-tooltip([title]= "l.tooltip.title", [text]= "l.tooltip.descriptions")
+              img(src="../../assets/img/icons/help-circle.svg")
         div
           img(src='../../assets/img/icons/report.svg')
           a(href="{{ l.reportLink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="Incentive Tracking") <b>Incentive Tracking</b>
