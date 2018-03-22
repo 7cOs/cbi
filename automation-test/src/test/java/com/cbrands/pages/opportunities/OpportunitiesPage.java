@@ -406,9 +406,7 @@ public class OpportunitiesPage extends TestNGBasePage {
       } else {
         numberOfSavedReports = list.size();
       }
-
       return numberOfSavedReports;
     }
-
   }
 }

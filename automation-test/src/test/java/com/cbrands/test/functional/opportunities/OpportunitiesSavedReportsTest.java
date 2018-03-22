@@ -342,6 +342,5 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     savedReportDropdown.closeDropdown();
 
     return existingNumberOfSavedReports;
-  }
-  
+  } 
 }
