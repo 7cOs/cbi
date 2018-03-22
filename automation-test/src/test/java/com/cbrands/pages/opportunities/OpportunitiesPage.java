@@ -133,7 +133,6 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private void clickSearchInFilter(WebElement filter) {
     waitForElementToClickable(
-      // filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]")),
       filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn') and contains(@class, 'visible')]")),
       true
     ).click();
