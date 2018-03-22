@@ -1,6 +1,6 @@
 {
   "name": "compass",
-  "version": "2.2.1",
+  "version": "2.2.3",
   "engines": {
     "node": "8.1.4",
     "npm": "5.2.0"

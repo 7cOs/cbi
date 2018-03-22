@@ -21,10 +21,10 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
 
-    distributor = "Healy Wholesale";
+    distributor = "Chicago Bev Systems - Il";
 
     this.startUpBrowser(String.format("Functional - Opportunities Reset Filter Test - %s",
-        method.getAnnotation(Test.class).description()));
+      method.getAnnotation(Test.class).description()));
 
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
@@ -43,12 +43,31 @@ public class OpportunitiesResetFiltersTest extends BaseTestCase {
     opportunitiesPage.enterDistributorSearchText(distributor).clickSearchForDistributor().clickFirstDistributorResult();
 
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor),
-        "Selected distributor chip IS NOT present post distributor select");
+      "Selected distributor chip IS NOT present post distributor select");
 
     opportunitiesPage.clickResetFilters();
 
     Assert.assertFalse(opportunitiesPage.isQueryChipPresent(distributor),
-        "Selected distributor chip IS present post distributor select");
+      "Selected distributor chip IS present post distributor select");
+  }
+
+  @Test(description = "Apply Filters then Reset Opportunites page filters" )
+  public void applyFiltersThenReset() {
+
+    opportunitiesPage.enterDistributorSearchText( distributor )
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult();
+
+    Assert.assertTrue( opportunitiesPage.isQueryChipPresent( distributor ),
+      "Selected distributor chip IS NOT present post distributor select" );
+
+    opportunitiesPage
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear()
+      .clickResetFilters();
+
+    Assert.assertFalse( opportunitiesPage.isQueryChipPresent( distributor ),
+      "Selected distributor chip IS present post distributor select" );
   }
 
 }

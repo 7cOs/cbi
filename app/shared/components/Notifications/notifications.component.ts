@@ -44,7 +44,14 @@ export class NotificationsComponent {
 
   clickOn(notification: Notification) {
     const analyticsAction = this.notificationActionAnalyticsMapping[notification.objectType];
-    const analyticsLabel = notification.objectId ? notification.objectId : 'Not Available';
+    let analyticsLabel;
+    if (notification.objectType === 'STORE'
+      || notification.objectType === 'ACCOUNT'
+      || notification.objectType === 'DISTRIBUTOR') {
+      analyticsLabel = notification.id ? notification.id : 'Not Available';
+    } else {
+      analyticsLabel = notification.objectId ? notification.objectId : 'Not Available';
+    }
     this.analyticsService.trackEvent(
       'Navigation',
       analyticsAction,
