@@ -604,10 +604,9 @@ public class SeleniumUtils {
 		driver.manage().window().maximize();
 	}
 	
-	
-	
     /**
      * Clicks element to set focus to element
+     * 
      * @param WebElement
      * @author SKARNEH
      * @category WORKAROUND
@@ -623,7 +622,9 @@ public class SeleniumUtils {
     }
   
     /**
-     * Ensure field value is entered into field by entering a single character at a time
+     * Ensure field value is entered into field by entering a single character at a
+     * time
+     * 
      * @param WebElement
      * @param String
      * @author SKARNEH
@@ -635,6 +636,4 @@ public class SeleniumUtils {
         field.sendKeys(c);
       }
     }
-    
-
 }
