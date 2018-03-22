@@ -38,8 +38,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage.goToPage();
     opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
 
-    Assert.assertEquals( SeleniumUtils.resetFocus( driver.findElement(By.xpath("//body")) ), 
-        true, "Error resetting focus to element" ); 
+    Assert.assertTrue(
+        SeleniumUtils.resetFocus(driver.findElement(By.xpath("//body"))),
+        "Error resetting focus to element"
+      ); 
   }
   
   @AfterMethod
