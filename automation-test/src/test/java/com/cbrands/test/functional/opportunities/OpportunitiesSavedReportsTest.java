@@ -8,7 +8,6 @@ import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
 import com.cbrands.helper.SeleniumUtils;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
