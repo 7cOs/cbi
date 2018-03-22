@@ -19,6 +19,7 @@ import { Environment } from './environment';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
 import { GoogleAnalyticsTrackerService } from './services/google-analytics-tracker.service';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
+import { ListDetailModule } from './containers/lists/list-detail.module';
 import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { OpportunitiesSearchHandoffService } from './services/opportunities-search-handoff.service';
@@ -49,6 +50,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   imports: [
     BrowserModule,
     HttpClientModule,
+    ListDetailModule,
     MyPerformanceModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
