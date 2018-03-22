@@ -15,7 +15,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
@@ -27,8 +26,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeMethod
-  public void setUp(Method method) throws MalformedURLException {
-    
+  public void setUp(Method method) throws MalformedURLException {    
     final String testCaseName = method.getAnnotation(Test.class).description();
     final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
     this.startUpBrowser(sauceTitle);
@@ -175,14 +173,12 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
   }
   
-  
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
     dataProvider = "editDuplicateReportData"
   )
-  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
-    
+  public void attemptToEditWithExistingName(String existingReportName, String distributor) {    
     opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
@@ -202,7 +198,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
         false, "Opportunites filtered when attempting to use name of existing report");
     
   }
-  
   
   @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
