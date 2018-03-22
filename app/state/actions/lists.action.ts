@@ -1,39 +1,34 @@
 import { Action } from '@ngrx/store';
+import { Stores, StoresHeader } from '../../models/lists.model';
 
-import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
-import { ProductMetrics } from '../../models/product-metrics.model';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
-
-export interface FetchStoreDeatilsPayload {
-  positionId: string;
-  contextPositionId?: string;
-  entityTypeCode?: string;
-  filter: MyPerformanceFilterState;
-  selectedEntityType: EntityType;
-  selectedBrandCode?: string;
-  isMemberOfExceptionHierarchy?: boolean;
-  inAlternateHierarchy?: boolean;
+export interface FetchStoreDetailsPayload {
+  listId: string;
 }
 
-export interface FetchProductMetricsSuccessPayload {
-  positionId: string;
-  products: ProductMetrics;
+export interface FetchHeaderDetailsPayload {
+  listId: string;
+}
+
+export interface FetchStoreDetailsSuccessPayload {
+  stores: Stores;
+}
+
+export interface FetchHeaderDetailsSuccessPayload {
+  headerInfo: StoresHeader;
 }
 
 export const FETCH_STORE_DETAILS = '[StoreDetails] FETCH_STORE_DETAILS';
 export class FetchStoreDetails implements Action {
   readonly type = FETCH_STORE_DETAILS;
 
-  constructor(public payload: FetchStoreDeatilsPayload) { }
+  constructor(public payload: FetchStoreDetailsPayload) { }
 }
 
 export const FETCH_STORE_DETAILS_SUCCESS = '[StoreDetails] FETCH_STORE_DETAILS_SUCCESS';
 export class FetchStoreDetailsSuccess implements Action {
   readonly type = FETCH_STORE_DETAILS_SUCCESS;
 
-  constructor(public payload: FetchProductMetricsSuccessPayload) { }
+  constructor(public payload: FetchStoreDetailsSuccessPayload) { }
 }
 
 export const FETCH_STORE_DETAILS_FAILURE = '[StoreDetails] FETCH_STORE_DETAILS_FAILURE';

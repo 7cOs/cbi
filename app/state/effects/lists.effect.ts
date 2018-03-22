@@ -5,10 +5,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import * as ListActions from '../../state/actions/lists.action';
+import { StoreDetailsGrouped, StoreHeaderDetails } from '../../models/lists.model';
 
 @Injectable()
 export class ListsEffects {
@@ -21,8 +20,8 @@ export class ListsEffects {
   fetchStoreDetail$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_STORE_DETAILS)
-      .switchMap((action: ListActions.FetchStoreDetails) => this.listsApiService.getStorePerformance(action.payload))
-      .switchMap((response: OpportunitiesGroupedByBrandSkuPackageCode) =>
+      .switchMap((action: ListActions.FetchStoreDetails) => this.listsApiService.getStorePerformance(action.payload.listId))
+      .switchMap((response: StoreDetailsGrouped) =>
         Observable.of(new ListActions.FetchStoreDetailsSuccess(response)))
       .catch((error: Error) => Observable.of(new ListActions.FetchStoreDetailsFailure(error)));
   }
@@ -40,8 +39,8 @@ export class ListsEffects {
   fetchHeaderDetail$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_HEADER_DETAILS)
-      .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getHeaderDetail(action.payload))
-      .switchMap((response: OpportunitiesGroupedByBrandSkuPackageCode) =>
+      .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getHeaderDetail(action.payload.listId))
+      .switchMap((response: StoreHeaderDetails) =>
         Observable.of(new ListActions.FetchHeaderDetailsSuccess(response)))
       .catch((error: Error) => Observable.of(new ListActions.FetchHeaderDetailsFailure(error)));
   }

@@ -4,80 +4,52 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
-import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { FetchOpportunityCountsPayload } from '../actions/product-metrics.action';
-import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
-import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
-import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
-import { getProductMetricsWithBrandValuesMock, getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
-import { ProductMetrics } from '../../models/product-metrics.model';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
-import { ProductMetricsEffects } from './product-metrics.effect';
-import { ProductMetricsService, ProductMetricsData } from '../../services/product-metrics.service';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
-import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import * as ListActions from '../../state/actions/lists.action';
+import { ListsEffects } from './lists.effect';
+import { ListsApiService } from '../../services/api/v3/lists-api.service';
+import { Stores, StoresHeader } from '../../models/lists.model';
+import { FetchHeaderDetails, FetchStoreDetails } from '../actions/lists.action';
 
 const chance = new Chance();
 
-describe('ProductMetrics Effects', () => {
-  let positionIdMock: string;
-  let contextPositionIdMock: string;
-  let entityTypeCodeMock: string;
-  let selectedBrandCodeMock: string;
-  let productMetricsWithBrandValuesMock: ProductMetrics;
-  let productMetricsWithSkuValuesMock: ProductMetrics;
-  let performanceFilterStateMock: MyPerformanceFilterState;
-  let selectedEntityTypeMock: EntityType = EntityType.Person;
-  let productMetricsSuccessPayloadMock: ProductMetricsActions.FetchProductMetricsSuccessPayload;
+describe('Lists Effects', () => {
   let error: Error;
   let actions$: Subject<ProductMetricsActions.Action>;
-  let productMetricsEffects: ProductMetricsEffects;
-  let productMetricsService: ProductMetricsService;
-  let productMetricsDataMock: ProductMetricsData;
-  let opportunitiesGroupedByBrandSkuPackageCodeMock: OpportunitiesGroupedByBrandSkuPackageCode;
+  let listIdMock: string;
+  let listsEffects: ListsEffects;
+  let listsApiService: ListsApiService;
+  let storesDataMock: Stores;
+  let storeHeaderInfoMock: StoresHeader;
 
-  const productMetricsServiceMock = {
-    getProductMetrics(productMetricsData: ProductMetricsData): Observable<ProductMetricsData> {
-      return Observable.of(productMetricsData);
+  const listsApiServiceMock = {
+    getStorePerformance(storesData: Stores): Observable<Stores> {
+      return Observable.of(storesData);
     },
-    getOpportunityCounts(opportunityCountsPayload: FetchOpportunityCountsPayload): Observable<OpportunitiesGroupedByBrandSkuPackageCode> {
-      return Observable.of(opportunitiesGroupedByBrandSkuPackageCodeMock);
-    },
-    filterProductMetricsBrand(responsibilitiesData: ProductMetricsData): Observable<ProductMetricsData> {
-      return Observable.of(responsibilitiesData);
+    getHeaderDetail(storedHeaderInfo: StoresHeader): Observable<StoresHeader> {
+      return Observable.of(storedHeaderInfo);
     }
   };
 
   beforeEach(() => {
-    positionIdMock = chance.string();
-    contextPositionIdMock = chance.string();
-    entityTypeCodeMock = chance.string();
-    selectedBrandCodeMock = chance.string();
-    productMetricsWithBrandValuesMock = getProductMetricsWithBrandValuesMock();
-    productMetricsWithSkuValuesMock = getProductMetricsWithSkuValuesMock(SkuPackageType.package);
-    performanceFilterStateMock = getMyPerformanceFilterMock();
-    opportunitiesGroupedByBrandSkuPackageCodeMock = getOpportunitiesGroupedByBrandSkuPackageCodeMock();
+    listIdMock = chance.string();
     error = new Error(chance.string());
 
-    productMetricsDataMock = {
-      positionId: positionIdMock,
-      contextPositionId: contextPositionIdMock,
-      entityTypeCode: entityTypeCodeMock,
-      filter: performanceFilterStateMock,
-      selectedEntityType: selectedEntityTypeMock,
-      selectedBrandCode: selectedBrandCodeMock
+    storesDataMock = {
+      listId: listIdMock
+    };
+
+    storeHeaderInfoMock = {
+      listId: listIdMock
     };
 
     TestBed.configureTestingModule({
       providers: [
-        ProductMetricsEffects,
+        ListsEffects,
         provideMockActions(() => actions$),
         {
-          provide: ProductMetricsService,
-          useValue: productMetricsServiceMock
+          provide: ListsApiService,
+          useValue: listsApiServiceMock
         }
       ]
     });
@@ -85,170 +57,30 @@ describe('ProductMetrics Effects', () => {
     actions$ = new ReplaySubject(1);
   });
 
-  beforeEach(inject([ ProductMetricsEffects, ProductMetricsService ],
-    (_productMetricsEffects: ProductMetricsEffects,
-      _productMetricsService: ProductMetricsService) => {
-      productMetricsEffects = _productMetricsEffects;
-      productMetricsService = _productMetricsService;
+  beforeEach(inject([ ListsEffects, ListsApiService ],
+    (_listsEffects: ListsEffects,
+     _listsApiService: ListsApiService) => {
+      listsEffects = _listsEffects;
+      listsApiService = _listsApiService;
     }
   ));
 
-  describe('when a FetchProductMetrics is received', () => {
-    beforeEach(() => {
-      actions$.next(new ProductMetricsActions.FetchProductMetrics({
-        positionId: positionIdMock,
-        contextPositionId: contextPositionIdMock,
-        entityTypeCode: entityTypeCodeMock,
-        filter: performanceFilterStateMock,
-        selectedEntityType: EntityType.Person,
-        selectedBrandCode: selectedBrandCodeMock
-      }));
-    });
-
-    it('should call getProductMetrics with productMetricsData', (done) => {
-      const getProductMetricsSpy = spyOn(productMetricsService, 'getProductMetrics').and.callThrough();
-
-      productMetricsEffects.fetchProductMetrics$().subscribe(() => {
-        done();
-      });
-
-      expect(getProductMetricsSpy.calls.count()).toBe(1);
-      expect(getProductMetricsSpy.calls.argsFor(0)[0]).toEqual(productMetricsDataMock);
-    });
-
-    describe('when ProductMetricsService returns successfully and productMetricsViewType is brands', () => {
-      it('should return a SetProductMetricsViewType and FetchProductMetricsSuccess', (done) => {
-        spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
-          productMetricsData.products = productMetricsWithBrandValuesMock;
-          productMetricsData.productMetricsViewType = ProductMetricsViewType.brands;
-          return Observable.of(productMetricsData);
-        });
-
-        productMetricsSuccessPayloadMock = {
-          positionId: positionIdMock,
-          products: productMetricsWithBrandValuesMock
-        };
-
-        productMetricsEffects.fetchProductMetrics$().pairwise().subscribe(([action1, action2]) => {
-          expect(action1).toEqual(new ProductMetricsActions.SetProductMetricsViewType(ProductMetricsViewType.brands));
-          expect(action2).toEqual(new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock));
-          done();
-        });
-      });
-    });
-
-    describe('when ProductMetricsService returns successfully and productMetricsViewType is skus', () => {
-      it('should return a SetProductMetricsViewType, FetchProductMetricsSuccess, and SelectBrandValues', (done) => {
-        spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
-          productMetricsData.products = productMetricsWithBrandValuesMock;
-          productMetricsData.productMetricsViewType = ProductMetricsViewType.skus;
-          productMetricsData.selectedBrandCode = selectedBrandCodeMock;
-          return Observable.of(productMetricsData);
-        });
-
-        productMetricsSuccessPayloadMock = {
-          positionId: positionIdMock,
-          products: productMetricsWithBrandValuesMock
-        };
-
-        let dispatchedActions: Action[] = [];
-
-        productMetricsEffects.fetchProductMetrics$().subscribe((action: Action) => {
-          dispatchedActions.push(action);
-
-          if (dispatchedActions.length === 3) {
-            expect(dispatchedActions).toEqual([
-              new ProductMetricsActions.SetProductMetricsViewType(ProductMetricsViewType.skus),
-              new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock),
-              new ProductMetricsActions.SelectBrandValues(selectedBrandCodeMock)
-            ]);
-            done();
-          }
-        });
-      });
-    });
-
-    describe('when ProductMetricsService returns successfully and productMetricsViewType is packages', () => {
-      it('should return a SetProductMetricsViewType, FetchProductMetricsSuccess, and SelectBrandValues', (done) => {
-        spyOn(productMetricsService, 'getProductMetrics').and.callFake((productMetricsData: ProductMetricsData) => {
-          productMetricsData.products = productMetricsWithBrandValuesMock;
-          productMetricsData.productMetricsViewType = ProductMetricsViewType.packages;
-          productMetricsData.selectedBrandCode = selectedBrandCodeMock;
-          return Observable.of(productMetricsData);
-        });
-
-        productMetricsSuccessPayloadMock = {
-          positionId: positionIdMock,
-          products: productMetricsWithBrandValuesMock
-        };
-
-        let dispatchedActions: Action[] = [];
-
-        productMetricsEffects.fetchProductMetrics$().subscribe((action: Action) => {
-          dispatchedActions.push(action);
-
-          if (dispatchedActions.length === 3) {
-            expect(dispatchedActions).toEqual([
-              new ProductMetricsActions.SetProductMetricsViewType(ProductMetricsViewType.packages),
-              new ProductMetricsActions.FetchProductMetricsSuccess(productMetricsSuccessPayloadMock),
-              new ProductMetricsActions.SelectBrandValues(selectedBrandCodeMock)
-            ]);
-            done();
-          }
-        });
-      });
-    });
-
-    describe('when ProductMetricsApiService returns an error', () => {
-      it('should return a FetchProductMetricsFailure after catching an error', (done) => {
-        spyOn(productMetricsService, 'getProductMetrics').and.returnValue(Observable.throw(error));
-
-        productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
-          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailure(error));
-          done();
-        });
-      });
-    });
-  });
-
-  describe('when a failed FetchProductMetricsFailure is received', () => {
-
-    beforeEach(() => {
-      actions$.next(new ProductMetricsActions.FetchProductMetricsFailure(error));
-      spyOn(console, 'error');
-    });
-
-    it('should log the error payload', (done) => {
-      productMetricsEffects.fetchProdcutMetricsFailure$().subscribe(() => {
-        expect(console.error).toHaveBeenCalled();
-        done();
-      });
-    });
-  });
-
-  describe('when a FetchOpportunityCounts actions is received', () => {
-    let actionPayloadMock: FetchOpportunityCountsPayload;
+  describe('when a FetchStoreDetails actions is received', () => {
+    let actionPayloadMock: FetchStoreDetails;
 
     beforeEach(() => {
       actionPayloadMock = {
-        positionId: chance.string(),
-        alternateHierarchyId: chance.string(),
-        distributorId: chance.string(),
-        subAccountId: chance.string(),
-        isMemberOfExceptionHierarchy: chance.bool(),
-        selectedEntityType: getEntityTypeMock(),
-        productMetricsViewType: getProductMetricsViewTypeMock(),
-        filter: getMyPerformanceFilterMock()
+        listId: chance.string()
       };
 
-      actions$.next(new ProductMetricsActions.FetchOpportunityCounts(actionPayloadMock));
+      actions$.next(new ListActions.FetchStoreDetails(actionPayloadMock));
     });
 
     describe('when everything returns successfully', () => {
-      it('should call getOpportunityCounts from the ProductMetricsService given the passed in action payload', (done) => {
-        const getOpportunitiesSpy = spyOn(productMetricsService, 'getOpportunityCounts').and.callThrough();
+      it('should call getStoreDetails from the ListsService given the passed in action payload', (done) => {
+        const getOpportunitiesSpy = spyOn(listsApiService, 'getStorePerformance').and.callThrough();
 
-        productMetricsEffects.fetchProductMetricOpportunityCounts$().subscribe(() => {
+        listsEffects.fetchStoreDetail$().subscribe(() => {
           done();
         });
 
@@ -256,20 +88,63 @@ describe('ProductMetrics Effects', () => {
         expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock);
       });
 
-      it('should dispatch a FetchOpportunityCountsSuccess action with the returned GroupedOpportunityCounts', (done) => {
-        productMetricsEffects.fetchProductMetricOpportunityCounts$().subscribe((action: Action) => {
-          expect(action).toEqual(new ProductMetricsActions.FetchOpportunityCountsSuccess(opportunitiesGroupedByBrandSkuPackageCodeMock));
+      it('should dispatch a FetchStoreDetailsSuccess action with the returned GroupedData', (done) => {
+        listsEffects.fetchStoreDetail$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.FetchStoreDetailsSuccess(storesDataMock));
           done();
         });
       });
     });
 
-    describe('when an error is returned from getOpportunityCounts', () => {
-      it('should dispatch a FetchProductMetricsFailure action with the error', (done) => {
-        spyOn(productMetricsService, 'getOpportunityCounts').and.returnValue(Observable.throw(error));
+    describe('when an error is returned from getStoreDetails', () => {
+      it('should dispatch a FetchStoreDetailsFailure action with the error', (done) => {
+        spyOn(listsApiService, 'getStorePerformance').and.returnValue(Observable.throw(error));
 
-        productMetricsEffects.fetchProductMetricOpportunityCounts$().subscribe((response) => {
-          expect(response).toEqual(new ProductMetricsActions.FetchOpportunityCountsFailure(error));
+        listsEffects.fetchStoreDetail$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.FetchStoreDetailsFailure(error));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('when a fetchHeaderDetail actions is received', () => {
+    let actionPayloadMock: FetchHeaderDetails;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        listId: chance.string()
+      };
+
+      actions$.next(new ListActions.FetchHeaderDetails(actionPayloadMock));
+    });
+
+    describe('when everything returns successfully', () => {
+      it('should call getHeaderDetails from the ListsService given the passed in action payload', (done) => {
+        const getOpportunitiesSpy = spyOn(listsApiService, 'getHeaderDetail').and.callThrough();
+
+        listsEffects.fetchStoreDetail$().subscribe(() => {
+          done();
+        });
+
+        expect(getOpportunitiesSpy.calls.count()).toBe(1);
+        expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock);
+      });
+
+      it('should dispatch a getHeaderDetailsSuccess action with the returned GroupedData', (done) => {
+        listsEffects.fetchStoreDetail$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.FetchHeaderDetailsSuccess(storeHeaderInfoMock));
+          done();
+        });
+      });
+    });
+
+    describe('when an error is returned from getHeaderDetails', () => {
+      it('should dispatch a FetchHeaderDetailsFailure action with the error', (done) => {
+        spyOn(listsApiService, 'getHeaderDetail').and.returnValue(Observable.throw(error));
+
+        listsEffects.fetchStoreDetail$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.FetchHeaderDetailsFailure(error));
           done();
         });
       });

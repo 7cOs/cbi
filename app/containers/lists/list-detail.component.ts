@@ -14,13 +14,13 @@ import { Subscription } from 'rxjs/Subscription';
 
 export class ListDetailComponent implements OnInit, OnDestroy {
 
+  private storeDetail: Subscription;
+
   constructor(
     private store: Store<AppState>,
     private titleService: Title,
     @Inject('$state') private $state: any,
   ) { }
-
-  private storeDetail: Subscription;
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);

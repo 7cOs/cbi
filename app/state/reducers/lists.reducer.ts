@@ -1,14 +1,12 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
-import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ListsActions from '../actions/lists.action';
+import { StoreHeaderDetails, Stores } from '../../models/lists.model';
 
 export interface ListsState extends State {
   StoreDetailStatus: ActionStatus;
   headerInfoStatus: ActionStatus;
-  stores: ProductMetrics;
-  headerInfo?: OpportunitiesGroupedByBrandSkuPackageCode;
+  stores: Stores;
+  headerInfo?: StoreHeaderDetails;
 }
 
 export const initialState: ListsState = {
@@ -16,6 +14,11 @@ export const initialState: ListsState = {
   headerInfoStatus: ActionStatus.NotFetched,
   stores: {},
 };
+
+export interface ListsReducerState {
+  current: ;
+  versions: Array<>;
+}
 
 export function listsReducer(
   state: ListsState = initialState,

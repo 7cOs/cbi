@@ -3,15 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
-import { V3ApiHelperService } from './v3-api-helper.service';
 import { ListStoreDTO } from '../../../models/lists-store-dto.model';
+import { StoreHeaderInfoDTO } from '../../../models/lists-store-header-dto.model';
 
 @Injectable()
 export class ListsApiService {
 
   constructor(
-    private v3ApiHelperService: V3ApiHelperService,
     private http: HttpClient
   ) { }
 
@@ -25,13 +23,10 @@ export class ListsApiService {
 
   public getHeaderDetail(
     listsId: string
-  ): Observable<EntitySubAccountDTO[]> {
+  ): Observable<StoreHeaderInfoDTO[]> {
     const url = `/v3/lists/${ listsId }`;
-    const params = {
-      positionId: positionId,
-    };
 
-    return this.http.get<ListStoreDTO[]>(url, { params: params })
+    return this.http.get<ListStoreDTO[]>(url)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 }

@@ -1,21 +1,10 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
-import { AccountsApiService } from './accounts-api.service';
 import { ApiRequestType } from '../../../enums/api-request-type.enum';
 import { chanceStringOptions } from '../../../lib/spec-util';
-import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
-import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
-import { getEntitySubAccountDTOMock } from '../../../models/entity-subaccount-dto.model.mock';
-import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
-import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
-import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
-import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PerformanceDTO } from '../../../models/performance.model';
-import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
-import { ProductMetricsDTO } from '../../../models/product-metrics.model';
-import { SkuPackageType } from '../../../enums/sku-package-type.enum';
 import { V3ApiHelperService } from './v3-api-helper.service';
 import { ListsApiService } from './lists-api.service';
 
@@ -49,16 +38,14 @@ describe('ListsApiService', () => {
     let expectedRequestUrl: string;
 
     beforeEach(() => {
-      expectedRequestUrl = `/v3/lists/${ listIdMock }`
-        + `?positionId=${ positionIdMock }`;
+      expectedRequestUrl = `/v3/lists/${ listIdMock }`;
     });
 
     it('should call the stores information endpoint and return stores data for the given list ID', () => {
       const performanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
 
       listsApiService.getStorePerformance(
-        listIdMock,
-        positionIdMock
+        listIdMock
       )
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(performanceDTOResponseMock);
@@ -77,8 +64,7 @@ describe('ListsApiService', () => {
       };
 
       listsApiService.getStorePerformance(
-        listIdMock,
-        positionIdMock
+        listIdMock
       )
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);
@@ -99,8 +85,7 @@ describe('ListsApiService', () => {
       const performanceDTOResponseMock: PerformanceDTO = getPerformanceDTOMock();
 
       listsApiService.getHeaderDetail(
-        listIdMock,
-        positionIdMock
+        listIdMock
       )
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(performanceDTOResponseMock);
@@ -119,8 +104,7 @@ describe('ListsApiService', () => {
       };
 
       listsApiService.getHeaderDetail(
-        listIdMock,
-        positionIdMock
+        listIdMock
       )
         .subscribe((response: PerformanceDTO) => {
           expect(response).toEqual(expectedEmptyPerformanceDTOResponseMock);

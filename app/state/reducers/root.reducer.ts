@@ -7,14 +7,14 @@ import { Environment } from '../../environment';
 import { myPerformanceReducer, MyPerformanceState } from './my-performance.reducer';
 import { myPerformanceFilterReducer, MyPerformanceFilterState } from './my-performance-filter.reducer';
 import { productMetricsReducer, ProductMetricsState } from './product-metrics.reducer';
-import { listsReducer, ListsReducerState } from "./lists.reducer";
+import { listsReducer, ListsReducerState } from './lists.reducer';
 
 export interface AppState {
   compassVersion: CompassVersionState;
   dateRanges: DateRangesState;
   myPerformance: MyPerformanceState;
   myPerformanceProductMetrics: ProductMetricsState;
-  listsDetails : ListDetailsState;
+  listsDetails: ListsReducerState;
   myPerformanceFilter: MyPerformanceFilterState;
 }
 
@@ -22,7 +22,7 @@ export const reducers: ActionReducerMap<AppState> = {
   compassVersion: compassVersionReducer,
   dateRanges: dateRangesReducer,
   myPerformance: myPerformanceReducer,
-  listsDetails : ListDetailsState,
+  listsDetails : listsReducer,
   myPerformanceProductMetrics: productMetricsReducer,
   myPerformanceFilter: myPerformanceFilterReducer
 };
