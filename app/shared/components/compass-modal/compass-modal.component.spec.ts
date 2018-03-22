@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 
 import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
-import { CompassOverlayPositionConfig } from '../../../models/compass-overlay-position-config.model';
 import { CompassModalComponent } from './compass-modal.component';
 import { CompassModalInputs } from '../../../models/compass-modal-inputs.model';
 import { CompassModalService } from '../../../services/compass-modal.service';

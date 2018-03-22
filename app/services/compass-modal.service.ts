@@ -1,8 +1,6 @@
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 import { ComponentRef, Injectable } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { toPromise } from 'rxjs/operator/toPromise';
-import { mergeMap } from 'rxjs/operators/mergeMap';
 
 import { CompassOverlayConfig } from '../models/compass-overlay-config.model';
 import { CompassOverlayService } from './compass-overlay.service';
