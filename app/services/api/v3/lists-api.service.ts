@@ -16,21 +16,15 @@ export class ListsApiService {
   ) { }
 
   public getStorePerformance(
-    listsId: string,
-    positionId: string
+    listsId: string
   ): Observable<ListStoreDTO[]> {
     const url = `/v3/lists/${ listsId }/stores`;
-    const params = {
-      positionId: positionId,
-    };
-
-    return this.http.get<ListStoreDTO[]>(url, { params: params })
+    return this.http.get<ListStoreDTO[]>(url)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
   public getHeaderDetail(
-    listsId: string,
-    positionId: string
+    listsId: string
   ): Observable<EntitySubAccountDTO[]> {
     const url = `/v3/lists/${ listsId }`;
     const params = {

@@ -4,20 +4,17 @@ import { ProductMetrics, ProductMetricsValues } from '../../models/product-metri
 import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ListsActions from '../actions/lists.action';
 
-export interface ProductMetricsState extends State {
-  status: ActionStatus;
-  opportunityCountsStatus: ActionStatus;
-  products: ProductMetrics;
-  opportunityCounts?: OpportunitiesGroupedByBrandSkuPackageCode;
-  selectedBrandCodeValues?: ProductMetricsValues;
-  productMetricsViewType: ProductMetricsViewType;
+export interface ListsState extends State {
+  StoreDetailStatus: ActionStatus;
+  headerInfoStatus: ActionStatus;
+  stores: ProductMetrics;
+  headerInfo?: OpportunitiesGroupedByBrandSkuPackageCode;
 }
 
-export const initialState: ProductMetricsState = {
+export const initialState: ListsState = {
   StoreDetailStatus: ActionStatus.NotFetched,
   headerInfoStatus: ActionStatus.NotFetched,
   stores: {},
-  productMetricsViewType: ProductMetricsViewType.brands
 };
 
 export function listsReducer(
