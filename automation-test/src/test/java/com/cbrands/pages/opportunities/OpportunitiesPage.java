@@ -216,13 +216,22 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage clickResetFilters() {
-    if (!isBrowserTypeIE()) {
-      waitForElementToClickable(resetFiltersButton, true).click();
+    if (isBrowserTypeIE()) {
+      clickResetTwiceForIE();
     } else {
-      waitForElementToClickable(resetFiltersButton, true).click();
       waitForElementToClickable(resetFiltersButton, true).click();
     }
     return this;
+  }
+
+  /**
+   * Workaround for IE-specific bug where the reset button does not respond on the first click. \
+   * Remove this workaround when fixed.
+   * See Rally ticket DE7088.
+   */
+  private void clickResetTwiceForIE() {
+    waitForElementToClickable(resetFiltersButton, true).click();
+    waitForElementToClickable(resetFiltersButton, true).click();
   }
 
   public OpportunitiesPage removeAccountScopeChip() {
