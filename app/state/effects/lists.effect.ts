@@ -8,9 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import { FetchProductMetricsPayload } from '../../state/actions/product-metrics.action';
 import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
-import { ProductMetricsService } from '../../services/product-metrics.service';
 import * as ListActions from '../../state/actions/lists.action';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
 @Injectable()
 export class ListsEffects {

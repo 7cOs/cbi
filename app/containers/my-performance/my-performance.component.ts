@@ -159,7 +159,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.dateRangeState = dateRangeState;
           this.setSelectedDateRangeValues();
         }
-    });
+      });
 
     this.filterStateSubscription = this.store
       .select(state => state.myPerformanceFilter)
