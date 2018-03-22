@@ -113,7 +113,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     final WebElement searchField = getSearchFilterTextBox(searchFilter);
     waitForElementToClickable(searchField, true).click();
     searchField.sendKeys(searchText);
-    ensureSendKeys( searchField, searchText );
+    enterKeys( searchField, searchText );
   }
   
   public OpportunitiesPage clickSearchForChainRetailer() {

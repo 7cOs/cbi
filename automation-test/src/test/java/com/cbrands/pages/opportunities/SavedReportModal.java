@@ -53,7 +53,7 @@ public class SavedReportModal extends TestNGBasePage {
   public SavedReportModal enterReportName(String name) {
     waitForElementToClickable(nameField, true).click();
     nameField.sendKeys(name);
-    ensureSendKeys( nameField, name );
+    enterKeys( nameField, name );
     return this;
   }
 

@@ -623,17 +623,15 @@ public class SeleniumUtils {
     }
   
     /**
-     * Ensure field value is entered into field by entering a single character at a
-     * time
-     * 
+     * Ensure field value is entered into field by entering a single character at a time
      * @param WebElement
      * @param String
      * @author SKARNEH
      * @category WORKAROUND
      */
-    public static void ensureSendKeys(WebElement field, String value) {
+    public static void enterKeys(WebElement field, String value) {
       field.clear();
-      for (String c : value.split(",")) {
+      for (String c : value.split("")) {
         field.sendKeys(c);
       }
     }

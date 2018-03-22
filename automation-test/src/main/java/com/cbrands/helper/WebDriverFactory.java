@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -60,8 +61,8 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     
     Validate.notNull(
       webDriver.get(),
-      "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
-        "/n Have you downloaded the correct driver into your local target directory?"
+      "Driver for " + BrowserType.chrome.name() + " could not be found at: " + HostType.local.name() +
+        "\n Have you downloaded the correct driver into your local target directory?"
     );
 
     return webDriver.get();

@@ -29,6 +29,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
+    
     final String testCaseName = method.getAnnotation(Test.class).description();
     final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
     this.startUpBrowser(sauceTitle);
@@ -225,7 +226,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Failed to display error message when max limit of Saved Reports already reached."
     );
   }
-
 
   @DataProvider
   public static Object[][] distributorData() {
