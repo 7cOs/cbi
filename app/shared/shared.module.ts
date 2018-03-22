@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { BeerLoaderComponent } from './components/beer-loader/beer-loader.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule }   from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +26,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     OverlayModule
   ],
   exports: [
+    BeerLoaderComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
@@ -35,12 +37,13 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     OverlayModule
   ],
   declarations: [
+    BeerLoaderComponent,
     CompassCardComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
-    DismissibleXComponent
+    DismissibleXComponent,
   ],
   providers: [
     CompassOverlayService,
