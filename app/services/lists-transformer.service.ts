@@ -10,25 +10,13 @@ import { StoreHeaderInfoDTO } from '../models/lists-store-header-dto.model';
 export class ListsTransformerService {
   constructor(private calculatorService: CalculatorService) { }
 
-  public formatStoresData(valuesDTO: ListStoreDTO): Stores {
+  public formatStoresData(valuesDTO: ListStoreDTO[]): Stores {
     return {
-      brandDescription: valuesDTO.brandDescription,
-      collectionMethod: valuesDTO.values[0].collectionMethod,
-      current: Math.round(valuesDTO.values[0].current),
-      yearAgo: this.calculatorService.getYearAgoDelta(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
-      yearAgoPercent: this.calculatorService.getYearAgoPercent(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
-      brandCode: valuesDTO.brandCode,
     };
   }
 
-  public formatListHeaderData(valuesDTO: StoreHeaderInfoDTO): StoresHeader {
+  public formatListHeaderData(valuesDTO: StoreHeaderInfoDTO[]): StoresHeader {
     return {
-      brandDescription: valuesDTO.brandDescription,
-      collectionMethod: valuesDTO.values[0].collectionMethod,
-      current: Math.round(valuesDTO.values[0].current),
-      yearAgo: this.calculatorService.getYearAgoDelta(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
-      yearAgoPercent: this.calculatorService.getYearAgoPercent(valuesDTO.values[0].current, valuesDTO.values[0].yearAgo),
-      brandCode: valuesDTO.brandCode,
     };
   }
 }
