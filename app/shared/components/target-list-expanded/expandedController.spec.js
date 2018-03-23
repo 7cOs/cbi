@@ -100,12 +100,6 @@ describe('Unit: expanded target list controller', function() {
 
     expect(ctrl.toggleAll).not.toBeUndefined();
     expect(typeof (ctrl.toggleAll)).toEqual('function');
-
-    expect(ctrl.moreThanMaxChars).not.toBeUndefined();
-    expect(typeof (ctrl.moreThanMaxChars)).toEqual('function');
-
-    expect(ctrl.isSaveDisabled).not.toBeUndefined();
-    expect(typeof (ctrl.isSaveDisabled)).toEqual('function');
   });
 
   describe('Public Methods', function() {

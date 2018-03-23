@@ -186,12 +186,6 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.retrieveStoreCountForSelectedOpportunities).not.toBeUndefined();
     expect(typeof (ctrl.retrieveStoreCountForSelectedOpportunities)).toEqual('function');
-
-    expect(ctrl.moreThanMaxChars).not.toBeUndefined();
-    expect(typeof (ctrl.moreThanMaxChars)).toEqual('function');
-
-    expect(ctrl.isSaveDisabled).not.toBeUndefined();
-    expect(typeof (ctrl.isSaveDisabled)).toEqual('function');
   });
 
   describe('Bindings', function() {
