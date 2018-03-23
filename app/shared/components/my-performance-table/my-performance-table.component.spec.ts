@@ -203,11 +203,11 @@ describe('MyPerformanceTableComponent', () => {
     it('should sort the data with two criteria accordingly when GeoBU, NSO , Draft are present', () => {
       let tableData = getMyPerformanceTableRowMock(3);
       componentInstance.viewType = SalesHierarchyViewType.roleGroups;
-      tableData[0].descriptionRow0 = 'DRAFT';
+      tableData[0].metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.DRAFT;
       tableData[0].metricColumn0 = 1;
-      tableData[1].descriptionRow0 = 'GEO BUSINESS UNITS';
+      tableData[1].metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.GEO_BUSINESS_UNITS;
       tableData[1].metricColumn0 = 0;
-      tableData[2].descriptionRow0 = 'NATIONAL SALES ORG';
+      tableData[2].metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG;
       tableData[2].metricColumn0 = 2;
       componentInstance.tableData = tableData.slice();
 

@@ -14,10 +14,18 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
-interface SortWeightArray {
+interface SortWeight {
   index: number;
   sortWeight: number;
 }
+
+export enum SpecialistRoleGroupEntityTypeCode {
+  GEO_BUSINESS_UNITS = '4',
+  NATIONAL_SALES_ORG = '19',
+  DRAFT = '9'
+}
+
+const GEOGRAPHY_SORTING_WEIGHT = 999;
 
 @Component({
   selector: 'my-performance-table',
@@ -39,10 +47,12 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
     if (tableData) {
-      const sortedTableData: Array<MyPerformanceTableRow> = typeof this.sortingFunction === 'function'
+      let sortedTableData: Array<MyPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-        this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups) ? this.sortRoleGroups(sortedTableData)
+
+      this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups || this.viewType === SalesHierarchyViewType.people)
+        ? this.sortRoleGroups(sortedTableData)
         : sortedTableData;
     }
   }
@@ -75,10 +85,9 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   /*Adding a Object with some number that carries high weights since below role groups should always be
   sorted at the bottom according to weights*/
   private specializedRoleGroupWeights = {
-    'GEO BUSINESS UNITS': 995,
-    [EntityPeopleType['NATIONAL SALES ORG']]: 996,
-    [EntityPeopleType.DRAFT]: 997,
-    [EntityPeopleType.GEOGRAPHY]: 998
+    [SpecialistRoleGroupEntityTypeCode.GEO_BUSINESS_UNITS]: 995,
+    [SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG]: 996,
+    [SpecialistRoleGroupEntityTypeCode.DRAFT]: 997
   };
 
   constructor (private calculatorService: CalculatorService) { }
@@ -218,20 +227,23 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
       const sortedData: Array<MyPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
-      this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups) ? this.sortRoleGroups(sortedData)
+      this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups || this.viewType === SalesHierarchyViewType.people)
+        ? this.sortRoleGroups(sortedData)
         : sortedData;
     }
   }
 
   private sortRoleGroups(rowData: Array<MyPerformanceTableRow>): Array<MyPerformanceTableRow> {
-    const rowDataMapping: Array<SortWeightArray> = rowData.map((row: MyPerformanceTableRow, index: number) => {
+    const rowDataMapping: Array<SortWeight> = rowData.map((row: MyPerformanceTableRow, index: number) => {
       return {
         index: index,
-        sortWeight: this.specializedRoleGroupWeights[row.descriptionRow0] || index
+        sortWeight: row.descriptionRow0 === EntityPeopleType.GEOGRAPHY
+          ? GEOGRAPHY_SORTING_WEIGHT
+          : this.specializedRoleGroupWeights[row.metadata.entityTypeCode] || index
       };
     });
-    const sortedRowDataMapping: Array<SortWeightArray> = sortBy(rowDataMapping, ['sortWeight']);
-    return sortedRowDataMapping.map((row: SortWeightArray) => {
+    const sortedRowDataMapping: Array<SortWeight> = sortBy(rowDataMapping, ['sortWeight']);
+    return sortedRowDataMapping.map((row: SortWeight) => {
       return rowData[row.index];
     });
   }
