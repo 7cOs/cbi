@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class ListDetailComponent implements OnInit, OnDestroy {
 
   private storeDetail: Subscription;
+  private headerDetail: Subscription;
 
   constructor(
     private store: Store<AppState>,
@@ -24,7 +25,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
-    this.store.dispatch(new ListsActions.FetchStoreDetails({listId: '259'}));
+    this.store.dispatch(new ListsActions.FetchStoreDetails({listId: '184'}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: '259'}));
 
     this.storeDetail = this.store
@@ -32,6 +33,16 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .subscribe((storeDetail: any)  => {
         if (storeDetail.status === ActionStatus.Fetched) {
           this.storeDetail = storeDetail;
+          console.log(storeDetail);
+        }
+      });
+
+    this.headerDetail = this.store
+      .select(state => state.listsDetails)
+      .subscribe((headerDetail: any)  => {
+        if (headerDetail.status === ActionStatus.Fetched) {
+          this.headerDetail = headerDetail;
+          console.log(headerDetail);
         }
       });
   }

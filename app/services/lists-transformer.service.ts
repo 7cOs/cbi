@@ -3,20 +3,30 @@ import 'rxjs/add/operator/map';
 
 import { CalculatorService } from './calculator.service';
 import { ListStoreDTO } from '../models/lists-store-dto.model';
-import { Stores, StoresHeader } from '../models/lists.model';
+import { StoreDetailsRow, StoreHeaderDetails } from '../models/lists.model';
 import { StoreHeaderInfoDTO } from '../models/lists-store-header-dto.model';
 
 @Injectable()
 export class ListsTransformerService {
-  constructor(private calculatorService: CalculatorService) { }
+  constructor() { }
 
-  public formatStoresData(valuesDTO: ListStoreDTO[]): Stores {
+  public formatStoresData(listStoresDTOs: Array<ListStoreDTO>): Array<StoreDetailsRow> {
+    return listStoresDTOs.map(store => this.formatStoreData(store));
+  }
+
+  public formatListHeaderData(headerDataDTO: StoreHeaderInfoDTO): StoreHeaderDetails {
     return {
+      description: headerDataDTO.description,
+      id: headerDataDTO.id,
+      name: headerDataDTO.name
     };
   }
 
-  public formatListHeaderData(valuesDTO: StoreHeaderInfoDTO[]): StoresHeader {
-    return {
+  private formatStoreData(store: ListStoreDTO): StoreDetailsRow {
+    const storeData: StoreDetailsRow = {
+      address: store.address,
+      city: store.city
     };
+    return storeData;
   }
 }

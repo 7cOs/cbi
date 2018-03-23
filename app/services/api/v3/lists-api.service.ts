@@ -15,7 +15,7 @@ export class ListsApiService {
 
   public getStorePerformance(
     listsId: string
-  ): Observable<ListStoreDTO[]> {
+  ): Observable<Array<ListStoreDTO>> {
     const url = `/v3/lists/${ listsId }/stores`;
     return this.http.get<ListStoreDTO[]>(url)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
@@ -23,7 +23,7 @@ export class ListsApiService {
 
   public getHeaderDetail(
     listsId: string
-  ): Observable<StoreHeaderInfoDTO[]> {
+  ): Observable<StoreHeaderInfoDTO> {
     const url = `/v3/lists/${ listsId }`;
 
     return this.http.get<ListStoreDTO[]>(url)

@@ -1,5 +1,17 @@
+import { Collaborators, Owner, Survey } from './lists.model';
+
 export interface StoreHeaderInfoDTO {
-  id: string;
+  archived: boolean;
+  category: string;
+  collaboratorType: string;
+  collaborators: Array<Collaborators>;
+  createdOn: string;
+  description: string;
+  id: number;
   name: string;
-  premiseTypes: string[];
+  numberOfAccounts: number;
+  owner: Owner;
+  survey: Survey;
+  type: number;
+  updatedOn: string;
 }
