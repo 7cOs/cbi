@@ -428,7 +428,7 @@ public class OpportunitiesPage extends TestNGBasePage {
    * @author SKARNEH
    * @category WORKAROUND
    */
-  public boolean resetFocus(WebElement element) {
+  public boolean dismissStrayBackdropElement (WebElement element) {
     try {
       element.click();
       return true;

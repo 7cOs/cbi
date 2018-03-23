@@ -34,7 +34,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage.goToPage();
     opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
     Assert.assertTrue(
-        opportunitiesPage.resetFocus(opportunitiesPage.getBody()),
+        opportunitiesPage.dismissStrayBackdropElement(opportunitiesPage.getBody()),
         "Error resetting focus to element"
       );
   }
