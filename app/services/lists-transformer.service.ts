@@ -10,7 +10,7 @@ import { StoreHeaderInfoDTO } from '../models/lists-store-header-dto.model';
 export class ListsTransformerService {
   constructor(private calculatorService: CalculatorService) { }
 
-  private formatStoresData(valuesDTO: ListStoreDTO): Stores {
+  public formatStoresData(valuesDTO: ListStoreDTO): Stores {
     return {
       brandDescription: valuesDTO.brandDescription,
       collectionMethod: valuesDTO.values[0].collectionMethod,
@@ -21,7 +21,7 @@ export class ListsTransformerService {
     };
   }
 
-  private formatListHeaderData(valuesDTO: StoreHeaderInfoDTO): StoresHeader {
+  public formatListHeaderData(valuesDTO: StoreHeaderInfoDTO): StoresHeader {
     return {
       brandDescription: valuesDTO.brandDescription,
       collectionMethod: valuesDTO.values[0].collectionMethod,
