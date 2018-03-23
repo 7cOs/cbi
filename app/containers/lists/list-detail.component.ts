@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { Subscription } from 'rxjs/Subscription';
+import { ListsState } from '../../state/reducers/lists.reducer';
 
 @Component({
   selector: 'list-detail',
@@ -16,6 +17,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   private storeDetail: Subscription;
   private headerDetail: Subscription;
+  private storeDetails: ListsState;
+  private headerDetails: ListsState;
 
   constructor(
     private store: Store<AppState>,
@@ -30,18 +33,18 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
     this.storeDetail = this.store
       .select(state => state.listsDetails)
-      .subscribe((storeDetail: any)  => {
+      .subscribe((storeDetail: ListsState)  => {
         if (storeDetail.status === ActionStatus.Fetched) {
-          this.storeDetail = storeDetail;
+          this.storeDetails = storeDetail;
           console.log(storeDetail);
         }
       });
 
     this.headerDetail = this.store
       .select(state => state.listsDetails)
-      .subscribe((headerDetail: any)  => {
+      .subscribe((headerDetail: ListsState)  => {
         if (headerDetail.status === ActionStatus.Fetched) {
-          this.headerDetail = headerDetail;
+          this.headerDetails = headerDetail;
           console.log(headerDetail);
         }
       });
