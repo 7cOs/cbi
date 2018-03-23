@@ -270,9 +270,6 @@ module.exports = /*  @ngInject */
                 for (var l = 0; l < tradeChannelValue.length; l++) {
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
-              } else if (key2 === 'masterSKU') {
-                let index = obj[key2][k].search('@');
-                queryParams += index === -1 ? obj[key2][k] : obj[key2][k].slice(0, index);
               } else {
                 queryParams += obj[key2][k];
               }
