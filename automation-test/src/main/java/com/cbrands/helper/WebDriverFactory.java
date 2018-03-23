@@ -58,7 +58,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static WebDriver getLocalWebDriver() {
     System.setProperty("webdriver.chrome.driver", "chromedriver");
     webDriver.set(new ChromeDriver());
-    
     Validate.notNull(
       webDriver.get(),
       "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
