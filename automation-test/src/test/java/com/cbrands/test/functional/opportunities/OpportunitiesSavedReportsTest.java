@@ -24,7 +24,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeMethod
-  public void setUp(Method method) throws MalformedURLException {  
+  public void setUp(Method method) throws MalformedURLException {
     final String testCaseName = method.getAnnotation(Test.class).description();
     final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
     this.startUpBrowser(sauceTitle);
@@ -33,7 +33,6 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
     opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
-
     Assert.assertTrue(
         opportunitiesPage.resetFocus(opportunitiesPage.getBody()),
         "Error resetting focus to element"
@@ -46,8 +45,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     this.shutDownBrowser();
   }
 
-  @Test(description = "Enabling/Disabling Save Report link", 
-      dataProvider = "distributorData")
+  @Test(description = "Enabling/Disabling Save Report link", dataProvider = "distributorData")
   public void enableSavedReport(String distributorSearchText) {
     Assert.assertFalse(
       opportunitiesPage.isSaveReportButtonEnabled(),
@@ -55,11 +53,11 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     );
 
     opportunitiesPage = opportunitiesPage
-     .enterDistributorSearchText(distributorSearchText)
-     .clickSearchForDistributor()
-     .clickFirstDistributorResult()
-     .clickApplyFiltersButton()
-     .waitForLoaderToDisappear();
+      .enterDistributorSearchText(distributorSearchText)
+      .clickSearchForDistributor()
+      .clickFirstDistributorResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear();
 
     Assert.assertTrue(
       opportunitiesPage.isSaveReportButtonEnabled(),

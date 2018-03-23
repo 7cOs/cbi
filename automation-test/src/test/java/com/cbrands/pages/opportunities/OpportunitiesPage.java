@@ -116,7 +116,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     final WebElement searchField = getSearchFilterTextBox(searchFilter);
     enterKeys( searchField, searchText );
   }
-  
+
   public OpportunitiesPage clickSearchForChainRetailer() {
     clickSearchInFilter(chainRetailerFilter);
     return this;
@@ -407,6 +407,7 @@ public class OpportunitiesPage extends TestNGBasePage {
       } else {
         numberOfSavedReports = list.size();
       }
+
       return numberOfSavedReports;
     }
   }

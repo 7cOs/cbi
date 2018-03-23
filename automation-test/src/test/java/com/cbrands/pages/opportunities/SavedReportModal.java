@@ -53,14 +53,16 @@ public class SavedReportModal extends TestNGBasePage {
   public SavedReportModal enterReportName(String name) {
     waitForElementToClickable(nameField, true).click();
     enterKeys( nameField, name );
+
     return this;
   }
 
   public SavedReportModal enterNewReportName(String newReportName) {
     waitForElementToClickable(editNameField, true).click();
     enterKeys(editNameField, newReportName);
+
     return this;
-  } 
+  }
 
   public SavedReportModal clickSave() {
     waitForElementToClickable(saveButton, true).click();
