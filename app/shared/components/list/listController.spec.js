@@ -189,6 +189,9 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.moreThanMaxChars).not.toBeUndefined();
     expect(typeof (ctrl.moreThanMaxChars)).toEqual('function');
+
+    expect(ctrl.isSaveDisabled).not.toBeUndefined();
+    expect(typeof (ctrl.isSaveDisabled)).toEqual('function');
   });
 
   describe('Bindings', function() {
@@ -397,15 +400,6 @@ describe('Unit: list controller', function() {
       ctrl.createNewList();
       expect(mdDialog.show).toHaveBeenCalled();
       expect(mdDialog.show.calls.count()).toEqual(1);
-    });
-  });
-
-  describe('[expanded.moreThanMaxChars] method', function() {
-    it('Should return true/false if more than 255/less than 255 respectively', function() {
-      const descriptionLength = [256, 254];
-      const max = 255;
-      expect(ctrl.moreThanMaxChars(descriptionLength[0], max)).toBeTruthy();
-      expect(ctrl.moreThanMaxChars(descriptionLength[1], max)).toBeFalsy();
     });
   });
 

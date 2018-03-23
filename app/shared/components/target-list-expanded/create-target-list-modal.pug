@@ -10,7 +10,7 @@ div.modal.create-target-list
     div.modal-input
       label Description (Optional)
       textarea(ng-model="expanded.newList.description" placeholder="Enter Description").larger-input
-      label.error(ng-show="expanded.moreThanMaxChars(expanded.newList.description.length, expanded.maxChars)") List description cannot be greater than 255 characters. {{expanded.newList.description.length - expanded.maxChars}} over limit.
+      label.error(ng-show="expanded.targetListService.moreThanMaxCharsNewList(expanded.newList.description.length, expanded.targetListService.maxChars)") List description cannot be greater than 255 characters. {{expanded.newList.description.length - expanded.targetListService.maxChars}} over limit.
     div.modal-input.add-collaborators
       label Add Collaborators (Optional)
       inline-search(type="user" placeholder="Name or CBI email address" variety="manage-collaborators" chosen-result="expanded.chosenResult" callback="expanded.addCollaborator(result)")
@@ -19,5 +19,5 @@ div.modal.create-target-list
         .collaborator(ng-repeat="collaborator in expanded.newList.collaborators") {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}} <span class="accent">Collaborator</span><span class="break">&nbsp;</span>
     div.modal-input
       md-checkbox.allow-invites(ng-model="expanded.newList.collaborateAndInvite" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
-    button.btn-action(ng-click="expanded.saveNewList($event)" ng-disabled="!expanded.newList.name || expanded.buttonDisabled || expanded.moreThanMaxChars(expanded.newList.description.length, expanded.maxChars)") Save
+    button.btn-action(ng-click="expanded.saveNewList($event)" ng-disabled="expanded.targetListService.isSaveDisabledNewList(expanded.newList.name, expanded.buttonDisabled, expanded.targetListService.moreThanMaxCharsNewList, expanded.newList.description.length, expanded.targetListService.maxChars)") Save
     p.cancel.accent(ng-click="expanded.closeModal()") X Cancel

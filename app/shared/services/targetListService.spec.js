@@ -149,6 +149,8 @@ describe('[Services.targetListService]', function() {
     expect(targetListService.addTargetListShares).toBeDefined();
     expect(targetListService.updateTargetListShares).toBeDefined();
     expect(targetListService.deleteTargetListShares).toBeDefined();
+    expect(targetListService.moreThanMaxCharsNewList).toBeDefined();
+    expect(targetListService.isSaveDisabledNewList).toBeDefined();
     expect(apiHelperService.request).toBeDefined();
     expect(opportunitiesService.model).toBeDefined();
     expect(filtersService.model).toBeDefined();
@@ -600,6 +602,63 @@ describe('[Services.targetListService]', function() {
     it('returns proper string when not archived and permission level is not author', () => {
       const result = targetListService.getAnalyticsCategory('permissionLevelMock');
       expect(result).toBe('Target Lists - Shared With Me');
+    });
+  });
+
+  describe('[moreThanMaxCharsNewList] method', function() {
+    it('Should return true if more than 255 respectively', function() {
+      var descriptionLengthAboveMax = 256;
+      var maxChars = 255;
+      expect(targetListService.moreThanMaxCharsNewList(descriptionLengthAboveMax, maxChars)).toBeTruthy();
+    });
+
+    it('Should return false if less than 255 respectively', function() {
+      var descriptionLengthBelowMax = 254;
+      var maxChars = 255;
+      expect(targetListService.moreThanMaxCharsNewList(descriptionLengthBelowMax, maxChars)).toBeFalsy();
+    });
+  });
+
+  describe('[isSaveDisabledNewList] method', function() {
+    var maxChars = 255;
+    var savedName = 'save';
+    var buttonDisabled = false;
+    it('Should return true if more than 255 respectively', function() {
+      var descriptionLengthAboveMax = 256;
+      expect(targetListService.isSaveDisabledNewList(savedName, buttonDisabled, targetListService.moreThanMaxCharsNewList, descriptionLengthAboveMax, maxChars)).toBeTruthy();
+    });
+
+    it('Should return false if less than 255 respectively', function() {
+      var descriptionLengthBelowMax = 254;
+      expect(targetListService.isSaveDisabledNewList(savedName, buttonDisabled, targetListService.moreThanMaxCharsNewList, descriptionLengthBelowMax, maxChars)).toBeFalsy();
+    });
+
+    it('Should return true if button is disabled already', function() {
+      var descriptionLengthBelowMax = 254;
+      buttonDisabled = true;
+      savedName = 'save';
+      expect(targetListService.isSaveDisabledNewList(savedName, buttonDisabled, targetListService.moreThanMaxCharsNewList, descriptionLengthBelowMax, maxChars)).toBeTruthy();
+    });
+
+    it('Should return false if button is not disabled already', function() {
+      var descriptionLengthBelowMax = 254;
+      buttonDisabled = false;
+      savedName = 'save';
+      expect(targetListService.isSaveDisabledNewList(savedName, buttonDisabled, targetListService.moreThanMaxCharsNewList, descriptionLengthBelowMax, maxChars)).toBeFalsy();
+    });
+
+    it('Should return true if save name is empty', function() {
+      var descriptionLengthBelowMax = 254;
+      buttonDisabled = false;
+      savedName = '';
+      expect(targetListService.isSaveDisabledNewList(savedName, buttonDisabled, targetListService.moreThanMaxCharsNewList, descriptionLengthBelowMax, maxChars)).toBeTruthy();
+    });
+
+    it('Should return false if save name is not empty', function() {
+      var descriptionLengthBelowMax = 254;
+      buttonDisabled = false;
+      savedName = 'save';
+      expect(targetListService.isSaveDisabledNewList(savedName, buttonDisabled, targetListService.moreThanMaxCharsNewList, descriptionLengthBelowMax, maxChars)).toBeFalsy();
     });
   });
 });

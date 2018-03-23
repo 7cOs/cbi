@@ -7,6 +7,8 @@ module.exports = /*  @ngInject */
       currentList: {}
     };
 
+    var maxChars = 255;
+
     var service = {
       model: model,
       getTargetList: getTargetList,
@@ -21,7 +23,10 @@ module.exports = /*  @ngInject */
       addTargetListShares: addTargetListShares,
       updateTargetListShares: updateTargetListShares,
       deleteTargetListShares: deleteTargetListShares,
-      getAnalyticsCategory: getAnalyticsCategory
+      getAnalyticsCategory: getAnalyticsCategory,
+      maxChars: maxChars,
+      moreThanMaxCharsNewList: moreThanMaxCharsNewList,
+      isSaveDisabledNewList: isSaveDisabledNewList
     };
 
     return service;
@@ -381,5 +386,29 @@ module.exports = /*  @ngInject */
         : listPermissionLevel === 'author'
           ? 'My Target Lists'
           : 'Shared With Me'}`;
+    }
+
+    /**
+     * @name moreThanMaxCharsNewList
+     * @desc Validates the create new list modal if the Description is more than allowed limit
+     * @param  {Number} descriptionLength - Length of description field of create new list modal
+     * @param  {Number} max - Max allowed number of characters
+     * @returns {Boolean} - Boolean
+     */
+    function moreThanMaxCharsNewList(descriptionLength, max) {
+      return descriptionLength > max;
+    }
+
+    /**
+     * @name isSaveDisabledNewList
+     * @desc Validates the create new list modal if the Description is more than allowed limit
+     * @param  {String} name - name of the new list in create list modal
+     * @param  {Boolean} buttonDisabled - Boolean value to determine if the button is already disabled
+     * @param  {Number} descriptionLength - Length of description field of create new list modal
+     * @param  {Number} max - Max allowed number of characters
+     * @returns {Boolean} - Boolean
+     */
+    function isSaveDisabledNewList(name, buttonDisabled, moreThanMaxCharsNewList, descriptionLength, max) {
+      return !name || buttonDisabled || moreThanMaxCharsNewList(descriptionLength, max);
     }
   };

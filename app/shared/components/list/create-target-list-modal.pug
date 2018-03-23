@@ -9,7 +9,7 @@ div.modal.create-target-list
     div.modal-input
       label Description (Optional)
       textarea(ng-model="list.newList.description" placeholder="Enter Description").larger-input
-      label.error(ng-show="list.moreThanMaxChars(list.newList.description.length, list.maxChars)") List description cannot be greater than 255 characters. {{list.newList.description.length - list.maxChars}} over limit.
+      label.error(ng-show="list.targetListService.moreThanMaxCharsNewList(list.newList.description.length, list.targetListService.maxChars)") List description cannot be greater than 255 characters. {{list.newList.description.length - list.targetListService.maxChars}} over limit.
     div.modal-input.add-collaborators
       label Add Collaborators (Optional)
       inline-search(type="user" placeholder="Name or CBI email address" variety="manage-collaborators" chosen-result="list.chosenResult" callback="list.addCollaborator(result)")
@@ -19,5 +19,5 @@ div.modal.create-target-list
     div.modal-input
       md-checkbox.allow-invites(ng-model="list.newList.collaborateAndInvite" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
 
-    button.btn-action(ng-click="list.saveNewList($event)" ng-disabled="!list.newList.name || list.buttonDisabled || list.moreThanMaxChars(list.newList.description.length, list.maxChars)") Save
+    button.btn-action(ng-click="list.saveNewList($event)" ng-disabled="list.targetListService.isSaveDisabledNewList(list.newList.name, list.buttonDisabled, list.targetListService.moreThanMaxCharsNewList, list.newList.description.length, list.targetListService.maxChars)") Save
     p.cancel.accent(ng-click="list.closeCreateTargetListModal()") X Cancel
