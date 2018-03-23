@@ -7,7 +7,7 @@ module.exports = /*  @ngInject */
       currentList: {}
     };
 
-    var maxChars = 255;
+    const maxChars = 255;
 
     var service = {
       model: model,
@@ -26,7 +26,7 @@ module.exports = /*  @ngInject */
       getAnalyticsCategory: getAnalyticsCategory,
       maxChars: maxChars,
       moreThanMaxCharsNewList: moreThanMaxCharsNewList,
-      isSaveDisabledNewList: isSaveDisabledNewList
+      isSaveNewListDisabled: isSaveNewListDisabled
     };
 
     return service;
@@ -408,7 +408,7 @@ module.exports = /*  @ngInject */
      * @param  {Number} max - Max allowed number of characters
      * @returns {Boolean} - Boolean
      */
-    function isSaveDisabledNewList(name, buttonDisabled, moreThanMaxCharsNewList, descriptionLength, max) {
+    function isSaveNewListDisabled(name, buttonDisabled, moreThanMaxCharsNewList, descriptionLength, max) {
       return !name || buttonDisabled || moreThanMaxCharsNewList(descriptionLength, max);
     }
   };
