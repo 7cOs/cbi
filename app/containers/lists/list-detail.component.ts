@@ -24,8 +24,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
-    this.store.dispatch(new ListsActions.FetchStoreDetails({listId: '3456'}));
-    this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: '3456'}));
+    this.store.dispatch(new ListsActions.FetchStoreDetails({listId: '259'}));
+    this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: '259'}));
 
     this.storeDetail = this.store
       .select(state => state.listsDetails)
