@@ -32,7 +32,8 @@ module.exports = /*  @ngInject */
       'title': 'Are you sure?',
       'body': 'By archiving this list, only limited set functionality will remain available.',
       'rejectLabel': 'Cancel',
-      'acceptLabel': 'Archive'};
+      'acceptLabel': 'Archive'
+    };
     vm.deleteModalStringInputs =  {
       'title': 'Are you sure?',
       'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
@@ -336,8 +337,8 @@ module.exports = /*  @ngInject */
           compassModalOverlayRef = compassModalService.showModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
         }
 
-        let eventPromise = compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance);
-        eventPromise.then((value) => {
+        compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
+        .then((value) => {
           if (value === vm.archiveModalStringInputs.acceptLabel) {
             updateList('archive');
           } else if (value === vm.deleteModalStringInputs.acceptLabel) {

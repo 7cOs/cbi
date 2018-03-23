@@ -27,6 +27,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     OverlayModule
   ],
   exports: [
+    CompassModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
@@ -34,26 +35,25 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     DismissibleXComponent,
     MatRippleModule,
     MatSidenavModule,
-    OverlayModule,
-    CompassModalComponent
+    OverlayModule
   ],
   declarations: [
     CompassCardComponent,
+    CompassModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
-    CompassModalComponent,
     DismissibleXComponent
   ],
   providers: [
+    CompassModalService,
     CompassOverlayService,
-    CompassTooltipService,
-    CompassModalService
+    CompassTooltipService
   ],
   entryComponents: [
-    CompassTooltipPopupComponent,
-    CompassModalComponent
+    CompassModalComponent,
+    CompassTooltipPopupComponent
   ]
 })
 
