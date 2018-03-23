@@ -609,7 +609,6 @@ public class SeleniumUtils {
      * @param WebElement
      * @param String
      * @author SKARNEH
-     * @category WORKAROUND
      */
     public static void enterKeys(WebElement field, String value) {
       field.clear();
