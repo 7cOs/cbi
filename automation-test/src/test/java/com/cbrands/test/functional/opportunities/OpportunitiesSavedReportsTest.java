@@ -49,7 +49,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(description = "Enabling/Disabling Save Report link", 
-      dataProvider = "distributorData", invocationCount=1)
+      dataProvider = "distributorData")
   public void enableSavedReport(String distributorSearchText) {
     Assert.assertFalse(
       opportunitiesPage.isSaveReportButtonEnabled(),
