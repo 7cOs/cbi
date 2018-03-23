@@ -38,7 +38,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
         "Error resetting focus to element"
       );
   }
-  
+
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
@@ -64,7 +64,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Save Report link failed to be enabled after filters applied."
     );
   }
- 
+
   @Test(
     description = "Creating an Opportunities Saved Report",
     dependsOnMethods = "enableSavedReport",
