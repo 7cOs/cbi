@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.linkToIQ = ENV_VARS.iqURL;
+    vm.linkToSurveyIQ = ENV_VARS.surveyIqURL;
 
     // User Agent Detection for IE fixes
     $rootScope.isIE = ieHackService.isIE;
@@ -96,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.goToNote = goToNote;
     vm.sendFeedback = sendFeedback;
     vm.openIQLink = openIQLink;
+    vm.openSurveyIQLink = openSurveyIQLink;
     vm.onTeamPerformancePage = onTeamPerformancePage;
     vm.onAccountDashboardPage = onAccountDashboardPage;
     vm.onMyScorecardsPage = onMyScorecardsPage;
@@ -534,6 +536,10 @@ module.exports = /*  @ngInject */
 
     function openIQLink() {
       $window.open(vm.linkToIQ, '_blank');
+    }
+
+    function openSurveyIQLink() {
+      $window.open(vm.linkToSurveyIQ, '_blank');
     }
 
   };

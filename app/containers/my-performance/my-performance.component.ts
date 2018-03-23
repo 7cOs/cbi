@@ -10,14 +10,13 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
-import { CompassTooltipObject } from '../../models/compass-tooltip-component.model';
+import { CompassTooltipPopupInputs } from '../../models/compass-tooltip-popup-inputs.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -82,6 +81,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public dateRange: DateRange;
   public dateRangeState: DateRangesState;
   public performanceMetric: string;
+  public opportunitiesTooltipInputData: CompassTooltipPopupInputs = {
+    title: 'Opportunity Summaries',
+    text: [
+      'The opportunity counts shown here are filtered to A and B accounts with High and Medium impact ratings only.',
+      'Please note: for Chain accounts, the opportunity counts on this page are NOT limited to authorized'
+      + ' and/or mandated items. To view only authorized and/or mandated opportunities for a chain,'
+      + ' proceed to the Opportunities page and apply an Authorization filter.'
+    ]
+  };
 
   private currentState: MyPerformanceEntitiesData;
   private currentUserId: string;
@@ -123,8 +131,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private clickedSalesHierarchyEntityName: string;
   private opportunitiesSkuPackageCode: string;
   private opportunitiesSkuPackageType: string;
-
-  private opportunitiesTooltip: CompassTooltipObject;
 
   constructor(
     private store: Store<AppState>,
@@ -270,15 +276,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         selectedBrandCode: this.selectedBrandCode
       }));
     }
-
-    this.opportunitiesTooltip = {
-      title: 'Opportunity Summaries',
-      position: 'below',
-      descriptions: [
-        'The opportunity counts shown here are filtered to A and B accounts with High and Medium impact ratings only.',
-        'Please note: for Chain accounts, the opportunity counts on this page are NOT limited to authorized ' +
-        'and/or mandated items. To view only authorized and/or mandated opportunities for a chain, ' +
-        'proceed to the Opportunities page and apply an Authorization filter.']};
   }
 
   ngOnDestroy() {

@@ -48,12 +48,9 @@ div.my-scorecards
             th(colspan=2).border
               .tooltip-wrap
                 p.accent CTV
-                .tooltip
-                  img(src="../../assets/img/icons/help-tooltip.svg")
-                  md-tooltip(md-direction="bottom")
-                    label Scorecard
-                    h3 Contribution to Volume
-                    p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
+                  span
+                    compass-tooltip([title]= "s.ctvTooltipInputData.title", [text]= "s.ctvTooltipInputData.text")
+                      img.tooltip-image(src="../../assets/img/icons/help-tooltip.svg")
           tr
             th.accent.border &nbsp;
             th.accent
@@ -132,13 +129,9 @@ div.my-scorecards
             th(colspan=2).accent.border
               .tooltip-wrap
                  p.accent.border CTV
-                   .tooltip
-                     img(src="../../assets/img/icons/help-tooltip.svg")
-                     md-tooltip(md-direction="bottom")
-                       label Scorecard
-                       h3 Contribution to Volume
-                       p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
-
+                   span
+                    compass-tooltip([title]= "s.ctvTooltipInputData.title", [text]= "s.ctvTooltipInputData.text")
+                      img.tooltip-image(src="../../assets/img/icons/help-tooltip.svg")
           tr
             th.accent.border &nbsp;
             th.accent

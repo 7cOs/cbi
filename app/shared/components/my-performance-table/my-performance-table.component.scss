@@ -317,7 +317,7 @@ tr.two-right-columns-present {
     &.opportunities {
       color: $blue;
       font-weight: normal;
-    } 
+    }
 
     &.opportunities-error {
       background-color: $very-light-red;
@@ -676,19 +676,23 @@ div.ctv {
     tr.total-row.deselected-total-row  {
       background-color: $light-blue-4;
 
+
       /deep/.left-col,
       /deep/.right-col {
         background-color: $body-bg;
         color: $blue;
+        font-weight: normal;
       }
 
       /deep/.right-col {
         box-shadow: inset -15px 0 15px -8px rgba(0, 0, 0, 0.1);
+        color: $black;
       }
 
       /deep/.center-col {
         background-color: $gray-4;
         color: $black;
+        font-weight: normal;
       }
 
       &:hover {

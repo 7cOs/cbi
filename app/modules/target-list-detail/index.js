@@ -8,7 +8,7 @@ module.exports =
   .config(function($stateProvider) {
     $stateProvider
     .state('target-list-detail', {
-      url: '/target-lists/:id',
+      url: '/lists/:id',
       title: 'Target List',
       template: require('./layout.pug'),
       controller: 'targetListDetailController',
@@ -21,7 +21,7 @@ module.exports =
       },
       analyticsData: {
         pageTitle: 'Target List',
-        pageUrl: '/target-lists/:id'
+        pageUrl: '/lists/:id'
       }
     });
   })

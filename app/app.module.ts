@@ -19,11 +19,13 @@ import { Environment } from './environment';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
 import { GoogleAnalyticsTrackerService } from './services/google-analytics-tracker.service';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
+import { ListDetailModule } from './containers/lists/list-detail.module';
 import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { OpportunitiesSearchHandoffService } from './services/opportunities-search-handoff.service';
 import { reducers, metaReducers } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
+import { SharedModule } from './shared/shared.module';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
@@ -48,10 +50,12 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   imports: [
     BrowserModule,
     HttpClientModule,
+    ListDetailModule,
     MyPerformanceModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
-    Environment.isLocal() ? StoreDevtoolsModule.instrument({maxAge: 25}) : []
+    Environment.isLocal() ? StoreDevtoolsModule.instrument({maxAge: 25}) : [],
+    SharedModule
   ],
   declarations: [
     AnalyticsEventDirective,

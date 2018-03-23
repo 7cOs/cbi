@@ -413,326 +413,353 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('[list.getCSVData] method', function() {
-    var opportunities = [{
-      'id': '0129597___80013986___20160929',
-      'product': {
-        'id': '80013986',
-        'name': 'MODELO NEGRA 12PK BT',
-        'type': 'sku',
-        'brand': 'MODELO NEGRA',
-        'brandCode': '437'
-      },
-      'type': 'NON_BUY',
-      'subType': null,
-      'impact': 'L',
-      'impactDescription': 'LOW',
-      'status': 'TARGETED',
-      'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
-      'store': {
-        'id': '0129597',
-        'name': 'CARNICERIA LA BARATA ETHNIC',
-        'address': '214 N 4TH AVE, PASCO, WA 993015323',
-        'segmentation': 'A',
-        'latitude': 46.2318,
-        'longitude': -119.0929,
-        'storeNumber': null,
-        'distributionL90Simple': 6,
-        'distributionL90SimpleYA': 7,
-        'distributionL90Effective': 30,
-        'distributionL90EffectiveYA': 29,
-        'velocity': 0,
-        'velocityYA': 0,
-        'depletionsCurrentYearToDate': 7015,
-        'depletionsCurrentYearToDateYA': 7902,
-        'opportunityCount': 7,
-        'highImpactOpportunityCount': 0,
-        'distributors': ['COHO DIST LLC - WA (KENNEWICK)'],
-        'streetAddress': '214 N 4TH AVE',
-        'city': 'PASCO',
-        'state': 'WA',
-        'zip': '99301',
-        'onPremise': false,
-        'cbbdChain': false,
-        'rationale': 'because'
-        }
-      },
-      {
-        'id': '0129597___80013986___20160929',
-        'product': {
-          'id': '80013986',
-          'name': null,
-          'type': 'sku',
-          'brand': 'MODELO NEGRA',
-          'brandCode': '437'
+  describe('[list.getCSVData] method', () => {
+    let opportunityArrayMock;
+
+    beforeEach(() => {
+      opportunityArrayMock = [{
+        id: chance.string(),
+        product: {
+          id: chance.string(),
+          name: chance.string(),
+          type: chance.string(),
+          brand: chance.string(),
+          brandCode: chance.string()
         },
-        'type': 'NON_BUY',
-        'subType': null,
-        'impact': 'L',
-        'impactDescription': 'LOW',
-        'status': 'TARGETED',
-        'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
-        'store': {
-          'id': '0129597',
-          'name': 'CARNICERIA LA BARATA ETHNIC',
-          'address': '214 N 4TH AVE, PASCO, WA 993015323',
-          'segmentation': 'A',
-          'latitude': 46.2318,
-          'longitude': -119.0929,
-          'storeNumber': null,
-          'distributionL90Simple': 6,
-          'distributionL90SimpleYA': 7,
-          'distributionL90Effective': 30,
-          'distributionL90EffectiveYA': 29,
-          'velocity': 0,
-          'velocityYA': 0,
-          'depletionsCurrentYearToDate': 7015,
-          'depletionsCurrentYearToDateYA': 7902,
-          'opportunityCount': 7,
-          'highImpactOpportunityCount': 0,
-          'distributors': null,
-          'streetAddress': '214 N 4TH AVE',
-          'city': 'PASCO',
-          'state': 'WA',
-          'zip': '99301',
-          'onPremise': false,
-          'cbbdChain': false,
-          'rationale': 'because'
+        type: chance.string(),
+        subType: chance.string(),
+        impact: chance.string(),
+        impactDescription: chance.string(),
+        status: chance.string(),
+        rationale: chance.string(),
+        store: {
+          id: chance.string(),
+          name: chance.string(),
+          address: chance.string(),
+          segmentation: chance.string(),
+          latitude: chance.integer(),
+          longitude: chance.integer(),
+          storeNumber: chance.natural(),
+          distributionL90Simple: chance.natural(),
+          distributionL90SimpleYA: chance.natural(),
+          distributionL90Effective: chance.natural(),
+          distributionL90EffectiveYA: chance.natural(),
+          velocity: chance.natural(),
+          velocityYA: chance.natural(),
+          depletionsCurrentYearToDate: chance.natural(),
+          depletionsCurrentYearToDateYA: chance.natural(),
+          opportunityCount: chance.natural(),
+          highImpactOpportunityCount: chance.natural(),
+          distributors: [chance.string()],
+          streetAddress: chance.string(),
+          city: chance.string(),
+          state: chance.string(),
+          zip: chance.string(),
+          onPremise: chance.bool(),
+          cbbdChain: chance.bool(),
+          rationale: chance.string(),
+          distributorsSalesInfo: [{
+            distributorCd: chance.string(),
+            distributorCustomerCd: chance.string(),
+            primaryFlag: 'Y',
+            salespersonName: chance.string()
+          }, {
+            distributorCd: chance.string(),
+            distributorCustomerCd: chance.string(),
+            primaryFlag: 'N',
+            salespersonName: chance.string()
+          }]
         }
-    }];
+      }, {
+        id: chance.string(),
+        product: {
+          id: chance.string(),
+          name: chance.string(),
+          type: chance.string(),
+          brand: chance.string(),
+          brandCode: chance.string()
+        },
+        type: chance.string(),
+        subType: chance.string(),
+        impact: chance.string(),
+        impactDescription: chance.string(),
+        status: chance.string(),
+        rationale: chance.string(),
+        store: {
+          id: chance.string(),
+          name: chance.string(),
+          address: chance.string(),
+          segmentation: chance.string(),
+          latitude: chance.integer(),
+          longitude: chance.integer(),
+          storeNumber: chance.natural(),
+          distributionL90Simple: chance.natural(),
+          distributionL90SimpleYA: chance.natural(),
+          distributionL90Effective: chance.natural(),
+          distributionL90EffectiveYA: chance.natural(),
+          velocity: chance.natural(),
+          velocityYA: chance.natural(),
+          depletionsCurrentYearToDate: chance.natural(),
+          depletionsCurrentYearToDateYA: chance.natural(),
+          opportunityCount: chance.natural(),
+          highImpactOpportunityCount: chance.natural(),
+          distributors: [chance.string()],
+          streetAddress: chance.string(),
+          city: chance.string(),
+          state: chance.string(),
+          zip: chance.string(),
+          onPremise: chance.bool(),
+          cbbdChain: chance.bool(),
+          rationale: chance.string(),
+          distributorsSalesInfo: [{
+            distributorCd: chance.string(),
+            distributorCustomerCd: chance.string(),
+            primaryFlag: 'Y',
+            salespersonName: chance.string()
+          }, {
+            distributorCd: chance.string(),
+            distributorCustomerCd: chance.string(),
+            primaryFlag: 'N',
+            salespersonName: chance.string()
+          }]
+        }
+      }];
 
-    it('should create a csvItem for each selected opportunity (WithoutRationales), and add it to the data array', () => {
-      ctrl.selected = [opportunities[0]];
-      ctrl.csvDownloadOption = 'WithoutRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
-      const csvHeader = ctrl.getCSVHeader();
-      expect(dataPromise.$$state.value).toEqual([{
-        'storeDistributor': opportunities[0].store.distributors[0],
-        'TDLinx': opportunities[0].store.id,
-        'storeName': opportunities[0].store.name,
-        'storeNumber': opportunities[0].store.storeNumber,
-        'storeAddress': opportunities[0].store.streetAddress,
-        'storeCity': opportunities[0].store.city,
-        'storeZip': opportunities[0].store.zip,
-        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': opportunities[0].store.segmentation,
-        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
-        'productBrand': opportunities[0].product.brand,
-        'productSku': opportunities[0].product.name,
-        'itemAuthorization': opportunities[0].isItemAuthorization,
-        'chainMandate': opportunities[0].isChainMandate,
-        'onFeature': opportunities[0].isOnFeature,
-        'opportunityStatus': opportunities[0].status,
-        'impactPredicted': opportunities[0].impactDescription
-      }]);
-      expect(csvHeader).toEqual([
-        'Distributor',
-        'TDLinx',
-        'Store Name',
-        'Store Number',
-        'Address',
-        'City',
-        'ZIP',
-        'Current YTD Store Volume',
-        'Last YTD Store Volume',
-        'Volume Trend for Store CYTD vs CYTD Last Year',
-        'Segmentation',
-        'Opportunity Type',
-        'Product Brand',
-        'Product Sku',
-        'Item Authorization',
-        'Chain Mandate',
-        'On Feature',
-        'Opportunity Status',
-        'Opportunity Predicted Impact']);
+      ctrl.selected = opportunityArrayMock;
     });
 
-    it('should create a csvItem item for each selected opportunity (WithRationales), and add it to the data array', () => {
-      ctrl.selected = [opportunities[0]];
-      ctrl.csvDownloadOption = 'WithRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
-      const csvHeader = ctrl.getCSVHeader();
-      expect(dataPromise.$$state.value).toEqual([{
-        'storeDistributor': opportunities[0].store.distributors[0],
-        'TDLinx': opportunities[0].store.id,
-        'storeName': opportunities[0].store.name,
-        'storeNumber': opportunities[0].store.storeNumber,
-        'storeAddress': opportunities[0].store.streetAddress,
-        'storeCity': opportunities[0].store.city,
-        'storeZip': opportunities[0].store.zip,
-        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': opportunities[0].store.segmentation,
-        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
-        'productBrand': opportunities[0].product.brand,
-        'productSku': opportunities[0].product.name,
-        'itemAuthorization': opportunities[0].isItemAuthorization,
-        'chainMandate': opportunities[0].isChainMandate,
-        'onFeature': opportunities[0].isOnFeature,
-        'opportunityStatus': opportunities[0].status,
-        'impactPredicted': opportunities[0].impactDescription,
-        'rationale': opportunities[0].rationale
-      }]);
-      expect(csvHeader).toEqual([
-        'Distributor',
-        'TDLinx',
-        'Store Name',
-        'Store Number',
-        'Address',
-        'City',
-        'ZIP',
-        'Current YTD Store Volume',
-        'Last YTD Store Volume',
-        'Volume Trend for Store CYTD vs CYTD Last Year',
-        'Segmentation',
-        'Opportunity Type',
-        'Product Brand',
-        'Product Sku',
-        'Item Authorization',
-        'Chain Mandate',
-        'On Feature',
-        'Opportunity Status',
-        'Opportunity Predicted Impact',
-        'Rationale']);
-    });
-
-    it('should create a csvItem item and add a rationale when provided as input', () => {
-      ctrl.selected = [opportunities[0]];
-      ctrl.csvDownloadOption = 'WithRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
-      const csvHeader = ctrl.getCSVHeader();
-      expect(dataPromise.$$state.value).toEqual([{
-        'storeDistributor': opportunities[0].store.distributors[0],
-        'TDLinx': opportunities[0].store.id,
-        'storeName': opportunities[0].store.name,
-        'storeNumber': opportunities[0].store.storeNumber,
-        'storeAddress': opportunities[0].store.streetAddress,
-        'storeCity': opportunities[0].store.city,
-        'storeZip': opportunities[0].store.zip,
-        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': opportunities[0].store.segmentation,
-        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
-        'productBrand': opportunities[0].product.brand,
-        'productSku': opportunities[0].product.name,
-        'itemAuthorization': opportunities[0].isItemAuthorization,
-        'chainMandate': opportunities[0].isChainMandate,
-        'onFeature': opportunities[0].isOnFeature,
-        'opportunityStatus': opportunities[0].status,
-        'impactPredicted': opportunities[0].impactDescription,
-        'rationale': opportunities[0].rationale
-      }]);
-      expect(csvHeader).toEqual([
-        'Distributor',
-        'TDLinx',
-        'Store Name',
-        'Store Number',
-        'Address',
-        'City',
-        'ZIP',
-        'Current YTD Store Volume',
-        'Last YTD Store Volume',
-        'Volume Trend for Store CYTD vs CYTD Last Year',
-        'Segmentation',
-        'Opportunity Type',
-        'Product Brand',
-        'Product Sku',
-        'Item Authorization',
-        'Chain Mandate',
-        'On Feature',
-        'Opportunity Status',
-        'Opportunity Predicted Impact',
-        'Rationale']);
+    describe('when downloading opportunity data with rationales', () => {
+      beforeEach(() => {
+        ctrl.csvDownloadOption = 'WithRationales';
       });
 
-    it('should create a csvItem with store only option', () => {
-      ctrl.selected = [opportunities[0]];
-      ctrl.csvDownloadOption = 'Stores';
-      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
-      const csvHeader = ctrl.getCSVHeader();
-      expect(dataPromise.$$state.value).toEqual([{
-        'storeDistributor': opportunities[0].store.distributors[0],
-        'TDLinx': opportunities[0].store.id,
-        'storeName': opportunities[0].store.name,
-        'storeNumber': opportunities[0].store.storeNumber,
-        'storeAddress': opportunities[0].store.streetAddress,
-        'storeCity': opportunities[0].store.city,
-        'storeZip': opportunities[0].store.zip,
-        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': opportunities[0].store.segmentation
-      }]);
-      expect(csvHeader).toEqual([
-        'Distributor',
-        'TDLinx',
-        'Store Name',
-        'Store Number',
-        'Address',
-        'City',
-        'ZIP',
-        'Current YTD Store Volume',
-        'Last YTD Store Volume',
-        'Volume Trend for Store CYTD vs CYTD Last Year',
-        'Segmentation']);
+      it('should return a csvItem item for each selected opportunity with rationales', () => {
+        ctrl.csvDownloadOption = 'WithRationales';
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+        const csvHeader = ctrl.getCSVHeader();
+
+        dataPromise.$$state.value.forEach((csvData, index) => {
+          expect(csvData).toEqual({
+            storeDistributor: opportunityArrayMock[index].store.distributors[0],
+            TDLinx: opportunityArrayMock[index].store.id,
+            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
+            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
+            storeName: opportunityArrayMock[index].store.name,
+            storeNumber: opportunityArrayMock[index].store.storeNumber,
+            storeAddress: opportunityArrayMock[index].store.streetAddress,
+            storeCity: opportunityArrayMock[index].store.city,
+            storeZip: opportunityArrayMock[index].store.zip,
+            storeDepletionsCTD: opportunityArrayMock[index].store.depletionsCurrentYearToDate,
+            storeDepletionsCTDYA: opportunityArrayMock[index].store.depletionsCurrentYearToDateYA,
+            storeDepletionsCTDYAPercent: opportunityArrayMock[index].store.depletionsCurrentYearToDateYAPercent,
+            storeSegmentation: opportunityArrayMock[index].store.segmentation,
+            opportunityType: filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunityArrayMock[index])),
+            productBrand: opportunityArrayMock[index].product.brand,
+            productSku: opportunityArrayMock[index].product.name,
+            itemAuthorization: opportunityArrayMock[index].isItemAuthorization,
+            chainMandate: opportunityArrayMock[index].isChainMandate,
+            onFeature: opportunityArrayMock[index].isOnFeature,
+            opportunityStatus: opportunityArrayMock[index].status,
+            impactPredicted: opportunityArrayMock[index].impactDescription,
+            rationale: opportunityArrayMock[index].rationale
+          });
+        });
+        expect(csvHeader).toEqual([
+          'Distributor',
+          'TDLinx',
+          'Distributor Customer Code',
+          'Distributor Sales Route (Primary)',
+          'Store Name',
+          'Store Number',
+          'Address',
+          'City',
+          'ZIP',
+          'Current YTD Store Volume',
+          'Last YTD Store Volume',
+          'Volume Trend for Store CYTD vs CYTD Last Year',
+          'Segmentation',
+          'Opportunity Type',
+          'Product Brand',
+          'Product Sku',
+          'Item Authorization',
+          'Chain Mandate',
+          'On Feature',
+          'Opportunity Status',
+          'Opportunity Predicted Impact',
+          'Rationale'
+        ]);
+      });
+
+      it('should return `Any` for productSku when the opportunity product has no name', () => {
+        opportunityArrayMock.forEach((opportunity) => {
+          opportunity.product.name = undefined;
+        });
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+
+        dataPromise.$$state.value.forEach((csvData) => {
+          expect(csvData.productSku).toBe('Any');
+        });
+      });
     });
 
-    it('should be able to parse when the distributor list is null', () => {
-      ctrl.selected = [opportunities[1]];
-      ctrl.csvDownloadOption = 'WithoutRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
-      expect(dataPromise.$$state.value).toEqual([{
-        'storeDistributor': '',
-        'TDLinx': opportunities[1].store.id,
-        'storeName': opportunities[1].store.name,
-        'storeNumber': opportunities[1].store.storeNumber,
-        'storeAddress': opportunities[1].store.streetAddress,
-        'storeCity': opportunities[1].store.city,
-        'storeZip': opportunities[1].store.zip,
-        'storeDepletionsCTD': opportunities[1].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': opportunities[1].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': opportunities[1].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': opportunities[1].store.segmentation,
-        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[1])),
-        'productBrand': opportunities[1].product.brand,
-        'productSku': 'Any',
-        'itemAuthorization': opportunities[1].isItemAuthorization,
-        'chainMandate': opportunities[1].isChainMandate,
-        'onFeature': opportunities[1].isOnFeature,
-        'opportunityStatus': opportunities[1].status,
-        'impactPredicted': opportunities[1].impactDescription
-      }]);
+    describe('when downloading opportunity data without rationales', () => {
+      beforeEach(() => {
+        ctrl.csvDownloadOption = 'WithoutRationales';
+      });
+
+      it('should return a csvItem item for each selected opportunity with rationales', () => {
+        ctrl.csvDownloadOption = 'WithoutRationales';
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+        const csvHeader = ctrl.getCSVHeader();
+
+        dataPromise.$$state.value.forEach((csvData, index) => {
+          expect(csvData).toEqual({
+            storeDistributor: opportunityArrayMock[index].store.distributors[0],
+            TDLinx: opportunityArrayMock[index].store.id,
+            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
+            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
+            storeName: opportunityArrayMock[index].store.name,
+            storeNumber: opportunityArrayMock[index].store.storeNumber,
+            storeAddress: opportunityArrayMock[index].store.streetAddress,
+            storeCity: opportunityArrayMock[index].store.city,
+            storeZip: opportunityArrayMock[index].store.zip,
+            storeDepletionsCTD: opportunityArrayMock[index].store.depletionsCurrentYearToDate,
+            storeDepletionsCTDYA: opportunityArrayMock[index].store.depletionsCurrentYearToDateYA,
+            storeDepletionsCTDYAPercent: opportunityArrayMock[index].store.depletionsCurrentYearToDateYAPercent,
+            storeSegmentation: opportunityArrayMock[index].store.segmentation,
+            opportunityType: filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunityArrayMock[index])),
+            productBrand: opportunityArrayMock[index].product.brand,
+            productSku: opportunityArrayMock[index].product.name,
+            itemAuthorization: opportunityArrayMock[index].isItemAuthorization,
+            chainMandate: opportunityArrayMock[index].isChainMandate,
+            onFeature: opportunityArrayMock[index].isOnFeature,
+            opportunityStatus: opportunityArrayMock[index].status,
+            impactPredicted: opportunityArrayMock[index].impactDescription
+          });
+        });
+        expect(csvHeader).toEqual([
+          'Distributor',
+          'TDLinx',
+          'Distributor Customer Code',
+          'Distributor Sales Route (Primary)',
+          'Store Name',
+          'Store Number',
+          'Address',
+          'City',
+          'ZIP',
+          'Current YTD Store Volume',
+          'Last YTD Store Volume',
+          'Volume Trend for Store CYTD vs CYTD Last Year',
+          'Segmentation',
+          'Opportunity Type',
+          'Product Brand',
+          'Product Sku',
+          'Item Authorization',
+          'Chain Mandate',
+          'On Feature',
+          'Opportunity Status',
+          'Opportunity Predicted Impact'
+        ]);
+      });
+
+      it('should return `Any` for productSku when downloading data without rationales and the product has no name', () => {
+        opportunityArrayMock.forEach((opportunity) => {
+          opportunity.product.name = undefined;
+        });
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+
+        dataPromise.$$state.value.forEach((csvData) => {
+          expect(csvData.productSku).toBe('Any');
+        });
+      });
+
+      it('should return `Any` for productSku when the opportunity product has no name', () => {
+        opportunityArrayMock.forEach((opportunity) => {
+          opportunity.product.name = undefined;
+        });
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+
+        dataPromise.$$state.value.forEach((csvData) => {
+          expect(csvData.productSku).toBe('Any');
+        });
+      });
     });
 
-    it('should use ANY as productSku when SIMPLE is selected or product.name is null', () => {
-      ctrl.selected = [opportunities[1]];
-      ctrl.csvDownloadOption = 'WithoutRationales';
-      const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
-      expect(dataPromise.$$state.value).toEqual([{
-        'storeDistributor': '',
-        'TDLinx': opportunities[1].store.id,
-        'storeName': opportunities[1].store.name,
-        'storeNumber': opportunities[1].store.storeNumber,
-        'storeAddress': opportunities[1].store.streetAddress,
-        'storeCity': opportunities[1].store.city,
-        'storeZip': opportunities[1].store.zip,
-        'storeDepletionsCTD': opportunities[1].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': opportunities[1].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': opportunities[1].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': opportunities[1].store.segmentation,
-        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[1])),
-        'productBrand': opportunities[1].product.brand,
-        'productSku': 'Any',
-        'itemAuthorization': opportunities[1].isItemAuthorization,
-        'chainMandate': opportunities[1].isChainMandate,
-        'onFeature': opportunities[1].isOnFeature,
-        'opportunityStatus': opportunities[1].status,
-        'impactPredicted': opportunities[1].impactDescription
-      }]);
+    describe('when downloading opportunity data with store data only', () => {
+      beforeEach(() => {
+        ctrl.csvDownloadOption = 'Stores';
+      });
+
+      it('should return csvItems with store only data', () => {
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+        const csvHeader = ctrl.getCSVHeader();
+
+        dataPromise.$$state.value.forEach((csvData, index) => {
+          expect(csvData).toEqual({
+            storeDistributor: opportunityArrayMock[index].store.distributors[0],
+            TDLinx: opportunityArrayMock[index].store.id,
+            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
+            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
+            storeName: opportunityArrayMock[index].store.name,
+            storeNumber: opportunityArrayMock[index].store.storeNumber,
+            storeAddress: opportunityArrayMock[index].store.streetAddress,
+            storeCity: opportunityArrayMock[index].store.city,
+            storeZip: opportunityArrayMock[index].store.zip,
+            storeDepletionsCTD: opportunityArrayMock[index].store.depletionsCurrentYearToDate,
+            storeDepletionsCTDYA: opportunityArrayMock[index].store.depletionsCurrentYearToDateYA,
+            storeDepletionsCTDYAPercent: opportunityArrayMock[index].store.depletionsCurrentYearToDateYAPercent,
+            storeSegmentation: opportunityArrayMock[index].store.segmentation
+          });
+        });
+        expect(csvHeader).toEqual([
+          'Distributor',
+          'TDLinx',
+          'Distributor Customer Code',
+          'Distributor Sales Route (Primary)',
+          'Store Name',
+          'Store Number',
+          'Address',
+          'City',
+          'ZIP',
+          'Current YTD Store Volume',
+          'Last YTD Store Volume',
+          'Volume Trend for Store CYTD vs CYTD Last Year',
+          'Segmentation'
+        ]);
+      });
+    });
+
+    describe('when downloading any opportunity data', () => {
+      it('should return `` for storeDistributor when the store has no distributors', () => {
+        opportunityArrayMock.forEach((opportunity) => {
+          opportunity.store.distributors = undefined;
+        });
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+
+        dataPromise.$$state.value.forEach((csvData) => {
+          expect(csvData.storeDistributor).toBe('');
+        });
+      });
+
+      it('should return `Unkown` for primaryDistributorSalesRoute when there is no salespersonName present', () => {
+        opportunityArrayMock.forEach((opportunity) => {
+          opportunity.store.distributorsSalesInfo.forEach((salesInfo) => {
+            salesInfo.salespersonName = '';
+          });
+        });
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+
+        dataPromise.$$state.value.forEach((csvData) => {
+          expect(csvData.primaryDistributorSalesRoute).toBe('Unknown');
+        });
+      });
     });
   });
 

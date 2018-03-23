@@ -41,6 +41,7 @@ module.exports = webpackMerge(commonConfig, {
         'ENV': JSON.stringify(ENV),
         'NODE_ENV': JSON.stringify(ENV),
         'IQ_LINK': JSON.stringify(process.env.IQ_LINK),
+        'SURVEY_IQ_LINK': JSON.stringify(process.env.SURVEY_IQ_LINK),
         'DEBUG_GOOGLE_ANALYTICS': JSON.stringify(process.env.DEBUG_GOOGLE_ANALYTICS)
       }
     }),

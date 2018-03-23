@@ -64,6 +64,10 @@ module.exports = /*  @ngInject */
     vm.initialized = false;
     vm.calculatingDepletionTotals;
     vm.calculatingDistributionTotals;
+    vm.ctvTooltipInputData = {
+      title: 'Contribution to Volume',
+      text: ['Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.']
+    };
 
     // Set page title for head and nav
     title.setTitle($state.current.title);

@@ -27,7 +27,7 @@ module.exports = /*  @ngInject */
     // tab names
     vm.types = {
       'mine': {
-        'name': 'My Target Lists',
+        'name': 'My Lists',
         'records': [],
         'total': 0,
         'index': 0
@@ -54,7 +54,7 @@ module.exports = /*  @ngInject */
 
     // Link to a specific tab in target list pageName
     function goToTab(tab) {
-      $state.go('target-lists', {
+      $state.go('lists', {
         obj: {
           index: tab
         }

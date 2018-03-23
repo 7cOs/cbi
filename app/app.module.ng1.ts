@@ -14,6 +14,7 @@ import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.
 import { DateRangeService } from './services/date-range.service';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { MyPerformanceComponent } from './containers/my-performance/my-performance.component';
+import { ListDetailComponent } from './containers/lists/list-detail.component';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 
@@ -39,6 +40,7 @@ export default angular.module('cf', [
   .directive('compassTooltip', AppUpgradeAdapter.downgradeNg2Component(CompassTooltipComponent) as IDirectiveFactory)
   .directive('dateRanges', AppUpgradeAdapter.downgradeNg2Component(DateRangeComponent) as IDirectiveFactory)
   .directive('greeting', AppUpgradeAdapter.downgradeNg2Component(GreetingComponent) as IDirectiveFactory)
+  .directive('listDetail', AppUpgradeAdapter.downgradeNg2Component(ListDetailComponent) as IDirectiveFactory)
   .directive('myPerformance', AppUpgradeAdapter.downgradeNg2Component(MyPerformanceComponent) as IDirectiveFactory)
   .directive('settings', AppUpgradeAdapter.downgradeNg2Component(SettingsComponent) as IDirectiveFactory)
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
