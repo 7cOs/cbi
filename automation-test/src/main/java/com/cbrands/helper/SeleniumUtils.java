@@ -603,28 +603,9 @@ public class SeleniumUtils {
 	public static void maximize() {
 		driver.manage().window().maximize();
 	}
-	
+
     /**
-     * Clicks element to set focus to element
-     * 
-     * @param WebElement
-     * @author SKARNEH
-     * @category WORKAROUND
-     */
-    public static boolean resetFocus(WebElement element) {
-      try {
-        element.click();
-        return true;
-      } catch (Exception x) {
-        x.printStackTrace();
-      }
-      return false;
-    }
-  
-    /**
-     * Ensure field value is entered into field by entering a single character at a
-     * time
-     * 
+     * Ensure field value is entered into field by entering a single character at a time
      * @param WebElement
      * @param String
      * @author SKARNEH

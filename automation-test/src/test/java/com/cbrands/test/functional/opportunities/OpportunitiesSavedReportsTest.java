@@ -7,8 +7,6 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
-import com.cbrands.helper.SeleniumUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -26,7 +24,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private OpportunitiesPage opportunitiesPage;
 
   @BeforeMethod
-  public void setUp(Method method) throws MalformedURLException {    
+  public void setUp(Method method) throws MalformedURLException {  
     final String testCaseName = method.getAnnotation(Test.class).description();
     final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
     this.startUpBrowser(sauceTitle);
@@ -37,9 +35,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
 
     Assert.assertTrue(
-        SeleniumUtils.resetFocus(driver.findElement(By.xpath("//body"))),
+        opportunitiesPage.resetFocus(opportunitiesPage.getBody()),
         "Error resetting focus to element"
-      ); 
+      );
   }
   
   @AfterMethod
@@ -67,9 +65,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       opportunitiesPage.isSaveReportButtonEnabled(),
       "Save Report link failed to be enabled after filters applied."
     );
-
   }
-
+ 
   @Test(
     description = "Creating an Opportunities Saved Report",
     dependsOnMethods = "enableSavedReport",
@@ -172,7 +169,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       getDeleteFailureMessage(reportNameToDelete, "Home")
     );
   }
-  
+
   @Test(
     description = "Attempting to edit a Saved Report to an existing name",
     dependsOnMethods = "createSavedReport",
@@ -191,14 +188,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       savedReportModal.isDuplicateNameErrorDisplayed(),
       "Failed to display error when attempting to use the name of an existing report."
     );
-    
-    savedReportModal.clickCancel();
-    
-    Assert.assertEquals(opportunitiesPage.isQueryChipPresent( distributor ), 
-        false, "Opportunites filtered when attempting to use name of existing report");
-    
+
+    savedReportModal.enterNewReportName(
+        getSavedReportName(existingReportName)).clickSave();
+
+    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(distributor), 
+        "Opportunites filtered when attempting to use name of existing report");    
   }
-  
+
   @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
@@ -336,5 +333,31 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     savedReportDropdown.closeDropdown();
 
     return existingNumberOfSavedReports;
-  } 
+  }
+
+  /**
+   * Uses exiting report name to return a new report with new time stamp
+   * @param existingName
+   * @return String
+   * @author SKARNEH
+   */
+  public String getSavedReportName(String existingReportName) {
+    String reportName = existingReportName; 
+    int pos =  existingReportName.indexOf( "Functional" );
+    if( pos > -1 ) {
+      reportName = existingReportName.substring( 0, pos ) +
+          "Functional Test: " + getTimeStamp("MM.dd.yyyy HH:mm:ss");
+    }
+    return reportName;
+  }
+
+  /**
+   * Return current time stamp in format defined by pattern passed to the method
+   * @param String
+   * @author SKARNEH
+   */
+  public String getTimeStamp(String pattern) {
+    return new java.text.SimpleDateFormat(pattern)
+        .format(new java.util.Date()); 
+  }
 }
