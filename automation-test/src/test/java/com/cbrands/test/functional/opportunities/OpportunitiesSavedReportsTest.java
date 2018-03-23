@@ -70,8 +70,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dependsOnMethods = "enableSavedReport",
     dataProvider = "createReportData"
   )
-  public void createSavedReport(String reportName, String distributorSearchText) {
-    
+  public void createSavedReport(String reportName, String distributorSearchText) {   
     testCreateASingleSavedReport(reportName + " #1", distributorSearchText);
 
     opportunitiesPage.goToPage();
