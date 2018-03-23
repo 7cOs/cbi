@@ -36,16 +36,16 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .subscribe((storeDetail: ListsState)  => {
         if (storeDetail.status === ActionStatus.Fetched) {
           this.storeDetails = storeDetail;
-          console.log(storeDetail);
+          console.log(storeDetail, 'store');
         }
       });
 
     this.headerDetail = this.store
       .select(state => state.listsDetails)
       .subscribe((headerDetail: ListsState)  => {
-        if (headerDetail.status === ActionStatus.Fetched) {
+        if (headerDetail.headerInfoStatus === ActionStatus.Fetched) {
           this.headerDetails = headerDetail;
-          console.log(headerDetail);
+          console.log(headerDetail, 'header');
         }
       });
   }

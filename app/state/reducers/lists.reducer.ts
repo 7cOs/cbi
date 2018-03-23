@@ -1,6 +1,6 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
 import * as ListsActions from '../actions/lists.action';
-import { StoreDetailsRow, StoreHeaderDetails, Stores } from '../../models/lists.model';
+import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
 
 export interface ListsState extends State {
   status: ActionStatus;
@@ -45,7 +45,7 @@ export function listsReducer(
     case ListsActions.FETCH_HEADER_DETAILS_SUCCESS:
       return Object.assign({}, state, {
         headerInfo: action.payload,
-        headerInfoStatus: ActionStatus.Fetching
+        headerInfoStatus: ActionStatus.Fetched
       });
 
     case ListsActions.FETCH_HEADER_DETAILS_FAILURE:
