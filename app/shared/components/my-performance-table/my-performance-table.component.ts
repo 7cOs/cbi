@@ -13,19 +13,7 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
-
-interface SortWeight {
-  index: number;
-  sortWeight: number;
-}
-
-export enum SpecialistRoleGroupEntityTypeCode {
-  GEO_BUSINESS_UNITS = '4',
-  NATIONAL_SALES_ORG = '19',
-  DRAFT = '9'
-}
-
-const GEOGRAPHY_SORTING_WEIGHT = 999;
+import { SortWeight, GEOGRAPHY_SORTING_WEIGHT, specializedRoleGroupWeights } from '../../../models/sort-weight.model';
 
 @Component({
   selector: 'my-performance-table',
@@ -81,14 +69,6 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
-
-  /*Adding a Object with some number that carries high weights since below role groups should always be
-  sorted at the bottom according to weights*/
-  private specializedRoleGroupWeights = {
-    [SpecialistRoleGroupEntityTypeCode.GEO_BUSINESS_UNITS]: 995,
-    [SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG]: 996,
-    [SpecialistRoleGroupEntityTypeCode.DRAFT]: 997
-  };
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -239,7 +219,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
         index: index,
         sortWeight: row.descriptionRow0 === EntityPeopleType.GEOGRAPHY
           ? GEOGRAPHY_SORTING_WEIGHT
-          : this.specializedRoleGroupWeights[row.metadata.entityTypeCode] || index
+          : specializedRoleGroupWeights[row.metadata.entityTypeCode] || index
       };
     });
     const sortedRowDataMapping: Array<SortWeight> = sortBy(rowDataMapping, ['sortWeight']);

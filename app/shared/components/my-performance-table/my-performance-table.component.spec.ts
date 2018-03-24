@@ -12,14 +12,14 @@ import { getProductMetricsViewTypeMock } from '../../../enums/product-metrics-vi
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { getSalesHierarchyViewTypeMock } from '../../../enums/sales-hierarchy-view-type.enum.mock';
 import { LoadingState } from '../../../enums/loading-state.enum';
-import { MyPerformanceTableComponent, SpecialistRoleGroupEntityTypeCode } from './my-performance-table.component';
+import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../../enums/row-type.enum';
 import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
-
+import { SpecialistRoleGroupEntityTypeCode } from '../../../enums/specialist-role-group-entity-type-code.enum';
 const chance = new Chance();
 
 @Component({
