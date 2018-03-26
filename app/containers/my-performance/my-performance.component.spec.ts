@@ -943,6 +943,7 @@ describe('MyPerformanceComponent', () => {
           }));
         });
       });
+
     });
 
     describe('when viewing People', () => {
@@ -1025,6 +1026,7 @@ describe('MyPerformanceComponent', () => {
           inAlternateHierarchy: false
         }));
       });
+
     });
 
     describe('when viewing Accounts', () => {
