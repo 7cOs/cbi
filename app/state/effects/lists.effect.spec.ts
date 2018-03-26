@@ -4,44 +4,50 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
-import * as ProductMetricsActions from '../actions/product-metrics.action';
 import * as ListActions from '../../state/actions/lists.action';
 import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
-import { Stores, StoresHeader } from '../../models/lists.model';
-import { FetchHeaderDetails, FetchStoreDetails } from '../actions/lists.action';
+import { ListsTransformerService } from '../../services/lists-transformer.service';
+import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/lists.action';
+import { ListStoreDTO } from '../../models/lists-store-dto.model';
+import { StoreHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
+import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
 
 const chance = new Chance();
 
 describe('Lists Effects', () => {
   let error: Error;
-  let actions$: Subject<ProductMetricsActions.Action>;
-  let listIdMock: string;
+  let actions$: Subject<ListActions.Action>;
   let listsEffects: ListsEffects;
   let listsApiService: ListsApiService;
-  let storesDataMock: Stores;
-  let storeHeaderInfoMock: StoresHeader;
+  let listsTransformerService: ListsTransformerService;
+  let listHeaderMock: StoreHeaderInfoDTO;
+  let storeListMock: ListStoreDTO[];
+  let headerDetailMock: StoreHeaderDetails;
+  let storesDataMock: StoreDetailsRow;
+  let storesData: Array<StoreDetailsRow>;
 
   const listsApiServiceMock = {
-    getStorePerformance(storesData: Stores): Observable<Stores> {
-      return Observable.of(storesData);
+    getStorePerformance(listIdMock: string): Observable<ListStoreDTO[]> {
+      return Observable.of(storeListMock);
     },
-    getHeaderDetail(storedHeaderInfo: StoresHeader): Observable<StoresHeader> {
-      return Observable.of(storedHeaderInfo);
+    getHeaderDetail(listIdMock: string): Observable<StoreHeaderInfoDTO> {
+      return Observable.of(listHeaderMock);
     }
   };
 
+  let listsTransformerServiceMock = {
+    formatListHeaderData(headerDataDTO: StoreHeaderInfoDTO): StoreHeaderDetails {
+      return headerDetailMock;
+    },
+    formatStoreData(store: ListStoreDTO): StoreDetailsRow {
+      return storesDataMock;
+    },
+  };
+
   beforeEach(() => {
-    listIdMock = chance.string();
+    let listIdMock = chance.string();
     error = new Error(chance.string());
-
-    storesDataMock = {
-      listId: listIdMock
-    };
-
-    storeHeaderInfoMock = {
-      listId: listIdMock
-    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -50,6 +56,10 @@ describe('Lists Effects', () => {
         {
           provide: ListsApiService,
           useValue: listsApiServiceMock
+        },
+        {
+          provide: ListsTransformerService,
+          useValue: listsTransformerServiceMock
         }
       ]
     });
@@ -59,14 +69,16 @@ describe('Lists Effects', () => {
 
   beforeEach(inject([ ListsEffects, ListsApiService ],
     (_listsEffects: ListsEffects,
-     _listsApiService: ListsApiService) => {
+     _listsApiService: ListsApiService,
+     _listsTransformerService: ListsTransformerService) => {
       listsEffects = _listsEffects;
       listsApiService = _listsApiService;
+      listsTransformerService = _listsTransformerService;
     }
   ));
 
-  describe('when a FetchStoreDetails actions is received', () => {
-    let actionPayloadMock: FetchStoreDetails;
+ fdescribe('when a FetchStoreDetails actions is received', () => {
+    let actionPayloadMock: FetchStoreDetailsPayload;
 
     beforeEach(() => {
       actionPayloadMock = {
@@ -85,12 +97,12 @@ describe('Lists Effects', () => {
         });
 
         expect(getOpportunitiesSpy.calls.count()).toBe(1);
-        expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock);
+        expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock.listId);
       });
 
       it('should dispatch a FetchStoreDetailsSuccess action with the returned GroupedData', (done) => {
         listsEffects.fetchStoreDetail$().subscribe((action: Action) => {
-          expect(action).toEqual(new ListActions.FetchStoreDetailsSuccess(storesDataMock));
+          expect(action).toEqual(new ListActions.FetchStoreDetailsSuccess(storesData));
           done();
         });
       });
@@ -109,7 +121,7 @@ describe('Lists Effects', () => {
   });
 
   describe('when a fetchHeaderDetail actions is received', () => {
-    let actionPayloadMock: FetchHeaderDetails;
+    let actionPayloadMock: FetchHeaderDetailsPayload;
 
     beforeEach(() => {
       actionPayloadMock = {
@@ -128,12 +140,12 @@ describe('Lists Effects', () => {
         });
 
         expect(getOpportunitiesSpy.calls.count()).toBe(1);
-        expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock);
+        expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock.listId);
       });
 
       it('should dispatch a getHeaderDetailsSuccess action with the returned GroupedData', (done) => {
         listsEffects.fetchStoreDetail$().subscribe((action: Action) => {
-          expect(action).toEqual(new ListActions.FetchHeaderDetailsSuccess(storeHeaderInfoMock));
+          expect(action).toEqual(new ListActions.FetchHeaderDetailsSuccess(headerDetailMock));
           done();
         });
       });
