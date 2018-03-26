@@ -25,8 +25,8 @@ interface SortWeightArray {
   template: require('./list-performance-table.component.pug'),
   styles: [ require('./list-performance-table.component.scss') ]
 })
-export class ListPerformanceTableComponent  { }
-  /* @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
+export class ListPerformanceTableComponent implements OnInit, OnChanges  {
+  @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
 
   @Input()
@@ -51,7 +51,19 @@ export class ListPerformanceTableComponent  { }
   @Input() opportunitiesError: boolean = false;
   @Input() showContributionToVolume: boolean = false;
   @Input() tableHeaderRow: Array<string> = ['Store', 'Distributor', 'Segment', 'Depeltions', ' Effective POD', 'Last Depletion'];
-  @Input() totalRow: ListPerformanceTableRow;
+  @Input() totalRow: ListPerformanceTableRow = {
+    descriptionRow0: 'descrow0',
+    descriptionRow1: 'descrow1',
+    descriptionRow2: 'descrow2',
+    metricColumn0: 0,
+    metricColumn1: 1,
+    metricColumn2: 2,
+    metricColumn3: 3,
+    metricColumn4: 4,
+    metricColumn5: 5,
+    depletionDate: '2017-08-01',
+    performanceError: false
+  };
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() loadingState: LoadingState.Loaded;
 
@@ -63,7 +75,10 @@ export class ListPerformanceTableComponent  { }
   public tableClasses: CssClasses = {};
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
-  private _sortingCriteria: Array<SortingCriteria> = null;
+  private _sortingCriteria: Array<SortingCriteria> = [{
+    columnType: ColumnType.metricColumn0,
+    ascending: false
+  }];
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -120,6 +135,18 @@ export class ListPerformanceTableComponent  { }
     return classes;
   }
 
+  public getColumnWidthClass(): string {
+    let style = '';
+
+    if (this.showContributionToVolume && this.showOpportunities) {
+      style = 'two-right-columns-present';
+    } else if (this.showContributionToVolume || this.showOpportunities) {
+      style = 'one-right-column-present';
+    }
+
+    return style;
+  }
+
   private getTableClasses(viewType: SalesHierarchyViewType | ProductMetricsViewType, loadingState: LoadingState): CssClasses {
     return {
       [`view-type-${viewType}`]: true,
@@ -153,4 +180,3 @@ export class ListPerformanceTableComponent  { }
     }
   }
 }
- */

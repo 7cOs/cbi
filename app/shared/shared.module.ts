@@ -14,6 +14,7 @@ import { CompassTooltipComponent } from './components/compass-tooltip/compass-to
 import { CompassTooltipPopupComponent } from './components/compass-tooltip-popup/compass-tooltip-popup.component';
 import { CompassTooltipService } from '../services/compass-tooltip.service';
 import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
+import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     DismissibleXComponent,
     MatRippleModule,
     MatSidenavModule,
-    OverlayModule
+    OverlayModule,
+    SortIndicatorComponent
   ],
   declarations: [
     BeerLoaderComponent,
@@ -44,6 +46,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
     DismissibleXComponent,
+    SortIndicatorComponent
   ],
   providers: [
     CompassOverlayService,

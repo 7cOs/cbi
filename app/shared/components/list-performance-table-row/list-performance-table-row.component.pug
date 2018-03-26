@@ -7,22 +7,30 @@ td.left-col(colspan=1)
     div.left-col-text-content
       div.description-line-0
         span {{tableRowData.descriptionRow0}}
-      div.description-line-1(*ngIf="tableRowData.descriptionRow1",
+td.left-col(colspan=1)
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0(*ngIf="tableRowData.descriptionRow1",
                             [ngClass]="getSublineClass()",
                             (click)="sublineClicked($event)")
-        span.description-line-1 {{tableRowData.descriptionRow1}}
+        span.description-line-0 {{tableRowData.descriptionRow1}}
+td.left-col(colspan=1)
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0
+        span {{tableRowData.descriptionRow2}}
 
 td.center-col(colspan=1) {{tableRowData.metricColumn0 | number}}
 td.center-col(colspan=1)
   span([ngClass]="getTrendClass(tableRowData.metricColumn1)") {{tableRowData.metricColumn1 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(tableRowData.metricColumn1)") {{tableRowData.metricColumn2 | number:'1.1-1'}}%
-td.right-col(*ngIf="showContributionToVolume", colspan=1)
-  span.ctv {{tableRowData.ctv | number:'1.1-1'}}%
-td.right-col(
-  *ngIf="showOpportunities", colspan=1,
-  [ngClass]="opportunityCountClass",
-  (click)="opportunityCountClicked($event)") {{(opportunityCountText === '-' || opportunityCountText === 'View') ? opportunityCountText : opportunityCountText | number}}
+  span([ngClass]="getTrendClass(tableRowData.metricColumn2)") {{tableRowData.metricColumn2 | number:'1.1-1'}}%
+td.center-col(colspan=1) {{tableRowData.metricColumn3 | number}}
+td.center-col(colspan=1)
+  span([ngClass]="getTrendClass(tableRowData.metricColumn4)") {{tableRowData.metricColumn4 | number}}
+td.center-col(colspan=1)
+  span([ngClass]="getTrendClass(tableRowData.metricColumn5)") {{tableRowData.metricColumn5 | number:'1.1-1'}}%
+td.right-col(colspan=1) {{tableRowData.depletionDate}}
 
 //- Temporary td column to act as an empty filler until a Simple Opportunities column is implemented
 td.right-col(*ngIf="showEmptyLastColumn", colspan=1)

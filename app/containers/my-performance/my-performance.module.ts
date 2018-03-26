@@ -18,7 +18,6 @@ import { ProductMetricsTransformerService } from  '../../services/product-metric
 import { ResponsibilitiesTransformerService } from  '../../services/responsibilities-transformer.service';
 import { ResponsibilitiesService } from  '../../services/responsibilities.service';
 import { SharedModule } from '../../shared/shared.module';
-import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SubAccountsApiService } from '../../services/api/v3/sub-accounts-api.service';
 import { TeamPerformanceOpportunitiesComponent }
   from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
@@ -37,7 +36,6 @@ import { WindowService } from '../../services/window.service';
     MyPerformanceFilterComponent,
     MyPerformanceTableComponent,
     MyPerformanceTableRowComponent,
-    SortIndicatorComponent,
     TeamPerformanceOpportunitiesComponent
   ],
   providers: [

@@ -22,21 +22,6 @@ export class ListPerformanceTableRowComponent {
   @Input() showX: boolean = false;
   @Input() set rowData(rowData: ListPerformanceTableRow) {
     this.tableRowData = rowData;
-    this.opportunityCountClass = this.getOpportunityCountClass();
-  }
-  @Input()
-  set viewType(viewType: SalesHierarchyViewType | ProductMetricsViewType) {
-    this.isBrands = viewType === ProductMetricsViewType.brands;
-    this.isSubAcountsOrDistributors = viewType === SalesHierarchyViewType.distributors
-      || viewType === SalesHierarchyViewType.subAccounts;
-    this.isRolegroups = viewType === SalesHierarchyViewType.roleGroups;
-    this.opportunityCountClass = this.getOpportunityCountClass();
-  }
-  @Input()
-  set opportunitiesError(opportunitiesError: boolean) {
-    this.isOpportunitiesError = opportunitiesError;
-    this.opportunityCountText = this.getOpportunityCountText(this.tableRowData.opportunities, opportunitiesError);
-    this.opportunityCountClass = this.getOpportunityCountClass();
   }
 
   public opportunityCountText: string;
@@ -56,20 +41,6 @@ export class ListPerformanceTableRowComponent {
     return {
       ['link']: this.isSubAcountsOrDistributors,
       ['forward-arrow']: this.isSubAcountsOrDistributors
-    };
-  }
-
-  public getOpportunityCountClass(): CssClasses {
-    let opportunitiesClass: boolean;
-
-    if (this.tableRowData && !isUndefined(this.tableRowData.opportunities)) {
-      opportunitiesClass = (this.tableRowData.opportunities > 0) || (this.isBrands && this.tableRowData.opportunities === 0);
-    } else
-      opportunitiesClass = false;
-
-    return {
-      ['opportunities']: opportunitiesClass,
-      ['opportunities-error']: this.isOpportunitiesError
     };
   }
 
