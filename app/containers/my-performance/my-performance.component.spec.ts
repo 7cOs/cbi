@@ -68,6 +68,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { WindowService } from '../../services/window.service';
+import { SpecialistRoleGroupEntityTypeCode } from '../../enums/specialist-role-group-entity-type-code.enum';
 
 const chance = new Chance();
 
@@ -876,10 +877,11 @@ describe('MyPerformanceComponent', () => {
       });
 
       describe('when clicking NSO/DRAFT roleGroup', () => {
-        it('should skip a level by getting data for the single person in that role-group instead of showing' +
+        it('should skip a level by getting data for the single person in that role-group instead of showing ' +
           'who is in that group when NSO role group is clicked', () => {
-          rowMock.descriptionRow0 = EntityPeopleType['NATIONAL SALES ORG'];
+          rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG;
           rowMock.metadata.entityName = EntityPeopleType['NATIONAL SALES ORG'];
+          rowMock.descriptionRow0 = EntityPeopleType['NATIONAL SALES ORG'];
 
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.EXCPN_HIER;
@@ -909,9 +911,10 @@ describe('MyPerformanceComponent', () => {
         });
 
         it('should skip a level by getting data for the single person in that role-group instead of showing' +
-          'who is in that group when DRAFT role group is clicked', () => {
-          rowMock.descriptionRow0 = EntityPeopleType.DRAFT;
+          ' who is in that group when DRAFT role group is clicked', () => {
+          rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.DRAFT;
           rowMock.metadata.entityName = EntityPeopleType.DRAFT;
+          rowMock.descriptionRow0 = EntityPeopleType.DRAFT;
 
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.OFF_HIER;
