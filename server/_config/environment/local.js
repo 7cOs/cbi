@@ -51,73 +51,56 @@ module.exports = function (config) {
   config.auth = {
     strategy: 'no-auth',
     user: {
-      "personId": 5545,
-      "employeeID": "1012135",
-      "firstName": "CHRIS",
-      "lastName": "WILLIAMS",
-      "email": "CHRIS.WILLIAMS@CBRANDS.COM",
-      "expiresAt": {
-          "era": 1,
-          "dayOfYear": 142,
-          "dayOfWeek": 2,
-          "dayOfMonth": 22,
-          "year": 2018,
-          "millisOfSecond": 882,
-          "centuryOfEra": 20,
-          "yearOfEra": 2018,
-          "yearOfCentury": 18,
-          "weekyear": 2018,
-          "monthOfYear": 5,
-          "weekOfWeekyear": 21,
-          "millisOfDay": 62045882,
-          "secondOfMinute": 5,
-          "secondOfDay": 62045,
-          "minuteOfHour": 14,
-          "minuteOfDay": 1034,
-          "hourOfDay": 17,
-          "chronology": {
-              "zone": {
-                  "fixed": true,
-                  "id": "Etc/UTC"
-              }
-          },
-          "zone": {
-              "fixed": true,
-              "id": "Etc/UTC"
-          },
-          "millis": 1527009245882,
-          "beforeNow": false,
-          "equalNow": false,
-          "afterNow": true
-      },
-      "srcTypeCd": [
-          "SALES_HIER"
+      'personId': 5579,
+      'positionId': '4903',
+      'buPositionId': '0',
+      'employeeID': '1002705',
+      'firstName': 'JOHN',
+      'lastName': 'UTTER',
+      'email': 'JOHN.UTTER@CBRANDS.COM',
+      'srcTypeCd': [
+        'SALES_HIER'
       ],
-      "positionId": "3898",
-      "buPositionId": "4275",
-      "corporateUser": false,
-      "userGroup": [],
-      "issuer": "https://orion.cbrands.com",
-      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IldJTExJQU1TIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiIxMDEyMTM1IiwiZmlyc3ROYW1lIjoiQ0hSSVMiLCJjb3Jwb3JhdGVVc2VyIjpmYWxzZSwicG9zaXRpb25JZCI6IjM4OTgiLCJwZXJzb25JRCI6NTU0NSwiZXhwIjoxNTI3MDA5MjQ1ODgyLCJpYXQiOjE1MjE4MjUyNDU4ODIsInVzZXJHcm91cCI6W10sImVtYWlsIjoiQ0hSSVMuV0lMTElBTVNAQ0JSQU5EUy5DT00iLCJzcmNUeXBlQ2QiOlsiU0FMRVNfSElFUiJdLCJidVBvc2l0aW9uSWQiOiI0Mjc1In0.8vl9oOqiR0tfQT10x3cgCq03l0_ycon1eUs1UoO32Sc",
-      "jwtmap": {
-          "lastName": "WILLIAMS",
-          "iss": "https://orion.cbrands.com",
-          "employeeID": "1012135",
-          "firstName": "CHRIS",
-          "corporateUser": false,
-          "positionId": "3898",
-          "personID": 5545,
-          "exp": 1527009245882,
-          "iat": 1521825245883,
-          "userGroup": [],
-          "email": "CHRIS.WILLIAMS@CBRANDS.COM",
-          "srcTypeCd": [
-              "SALES_HIER"
-          ],
-          "buPositionId": "4275"
-      },
-      "issuedAt": 1521825245883
-  }
+      'corporateUser': false,
+      'userGroup': [
+        'cbi-role-iq-app-users',
+        'ug-cbigdc-role-abpanaplancorporateview',
+        'cbi employees',
+        'ug-cbigdc-biz-role-busunitvp',
+        'ug-cbigdc-triana-role-ecrownappuser',
+        'cbi users',
+        'cbi-adenabledaccounts',
+        'ug-cbigdc-role-ecrownappusercimemployeeview'
+      ],
+      'issuer': 'https://orion.cbrands.com',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IlVUVEVSIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiIxMDAyNzA1IiwiZmlyc3ROYW1lIjoiSk9ITiIsImNvcnBvcmF0ZVVzZXIiOmZhbHNlLCJwb3NpdGlvbklkIjoiNDkwMyIsInBlcnNvbklEIjo1NTc5LCJleHAiOjE1MjQ4NDUxMzU0NTcsImlhdCI6MTUxOTY2MTEzNTQ1NywidXNlckdyb3VwIjpbXSwiZW1haWwiOiJKT0hOLlVUVEVSQENCUkFORFMuQ09NIiwic3JjVHlwZUNkIjpbIlNBTEVTX0hJRVIiXSwiYnVQb3NpdGlvbklkIjoiMCJ9.LVIbAg54asnc-Whl4ZHH2cXniPnRdVHOxiqIUH6Vq9c',
+      'jwtmap': {
+        'firstName': 'JOHN',
+        'lastName': 'UTTER',
+        'corporateUser': false,
+        'iss': 'https://orion.cbrands.com',
+        'personId': 5579,
+        'positionId': '4903',
+        'buPositionId': '0',
+        'employeeID': '1002705',
+        'exp': 1509132101428,
+        'iat': 1503948101433,
+        'userGroup': [
+          'cbi-role-iq-app-users',
+          'ug-cbigdc-role-abpanaplancorporateview',
+          'cbi employees',
+          'ug-cbigdc-biz-role-busunitvp',
+          'ug-cbigdc-triana-role-ecrownappuser',
+          'cbi users',
+          'cbi-adenabledaccounts',
+          'ug-cbigdc-role-ecrownappusercimemployeeview'
+        ],
+        'email': 'JOHN.UTTER@CBRANDS.COM',
+        'srcTypeCd': [
+          'SALES_HIER'
+        ]
+      }
+    }
   };
 
   // directories
