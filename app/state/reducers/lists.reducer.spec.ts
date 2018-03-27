@@ -1,59 +1,49 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
-import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
-import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
-import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
-import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
-import { initialState, listsReducer } from './lists.reducer';
-import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
-import * as ListsActions from '../actions/lists.action';
-import { ProductMetricsState } from './product-metrics.reducer';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 
-const positionIdMock = chance.string();
-const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
+import { initialState, listsReducer, ListsState } from './lists.reducer';
+import * as ListsActions from '../actions/lists.action';
+import { getStoreListsMock } from '../../models/lists-store.model.mock';
+import { getStoreHeaderInfoMock } from '../../models/lists-store-header.model.mock';
+
+const listIdMock = chance.string();
 
 describe('Lists Reducer', () => {
 
   describe('when a FetchStoreDetails action is dispatched', () => {
     it('should update the store details status to Fetching', () => {
       const expectedState = {
-        StoreDetailStatus: ActionStatus.Fetching,
+        status: ActionStatus.Fetching,
         headerInfoStatus: initialState.headerInfoStatus,
         stores: initialState.stores,
       };
 
       const actualState = listsReducer(initialState, new ListsActions.FetchStoreDetails({
-        positionId: positionIdMock
+        listId: listIdMock
       }));
 
       expect(actualState).toEqual(expectedState);
     });
-    it('should store the list of stores and set the store details status to Fetched on success', () => {
-      const stores = getProductMetricsWithBrandValuesMock();
 
-      const payloadMock = {
-        positionId: positionIdMock,
-      };
+    it('should store the list of stores and set the store details status to Fetched on success', () => {
+      const stores = getStoreListsMock();
 
       const expectedState = {
-        StoreDetailStatus: ActionStatus.Fetched,
+        status: ActionStatus.Fetched,
         headerInfoStatus: initialState.headerInfoStatus,
         stores: stores,
       };
 
       const actualState = listsReducer(
         initialState,
-        new ListsActions.FetchStoreDetailsSuccess(payloadMock)
+        new ListsActions.FetchStoreDetailsSuccess(stores)
       );
 
       expect(actualState).toEqual(expectedState);
     });
+
     it('should should update the store details status to Error', () => {
       const expectedState: ListsState = {
-        StoreDetailStatus: ActionStatus.Error,
+        status: ActionStatus.Error,
         headerInfoStatus: initialState.headerInfoStatus,
         stores: initialState.stores,
       };
@@ -68,26 +58,22 @@ describe('Lists Reducer', () => {
   describe('when a FetchHeaderDetails action is dispatched', () => {
     it('should update the store details status to Fetching', () => {
         const expectedState = {
-          StoreDetailStatus: initialState.StoreDetailStatus,
+          status: initialState.status,
           headerInfoStatus: ActionStatus.Fetching,
           stores: initialState.stores,
         };
 
         const actualState = listsReducer(initialState, new ListsActions.FetchHeaderDetails({
-          positionId: positionIdMock
+          listId: listIdMock
         }));
 
         expect(actualState).toEqual(expectedState);
       });
     it('should store the header details and set the headers status to Fetched on success', () => {
-      const headersMock = getProductMetricsWithBrandValuesMock();
-
-      const payloadMock = {
-        positionId: positionIdMock,
-      };
+      const headersMock = getStoreHeaderInfoMock();
 
       const expectedState = {
-        StoreDetailStatus: initialState.StoreDetailStatus,
+        status: initialState.status,
         headerInfo: headersMock,
         headerInfoStatus: ActionStatus.Fetched,
         stores: initialState.stores
@@ -95,14 +81,14 @@ describe('Lists Reducer', () => {
 
       const actualState = listsReducer(
         initialState,
-        new ListsActions.FetchHeaderDetailsSuccess(payloadMock)
+        new ListsActions.FetchHeaderDetailsSuccess(headersMock)
       );
 
       expect(actualState).toEqual(expectedState);
     });
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
-        StoreDetailStatus: initialState.StoreDetailStatus,
+        status: initialState.status,
         headerInfoStatus: ActionStatus.Error,
         stores: initialState.stores,
       };

@@ -1,16 +1,8 @@
 import * as Chance from 'chance';
-
-import { FetchOpportunityCountsPayload } from './product-metrics.action';
-import { getEntityTypeMock } from '../../enums/entity-responsibilities.enum.mock';
-import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
-import { getProductMetricsViewTypeMock } from '../../enums/product-metrics-view-type.enum.mock';
-import { getProductMetricsWithBrandValuesMock } from '../../models/product-metrics.model.mock';
-import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
-import { ProductMetrics } from '../../models/product-metrics.model';
-import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
 import * as ListsActions from './lists.action';
+
+import { getStoreListsMock } from '../../models/lists-store.model.mock';
+import { getStoreHeaderInfoMock } from '../../models/lists-store-header.model.mock';
 
 const chance = new Chance();
 
@@ -18,13 +10,13 @@ describe('Lists Actions', () => {
 
   describe('FetchStoreDetails', () => {
     let action: ListsActions.FetchStoreDetails;
-    let positionIdMock: string;
+    let listIdMock: string;
     let actionPayloadMock: any;
 
     beforeEach(() => {
-      positionIdMock = chance.string();
+      listIdMock = chance.string();
       actionPayloadMock = {
-        positionId: positionIdMock,
+        listId: listIdMock,
       };
       action = new ListsActions.FetchStoreDetails(actionPayloadMock);
     });
@@ -41,17 +33,10 @@ describe('Lists Actions', () => {
 
   describe('FetchStoreDetailsSuccess', () => {
     let action: ListsActions.FetchStoreDetailsSuccess;
-    let product: ProductMetrics;
-    let mockUserId: number;
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      product = getProductMetricsWithBrandValuesMock();
-      mockUserId = chance.natural();
-      mockSuccessActionPayload = {
-        positionId: mockUserId,
-        products: product,
-      };
+      mockSuccessActionPayload = getStoreListsMock();
 
       action = new ListsActions.FetchStoreDetailsSuccess(mockSuccessActionPayload);
     });
@@ -69,16 +54,16 @@ describe('Lists Actions', () => {
 
   describe('FetchStoreDetailsFailure', () => {
     const error: Error = new Error(chance.string());
-    let action: ListsActions.FetchHeaderDetailsFailure;
+    let action: ListsActions.FetchStoreDetailsFailure;
 
     beforeEach(() => {
-      action = new ListsActions.FetchHeaderDetailsFailure(error);
+      action = new ListsActions.FetchStoreDetailsFailure(error);
     });
 
     it('should have the correct type', () => {
-      expect(ListsActions.FETCH_HEADER_DETAILS_FAILURE)
-        .toBe('[StoreDetails] FETCH_STORE_DETAILS_SUCCESS_FAILURE');
-      expect(action.type).toBe(ListsActions.FETCH_HEADER_DETAILS_FAILURE);
+      expect(ListsActions.FETCH_STORE_DETAILS_FAILURE)
+        .toBe('[StoreDetails] FETCH_STORE_DETAILS_FAILURE');
+      expect(action.type).toBe(ListsActions.FETCH_STORE_DETAILS_FAILURE);
     });
 
     it('should contain the mock payload', () => {
@@ -88,13 +73,13 @@ describe('Lists Actions', () => {
 
   describe('FetchHeaderDetails', () => {
     let action: ListsActions.FetchHeaderDetails;
-    let positionIdMock: string;
+    let listIdMock: string;
     let actionPayloadMock: any;
 
     beforeEach(() => {
-      positionIdMock = chance.string();
+      listIdMock = chance.string();
       actionPayloadMock = {
-        positionId: positionIdMock,
+        listId: listIdMock,
       };
       action = new ListsActions.FetchHeaderDetails(actionPayloadMock);
     });
@@ -111,17 +96,10 @@ describe('Lists Actions', () => {
 
   describe('FetchHeaderDetailsSuccess', () => {
     let action: ListsActions.FetchHeaderDetailsSuccess;
-    let product: ProductMetrics;
-    let mockUserId: number;
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      product = getProductMetricsWithBrandValuesMock();
-      mockUserId = chance.natural();
-      mockSuccessActionPayload = {
-        positionId: mockUserId,
-        products: product,
-      };
+      mockSuccessActionPayload = getStoreHeaderInfoMock();
 
       action = new ListsActions.FetchHeaderDetailsSuccess(mockSuccessActionPayload);
     });

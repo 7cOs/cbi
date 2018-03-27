@@ -44,9 +44,9 @@ export class FetchHeaderDetailsSuccess implements Action {
   constructor(public payload: StoreHeaderDetails) { }
 }
 
-export const FETCH_HEADER_DETAILS_FAILURE = '[StoreDetails] FETCH_STORE_DETAILS_FAILURE';
+export const FETCH_HEADER_DETAILS_FAILURE = '[StoreDetails] FETCH_HEADER_DETAILS_FAILURE';
 export class FetchHeaderDetailsFailure implements Action {
-  readonly type = FETCH_STORE_DETAILS_FAILURE;
+  readonly type = FETCH_HEADER_DETAILS_FAILURE;
 
   constructor(public payload: Error) { }
 }

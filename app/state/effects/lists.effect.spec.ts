@@ -12,6 +12,7 @@ import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/
 import { ListStoreDTO } from '../../models/lists-store-dto.model';
 import { StoreHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
 import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
+import { getStoreListsMock } from '../../models/lists-store.model.mock';
 
 const chance = new Chance();
 
@@ -24,8 +25,7 @@ describe('Lists Effects', () => {
   let listHeaderMock: StoreHeaderInfoDTO;
   let storeListMock: ListStoreDTO[];
   let headerDetailMock: StoreHeaderDetails;
-  let storesDataMock: StoreDetailsRow;
-  let storesData: Array<StoreDetailsRow>;
+  let storesData: Array<StoreDetailsRow> = getStoreListsMock();
 
   const listsApiServiceMock = {
     getStorePerformance(listIdMock: string): Observable<ListStoreDTO[]> {
@@ -40,8 +40,8 @@ describe('Lists Effects', () => {
     formatListHeaderData(headerDataDTO: StoreHeaderInfoDTO): StoreHeaderDetails {
       return headerDetailMock;
     },
-    formatStoreData(store: ListStoreDTO): StoreDetailsRow {
-      return storesDataMock;
+    formatStoresData(store: Array<ListStoreDTO>): Array<StoreDetailsRow> {
+      return storesData;
     },
   };
 
@@ -77,7 +77,7 @@ describe('Lists Effects', () => {
     }
   ));
 
- fdescribe('when a FetchStoreDetails actions is received', () => {
+ describe('when a FetchStoreDetails actions is received', () => {
     let actionPayloadMock: FetchStoreDetailsPayload;
 
     beforeEach(() => {
@@ -135,7 +135,7 @@ describe('Lists Effects', () => {
       it('should call getHeaderDetails from the ListsService given the passed in action payload', (done) => {
         const getOpportunitiesSpy = spyOn(listsApiService, 'getHeaderDetail').and.callThrough();
 
-        listsEffects.fetchStoreDetail$().subscribe(() => {
+        listsEffects.fetchHeaderDetail$().subscribe(() => {
           done();
         });
 
@@ -144,7 +144,7 @@ describe('Lists Effects', () => {
       });
 
       it('should dispatch a getHeaderDetailsSuccess action with the returned GroupedData', (done) => {
-        listsEffects.fetchStoreDetail$().subscribe((action: Action) => {
+        listsEffects.fetchHeaderDetail$().subscribe((action: Action) => {
           expect(action).toEqual(new ListActions.FetchHeaderDetailsSuccess(headerDetailMock));
           done();
         });
@@ -155,7 +155,7 @@ describe('Lists Effects', () => {
       it('should dispatch a FetchHeaderDetailsFailure action with the error', (done) => {
         spyOn(listsApiService, 'getHeaderDetail').and.returnValue(Observable.throw(error));
 
-        listsEffects.fetchStoreDetail$().subscribe((response) => {
+        listsEffects.fetchHeaderDetail$().subscribe((response) => {
           expect(response).toEqual(new ListActions.FetchHeaderDetailsFailure(error));
           done();
         });

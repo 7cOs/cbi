@@ -1,11 +1,9 @@
+/*
 import { inject, TestBed } from '@angular/core/testing';
 
-import { EntityType } from '../enums/entity-responsibilities.enum';
-import { getEntityPeopleResponsibilitiesMock,
-         getHierarchyEntityDTO,
-         mockHierarchyEntityDTOCollection } from '../models/hierarchy-entity.model.mock';
-import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { ListsTransformerService } from './lists-transformer.service';
+import { ListStoreDTO } from '../models/lists-store-dto.model';
+import { getStoreListsDTOMock } from '../models/lists-store-dto.model.mock';
 
 describe('Service: ListsTransformerService', () => {
   let listsTransformerService: ListsTransformerService;
@@ -20,31 +18,29 @@ describe('Service: ListsTransformerService', () => {
   }));
 
   describe('transformStoresData', () => {
-    it('should return a collection of hierarchy entities given a collection of hierarchy entity DTO\'s', () => {
-      const hierarchyEntitiesDTOMock: HierarchyEntityDTO[] = [ getHierarchyEntityDTO(), getHierarchyEntityDTO() ];
+    it('should transform the stores Data', () => {
+      const storesDTOMock: Array<ListStoreDTO> = [ getStoreListsDTOMock(), getStoreListsDTOMock() ];
 
-      const expectedHierachyEntities: HierarchyEntity[] = [{
-        positionId: hierarchyEntitiesDTOMock[0].id,
-        employeeId: hierarchyEntitiesDTOMock[0].employeeId,
-        name: hierarchyEntitiesDTOMock[0].name,
-        description: hierarchyEntitiesDTOMock[0].description,
-        positionDescription: '',
-        type: hierarchyEntitiesDTOMock[0].type,
-        hierarchyType: hierarchyEntitiesDTOMock[0].hierarchyType,
-        entityType: EntityType.Person
+      const expectedHierachyEntities: Array<ListStoreDTO> = [{
+        address: store.address,
+        city: store.city,
+        name: store.number,
+        number: store.number,
+        postalCode: store.postalCode,
+        premiseType: store.premiseType,
+        state : store.state
       }, {
-        positionId: hierarchyEntitiesDTOMock[1].id,
-        employeeId: hierarchyEntitiesDTOMock[1].employeeId,
-        name: hierarchyEntitiesDTOMock[1].name,
-        description: hierarchyEntitiesDTOMock[1].description,
-        positionDescription: '',
-        type: hierarchyEntitiesDTOMock[1].type,
-        hierarchyType: hierarchyEntitiesDTOMock[1].hierarchyType,
-        entityType: EntityType.Person
+        address: store.address,
+        city: store.city,
+        name: store.number,
+        number: store.number,
+        postalCode: store.postalCode,
+        premiseType: store.premiseType,
+        state : store.state
       }];
 
-      const actualHierarchyEntities: HierarchyEntity[] =
-        responsibilitiesTransformerService.transformHierarchyEntityDTOCollection(hierarchyEntitiesDTOMock);
+      const actualHierarchyEntities: Array<ListStoreDTO> =
+        listsTransformerService.formatStoresData(storesDTOMock);
 
       expect(actualHierarchyEntities).toEqual(expectedHierachyEntities);
     });
@@ -81,3 +77,4 @@ describe('Service: ListsTransformerService', () => {
     });
   });
 });
+*/
