@@ -68,11 +68,6 @@ public class SavedReportModal extends TestNGBasePage {
     waitForElementToClickable(saveButton, true).click();
     return this;
   }
-  
-  public SavedReportModal clickCancel() {
-    waitForElementToClickable(cancelButton, true).click();
-    return this;
-  }
 
   public SavedReportModal clickSavedReportDeleteLink() {
     waitForElementToClickable(deleteSavedReportLink, true).click();
