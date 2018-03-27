@@ -1,2 +1,2 @@
 # Treat binary file(s) as binary
-automation-test/images/*.png -text -diff
+wiki-artifacts/*.png -text -diff
