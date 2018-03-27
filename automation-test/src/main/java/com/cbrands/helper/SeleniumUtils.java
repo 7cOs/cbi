@@ -615,5 +615,8 @@ public class SeleniumUtils {
       for (String c : value.split("")) {
         field.sendKeys(c);
       }
+      while( ! value.equals( field.getAttribute("value") ) ) {
+        enterKeys(field, value);
+      }
     }
 }
