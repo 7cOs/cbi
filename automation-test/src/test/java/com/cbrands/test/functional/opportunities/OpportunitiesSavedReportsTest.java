@@ -70,7 +70,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dependsOnMethods = "enableSavedReport",
     dataProvider = "createReportData"
   )
-  public void createSavedReport(String reportName, String distributorSearchText) {   
+  public void createSavedReport(String reportName, String distributorSearchText) {
     testCreateASingleSavedReport(reportName + " #1", distributorSearchText);
 
     opportunitiesPage.goToPage();
@@ -186,8 +186,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Failed to display error when attempting to use the name of an existing report."
     );
 
-    savedReportModal.enterNewReportName(
-        getSavedReportName(existingReportName)).clickSave();
+    opportunitiesPage = savedReportModal.enterNewReportName(
+          generateNewEditedReportName(existingReportName))
+        .clickSave()
+        .waitForModalToClose();
 
     Assert.assertFalse(opportunitiesPage.isQueryChipPresent(distributor), 
         "Opportunites filtered when attempting to use name of existing report");    
@@ -333,28 +335,12 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   /**
-   * Uses exiting report name to return a new report with new time stamp
-   * @param existingName
+   * Returns new report name prefaced with "EDITED "
+   * @param existingReportName
    * @return String
    * @author SKARNEH
    */
-  public String getSavedReportName(String existingReportName) {
-    String reportName = existingReportName; 
-    int pos =  existingReportName.indexOf( "Functional" );
-    if( pos > -1 ) {
-      reportName = existingReportName.substring( 0, pos ) +
-          "Functional Test: " + getTimeStamp("MM.dd.yyyy HH:mm:ss");
-    }
-    return reportName;
-  }
-
-  /**
-   * Return current time stamp in format defined by pattern passed to the method
-   * @param String
-   * @author SKARNEH
-   */
-  public String getTimeStamp(String pattern) {
-    return new java.text.SimpleDateFormat(pattern)
-        .format(new java.util.Date()); 
+  public String generateNewEditedReportName(String existingReportName) {
+    return "EDITED " + existingReportName;
   }
 }
