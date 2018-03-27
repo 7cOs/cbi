@@ -42,17 +42,17 @@ public class ListsTest extends BaseTestCase {
       .clickSaveButton();
 
     Assert.assertTrue(listsPage.isLoaded(), "Failure loading page after saving new List");
-    Assert.assertTrue(listsPage.doesTargetListExist(listName), "Failure creating list: " +
+    Assert.assertTrue(listsPage.doesListExist(listName), "Failure creating list: " +
       listName);
   }
 
   @Test(dependsOnMethods = "createList", dataProvider = "listData", description = "Delete List")
   public void deleteList(String listName, String listDescription) {
     listsPage
-      .selectTargetListByName(listName)
+      .selectCheckboxByListName(listName)
       .clickDeleteButton();
 
-    Assert.assertFalse(listsPage.doesTargetListExist(listName), "Failure deleting list: " +
+    Assert.assertFalse(listsPage.doesListExist(listName), "Failure deleting list: " +
       listName);
   }
 

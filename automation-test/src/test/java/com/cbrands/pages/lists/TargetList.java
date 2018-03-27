@@ -302,7 +302,7 @@ public class TargetList extends LoadableComponent<TargetList> {
       driver,
       ListsPage.class
     );
-    listsPage.clickTargetListByName(name);
+    listsPage.clickListByName(name);
 
     return this;
   }
