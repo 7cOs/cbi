@@ -11,7 +11,7 @@ import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class EditTargetListModal extends TestNGBasePage {
+public class ListManagementModal extends TestNGBasePage {
 
   private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'target-list-modal')]";
   private final WebDriver driver;
@@ -37,7 +37,7 @@ public class EditTargetListModal extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//a[contains(.,'Yes, Delete')]")
   private WebElement confirmDelete;
 
-  public EditTargetListModal(WebDriver driver) {
+  public ListManagementModal(WebDriver driver) {
     this.driver = driver;
   }
 
@@ -52,7 +52,7 @@ public class EditTargetListModal extends TestNGBasePage {
     Assert.fail("The Manage modal for Target Lists cannot be loaded directly.");
   }
 
-  public EditTargetListModal enterListName(String name) {
+  public ListManagementModal enterListName(String name) {
     waitForElementToClickable(listNameTextBox, true).click();
     listNameTextBox.clear();
     waitForElementToClickable(listNameTextBox, true).click();
@@ -60,13 +60,13 @@ public class EditTargetListModal extends TestNGBasePage {
     return this;
   }
 
-  public EditTargetListModal enterDescription(String description) {
+  public ListManagementModal enterDescription(String description) {
     waitForElementToClickable(descriptionTextBox, true).click();
     descriptionTextBox.sendKeys(description);
     return this;
   }
 
-  public EditTargetListModal addCollaborator(String collaborator) {
+  public ListManagementModal addCollaborator(String collaborator) {
     waitForElementToClickable(collaboratorSearchBox, true).click();
     collaboratorSearchBox.sendKeys(collaborator);
 
@@ -87,7 +87,7 @@ public class EditTargetListModal extends TestNGBasePage {
     return listsPage;
   }
 
-  public EditTargetListModal clickDeleteTargetListButton() {
+  public ListManagementModal clickDeleteTargetListButton() {
     deleteListButton.click();
 
     return this;

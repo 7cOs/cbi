@@ -124,9 +124,9 @@ public class ListsPage extends TestNGBasePage {
       modal = waitForVisibleFluentWait(modalHandle);
     }
 
-    public EditTargetListModal chooseCreateNewList() {
+    public ListManagementModal chooseCreateNewList() {
       waitForElementToClickable(modal.findElement(By.xpath("//button[contains(., 'Create New List')]")), true).click();
-      return PageFactory.initElements(driver, EditTargetListModal.class);
+      return PageFactory.initElements(driver, ListManagementModal.class);
     }
   }
 }

@@ -250,45 +250,45 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the EditTargetListModal page object
-   * @see EditTargetListModal
+   * @see ListManagementModal
    */
   @Deprecated
   public TargetList EnterNameTextBox(String name) {
-    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
-    editTargetListModal.enterListName(name);
+    final ListManagementModal listManagementModal = PageFactory.initElements(driver, ListManagementModal.class);
+    listManagementModal.enterListName(name);
     return this;
   }
 
   /**
    * @deprecated Please use the method extracted to the EditTargetListModal page object
-   * @see EditTargetListModal
+   * @see ListManagementModal
    */
   @Deprecated
   public TargetList typeDescription(String description) {
-    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
-    editTargetListModal.enterDescription(description);
+    final ListManagementModal listManagementModal = PageFactory.initElements(driver, ListManagementModal.class);
+    listManagementModal.enterDescription(description);
     return this;
   }
 
   /**
    * @deprecated Please use the method extracted to the EditTargetListModal page object
-   * @see EditTargetListModal
+   * @see ListManagementModal
    */
   @Deprecated
   public TargetList addCollaborator(String collaborator) {
-    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
-    editTargetListModal.addCollaborator(collaborator);
+    final ListManagementModal listManagementModal = PageFactory.initElements(driver, ListManagementModal.class);
+    listManagementModal.addCollaborator(collaborator);
     return this;
   }
 
   /**
    * @deprecated Please use the method extracted to the EditTargetListModal page object
-   * @see EditTargetListModal
+   * @see ListManagementModal
    */
   @Deprecated
   public TargetList clickSaveButton() {
-    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
-    editTargetListModal.clickSaveButton();
+    final ListManagementModal listManagementModal = PageFactory.initElements(driver, ListManagementModal.class);
+    listManagementModal.clickSaveButton();
     return this;
   }
 
@@ -333,23 +333,23 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the EditTargetListModal page object
-   * @see EditTargetListModal
+   * @see ListManagementModal
    */
   @Deprecated
   public TargetList clickDelete_TargetListPage() {
-    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
-    editTargetListModal.clickDeleteTargetListButton();
+    final ListManagementModal listManagementModal = PageFactory.initElements(driver, ListManagementModal.class);
+    listManagementModal.clickDeleteTargetListButton();
     return this;
   }
 
   /**
    * @deprecated Please use the method extracted to the EditTargetListModal page object
-   * @see EditTargetListModal
+   * @see ListManagementModal
    */
   @Deprecated
   public TargetList clickYesDelete() {
-    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
-    editTargetListModal.confirmListDelete();
+    final ListManagementModal listManagementModal = PageFactory.initElements(driver, ListManagementModal.class);
+    listManagementModal.confirmListDelete();
     return this;
   }
 

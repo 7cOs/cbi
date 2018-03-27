@@ -35,9 +35,9 @@ public class ListDetailPage extends TestNGBasePage {
     Assert.fail("The Target List detail page cannot be loaded directly without a specified Target List.");
   }
 
-  public EditTargetListModal clickManageButton() {
+  public ListManagementModal clickManageButton() {
     waitForElementToClickable(targetListManageButton, true).click();
 
-    return PageFactory.initElements(driver, EditTargetListModal.class);
+    return PageFactory.initElements(driver, ListManagementModal.class);
   }
 }
