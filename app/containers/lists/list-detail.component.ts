@@ -6,6 +6,7 @@ import * as ListsActions from '../../state/actions//lists.action';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { Subscription } from 'rxjs/Subscription';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
 
 @Component({
   selector: 'list-detail',
@@ -14,11 +15,9 @@ import { ListsState } from '../../state/reducers/lists.reducer';
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-
-  private storeDetail: Subscription;
-  private headerDetail: Subscription;
-  private storeDetails: ListsState;
-  private headerDetails: ListsState;
+  public storeList: StoreDetailsRow[];
+  public listHeader: StoreHeaderDetails;
+  private listDetail: Subscription;
 
   constructor(
     private store: Store<AppState>,
@@ -31,21 +30,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: '184'}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: '259'}));
 
-    this.storeDetail = this.store
+    this.listDetail = this.store
       .select(state => state.listsDetails)
-      .subscribe((storeDetail: ListsState)  => {
-        if (storeDetail.status === ActionStatus.Fetched) {
-          this.storeDetails = storeDetail;
-          console.log(storeDetail, 'store');
+      .subscribe((listDetail: ListsState)  => {
+        if (listDetail.status === ActionStatus.Fetched) {
+          this.storeList = listDetail.stores;
         }
-      });
-
-    this.headerDetail = this.store
-      .select(state => state.listsDetails)
-      .subscribe((headerDetail: ListsState)  => {
-        if (headerDetail.headerInfoStatus === ActionStatus.Fetched) {
-          this.headerDetails = headerDetail;
-          console.log(headerDetail, 'header');
+        if (listDetail.headerInfoStatus === ActionStatus.Fetched) {
+          this.listHeader = listDetail.headerInfo;
         }
       });
   }
