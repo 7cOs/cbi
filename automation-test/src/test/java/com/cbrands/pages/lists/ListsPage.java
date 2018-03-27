@@ -20,7 +20,7 @@ public class ListsPage extends TestNGBasePage {
   private final WebDriver driver;
   protected Log log = LogFactory.getLog(ListsPage.class);
 
-  @FindBy(how = How.XPATH, using = "//h1[text()='Target Lists']")
+  @FindBy(how = How.XPATH, using = "//h1[text()='Lists']")
   private WebElement listingsHeader;
 
   @FindBy(how = How.XPATH, using = "//button[contains(., 'Delete')]")
@@ -45,7 +45,7 @@ public class ListsPage extends TestNGBasePage {
 
   @Override
   protected void load() {
-    driver.get(webAppBaseUrl + "/target-lists");
+    driver.get(webAppBaseUrl + "/lists");
   }
 
   public ListsPage clickDeleteButton() {
