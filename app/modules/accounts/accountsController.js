@@ -795,6 +795,8 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         vm.premiseTypeValue = 'off';
       } else if (result.premiseType === 'ON PREMISE') {
         vm.premiseTypeValue = 'on';
+      } else if (result.premiseType === 'ALL') {
+        vm.premiseTypeValue = 'all';
       }
     }
 
@@ -1128,6 +1130,10 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         vm.premiseTypeValue = 'off';
         vm.filtersService.model.selected.premiseType = 'off';
         vm.updateChip('Off-Premise', 'premiseType');
+      } else if (premiseType === 'All') {
+        vm.premiseTypeValue = 'all';
+        vm.filtersService.model.selected.premiseType = 'all';
+        vm.updateChip('All', 'premiseType');
       }
     }
 
