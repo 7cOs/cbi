@@ -12,7 +12,7 @@ import org.testng.annotations.*;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
-public class TargetListTest extends BaseTestCase {
+public class ListsTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
   private ListsPage listsPage;
