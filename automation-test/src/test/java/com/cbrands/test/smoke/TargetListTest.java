@@ -15,15 +15,15 @@ import java.net.MalformedURLException;
 public class TargetListTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
-  private ListsPage targetListListingPage;
+  private ListsPage listsPage;
 
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
-    this.startUpBrowser(String.format("Smoke - TargetList Test - %s", method.getAnnotation(Test.class).description()));
+    this.startUpBrowser(String.format("Smoke - Lists Test - %s", method.getAnnotation(Test.class).description()));
 
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
-    targetListListingPage = PageFactory.initElements(driver, ListsPage.class);
-    targetListListingPage.goToPage();
+    listsPage = PageFactory.initElements(driver, ListsPage.class);
+    listsPage.goToPage();
   }
 
   @AfterMethod
@@ -32,32 +32,32 @@ public class TargetListTest extends BaseTestCase {
     this.shutDownBrowser();
   }
 
-  @Test(dataProvider = "targetListData", description = "Create a new Target List")
-  public void createTargetList(String targetListName, String targetListDescription) throws InterruptedException {
-    targetListListingPage
+  @Test(dataProvider = "listData", description = "Create a new List")
+  public void createList(String listName, String listDescription) throws InterruptedException {
+    listsPage
       .clickCreateNewListButton()
       .chooseCreateNewList()
-      .enterListName(targetListName)
-      .enterDescription(targetListDescription)
+      .enterListName(listName)
+      .enterDescription(listDescription)
       .clickSaveButton();
 
-    Assert.assertTrue(targetListListingPage.isLoaded(), "Failure loading page after saving new Target List");
-    Assert.assertTrue(targetListListingPage.doesTargetListExist(targetListName), "Failure creating target list: " +
-      targetListName);
+    Assert.assertTrue(listsPage.isLoaded(), "Failure loading page after saving new List");
+    Assert.assertTrue(listsPage.doesTargetListExist(listName), "Failure creating list: " +
+      listName);
   }
 
-  @Test(dependsOnMethods = "createTargetList", dataProvider = "targetListData", description = "Delete Target List")
-  public void deleteTargetList(String targetListName, String targetListDescription) {
-    targetListListingPage
-      .selectTargetListByName(targetListName)
+  @Test(dependsOnMethods = "createList", dataProvider = "listData", description = "Delete List")
+  public void deleteList(String listName, String listDescription) {
+    listsPage
+      .selectTargetListByName(listName)
       .clickDeleteButton();
 
-    Assert.assertFalse(targetListListingPage.doesTargetListExist(targetListName), "Failure deleting target list: " +
-      targetListName);
+    Assert.assertFalse(listsPage.doesTargetListExist(listName), "Failure deleting list: " +
+      listName);
   }
 
-  @DataProvider(name = "targetListData")
-  public static Object[][] targetListData() {
+  @DataProvider(name = "listData")
+  public static Object[][] listData() {
     return new Object[][]{{"Smoke Test " + current_time_stamp, "test"}};
   }
 
