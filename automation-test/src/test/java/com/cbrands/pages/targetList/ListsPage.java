@@ -73,7 +73,7 @@ public class ListsPage extends TestNGBasePage {
     return false;
   }
 
-  public TargetListDetailPage clickTargetListByName(String listName) {
+  public ListDetailPage clickTargetListByName(String listName) {
     WebElement targetListElement = getTargetListByName(listName);
 
     if (null != targetListElement) {
@@ -82,7 +82,7 @@ public class ListsPage extends TestNGBasePage {
       log.info("Cannot click Target List. No target list found by the following name: " + listName);
     }
 
-    return PageFactory.initElements(driver, TargetListDetailPage.class);
+    return PageFactory.initElements(driver, ListDetailPage.class);
   }
 
   public ListsPage selectTargetListByName(String listName) {

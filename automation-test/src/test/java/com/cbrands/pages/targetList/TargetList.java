@@ -309,24 +309,24 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the TargetListDetailPage page object
-   * @see TargetListDetailPage
+   * @see ListDetailPage
    */
   @Deprecated
   public TargetList clickManage() {
-    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
-    targetListDetailPage.clickManageButton();
+    final ListDetailPage listDetailPage = PageFactory.initElements(driver, ListDetailPage.class);
+    listDetailPage.clickManageButton();
 
     return this;
   }
 
   /**
    * @deprecated Please use the method extracted to the TargetListDetailPage page object
-   * @see TargetListDetailPage
+   * @see ListDetailPage
    */
   @Deprecated
   public TargetList clickManageButton() {
-    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
-    targetListDetailPage.clickManageButton();
+    final ListDetailPage listDetailPage = PageFactory.initElements(driver, ListDetailPage.class);
+    listDetailPage.clickManageButton();
 
     return this;
   }

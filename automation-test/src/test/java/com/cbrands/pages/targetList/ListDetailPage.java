@@ -10,7 +10,7 @@ import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class TargetListDetailPage extends TestNGBasePage {
+public class ListDetailPage extends TestNGBasePage {
 
   private final WebDriver driver;
 
@@ -20,7 +20,7 @@ public class TargetListDetailPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//button[contains(.,'Manage')]")
   private WebElement targetListManageButton;
 
-  public TargetListDetailPage(WebDriver driver) {
+  public ListDetailPage(WebDriver driver) {
     this.driver = driver;
   }
 
