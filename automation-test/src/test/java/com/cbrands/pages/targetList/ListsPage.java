@@ -14,11 +14,11 @@ import java.util.List;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class TargetListListingsPage extends TestNGBasePage {
+public class ListsPage extends TestNGBasePage {
   private static final String LOADER_XPATH = "//loader";
 
   private final WebDriver driver;
-  protected Log log = LogFactory.getLog(TargetListListingsPage.class);
+  protected Log log = LogFactory.getLog(ListsPage.class);
 
   @FindBy(how = How.XPATH, using = "//h1[text()='Target Lists']")
   private WebElement listingsHeader;
@@ -32,7 +32,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
   private List<WebElement> targetListElements;
 
-  public TargetListListingsPage(WebDriver driver) {
+  public ListsPage(WebDriver driver) {
     this.driver = driver;
   }
 
@@ -48,7 +48,7 @@ public class TargetListListingsPage extends TestNGBasePage {
     driver.get(webAppBaseUrl + "/target-lists");
   }
 
-  public TargetListListingsPage clickDeleteButton() {
+  public ListsPage clickDeleteButton() {
     waitForElementToClickable(deleteButton, true).click();
     return this;
   }
@@ -85,7 +85,7 @@ public class TargetListListingsPage extends TestNGBasePage {
     return PageFactory.initElements(driver, TargetListDetailPage.class);
   }
 
-  public TargetListListingsPage selectTargetListByName(String listName) {
+  public ListsPage selectTargetListByName(String listName) {
     final WebElement targetList = getTargetListByName(listName);
 
     if (null != targetList) {

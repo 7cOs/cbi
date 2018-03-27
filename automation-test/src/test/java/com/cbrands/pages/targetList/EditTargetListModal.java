@@ -78,13 +78,13 @@ public class EditTargetListModal extends TestNGBasePage {
     return this;
   }
 
-  public TargetListListingsPage clickSaveButton() {
-    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(driver, TargetListListingsPage.class);
+  public ListsPage clickSaveButton() {
+    final ListsPage listsPage = PageFactory.initElements(driver, ListsPage.class);
 
     saveButton.click();
     waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH));
 
-    return targetListListingsPage;
+    return listsPage;
   }
 
   public EditTargetListModal clickDeleteTargetListButton() {
@@ -93,10 +93,10 @@ public class EditTargetListModal extends TestNGBasePage {
     return this;
   }
 
-  public TargetListListingsPage confirmListDelete() {
+  public ListsPage confirmListDelete() {
     waitForVisibleFluentWait(confirmDelete).click();
 
-    return PageFactory.initElements(driver, TargetListListingsPage.class);
+    return PageFactory.initElements(driver, ListsPage.class);
   }
 
 }

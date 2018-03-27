@@ -3,7 +3,7 @@ package com.cbrands.test.smoke;
 import com.cbrands.TestUser;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
-import com.cbrands.pages.targetList.TargetListListingsPage;
+import com.cbrands.pages.targetList.ListsPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
@@ -15,14 +15,14 @@ import java.net.MalformedURLException;
 public class TargetListTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
-  private TargetListListingsPage targetListListingPage;
+  private ListsPage targetListListingPage;
 
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
     this.startUpBrowser(String.format("Smoke - TargetList Test - %s", method.getAnnotation(Test.class).description()));
 
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
-    targetListListingPage = PageFactory.initElements(driver, TargetListListingsPage.class);
+    targetListListingPage = PageFactory.initElements(driver, ListsPage.class);
     targetListListingPage.goToPage();
   }
 

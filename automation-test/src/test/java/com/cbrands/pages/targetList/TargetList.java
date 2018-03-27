@@ -230,7 +230,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the TargetListListings page object
-   * @see TargetListListingsPage
+   * @see ListsPage
    */
   @Deprecated
   public TargetList clickCreateNewListButton() {
@@ -240,7 +240,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the TargetListListings page object
-   * @see TargetListListingsPage
+   * @see ListsPage
    */
   @Deprecated
   public TargetList clickCreateNewListButtonInModal() {
@@ -294,15 +294,15 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the TargetListListingsPage page object
-   * @see TargetListListingsPage
+   * @see ListsPage
    */
   @Deprecated
   public TargetList clickTargetList(String name) {
-    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(
+    final ListsPage listsPage = PageFactory.initElements(
       driver,
-      TargetListListingsPage.class
+      ListsPage.class
     );
-    targetListListingsPage.clickTargetListByName(name);
+    listsPage.clickTargetListByName(name);
 
     return this;
   }
