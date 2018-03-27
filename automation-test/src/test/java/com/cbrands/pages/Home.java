@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cbrands.pages.opportunities.Opportunities;
-import com.cbrands.pages.targetList.TargetList;
-import com.cbrands.pages.targetList.ListsPage;
+import com.cbrands.pages.lists.TargetList;
+import com.cbrands.pages.lists.ListsPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;

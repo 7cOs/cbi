@@ -1,4 +1,4 @@
-package com.cbrands.pages.targetList;
+package com.cbrands.pages.lists;
 
 import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.findElements;

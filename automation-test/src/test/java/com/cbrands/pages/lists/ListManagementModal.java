@@ -1,4 +1,4 @@
-package com.cbrands.pages.targetList;
+package com.cbrands.pages.lists;
 
 import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;

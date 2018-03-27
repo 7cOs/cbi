@@ -3,7 +3,7 @@ package com.cbrands.test.smoke;
 import com.cbrands.TestUser;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
-import com.cbrands.pages.targetList.ListsPage;
+import com.cbrands.pages.lists.ListsPage;
 import com.cbrands.test.BaseTestCase;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
