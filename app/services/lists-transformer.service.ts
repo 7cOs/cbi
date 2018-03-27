@@ -21,12 +21,9 @@ export class ListsTransformerService {
       description: headerDataDTO.description,
       id: headerDataDTO.id,
       name: headerDataDTO.name,
-      collaborators: headerDataDTO.collaborators,
-      createdOn: this.formatDate(headerDataDTO.createdOn),
       numberOfAccounts: headerDataDTO.numberOfAccounts,
       ownerFirstName: headerDataDTO.owner.firstName,
-      ownerLastName: headerDataDTO.owner.lastName,
-      updatedOn: this.formatDate(headerDataDTO.updatedOn)
+      ownerLastName: headerDataDTO.owner.lastName
     };
   }
 
@@ -34,17 +31,12 @@ export class ListsTransformerService {
     const storeData: StoreDetailsRow = {
       address: store.address,
       city: store.city,
-      name: store.number,
+      name: store.name,
       number: store.number,
       postalCode: store.postalCode,
       premiseType: store.premiseType,
       state : store.state
     };
     return storeData;
-  }
-
-  private formatDate(date: string, format?: string) {
-    const _format = format || this.defaultDateFormat;
-    return moment(date).format(_format);
   }
 }

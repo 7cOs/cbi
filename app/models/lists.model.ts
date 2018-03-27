@@ -12,12 +12,9 @@ export interface StoreHeaderDetails {
   description: string;
   id: number;
   name: string;
-  collaborators: Array<Collaborators>;
-  createdOn: string;
   numberOfAccounts: number;
   ownerFirstName: string;
   ownerLastName: string;
-  updatedOn: string;
 }
 
 export interface Owner {
