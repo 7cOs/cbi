@@ -413,24 +413,14 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   /**
-   * Getter method to return body element
+   * Set focus to body element
    * @param WebElement
    * @author SKARNEH
    * @category WORKAROUND
    */
-  public WebElement getBody() {
-    return body;
-  }
-
-  /**
-   * Clicks element to set focus to element
-   * @param WebElement
-   * @author SKARNEH
-   * @category WORKAROUND
-   */
-  public boolean dismissStrayBackdropElement (WebElement element) {
+  public boolean dismissStrayBackdropElement () {
     try {
-      element.click();
+      body.click();
       return true;
     } catch (Exception x) {
       x.printStackTrace();
