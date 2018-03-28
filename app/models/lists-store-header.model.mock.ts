@@ -1,5 +1,5 @@
 import * as Chance from 'chance';
-import { Collaborators, StoreHeaderDetails } from './lists.model';
+import { StoreHeaderDetails } from './lists.model';
 
 let chance = new Chance();
 

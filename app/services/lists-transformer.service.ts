@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import * as moment from 'moment';
 
 import { ListStoreDTO } from '../models/lists-store-dto.model';
 import { StoreDetailsRow, StoreHeaderDetails } from '../models/lists.model';
@@ -8,7 +7,6 @@ import { StoreHeaderInfoDTO } from '../models/lists-store-header-dto.model';
 
 @Injectable()
 export class ListsTransformerService {
-  private defaultDateFormat: string;
 
   constructor() { }
 

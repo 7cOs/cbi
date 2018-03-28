@@ -46,7 +46,6 @@ describe('Lists Effects', () => {
   };
 
   beforeEach(() => {
-    let listIdMock = chance.string();
     error = new Error(chance.string());
 
     TestBed.configureTestingModule({
