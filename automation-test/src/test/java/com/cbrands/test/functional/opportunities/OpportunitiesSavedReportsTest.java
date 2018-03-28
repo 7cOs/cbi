@@ -200,8 +200,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       dependsOnMethods = "createSavedReport",
       dataProvider = "createDuplicateReportData"
   )
-  public void attemptToCreateWithDuplicateName(String reportName, String distributor) {    
-    opportunitiesPage = this.setUpNewSavedReport(reportName, distributor);
+  public void attemptToCreateWithDuplicateName(String existingReportName, String distributor) {    
+    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
             .enterDistributorSearchText(distributor)
@@ -210,7 +210,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
             .clickApplyFiltersButton()
             .waitForLoaderToDisappear()
             .clickSaveReportLink()
-            .enterReportName(reportName)
+            .enterReportName(existingReportName)
             .clickSave();
 
     Assert.assertTrue(
@@ -218,20 +218,20 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       "Failed to display error when attempting to use the name of an existing report."
     );
 
-    String editedReportName = generateNewEditedReportName(reportName);
-    opportunitiesPage = savedReportModal.enterReportName(editedReportName)
+    final String nonDuplicateReportName = generateNewEditedReportName(existingReportName);
+    opportunitiesPage = savedReportModal.enterReportName(nonDuplicateReportName)
        .clickSave()
        .waitForModalToClose();
     
     Assert.assertTrue(
-        opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
-        getDeleteFailureMessage(editedReportName, "Opportunities")
+        opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(nonDuplicateReportName),
+        getCreateFailureMessage(nonDuplicateReportName, "Opportunities")
       );
 
     homePage.goToPage();
     Assert.assertTrue(
-      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
-      getDeleteFailureMessage(editedReportName, "Home")
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(nonDuplicateReportName),
+      getCreateFailureMessage(nonDuplicateReportName, "Home")
     );    
   }  
 
