@@ -1,5 +1,6 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
@@ -10,7 +11,7 @@ import { COMPASS_ALERT_MODAL_INPUTS } from './compass-alert-modal.tokens';
 
 const chance = new Chance();
 
-describe('Compass Modal Component', () => {
+describe('Compass Alert Modal Component', () => {
   let fixture: ComponentFixture<CompassAlertModalComponent>;
   let componentInstance: CompassAlertModalComponent;
   let fixtureDebugElement: DebugElement;
@@ -60,9 +61,21 @@ describe('Compass Modal Component', () => {
     fixtureDebugElement = fixture.debugElement;
 
     fixture.detectChanges();
+  });
 
-    compassModalServiceMock.showAlertModalDialog.calls.reset();
-    compassModalOverlayMock.closeModal.calls.reset();
+  describe('Compass Alert Modal Inputs', () => {
+    it('should contain a title element when the injection has a title', () => {
+      let titleElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-title'));
+
+      expect(titleElement).not.toBe(null);
+      expect(titleElement.nativeElement.textContent).toBe(compassModalInputsMock.title);
+
+      componentInstance.modalInputs.title = undefined;
+      fixture.detectChanges();
+      titleElement = fixture.debugElement.query(By.css('.compass-modal-title'));
+
+      expect(titleElement).toBe(null);
+    });
   });
 
   describe('Compass Modal Events', () => {
