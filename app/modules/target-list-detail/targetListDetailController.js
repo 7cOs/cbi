@@ -45,7 +45,6 @@ module.exports = /*  @ngInject */
     // Services
     vm.targetListService = targetListService;
     vm.userService = userService;
-    vm.compassModalService = compassModalService;
 
     // Set page title for head and nav
     title.setTitle($state.current.title);
@@ -331,10 +330,10 @@ module.exports = /*  @ngInject */
 
     function showActionModal(actionLabel) {
         let compassModalOverlayRef;
-        if (actionLabel === 'archive') {
-          compassModalOverlayRef = compassModalService.showModalDialog(vm.archiveModalStringInputs, vm.modalSettings);
-        } else if (actionLabel === 'delete') {
-          compassModalOverlayRef = compassModalService.showModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
+        if (actionLabel === 'Archive') {
+          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs, vm.modalSettings);
+        } else if (actionLabel === 'Delete') {
+          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
         }
 
         compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)

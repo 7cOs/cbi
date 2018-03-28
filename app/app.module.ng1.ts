@@ -9,7 +9,7 @@ import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
 import { AppUpgradeAdapter } from './app.module';
 import { CompassCardComponent } from './shared/components/compass-card/compass-card.component';
-import { CompassModalComponent } from './shared/components/compass-modal/compass-modal.component';
+import { CompassAlertModalComponent } from './shared/components/compass-modal/compass-alert-modal.component';
 import { CompassModalService } from './services/compass-modal.service';
 import { CompassTooltipComponent } from './shared/components/compass-tooltip/compass-tooltip.component';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
@@ -46,7 +46,7 @@ export default angular.module('cf', [
   .directive('myPerformance', AppUpgradeAdapter.downgradeNg2Component(MyPerformanceComponent) as IDirectiveFactory)
   .directive('settings', AppUpgradeAdapter.downgradeNg2Component(SettingsComponent) as IDirectiveFactory)
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
-  .directive('compassModal', AppUpgradeAdapter.downgradeNg2Component(CompassModalComponent) as IDirectiveFactory)
+  .directive('compassAlertModal', AppUpgradeAdapter.downgradeNg2Component(CompassAlertModalComponent) as IDirectiveFactory)
   .factory('dateRangeService', downgradeInjectable(DateRangeService))
   .factory('analyticsService', downgradeInjectable(AnalyticsService))
   .factory('compassModalService', downgradeInjectable(CompassModalService))

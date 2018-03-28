@@ -23,7 +23,7 @@ describe('Unit: targetListDetailController', function() {
 
     angular.mock.module(($provide) => {
       compassModalService = {
-        showModalDialog: () => {}
+        showAlertModalDialog: () => {}
       };
       $provide.value('compassModalService', compassModalService);
     });
@@ -232,7 +232,6 @@ describe('Unit: targetListDetailController', function() {
     expect(chipsService).not.toBeUndefined();
     expect(filtersService).not.toBeUndefined();
     expect(opportunitiesService).not.toBeUndefined();
-    expect(ctrl.compassModalService).not.toBeUndefined();
   });
 
   it('should expose public methods', function() {
@@ -295,9 +294,6 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.sendGoogleAnalytics).not.toBeUndefined();
     expect(typeof (ctrl.sendGoogleAnalytics)).toEqual('function');
-
-    expect(ctrl.showActionModal).not.toBeUndefined();
-    expect(typeof (ctrl.showActionModal)).toEqual('function');
 
   });
 

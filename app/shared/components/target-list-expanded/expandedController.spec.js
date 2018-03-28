@@ -20,7 +20,7 @@ describe('Unit: expanded target list controller', function() {
 
     angular.mock.module(($provide) => {
       compassModalService = {
-        showModalDialog: () => {}
+        showAlertModalDialog: () => {}
       };
       $provide.value('compassModalService', compassModalService);
     });
@@ -540,7 +540,7 @@ describe('Unit: expanded target list controller', function() {
             ]
           }
         ];
-        spyOn(compassModalService, 'showModalDialog').and.callFake(() => {});
+        spyOn(compassModalService, 'showAlertModalDialog').and.callFake(() => {});
         httpBackend.expectGET('/v2/targetLists').respond(200);
 
         spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
@@ -681,7 +681,7 @@ describe('Unit: expanded target list controller', function() {
           };
         });
 
-      spyOn(compassModalService, 'showModalDialog').and.callFake(() => {});
+      spyOn(compassModalService, 'showAlertModalDialog').and.callFake(() => {});
       spyOn(toastService, 'showToast').and.callThrough();
 
       spyOn(analyticsService, 'trackEvent').and.callFake(() => {});

@@ -67,8 +67,8 @@ div.modal.target-list-modal
           label="{{tld.listID}}") Yes, Leave
       a.hide-row(ng-click="tld.removeFooterToast(); tld.leave = false")
   div.modal-footer.clearfix(ng-if="tld.editable" ng-class="{'toasted': tld.showToast}")
-    button.link.align-left(ng-click="tld.showActionModal('archive');tld.closeModal(true);") Archive List
-    button.link.align-right(ng-click="tld.showActionModal('delete');tld.closeModal(true);"
+    button.link.align-left(ng-click="tld.showActionModal(tld.archiveModalStringInputs.acceptLabel);tld.closeModal(true);") Archive List
+    button.link.align-right(ng-click="tld.showActionModal(tld.deleteModalStringInputs.acceptLabel);tld.closeModal(true);"
                             ng-disabled="tld.targetListService.model.currentList.collaborators.length > 1 || tld.pendingShares.length > 0") Delete List
   div.success(ng-if="tld.confirmToast")
     h4 Success!

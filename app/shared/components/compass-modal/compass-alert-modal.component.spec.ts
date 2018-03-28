@@ -3,18 +3,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 
 import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
-import { CompassModalComponent } from './compass-modal.component';
-import { CompassModalInputs } from '../../../models/compass-modal-inputs.model';
+import { CompassAlertModalComponent } from './compass-alert-modal.component';
+import { CompassAlertModalInputs } from '../../../models/compass-alert-modal-inputs.model';
 import { CompassModalService } from '../../../services/compass-modal.service';
-import { COMPASS_MODAL_INPUTS } from './compass-modal.tokens';
+import { COMPASS_ALERT_MODAL_INPUTS } from './compass-alert-modal.tokens';
 
 const chance = new Chance();
 
 describe('Compass Modal Component', () => {
-  let fixture: ComponentFixture<CompassModalComponent>;
-  let componentInstance: CompassModalComponent;
+  let fixture: ComponentFixture<CompassAlertModalComponent>;
+  let componentInstance: CompassAlertModalComponent;
   let fixtureDebugElement: DebugElement;
-  let compassModalInputsMock: CompassModalInputs;
+  let compassModalInputsMock: CompassAlertModalInputs;
 
   let titleInputMock: string;
   let bodyInputMock: string;
@@ -26,18 +26,18 @@ describe('Compass Modal Component', () => {
   };
 
   const compassModalServiceMock = {
-    showModalDialog: jasmine.createSpy('showModalDialog').and.callFake(() => compassModalOverlayMock)
+    showAlertModalDialog: jasmine.createSpy('showAlertModalDialog').and.callFake(() => compassModalOverlayMock)
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompassModalComponent ],
+      declarations: [ CompassAlertModalComponent ],
       providers: [{
         provide: CompassModalService,
         useValue: compassModalServiceMock
       },
       {
-        provide: COMPASS_MODAL_INPUTS,
+        provide: COMPASS_ALERT_MODAL_INPUTS,
         userValue: compassModalInputsMock
       }]
     });
@@ -54,20 +54,20 @@ describe('Compass Modal Component', () => {
       rejectLabel: rejectLabelMock
     };
 
-    fixture = TestBed.createComponent(CompassModalComponent);
+    fixture = TestBed.createComponent(CompassAlertModalComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.modalInputs = compassModalInputsMock;
     fixtureDebugElement = fixture.debugElement;
 
     fixture.detectChanges();
 
-    compassModalServiceMock.showModalDialog.calls.reset();
+    compassModalServiceMock.showAlertModalDialog.calls.reset();
     compassModalOverlayMock.closeModal.calls.reset();
   });
 
   describe('Compass Modal Events', () => {
-    it('should reach out to the CompassModalService and call showModalDialog with a particular CompassModalInputs', () => {
-      const expectedModalInputs: CompassModalInputs = {
+    it('should reach out to the CompassModalService and call showAlertModalDialog with a particular CompassAlertModalInputs', () => {
+      const expectedModalInputs: CompassAlertModalInputs = {
         title: titleInputMock,
         body: bodyInputMock,
         acceptLabel: acceptLabelMock,
@@ -77,9 +77,9 @@ describe('Compass Modal Component', () => {
         hasBackdrop: true
       };
 
-      compassModalServiceMock.showModalDialog(expectedModalInputs, expectedOverlayConfig);
+      compassModalServiceMock.showAlertModalDialog(expectedModalInputs, expectedOverlayConfig);
 
-      expect(compassModalServiceMock.showModalDialog).toHaveBeenCalledWith(
+      expect(compassModalServiceMock.showAlertModalDialog).toHaveBeenCalledWith(
         expectedModalInputs,
         expectedOverlayConfig
       );

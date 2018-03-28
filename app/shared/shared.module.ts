@@ -6,7 +6,7 @@ import { MatCardModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSid
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { CompassCardComponent }  from './components/compass-card/compass-card.component';
-import { CompassModalComponent } from './components/compass-modal/compass-modal.component';
+import { CompassAlertModalComponent } from './components/compass-modal/compass-alert-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
 import { CompassOverlayService } from '../services/compass-overlay.service';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
@@ -27,7 +27,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     OverlayModule
   ],
   exports: [
-    CompassModalComponent,
+    CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
@@ -39,7 +39,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
   ],
   declarations: [
     CompassCardComponent,
-    CompassModalComponent,
+    CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
@@ -52,7 +52,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     CompassTooltipService
   ],
   entryComponents: [
-    CompassModalComponent,
+    CompassAlertModalComponent,
     CompassTooltipPopupComponent
   ]
 })

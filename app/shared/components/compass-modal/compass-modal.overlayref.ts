@@ -1,9 +1,9 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { CompassModalComponent } from './compass-modal.component';
+import { CompassAlertModalComponent } from './compass-alert-modal.component';
 
 export class CompassModalOverlayRef {
-  public modalInstance: CompassModalComponent;
+  public modalInstance: CompassAlertModalComponent;
 
   constructor(private overlayRef: OverlayRef) { }
 

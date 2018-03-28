@@ -428,10 +428,10 @@ module.exports = /*  @ngInject */
 
     function showActionModal(actionLabel) {
       let compassModalOverlayRef;
-      if (actionLabel === 'archive') {
-        compassModalOverlayRef = compassModalService.showModalDialog(vm.archiveModalStringInputs, vm.modalSettings);
-      } else if (actionLabel === 'delete') {
-        compassModalOverlayRef = compassModalService.showModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
+      if (actionLabel === 'Archive') {
+        compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs, vm.modalSettings);
+      } else if (actionLabel === 'Delete') {
+        compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
       }
 
       let eventPromise = compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance);
