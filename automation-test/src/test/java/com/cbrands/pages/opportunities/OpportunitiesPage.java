@@ -416,9 +416,8 @@ public class OpportunitiesPage extends TestNGBasePage {
    * Set focus to body element
    * @param WebElement
    * @author SKARNEH
-   * @category WORKAROUND
    */
-  public boolean dismissStrayBackdropElement () {
+  public boolean dismissStrayBackdropElement() {
     try {
       body.click();
       return true;
