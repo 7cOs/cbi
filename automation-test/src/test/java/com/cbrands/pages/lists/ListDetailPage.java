@@ -1,4 +1,4 @@
-package com.cbrands.pages.targetList;
+package com.cbrands.pages.lists;
 
 import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.WebDriver;
@@ -10,7 +10,7 @@ import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class TargetListDetailPage extends TestNGBasePage {
+public class ListDetailPage extends TestNGBasePage {
 
   private final WebDriver driver;
 
@@ -20,7 +20,7 @@ public class TargetListDetailPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//button[contains(.,'Manage')]")
   private WebElement targetListManageButton;
 
-  public TargetListDetailPage(WebDriver driver) {
+  public ListDetailPage(WebDriver driver) {
     this.driver = driver;
   }
 
@@ -35,9 +35,9 @@ public class TargetListDetailPage extends TestNGBasePage {
     Assert.fail("The Target List detail page cannot be loaded directly without a specified Target List.");
   }
 
-  public EditTargetListModal clickManageButton() {
+  public ListManagementModal clickManageButton() {
     waitForElementToClickable(targetListManageButton, true).click();
 
-    return PageFactory.initElements(driver, EditTargetListModal.class);
+    return PageFactory.initElements(driver, ListManagementModal.class);
   }
 }
