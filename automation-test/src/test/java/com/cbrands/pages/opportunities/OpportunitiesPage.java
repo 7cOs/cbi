@@ -48,6 +48,9 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = "//md-select[@placeholder='Select Saved Report']")
   private WebElement savedReportsDropdown;
+  
+  @FindBy(how = How.XPATH, using = "//body")
+  private WebElement body;
 
   public OpportunitiesPage(WebDriver driver) {
     this.driver = driver;
@@ -111,8 +114,7 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private void enterSearchTextFor(WebElement searchFilter, String searchText) {
     final WebElement searchField = getSearchFilterTextBox(searchFilter);
-    waitForElementToClickable(searchField, true).click();
-    searchField.sendKeys(searchText);
+    enterKeys( searchField, searchText );
   }
 
   public OpportunitiesPage clickSearchForChainRetailer() {
@@ -132,7 +134,7 @@ public class OpportunitiesPage extends TestNGBasePage {
 
   private void clickSearchInFilter(WebElement filter) {
     waitForElementToClickable(
-      filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]")),
+      filter.findElement(By.xpath(".//input[contains(@class, 'submit-btn') and contains(@class, 'visible')]")),
       true
     ).click();
   }
@@ -422,5 +424,20 @@ public class OpportunitiesPage extends TestNGBasePage {
 
       return numberOfSavedReports;
     }
+  }
+
+  /**
+   * Set focus to body element
+   * @param WebElement
+   * @author SKARNEH
+   */
+  public boolean dismissStrayBackdropElement() {
+    try {
+      body.click();
+      return true;
+    } catch (Exception x) {
+      x.printStackTrace();
+    }
+    return false;
   }
 }
