@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { Subject } from 'rxjs/Subject';
+import * as ListsActions from '../../state/actions//lists.action';
 
 const chance = new Chance();
 
@@ -30,6 +31,9 @@ describe('ListDetailComponent', () => {
     listDetails: listDetailMock,
     current: {
       title: chance.string()
+    },
+    params: {
+      id: chance.string()
     }
   };
 
@@ -67,15 +71,22 @@ describe('ListDetailComponent', () => {
   });
 
   describe('ListDetailComponent initialization', () => {
- /*   let store: any;
-
-    beforeEach(inject([ Store ],
-      ( _store: any) => {
-        store = _store;
-      }));*/
 
     it('should call setTitle', () => {
       expect(titleMock.setTitle).toHaveBeenCalledWith(stateMock.current.title);
+    });
+
+    it('should dispatch actions for fetching stores and list headers', () => {
+      storeMock.dispatch.calls.reset();
+      componentInstance.ngOnInit();
+
+      expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
+        listId : stateMock.params.id
+      }));
+      expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ListsActions.FetchHeaderDetails({
+        listId : stateMock.params.id
+      }));
     });
   });
 });
