@@ -34,7 +34,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage.goToPage();
     opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
     Assert.assertTrue(
-        opportunitiesPage.dismissStrayBackdropElement(opportunitiesPage.getBody()),
+        opportunitiesPage.dismissStrayBackdropElement(),
         "Error resetting focus to element"
       );
   }
@@ -121,7 +121,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public void editSavedReport(String originalReportName, String distributor) {
     opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
 
-    final String editedReportName = "EDITED " + originalReportName;
+    final String editedReportName = generateNewEditedReportName(originalReportName);
     opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .openModalForSavedReportWithName(originalReportName)

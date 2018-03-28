@@ -218,8 +218,22 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   public OpportunitiesPage clickResetFilters() {
-    waitForElementToClickable(resetFiltersButton, true).click();
+    if (isBrowserTypeIE()) {
+      clickResetTwiceForIE();
+    } else {
+      waitForElementToClickable(resetFiltersButton, true).click();
+    }
     return this;
+  }
+
+  /**
+   * Workaround for IE-specific bug where the reset button does not respond on the first click. \
+   * Remove this workaround when fixed.
+   * See Rally ticket DE7088.
+   */
+  private void clickResetTwiceForIE() {
+    waitForElementToClickable(resetFiltersButton, true).click();
+    waitForElementToClickable(resetFiltersButton, true).click();
   }
 
   public OpportunitiesPage removeAccountScopeChip() {
@@ -413,24 +427,13 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
 
   /**
-   * Getter method to return body element
+   * Set focus to body element
    * @param WebElement
    * @author SKARNEH
-   * @category WORKAROUND
    */
-  public WebElement getBody() {
-    return body;
-  }
-
-  /**
-   * Clicks element to set focus to element
-   * @param WebElement
-   * @author SKARNEH
-   * @category WORKAROUND
-   */
-  public boolean dismissStrayBackdropElement (WebElement element) {
+  public boolean dismissStrayBackdropElement() {
     try {
-      element.click();
+      body.click();
       return true;
     } catch (Exception x) {
       x.printStackTrace();
