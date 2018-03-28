@@ -1,23 +1,25 @@
+@import '../../../assets/styles/base/variables';
+
 .compass-modal {
   width: 400px;
   min-height: 280px;
   border-radius: 4px;
-  background-color: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  background-color: $white;
+  box-shadow: 0 1px 2px 0 $gray-1;
 }
 
 .compass-modal-title {
   height: 28px;
-  font-family: Roboto;
+  font-family: $roboto;
   font-size: 21px;
   line-height: 1.52;
   text-align: left;
-  color: #4a4a4a;
+  color: $gray-1;
   float: left;
 }
 
 .compass-modal-header {
-  padding: 20px;
+  padding: 30px;
 }
 
 .X-modal-btn {
@@ -33,12 +35,17 @@
 .compass-modal-body {
   width: 340px;
   height: 42px;
-  padding: 20px;
-  font-family: Roboto;
+  padding: 30px;
+  font-family: $roboto;
   font-size: 14px;
   line-height: 1.5;
   text-align: left;
-  color: #4a4a4a;
+  color: $gray-1;
+
+  p {
+    font-family: $roboto;
+    font-size: 14px;
+  }
 }
 
 .compass-modal-action-bar {
