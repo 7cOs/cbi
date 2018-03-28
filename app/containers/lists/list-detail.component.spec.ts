@@ -1,5 +1,5 @@
 import * as Chance from 'chance';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 
 import { ListDetailComponent } from './list-detail.component';
@@ -12,7 +12,7 @@ import * as ListsActions from '../../state/actions//lists.action';
 
 const chance = new Chance();
 
-describe('ListDetailComponent', () => {
+fdescribe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
   let listDetailMock: ListsState = {
@@ -72,8 +72,28 @@ describe('ListDetailComponent', () => {
 
   describe('ListDetailComponent initialization', () => {
 
+    let store: any;
+    beforeEach(inject([ Store ],
+      (_store: any) => {
+        store = _store;
+      }));
+
     it('should call setTitle', () => {
       expect(titleMock.setTitle).toHaveBeenCalledWith(stateMock.current.title);
+    });
+
+    fit('should call select with the right arguments', () => {
+      storeMock.dispatch.calls.reset();
+      storeMock.select.calls.reset();
+      listsSubject.next(stateMock.listDetails);
+      componentInstance.ngOnInit();
+
+      expect(storeMock.select.calls.count()).toBe(1);
+      const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
+      console.log(functionPassToSelectCall0);
+      console.log(functionPassToSelectCall0(stateMock));
+      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.listDetails);
+      expect(store.select).toHaveBeenCalled();
     });
 
     it('should dispatch actions for fetching stores and list headers', () => {
