@@ -1,4 +1,4 @@
-package com.cbrands.pages.targetList;
+package com.cbrands.pages.lists;
 
 import com.cbrands.pages.TestNGBasePage;
 import org.apache.commons.logging.Log;
@@ -14,13 +14,13 @@ import java.util.List;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class TargetListListingsPage extends TestNGBasePage {
+public class ListsPage extends TestNGBasePage {
   private static final String LOADER_XPATH = "//loader";
 
   private final WebDriver driver;
-  protected Log log = LogFactory.getLog(TargetListListingsPage.class);
+  protected Log log = LogFactory.getLog(ListsPage.class);
 
-  @FindBy(how = How.XPATH, using = "//h1[text()='Target Lists']")
+  @FindBy(how = How.XPATH, using = "//h1[text()='Lists']")
   private WebElement listingsHeader;
 
   @FindBy(how = How.XPATH, using = "//button[contains(., 'Delete')]")
@@ -30,9 +30,9 @@ public class TargetListListingsPage extends TestNGBasePage {
   private WebElement createNewListButton;
 
   @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
-  private List<WebElement> targetListElements;
+  private List<WebElement> listElements;
 
-  public TargetListListingsPage(WebDriver driver) {
+  public ListsPage(WebDriver driver) {
     this.driver = driver;
   }
 
@@ -45,20 +45,20 @@ public class TargetListListingsPage extends TestNGBasePage {
 
   @Override
   protected void load() {
-    driver.get(webAppBaseUrl + "/target-lists");
+    driver.get(webAppBaseUrl + "/lists");
   }
 
-  public TargetListListingsPage clickDeleteButton() {
+  public ListsPage clickDeleteButton() {
     waitForElementToClickable(deleteButton, true).click();
     return this;
   }
 
-  public TargetListSwitchModal clickCreateNewListButton() {
+  public ListsSwitchModal clickCreateNewListButton() {
     waitForVisibleFluentWait(createNewListButton).click();
-    return new TargetListSwitchModal();
+    return new ListsSwitchModal();
   }
 
-  public boolean doesTargetListExist(String listname) {
+  public boolean doesListExist(String listname) {
     WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
     waitForElementVisible(element, true);
 
@@ -73,60 +73,60 @@ public class TargetListListingsPage extends TestNGBasePage {
     return false;
   }
 
-  public TargetListDetailPage clickTargetListByName(String listName) {
-    WebElement targetListElement = getTargetListByName(listName);
+  public ListDetailPage clickListByName(String listName) {
+    WebElement listElement = getListByName(listName);
 
-    if (null != targetListElement) {
-      targetListElement.click();
+    if (null != listElement) {
+      listElement.click();
     } else {
-      log.info("Cannot click Target List. No target list found by the following name: " + listName);
+      log.info("Cannot click List. No list found by the following name: " + listName);
     }
 
-    return PageFactory.initElements(driver, TargetListDetailPage.class);
+    return PageFactory.initElements(driver, ListDetailPage.class);
   }
 
-  public TargetListListingsPage selectTargetListByName(String listName) {
-    final WebElement targetList = getTargetListByName(listName);
+  public ListsPage selectCheckboxByListName(String listName) {
+    final WebElement list = getListByName(listName);
 
-    if (null != targetList) {
-      final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox"));
-      targetListCheckBox.click();
-      waitForElementAttributeToContain(targetListCheckBox, "aria-checked", "true");
+    if (null != list) {
+      final WebElement listCheckBox = list.findElement(By.xpath("./div[1]/md-checkbox"));
+      listCheckBox.click();
+      waitForElementAttributeToContain(listCheckBox, "aria-checked", "true");
     } else {
-      log.info("Cannot select Target List checkbox. No target list found by the following name: " + listName);
+      log.info("Cannot select List checkbox. No list found by the following name: " + listName);
     }
 
     return this;
   }
 
-  private WebElement getTargetListByName(String listName) {
-    WebElement targetListElement = null;
+  private WebElement getListByName(String listName) {
+    WebElement listElement = null;
 
-    for (WebElement element : targetListElements) {
+    for (WebElement element : listElements) {
       final String elementTitle = element.findElement(By.xpath("./div/div[@class='stats']/div/h4[1]")).getText();
       if (elementTitle.equalsIgnoreCase(listName)) {
-        targetListElement = element;
+        listElement = element;
         break;
       }
 
     }
 
-    return targetListElement;
+    return listElement;
   }
 
-  public class TargetListSwitchModal {
+  public class ListsSwitchModal {
     private static final String MODAL_XPATH = "//div[@class='modal target-list-switch-modal']";
 
     private WebElement modal;
 
-    public TargetListSwitchModal() {
+    public ListsSwitchModal() {
       final By modalHandle = By.xpath(MODAL_XPATH);
       modal = waitForVisibleFluentWait(modalHandle);
     }
 
-    public EditTargetListModal chooseCreateNewList() {
+    public ListManagementModal chooseCreateNewList() {
       waitForElementToClickable(modal.findElement(By.xpath("//button[contains(., 'Create New List')]")), true).click();
-      return PageFactory.initElements(driver, EditTargetListModal.class);
+      return PageFactory.initElements(driver, ListManagementModal.class);
     }
   }
 }
