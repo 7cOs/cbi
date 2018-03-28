@@ -12,7 +12,7 @@ import * as ListsActions from '../../state/actions//lists.action';
 
 const chance = new Chance();
 
-fdescribe('ListDetailComponent', () => {
+describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
   let listDetailMock: ListsState = {
@@ -28,7 +28,7 @@ fdescribe('ListDetailComponent', () => {
   };
 
   const stateMock = {
-    listDetails: listDetailMock,
+    listsDetails: listDetailMock,
     current: {
       title: chance.string()
     },
@@ -82,17 +82,15 @@ fdescribe('ListDetailComponent', () => {
       expect(titleMock.setTitle).toHaveBeenCalledWith(stateMock.current.title);
     });
 
-    fit('should call select with the right arguments', () => {
+    it('should call select with the right arguments', () => {
       storeMock.dispatch.calls.reset();
       storeMock.select.calls.reset();
-      listsSubject.next(stateMock.listDetails);
+      listsSubject.next(stateMock.listsDetails);
       componentInstance.ngOnInit();
 
       expect(storeMock.select.calls.count()).toBe(1);
       const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
-      console.log(functionPassToSelectCall0);
-      console.log(functionPassToSelectCall0(stateMock));
-      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.listDetails);
+      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.listsDetails);
       expect(store.select).toHaveBeenCalled();
     });
 

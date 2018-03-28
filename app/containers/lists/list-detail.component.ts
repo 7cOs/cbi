@@ -42,5 +42,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.listDetailSubscription.unsubscribe();
+  }
 }
