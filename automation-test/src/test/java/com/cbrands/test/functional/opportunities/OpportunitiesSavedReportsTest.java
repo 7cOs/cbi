@@ -7,6 +7,9 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -15,6 +18,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.util.List;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private static final int MAX_SAVED_REPORT_LIMIT = 10;
@@ -199,28 +203,40 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       description = "Attempting to edit a Saved Report to an existing name",
       dependsOnMethods = "createSavedReport",
       dataProvider = "createDuplicateReportData"
-    )
-  public void attemptToCreateWithDuplicateName(String existingReportName, String distributor) {    
-    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
+  )
+  public void attemptToCreateWithDuplicateName(String reportName, String distributor) {    
+    opportunitiesPage = this.setUpNewSavedReport(reportName, distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
-      .clickSavedReportsDropdown()
-      .openModalForSavedReportWithName(existingReportName)
-      .enterNewReportName(existingReportName)
-      .clickSave();
+            .enterDistributorSearchText(distributor)
+            .clickSearchForDistributor()
+            .clickFirstDistributorResult()
+            .clickApplyFiltersButton()
+            .waitForLoaderToDisappear()
+            .clickSaveReportLink()
+            .enterReportName(reportName)
+            .clickSave();
 
     Assert.assertTrue(
       savedReportModal.isDuplicateNameErrorDisplayed(),
       "Failed to display error when attempting to use the name of an existing report."
     );
 
-    opportunitiesPage = savedReportModal.enterNewReportName(
-          generateNewEditedReportName(existingReportName))
-        .clickSave()
-        .waitForModalToClose();
+    String editedReportName = generateNewEditedReportName(reportName);
+    opportunitiesPage = savedReportModal.enterReportName(editedReportName)
+       .clickSave()
+       .waitForModalToClose();
+    
+    Assert.assertTrue(
+        opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+        getDeleteFailureMessage(editedReportName, "Opportunities")
+      );
 
-    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(distributor), 
-        "Opportunites filtered when attempting to use name of existing report");    
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(editedReportName),
+      getDeleteFailureMessage(editedReportName, "Home")
+    );    
   }  
 
   @Test(
