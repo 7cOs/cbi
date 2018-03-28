@@ -7,9 +7,6 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -18,7 +15,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.util.List;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private static final int MAX_SAVED_REPORT_LIMIT = 10;
