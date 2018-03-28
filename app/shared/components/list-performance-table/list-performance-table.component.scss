@@ -202,11 +202,19 @@ th {
 
 /deep/.right-col {
   text-align: center;
-  width: 14%;
+  width: 10%;
+  padding-top: 20px;
+}
 
-  &.opportunities {
-    width: 12%;
-  }
+/deep/.segment-col {
+  text-align: center;
+  width: 15%;
+  min-width: 0 px;
+  padding-top: 20px;
+}
+
+/deep/.checkbox-col {
+  padding: 20px;
 }
 
 tr.one-right-column-present {
@@ -247,11 +255,6 @@ tr.two-right-columns-present {
   }
 }
 
-.performance-table-wrapper {
-  width: 50%;
-  min-width: $table-width;
-  display: inline-block;
-}
 
 .performance-table-summary {
   box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.05);
@@ -267,40 +270,14 @@ tr.two-right-columns-present {
   height: $row-height;
   border-bottom: 1px solid $gray-10;
   text-transform: uppercase;
+  background-color: #002d61;
+  color: $white;
 
   /deep/.left-col,
   /deep/.center-col,
   /deep/.right-col {
     font-weight: $semibold;
-  }
-}
-
-.dismissible-total-row {
-  height: $row-height;
-  border-bottom: 1px solid $gray-10;
-  border-right: 1px solid $gray-10;
-  text-transform: uppercase;
-
-  /deep/.left-col {
-    color: $blue;
-  }
-
-  &:hover {
-    /deep/td {
-      background-color: $light-blue-4;
-    }
-  }
-
-  &.selected {
-    background-color: $light-blue-4;
-
-    /deep/.left-col,
-    /deep/.center-col,
-    /deep/.right-col {
-      font-weight: $semibold;
-      color: $gray-1;
-      background-color: $light-blue-4;
-    }
+    background-color: #002d61;
   }
 }
 

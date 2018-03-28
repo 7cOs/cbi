@@ -14,6 +14,7 @@ import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
+import { MatCheckboxModule, MatCheckboxChange } from '@angular/material';
 
 interface SortWeightArray {
   index: number;
@@ -50,20 +51,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   @Input() showOpportunities: boolean = false;
   @Input() opportunitiesError: boolean = false;
   @Input() showContributionToVolume: boolean = false;
-  @Input() tableHeaderRow: Array<string> = ['Store', 'Distributor', 'Segment', 'Depeltions', ' Effective POD', 'Last Depletion'];
-  @Input() totalRow: ListPerformanceTableRow = {
-    descriptionRow0: 'descrow0',
-    descriptionRow1: 'descrow1',
-    descriptionRow2: 'descrow2',
-    metricColumn0: 0,
-    metricColumn1: 1,
-    metricColumn2: 2,
-    metricColumn3: 3,
-    metricColumn4: 4,
-    metricColumn5: 5,
-    depletionDate: '2017-08-01',
-    performanceError: false
-  };
+  @Input() tableHeaderRow: Array<string> = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
+  @Input() totalRow: ListPerformanceTableRow;
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() loadingState: LoadingState.Loaded;
 
@@ -74,6 +63,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public rippleColor: string = 'rgba(17, 119, 184, 0.05)';
   public tableClasses: CssClasses = {};
 
+  private selectedListItems: Array<ListPerformanceTableRow> = [];
+
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -83,13 +74,12 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   constructor (private calculatorService: CalculatorService) { }
 
   public ngOnInit() {
-    this.tableClasses = this.getTableClasses(this.viewType, this.loadingState);
+    this.tableClasses = this.getTableClasses(this.loadingState);
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    const viewType = changes.viewType ? changes.viewType.currentValue : this.viewType;
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
-    this.tableClasses = this.getTableClasses(viewType, loadingState);
+    this.tableClasses = this.getTableClasses(loadingState);
   }
 
   public getTableBodyClasses(): string {
@@ -115,6 +105,12 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   public onRowClicked(type: RowType, index: number, row?: ListPerformanceTableRow) {
       this.onElementClicked.emit({type: type, index: index, row: row});
+  }
+
+  public selectAllStores(event: MatCheckboxChange) {
+    this.sortedTableData.forEach(function(row) {
+      row.checked = event.checked;
+    } );
   }
 
   public getSubHeaderClasses(): string {
@@ -147,9 +143,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
     return style;
   }
 
-  private getTableClasses(viewType: SalesHierarchyViewType | ProductMetricsViewType, loadingState: LoadingState): CssClasses {
+  private getTableClasses(loadingState: LoadingState): CssClasses {
     return {
-      [`view-type-${viewType}`]: true,
       [loadingState]: true
     };
   }

@@ -12,15 +12,30 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   {
     descriptionRow0: 'descrow0',
     descriptionRow1: 'descrow1',
-    descriptionRow2: 'descrow2',
+    descriptionRow2: 'B',
     metricColumn0: 0,
     metricColumn1: 1,
     metricColumn2: 2,
     metricColumn3: 3,
     metricColumn4: 4,
     metricColumn5: 5,
-    depletionDate: '2017-08-01'
+    depletionDate: '2017-08-01',
+    checked: false
   } ];
+
+  public totalRow = {
+    descriptionRow0: 'Total',
+    descriptionRow1: '',
+    descriptionRow2: '',
+    metricColumn0: 0,
+    metricColumn1: 1,
+    metricColumn2: 2,
+    metricColumn3: 3,
+    metricColumn4: 4,
+    metricColumn5: 5,
+    depletionDate: '',
+    performanceError: false
+  };
 
   constructor(
     private titleService: Title,

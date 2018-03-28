@@ -7,26 +7,28 @@ div
     thead.col-100-pct
 
       tr.top-header.col-100-pct
+        th(colspan=1)
+          mat-checkbox(aria-label="Select All Stores",
+          (change)="selectAllStores($event)")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow1)")
           span {{ tableHeaderRow[1] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow1)")
-        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow2)")
+        th.segment-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow2)")
           span {{ tableHeaderRow[2] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow2)")
-        th.sort-indicator(colspan=3, (click)="sortRows(columnType.descriptionRow3)")
+        th(colspan=3)
           span {{ tableHeaderRow[3] }}
-            sort-indicator([status]="getSortStatus(columnType.descriptionRow3)")
-        th.sort-indicator(colspan=3, (click)="sortRows(columnType.descriptionRow4)")
+        th(colspan=3)
           span {{ tableHeaderRow[4] }}
-            sort-indicator([status]="getSortStatus(columnType.descriptionRow4)")
         th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow5)")
           span {{ tableHeaderRow[5] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow5)")
 
       tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
+        th(colspan=1)
         th(colspan=1)
         th(colspan=1)
         th(colspan=1)
@@ -49,6 +51,11 @@ div
           span VS YA %
             sort-indicator([status]='getSortStatus(columnType.metricColumn5)')
         th(colspan=1)
+
+      tr.total-row.col-100-pct(
+        *ngIf="totalRow",
+        list-performance-table-row,
+        [rowData]="totalRow")
 
     tbody([ngClass]="getTableBodyClasses()")
       tr.entity-row.col-100-pct(
