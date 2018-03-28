@@ -160,21 +160,21 @@ describe('NotificationsComponent', () => {
       expect(analyticsServiceMock.trackEvent.calls.argsFor(2)).toEqual([
         'Navigation',
         'Read Note Notifications',
-        notificationsMock[2].objectId
+        notificationsMock[2].salesforceUserNoteID
       ]);
 
       component.clickOn(notificationsMock[3]);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(3)).toEqual([
         'Navigation',
         'Read Note Notifications',
-        notificationsMock[3].objectId
+        notificationsMock[3].salesforceUserNoteID
       ]);
 
       component.clickOn(notificationsMock[4]);
       expect(analyticsServiceMock.trackEvent.calls.argsFor(4)).toEqual([
         'Navigation',
         'Read Note Notifications',
-        notificationsMock[4].objectId
+        notificationsMock[4].salesforceUserNoteID
       ]);
     }));
 

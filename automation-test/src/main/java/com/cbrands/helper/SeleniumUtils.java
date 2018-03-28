@@ -2,6 +2,7 @@ package com.cbrands.helper;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.*;
 
 import java.io.File;
@@ -34,6 +35,15 @@ public class SeleniumUtils {
 	public static void setDriver(WebDriver driver) {
 		SeleniumUtils.driver = driver;
 		setTimeout(DEFAULT_WAIT_TIME);
+	}
+
+	/**
+	 * Detects if the current browser under test is Internet Explorer
+	 * @return true if browser is IE, otherwise false
+   */
+	public static boolean isBrowserTypeIE() {
+		final String browserUnderTest = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
+		return "internet explorer".equals(browserUnderTest);
 	}
 
 	/**
@@ -604,4 +614,16 @@ public class SeleniumUtils {
 		driver.manage().window().maximize();
 	}
 
+    /**
+     * Ensure field value is entered into field by entering a single character at a time
+     * @param WebElement
+     * @param String
+     * @author SKARNEH
+     */
+    public static void enterKeys(WebElement field, String value) {
+      field.clear();
+      for (String c : value.split("")) {
+        field.sendKeys(c);
+      }
+    }
 }

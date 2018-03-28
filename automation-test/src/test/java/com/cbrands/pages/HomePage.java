@@ -46,10 +46,7 @@ public class HomePage extends TestNGBasePage {
   }
 
   public OpportunitiesPage selectSavedReportWithName(String reportName) {
-    waitForElementToClickable(
-      savedReportsDropdown.findElement(getByHandleForSavedReportWithName(reportName)),
-      true
-    ).click();
+    scrollToAndClick(savedReportsDropdown.findElement(getByHandleForSavedReportWithName(reportName)));
     return PageFactory.initElements(driver, OpportunitiesPage.class);
   }
 

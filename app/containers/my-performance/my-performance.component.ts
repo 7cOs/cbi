@@ -16,8 +16,7 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { DrillStatus } from '../../enums/drill-status.enum';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -42,6 +41,7 @@ import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { SpecialistRoleGroupEntityTypeCode } from '../../enums/specialist-role-group-entity-type-code.enum';
 import { WindowService } from '../../services/window.service';
 
 export const CORPORATE_USER_POSITION_ID = '0';
@@ -519,8 +519,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
-      || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
+    if (parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG
+      || parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.DRAFT) {
       const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
       this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
     } else {

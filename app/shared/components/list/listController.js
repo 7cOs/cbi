@@ -119,7 +119,6 @@ module.exports = /*  @ngInject */
     vm.sendDownloadEvent = sendDownloadEvent;
     vm.retrieveStoreCountForSelectedOpportunities = retrieveStoreCountForSelectedOpportunities;
     vm.retrieveOpportunityCountFromSelection = retrieveOpportunityCountFromSelection;
-
     // Custom Headers for CSV export
     vm.csvHeader = [
       'Distributor',
@@ -345,8 +344,9 @@ module.exports = /*  @ngInject */
         return targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
       })
       .then(addCollaboratorResponse => {
-        userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
-
+        if (userService.model.targetLists) {
+         userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
+        }
         vm.newList = {
           name: '',
           description: '',
@@ -1102,6 +1102,8 @@ module.exports = /*  @ngInject */
     function getStoreToBePassedToAcct(storeDetails) {
       return {
         storeid: storeDetails.id,
+        premiseType: storeDetails.onPremise ? 'on' : 'off',
+        versionedStoreID: storeDetails.versionedId,
         myaccountsonly: false,
         depletiontimeperiod: 'CYTD'
       };

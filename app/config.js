@@ -1,10 +1,14 @@
 'use strict';
 const myPerformanceConfigState = require('./containers/my-performance/my-performance.state.ts').configState;
+const listsConfigState = require('./containers/lists/list-detail.state').configState;
 
 module.exports = /*  @ngInject */
   function($mdThemingProvider, $locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
 
+    // call config for Angular containers
     myPerformanceConfigState($stateProvider);
+    listsConfigState($stateProvider);
+
     if (!$httpProvider.defaults.headers.get) {
       $httpProvider.defaults.headers.get = {};
     }
