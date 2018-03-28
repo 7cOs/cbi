@@ -17,7 +17,7 @@ import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetailsRow[];
   public listHeader: StoreHeaderDetails;
-  private listDetail: Subscription;
+  private listDetailSubscription: Subscription;
 
   constructor(
     private store: Store<AppState>,
@@ -30,7 +30,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: '184'}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: '259'}));
 
-    this.listDetail = this.store
+    this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
         if (listDetail.status === ActionStatus.Fetched) {
