@@ -196,6 +196,34 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
+      description = "Attempting to edit a Saved Report to an existing name",
+      dependsOnMethods = "createSavedReport",
+      dataProvider = "createDuplicateReportData"
+    )
+  public void attemptToCreateWithDuplicateName(String existingReportName, String distributor) {    
+    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
+
+    final SavedReportModal savedReportModal = opportunitiesPage
+      .clickSavedReportsDropdown()
+      .openModalForSavedReportWithName(existingReportName)
+      .enterNewReportName(existingReportName)
+      .clickSave();
+
+    Assert.assertTrue(
+      savedReportModal.isDuplicateNameErrorDisplayed(),
+      "Failed to display error when attempting to use the name of an existing report."
+    );
+
+    opportunitiesPage = savedReportModal.enterNewReportName(
+          generateNewEditedReportName(existingReportName))
+        .clickSave()
+        .waitForModalToClose();
+
+    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(distributor), 
+        "Opportunites filtered when attempting to use name of existing report");    
+  }  
+
+  @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
     dataProvider = "distributorData"
@@ -245,6 +273,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
       {"Edit Duplicate " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] createDuplicateReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Create Duplicate " + testReportName, "Healy Wholesale"}
     };
   }
 
