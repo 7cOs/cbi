@@ -58,11 +58,11 @@ section.landing-page
         target
     section(column="4")
       compass-card(
-        [image]="l.salesCompassCard.image",
-        [title]="l.salesCompassCard.title",
-        [main-action]="l.salesCompassCard.mainActionName",
-        [analytics-properties]="{category: 'Navigation', label: 'Get More Information'}",
-        (on-main-action-clicked)="l.openWebPage(l.salesCompassCard.webPage)"
+      [image]="l.salesCompassCard.image",
+      [title]="l.salesCompassCard.title",
+      [main-action]="l.salesCompassCard.mainActionName",
+      [analytics-properties]="{category: 'Navigation', label: 'Get More Information'}",
+      (on-main-action-clicked)="l.openWebPage(l.salesCompassCard.webPage)"
       )
         p.bold The Corona Premier 'Fast Start' Incentive is underway through April 30!  Are you ALL IN? Track performance against this initiative via the following dashboards:
           span.sales-priority-tooltip
@@ -77,18 +77,18 @@ section.landing-page
           a(href="{{ l.newOpportunityLink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="GM/MDM Opportunities") <b>GM/MDM Opportunities</b>
           p.top Distribution relative to CL comp SKUs at GM and MDM levels, as well as associated opportunities
       compass-card(
-        [image]="l.enhancementCompassCard.image",
-        [title]="l.enhancementCompassCard.title",
-        [main-action]="l.enhancementCompassCard.mainActionName",
-        [analytics-properties]="{category: 'Navigation', label: 'View Job Aides'}",
-        (on-main-action-clicked)="l.openWebPage(l.enhancementCompassCard.webPage)"
+      [image]="l.enhancementCompassCard.image",
+      [title]="l.enhancementCompassCard.title",
+      [main-action]="l.enhancementCompassCard.mainActionName",
+      [analytics-properties]="{category: 'Navigation', label: 'View Job Aides'}",
+      (on-main-action-clicked)="l.openWebPage(l.enhancementCompassCard.webPage)"
       )
         p.bold What's new in February 2018:
           ul <b>Web only</b>:
             li <b>Quarterly Time Period options:</b> fiscal and calendar quarter views now available across all "My Performance" pages
             li <b>Summary of top SKU Opportunities integrated into "Team Performance":</b> when viewing Distributor or Retailer-level performance, Compass now displays a summary of High and Medium Impact opportunities available at A & B accounts
           ul <b>Mobile only</b>:
-            li <b>Integration of Compass Retail SurveyInfo (CRS) tool:</b> driving retail execution is easier than ever with new survey and recap capabilities
+            li <b>Integration of Compass Retail Survey (CRS) tool:</b> driving retail execution is easier than ever with new survey and recap capabilities
             li <b>"My Visits" and Retailer "Activity" feeds:</b> access a consolidated view of relevant activities (accounts surveyed, notes taken, etc.)
           ul <b>Prior enhancements:</b>
             li "Team Performance" Dashboard added for additional visibility into your market
