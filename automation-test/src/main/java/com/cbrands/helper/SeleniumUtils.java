@@ -495,6 +495,10 @@ public class SeleniumUtils {
 		return element;
 	}
 
+	public static WebElement waitForElementToBeChecked(WebElement listCheckBox) {
+		return waitForElementAttributeToContain(listCheckBox, "aria-checked", "true");
+	}
+
   /**
    * Wait for a given element's attribute to contain a value
    * @param element the element to inspect
@@ -502,9 +506,8 @@ public class SeleniumUtils {
    * @param expectedValue the value the attribute should contain
    * @return
    */
-	public static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
-    getFluentWait()
-			.until(ExpectedConditions.attributeContains(element, attribute, expectedValue));
+	private static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
+    getFluentWait().until(ExpectedConditions.attributeContains(element, attribute, expectedValue));
 		return element;
 	}
 
