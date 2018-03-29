@@ -383,7 +383,6 @@ public class SeleniumUtils {
 	 * @param element the element
 	 * @return the web element
 	 */
-	@SuppressWarnings("unchecked")
 	public static WebElement waitForVisibleFluentWait(WebElement element) {
 		final Wait<WebDriver> wait = getFluentWait()
 	              .ignoring(NoSuchElementException.class)
@@ -398,7 +397,6 @@ public class SeleniumUtils {
 	 * @param by the element locator
 	 * @return the web element
 	 */
-	@SuppressWarnings("unchecked")
 	public static WebElement waitForVisibleFluentWait(By by) {
 		final Wait<WebDriver> wait = getFluentWait()
 	              .ignoring(NoSuchElementException.class)
@@ -413,7 +411,6 @@ public class SeleniumUtils {
 	 * @param elements the elements
 	 * @return the list
 	 */
-	@SuppressWarnings("unchecked")
 	public static List<WebElement> waitForElementsVisibleFluentWait(List<WebElement> elements) {
 		final Wait<WebDriver> wait = getFluentWait()
 				.ignoring(NoSuchElementException.class)
@@ -437,7 +434,6 @@ public class SeleniumUtils {
    *
    * @param by the element handle
    */
-	@SuppressWarnings("unchecked")
   public static void waitForElementToDisappear(By by) {
     try{
       final WebElement element = findElement(by);
@@ -450,8 +446,8 @@ public class SeleniumUtils {
     }
   }
 
-	private static FluentWait getFluentWait() {
-		return new FluentWait(driver)
+	private static FluentWait<WebDriver> getFluentWait() {
+		return new FluentWait<>(driver)
       .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
       .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS);
 	}
