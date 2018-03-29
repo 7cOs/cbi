@@ -22,12 +22,16 @@ export class CompassAlertModalComponent {
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
     if (event.keyCode === this.ESCKEY) {
-      this.modalOverlayRef.closeModal();
+      if (this.modalOverlayRef) {
+        this.modalOverlayRef.closeModal();
+      }
     }
   }
 
   public hideModal(buttonLabel: string): void {
     this.buttonContainerEvent.emit(buttonLabel);
-    this.modalOverlayRef.closeModal();
+    if (this.modalOverlayRef) {
+      this.modalOverlayRef.closeModal();
+    }
   }
 }
