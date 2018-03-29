@@ -89,9 +89,9 @@ describe('Lists Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should call getStoreDetails from the ListsService given the passed in action payload', (done) => {
-        const getOpportunitiesSpy = spyOn(listsApiService, 'getStorePerformance').and.callThrough();
+        const getOpportunitiesSpy = spyOn(listsApiService, 'getStoreListDetails').and.callThrough();
 
-        listsEffects.fetchStoreDetail$().subscribe(() => {
+        listsEffects.fetchStoreDetails$().subscribe(() => {
           done();
         });
 
@@ -100,7 +100,7 @@ describe('Lists Effects', () => {
       });
 
       it('should dispatch a FetchStoreDetailsSuccess action with the returned Formatted Data', (done) => {
-        listsEffects.fetchStoreDetail$().subscribe((action: Action) => {
+        listsEffects.fetchStoreDetails$().subscribe((action: Action) => {
           expect(action).toEqual(new ListActions.FetchStoreDetailsSuccess(storesData));
           done();
         });
@@ -109,9 +109,9 @@ describe('Lists Effects', () => {
 
     describe('when an error is returned from getStoreDetails', () => {
       it('should dispatch a FetchStoreDetailsFailure action with the error', (done) => {
-        spyOn(listsApiService, 'getStorePerformance').and.returnValue(Observable.throw(error));
+        spyOn(listsApiService, 'getStoreListDetails').and.returnValue(Observable.throw(error));
 
-        listsEffects.fetchStoreDetail$().subscribe((response) => {
+        listsEffects.fetchStoreDetails$().subscribe((response) => {
           expect(response).toEqual(new ListActions.FetchStoreDetailsFailure(error));
           done();
         });
@@ -132,9 +132,9 @@ describe('Lists Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should call getHeaderDetails from the ListsService given the passed in action payload', (done) => {
-        const getOpportunitiesSpy = spyOn(listsApiService, 'getHeaderDetail').and.callThrough();
+        const getOpportunitiesSpy = spyOn(listsApiService, 'getHeaderInfo').and.callThrough();
 
-        listsEffects.fetchHeaderDetail$().subscribe(() => {
+        listsEffects.fetchHeaderDetails$().subscribe(() => {
           done();
         });
 
@@ -143,7 +143,7 @@ describe('Lists Effects', () => {
       });
 
       it('should dispatch a getHeaderDetailsSuccess action with the returned transformed data', (done) => {
-        listsEffects.fetchHeaderDetail$().subscribe((action: Action) => {
+        listsEffects.fetchHeaderDetails$().subscribe((action: Action) => {
           expect(action).toEqual(new ListActions.FetchHeaderDetailsSuccess(headerDetailMock));
           done();
         });
@@ -152,9 +152,9 @@ describe('Lists Effects', () => {
 
     describe('when an error is returned from getHeaderDetails', () => {
       it('should dispatch a FetchHeaderDetailsFailure action with the error', (done) => {
-        spyOn(listsApiService, 'getHeaderDetail').and.returnValue(Observable.throw(error));
+        spyOn(listsApiService, 'getHeaderInfo').and.returnValue(Observable.throw(error));
 
-        listsEffects.fetchHeaderDetail$().subscribe((response) => {
+        listsEffects.fetchHeaderDetails$().subscribe((response) => {
           expect(response).toEqual(new ListActions.FetchHeaderDetailsFailure(error));
           done();
         });

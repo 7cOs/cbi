@@ -13,7 +13,7 @@ export class ListsApiService {
     private http: HttpClient
   ) { }
 
-  public getStorePerformance(
+  public getStoreListDetails(
     listsId: string
   ): Observable<Array<StoreListDTO>> {
     const url = `/v3/lists/${ listsId }/stores`;
@@ -21,7 +21,7 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public getHeaderDetail(
+  public getHeaderInfo(
     listsId: string
   ): Observable<ListHeaderInfoDTO> {
     const url = `/v3/lists/${ listsId }`;

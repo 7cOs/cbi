@@ -20,17 +20,17 @@ export class ListsEffects {
   }
 
   @Effect()
-  fetchStoreDetail$(): Observable<Action> {
+  fetchStoreDetails$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_STORE_DETAILS)
-      .switchMap((action: ListActions.FetchStoreDetails) => this.listsApiService.getStorePerformance(action.payload.listId))
+      .switchMap((action: ListActions.FetchStoreDetails) => this.listsApiService.getStoreListDetails(action.payload.listId))
       .switchMap((response: Array<StoreListDTO>) =>
         Observable.of(new ListActions.FetchStoreDetailsSuccess(this.listsTransformerService.formatStoresData(response))))
       .catch((error: Error) => Observable.of(new ListActions.FetchStoreDetailsFailure(error)));
   }
 
   @Effect({dispatch: false})
-  fetchStoreFailure$(): Observable<Action> {
+  fetchStoreDetailsFailure$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_STORE_DETAILS_FAILURE)
       .do((action: ListActions.FetchStoreDetailsFailure) => {
@@ -39,17 +39,17 @@ export class ListsEffects {
   }
 
   @Effect()
-  fetchHeaderDetail$(): Observable<Action> {
+  fetchHeaderDetails$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_HEADER_DETAILS)
-      .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getHeaderDetail(action.payload.listId))
+      .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getHeaderInfo(action.payload.listId))
       .switchMap((response: ListHeaderInfoDTO) =>
         Observable.of(new ListActions.FetchHeaderDetailsSuccess(this.listsTransformerService.formatListHeaderData(response))))
       .catch((error: Error) => Observable.of(new ListActions.FetchHeaderDetailsFailure(error)));
   }
 
   @Effect({dispatch: false})
-  fetchHeaderDetailFailure$(): Observable<Action> {
+  fetchHeaderDetailsFailure$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_HEADER_DETAILS_FAILURE)
       .do((action: ListActions.FetchHeaderDetailsFailure) => {
