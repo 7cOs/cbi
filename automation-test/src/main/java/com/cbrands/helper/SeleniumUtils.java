@@ -531,7 +531,8 @@ public class SeleniumUtils {
    * @return
    */
 	public static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
-    waitForCondition(ExpectedConditions.attributeContains(element, attribute, expectedValue), DEFAULT_WAIT_TIME);
+    getFluentWait()
+			.until(ExpectedConditions.attributeContains(element, attribute, expectedValue));
 		return element;
 	}
 
