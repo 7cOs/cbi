@@ -593,8 +593,8 @@ public class SeleniumUtils {
 
     /**
      * Ensure field value is entered into field by entering a single character at a time
-     * @param field
-     * @param value
+     * @param WebElement
+     * @param String
      * @author SKARNEH
      */
     public static void enterKeys(WebElement field, String value) {
