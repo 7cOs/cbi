@@ -2,10 +2,10 @@ div.compass-modal
   div
     div.compass-modal-header
       h1.compass-modal-title {{ modalInputs.title }}
-      div.X-modal-btn-container((click)='hideModal("x-btn")')
+      div.X-modal-btn-container((click)='hideModal(CompassAlertModalEvent.Close)')
         img.X-modal-btn(src="../../../assets/img/icons/thin-x.svg")
     div.compass-modal-body
       p {{ modalInputs.body }}
     div.compass-modal-action-bar
-      span.compass-modal-btn((click)='hideModal(modalInputs.rejectLabel)') {{ modalInputs.rejectLabel }}
-      button.btn-action((click)='hideModal(modalInputs.acceptLabel)') {{ modalInputs.acceptLabel }}
+      span.compass-modal-btn((click)='hideModal(CompassAlertModalEvent.Decline)') {{ modalInputs.rejectLabel }}
+      button.btn-action((click)='hideModal(CompassAlertModalEvent.Accept)') {{ modalInputs.acceptLabel }}

@@ -9,6 +9,7 @@ import { CompassAlertModalInputs } from '../../../models/compass-alert-modal-inp
 import { CompassModalService } from '../../../services/compass-modal.service';
 import { COMPASS_ALERT_MODAL_INPUTS } from './compass-alert-modal.tokens';
 import { CompassModalOverlayRef } from './compass-modal.overlayref';
+import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
 
 const chance = new Chance();
 
@@ -97,7 +98,7 @@ describe('Compass Alert Modal Component', () => {
       expect(buttonElement.nativeElement.textContent).toBe(compassModalInputsMock.rejectLabel);
 
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
-        expect(value).toEqual(compassModalInputsMock.rejectLabel);
+        expect(value).toEqual(CompassAlertModalEvent.Decline);
         expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
       });
 
@@ -110,7 +111,7 @@ describe('Compass Alert Modal Component', () => {
       let buttonElement: DebugElement = fixture.debugElement.query(By.css('.X-modal-btn-container'));
 
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
-        expect(value).toEqual('x-btn');
+        expect(value).toEqual(CompassAlertModalEvent.Close);
         expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
       });
 
@@ -135,7 +136,7 @@ describe('Compass Alert Modal Component', () => {
       expect(buttonElement.nativeElement.textContent).toBe(compassModalInputsMock.acceptLabel);
 
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
-        expect(value).toEqual(compassModalInputsMock.acceptLabel);
+        expect(value).toEqual(CompassAlertModalEvent.Accept);
         expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
       });
 

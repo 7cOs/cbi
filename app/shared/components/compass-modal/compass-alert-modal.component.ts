@@ -3,6 +3,7 @@ import { Component, EventEmitter, HostListener, Output, Inject } from '@angular/
 import { CompassAlertModalInputs } from '../../../models/compass-alert-modal-inputs.model';
 import { CompassModalOverlayRef } from './compass-modal.overlayref';
 import { COMPASS_ALERT_MODAL_INPUTS } from '../../components/compass-modal/compass-alert-modal.tokens';
+import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
 
 @Component({
   selector: 'compass-alert-modal',
@@ -11,7 +12,7 @@ import { COMPASS_ALERT_MODAL_INPUTS } from '../../components/compass-modal/compa
 })
 
 export class CompassAlertModalComponent {
-  @Output() buttonContainerEvent = new EventEmitter<string>();
+  @Output() buttonContainerEvent = new EventEmitter<CompassAlertModalEvent>();
 
   public modalOverlayRef: CompassModalOverlayRef;
   private ESCKEY = 27;
@@ -28,8 +29,8 @@ export class CompassAlertModalComponent {
     }
   }
 
-  public hideModal(buttonLabel: string): void {
-    this.buttonContainerEvent.emit(buttonLabel);
+  public hideModal(modalEventString: CompassAlertModalEvent): void {
+    this.buttonContainerEvent.emit(modalEventString);
     if (this.modalOverlayRef) {
       this.modalOverlayRef.closeModal();
     }

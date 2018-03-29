@@ -8,6 +8,7 @@ import { CompassAlertModalComponent } from '../shared/components/compass-modal/c
 import { CompassAlertModalInputs } from '../models/compass-alert-modal-inputs.model';
 import { CompassModalOverlayRef } from '../shared/components/compass-modal/compass-modal.overlayref';
 import { COMPASS_ALERT_MODAL_INPUTS } from '../shared/components/compass-modal/compass-alert-modal.tokens';
+import { CompassAlertModalEvent } from '../enums/compass-alert-modal-strings.enum';
 
 @Injectable()
 export class CompassModalService {
@@ -38,7 +39,7 @@ export class CompassModalService {
   }
 
   public modalActionBtnContainerEvent(modalComponentInstance: CompassAlertModalComponent): Promise<{}> {
-    return modalComponentInstance.buttonContainerEvent.first( (result: any) => {
+    return modalComponentInstance.buttonContainerEvent.first( ( result: any) => {
       return result;
     } ).toPromise();
   }

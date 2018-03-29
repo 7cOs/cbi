@@ -70,7 +70,8 @@ module.exports = /*  @ngInject */
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
     vm.sendGoogleAnalytics = sendGoogleAnalytics;
-    vm.showActionModal = showActionModal;
+    vm.showArchiveModal = showArchiveModal;
+    vm.showDeleteModal = showDeleteModal;
 
     init();
 
@@ -327,19 +328,19 @@ module.exports = /*  @ngInject */
       );
     }
 
-    function showActionModal(actionLabel) {
-        let compassModalOverlayRef;
-        if (actionLabel === 'Archive') {
-          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs);
-        } else if (actionLabel === 'Delete') {
-          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs);
-        }
-
-        compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
-        .then((value) => {
-          if (value === vm.archiveModalStringInputs.acceptLabel) {
+    function showArchiveModal() {
+      let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs);
+      compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+          if (value === 'Accept') {
             updateList('archive');
-          } else if (value === vm.deleteModalStringInputs.acceptLabel) {
+          }
+        });
+    }
+
+    function showDeleteModal() {
+      let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs);
+      compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+          if (value === 'Accept') {
             pendingCheck();
           }
         });
