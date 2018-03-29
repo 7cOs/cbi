@@ -196,7 +196,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
-      description = "Attempting to edit a Saved Report to an existing name",
+      description = "Attempt to create saved report with duplicate name, then save with valid name",
       dependsOnMethods = "createSavedReport",
       dataProvider = "createDuplicateReportData"
   )
