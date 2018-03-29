@@ -438,21 +438,6 @@ public class SeleniumUtils {
 		waitForCondition(ExpectedConditions.visibilityOfElementLocated(by), timeout);
 	}
 
-	/**
-   * Waits for element to disappear from the DOM
-   *
-   * @param element the element
-   */
-  @SuppressWarnings("unchecked")
-  private static void waitForElementStalenessFluentWait(WebElement element) {
-    Wait<WebDriver> wait = new FluentWait(driver)
-      .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-      .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS)
-      .ignoring(NoSuchElementException.class)
-      .ignoring(ElementNotVisibleException.class);
-		wait.until(ExpectedConditions.stalenessOf(element));
-	}
-
   /**
    * Waits for element to disappear from the DOM. If element is not present, swallows the exception.
    *
