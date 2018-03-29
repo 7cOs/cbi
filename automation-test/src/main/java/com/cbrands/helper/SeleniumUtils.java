@@ -614,4 +614,16 @@ public class SeleniumUtils {
 		driver.manage().window().maximize();
 	}
 
+    /**
+     * Ensure field value is entered into field by entering a single character at a time
+     * @param WebElement
+     * @param String
+     * @author SKARNEH
+     */
+    public static void enterKeys(WebElement field, String value) {
+      field.clear();
+      for (String c : value.split("")) {
+        field.sendKeys(c);
+      }
+    }
 }

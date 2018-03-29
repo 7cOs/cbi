@@ -13,7 +13,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
@@ -34,6 +33,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
     opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
+    Assert.assertTrue(
+        opportunitiesPage.dismissStrayBackdropElement(),
+        "Error resetting focus to element"
+      );
   }
 
   @AfterMethod
@@ -118,7 +121,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public void editSavedReport(String originalReportName, String distributor) {
     opportunitiesPage = this.setUpNewSavedReport(originalReportName, distributor);
 
-    final String editedReportName = "EDITED " + originalReportName;
+    final String editedReportName = generateNewEditedReportName(originalReportName);
     opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
       .openModalForSavedReportWithName(originalReportName)
@@ -169,7 +172,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dependsOnMethods = "createSavedReport",
     dataProvider = "editDuplicateReportData"
   )
-  public void attemptToEditWithExistingName(String existingReportName, String distributor) {
+  public void attemptToEditWithExistingName(String existingReportName, String distributor) {    
     opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
 
     final SavedReportModal savedReportModal = opportunitiesPage
@@ -182,6 +185,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       savedReportModal.isDuplicateNameErrorDisplayed(),
       "Failed to display error when attempting to use the name of an existing report."
     );
+
+    opportunitiesPage = savedReportModal.enterNewReportName(
+          generateNewEditedReportName(existingReportName))
+        .clickSave()
+        .waitForModalToClose();
+
+    Assert.assertFalse(opportunitiesPage.isQueryChipPresent(distributor), 
+        "Opportunites filtered when attempting to use name of existing report");    
   }
 
   @Test(
@@ -323,4 +334,13 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     return existingNumberOfSavedReports;
   }
 
+  /**
+   * Returns new report name prefaced with "EDITED "
+   * @param existingReportName
+   * @return String
+   * @author SKARNEH
+   */
+  public String generateNewEditedReportName(String existingReportName) {
+    return "EDITED " + existingReportName;
+  }
 }

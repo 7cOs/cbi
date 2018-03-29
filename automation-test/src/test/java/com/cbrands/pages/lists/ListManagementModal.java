@@ -1,4 +1,4 @@
-package com.cbrands.pages.targetList;
+package com.cbrands.pages.lists;
 
 import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
@@ -11,7 +11,7 @@ import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class EditTargetListModal extends TestNGBasePage {
+public class ListManagementModal extends TestNGBasePage {
 
   private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'target-list-modal')]";
   private final WebDriver driver;
@@ -37,7 +37,7 @@ public class EditTargetListModal extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//a[contains(.,'Yes, Delete')]")
   private WebElement confirmDelete;
 
-  public EditTargetListModal(WebDriver driver) {
+  public ListManagementModal(WebDriver driver) {
     this.driver = driver;
   }
 
@@ -52,7 +52,7 @@ public class EditTargetListModal extends TestNGBasePage {
     Assert.fail("The Manage modal for Target Lists cannot be loaded directly.");
   }
 
-  public EditTargetListModal enterListName(String name) {
+  public ListManagementModal enterListName(String name) {
     waitForElementToClickable(listNameTextBox, true).click();
     listNameTextBox.clear();
     waitForElementToClickable(listNameTextBox, true).click();
@@ -60,13 +60,13 @@ public class EditTargetListModal extends TestNGBasePage {
     return this;
   }
 
-  public EditTargetListModal enterDescription(String description) {
+  public ListManagementModal enterDescription(String description) {
     waitForElementToClickable(descriptionTextBox, true).click();
     descriptionTextBox.sendKeys(description);
     return this;
   }
 
-  public EditTargetListModal addCollaborator(String collaborator) {
+  public ListManagementModal addCollaborator(String collaborator) {
     waitForElementToClickable(collaboratorSearchBox, true).click();
     collaboratorSearchBox.sendKeys(collaborator);
 
@@ -78,25 +78,25 @@ public class EditTargetListModal extends TestNGBasePage {
     return this;
   }
 
-  public TargetListListingsPage clickSaveButton() {
-    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(driver, TargetListListingsPage.class);
+  public ListsPage clickSaveButton() {
+    final ListsPage listsPage = PageFactory.initElements(driver, ListsPage.class);
 
     saveButton.click();
     waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH));
 
-    return targetListListingsPage;
+    return listsPage;
   }
 
-  public EditTargetListModal clickDeleteTargetListButton() {
+  public ListManagementModal clickDeleteTargetListButton() {
     deleteListButton.click();
 
     return this;
   }
 
-  public TargetListListingsPage confirmListDelete() {
+  public ListsPage confirmListDelete() {
     waitForVisibleFluentWait(confirmDelete).click();
 
-    return PageFactory.initElements(driver, TargetListListingsPage.class);
+    return PageFactory.initElements(driver, ListsPage.class);
   }
 
 }

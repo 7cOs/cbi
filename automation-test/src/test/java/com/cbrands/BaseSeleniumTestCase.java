@@ -6,7 +6,7 @@ import com.cbrands.helper.WebDriverFactory;
 import com.cbrands.listener.SeleniumSnapshotRule;
 import com.cbrands.pages.*;
 import com.cbrands.pages.opportunities.Opportunities;
-import com.cbrands.pages.targetList.TargetList;
+import com.cbrands.pages.lists.TargetList;
 import com.cbrands.test.BaseTestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
