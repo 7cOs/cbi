@@ -362,7 +362,7 @@ public class SeleniumUtils {
 	 * @return the web element
 	 */
 	public static WebElement waitForVisibleFluentWait(WebElement element) {
-		final Wait<WebDriver> wait = getFluentWait()
+		final Wait<WebDriver> wait = getDefaultFluentWait()
 	              .ignoring(NoSuchElementException.class)
 	              .ignoring(ElementNotVisibleException.class);
 	   wait.until(ExpectedConditions.visibilityOf(element));
@@ -376,7 +376,7 @@ public class SeleniumUtils {
 	 * @return the web element
 	 */
 	public static WebElement waitForVisibleFluentWait(By by) {
-		final Wait<WebDriver> wait = getFluentWait()
+		final Wait<WebDriver> wait = getDefaultFluentWait()
 	              .ignoring(NoSuchElementException.class)
 	              .ignoring(ElementNotVisibleException.class);
 	   wait.until(ExpectedConditions.visibilityOfElementLocated(by));
@@ -390,7 +390,7 @@ public class SeleniumUtils {
 	 * @return the list
 	 */
 	public static List<WebElement> waitForElementsVisibleFluentWait(List<WebElement> elements) {
-		final Wait<WebDriver> wait = getFluentWait()
+		final Wait<WebDriver> wait = getDefaultFluentWait()
 				.ignoring(NoSuchElementException.class)
 				.ignoring(ElementNotVisibleException.class);
 		wait.until(ExpectedConditions.visibilityOfAllElements(elements));
@@ -416,7 +416,7 @@ public class SeleniumUtils {
     try{
       final WebElement element = findElement(by);
 
-      final Wait<WebDriver> wait = getFluentWait();
+      final Wait<WebDriver> wait = getDefaultFluentWait();
 			wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)));
 			wait.until(ExpectedConditions.stalenessOf(element));
     } catch (NoSuchElementException | StaleElementReferenceException e) {
@@ -507,7 +507,7 @@ public class SeleniumUtils {
    * @return
    */
 	private static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
-    getFluentWait().until(ExpectedConditions.attributeContains(element, attribute, expectedValue));
+		getDefaultFluentWait().until(ExpectedConditions.attributeContains(element, attribute, expectedValue));
 		return element;
 	}
 
@@ -535,10 +535,14 @@ public class SeleniumUtils {
 		(new WebDriverWait(driver, timeout)).until(conditon);
 	}
 
-	private static FluentWait<WebDriver> getFluentWait() {
+	private static FluentWait<WebDriver> getDefaultFluentWait() {
+		return getCustomFluentWait(DEFAULT_WAIT_TIME, DEFAULT_POLL_TIME);
+	}
+
+	private static FluentWait<WebDriver> getCustomFluentWait(int waitTime, int pollTime) {
 		return new FluentWait<>(driver)
-			.withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-			.pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS);
+			.withTimeout(waitTime, TimeUnit.SECONDS)
+			.pollingEvery(pollTime, TimeUnit.SECONDS);
 	}
 
 	/**
