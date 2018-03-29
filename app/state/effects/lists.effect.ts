@@ -7,9 +7,9 @@ import 'rxjs/add/operator/switchMap';
 
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import * as ListActions from '../../state/actions/lists.action';
+import { ListStoreDTO } from '../../models/lists-store-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { StoreHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
-import { ListStoreDTO } from '../../models/lists-store-dto.model';
 
 @Injectable()
 export class ListsEffects {

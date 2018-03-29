@@ -1,14 +1,13 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ApiRequestType } from '../../../enums/api-request-type.enum';
 import { chanceStringOptions } from '../../../lib/spec-util';
-import { V3ApiHelperService } from './v3-api-helper.service';
+import { getStoreListsDTOMock } from '../../../models/lists-store-dto.model.mock';
+import { getStoreHeaderInfoDTOMock } from '../../../models/lists-store-header-dto.model.mock';
 import { ListsApiService } from './lists-api.service';
 import { ListStoreDTO } from '../../../models/lists-store-dto.model';
 import { StoreHeaderInfoDTO } from '../../../models/lists-store-header-dto.model';
-import { getStoreListsDTOMock } from '../../../models/lists-store-dto.model.mock';
-import { getStoreHeaderInfoDTOMock } from '../../../models/lists-store-header-dto.model.mock';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -20,7 +19,7 @@ describe('ListsApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ ListsApiService, V3ApiHelperService ]
+      providers: [ ListsApiService ]
     });
 
     testBed = getTestBed();
@@ -34,14 +33,14 @@ describe('ListsApiService', () => {
     http.verify();
   });
 
-  describe('getStorePerformance', () => {
+  describe('getStoreListDetails', () => {
     let expectedRequestUrl: string;
 
     beforeEach(() => {
       expectedRequestUrl = `/v3/lists/${ listIdMock }/stores`;
     });
 
-    it('should call the stores information endpoint and return stores data for the given list ID', () => {
+    it('should call the stores list endpoint and return stores data for the given list ID', () => {
       const storeInfoDTOResponseMock:  Array<ListStoreDTO> = getStoreListsDTOMock();
 
       listsApiService.getStorePerformance(
@@ -58,13 +57,13 @@ describe('ListsApiService', () => {
     });
 
   });
-  describe('getHeaderDetail', () => {
+  describe('getListHeaderDetail', () => {
     let expectedRequestUrl: string;
     beforeEach(() => {
       expectedRequestUrl = `/v3/lists/${ listIdMock }`;
     });
 
-    it('should call the store header information endpoint and return data for the given list', () => {
+    it('should call the lists header information endpoint and return data for the given list ID', () => {
       const expectedStoreHeaderInfoDTOMock: StoreHeaderInfoDTO = getStoreHeaderInfoDTOMock();
 
       listsApiService.getHeaderDetail(

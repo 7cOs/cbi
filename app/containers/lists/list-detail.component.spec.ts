@@ -1,14 +1,14 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
 
-import { ListDetailComponent } from './list-detail.component';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { ListsState } from '../../state/reducers/lists.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
-import { Subject } from 'rxjs/Subject';
 import * as ListsActions from '../../state/actions//lists.action';
+import { ListDetailComponent } from './list-detail.component';
+import { ListsState } from '../../state/reducers/lists.reducer';
 
 const chance = new Chance();
 

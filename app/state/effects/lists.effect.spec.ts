@@ -1,18 +1,18 @@
-import { Action } from '@ngrx/store';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
+import { Action } from '@ngrx/store';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { TestBed, inject } from '@angular/core/testing';
 
+import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/lists.action';
+import { getStoreListsMock } from '../../models/lists-store.model.mock';
 import * as ListActions from '../../state/actions/lists.action';
 import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/lists.action';
 import { ListStoreDTO } from '../../models/lists-store-dto.model';
 import { StoreHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
 import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
-import { getStoreListsMock } from '../../models/lists-store.model.mock';
 
 const chance = new Chance();
 
@@ -99,7 +99,7 @@ describe('Lists Effects', () => {
         expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock.listId);
       });
 
-      it('should dispatch a FetchStoreDetailsSuccess action with the returned GroupedData', (done) => {
+      it('should dispatch a FetchStoreDetailsSuccess action with the returned Formatted Data', (done) => {
         listsEffects.fetchStoreDetail$().subscribe((action: Action) => {
           expect(action).toEqual(new ListActions.FetchStoreDetailsSuccess(storesData));
           done();
@@ -142,7 +142,7 @@ describe('Lists Effects', () => {
         expect(getOpportunitiesSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock.listId);
       });
 
-      it('should dispatch a getHeaderDetailsSuccess action with the returned GroupedData', (done) => {
+      it('should dispatch a getHeaderDetailsSuccess action with the returned transformed data', (done) => {
         listsEffects.fetchHeaderDetail$().subscribe((action: Action) => {
           expect(action).toEqual(new ListActions.FetchHeaderDetailsSuccess(headerDetailMock));
           done();

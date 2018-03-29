@@ -1,10 +1,11 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../state/reducers/root.reducer';
-import { Title } from '@angular/platform-browser';
-import * as ListsActions from '../../state/actions//lists.action';
-import { ActionStatus } from '../../enums/action-status.enum';
 import { Subscription } from 'rxjs/Subscription';
+import { Title } from '@angular/platform-browser';
+
+import { ActionStatus } from '../../enums/action-status.enum';
+import { AppState } from '../../state/reducers/root.reducer';
+import * as ListsActions from '../../state/actions//lists.action';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
 

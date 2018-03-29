@@ -1,9 +1,8 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-
-import { initialState, listsReducer, ListsState } from './lists.reducer';
-import * as ListsActions from '../actions/lists.action';
 import { getStoreListsMock } from '../../models/lists-store.model.mock';
 import { getStoreHeaderInfoMock } from '../../models/lists-store-header.model.mock';
+import { listsReducer, initialState, ListsState } from './lists.reducer';
+import * as ListsActions from '../actions/lists.action';
 
 const listIdMock = chance.string();
 
@@ -56,7 +55,7 @@ describe('Lists Reducer', () => {
   });
 
   describe('when a FetchHeaderDetails action is dispatched', () => {
-    it('should update the store details status to Fetching', () => {
+    it('should update the header details status to Fetching', () => {
         const expectedState = {
           status: initialState.status,
           headerInfoStatus: ActionStatus.Fetching,
@@ -69,7 +68,7 @@ describe('Lists Reducer', () => {
 
         expect(actualState).toEqual(expectedState);
       });
-    it('should store the header details and set the headers status to Fetched on success', () => {
+    it('should update the header details and set the headers status to Fetched on success', () => {
       const headersMock = getStoreHeaderInfoMock();
 
       const expectedState = {
