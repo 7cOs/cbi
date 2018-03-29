@@ -16,11 +16,12 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class ListsPage extends TestNGBasePage {
   private static final String LOADER_XPATH = "//loader";
+  private static final String HEADER_XPATH = "//h1[text()='Lists']";
 
   private final WebDriver driver;
   protected Log log = LogFactory.getLog(ListsPage.class);
 
-  @FindBy(how = How.XPATH, using = "//h1[text()='Lists']")
+  @FindBy(how = How.XPATH, using = HEADER_XPATH)
   private WebElement listingsHeader;
 
   @FindBy(how = How.XPATH, using = "//button[contains(., 'Delete')]")
@@ -40,7 +41,8 @@ public class ListsPage extends TestNGBasePage {
   public boolean isLoaded() {
     waitForVisibleFluentWait(listingsHeader);
     waitForElementToDisappear(By.xpath(LOADER_XPATH));
-    return listingsHeader.isDisplayed();
+
+    return isElementPresent(By.xpath(HEADER_XPATH)) && !isElementPresent(By.xpath(LOADER_XPATH));
   }
 
   @Override
