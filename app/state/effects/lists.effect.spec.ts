@@ -28,10 +28,10 @@ describe('Lists Effects', () => {
   let storesData: Array<StoreDetailsRow> = getStoreListsMock();
 
   const listsApiServiceMock = {
-    getStorePerformance(listIdMock: string): Observable<StoreListDTO[]> {
+    getStoreListDetails(listIdMock: string): Observable<StoreListDTO[]> {
       return Observable.of(storeListMock);
     },
-    getHeaderDetail(listIdMock: string): Observable<ListHeaderInfoDTO> {
+    getHeaderInfo(listIdMock: string): Observable<ListHeaderInfoDTO> {
       return Observable.of(listHeaderMock);
     }
   };
