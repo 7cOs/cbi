@@ -20,7 +20,9 @@ export class CompassModalService {
     modalInputs: CompassAlertModalInputs,
     compassOverlayConfig: CompassOverlayConfig
   ): CompassModalOverlayRef {
-    const overlayPortalHost: OverlayRef = this.compassOverlayService.getCenteredOverlayPortalHost(compassOverlayConfig);
+    const defaultOverlayConfig = {hasBackdrop: true};
+    const combinedOverlayConfig = Object.assign({}, defaultOverlayConfig, compassOverlayConfig);
+    const overlayPortalHost: OverlayRef = this.compassOverlayService.getCenteredOverlayPortalHost(combinedOverlayConfig);
     const modalInputPortalInjector: PortalInjector = this.compassOverlayService.getInputPortalInjector(
       COMPASS_ALERT_MODAL_INPUTS,
       modalInputs

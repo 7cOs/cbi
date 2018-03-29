@@ -40,7 +40,6 @@ module.exports = /*  @ngInject */
       'rejectLabel': 'Cancel',
       'acceptLabel': 'Delete'
     };
-    vm.modalSettings = { hasBackdrop: true };
 
     // Services
     vm.targetListService = targetListService;
@@ -331,9 +330,9 @@ module.exports = /*  @ngInject */
     function showActionModal(actionLabel) {
         let compassModalOverlayRef;
         if (actionLabel === 'Archive') {
-          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs, vm.modalSettings);
+          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs);
         } else if (actionLabel === 'Delete') {
-          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs, vm.modalSettings);
+          compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs);
         }
 
         compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
