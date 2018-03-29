@@ -254,27 +254,6 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Checks if is checked.
-	 *
-	 * @param by the by
-	 * @return true, if is checked
-	 */
-	public static boolean isChecked(By by) {
-		WebElement element = driver.findElement(by);
-		return isChecked(element);
-	}
-
-	/**
-	 * Checks if is checked.
-	 *
-	 * @param element the element
-	 * @return true, if is checked
-	 */
-	public static boolean isChecked(WebElement element) {
-		return element.isSelected();
-	}
-
-	/**
 	 * Gets the select.
 	 *
 	 * @param by the by
