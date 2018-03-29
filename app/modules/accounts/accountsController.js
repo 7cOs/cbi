@@ -795,8 +795,6 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         vm.premiseTypeValue = 'off';
       } else if (result.premiseType === 'ON PREMISE') {
         vm.premiseTypeValue = 'on';
-      } else if (result.premiseType === 'ALL') {
-        vm.premiseTypeValue = 'all';
       }
     }
 

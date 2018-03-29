@@ -171,7 +171,7 @@ describe('Service: MyPerformanceService', () => {
         insideExceptionHierarchyMock,
         filterMock,
         rowMock,
-        undefined)).toEqual({});
+        filterMock.premiseType)).toEqual({});
     });
 
     it('should return the correct option when metric type is depletions and entityType is distributor', () => {
@@ -182,7 +182,7 @@ describe('Service: MyPerformanceService', () => {
         insideExceptionHierarchyMock,
         filterMock,
         rowMock,
-        undefined);
+        filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         depletiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
@@ -200,7 +200,7 @@ describe('Service: MyPerformanceService', () => {
         insideExceptionHierarchyMock,
         filterMock,
         rowMock,
-        undefined);
+        filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
@@ -217,7 +217,7 @@ describe('Service: MyPerformanceService', () => {
         insideExceptionHierarchyMock,
         filterMock,
         rowMock,
-        undefined);
+        filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,

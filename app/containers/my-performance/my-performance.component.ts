@@ -297,7 +297,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.isInsideAlternateHierarchy(),
           this.currentState.responsibilities.exceptionHierarchy,
           this.filterState,
-          row);
+          row, this.filterState.premiseType);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
@@ -316,7 +316,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.isInsideAlternateHierarchy(),
           this.currentState.responsibilities.exceptionHierarchy,
           this.filterState,
-          row);
+          row, this.filterState.premiseType);
       }
     }
 

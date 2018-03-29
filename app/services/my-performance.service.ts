@@ -80,7 +80,7 @@ export class MyPerformanceService {
     insideExceptionHierarchy: boolean,
     filter: MyPerformanceFilterState,
     row: MyPerformanceTableRow,
-    premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
+    premiseType: PremiseTypeValue): AccountDashboardStateParameters {
 
     let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: !insideAlternateHierarchy};
     if (row.metadata.entityType === EntityType.Distributor) {
@@ -89,11 +89,11 @@ export class MyPerformanceService {
       }
       accountDashboardStateParams.distributorname = row.descriptionRow0;
       accountDashboardStateParams.distributorid = row.metadata.positionId;
-      accountDashboardStateParams.premisetype = PremiseTypeValue[filter.premiseType];
+      accountDashboardStateParams.premisetype = PremiseTypeValue[premiseType];
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       accountDashboardStateParams.subaccountid = row.metadata.positionId;
       accountDashboardStateParams.subaccountname = row.descriptionRow0;
-      accountDashboardStateParams.premisetype = PremiseTypeValue[filter.premiseType];
+      accountDashboardStateParams.premisetype = PremiseTypeValue[premiseType];
     }
 
     switch (filter.metricType) {
