@@ -48,7 +48,7 @@ export class NotificationsComponent {
     if (notification.objectType === 'STORE'
       || notification.objectType === 'ACCOUNT'
       || notification.objectType === 'DISTRIBUTOR') {
-      analyticsLabel = notification.id ? notification.id : 'Not Available';
+      analyticsLabel = notification.salesforceUserNoteID ? notification.salesforceUserNoteID : 'Not Available';
     } else {
       analyticsLabel = notification.objectId ? notification.objectId : 'Not Available';
     }

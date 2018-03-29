@@ -7,7 +7,7 @@
 	<test name="Smoke Test">
 		<classes>
 			<class name="com.cbrands.test.smoke.LoginTest" />
-			<class name="com.cbrands.test.smoke.TargetListTest" />
+			<class name="com.cbrands.test.smoke.ListsTest" />
 			<class name="com.cbrands.test.smoke.OpportunitiesTest" />
 			<class name="com.cbrands.test.smoke.AccountDashboardTest" />
 			<class name="com.cbrands.test.smoke.NotesTest" />
