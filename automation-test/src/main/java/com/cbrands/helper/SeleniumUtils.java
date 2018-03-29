@@ -463,7 +463,7 @@ public class SeleniumUtils {
 		final FluentWait<WebDriver> wait;
 
 		if (isBrowserTypeIE()) {
-			wait = getCustomFluentWait(DEFAULT_WAIT_TIME * 2, DEFAULT_POLL_TIME);
+			wait = getIECheckboxWait();
 		} else {
 			wait = getDefaultFluentWait();
 		}
@@ -471,6 +471,16 @@ public class SeleniumUtils {
 		wait.until(ExpectedConditions.attributeContains(checkbox, "aria-checked", "true"));
 
 		return checkbox;
+	}
+
+	/**
+	 * Workaround for IE-specific bug where faulty implementation of checkbox causes excessive lag time.
+	 * Remove this workaround when fixed.
+	 * See Rally ticket DE7112.
+	 * @return customized fluent wait
+   */
+	private static FluentWait<WebDriver> getIECheckboxWait() {
+		return getCustomFluentWait(DEFAULT_WAIT_TIME * 4, DEFAULT_POLL_TIME);
 	}
 
 	/**
