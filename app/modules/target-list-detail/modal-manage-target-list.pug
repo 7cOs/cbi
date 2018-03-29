@@ -15,7 +15,7 @@ div.modal.target-list-modal
         .collaborator.manage-list(ng-repeat="collaborator in tld.targetListService.model.currentList.collaborators | filter: {'permissionLevel' : 'author'}")
           .align-left(ng-if="tld.targetListService.model.currentList.permissionLevel === 'author'") You
           .align-left(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'") {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
-          .accent Owner
+          .accent OwnerDetails
         .collaborator.manage-list(ng-repeat="collaborator in tld.targetListService.model.currentList.collaborators | filter: {'permissionLevel' : 'collaborate'} || {'permissionLevel' : 'collaborateandinvite'} | orderBy: ['permissionLevel','user.firstName']")
           .align-left(ng-if="tld.userService.model.currentUser.employeeID !== collaborator.user.employeeId") {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
           .align-left(ng-if="tld.userService.model.currentUser.employeeID === collaborator.user.employeeId") You
@@ -24,7 +24,7 @@ div.modal.target-list-modal
               span {{tld.permissionLabel(collaborator.permissionLevel)}}
               a(ng-hide="!tld.editable").chevron-down
             md-menu-content.collaborator-options
-              md-menu-item(ng-click="tld.selectedCollaboratorId = collaborator.user.employeeId" ng-disabled="") Make Owner
+              md-menu-item(ng-click="tld.selectedCollaboratorId = collaborator.user.employeeId" ng-disabled="") Make OwnerDetails
               md-menu-item(ng-click="tld.removeCollaboratorClick(collaborator.user.employeeId)") Remove
           .action-overlay(ng-class="{'confirm': tld.selectedCollaboratorId === collaborator.user.employeeId}")
             div.overlay-wrapper

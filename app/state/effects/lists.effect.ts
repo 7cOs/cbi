@@ -7,9 +7,9 @@ import 'rxjs/add/operator/switchMap';
 
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import * as ListActions from '../../state/actions/lists.action';
-import { ListStoreDTO } from '../../models/lists-store-dto.model';
+import { StoreListDTO } from '../../models/lists-store-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { StoreHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
 
 @Injectable()
 export class ListsEffects {
@@ -24,7 +24,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListActions.FETCH_STORE_DETAILS)
       .switchMap((action: ListActions.FetchStoreDetails) => this.listsApiService.getStorePerformance(action.payload.listId))
-      .switchMap((response: Array<ListStoreDTO>) =>
+      .switchMap((response: Array<StoreListDTO>) =>
         Observable.of(new ListActions.FetchStoreDetailsSuccess(this.listsTransformerService.formatStoresData(response))))
       .catch((error: Error) => Observable.of(new ListActions.FetchStoreDetailsFailure(error)));
   }
@@ -43,7 +43,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListActions.FETCH_HEADER_DETAILS)
       .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getHeaderDetail(action.payload.listId))
-      .switchMap((response: StoreHeaderInfoDTO) =>
+      .switchMap((response: ListHeaderInfoDTO) =>
         Observable.of(new ListActions.FetchHeaderDetailsSuccess(this.listsTransformerService.formatListHeaderData(response))))
       .catch((error: Error) => Observable.of(new ListActions.FetchHeaderDetailsFailure(error)));
   }

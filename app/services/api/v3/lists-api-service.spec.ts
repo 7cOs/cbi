@@ -4,10 +4,10 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ApiRequestType } from '../../../enums/api-request-type.enum';
 import { chanceStringOptions } from '../../../lib/spec-util';
 import { getStoreListsDTOMock } from '../../../models/lists-store-dto.model.mock';
-import { getStoreHeaderInfoDTOMock } from '../../../models/lists-store-header-dto.model.mock';
+import { getListHeaderInfoDTOMock } from '../../../models/lists-store-header-dto.model.mock';
 import { ListsApiService } from './lists-api.service';
-import { ListStoreDTO } from '../../../models/lists-store-dto.model';
-import { StoreHeaderInfoDTO } from '../../../models/lists-store-header-dto.model';
+import { StoreListDTO } from '../../../models/lists-store-dto.model';
+import { ListHeaderInfoDTO } from '../../../models/lists-store-header-dto.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -41,12 +41,12 @@ describe('ListsApiService', () => {
     });
 
     it('should call the stores list endpoint and return stores data for the given list ID', () => {
-      const storeInfoDTOResponseMock:  Array<ListStoreDTO> = getStoreListsDTOMock();
+      const storeInfoDTOResponseMock:  Array<StoreListDTO> = getStoreListsDTOMock();
 
       listsApiService.getStorePerformance(
         listIdMock
       )
-        .subscribe((response: Array<ListStoreDTO>) => {
+        .subscribe((response: Array<StoreListDTO>) => {
           expect(response).toEqual(storeInfoDTOResponseMock);
         });
 
@@ -64,12 +64,12 @@ describe('ListsApiService', () => {
     });
 
     it('should call the lists header information endpoint and return data for the given list ID', () => {
-      const expectedStoreHeaderInfoDTOMock: StoreHeaderInfoDTO = getStoreHeaderInfoDTOMock();
+      const expectedStoreHeaderInfoDTOMock: ListHeaderInfoDTO = getListHeaderInfoDTOMock();
 
       listsApiService.getHeaderDetail(
         listIdMock
       )
-        .subscribe((response: StoreHeaderInfoDTO) => {
+        .subscribe((response: ListHeaderInfoDTO) => {
           expect(response).toEqual(expectedStoreHeaderInfoDTOMock);
         });
 

@@ -1,9 +1,9 @@
 import * as Chance from 'chance';
-import { StoreHeaderDetails } from './lists.model';
+import { ListHeaderDetails } from './lists.model';
 
 let chance = new Chance();
 
-export function getStoreHeaderInfoMock(): StoreHeaderDetails {
+export function getListHeaderInfoMock(): ListHeaderDetails {
   return {
     description: chance.string(),
     id: chance.floating(),

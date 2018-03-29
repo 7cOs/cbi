@@ -1,12 +1,12 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
 import * as ListsActions from '../actions/lists.action';
-import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
+import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
 
 export interface ListsState extends State {
   status: ActionStatus;
   headerInfoStatus: ActionStatus;
   stores: Array<StoreDetailsRow>;
-  headerInfo?: StoreHeaderDetails;
+  headerInfo?: ListHeaderDetails;
 }
 
 export const initialState: ListsState = {

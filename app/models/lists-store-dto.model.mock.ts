@@ -1,13 +1,13 @@
 import * as Chance from 'chance';
-import { ListStoreDTO } from './lists-store-dto.model';
+import { StoreListDTO } from './lists-store-dto.model';
 
 let chance = new Chance();
 
-export function getStoreListsDTOMock(): ListStoreDTO[] {
-  return Array(chance.natural({min: 1, max: 3})).fill('').map(() => getListSToreDTOMock());
+export function getStoreListsDTOMock(): StoreListDTO[] {
+  return Array(chance.natural({min: 1, max: 3})).fill('').map(() => getStoreDTOMock());
 }
 
-export function getListSToreDTOMock(): ListStoreDTO {
+export function getStoreDTOMock(): StoreListDTO {
   return {
     address: chance.string(),
     cbiRecommendedSegmentCode: chance.string(),

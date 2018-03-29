@@ -8,7 +8,7 @@ export interface StoreDetailsRow {
   state: string;
 }
 
-export interface StoreHeaderDetails {
+export interface ListHeaderDetails {
   description: string;
   id: number;
   name: string;
@@ -17,7 +17,7 @@ export interface StoreHeaderDetails {
   ownerLastName: string;
 }
 
-export interface Owner {
+export interface OwnerDetails {
   employeeId: string;
   firstName: string;
   lastName: string;
@@ -27,7 +27,7 @@ export interface Collaborators {
   name: string;
 }
 
-export interface Survey {
+export interface SurveyInfo {
   sfid: string;
   name: string;
 }

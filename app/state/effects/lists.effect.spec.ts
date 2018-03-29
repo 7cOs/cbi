@@ -10,9 +10,9 @@ import * as ListActions from '../../state/actions/lists.action';
 import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { ListStoreDTO } from '../../models/lists-store-dto.model';
-import { StoreHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
-import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
+import { StoreListDTO } from '../../models/lists-store-dto.model';
+import { ListHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
+import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
 
 const chance = new Chance();
 
@@ -22,25 +22,25 @@ describe('Lists Effects', () => {
   let listsEffects: ListsEffects;
   let listsApiService: ListsApiService;
   let listsTransformerService: ListsTransformerService;
-  let listHeaderMock: StoreHeaderInfoDTO;
-  let storeListMock: ListStoreDTO[];
-  let headerDetailMock: StoreHeaderDetails;
+  let listHeaderMock: ListHeaderInfoDTO;
+  let storeListMock: StoreListDTO[];
+  let headerDetailMock: ListHeaderDetails;
   let storesData: Array<StoreDetailsRow> = getStoreListsMock();
 
   const listsApiServiceMock = {
-    getStorePerformance(listIdMock: string): Observable<ListStoreDTO[]> {
+    getStorePerformance(listIdMock: string): Observable<StoreListDTO[]> {
       return Observable.of(storeListMock);
     },
-    getHeaderDetail(listIdMock: string): Observable<StoreHeaderInfoDTO> {
+    getHeaderDetail(listIdMock: string): Observable<ListHeaderInfoDTO> {
       return Observable.of(listHeaderMock);
     }
   };
 
   let listsTransformerServiceMock = {
-    formatListHeaderData(headerDataDTO: StoreHeaderInfoDTO): StoreHeaderDetails {
+    formatListHeaderData(headerDataDTO: ListHeaderInfoDTO): ListHeaderDetails {
       return headerDetailMock;
     },
-    formatStoresData(store: Array<ListStoreDTO>): Array<StoreDetailsRow> {
+    formatStoresData(store: Array<StoreListDTO>): Array<StoreDetailsRow> {
       return storesData;
     },
   };

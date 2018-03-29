@@ -927,7 +927,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	public TargetList makeOwner() {
 		//WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[1]"));
-		//WebElement element = findElement(By.xpath("//md-menu-item[contains(.,'Make Owner')]"));
+		//WebElement element = findElement(By.xpath("//md-menu-item[contains(.,'Make OwnerDetails')]"));
 		//element.click();
 		waitForVisibleFluentWait(makeOwnerOption).click();
 		return this;

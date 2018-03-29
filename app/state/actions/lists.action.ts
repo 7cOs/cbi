@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
+import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
 
 export interface FetchStoreDetailsPayload {
   listId: string;
@@ -41,7 +41,7 @@ export const FETCH_HEADER_DETAILS_SUCCESS = '[StoreDetails] FETCH_HEADER_DETAILS
 export class FetchHeaderDetailsSuccess implements Action {
   readonly type = FETCH_HEADER_DETAILS_SUCCESS;
 
-  constructor(public payload: StoreHeaderDetails) { }
+  constructor(public payload: ListHeaderDetails) { }
 }
 
 export const FETCH_HEADER_DETAILS_FAILURE = '[StoreDetails] FETCH_HEADER_DETAILS_FAILURE';

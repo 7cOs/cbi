@@ -1,9 +1,9 @@
 import * as Chance from 'chance';
-import { StoreHeaderInfoDTO } from './lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from './lists-store-header-dto.model';
 
 let chance = new Chance();
 
-export function getStoreHeaderInfoDTOMock(): StoreHeaderInfoDTO {
+export function getListHeaderInfoDTOMock(): ListHeaderInfoDTO {
   return {
     archived: chance.bool(),
     category: chance.string(),

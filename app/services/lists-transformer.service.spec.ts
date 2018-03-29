@@ -1,11 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { getStoreListsDTOMock } from '../models/lists-store-dto.model.mock';
-import { getStoreHeaderInfoDTOMock } from '../models/lists-store-header-dto.model.mock';
+import { getListHeaderInfoDTOMock } from '../models/lists-store-header-dto.model.mock';
 import { ListsTransformerService } from './lists-transformer.service';
-import { ListStoreDTO } from '../models/lists-store-dto.model';
-import { StoreDetailsRow, StoreHeaderDetails } from '../models/lists.model';
-import { StoreHeaderInfoDTO } from '../models/lists-store-header-dto.model';
+import { StoreListDTO } from '../models/lists-store-dto.model';
+import { StoreDetailsRow, ListHeaderDetails } from '../models/lists.model';
+import { ListHeaderInfoDTO } from '../models/lists-store-header-dto.model';
 
 describe('Service: ListsTransformerService', () => {
   let listsTransformerService: ListsTransformerService;
@@ -21,7 +21,7 @@ describe('Service: ListsTransformerService', () => {
 
   describe('transformStoresData', () => {
     it('should transform the stores Data', () => {
-      const storesDTOMock: Array<ListStoreDTO> = getStoreListsDTOMock();
+      const storesDTOMock: Array<StoreListDTO> = getStoreListsDTOMock();
 
       const actualStoreData: StoreDetailsRow[] =
         listsTransformerService.formatStoresData(storesDTOMock);
@@ -40,9 +40,9 @@ describe('Service: ListsTransformerService', () => {
 
   describe('transformHeaderData', () => {
     it('should transform header Data', () => {
-      const listHeaderDTOMock: StoreHeaderInfoDTO = getStoreHeaderInfoDTOMock();
+      const listHeaderDTOMock: ListHeaderInfoDTO = getListHeaderInfoDTOMock();
 
-      const actualHeaderData: StoreHeaderDetails =
+      const actualHeaderData: ListHeaderDetails =
         listsTransformerService.formatListHeaderData(listHeaderDTOMock);
 
       expect(actualHeaderData.description).toBe(listHeaderDTOMock.description);

@@ -1,4 +1,4 @@
-export interface ListStoreDTO {
+export interface StoreListDTO {
   address: string;
   cbiRecommendedSegmentCode: string;
   cbiRecommendedSegmentDescription: string;

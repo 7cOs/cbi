@@ -7,7 +7,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListsState } from '../../state/reducers/lists.reducer';
-import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
+import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
 
 @Component({
   selector: 'list-detail',
@@ -17,7 +17,7 @@ import { StoreDetailsRow, StoreHeaderDetails } from '../../models/lists.model';
 
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetailsRow[];
-  public listHeader: StoreHeaderDetails;
+  public listHeader: ListHeaderDetails;
   private listDetailSubscription: Subscription;
 
   constructor(
