@@ -11,7 +11,7 @@ import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { StoreListDTO } from '../../models/lists-store-dto.model';
-import { ListHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from '../../models/lists-header-dto.model';
 import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
 
 const chance = new Chance();

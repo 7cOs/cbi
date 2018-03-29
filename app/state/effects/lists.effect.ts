@@ -9,7 +9,7 @@ import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import * as ListActions from '../../state/actions/lists.action';
 import { StoreListDTO } from '../../models/lists-store-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { ListHeaderInfoDTO } from '../../models/lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from '../../models/lists-header-dto.model';
 
 @Injectable()
 export class ListsEffects {

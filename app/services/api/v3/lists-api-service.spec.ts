@@ -4,10 +4,10 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ApiRequestType } from '../../../enums/api-request-type.enum';
 import { chanceStringOptions } from '../../../lib/spec-util';
 import { getStoreListsDTOMock } from '../../../models/lists-store-dto.model.mock';
-import { getListHeaderInfoDTOMock } from '../../../models/lists-store-header-dto.model.mock';
+import { getListHeaderInfoDTOMock } from '../../../models/lists-header-dto.model.mock';
 import { ListsApiService } from './lists-api.service';
 import { StoreListDTO } from '../../../models/lists-store-dto.model';
-import { ListHeaderInfoDTO } from '../../../models/lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from '../../../models/lists-header-dto.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;

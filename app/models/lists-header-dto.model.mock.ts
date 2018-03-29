@@ -1,5 +1,5 @@
 import * as Chance from 'chance';
-import { ListHeaderInfoDTO } from './lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from './lists-header-dto.model';
 
 let chance = new Chance();
 

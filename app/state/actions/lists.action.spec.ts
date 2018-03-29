@@ -2,7 +2,7 @@ import * as Chance from 'chance';
 import * as ListsActions from './lists.action';
 
 import { getStoreListsMock } from '../../models/lists-store.model.mock';
-import { getListHeaderInfoMock } from '../../models/lists-store-header.model.mock';
+import { getListHeaderInfoMock } from '../../models/lists-header.model.mock';
 
 const chance = new Chance();
 

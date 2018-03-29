@@ -1,6 +1,6 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { getStoreListsMock } from '../../models/lists-store.model.mock';
-import { getListHeaderInfoMock } from '../../models/lists-store-header.model.mock';
+import { getListHeaderInfoMock } from '../../models/lists-header.model.mock';
 import { listsReducer, initialState, ListsState } from './lists.reducer';
 import * as ListsActions from '../actions/lists.action';
 

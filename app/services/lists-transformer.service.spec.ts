@@ -1,11 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { getStoreListsDTOMock } from '../models/lists-store-dto.model.mock';
-import { getListHeaderInfoDTOMock } from '../models/lists-store-header-dto.model.mock';
+import { getListHeaderInfoDTOMock } from '../models/lists-header-dto.model.mock';
 import { ListsTransformerService } from './lists-transformer.service';
 import { StoreListDTO } from '../models/lists-store-dto.model';
 import { StoreDetailsRow, ListHeaderDetails } from '../models/lists.model';
-import { ListHeaderInfoDTO } from '../models/lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from '../models/lists-header-dto.model';
 
 describe('Service: ListsTransformerService', () => {
   let listsTransformerService: ListsTransformerService;

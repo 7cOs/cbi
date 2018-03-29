@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 import { StoreListDTO } from '../../../models/lists-store-dto.model';
-import { ListHeaderInfoDTO } from '../../../models/lists-store-header-dto.model';
+import { ListHeaderInfoDTO } from '../../../models/lists-header-dto.model';
 
 @Injectable()
 export class ListsApiService {
