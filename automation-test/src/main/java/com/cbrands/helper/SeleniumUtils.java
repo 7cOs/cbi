@@ -458,11 +458,15 @@ public class SeleniumUtils {
    *
    * @param by the element handle
    */
+	@SuppressWarnings("unchecked")
   public static void waitForElementToDisappear(By by) {
     try{
       final WebElement element = findElement(by);
-      waitForCondition(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)), DEFAULT_WAIT_TIME);
-      waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
+			final Wait<WebDriver> wait = new FluentWait(driver)
+				.withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
+				.pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS);
+			wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)));
+			wait.until(ExpectedConditions.stalenessOf(element));
     } catch (NoSuchElementException | StaleElementReferenceException e) {
       // Success. Element not present.
     }
@@ -616,8 +620,8 @@ public class SeleniumUtils {
 
     /**
      * Ensure field value is entered into field by entering a single character at a time
-     * @param WebElement
-     * @param String
+     * @param field
+     * @param value
      * @author SKARNEH
      */
     public static void enterKeys(WebElement field, String value) {
