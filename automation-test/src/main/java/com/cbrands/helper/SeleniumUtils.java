@@ -378,7 +378,7 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for visible fluent wait.
+	 * Wait for a single element to be visible fluent wait.
 	 *
 	 * @param element the element
 	 * @return the web element
@@ -393,7 +393,7 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for visible fluent wait.
+	 * Wait for a single element to be visible fluent wait.
 	 *
 	 * @param by the element locator
 	 * @return the web element
@@ -408,7 +408,7 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for elements visible fluent wait.
+	 * Wait for multiple elements visible fluent wait.
 	 *
 	 * @param elements the elements
 	 * @return the list
