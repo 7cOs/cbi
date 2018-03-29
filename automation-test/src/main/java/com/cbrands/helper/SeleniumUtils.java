@@ -445,12 +445,6 @@ public class SeleniumUtils {
     }
   }
 
-	private static FluentWait<WebDriver> getFluentWait() {
-		return new FluentWait<>(driver)
-      .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-      .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS);
-	}
-
   /**
    * Enter text into a given textbox while ensuring it has focus
    * @param expectedText text to enter
@@ -557,6 +551,12 @@ public class SeleniumUtils {
 	@Deprecated
 	public static void waitForCondition(ExpectedCondition conditon, int timeout) {
 		(new WebDriverWait(driver, timeout)).until(conditon);
+	}
+
+	private static FluentWait<WebDriver> getFluentWait() {
+		return new FluentWait<>(driver)
+			.withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
+			.pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS);
 	}
 
 	/**
