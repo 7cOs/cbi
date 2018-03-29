@@ -48,11 +48,11 @@ div.modal.target-list-modal
       inline-search(type="user" placeholder="Enter names or CBI Email addresses" variety="manage-collaborators" chosen-result="tld.collaboratorName" callback="tld.addCollaboratorClick(result)")
     div(ng-if="tld.saveButton")
       button.btn-action(ng-disabled="!tld.changed"
-      ng-click="tld.updateList()"
-      analytics-event-on="click"
-      category="{{tld.analyticsCategory}}"
-      action="Manage Target List"
-      label="{{tld.listID}}") Save
+                        ng-click="tld.updateList()"
+                        analytics-event-on="click"
+                        category="{{tld.analyticsCategory}}"
+                        action="Manage Target List"
+                        label="{{tld.listID}}") Save
       p.cancel.accent(ng-click="tld.closeModal(true)") X Cancel
     button(ng-if="tld.closeButton" ng-click="tld.changed ? tld.navigateToTL() : tld.closeModal(true)").btn-action Close
   div.modal-footer.clearfix(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'" ng-class="{'toasted': tld.showToast}")
@@ -61,15 +61,15 @@ div.modal.target-list-modal
       p Are you sure you want to leave this target list?
       p.bold.link(ng-if="!tld.confirmToast")
         a(ng-click="tld.removeCollaborator([tld.userService.model.currentUser.employeeID]); tld.removeFooterToast()"
-        analytics-event-on="click"
-        category="{{tld.analyticsCategory}}"
-        action="Leave Target List"
-        label="{{tld.listID}}") Yes, Leave
+          analytics-event-on="click"
+          category="{{tld.analyticsCategory}}"
+          action="Leave Target List"
+          label="{{tld.listID}}") Yes, Leave
       a.hide-row(ng-click="tld.removeFooterToast(); tld.leave = false")
   div.modal-footer.clearfix(ng-if="tld.editable" ng-class="{'toasted': tld.showToast}")
     button.link.align-left(ng-click="tld.footerToast('archive')") Archive List
     button.link.align-right(ng-click="tld.footerToast('delete')"
-    ng-disabled="tld.targetListService.model.currentList.collaborators.length > 1 || tld.pendingShares.length > 0") Delete List
+                            ng-disabled="tld.targetListService.model.currentList.collaborators.length > 1 || tld.pendingShares.length > 0") Delete List
     .toast(ng-hide="!tld.showToast")
       p Are you sure you want to <span ng-if="tld.deleting">delete</span><span ng-if="tld.archiving">archive</span> this target list?
       p.bold.link(ng-if="tld.deleting && !tld.confirmToast")
