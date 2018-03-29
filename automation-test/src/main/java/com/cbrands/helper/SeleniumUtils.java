@@ -212,48 +212,6 @@ public class SeleniumUtils {
   }
 
 	/**
-	 * Check.
-	 *
-	 * @param by the by
-	 */
-	public static void check(By by) {
-		WebElement element = driver.findElement(by);
-		check(element);
-	}
-
-	/**
-	 * Check.
-	 *
-	 * @param element the element
-	 */
-	public static void check(WebElement element) {
-		if (!element.isSelected()) {
-			element.click();
-		}
-	}
-
-	/**
-	 * Uncheck.
-	 *
-	 * @param by the by
-	 */
-	public static void uncheck(By by) {
-		WebElement element = driver.findElement(by);
-		uncheck(element);
-	}
-
-	/**
-	 * Uncheck.
-	 *
-	 * @param element the element
-	 */
-	public static void uncheck(WebElement element) {
-		if (element.isSelected()) {
-			element.click();
-		}
-	}
-
-	/**
 	 * Gets the select.
 	 *
 	 * @param by the by
