@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cbrands.pages.opportunities.Opportunities;
-import com.cbrands.pages.targetList.TargetList;
-import com.cbrands.pages.targetList.TargetListListingsPage;
+import com.cbrands.pages.lists.TargetList;
+import com.cbrands.pages.lists.ListsPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -111,11 +111,11 @@ public class Home extends LoadableComponent<Home>{
    * to navigate to the
    * TargetList page.
    *
-   * @see TargetListListingsPage
+   * @see ListsPage
    */
   @Deprecated
   public TargetList navigateTargetList() {
-    PageFactory.initElements(driver, TargetListListingsPage.class).goToPage();
+    PageFactory.initElements(driver, ListsPage.class).goToPage();
     return PageFactory.initElements(driver, TargetList.class);
   }
 

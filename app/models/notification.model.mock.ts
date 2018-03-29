@@ -76,7 +76,7 @@ export function getStoreNotificationMock(): any {
     objectType: 'STORE',
     objectId: chance.string(),
     action: 'ADDED_NOTE',
-    salesforceUserNoteID: null,
+    salesforceUserNoteID: chance.string(),
     creator: {
       id: chance.string(),
       firstName: chance.string(),
@@ -104,7 +104,7 @@ export function getAccountNotificationMock(): any {
     objectType: 'ACCOUNT',
     objectId: chance.string(),
     action: 'ADDED_NOTE',
-    salesforceUserNoteID: null,
+    salesforceUserNoteID: chance.string(),
     creator: {
       id: chance.string(),
       firstName: chance.string(),
@@ -128,7 +128,7 @@ export function getDistributorNotificationMock(): any {
     objectType: 'DISTRIBUTOR',
     objectId: chance.string(),
     action: 'ADDED_NOTE',
-    salesforceUserNoteID: null,
+    salesforceUserNoteID: chance.string(),
     creator: {
       id: chance.string(),
       firstName: chance.string(),
