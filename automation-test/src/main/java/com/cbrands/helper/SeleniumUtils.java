@@ -385,9 +385,7 @@ public class SeleniumUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static WebElement waitForVisibleFluentWait(WebElement element) {
-		Wait<WebDriver> wait = new FluentWait(driver)
-	              .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-	              .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.MILLISECONDS)
+		final Wait<WebDriver> wait = getFluentWait()
 	              .ignoring(NoSuchElementException.class)
 	              .ignoring(ElementNotVisibleException.class);
 	   wait.until(ExpectedConditions.visibilityOf(element));
@@ -402,9 +400,7 @@ public class SeleniumUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static WebElement waitForVisibleFluentWait(By by) {
-		Wait<WebDriver> wait = new FluentWait(driver)
-	              .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-	              .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.MILLISECONDS)
+		final Wait<WebDriver> wait = getFluentWait()
 	              .ignoring(NoSuchElementException.class)
 	              .ignoring(ElementNotVisibleException.class);
 	   wait.until(ExpectedConditions.visibilityOfElementLocated(by));
@@ -419,9 +415,7 @@ public class SeleniumUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<WebElement> waitForElementsVisibleFluentWait(List<WebElement> elements) {
-		Wait<WebDriver> wait = new FluentWait(driver)
-				.withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-				.pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS)
+		final Wait<WebDriver> wait = getFluentWait()
 				.ignoring(NoSuchElementException.class)
 				.ignoring(ElementNotVisibleException.class);
 		wait.until(ExpectedConditions.visibilityOfAllElements(elements));
@@ -447,15 +441,20 @@ public class SeleniumUtils {
   public static void waitForElementToDisappear(By by) {
     try{
       final WebElement element = findElement(by);
-			final Wait<WebDriver> wait = new FluentWait(driver)
-				.withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-				.pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS);
+
+      final Wait<WebDriver> wait = getFluentWait();
 			wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)));
 			wait.until(ExpectedConditions.stalenessOf(element));
     } catch (NoSuchElementException | StaleElementReferenceException e) {
       // Success. Element not present.
     }
   }
+
+	private static FluentWait getFluentWait() {
+		return new FluentWait(driver)
+      .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
+      .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS);
+	}
 
   /**
    * Enter text into a given textbox while ensuring it has focus
