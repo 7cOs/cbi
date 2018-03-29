@@ -17,8 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SeleniumUtils {
 
-	/** The Constant DEFAULT_WAIT_TIME. */
-	public static final int DEFAULT_WAIT_TIME = 20;
+	private static final int DEFAULT_WAIT_TIME = 20;
   private static final int DEFAULT_POLL_TIME = 5;
 
   /** The driver. */
