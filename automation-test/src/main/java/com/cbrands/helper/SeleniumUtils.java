@@ -552,11 +552,14 @@ public class SeleniumUtils {
 	}
 
 	/**
+	 * @deprecated Please keep wait logic contained within Selenium Utils, and use Fluent Wait instead of WebDriverWait.
+	 *
 	 * Wait for condition.
 	 *
 	 * @param conditon the conditon
 	 * @param timeout the timeout
 	 */
+	@Deprecated
 	public static void waitForCondition(ExpectedCondition conditon, int timeout) {
 		(new WebDriverWait(driver, timeout)).until(conditon);
 	}
