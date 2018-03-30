@@ -241,6 +241,11 @@ public class AccountDashboardPage extends TestNGBasePage {
       return resultsAreLoaded;
     }
 
+    public AccountDashboardPage waitForBrandsPanelLoaderToDisappear() {
+      waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
+
   }
 
   public AccountDashboardPage drillIntoFirstRowInRightPanel() {
@@ -303,11 +308,6 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   public String getRightPanelSelectorContextLabel() {
     return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
-  }
-
-  public AccountDashboardPage waitForBrandsPanelLoaderToDisappear() {
-    waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
-    return this;
   }
 
   public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
