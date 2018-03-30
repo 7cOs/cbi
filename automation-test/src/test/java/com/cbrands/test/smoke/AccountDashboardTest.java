@@ -45,7 +45,7 @@ public class AccountDashboardTest extends BaseTestCase {
       .filterForm.enterDistributorSearchText(distributorSearchText)
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(secondarySearchText)
-      .clickApplyFilters()
+      .filterForm.clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
 

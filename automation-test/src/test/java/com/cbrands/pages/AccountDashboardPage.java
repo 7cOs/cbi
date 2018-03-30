@@ -39,10 +39,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
   private WebElement retailerChainFilter;
 
-  @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button" +
-    ".btn-action")
-  private WebElement applyFilters;
-
   @FindBy(how = How.XPATH, using = "//a[contains(@class, 'reset-icon')]")
   private WebElement resetFilters;
 
@@ -81,6 +77,10 @@ public class AccountDashboardPage extends TestNGBasePage {
 
     @FindBy(how = How.XPATH, using = "//inline-search[@type='store']")
     private WebElement retailerStoreFilter;
+
+    @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button" +
+      ".btn-action")
+    private WebElement applyFilters;
 
     private final WebDriver driver;
 
@@ -196,13 +196,13 @@ public class AccountDashboardPage extends TestNGBasePage {
       waitForElementToDisappear(By.xpath("//md-progress-circular"));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
-  }
 
-  public AccountDashboardPage clickApplyFilters() {
-    waitForElementToClickable(applyFilters, true);
-    waitForVisibleFluentWait(applyFilters).click();
+    public AccountDashboardPage clickApplyFilters() {
+      waitForElementToClickable(applyFilters, true);
+      waitForVisibleFluentWait(applyFilters).click();
 
-    return this;
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
   }
 
   public AccountDashboardPage drillIntoFirstRowInLeftPanel() {
@@ -271,13 +271,14 @@ public class AccountDashboardPage extends TestNGBasePage {
     return notesModal;
   }
 
-  public AccountDashboardPage filterForStore(String storeAccountName, String stateLocation, String address) {
+  public AccountDashboardPage applyFiltersForStore(String storeAccountName, String stateLocation, String address) {
     return this.filterForm.openRetailerTypeDropdown()
       .filterForm.chooseStoreRetailerType()
       .filterForm.enterRetailerStoreSearchText(storeAccountName)
       .filterForm.clickSearchForRetailerStore()
       .filterForm.waitForStoreLoaderToDisappear()
-      .filterForm.selectRetailerStoreByState(stateLocation, address);
+      .filterForm.selectRetailerStoreByState(stateLocation, address)
+      .filterForm.clickApplyFilters();
   }
 
   public String getRightPanelHeader() {

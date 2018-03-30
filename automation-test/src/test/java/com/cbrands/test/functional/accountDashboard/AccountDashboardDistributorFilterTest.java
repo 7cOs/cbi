@@ -53,7 +53,8 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       "Failed to select Distributor"
     );
 
-    accountDashboardPage.clickApplyFilters()
+    accountDashboardPage
+      .filterForm.clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
 
@@ -72,7 +73,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .filterForm.enterDistributorSearchText(distributorName)
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
+      .filterForm.clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
       .filterForm.clickRemoveDistributorFilter();
@@ -80,7 +81,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
 
     accountDashboardPage
-      .clickApplyFilters()
+      .filterForm.clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
     assertDefaultDistributorLabels();
@@ -96,7 +97,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .filterForm.enterDistributorSearchText(distributorName)
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
+      .filterForm.clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
       .clickResetFilters();

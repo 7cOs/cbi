@@ -61,7 +61,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
     );
 
     accountDashboardPage
-      .clickApplyFilters()
+      .filterForm.clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
 
@@ -81,7 +81,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .filterForm.enterDistributorSearchText(distributorName)
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
+      .filterForm.clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
       .clickSeeAllOpportunitiesLink()
