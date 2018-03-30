@@ -18,14 +18,11 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends TestNGBasePage {
-  private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
-  private static final String LEFT_PANEL_ROW_XPATH = ".//md-tab-content[contains(@class, 'md-active')]//tr[@ng-repeat]";
+  private static final String PANEL_LOADER_XPATH = "//div[contains(@class, 'loader-wrap')]";
   private static final String RIGHT_PANEL_XPATH = "//div[contains(@class, 'scorecard-chart')]";
   private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
   private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
-  private static final String PANEL_LOADER_XPATH = "//div[contains(@class, 'loader-wrap')]";
   private static final String RIGHT_PANEL_LOADER_XPATH = RIGHT_PANEL_XPATH + PANEL_LOADER_XPATH;
-  private static final String LEFT_PANEL_LOADER_XPATH = LEFT_PANEL_XPATH + PANEL_LOADER_XPATH;
   private static final String REMOVE_BUTTON_XPATH = "//input[contains(@class, 'remove-btn visible')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
@@ -205,6 +202,10 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public static class BrandSnapshotPanel {
+    private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
+    private static final String LEFT_PANEL_LOADER_XPATH = LEFT_PANEL_XPATH + PANEL_LOADER_XPATH;
+    private static final String LEFT_PANEL_ROW_XPATH = ".//md-tab-content[contains(@class, 'md-active')]//tr[@ng-repeat]";
+
     @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
     private WebElement leftPanel;
 
