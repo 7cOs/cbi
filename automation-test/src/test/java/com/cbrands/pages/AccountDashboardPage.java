@@ -214,12 +214,12 @@ public class AccountDashboardPage extends TestNGBasePage {
       this.driver = driver;
     }
 
-    public AccountDashboardPage drillIntoFirstRowInLeftPanel() {
+    public AccountDashboardPage drillIntoFirstRow() {
       scrollToAndClick(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public AccountDashboardPage drillUpLeftPanel() {
+    public AccountDashboardPage drillUp() {
       final WebElement backButton = leftPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
       waitForVisibleFluentWait(backButton);
       waitForElementToClickable(backButton, true).click();
@@ -227,7 +227,7 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
+    public boolean areResultsLoadedFor(LeftPanelLevel level) {
       boolean resultsAreLoaded;
 
       try {
