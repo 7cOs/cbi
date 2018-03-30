@@ -36,14 +36,8 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
 
-  @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
-  private WebElement retailerTypeDropdown;
-
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
   private WebElement retailerChainFilter;
-
-  @FindBy(how = How.XPATH, using = "//inline-search[@type='store']")
-  private WebElement retailerStoreFilter;
 
   @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button" +
     ".btn-action")
@@ -81,6 +75,12 @@ public class AccountDashboardPage extends TestNGBasePage {
   public static class FilterForm {
     @FindBy(how = How.XPATH, using = "//inline-search[@type='distributor']")
     private WebElement distributorFilter;
+
+    @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
+    private WebElement retailerTypeDropdown;
+
+    @FindBy(how = How.XPATH, using = "//inline-search[@type='store']")
+    private WebElement retailerStoreFilter;
 
     private final WebDriver driver;
 
@@ -151,51 +151,51 @@ public class AccountDashboardPage extends TestNGBasePage {
 
       return retailer;
     }
-  }
 
-  public AccountDashboardPage clickRetailerType() {
-    waitForElementToClickable(retailerTypeDropdown, true).click();
-    return this;
-  }
+    public AccountDashboardPage openRetailerTypeDropdown() {
+      waitForElementToClickable(retailerTypeDropdown, true).click();
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
-  public AccountDashboardPage chooseStoreRetailerType() {
-    final By retailerTypeHandle = By.xpath("//md-option[@aria-label='Store']");
-    waitForElementToClickable(findElement(retailerTypeHandle), true).click();
-    waitForElementToClickable(findElement(retailerTypeHandle), false);
-    return this;
-  }
+    public AccountDashboardPage chooseStoreRetailerType() {
+      final By retailerTypeHandle = By.xpath("//md-option[@aria-label='Store']");
+      waitForElementToClickable(findElement(retailerTypeHandle), true).click();
+      waitForElementToClickable(findElement(retailerTypeHandle), false);
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
-  public AccountDashboardPage enterRetailerStoreSearchText(String text) {
-    final WebElement retailerStoreTextBox = retailerStoreFilter
-      .findElement(By.xpath(".//input[@placeholder='Name, Address, TDLinx']"));
-    waitForElementToClickable(retailerStoreTextBox, true).click();
-    retailerStoreTextBox.sendKeys(text);
+    public AccountDashboardPage enterRetailerStoreSearchText(String text) {
+      final WebElement retailerStoreTextBox = retailerStoreFilter
+        .findElement(By.xpath(".//input[@placeholder='Name, Address, TDLinx']"));
+      waitForElementToClickable(retailerStoreTextBox, true).click();
+      retailerStoreTextBox.sendKeys(text);
 
-    return this;
-  }
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
-  public AccountDashboardPage clickSearchForRetailerStore() {
-    final WebElement searchButton = retailerStoreFilter
-      .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
-    waitForElementToClickable(searchButton, true).click();
+    public AccountDashboardPage clickSearchForRetailerStore() {
+      final WebElement searchButton = retailerStoreFilter
+        .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
+      waitForElementToClickable(searchButton, true).click();
 
-    return this;
-  }
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
-  public AccountDashboardPage waitForStoreLoaderToDisappear() {
-    waitForElementToDisappear(By.xpath("//md-progress-circular"));
-    return this;
-  }
+    public AccountDashboardPage selectRetailerStoreByState(String stateLocation, String address) {
+      final WebElement selectMe = retailerStoreFilter
+        .findElement(By.xpath(".//div[contains(@class, 'results-container')]"))
+        .findElement(By.xpath(".//label[contains(@class, 'state-group')][contains(., '" + stateLocation + "')]"))
+        .findElement(By.xpath("./following-sibling::li[contains(., '" + address + "')]"));
 
-  public AccountDashboardPage selectRetailerStoreByState(String stateLocation, String address) {
-    final WebElement selectMe = retailerStoreFilter
-      .findElement(By.xpath(".//div[contains(@class, 'results-container')]"))
-      .findElement(By.xpath(".//label[contains(@class, 'state-group')][contains(., '" + stateLocation + "')]"))
-      .findElement(By.xpath("./following-sibling::li[contains(., '" + address + "')]"));
+      scrollToAndClick(selectMe);
 
-    scrollToAndClick(selectMe);
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
-    return this;
+    public AccountDashboardPage waitForStoreLoaderToDisappear() {
+      waitForElementToDisappear(By.xpath("//md-progress-circular"));
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
   }
 
   public AccountDashboardPage clickApplyFilters() {
@@ -272,12 +272,12 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public AccountDashboardPage filterForStore(String storeAccountName, String stateLocation, String address) {
-    return this.clickRetailerType()
-      .chooseStoreRetailerType()
-      .enterRetailerStoreSearchText(storeAccountName)
-      .clickSearchForRetailerStore()
-      .waitForStoreLoaderToDisappear()
-      .selectRetailerStoreByState(stateLocation, address);
+    return this.filterForm.openRetailerTypeDropdown()
+      .filterForm.chooseStoreRetailerType()
+      .filterForm.enterRetailerStoreSearchText(storeAccountName)
+      .filterForm.clickSearchForRetailerStore()
+      .filterForm.waitForStoreLoaderToDisappear()
+      .filterForm.selectRetailerStoreByState(stateLocation, address);
   }
 
   public String getRightPanelHeader() {
