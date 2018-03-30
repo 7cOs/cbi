@@ -56,7 +56,8 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to load results"
     );
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
+      accountDashboardPage
+        .topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
       "Right accounts panel failed to load results"
     );
   }
@@ -68,9 +69,11 @@ public class AccountDashboardTest extends BaseTestCase {
   }
 
   private void drillRightPanelToBottom() {
-    accountDashboardPage.drillIntoFirstRowInRightPanel();
+    accountDashboardPage
+      .topBottomPanel.drillIntoFirstRowInRightPanel();
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
+      accountDashboardPage
+        .topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
       "Right panel failed to load accounts for selected distributor"
     );
     Assert.assertTrue(
@@ -80,9 +83,10 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to load results"
     );
 
-    accountDashboardPage.drillIntoFirstRowInRightPanel();
+    accountDashboardPage.topBottomPanel.drillIntoFirstRowInRightPanel();
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.SubAccounts),
+      accountDashboardPage
+        .topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.SubAccounts),
       "Right panel failed to load subaccounts for selected account"
     );
     Assert.assertTrue(
@@ -91,9 +95,10 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to reload for subaccounts"
     );
 
-    accountDashboardPage.drillIntoFirstRowInRightPanel();
+    accountDashboardPage.topBottomPanel.drillIntoFirstRowInRightPanel();
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Stores),
+      accountDashboardPage
+        .topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.Stores),
       "Right accounts panel failed to load stores for selected subaccount"
     );
     Assert.assertTrue(
@@ -105,9 +110,10 @@ public class AccountDashboardTest extends BaseTestCase {
   }
 
   private void drillRightPanelToTop() {
-    accountDashboardPage.drillUpRightPanel();
+    accountDashboardPage.topBottomPanel.drillUpRightPanel();
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.SubAccounts),
+      accountDashboardPage
+        .topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.SubAccounts),
       "Right accounts panel failed to load subaccounts"
     );
     Assert.assertTrue(
@@ -117,9 +123,10 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to reload for subaccounts"
     );
 
-    accountDashboardPage.drillUpRightPanel();
+    accountDashboardPage.topBottomPanel.drillUpRightPanel();
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
+      accountDashboardPage
+        .topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
       "Right accounts panel failed to load accounts"
     );
     Assert.assertTrue(
@@ -129,9 +136,10 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to reload for accounts"
     );
 
-    accountDashboardPage.drillUpRightPanel();
+    accountDashboardPage.topBottomPanel.drillUpRightPanel();
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
+      accountDashboardPage
+        .topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
       "Right accounts panel failed to load distributors"
     );
     Assert.assertTrue(
@@ -154,7 +162,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to load for SKU/Packages"
     );
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
+      accountDashboardPage.topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
       "Right accounts panel failed to reload for SKU/Packages"
     );
 
@@ -168,7 +176,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to load for Brands"
     );
     Assert.assertTrue(
-      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
+      accountDashboardPage.topBottomPanel.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
       "Right accounts panel failed to reload for Brands"
     );
   }

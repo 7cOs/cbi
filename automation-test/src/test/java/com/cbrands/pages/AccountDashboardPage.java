@@ -38,9 +38,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
   private WebElement retailerChainFilter;
 
-  @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
-  private WebElement rightPanel;
-
   @FindBy(how = How.XPATH, using = "//a[contains(., 'See All Opportunities')]")
   private WebElement seeAllOpportunitiesLink;
 
@@ -269,40 +266,43 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public static class TopBottomPanel {
+    @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
+    private WebElement rightPanel;
+
     private final WebDriver driver;
 
     public TopBottomPanel(WebDriver driver) {
       this.driver = driver;
     }
-  }
 
-  public AccountDashboardPage drillIntoFirstRowInRightPanel() {
-    scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
-    return this;
-  }
-
-  public AccountDashboardPage drillUpRightPanel() {
-    final WebElement backButton = rightPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
-    waitForVisibleFluentWait(backButton);
-    waitForElementToClickable(backButton, true).click();
-
-    return this;
-  }
-
-  public boolean isRightPanelResultsLoadedFor(RightPanelLevel rightPanelLevel) {
-    boolean resultsAreLoaded;
-
-    try {
-      waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
-      waitForVisibleFluentWait(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
-
-      final WebElement panelHeader = rightPanel.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
-      resultsAreLoaded = rightPanelLevel.name().equalsIgnoreCase(panelHeader.getText());
-    } catch (NoSuchElementException e) {
-      resultsAreLoaded = false;
+    public AccountDashboardPage drillIntoFirstRowInRightPanel() {
+      scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    return resultsAreLoaded;
+    public AccountDashboardPage drillUpRightPanel() {
+      final WebElement backButton = rightPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+      waitForVisibleFluentWait(backButton);
+      waitForElementToClickable(backButton, true).click();
+
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
+
+    public boolean isRightPanelResultsLoadedFor(RightPanelLevel rightPanelLevel) {
+      boolean resultsAreLoaded;
+
+      try {
+        waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
+        waitForVisibleFluentWait(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
+
+        final WebElement panelHeader = rightPanel.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
+        resultsAreLoaded = rightPanelLevel.name().equalsIgnoreCase(panelHeader.getText());
+      } catch (NoSuchElementException e) {
+        resultsAreLoaded = false;
+      }
+
+      return resultsAreLoaded;
+    }
   }
 
   public NotesModal clickNotesButton() {
