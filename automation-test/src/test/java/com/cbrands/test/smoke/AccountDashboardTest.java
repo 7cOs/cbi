@@ -2,7 +2,7 @@ package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.AccountDashboardPage;
-import com.cbrands.pages.AccountDashboardPage.LeftPanelLevel;
+import com.cbrands.pages.AccountDashboardPage.BrandSnapshotPanel.LeftPanelLevel;
 import com.cbrands.pages.AccountDashboardPage.RightPanelLevel;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;

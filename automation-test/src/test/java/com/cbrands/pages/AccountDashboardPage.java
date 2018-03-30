@@ -247,6 +247,17 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
+    public enum LeftPanelLevel {
+      Brand("Brand"),
+      SkuPackage("SKU / PACKAGE");
+
+      private final String header;
+
+      LeftPanelLevel(String header) {
+        this.header = header;
+      }
+    }
+
   }
 
   public AccountDashboardPage drillIntoFirstRowInRightPanel() {
@@ -336,16 +347,5 @@ public class AccountDashboardPage extends TestNGBasePage {
     Accounts,
     SubAccounts,
     Stores
-  }
-
-  public enum LeftPanelLevel {
-    Brand("Brand"),
-    SkuPackage("SKU / PACKAGE");
-
-    private final String header;
-
-    LeftPanelLevel(String header) {
-      this.header = header;
-    }
   }
 }
