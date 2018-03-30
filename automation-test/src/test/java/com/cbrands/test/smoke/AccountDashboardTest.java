@@ -2,7 +2,7 @@ package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.AccountDashboardPage;
-import com.cbrands.pages.AccountDashboardPage.BrandSnapshotPanel.LeftPanelLevel;
+import com.cbrands.pages.AccountDashboardPage.BrandSnapshotPanel.Level;
 import com.cbrands.pages.AccountDashboardPage.RightPanelLevel;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
@@ -52,7 +52,7 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to load results"
     );
     Assert.assertTrue(
@@ -76,7 +76,7 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to load results"
     );
 
@@ -87,7 +87,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
 
@@ -99,7 +99,7 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to reload for stores"
     );
   }
@@ -113,7 +113,7 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
 
@@ -125,7 +125,7 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to reload for accounts"
     );
 
@@ -137,7 +137,7 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to reload for distributors"
     );
   }
@@ -150,7 +150,7 @@ public class AccountDashboardTest extends BaseTestCase {
       .waitForMarketPanelLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.SkuPackage),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.SkuPackage),
       "Left brands panel failed to load for SKU/Packages"
     );
     Assert.assertTrue(
@@ -164,7 +164,7 @@ public class AccountDashboardTest extends BaseTestCase {
       .waitForMarketPanelLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
       "Left brands panel failed to load for Brands"
     );
     Assert.assertTrue(

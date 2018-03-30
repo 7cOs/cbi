@@ -228,7 +228,7 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public boolean areResultsLoadedFor(LeftPanelLevel level) {
+    public boolean areResultsLoadedFor(Level level) {
       boolean resultsAreLoaded;
 
       try {
@@ -247,13 +247,13 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public enum LeftPanelLevel {
+    public enum Level {
       Brand("Brand"),
       SkuPackage("SKU / PACKAGE");
 
       private final String header;
 
-      LeftPanelLevel(String header) {
+      Level(String header) {
         this.header = header;
       }
     }
