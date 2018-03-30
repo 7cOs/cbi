@@ -50,7 +50,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
     );
 
     accountDashboardPage
-      .selectPremiseType(premiseType)
+      .filterForm.selectPremiseType(premiseType)
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
       .selectDistributorFilterContaining(distributorName);
@@ -77,7 +77,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
   )
   public void viewOpportunities(PremiseType premiseType, String distributorName) {
     final OpportunitiesPage opportunitiesPage = accountDashboardPage
-      .selectPremiseType(premiseType)
+      .filterForm.selectPremiseType(premiseType)
       .enterDistributorSearchText(distributorName)
       .clickSearchForDistributor()
       .selectDistributorFilterContaining(distributorName)

@@ -31,6 +31,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
   private final WebDriver driver;
+  public final FilterForm filterForm;
 
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
@@ -65,6 +66,8 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
+
+    this.filterForm = new FilterForm(driver);
   }
 
   @Override
@@ -78,13 +81,23 @@ public class AccountDashboardPage extends TestNGBasePage {
     driver.get(webAppBaseUrl + "/accounts");
   }
 
-  public AccountDashboardPage selectPremiseType(PremiseType premiseType) {
-    waitForElementToClickable(
-      findElement(By.xpath("//md-radio-button[@aria-label='" + premiseType.label() + "']")),
-      true
-    ).click();
-    return this;
+  public static class FilterForm {
+    private final WebDriver driver;
+
+    public FilterForm(WebDriver driver) {
+      this.driver = driver;
+    }
+
+    public AccountDashboardPage selectPremiseType(PremiseType premiseType) {
+      waitForElementToClickable(
+        findElement(By.xpath("//md-radio-button[@aria-label='" + premiseType.label() + "']")),
+        true
+      ).click();
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
+
   }
+
 
   public AccountDashboardPage enterDistributorSearchText(String text) {
     final WebElement distributorTextBox = distributorFilter
