@@ -37,9 +37,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
   private WebElement retailerChainFilter;
 
-  @FindBy(how = How.XPATH, using = "//a[contains(@class, 'reset-icon')]")
-  private WebElement resetFilters;
-
   @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
   private WebElement rightPanel;
 
@@ -77,6 +74,9 @@ public class AccountDashboardPage extends TestNGBasePage {
     @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button" +
       ".btn-action")
     private WebElement applyFilters;
+
+    @FindBy(how = How.XPATH, using = "//a[contains(@class, 'reset-icon')]")
+    private WebElement resetFilters;
 
     private final WebDriver driver;
 
@@ -196,6 +196,12 @@ public class AccountDashboardPage extends TestNGBasePage {
     public AccountDashboardPage clickApplyFilters() {
       waitForElementToClickable(applyFilters, true);
       waitForVisibleFluentWait(applyFilters).click();
+
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
+
+    public AccountDashboardPage clickResetFilters() {
+      waitForElementToClickable(resetFilters, true).click();
 
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
@@ -324,12 +330,6 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
-    return this;
-  }
-
-  public AccountDashboardPage clickResetFilters() {
-    waitForElementToClickable(resetFilters, true).click();
-
     return this;
   }
 

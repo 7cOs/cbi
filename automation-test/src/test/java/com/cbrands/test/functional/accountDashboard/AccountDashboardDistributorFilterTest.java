@@ -103,7 +103,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
-      .clickResetFilters();
+      .filterForm.clickResetFilters();
 
     Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
     assertDefaultDistributorLabels();
