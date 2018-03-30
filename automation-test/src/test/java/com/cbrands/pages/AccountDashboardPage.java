@@ -36,9 +36,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
 
-  @FindBy(how = How.XPATH, using = "//inline-search[@type='distributor']")
-  private WebElement distributorFilter;
-
   @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
   private WebElement retailerTypeDropdown;
 
@@ -67,7 +64,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
 
-    this.filterForm = new FilterForm(driver);
+    this.filterForm = PageFactory.initElements(driver, FilterForm.class);
   }
 
   @Override
@@ -82,6 +79,9 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public static class FilterForm {
+    @FindBy(how = How.XPATH, using = "//inline-search[@type='distributor']")
+    private WebElement distributorFilter;
+
     private final WebDriver driver;
 
     public FilterForm(WebDriver driver) {
@@ -96,39 +96,61 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-  }
+    public AccountDashboardPage clickRemoveDistributorFilter() {
+      final WebElement removeDistributorButton = distributorFilter.findElement(By.xpath(REMOVE_BUTTON_XPATH));
+      waitForElementToClickable(removeDistributorButton, true).click();
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
+    public String getDistributorFieldText() {
+      return distributorFilter.findElement(By.xpath("//input[@type='text']")).getAttribute("value");
+    }
 
-  public AccountDashboardPage enterDistributorSearchText(String text) {
-    final WebElement distributorTextBox = distributorFilter
-      .findElement(By.xpath(".//input[@placeholder='Name']"));
-    waitForElementToClickable(distributorTextBox, true).click();
-    distributorTextBox.sendKeys(text);
+    public AccountDashboardPage enterDistributorSearchText(String text) {
+      final WebElement distributorTextBox = distributorFilter
+        .findElement(By.xpath(".//input[@placeholder='Name']"));
+      waitForElementToClickable(distributorTextBox, true).click();
+      distributorTextBox.sendKeys(text);
 
-    return this;
-  }
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
-  public AccountDashboardPage clickSearchForDistributor() {
-    final WebElement searchButton = distributorFilter
-      .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
-    waitForElementToClickable(searchButton, true).click();
+    public AccountDashboardPage clickSearchForDistributor() {
+      final WebElement searchButton = distributorFilter
+        .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
+      waitForElementToClickable(searchButton, true).click();
 
-    return this;
-  }
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
 
-  public AccountDashboardPage selectDistributorFilterContaining(String text) {
-    final WebElement resultsContainer = distributorFilter
-      .findElement(By.xpath(".//div[contains(@class, 'results-container')]"));
-    waitForVisibleFluentWait(resultsContainer);
+    public AccountDashboardPage selectDistributorFilterContaining(String text) {
+      final WebElement resultsContainer = distributorFilter
+        .findElement(By.xpath(".//div[contains(@class, 'results-container')]"));
+      waitForVisibleFluentWait(resultsContainer);
 
-    final List<WebElement> results = resultsContainer.findElements(By.xpath(".//li"));
-    waitForElementsVisibleFluentWait(results);
+      final List<WebElement> results = resultsContainer.findElements(By.xpath(".//li"));
+      waitForElementsVisibleFluentWait(results);
 
-    final WebElement distributor = getFirstElementContainingText(text, results);
-    Assert.assertNotNull(distributor, "No distributor found with name containing " + text);
-    waitForElementToClickable(distributor, true).click();
+      final WebElement distributor = getFirstElementContainingText(text, results);
+      Assert.assertNotNull(distributor, "No distributor found with name containing " + text);
+      waitForElementToClickable(distributor, true).click();
 
-    return this;
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
+
+    private WebElement getFirstElementContainingText(String text, List<WebElement> elements) {
+      WebElement retailer = null;
+
+      for (WebElement result : elements) {
+        final String resultText = result.getText().trim();
+        if (resultText.toUpperCase().contains(text.toUpperCase())) {
+          retailer = result;
+          break;
+        }
+      }
+
+      return retailer;
+    }
   }
 
   public AccountDashboardPage clickRetailerType() {
@@ -174,20 +196,6 @@ public class AccountDashboardPage extends TestNGBasePage {
     scrollToAndClick(selectMe);
 
     return this;
-  }
-
-  private WebElement getFirstElementContainingText(String text, List<WebElement> elements) {
-    WebElement retailer = null;
-
-    for (WebElement result : elements) {
-      final String resultText = result.getText().trim();
-      if (resultText.toUpperCase().contains(text.toUpperCase())) {
-        retailer = result;
-        break;
-      }
-    }
-
-    return retailer;
   }
 
   public AccountDashboardPage clickApplyFilters() {
@@ -293,16 +301,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
     return this;
-  }
-
-  public AccountDashboardPage clickRemoveDistributorFilter() {
-    final WebElement removeDistributorButton = distributorFilter.findElement(By.xpath(REMOVE_BUTTON_XPATH));
-    waitForElementToClickable(removeDistributorButton, true).click();
-    return this;
-  }
-
-  public String getDistributorFieldText() {
-    return distributorFilter.findElement(By.xpath("//input[@type='text']")).getAttribute("value");
   }
 
   public AccountDashboardPage clickResetFilters() {

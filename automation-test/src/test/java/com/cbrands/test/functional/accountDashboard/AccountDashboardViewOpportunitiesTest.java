@@ -51,9 +51,9 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
 
     accountDashboardPage
       .filterForm.selectPremiseType(premiseType)
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName);
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName);
 
     Assert.assertFalse(
       accountDashboardPage.isOpportunitiesLinkEnabled(),
@@ -78,9 +78,9 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
   public void viewOpportunities(PremiseType premiseType, String distributorName) {
     final OpportunitiesPage opportunitiesPage = accountDashboardPage
       .filterForm.selectPremiseType(premiseType)
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()

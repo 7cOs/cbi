@@ -43,12 +43,12 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   @Test(description = "Filter by Distributor", dataProvider = "distributorData")
   public void filterByDistributor(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName);
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName);
 
     Assert.assertEquals(
-      accountDashboardPage.getDistributorFieldText(),
+      accountDashboardPage.filterForm.getDistributorFieldText(),
       distributorName,
       "Failed to select Distributor"
     );
@@ -69,15 +69,15 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   @Test(description = "Remove Distributor filter", dataProvider = "distributorData")
   public void removeDistributorFilter(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
-      .clickRemoveDistributorFilter();
+      .filterForm.clickRemoveDistributorFilter();
 
-    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
+    Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
 
     accountDashboardPage
       .clickApplyFilters()
@@ -93,15 +93,15 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   )
   public void resetFilters(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
       .clickResetFilters();
 
-    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
+    Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
     assertDefaultDistributorLabels();
   }
 

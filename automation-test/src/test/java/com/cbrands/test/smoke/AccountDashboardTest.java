@@ -41,9 +41,10 @@ public class AccountDashboardTest extends BaseTestCase {
 
   @Test(description = "Search for accounts", dataProvider = "searchData")
   public void searchAccounts(String distributorSearchText, String secondarySearchText) {
-    accountDashboardPage.enterDistributorSearchText(distributorSearchText)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(secondarySearchText)
+    accountDashboardPage
+      .filterForm.enterDistributorSearchText(distributorSearchText)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(secondarySearchText)
       .clickApplyFilters()
       .waitForBrandsPanelLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
