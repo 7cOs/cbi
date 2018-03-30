@@ -56,7 +56,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     accountDashboardPage
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+      .topBottomPanel.waitForMarketPanelLoaderToDisappear();
 
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
@@ -78,7 +78,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .filterForm.selectDistributorFilterContaining(distributorName)
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
+      .topBottomPanel.waitForMarketPanelLoaderToDisappear()
       .filterForm.clickRemoveDistributorFilter();
 
     Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
@@ -86,7 +86,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
     accountDashboardPage
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+      .topBottomPanel.waitForMarketPanelLoaderToDisappear();
     assertDefaultDistributorLabels();
   }
 
@@ -102,7 +102,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .filterForm.selectDistributorFilterContaining(distributorName)
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
+      .topBottomPanel.waitForMarketPanelLoaderToDisappear()
       .filterForm.clickResetFilters();
 
     Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");

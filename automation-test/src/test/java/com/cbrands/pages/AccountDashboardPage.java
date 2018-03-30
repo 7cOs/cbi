@@ -19,10 +19,7 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends TestNGBasePage {
   private static final String PANEL_LOADER_XPATH = "//div[contains(@class, 'loader-wrap')]";
-  private static final String RIGHT_PANEL_XPATH = "//div[contains(@class, 'scorecard-chart')]";
-  private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
   private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
-  private static final String RIGHT_PANEL_LOADER_XPATH = RIGHT_PANEL_XPATH + PANEL_LOADER_XPATH;
   private static final String REMOVE_BUTTON_XPATH = "//input[contains(@class, 'remove-btn visible')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
@@ -266,8 +263,12 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public static class TopBottomPanel {
-    @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
-    private WebElement rightPanel;
+    private static final String CONTAINER_XPATH = "//div[contains(@class, 'scorecard-chart')]";
+    private static final String ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
+    private static final String LOADER_XPATH = CONTAINER_XPATH + PANEL_LOADER_XPATH;
+
+    @FindBy(how = How.XPATH, using = CONTAINER_XPATH)
+    private WebElement panelContainer;
 
     private final WebDriver driver;
 
@@ -275,33 +276,38 @@ public class AccountDashboardPage extends TestNGBasePage {
       this.driver = driver;
     }
 
-    public AccountDashboardPage drillIntoFirstRowInRightPanel() {
-      scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
+    public AccountDashboardPage drillIntoFirstRow() {
+      scrollToAndClick(panelContainer.findElement(By.xpath(ROW_XPATH)));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public AccountDashboardPage drillUpRightPanel() {
-      final WebElement backButton = rightPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+    public AccountDashboardPage drillUp() {
+      final WebElement backButton = panelContainer.findElement(By.xpath(BACK_CHEVRON_XPATH));
       waitForVisibleFluentWait(backButton);
       waitForElementToClickable(backButton, true).click();
 
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public boolean isRightPanelResultsLoadedFor(RightPanelLevel rightPanelLevel) {
+    public boolean areResultsLoadedFor(RightPanelLevel rightPanelLevel) {
       boolean resultsAreLoaded;
 
       try {
-        waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
-        waitForVisibleFluentWait(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
+        waitForElementToDisappear(By.xpath(LOADER_XPATH));
+        waitForVisibleFluentWait(panelContainer.findElement(By.xpath(ROW_XPATH)));
 
-        final WebElement panelHeader = rightPanel.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
+        final WebElement panelHeader = panelContainer.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
         resultsAreLoaded = rightPanelLevel.name().equalsIgnoreCase(panelHeader.getText());
       } catch (NoSuchElementException e) {
         resultsAreLoaded = false;
       }
 
       return resultsAreLoaded;
+    }
+
+    public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
+      waitForElementToDisappear(By.xpath(LOADER_XPATH));
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
   }
 
@@ -336,11 +342,6 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   public String getRightPanelSelectorContextLabel() {
     return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
-  }
-
-  public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
-    waitForElementToDisappear(By.xpath(RIGHT_PANEL_LOADER_XPATH));
-    return this;
   }
 
   public boolean isOpportunitiesLinkEnabled() {

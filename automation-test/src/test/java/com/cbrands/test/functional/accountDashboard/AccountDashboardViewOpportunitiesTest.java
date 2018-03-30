@@ -63,7 +63,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
     accountDashboardPage
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+      .topBottomPanel.waitForMarketPanelLoaderToDisappear();
 
     Assert.assertTrue(
       accountDashboardPage.isOpportunitiesLinkEnabled(),
@@ -83,7 +83,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .filterForm.selectDistributorFilterContaining(distributorName)
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
+      .topBottomPanel.waitForMarketPanelLoaderToDisappear()
       .clickSeeAllOpportunitiesLink()
       .waitForLoaderToDisappear();
 
