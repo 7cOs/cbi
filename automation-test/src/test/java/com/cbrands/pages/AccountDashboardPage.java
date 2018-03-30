@@ -32,6 +32,7 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   private final WebDriver driver;
   public final FilterForm filterForm;
+  public final BrandSnapshotPanel brandSnapshotPanel;
 
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
@@ -41,9 +42,6 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = "//a[contains(@class, 'reset-icon')]")
   private WebElement resetFilters;
-
-  @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
-  private WebElement leftPanel;
 
   @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
   private WebElement rightPanel;
@@ -55,6 +53,7 @@ public class AccountDashboardPage extends TestNGBasePage {
     this.driver = driver;
 
     this.filterForm = PageFactory.initElements(driver, FilterForm.class);
+    this.brandSnapshotPanel = PageFactory.initElements(driver, BrandSnapshotPanel.class);
   }
 
   @Override
@@ -205,17 +204,43 @@ public class AccountDashboardPage extends TestNGBasePage {
     }
   }
 
-  public AccountDashboardPage drillIntoFirstRowInLeftPanel() {
-    scrollToAndClick(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
-    return this;
-  }
+  public static class BrandSnapshotPanel {
+    @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
+    private WebElement leftPanel;
 
-  public AccountDashboardPage drillUpLeftPanel() {
-    final WebElement backButton = leftPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
-    waitForVisibleFluentWait(backButton);
-    waitForElementToClickable(backButton, true).click();
+    private final WebDriver driver;
 
-    return this;
+    public BrandSnapshotPanel(WebDriver driver) {
+      this.driver = driver;
+    }
+
+    public AccountDashboardPage drillIntoFirstRowInLeftPanel() {
+      scrollToAndClick(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
+
+    public AccountDashboardPage drillUpLeftPanel() {
+      final WebElement backButton = leftPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+      waitForVisibleFluentWait(backButton);
+      waitForElementToClickable(backButton, true).click();
+
+      return PageFactory.initElements(driver, AccountDashboardPage.class);
+    }
+
+    public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
+      boolean resultsAreLoaded;
+
+      try {
+        waitForVisibleFluentWait(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
+        final WebElement panelHeader = leftPanel.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
+        resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
+      } catch (NoSuchElementException e) {
+        resultsAreLoaded = false;
+      }
+
+      return resultsAreLoaded;
+    }
+
   }
 
   public AccountDashboardPage drillIntoFirstRowInRightPanel() {
@@ -229,20 +254,6 @@ public class AccountDashboardPage extends TestNGBasePage {
     waitForElementToClickable(backButton, true).click();
 
     return this;
-  }
-
-  public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
-    boolean resultsAreLoaded;
-
-    try {
-      waitForVisibleFluentWait(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
-      final WebElement panelHeader = leftPanel.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
-      resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
-    } catch (NoSuchElementException e) {
-      resultsAreLoaded = false;
-    }
-
-    return resultsAreLoaded;
   }
 
   public boolean isRightPanelResultsLoadedFor(RightPanelLevel rightPanelLevel) {

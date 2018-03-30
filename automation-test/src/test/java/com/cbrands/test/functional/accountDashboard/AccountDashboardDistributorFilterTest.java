@@ -60,10 +60,13 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
 
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsPanelLoaderToDisappear();
+    accountDashboardPage
+      .brandSnapshotPanel.drillIntoFirstRowInLeftPanel()
+      .waitForBrandsPanelLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillUpLeftPanel().waitForBrandsPanelLoaderToDisappear();
+    accountDashboardPage
+      .brandSnapshotPanel.drillUpLeftPanel().waitForBrandsPanelLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
   }
 
