@@ -20,7 +20,6 @@ import static com.cbrands.helper.SeleniumUtils.*;
 public class AccountDashboardPage extends TestNGBasePage {
   private static final String PANEL_LOADER_XPATH = "//div[contains(@class, 'loader-wrap')]";
   private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
-  private static final String REMOVE_BUTTON_XPATH = "//input[contains(@class, 'remove-btn visible')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -88,8 +87,9 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public AccountDashboardPage clickRemoveDistributorFilter() {
-      final WebElement removeDistributorButton = distributorFilter.findElement(By.xpath(REMOVE_BUTTON_XPATH));
+    public AccountDashboardPage clickRemoveDistributorFilterButton() {
+      final WebElement removeDistributorButton = distributorFilter.findElement(
+        By.xpath("//input[contains(@class, 'remove-btn visible')]"));
       waitForElementToClickable(removeDistributorButton, true).click();
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
@@ -276,6 +276,10 @@ public class AccountDashboardPage extends TestNGBasePage {
       this.driver = driver;
     }
 
+    public String getRightPanelHeader() {
+      return findElement(By.xpath("//p[contains(@class, 'market')]")).getText();
+    }
+
     public AccountDashboardPage drillIntoFirstRow() {
       scrollToAndClick(panelContainer.findElement(By.xpath(ROW_XPATH)));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
@@ -329,10 +333,6 @@ public class AccountDashboardPage extends TestNGBasePage {
       .filterForm.waitForStoreLoaderToDisappear()
       .filterForm.selectRetailerStoreByState(stateLocation, address)
       .filterForm.clickApplyFilters();
-  }
-
-  public String getRightPanelHeader() {
-    return findElement(By.xpath("//p[contains(@class, 'market')]")).getText();
   }
 
   public String getOverviewMarketLabel() {
