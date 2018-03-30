@@ -202,12 +202,12 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public static class BrandSnapshotPanel {
-    private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
-    private static final String LEFT_PANEL_LOADER_XPATH = LEFT_PANEL_XPATH + PANEL_LOADER_XPATH;
-    private static final String LEFT_PANEL_ROW_XPATH = ".//md-tab-content[contains(@class, 'md-active')]//tr[@ng-repeat]";
+    private static final String CONTAINER_XPATH = "//div[contains(@class, 'scorecard-table')]";
+    private static final String LOADER_XPATH = CONTAINER_XPATH + PANEL_LOADER_XPATH;
+    private static final String ROW_XPATH = ".//md-tab-content[contains(@class, 'md-active')]//tr[@ng-repeat]";
 
-    @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
-    private WebElement leftPanel;
+    @FindBy(how = How.XPATH, using = CONTAINER_XPATH)
+    private WebElement panelContainer;
 
     private final WebDriver driver;
 
@@ -216,12 +216,12 @@ public class AccountDashboardPage extends TestNGBasePage {
     }
 
     public AccountDashboardPage drillIntoFirstRow() {
-      scrollToAndClick(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
+      scrollToAndClick(panelContainer.findElement(By.xpath(ROW_XPATH)));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
     public AccountDashboardPage drillUp() {
-      final WebElement backButton = leftPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+      final WebElement backButton = panelContainer.findElement(By.xpath(BACK_CHEVRON_XPATH));
       waitForVisibleFluentWait(backButton);
       waitForElementToClickable(backButton, true).click();
 
@@ -232,8 +232,8 @@ public class AccountDashboardPage extends TestNGBasePage {
       boolean resultsAreLoaded;
 
       try {
-        waitForVisibleFluentWait(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
-        final WebElement panelHeader = leftPanel.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
+        waitForVisibleFluentWait(panelContainer.findElement(By.xpath(ROW_XPATH)));
+        final WebElement panelHeader = panelContainer.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
         resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
       } catch (NoSuchElementException e) {
         resultsAreLoaded = false;
@@ -242,8 +242,8 @@ public class AccountDashboardPage extends TestNGBasePage {
       return resultsAreLoaded;
     }
 
-    public AccountDashboardPage waitForBrandsPanelLoaderToDisappear() {
-      waitForElementToDisappear(By.xpath(LEFT_PANEL_LOADER_XPATH));
+    public AccountDashboardPage waitForLoaderToDisappear() {
+      waitForElementToDisappear(By.xpath(LOADER_XPATH));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 

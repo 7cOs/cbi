@@ -46,12 +46,12 @@ public class AccountDashboardTest extends BaseTestCase {
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(secondarySearchText)
       .filterForm.clickApplyFilters()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
 
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+        .brandSnapshotPanel.waitForLoaderToDisappear()
         .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to load results"
     );
@@ -75,7 +75,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+        .brandSnapshotPanel.waitForLoaderToDisappear()
         .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to load results"
     );
@@ -98,7 +98,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+        .brandSnapshotPanel.waitForLoaderToDisappear()
         .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for stores"
     );
@@ -112,7 +112,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+        .brandSnapshotPanel.waitForLoaderToDisappear()
         .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
@@ -124,7 +124,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+        .brandSnapshotPanel.waitForLoaderToDisappear()
         .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for accounts"
     );
@@ -136,7 +136,7 @@ public class AccountDashboardTest extends BaseTestCase {
     );
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+        .brandSnapshotPanel.waitForLoaderToDisappear()
         .brandSnapshotPanel.areResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for distributors"
     );
@@ -146,7 +146,7 @@ public class AccountDashboardTest extends BaseTestCase {
   public void drillDownDrillUpBrands() {
     accountDashboardPage
       .brandSnapshotPanel.drillIntoFirstRow()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage
@@ -160,7 +160,7 @@ public class AccountDashboardTest extends BaseTestCase {
 
     accountDashboardPage
       .brandSnapshotPanel.drillUp()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage

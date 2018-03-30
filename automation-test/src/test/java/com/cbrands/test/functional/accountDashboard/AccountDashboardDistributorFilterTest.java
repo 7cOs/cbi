@@ -55,18 +55,18 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
 
     accountDashboardPage
       .filterForm.clickApplyFilters()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
 
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
     accountDashboardPage
       .brandSnapshotPanel.drillIntoFirstRow()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear();
+      .brandSnapshotPanel.waitForLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
     accountDashboardPage
-      .brandSnapshotPanel.drillUp().brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear();
+      .brandSnapshotPanel.drillUp().brandSnapshotPanel.waitForLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
   }
 
@@ -77,7 +77,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(distributorName)
       .filterForm.clickApplyFilters()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
       .filterForm.clickRemoveDistributorFilter();
 
@@ -85,7 +85,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
 
     accountDashboardPage
       .filterForm.clickApplyFilters()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
     assertDefaultDistributorLabels();
   }
@@ -101,7 +101,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(distributorName)
       .filterForm.clickApplyFilters()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
       .clickResetFilters();
 

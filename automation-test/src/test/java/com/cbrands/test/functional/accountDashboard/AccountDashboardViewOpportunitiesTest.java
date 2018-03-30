@@ -62,7 +62,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
 
     accountDashboardPage
       .filterForm.clickApplyFilters()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear();
 
     Assert.assertTrue(
@@ -82,7 +82,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .filterForm.clickSearchForDistributor()
       .filterForm.selectDistributorFilterContaining(distributorName)
       .filterForm.clickApplyFilters()
-      .brandSnapshotPanel.waitForBrandsPanelLoaderToDisappear()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
       .waitForMarketPanelLoaderToDisappear()
       .clickSeeAllOpportunitiesLink()
       .waitForLoaderToDisappear();
