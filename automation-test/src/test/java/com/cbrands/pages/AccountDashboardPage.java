@@ -30,6 +30,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   private final WebDriver driver;
   public final FilterForm filterForm;
   public final BrandSnapshotPanel brandSnapshotPanel;
+  public final TopBottomPanel topBottomPanel;
 
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
@@ -48,6 +49,7 @@ public class AccountDashboardPage extends TestNGBasePage {
 
     this.filterForm = PageFactory.initElements(driver, FilterForm.class);
     this.brandSnapshotPanel = PageFactory.initElements(driver, BrandSnapshotPanel.class);
+    this.topBottomPanel = PageFactory.initElements(driver, TopBottomPanel.class);
   }
 
   @Override
@@ -264,6 +266,14 @@ public class AccountDashboardPage extends TestNGBasePage {
       }
     }
 
+  }
+
+  public static class TopBottomPanel {
+    private final WebDriver driver;
+
+    public TopBottomPanel(WebDriver driver) {
+      this.driver = driver;
+    }
   }
 
   public AccountDashboardPage drillIntoFirstRowInRightPanel() {
