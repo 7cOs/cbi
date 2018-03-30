@@ -47,7 +47,7 @@ public class AccountDashboardTest extends BaseTestCase {
       .filterForm.selectDistributorFilterContaining(secondarySearchText)
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .topBottomPanel.waitForMarketPanelLoaderToDisappear();
+      .topBottomPanel.waitForLoaderToDisappear();
 
     Assert.assertTrue(
       accountDashboardPage
@@ -155,7 +155,7 @@ public class AccountDashboardTest extends BaseTestCase {
     accountDashboardPage
       .brandSnapshotPanel.drillIntoFirstRow()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .topBottomPanel.waitForMarketPanelLoaderToDisappear();
+      .topBottomPanel.waitForLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.areResultsLoadedFor(Level.SkuPackage),
@@ -169,7 +169,7 @@ public class AccountDashboardTest extends BaseTestCase {
     accountDashboardPage
       .brandSnapshotPanel.drillUp()
       .brandSnapshotPanel.waitForLoaderToDisappear()
-      .topBottomPanel.waitForMarketPanelLoaderToDisappear();
+      .topBottomPanel.waitForLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),

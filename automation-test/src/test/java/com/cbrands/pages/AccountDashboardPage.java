@@ -276,7 +276,7 @@ public class AccountDashboardPage extends TestNGBasePage {
       this.driver = driver;
     }
 
-    public String getRightPanelHeader() {
+    public String getHeaderText() {
       return findElement(By.xpath("//p[contains(@class, 'market')]")).getText();
     }
 
@@ -309,7 +309,7 @@ public class AccountDashboardPage extends TestNGBasePage {
       return resultsAreLoaded;
     }
 
-    public AccountDashboardPage waitForMarketPanelLoaderToDisappear() {
+    public AccountDashboardPage waitForLoaderToDisappear() {
       waitForElementToDisappear(By.xpath(LOADER_XPATH));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
