@@ -32,9 +32,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
 
-  @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
-  private WebElement retailerChainFilter;
-
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
 
