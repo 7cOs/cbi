@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
 
 import { StoreListDTO } from '../../../models/lists-store-dto.model';
 import { ListHeaderInfoDTO } from '../../../models/lists-header-dto.model';
