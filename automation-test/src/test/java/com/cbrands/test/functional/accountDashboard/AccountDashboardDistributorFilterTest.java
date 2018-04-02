@@ -123,12 +123,12 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       "Market Overview label failed to match expected default."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      accountDashboardPage.topBottomPanel.getSelectorContextLabel(),
       testUser.fullName().toUpperCase(),
       "The 'for' label for the right panel selector header failed to match expected default."
     );
     Assert.assertEquals(
-      accountDashboardPage.topBottomPanel.getHeaderText(),
+      accountDashboardPage.topBottomPanel.getHeaderTitle(),
       "DISTRIBUTORS",
       "Right panel header text failed to match expected default."
     );
@@ -141,12 +141,12 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       "Market Overview label failed to match applied Distributor filter."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      accountDashboardPage.topBottomPanel.getSelectorContextLabel(),
       distributorName,
       "The 'for' label for the right panel selector header failed to match applied Distributor filter."
     );
     Assert.assertEquals(
-      accountDashboardPage.topBottomPanel.getHeaderText(),
+      accountDashboardPage.topBottomPanel.getHeaderTitle(),
       shortenedDistributorName,
       "Right panel header text failed to match applied Distributor filter."
     );

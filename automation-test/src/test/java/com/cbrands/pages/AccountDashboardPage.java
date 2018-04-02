@@ -276,7 +276,11 @@ public class AccountDashboardPage extends TestNGBasePage {
       this.driver = driver;
     }
 
-    public String getHeaderText() {
+    public String getSelectorContextLabel() {
+      return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
+    }
+
+    public String getHeaderTitle() {
       return findElement(By.xpath("//p[contains(@class, 'market')]")).getText();
     }
 
@@ -338,10 +342,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   public String getOverviewMarketLabel() {
     final WebElement marketTab = findElement(By.xpath("//div[@class='market-overview clearfix']/div[@class='market']"));
     return marketTab.getText();
-  }
-
-  public String getRightPanelSelectorContextLabel() {
-    return findElement(By.xpath("//div[@class='section-header-user']/span[@class='ng-binding']")).getText();
   }
 
   public boolean isOpportunitiesLinkEnabled() {
