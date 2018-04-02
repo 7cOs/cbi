@@ -230,13 +230,13 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public boolean areResultsLoadedFor(Level level) {
+    public boolean areResultsLoadedFor(DrillLevel drillLevel) {
       boolean resultsAreLoaded;
 
       try {
         waitForVisibleFluentWait(panelContainer.findElement(By.xpath(ROW_XPATH)));
         final WebElement panelHeader = panelContainer.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
-        resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
+        resultsAreLoaded = drillLevel.header.equalsIgnoreCase(panelHeader.getText());
       } catch (NoSuchElementException e) {
         resultsAreLoaded = false;
       }
@@ -249,13 +249,13 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public enum Level {
+    public enum DrillLevel {
       Brand("Brand"),
       SkuPackage("SKU / PACKAGE");
 
       private final String header;
 
-      Level(String header) {
+      DrillLevel(String header) {
         this.header = header;
       }
     }
@@ -297,7 +297,7 @@ public class AccountDashboardPage extends TestNGBasePage {
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
-    public boolean areResultsLoadedFor(RightPanelLevel rightPanelLevel) {
+    public boolean areResultsLoadedFor(DrillLevel drillLevel) {
       boolean resultsAreLoaded;
 
       try {
@@ -305,7 +305,7 @@ public class AccountDashboardPage extends TestNGBasePage {
         waitForVisibleFluentWait(panelContainer.findElement(By.xpath(ROW_XPATH)));
 
         final WebElement panelHeader = panelContainer.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
-        resultsAreLoaded = rightPanelLevel.name().equalsIgnoreCase(panelHeader.getText());
+        resultsAreLoaded = drillLevel.name().equalsIgnoreCase(panelHeader.getText());
       } catch (NoSuchElementException e) {
         resultsAreLoaded = false;
       }
@@ -317,6 +317,14 @@ public class AccountDashboardPage extends TestNGBasePage {
       waitForElementToDisappear(By.xpath(LOADER_XPATH));
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
+
+    public enum DrillLevel {
+      Distributors,
+      Accounts,
+      SubAccounts,
+      Stores
+    }
+
   }
 
   public NotesModal clickNotesButton() {
@@ -351,12 +359,4 @@ public class AccountDashboardPage extends TestNGBasePage {
   public OpportunitiesPage clickSeeAllOpportunitiesLink() {
     waitForElementToClickable(seeAllOpportunitiesLink, true).click();
     return PageFactory.initElements(driver, OpportunitiesPage.class);
-  }
-
-  public enum RightPanelLevel {
-    Distributors,
-    Accounts,
-    SubAccounts,
-    Stores
-  }
-}
+  }}

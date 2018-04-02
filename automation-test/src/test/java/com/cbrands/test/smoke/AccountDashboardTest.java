@@ -2,8 +2,8 @@ package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.AccountDashboardPage;
-import com.cbrands.pages.AccountDashboardPage.BrandSnapshotPanel.Level;
-import com.cbrands.pages.AccountDashboardPage.RightPanelLevel;
+import com.cbrands.pages.AccountDashboardPage.BrandSnapshotPanel;
+import com.cbrands.pages.AccountDashboardPage.TopBottomPanel;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.test.BaseTestCase;
@@ -52,12 +52,12 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to load results"
     );
     Assert.assertTrue(
       accountDashboardPage
-        .topBottomPanel.areResultsLoadedFor(RightPanelLevel.Accounts),
+        .topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Accounts),
       "Right accounts panel failed to load results"
     );
   }
@@ -73,38 +73,38 @@ public class AccountDashboardTest extends BaseTestCase {
       .topBottomPanel.drillIntoFirstRow();
     Assert.assertTrue(
       accountDashboardPage
-        .topBottomPanel.areResultsLoadedFor(RightPanelLevel.Accounts),
+        .topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Accounts),
       "Right panel failed to load accounts for selected distributor"
     );
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to load results"
     );
 
     accountDashboardPage.topBottomPanel.drillIntoFirstRow();
     Assert.assertTrue(
       accountDashboardPage
-        .topBottomPanel.areResultsLoadedFor(RightPanelLevel.SubAccounts),
+        .topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.SubAccounts),
       "Right panel failed to load subaccounts for selected account"
     );
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
 
     accountDashboardPage.topBottomPanel.drillIntoFirstRow();
     Assert.assertTrue(
       accountDashboardPage
-        .topBottomPanel.areResultsLoadedFor(RightPanelLevel.Stores),
+        .topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Stores),
       "Right accounts panel failed to load stores for selected subaccount"
     );
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to reload for stores"
     );
   }
@@ -113,39 +113,39 @@ public class AccountDashboardTest extends BaseTestCase {
     accountDashboardPage.topBottomPanel.drillUp();
     Assert.assertTrue(
       accountDashboardPage
-        .topBottomPanel.areResultsLoadedFor(RightPanelLevel.SubAccounts),
+        .topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.SubAccounts),
       "Right accounts panel failed to load subaccounts"
     );
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
 
     accountDashboardPage.topBottomPanel.drillUp();
     Assert.assertTrue(
       accountDashboardPage
-        .topBottomPanel.areResultsLoadedFor(RightPanelLevel.Accounts),
+        .topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Accounts),
       "Right accounts panel failed to load accounts"
     );
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to reload for accounts"
     );
 
     accountDashboardPage.topBottomPanel.drillUp();
     Assert.assertTrue(
       accountDashboardPage
-        .topBottomPanel.areResultsLoadedFor(RightPanelLevel.Distributors),
+        .topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Distributors),
       "Right accounts panel failed to load distributors"
     );
     Assert.assertTrue(
       accountDashboardPage
         .brandSnapshotPanel.waitForLoaderToDisappear()
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to reload for distributors"
     );
   }
@@ -158,11 +158,11 @@ public class AccountDashboardTest extends BaseTestCase {
       .topBottomPanel.waitForLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(Level.SkuPackage),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.SkuPackage),
       "Left brands panel failed to load for SKU/Packages"
     );
     Assert.assertTrue(
-      accountDashboardPage.topBottomPanel.areResultsLoadedFor(RightPanelLevel.Distributors),
+      accountDashboardPage.topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Distributors),
       "Right accounts panel failed to reload for SKU/Packages"
     );
 
@@ -172,11 +172,11 @@ public class AccountDashboardTest extends BaseTestCase {
       .topBottomPanel.waitForLoaderToDisappear();
     Assert.assertTrue(
       accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(Level.Brand),
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to load for Brands"
     );
     Assert.assertTrue(
-      accountDashboardPage.topBottomPanel.areResultsLoadedFor(RightPanelLevel.Distributors),
+      accountDashboardPage.topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Distributors),
       "Right accounts panel failed to reload for Brands"
     );
   }
