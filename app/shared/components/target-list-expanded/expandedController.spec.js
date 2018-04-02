@@ -58,9 +58,6 @@ describe('Unit: expanded target list controller', function() {
     expect(ctrl.loaderService).not.toBeUndefined();
     expect(typeof (ctrl.loaderService)).toEqual('object');
 
-    expect(ctrl.compassModalService).not.toBeUndefined();
-    expect(typeof (ctrl.compassModalService)).toEqual('object');
-
   });
 
   it('should expose public methods', function() {

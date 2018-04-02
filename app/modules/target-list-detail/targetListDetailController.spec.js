@@ -215,10 +215,8 @@ describe('Unit: targetListDetailController', function() {
   it('should expose public services', function() {
     expect(ctrl.targetListService).not.toBeUndefined();
     expect(typeof (ctrl.targetListService)).toEqual('object');
-
     expect(ctrl.userService).not.toBeUndefined();
     expect(typeof (ctrl.userService)).toEqual('object');
-
   });
 
   it('should not expose private services', function() {
@@ -294,7 +292,6 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.sendGoogleAnalytics).not.toBeUndefined();
     expect(typeof (ctrl.sendGoogleAnalytics)).toEqual('function');
-
   });
 
   describe('Public Methods', function() {

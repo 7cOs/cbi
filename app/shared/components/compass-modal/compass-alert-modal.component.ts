@@ -15,6 +15,7 @@ export class CompassAlertModalComponent {
   @Output() buttonContainerEvent = new EventEmitter<CompassAlertModalEvent>();
 
   public modalOverlayRef: CompassModalOverlayRef;
+  public compassAlertModalEvent = CompassAlertModalEvent;
   private ESCKEY = 27;
 
   constructor(

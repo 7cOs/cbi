@@ -3,13 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { CompassOverlayConfig } from '../../../models/compass-overlay-config.model';
 import { CompassAlertModalComponent } from './compass-alert-modal.component';
 import { CompassAlertModalInputs } from '../../../models/compass-alert-modal-inputs.model';
-import { CompassModalService } from '../../../services/compass-modal.service';
 import { COMPASS_ALERT_MODAL_INPUTS } from './compass-alert-modal.tokens';
 import { CompassModalOverlayRef } from './compass-modal.overlayref';
 import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
+import { OverlayRef } from '@angular/cdk/overlay';
 
 const chance = new Chance();
 
@@ -29,21 +28,15 @@ describe('Compass Alert Modal Component', () => {
     closeModal: jasmine.createSpy('closeModal')
   };
 
-  const compassModalServiceMock = {
-    showAlertModalDialog: jasmine.createSpy('showAlertModalDialog').and.callFake(() => compassModalOverlayMock)
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ CompassAlertModalComponent ],
-      providers: [{
-        provide: CompassModalService,
-        useValue: compassModalServiceMock
-      },
+      providers: [
       {
         provide: COMPASS_ALERT_MODAL_INPUTS,
         userValue: compassModalInputsMock
-      }]
+      }
+      ]
     });
 
     titleInputMock = chance.string();
@@ -70,32 +63,30 @@ describe('Compass Alert Modal Component', () => {
   describe('Compass Alert Modal Inputs', () => {
     it('should contain a title element when the injection has a title', () => {
       let titleElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-title'));
-
-      expect(titleElement).not.toBe(null);
-      expect(titleElement.nativeElement.textContent).toBe(compassModalInputsMock.title);
+      expect(titleElement.nativeElement.textContent).toEqual(compassModalInputsMock.title);
 
       componentInstance.modalInputs.title = undefined;
       fixture.detectChanges();
       titleElement = fixture.debugElement.query(By.css('.compass-modal-title'));
-      expect(titleElement.nativeElement.textContent).toBe('');
+      expect(titleElement.nativeElement.textContent).toEqual('');
     });
-  });
-
-  describe('Compass Alert Modal Inputs', () => {
     it('should contain a body element when the injection has a body', () => {
       let bodyElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-body'));
-
-      expect(bodyElement).not.toBe(null);
-      expect(bodyElement.nativeElement.textContent).toBe(compassModalInputsMock.body);
+      expect(bodyElement.nativeElement.textContent).toEqual(compassModalInputsMock.body);
+    });
+    it('should contain a cancel button element when the injection has a cancel button string', () => {
+      let buttonElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-btn'));
+      expect(buttonElement.nativeElement.textContent).toEqual(compassModalInputsMock.rejectLabel);
+    });
+    it('should contain an accept button element when the injection has an accept button string', () => {
+      let buttonElement: DebugElement = fixture.debugElement.query(By.css('.btn-action'));
+      expect(buttonElement.nativeElement.textContent).toEqual(compassModalInputsMock.acceptLabel);
     });
   });
 
-  describe('Compass Alert Modal Inputs', () => {
-    it('should contain a cancel button element when the injection has a cancel button string', () => {
+  describe('Compass Alert Modal Outputs', () => {
+    it('should output a cancel event when the cancel button is selected.', () => {
       let buttonElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-btn'));
-
-      expect(buttonElement).not.toBe(null);
-      expect(buttonElement.nativeElement.textContent).toBe(compassModalInputsMock.rejectLabel);
 
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
         expect(value).toEqual(CompassAlertModalEvent.Decline);
@@ -104,10 +95,7 @@ describe('Compass Alert Modal Component', () => {
 
       buttonElement.nativeElement.click();
     });
-  });
-
-  describe('Compass Alert Modal Inputs', () => {
-    it('should contain a X button element when the injection has a X button string', () => {
+    it('should output an decline message when the x button is clicked.', () => {
       let buttonElement: DebugElement = fixture.debugElement.query(By.css('.X-modal-btn-container'));
 
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
@@ -117,30 +105,13 @@ describe('Compass Alert Modal Component', () => {
 
       buttonElement.nativeElement.click();
     });
-  });
-
-  describe('Compass Alert Modal Inputs', () => {
-    it('should contain a accept button element when the injection has a accept button string', () => {
-      const expectedModalInputs: CompassAlertModalInputs = {
-        title: titleInputMock,
-        body: bodyInputMock,
-        acceptLabel: acceptLabelMock,
-        rejectLabel: rejectLabelMock
-      };
-      const expectedOverlayConfig: CompassOverlayConfig = {
-        hasBackdrop: true
-      };
+    it('should output an accept message when the accept button is clicked', () => {
       let buttonElement: DebugElement = fixture.debugElement.query(By.css('.btn-action'));
-
-      expect(buttonElement).not.toBe(null);
-      expect(buttonElement.nativeElement.textContent).toBe(compassModalInputsMock.acceptLabel);
-
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
         expect(value).toEqual(CompassAlertModalEvent.Accept);
         expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
       });
 
-      compassModalServiceMock.showAlertModalDialog(expectedModalInputs, expectedOverlayConfig);
       buttonElement.nativeElement.click();
     });
   });

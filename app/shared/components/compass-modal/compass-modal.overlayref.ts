@@ -7,7 +7,7 @@ export class CompassModalOverlayRef {
 
   constructor(private overlayRef: OverlayRef) { }
 
-  closeModal(): void {
+  public closeModal(): void {
     this.overlayRef.dispose();
   }
 }
