@@ -23,11 +23,6 @@ describe('Compass Alert Modal Component', () => {
   let acceptLabelMock: string;
   let rejectLabelMock: string;
 
-  const compassModalOverlayMock = {
-    modalInstance: componentInstance,
-    closeModal: jasmine.createSpy('closeModal')
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ CompassAlertModalComponent ],
