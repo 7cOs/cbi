@@ -24,6 +24,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
   private final WebDriver driver;
+
   public final FilterForm filterForm;
   public final BrandSnapshotPanel brandSnapshotPanel;
   public final TopBottomPanel topBottomPanel;
