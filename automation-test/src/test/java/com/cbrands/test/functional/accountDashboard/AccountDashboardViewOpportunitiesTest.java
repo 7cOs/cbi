@@ -45,7 +45,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
   )
   public void enableOpportunitiesLink(PremiseType premiseType, String distributorName) {
     Assert.assertFalse(
-      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      accountDashboardPage.footer.isOpportunitiesFooterLinkEnabled(),
       "Opportunities link failed to be disabled by default, when no filters are applied."
     );
 
@@ -56,7 +56,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .filterForm.selectDistributorFilterContaining(distributorName);
 
     Assert.assertFalse(
-      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      accountDashboardPage.footer.isOpportunitiesFooterLinkEnabled(),
       "Opportunities link enabled pre-maturely. Should not be enabled until after filters are applied."
     );
 
@@ -66,7 +66,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .topBottomPanel.waitForLoaderToDisappear();
 
     Assert.assertTrue(
-      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      accountDashboardPage.footer.isOpportunitiesFooterLinkEnabled(),
       "Opportunities link failed to be enabled after valid Premise Type and Distributor filters are applied."
     );
   }
@@ -84,7 +84,7 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
       .filterForm.clickApplyFilters()
       .brandSnapshotPanel.waitForLoaderToDisappear()
       .topBottomPanel.waitForLoaderToDisappear()
-      .clickSeeAllOpportunitiesLink()
+      .footer.clickSeeAllOpportunitiesFooterLink()
       .waitForLoaderToDisappear();
 
     Assert.assertTrue(

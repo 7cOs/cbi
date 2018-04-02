@@ -27,6 +27,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   public final FilterForm filterForm;
   public final BrandSnapshotPanel brandSnapshotPanel;
   public final TopBottomPanel topBottomPanel;
+  public final Footer footer;
 
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'account-header')]")
   private WebElement header;
@@ -34,15 +35,13 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']")
   private WebElement retailerChainFilter;
 
-  @FindBy(how = How.XPATH, using = "//a[contains(., 'See All Opportunities')]")
-  private WebElement seeAllOpportunitiesLink;
-
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
 
     this.filterForm = PageFactory.initElements(driver, FilterForm.class);
     this.brandSnapshotPanel = PageFactory.initElements(driver, BrandSnapshotPanel.class);
     this.topBottomPanel = PageFactory.initElements(driver, TopBottomPanel.class);
+    this.footer = PageFactory.initElements(driver, Footer.class);
   }
 
   @Override
@@ -54,6 +53,21 @@ public class AccountDashboardPage extends TestNGBasePage {
   @Override
   protected void load() {
     driver.get(webAppBaseUrl + "/accounts");
+  }
+
+  public String getOverviewMarketLabel() {
+    final WebElement marketTab = findElement(By.xpath("//div[@class='market-overview clearfix']/div[@class='market']"));
+    return marketTab.getText();
+  }
+
+  public NotesModal clickNotesButton() {
+    final WebElement notesButton = findElement(By.xpath(
+      "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
+    waitForElementToClickable(notesButton, true).click();
+
+    final NotesModal notesModal = PageFactory.initElements(driver, NotesModal.class);
+    notesModal.isLoaded();
+    return notesModal;
   }
 
   public static class FilterForm {
@@ -327,14 +341,24 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   }
 
-  public NotesModal clickNotesButton() {
-    final WebElement notesButton = findElement(By.xpath(
-      "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
-    waitForElementToClickable(notesButton, true).click();
+  public static class Footer {
+    @FindBy(how = How.XPATH, using = "//a[contains(., 'See All Opportunities')]")
+    private WebElement seeAllOpportunitiesLink;
 
-    final NotesModal notesModal = PageFactory.initElements(driver, NotesModal.class);
-    notesModal.isLoaded();
-    return notesModal;
+    private final WebDriver driver;
+
+    public Footer(WebDriver driver) {
+      this.driver = driver;
+    }
+
+    public boolean isOpportunitiesFooterLinkEnabled() {
+      return !"true".equalsIgnoreCase(seeAllOpportunitiesLink.getAttribute("disabled"));
+    }
+
+    public OpportunitiesPage clickSeeAllOpportunitiesFooterLink() {
+      waitForElementToClickable(seeAllOpportunitiesLink, true).click();
+      return PageFactory.initElements(driver, OpportunitiesPage.class);
+    }
   }
 
   public AccountDashboardPage applyFiltersForStore(String storeAccountName, String stateLocation, String address) {
@@ -347,16 +371,4 @@ public class AccountDashboardPage extends TestNGBasePage {
       .filterForm.clickApplyFilters();
   }
 
-  public String getOverviewMarketLabel() {
-    final WebElement marketTab = findElement(By.xpath("//div[@class='market-overview clearfix']/div[@class='market']"));
-    return marketTab.getText();
-  }
-
-  public boolean isOpportunitiesLinkEnabled() {
-    return !"true".equalsIgnoreCase(seeAllOpportunitiesLink.getAttribute("disabled"));
-  }
-
-  public OpportunitiesPage clickSeeAllOpportunitiesLink() {
-    waitForElementToClickable(seeAllOpportunitiesLink, true).click();
-    return PageFactory.initElements(driver, OpportunitiesPage.class);
-  }}
+}
