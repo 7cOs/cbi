@@ -519,8 +519,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    if (parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG
-      || parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.DRAFT) {
+    if ((parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG
+      || parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.DRAFT)
+      && this.currentState.responsibilities.positionId === CORPORATE_USER_POSITION_ID ) {
       const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
       this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
     } else {
