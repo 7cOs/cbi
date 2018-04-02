@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChange
 import { sortBy } from 'lodash';
 
 import { CalculatorService } from '../../../services/calculator.service';
-import { ColumnType } from '../../../enums/column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
 import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
 import { LoadingState } from '../../../enums/loading-state.enum';
+import { ListPerformanceColumnType } from '../../../enums/list-performance-column-types.enum';
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../../enums/row-type.enum';
@@ -57,17 +57,16 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   @Input() loadingState: LoadingState.Loaded;
 
   public sortedTableData: Array<ListPerformanceTableRow>;
-  public columnType = ColumnType;
+  public columnType = ListPerformanceColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
-  public rippleColor: string = 'rgba(17, 119, 184, 0.05)';
   public tableClasses: CssClasses = {};
 
   private selectedListItems: Array<ListPerformanceTableRow> = [];
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
-    columnType: ColumnType.metricColumn0,
+    columnType: ListPerformanceColumnType.metricColumn0,
     ascending: false
   }];
 
@@ -86,7 +85,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
     return (this.totalRow) ? 'total-row-present' : 'total-row-absent';
   }
 
-  public getSortStatus(columnType: ColumnType): SortStatus {
+  public getSortStatus(columnType: ListPerformanceColumnType): SortStatus {
     return this._sortingCriteria[0].columnType === columnType
       ? this._sortingCriteria[0].ascending
         ? SortStatus.ascending
@@ -94,11 +93,10 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       : SortStatus.inactive;
   }
 
-  public sortRows(colType: ColumnType) {
-    // this will only sort on the FIRST criterion (for now)
+  public sortRows(colType: ListPerformanceColumnType) {
     const ascending = this._sortingCriteria[0].columnType === colType
       ? !this._sortingCriteria[0].ascending
-      : colType === ColumnType.descriptionRow0;
+      : colType === ListPerformanceColumnType.descriptionRow0;
     const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
     this.applySortingCriteria(criteria);
   }
@@ -125,22 +123,11 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   public getEntityRowClasses(row: ListPerformanceTableRow): CssClasses {
     let classes: CssClasses = {
-      'performance-error': row.performanceError
+      'performance-error': row.performanceError,
+      'selected-entity-row': row.checked
     };
 
     return classes;
-  }
-
-  public getColumnWidthClass(): string {
-    let style = '';
-
-    if (this.showContributionToVolume && this.showOpportunities) {
-      style = 'two-right-columns-present';
-    } else if (this.showContributionToVolume || this.showOpportunities) {
-      style = 'one-right-column-present';
-    }
-
-    return style;
   }
 
   private getTableClasses(loadingState: LoadingState): CssClasses {
@@ -157,7 +144,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
         let currentSortOrder: number;
         this._sortingCriteria.every((criterion, idx) => {
           i = idx;
-          currentColumn = ColumnType[criterion.columnType];
+          currentColumn = ListPerformanceColumnType[criterion.columnType];
           currentSortOrder = this.calculatorService.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           return !currentSortOrder;
         });

@@ -7,7 +7,7 @@ div
     thead.col-100-pct
 
       tr.top-header.col-100-pct
-        th(colspan=1)
+        th.checkbox-col(colspan=1)
           mat-checkbox(aria-label="Select All Stores",
           (change)="selectAllStores($event)")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")

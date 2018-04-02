@@ -1,6 +1,7 @@
 export interface ListPerformanceTableRow {
   descriptionRow0: string;
-  descriptionRow1?: string;
+  descriptionRow0Sub1: string;
+  descriptionRow1: string;
   descriptionRow2: string;
   metricColumn0: number;
   metricColumn1: number;
