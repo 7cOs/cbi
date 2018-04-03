@@ -1932,7 +1932,9 @@ describe('MyPerformanceComponent', () => {
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
             rowMock, hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
@@ -1989,7 +1991,9 @@ describe('MyPerformanceComponent', () => {
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
+          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
             rowMock, hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
