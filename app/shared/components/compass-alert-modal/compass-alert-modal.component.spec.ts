@@ -6,11 +6,14 @@ import { DebugElement } from '@angular/core';
 import { CompassAlertModalComponent } from './compass-alert-modal.component';
 import { CompassAlertModalInputs } from '../../../models/compass-alert-modal-inputs.model';
 import { COMPASS_ALERT_MODAL_INPUTS } from './compass-alert-modal.tokens';
-import { CompassModalOverlayRef } from './compass-modal.overlayref';
+import { CompassModalOverlayRef } from './compass-alert-modal.overlayref';
 import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
 import { OverlayRef } from '@angular/cdk/overlay';
 
 const chance = new Chance();
+const modalOverlayRefMock = {
+  closeModal: jasmine.createSpy('closeModal')
+};
 
 describe('Compass Alert Modal Component', () => {
   let fixture: ComponentFixture<CompassAlertModalComponent>;
@@ -49,7 +52,7 @@ describe('Compass Alert Modal Component', () => {
     fixture = TestBed.createComponent(CompassAlertModalComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.modalInputs = compassModalInputsMock;
-    componentInstance.modalOverlayRef = CompassModalOverlayRef as any;
+    componentInstance.modalOverlayRef = modalOverlayRefMock as any;
     fixtureDebugElement = fixture.debugElement;
 
     fixture.detectChanges();
@@ -85,29 +88,32 @@ describe('Compass Alert Modal Component', () => {
 
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
         expect(value).toEqual(CompassAlertModalEvent.Decline);
-        expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
       });
 
       buttonElement.nativeElement.click();
+      expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
+
     });
     it('should output an decline message when the x button is clicked.', () => {
       let buttonElement: DebugElement = fixture.debugElement.query(By.css('.X-modal-btn-container'));
 
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
         expect(value).toEqual(CompassAlertModalEvent.Close);
-        expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
       });
 
       buttonElement.nativeElement.click();
+      expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
+
     });
     it('should output an accept message when the accept button is clicked', () => {
       let buttonElement: DebugElement = fixture.debugElement.query(By.css('.btn-action'));
       componentInstance.buttonContainerEvent.subscribe((value: String) => {
         expect(value).toEqual(CompassAlertModalEvent.Accept);
-        expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
       });
 
       buttonElement.nativeElement.click();
+      expect(componentInstance.modalOverlayRef.closeModal).toHaveBeenCalled();
+
     });
   });
 });

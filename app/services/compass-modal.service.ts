@@ -4,10 +4,10 @@ import { OverlayRef } from '@angular/cdk/overlay';
 
 import { CompassOverlayConfig } from '../models/compass-overlay-config.model';
 import { CompassOverlayService } from './compass-overlay.service';
-import { CompassAlertModalComponent } from '../shared/components/compass-modal/compass-alert-modal.component';
+import { CompassAlertModalComponent } from '../shared/components/compass-alert-modal/compass-alert-modal.component';
 import { CompassAlertModalInputs } from '../models/compass-alert-modal-inputs.model';
-import { CompassModalOverlayRef } from '../shared/components/compass-modal/compass-modal.overlayref';
-import { COMPASS_ALERT_MODAL_INPUTS } from '../shared/components/compass-modal/compass-alert-modal.tokens';
+import { CompassModalOverlayRef } from '../shared/components/compass-alert-modal/compass-alert-modal.overlayref';
+import { COMPASS_ALERT_MODAL_INPUTS } from '../shared/components/compass-alert-modal/compass-alert-modal.tokens';
 import { CompassAlertModalEvent } from '../enums/compass-alert-modal-strings.enum';
 
 @Injectable()

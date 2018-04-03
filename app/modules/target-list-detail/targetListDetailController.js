@@ -1,5 +1,7 @@
 'use strict';
 
+const CompassAlertModalEvents = require('../../enums/compass-alert-modal-strings.enum').CompassAlertModalEvent;
+
 module.exports = /*  @ngInject */
   function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title, compassModalService) {
 
@@ -40,7 +42,7 @@ module.exports = /*  @ngInject */
       'rejectLabel': 'Cancel',
       'acceptLabel': 'Delete'
     };
-
+    vm.compassAlertModalAccept = CompassAlertModalEvents.Accept;
     // Services
     vm.targetListService = targetListService;
     vm.userService = userService;
@@ -331,7 +333,7 @@ module.exports = /*  @ngInject */
     function showArchiveModal() {
       let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs);
       compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
-          if (value === 'Accept') {
+          if (value === vm.compassAlertModalAccept) {
             updateList('archive');
           }
         });
@@ -340,7 +342,7 @@ module.exports = /*  @ngInject */
     function showDeleteModal() {
       let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs);
       compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
-          if (value === 'Accept') {
+          if (value === vm.compassAlertModalAccept) {
             pendingCheck();
           }
         });

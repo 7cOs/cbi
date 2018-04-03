@@ -6,7 +6,7 @@ import { MatCardModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSid
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { CompassCardComponent }  from './components/compass-card/compass-card.component';
-import { CompassAlertModalComponent } from './components/compass-modal/compass-alert-modal.component';
+import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
 import { CompassOverlayService } from '../services/compass-overlay.service';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';

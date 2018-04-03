@@ -1,5 +1,7 @@
 'use strict';
 
+const CompassAlertModalEvents = require('../../../enums/compass-alert-modal-strings.enum').CompassAlertModalEvent;
+
 module.exports = /*  @ngInject */
   function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService, compassModalService) {
 
@@ -53,6 +55,7 @@ module.exports = /*  @ngInject */
       'rejectLabel': 'Cancel',
       'acceptLabel': 'Delete'
     };
+    vm.compassAlertModalAccept = CompassAlertModalEvents.Accept;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -429,7 +432,7 @@ module.exports = /*  @ngInject */
     function showArchiveModal() {
       let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs);
       compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
-          if (value === 'Accept') {
+          if (value === vm.compassAlertModalAccept) {
             archiveTargetList();
           }
         });
@@ -438,7 +441,7 @@ module.exports = /*  @ngInject */
     function showDeleteModal() {
       let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs);
       compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
-          if (value === 'Accept') {
+          if (value === vm.compassAlertModalAccept) {
             deleteTargetList();
           }
         });
