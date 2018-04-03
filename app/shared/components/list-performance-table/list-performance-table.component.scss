@@ -64,22 +64,6 @@ tbody {
   transition: opacity 0.5s;
 }
 
-.loaded-with-slide-left-animation {
-  opacity: 1;
-  position: relative;
-  right: -565px;
-
-  -webkit-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  transform: translateX(-100%);
-
-  -webkit-transition: -webkit-transform 0.7s ease-out;
-  -moz-transition: -moz-transform 0.7s ease-out;
-  transition: transform 0.7s ease-out;
-
-  animation: transit 1s;
-}
-
 .individual-loader {
   display: inline-block;
   position: absolute;
@@ -384,31 +368,9 @@ td, th {
   padding-left: 16px;
 }
 
-.summary-date-range {
-  font-family: $work-sans;
-  font-size: 11px;
-  font-weight: $semibold;
-  letter-spacing: 1.2px;
-  text-align: left;
-  color: $gray-1;
-  padding-left: 16px;
-}
-
 .link {
   &:hover {
     cursor: pointer;
-  }
-}
-
-.forward-arrow {
-  background-image: url('../../../assets/img/icons/arrow-right-blue.svg');
-  background-repeat: no-repeat;
-  background-position: right 0 center;
-  box-sizing: border-box;
-  padding-right: 12px;
-
-  &:hover, &:active {
-    background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
   }
 }
 
