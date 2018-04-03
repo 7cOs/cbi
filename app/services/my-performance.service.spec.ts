@@ -169,7 +169,8 @@ describe('Service: MyPerformanceService', () => {
       expect(myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
         filterMock.premiseType)).toEqual({});
     });
@@ -180,7 +181,8 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
         filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
@@ -198,7 +200,8 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
         filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
@@ -215,7 +218,8 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
         filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
@@ -233,7 +237,8 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
         premiseType);
 

@@ -78,7 +78,8 @@ export class MyPerformanceService {
   public accountDashboardStateParameters(
     insideAlternateHierarchy: boolean,
     insideExceptionHierarchy: boolean,
-    filter: MyPerformanceFilterState,
+    dateRangeCode: DateRangeTimePeriodValue,
+    metricType: MetricTypeValue,
     row: MyPerformanceTableRow,
     premiseType: PremiseTypeValue): AccountDashboardStateParameters {
 
@@ -96,13 +97,13 @@ export class MyPerformanceService {
       accountDashboardStateParams.premisetype = PremiseTypeValue[premiseType];
     }
 
-    switch (filter.metricType) {
+    switch (metricType) {
       case MetricTypeValue.Depletions:
-          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
+          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriodValue[dateRangeCode];
           break;
       case MetricTypeValue.Distribution:
       case MetricTypeValue.Velocity:
-          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
+          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriodValue[dateRangeCode];
           break;
       default:
         return {};
