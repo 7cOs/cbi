@@ -6,9 +6,7 @@ import { DebugElement } from '@angular/core';
 import { CompassAlertModalComponent } from './compass-alert-modal.component';
 import { CompassAlertModalInputs } from '../../../models/compass-alert-modal-inputs.model';
 import { COMPASS_ALERT_MODAL_INPUTS } from './compass-alert-modal.tokens';
-import { CompassModalOverlayRef } from './compass-alert-modal.overlayref';
 import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
-import { OverlayRef } from '@angular/cdk/overlay';
 
 const chance = new Chance();
 const modalOverlayRefMock = {
