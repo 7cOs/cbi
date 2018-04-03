@@ -9,7 +9,9 @@ export function getListHeaderInfoDTOMock(): ListHeaderInfoDTO {
     category: chance.string(),
     collaboratorType: chance.string(),
     collaborators: [{
-      name: chance.string(),
+      employeeId: chance.string(),
+      firstName: chance.string(),
+      lastName: chance.string()
     }],
     createdOn: chance.string(),
     description: chance.string(),

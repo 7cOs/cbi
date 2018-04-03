@@ -1,16 +1,16 @@
-import { Collaborators, OwnerDetails, SurveyInfo } from './lists.model';
+import {CollaboratorOwnerDetails, SurveyInfo} from './lists.model';
 
 export interface ListHeaderInfoDTO {
   archived: boolean;
   category: string;
   collaboratorType: string;
-  collaborators: Array<Collaborators>;
+  collaborators: Array<CollaboratorOwnerDetails>;
   createdOn: string;
   description: string;
   id: number;
   name: string;
   numberOfAccounts: number;
-  owner: OwnerDetails;
+  owner: CollaboratorOwnerDetails;
   survey: SurveyInfo;
   type: number;
   updatedOn: string;

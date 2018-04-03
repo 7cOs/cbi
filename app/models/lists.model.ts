@@ -17,14 +17,10 @@ export interface ListHeaderDetails {
   ownerLastName: string;
 }
 
-export interface OwnerDetails {
+export interface CollaboratorOwnerDetails {
   employeeId: string;
   firstName: string;
   lastName: string;
-}
-
-export interface Collaborators {
-  name: string;
 }
 
 export interface SurveyInfo {
