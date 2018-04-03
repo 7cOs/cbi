@@ -1,4 +1,4 @@
-import {CollaboratorOwnerDetails, SurveyInfo} from './lists.model';
+import { CollaboratorOwnerDetails, SurveyInfo } from './lists.model';
 
 export interface ListHeaderInfoDTO {
   archived: boolean;
