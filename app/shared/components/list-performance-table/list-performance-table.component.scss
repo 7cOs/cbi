@@ -374,6 +374,12 @@ td, th {
   }
 }
 
+.sort-indicator {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .selected-entity-row {
   font-weight: $semibold;
   background-color: $light-blue-4;
