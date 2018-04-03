@@ -13,9 +13,6 @@ import static com.cbrands.helper.SeleniumUtils.*;
 public class HomePage extends TestNGBasePage {
   private final WebDriver driver;
 
-  @FindBy(how = How.XPATH, using = "//greeting//h1")
-  private WebElement greeting;
-
   @FindBy(how = How.XPATH, using = "//md-select[@aria-label='Saved Filter Dropdown']")
   private WebElement savedReportsDropdown;
 
@@ -31,9 +28,8 @@ public class HomePage extends TestNGBasePage {
 
   @Override
   public boolean isLoaded() {
-    waitForVisibleFluentWait(greeting);
     waitForElementToDisappear(By.xpath("//div[@class='loader']"));
-    return greeting.isDisplayed();
+    return isElementPresent(By.xpath("//greeting//h1"));
   }
 
   public HomePage clickSavedReportsDropdown() {

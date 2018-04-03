@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state, analyticsService, title;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state, analyticsService, title, compassModalService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -19,6 +19,13 @@ describe('Unit: targetListDetailController', function() {
         trackEvent: () => {}
       };
       $provide.value('analyticsService', analyticsService);
+    });
+
+    angular.mock.module(($provide) => {
+      compassModalService = {
+        showAlertModalDialog: () => {}
+      };
+      $provide.value('compassModalService', compassModalService);
     });
 
     inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_, _$state_) {
@@ -208,7 +215,6 @@ describe('Unit: targetListDetailController', function() {
   it('should expose public services', function() {
     expect(ctrl.targetListService).not.toBeUndefined();
     expect(typeof (ctrl.targetListService)).toEqual('object');
-
     expect(ctrl.userService).not.toBeUndefined();
     expect(typeof (ctrl.userService)).toEqual('object');
   });
