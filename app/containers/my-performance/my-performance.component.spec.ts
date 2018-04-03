@@ -885,7 +885,7 @@ describe('MyPerformanceComponent', () => {
 
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.EXCPN_HIER;
-          stateMock.myPerformance.current.responsibilities.positionId = '0';
+          stateMock.myPerformance.current.responsibilities.positionId = CORPORATE_USER_POSITION_ID;
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
@@ -917,7 +917,7 @@ describe('MyPerformanceComponent', () => {
           rowMock.descriptionRow0 = EntityPeopleType['NATIONAL SALES ORG'];
 
           // any number other than 0 as positionId
-          stateMock.myPerformance.current.responsibilities.positionId = '5267';
+          stateMock.myPerformance.current.responsibilities.positionId = chance.string({pool: '123456789'});
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
@@ -956,7 +956,7 @@ describe('MyPerformanceComponent', () => {
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.OFF_HIER;
 
-          stateMock.myPerformance.current.responsibilities.positionId = '0';
+          stateMock.myPerformance.current.responsibilities.positionId = CORPORATE_USER_POSITION_ID;
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
@@ -988,7 +988,7 @@ describe('MyPerformanceComponent', () => {
           rowMock.descriptionRow0 = EntityPeopleType.DRAFT;
 
           // any number other than 0 as positionId
-          stateMock.myPerformance.current.responsibilities.positionId = '5267';
+          stateMock.myPerformance.current.responsibilities.positionId = chance.string({pool: '123456789'});
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
