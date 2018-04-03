@@ -255,6 +255,21 @@ tr.one-right-column-present {
       color: inherit;
     }
   }
+
+  &:hover {
+    background-color: $light-blue-4;
+
+    /deep/.left-col,
+    /deep/.center-col,
+    /deep/.right-col,
+    /deep/.segment-col {
+      background-color: $light-blue-4;
+    }
+
+    /deep/.checkbox-col {
+      background-color: $white;
+    }
+  }
 }
 
 span.positive {
