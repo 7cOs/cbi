@@ -10,6 +10,7 @@ import { getSortingCriteriaMock } from '../../../models/my-performance-table-sor
 import { LoadingState } from '../../../enums/loading-state.enum';
 import { ListPerformanceTableComponent } from './list-performance-table.component';
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
+import { MatCheckboxModule, MatCheckboxChange } from '@angular/material';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
@@ -38,6 +39,7 @@ describe('ListPerformanceTableComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [MatCheckboxModule],
       declarations: [
         BeerLoaderComponentMock,
         MockListPerformanceTableRowComponent,

@@ -1,10 +1,25 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { ListDetailComponent } from './list-detail.component';
+import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
+import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
 const chance = new Chance();
+
+@Component({
+  selector: 'list-performance-table',
+  template: ''
+})
+class ListPerformanceTableComponentMock {
+  @Input() sortingCriteria: Array<SortingCriteria>;
+  @Input() tableData: Array<ListPerformanceTableRow>;
+  @Input() tableHeaderRow: Array<string>;
+  @Input() totalRow: ListPerformanceTableRow;
+  @Input() loadingState: boolean;
+}
 
 describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
@@ -23,7 +38,8 @@ describe('ListDetailComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ListDetailComponent
+        ListDetailComponent,
+        ListPerformanceTableComponentMock
       ],
       providers: [
         {
