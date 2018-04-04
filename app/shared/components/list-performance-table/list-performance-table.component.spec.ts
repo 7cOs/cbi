@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, Input, SimpleChange } from '@angular/core';
+import { Component, Input, SimpleChange, ChangeDetectorRef } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -37,7 +37,6 @@ describe('ListPerformanceTableComponent', () => {
   let fixture: ComponentFixture<ListPerformanceTableComponent>;
   let componentInstance: ListPerformanceTableComponent;
   let tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [MatCheckboxModule],
@@ -215,17 +214,32 @@ describe('ListPerformanceTableComponent', () => {
     });
   });
 
-  describe('when the checkbox for all stores is selected', () => {
+  fdescribe('when the checkbox for all stores is selected', () => {
     it('should check all the elements', () => {
       const selectAllStoresSpy = spyOn(componentInstance, 'selectAllStores');
+
       let tableData = getListPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
-
-      fixture.nativeElement.querySelector('mat-checkbox input').click();
       fixture.detectChanges();
-      expect(selectAllStoresSpy).toHaveBeenCalled();
+
+      // fixture.nativeElement.querySelector('mat-checkbox input').click();
+      // fixture.detectChanges();
+
+      fixture.debugElement.query(By.css('.select-all-checkbox')).triggerEventHandler('click', null);
+      fixture.detectChanges();
+
+      // expect(selectAllStoresSpy).toHaveBeenCalled();
       expect(componentInstance.sortedTableData[0].checked).toEqual(true);
       expect(componentInstance.sortedTableData[1].checked).toEqual(true);
+
+      fixture.debugElement.query(By.css('.select-all-checkbox')).triggerEventHandler('click', null);
+      fixture.detectChanges();
+
+      // fixture.nativeElement.querySelector('mat-checkbox input').click();
+      // fixture.detectChanges();
+
+      expect(componentInstance.sortedTableData[0].checked).toEqual(false);
+      expect(componentInstance.sortedTableData[1].checked).toEqual(false);
     });
   });
 

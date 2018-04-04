@@ -10,7 +10,6 @@ import { ListPerformanceColumnType } from '../../../enums/list-performance-colum
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
 import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../../enums/row-type.enum';
-import { SalesHierarchyViewType } from '../../../enums/sales-hierarchy-view-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
@@ -53,7 +52,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   @Input() showContributionToVolume: boolean = false;
   @Input() tableHeaderRow: Array<string> = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   @Input() totalRow: ListPerformanceTableRow;
-  @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() loadingState: LoadingState.Loaded;
 
   public sortedTableData: Array<ListPerformanceTableRow>;
@@ -61,6 +59,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
   public tableClasses: CssClasses = {};
+  public isSelectAllChecked = false;
 
   private selectedListItems: Array<ListPerformanceTableRow> = [];
 
@@ -105,10 +104,15 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
-  public selectAllStores(event: MatCheckboxChange) {
-    this.sortedTableData.forEach(function(row) {
-      row.checked = event.checked;
-    } );
+  public selectAllStores() {
+    this.isSelectAllChecked = !this.isSelectAllChecked;
+    const updatedTableData = this.sortedTableData.map((row: any) => {
+      return Object.assign({}, row, {
+        checked: this.isSelectAllChecked
+      });
+    });
+
+    this.sortedTableData = updatedTableData;
   }
 
   public getSubHeaderClasses(): string {

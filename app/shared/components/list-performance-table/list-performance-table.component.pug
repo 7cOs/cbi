@@ -8,8 +8,9 @@ div
 
       tr.top-header.col-100-pct
         th.checkbox-col(colspan=1)
-          mat-checkbox(aria-label="Select All Stores",
-          (change)="selectAllStores($event)")
+          mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
+          [checked]="isSelectAllChecked.checked",
+          (click)="selectAllStores()")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
