@@ -214,29 +214,20 @@ describe('ListPerformanceTableComponent', () => {
     });
   });
 
-  fdescribe('when the checkbox for all stores is selected', () => {
+  describe('when select all is false and it is clicked', () => {
     it('should check all the elements', () => {
-      const selectAllStoresSpy = spyOn(componentInstance, 'selectAllStores');
-
-      let tableData = getListPerformanceTableRowMock(2);
-      componentInstance.tableData = tableData;
+      componentInstance.tableData = getListPerformanceTableRowMock(2);
+      componentInstance.isSelectAllChecked = false;
       fixture.detectChanges();
-
-      // fixture.nativeElement.querySelector('mat-checkbox input').click();
-      // fixture.detectChanges();
 
       fixture.debugElement.query(By.css('.select-all-checkbox')).triggerEventHandler('click', null);
       fixture.detectChanges();
 
-      // expect(selectAllStoresSpy).toHaveBeenCalled();
       expect(componentInstance.sortedTableData[0].checked).toEqual(true);
       expect(componentInstance.sortedTableData[1].checked).toEqual(true);
 
       fixture.debugElement.query(By.css('.select-all-checkbox')).triggerEventHandler('click', null);
       fixture.detectChanges();
-
-      // fixture.nativeElement.querySelector('mat-checkbox input').click();
-      // fixture.detectChanges();
 
       expect(componentInstance.sortedTableData[0].checked).toEqual(false);
       expect(componentInstance.sortedTableData[1].checked).toEqual(false);
