@@ -1,7 +1,9 @@
 'use strict';
 
+const CompassAlertModalEvents = require('../../../enums/compass-alert-modal-strings.enum').CompassAlertModalEvent;
+
 module.exports = /*  @ngInject */
-  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService) {
+  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService, compassModalService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -14,6 +16,7 @@ module.exports = /*  @ngInject */
     vm.userService = userService;
     vm.targetListService = targetListService;
     vm.loaderService = loaderService;
+    vm.compassModalService = compassModalService;
 
     // Defaults
     vm.allowDelete = true;
@@ -41,6 +44,18 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
+    vm.archiveModalStringInputs = {
+      'title': 'Are you sure?',
+      'body': 'By archiving this list, only limited set functionality will remain available.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Archive'};
+    vm.deleteModalStringInputs =  {
+      'title': 'Are you sure?',
+      'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Delete'
+    };
+    vm.compassAlertModalAccept = CompassAlertModalEvents.Accept;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -60,6 +75,8 @@ module.exports = /*  @ngInject */
     vm.sortBy = sortBy;
     vm.toggle = toggle;
     vm.toggleAll = toggleAll;
+    vm.showArchiveModal = showArchiveModal;
+    vm.showDeleteModal = showDeleteModal;
 
     init();
 
@@ -410,5 +427,23 @@ module.exports = /*  @ngInject */
           }
         }
       });
+    }
+
+    function showArchiveModal() {
+      let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs);
+      compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+          if (value === vm.compassAlertModalAccept) {
+            archiveTargetList();
+          }
+        });
+    }
+
+    function showDeleteModal() {
+      let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs);
+      compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+          if (value === vm.compassAlertModalAccept) {
+            deleteTargetList();
+          }
+        });
     }
   };
