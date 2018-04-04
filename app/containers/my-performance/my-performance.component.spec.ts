@@ -1859,7 +1859,8 @@ describe('MyPerformanceComponent', () => {
           'accounts',
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
-            stateMock.myPerformanceFilter.metricType, rowMock,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
             stateMock.myPerformanceFilter.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
@@ -1935,7 +1936,8 @@ describe('MyPerformanceComponent', () => {
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
             stateMock.myPerformanceFilter.metricType,
-            rowMock, hierarchyEntityMock.premiseType));
+            rowMock,
+            hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
@@ -1961,7 +1963,8 @@ describe('MyPerformanceComponent', () => {
           'accounts',
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
-            stateMock.myPerformanceFilter.metricType, rowMock,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
             stateMock.myPerformanceFilter.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
@@ -1994,7 +1997,8 @@ describe('MyPerformanceComponent', () => {
           myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
             stateMock.myPerformanceFilter.metricType,
-            rowMock, hierarchyEntityMock.premiseType));
+            rowMock,
+            hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(

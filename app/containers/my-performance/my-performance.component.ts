@@ -298,7 +298,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.currentState.responsibilities.exceptionHierarchy,
           this.filterState.dateRangeCode,
           this.filterState.metricType,
-          row, this.filterState.premiseType);
+          row,
+          this.filterState.premiseType);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
@@ -319,7 +320,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.currentState.responsibilities.exceptionHierarchy,
           this.filterState.dateRangeCode,
           this.filterState.metricType,
-          row, this.filterState.premiseType);
+          row,
+          this.filterState.premiseType);
       }
     }
 

@@ -164,6 +164,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     vm.filterTopBottom = filterTopBottom;
     vm.canOpenNote = canOpenNote;
     vm.getAccountTypePerformanceData = getAccountTypePerformanceData;
+    vm.setPremiseType = setPremiseType;
 
     init();
 
