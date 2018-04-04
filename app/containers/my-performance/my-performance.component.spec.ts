@@ -32,7 +32,7 @@ import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/o
 import { getProductMetricsBrandMock,
          getProductMetricsSkuMock,
          getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { HandleElementClickedParameters, MyPerformanceComponent, CORPORATE_USER_POSITION_ID } from './my-performance.component';
+import { CORPORATE_USER_POSITION_ID, HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
