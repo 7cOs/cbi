@@ -14,6 +14,7 @@ import { MatCheckboxModule, MatCheckboxChange } from '@angular/material';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
+
 const chance = new Chance();
 
 @Component({
@@ -211,6 +212,20 @@ describe('ListPerformanceTableComponent', () => {
       fixture.detectChanges();
       fixture.nativeElement.querySelector('tbody tr').click();
       expect(onRowClickedSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('when the checkbox for all stores is selected', () => {
+    it('should check all the elements', () => {
+      const selectAllStoresSpy = spyOn(componentInstance, 'selectAllStores');
+      let tableData = getListPerformanceTableRowMock(2);
+      debugger;
+      componentInstance.tableData = tableData;
+
+      fixture.detectChanges();
+      componentInstance.selectAllStores({checked: true, source: fixture.nativeElement});
+      expect(componentInstance.sortedTableData[0].checked).toEqual(true);
+      expect(componentInstance.sortedTableData[1].checked).toEqual(true);
     });
   });
 

@@ -18,7 +18,8 @@ export function getListPerformanceTableRowMock(length: number) {
       metricColumn3: chance.floating(),
       metricColumn4: chance.floating(),
       metricColumn5: chance.floating(),
-      depletionDate: chance.string()
+      depletionDate: chance.string(),
+      checked: false
     });
   }
 
