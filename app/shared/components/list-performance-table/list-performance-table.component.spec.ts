@@ -219,11 +219,11 @@ describe('ListPerformanceTableComponent', () => {
     it('should check all the elements', () => {
       const selectAllStoresSpy = spyOn(componentInstance, 'selectAllStores');
       let tableData = getListPerformanceTableRowMock(2);
-      debugger;
       componentInstance.tableData = tableData;
 
+      fixture.nativeElement.querySelector('mat-checkbox input').click();
       fixture.detectChanges();
-      componentInstance.selectAllStores({checked: true, source: fixture.nativeElement});
+      expect(selectAllStoresSpy).toHaveBeenCalled();
       expect(componentInstance.sortedTableData[0].checked).toEqual(true);
       expect(componentInstance.sortedTableData[1].checked).toEqual(true);
     });
