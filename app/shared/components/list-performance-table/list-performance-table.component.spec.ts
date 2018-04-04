@@ -214,7 +214,7 @@ describe('ListPerformanceTableComponent', () => {
     });
   });
 
-  describe('when select all is false and it is clicked', () => {
+  describe('when isSelectAllChecked is false and it is clicked', () => {
     it('should check all the elements', () => {
       componentInstance.tableData = getListPerformanceTableRowMock(2);
       componentInstance.isSelectAllChecked = false;
