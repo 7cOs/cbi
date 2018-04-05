@@ -1,7 +1,8 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 // TODO: Remove this when we get real data.
-import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
+import { getListPerformanceTableRowMock,
+  getListPerformanceHeaderRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 @Component({
   selector: 'list-detail',
@@ -13,7 +14,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   // TODO: Remove this when we get real data.
   public tableData = getListPerformanceTableRowMock(4);
-
+  public tableHeader = getListPerformanceHeaderRowMock();
   public totalRow = {
     descriptionRow0: 'Total',
     descriptionRow1: '',

@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, Input, SimpleChange, ChangeDetectorRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -7,11 +7,9 @@ import { CalculatorService } from '../../../services/calculator.service';
 import { ListPerformanceColumnType } from '../../../enums/list-performance-column-types.enum';
 import { getListPerformanceTableRowMock } from '../../../models/list-performance/list-performance-table-row.model.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
-import { LoadingState } from '../../../enums/loading-state.enum';
 import { ListPerformanceTableComponent } from './list-performance-table.component';
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
-import { MatCheckboxModule, MatCheckboxChange } from '@angular/material';
-import { RowType } from '../../../enums/row-type.enum';
+import { MatCheckboxModule } from '@angular/material';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 
@@ -173,7 +171,6 @@ describe('ListPerformanceTableComponent', () => {
   describe('getTableBodyClasses', () => {
     it('should return the total-row-present class when total row is present', () => {
       const totalRowMock: ListPerformanceTableRow = getListPerformanceTableRowMock(1)[0];
-      const dismissibleTotalRowMock: ListPerformanceTableRow = null;
       componentInstance.totalRow = totalRowMock;
 
       const tableBodyClass = componentInstance.getTableBodyClasses();
@@ -182,7 +179,6 @@ describe('ListPerformanceTableComponent', () => {
 
     it('should return the total-row-absent class when total row is absent', () => {
       const totalRowMock: ListPerformanceTableRow = null;
-      const dismissibleTotalRowMock: ListPerformanceTableRow = null;
       componentInstance.totalRow = totalRowMock;
 
       const tableBodyClass = componentInstance.getTableBodyClasses();
@@ -191,7 +187,6 @@ describe('ListPerformanceTableComponent', () => {
   });
 
   describe('when calling onRowClicked', () => {
-    let rowTypeMock: RowType = RowType.data;
     let indexMock: number;
     let listPerformanceTableRowMock: ListPerformanceTableRow;
 

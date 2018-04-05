@@ -1,19 +1,13 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { sortBy } from 'lodash';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { CssClasses } from '../../../models/css-classes.model';
-import { DateRange } from '../../../models/date-range.model';
-import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
 import { LoadingState } from '../../../enums/loading-state.enum';
 import { ListPerformanceColumnType } from '../../../enums/list-performance-column-types.enum';
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
-import { ProductMetricsViewType } from '../../../enums/product-metrics-view-type.enum';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
-import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { MatCheckboxModule, MatCheckboxChange } from '@angular/material';
 
 @Component({
   selector: 'list-performance-table',
@@ -39,13 +33,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
     }
   }
 
-  @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() showDateRange: boolean = false;
-  @Input() showOpportunities: boolean = false;
-  @Input() opportunitiesError: boolean = false;
-  @Input() showContributionToVolume: boolean = false;
-  @Input() tableHeaderRow: Array<string> = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
+  @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: LoadingState.Loaded;
 
@@ -55,8 +44,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public loadingStateEnum = LoadingState;
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
-
-  private selectedListItems: Array<ListPerformanceTableRow> = [];
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{

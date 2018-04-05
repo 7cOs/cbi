@@ -1,7 +1,6 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
-import { MatCheckboxModule } from '@angular/material/';
 
 @Component({
   selector: '[list-performance-table-row]',

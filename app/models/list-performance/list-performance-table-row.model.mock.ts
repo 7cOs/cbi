@@ -26,3 +26,7 @@ export function getListPerformanceTableRowMock(length: number) {
 
   return rows;
 }
+
+export function getListPerformanceHeaderRowMock(): Array<string> {
+  return ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
+}
