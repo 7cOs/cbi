@@ -1,35 +1,35 @@
 td.checkbox-col(colspan=1)
   div.left-col-content
-    mat-checkbox(*ngIf="tableRowData.descriptionRow0 != 'Total'",
+    mat-checkbox(*ngIf="rowData.descriptionRow0 != 'Total'",
     aria-label="Select Store",
-    [checked]='tableRowData.checked',
-    (change)="tableRowData.checked = !tableRowData.checked")
+    [checked]='rowData.checked',
+    (change)="rowData.checked = !rowData.checked")
 td.left-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0
-        span {{tableRowData.descriptionRow0}}
+        span {{rowData.descriptionRow0}}
       div.description-line-1
-        span.description-line-1 {{tableRowData.descriptionRow0Sub1}}
+        span.description-line-1 {{rowData.descriptionRow0Sub1}}
 td.left-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0
-        span.description-line-0 {{tableRowData.descriptionRow1}}
+        span.description-line-0 {{rowData.descriptionRow1}}
 td.segment-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0
-        span {{tableRowData.descriptionRow2}}
+        span {{rowData.descriptionRow2}}
 
-td.center-col(colspan=1) {{tableRowData.metricColumn0 | number}}
+td.center-col(colspan=1) {{rowData.metricColumn0 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(tableRowData.metricColumn1)") {{tableRowData.metricColumn1 | number}}
+  span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn1 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(tableRowData.metricColumn2)") {{tableRowData.metricColumn2 | number:'1.1-1'}}%
-td.center-col(colspan=1) {{tableRowData.metricColumn3 | number}}
+  span([ngClass]="getTrendClass(rowData.metricColumn2)") {{rowData.metricColumn2 | number:'1.1-1'}}%
+td.center-col(colspan=1) {{rowData.metricColumn3 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(tableRowData.metricColumn4)") {{tableRowData.metricColumn4 | number}}
+  span([ngClass]="getTrendClass(rowData.metricColumn4)") {{rowData.metricColumn4 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(tableRowData.metricColumn5)") {{tableRowData.metricColumn5 | number:'1.1-1'}}%
-td.right-col(colspan=1) {{tableRowData.depletionDate}}
+  span([ngClass]="getTrendClass(rowData.metricColumn5)") {{rowData.metricColumn5 | number:'1.1-1'}}%
+td.right-col(colspan=1) {{rowData.depletionDate}}

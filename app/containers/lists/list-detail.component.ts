@@ -1,5 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+// TODO: Remove this when we get real data.
+import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 @Component({
   selector: 'list-detail',
@@ -8,49 +10,9 @@ import { Title } from '@angular/platform-browser';
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-  public tableData = [
-  {
-    descriptionRow0: 'descrow0',
-    descriptionRow1: 'descrow1',
-    descriptionRow0Sub1: 'address',
-    descriptionRow2: 'B',
-    metricColumn0: 0,
-    metricColumn1: 1,
-    metricColumn2: 2,
-    metricColumn3: 3,
-    metricColumn4: 4,
-    metricColumn5: 5,
-    depletionDate: '2017-08-01',
-    checked: false
-  },
-  {
-    descriptionRow0: 'descrow0',
-    descriptionRow1: 'descrow1',
-    descriptionRow0Sub1: 'address',
-    descriptionRow2: 'B',
-    metricColumn0: 0,
-    metricColumn1: 1,
-    metricColumn2: 2,
-    metricColumn3: 3,
-    metricColumn4: 4,
-    metricColumn5: 5,
-    depletionDate: '2017-08-01',
-    checked: false
-  },
-  {
-    descriptionRow0: 'descrow0',
-    descriptionRow1: 'descrow1',
-    descriptionRow0Sub1: 'address',
-    descriptionRow2: 'B',
-    metricColumn0: 0,
-    metricColumn1: 1,
-    metricColumn2: 2,
-    metricColumn3: 3,
-    metricColumn4: 4,
-    metricColumn5: 5,
-    depletionDate: '2017-08-01',
-    checked: false
-  } ];
+
+  // TODO: Remove this when we get real data.
+  public tableData = getListPerformanceTableRowMock(4);
 
   public totalRow = {
     descriptionRow0: 'Total',

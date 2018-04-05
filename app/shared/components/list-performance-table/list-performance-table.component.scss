@@ -116,7 +116,6 @@ th {
 /deep/.center-col {
   text-align: center;
   background-color: $gray-4;
-
   width: 5%;
 
   &.spanned {
@@ -156,7 +155,7 @@ tr.one-right-column-present {
 }
 
 .performance-table-summary {
-  box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.05);
+  box-shadow: $table-box-shadow;
   background-color: $gray-4;
   border-bottom: 2px solid $gray-8;
   font-family: $rajdhani;
@@ -395,4 +394,12 @@ td, th {
   /deep/.checkbox-col {
     background-color: $white;
   }
+}
+
+.description-line-1 {
+  font-size: 11px;
+}
+
+.description-line-0 {
+  font-size: 14px;
 }

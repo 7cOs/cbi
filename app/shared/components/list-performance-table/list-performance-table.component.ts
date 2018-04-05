@@ -15,11 +15,6 @@ import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.compone
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { MatCheckboxModule, MatCheckboxChange } from '@angular/material';
 
-interface SortWeightArray {
-  index: number;
-  sortWeight: number;
-}
-
 @Component({
   selector: 'list-performance-table',
   template: require('./list-performance-table.component.pug'),
@@ -104,9 +99,9 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
-  public selectAllStores() {
+  public toggleSelectAllStores() {
     this.isSelectAllChecked = !this.isSelectAllChecked;
-    const updatedTableData = this.sortedTableData.map((row: any) => {
+    const updatedTableData = this.sortedTableData.map((row: ListPerformanceTableRow) => {
       return Object.assign({}, row, {
         checked: this.isSelectAllChecked
       });
@@ -116,13 +111,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public getSubHeaderClasses(): string {
-    let style = '';
-
-    if (this.totalRow) {
-      style = style.concat(' no-sub-header-border');
-    }
-
-    return style;
+    return this.totalRow ? ' no-sub-header-border' : '';
   }
 
   public getEntityRowClasses(row: ListPerformanceTableRow): CssClasses {
@@ -130,7 +119,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       'performance-error': row.performanceError,
       'selected-entity-row': row.checked
     };
-
     return classes;
   }
 

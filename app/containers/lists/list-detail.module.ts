@@ -7,7 +7,11 @@ import { SharedModule } from '../../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material';
 
 @NgModule({
-  imports: [SharedModule, CommonModule, MatCheckboxModule],
+  imports: [
+    CommonModule,
+    MatCheckboxModule,
+    SharedModule
+  ],
   declarations: [
     ListDetailComponent,
     ListPerformanceTableComponent,
