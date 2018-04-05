@@ -50,9 +50,9 @@ public class ListsPage extends TestNGBasePage {
     driver.get(webAppBaseUrl + "/lists");
   }
 
-  public ListsPage clickDeleteButton() {
+  public ConfirmDeleteModal clickDeleteButton() {
     waitForElementToClickable(deleteButton, true).click();
-    return this;
+    return new ConfirmDeleteModal();
   }
 
   public ListsSwitchModal clickCreateNewListButton() {
@@ -130,5 +130,20 @@ public class ListsPage extends TestNGBasePage {
       waitForElementToClickable(modal.findElement(By.xpath("//button[contains(., 'Create New List')]")), true).click();
       return PageFactory.initElements(driver, ListManagementModal.class);
     }
+  }
+
+  public class ConfirmDeleteModal {
+    private WebElement modal;
+
+    public ConfirmDeleteModal(){
+      modal = findElement(By.xpath("//compass-alert-modal"));
+      waitForVisibleFluentWait(modal);
+    }
+
+    public ListsPage confirmDelete() {
+      waitForElementToClickable(modal.findElement(By.xpath(".//button[contains(., 'Delete')]")), true).click();
+      return PageFactory.initElements(driver, ListsPage.class);
+    }
+
   }
 }

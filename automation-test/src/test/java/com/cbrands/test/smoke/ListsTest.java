@@ -48,9 +48,10 @@ public class ListsTest extends BaseTestCase {
 
   @Test(dependsOnMethods = "createList", dataProvider = "listData", description = "Delete List")
   public void deleteList(String listName, String listDescription) {
-    listsPage
+    listsPage = listsPage
       .selectCheckboxByListName(listName)
-      .clickDeleteButton();
+      .clickDeleteButton()
+      .confirmDelete();
 
     Assert.assertFalse(listsPage.doesListExist(listName), "Failure deleting list: " +
       listName);
