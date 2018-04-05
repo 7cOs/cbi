@@ -13,7 +13,7 @@ import { CalculatorService } from './services/calculator.service';
 import { DateRangeApiService } from './services/api/v3/date-range-api.service';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
-import { DateRangeTransformerService } from './services/date-range-transformer.service';
+import { DateRangeTransformerService } from './services/transformers/date-range-transformer.service';
 import { effects } from './state/effects/root.effect';
 import { Environment } from './environment';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';

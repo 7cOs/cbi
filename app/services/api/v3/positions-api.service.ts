@@ -7,7 +7,7 @@ import { EntityDTO } from '../../../models/entity-dto.model';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../../models/people-responsibilities-dto.model';
-import { PerformanceDTO } from '../../../models/performance.model';
+import { PerformanceDTO } from '../../../models/performance-dto.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';

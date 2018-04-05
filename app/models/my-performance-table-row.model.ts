@@ -1,4 +1,5 @@
 import { EntityType } from '../enums/entity-responsibilities.enum';
+import { SalesHierarchyEntityType } from '../enums/sales-hierarchy/sales-hierarchy-entity-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
 
 export interface TeamPerformanceTableOpportunity {
@@ -17,6 +18,9 @@ export interface MyPerformanceTableRowMetadata {
   positionId?: string;
   skuPackageCode?: string;
   skuPackageType?: SkuPackageType;
+  id?: string;
+  type?: SalesHierarchyEntityType;
+  groupTypeCode?: string;
 }
 
 export interface MyPerformanceTableRow {

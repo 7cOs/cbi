@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntityDTO } from '../models/entity-dto.model';
-import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
-import { GroupedEntities } from '../models/grouped-entities.model';
-import { HierarchyEntity } from '../models/hierarchy-entity.model';
-import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { EntityDTO } from '../../models/entity-dto.model';
+import { EntitySubAccountDTO } from '../../models/entity-subaccount-dto.model';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { GroupedEntities } from '../../models/grouped-entities.model';
+import { HierarchyEntity } from '../../models/hierarchy-entity.model';
+import { HierarchyEntityDTO } from '../../models/hierarchy-entity.model';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 
 @Injectable()
 export class ResponsibilitiesTransformerService {
@@ -20,18 +20,6 @@ export class ResponsibilitiesTransformerService {
         groupedEntities[entity.description] = [
           this.transformHierarchyEntityDTO(entity)
         ];
-      }
-
-      return groupedEntities;
-    }, {});
-  }
-
-  public groupPeopleEntitiesByRole(peopleEntities: HierarchyEntity[]): GroupedEntities {
-    return peopleEntities.reduce((groupedEntities: GroupedEntities, entity: HierarchyEntity) => {
-      if (Array.isArray(groupedEntities[entity.description])) {
-        groupedEntities[entity.description].push(entity);
-      } else {
-        groupedEntities[entity.description] = [ entity ];
       }
 
       return groupedEntities;

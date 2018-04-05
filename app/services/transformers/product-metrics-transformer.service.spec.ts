@@ -1,14 +1,14 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { CalculatorService } from './calculator.service';
-import { getOpportunityCountDTOsMock } from '../models/opportunity-count-dto.model.mock';
-import { getOpportunityTypeMock } from '../enums/opportunity.enum.mock';
-import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../models/product-metrics.model.mock';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
-import { OpportunityCount } from '../models/opportunity-count.model';
-import { OpportunityType, OpportunityTypeLabel } from '../enums/opportunity.enum';
-import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
-import { ProductMetrics, ProductMetricsValues, ProductMetricsDTO } from '../models/product-metrics.model';
+import { CalculatorService } from '../calculator.service';
+import { getOpportunityCountDTOsMock } from '../../models/opportunity-count-dto.model.mock';
+import { getOpportunityTypeMock } from '../../enums/opportunity.enum.mock';
+import { getProductMetricsBrandDTOMock, getProductMetricsSkuDTOMock } from '../../models/product-metrics.model.mock';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
+import { OpportunityCount } from '../../models/opportunity-count.model';
+import { OpportunityType, OpportunityTypeLabel } from '../../enums/opportunity.enum';
+import { OpportunityCountDTO } from '../../models/opportunity-count-dto.model';
+import { ProductMetrics, ProductMetricsValues, ProductMetricsDTO } from '../../models/product-metrics.model';
 import { ProductMetricsTransformerService } from './product-metrics-transformer.service';
 
 describe('Service: ProductMetricsTransformerService', () => {

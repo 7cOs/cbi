@@ -8,12 +8,12 @@ import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-
 import { getEntityDTOMock } from '../../../models/entity-dto.model.mock';
 import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getPeopleResponsibilitiesDTOMock } from '../../../models/people-responsibilities-dto.model.mock';
-import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
+import { getPerformanceDTOMock } from '../../../models/performance-dto.model.mock';
 import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../../models/people-responsibilities-dto.model';
-import { PerformanceDTO } from '../../../models/performance.model';
+import { PerformanceDTO } from '../../../models/performance-dto.model';
 import { PositionsApiService } from './positions-api.service';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';

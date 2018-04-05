@@ -24,7 +24,7 @@ import * as MyPerformanceFilterActions from '../../state/actions/my-performance-
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
+import { MyPerformanceTableDataTransformerService } from '../../services/transformers/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
@@ -37,7 +37,7 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
-import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
+import { SalesHierarchyType } from '../../enums/sales-hierarchy/sales-hierarchy-type.enum';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';

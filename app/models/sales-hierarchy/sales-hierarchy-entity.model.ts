@@ -1,9 +1,9 @@
-import { EntityType } from '../../enums/entity-responsibilities.enum';
 import { Performance } from '../performance.model';
+import { SalesHierarchyEntityType } from '../../enums/sales-hierarchy/sales-hierarchy-entity-type.enum';
 
 export interface SalesHierarchyEntity {
-  id: string; // this maps to specific ids in the models.
+  id: string;
   name: string;
-  type: EntityType;
-  performance: Performance;
+  type: SalesHierarchyEntityType;
+  performance?: Performance;
 }

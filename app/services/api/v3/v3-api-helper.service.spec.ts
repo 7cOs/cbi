@@ -7,7 +7,7 @@ import { getDistributionTypeValueMock } from '../../../enums/distribution-type.e
 import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
 import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
-import { PerformanceDTO } from '../../../models/performance.model';
+import { PerformanceDTO } from '../../../models/performance-dto.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';

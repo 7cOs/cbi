@@ -42,7 +42,7 @@ import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter
 import { MyPerformanceFilterEvent, MyPerformanceFilter } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reducers/my-performance.reducer';
-import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
+import { MyPerformanceTableDataTransformerService } from '../../services/transformers/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
@@ -62,7 +62,7 @@ import { ClearMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedDistributorCode,
          SkuPackagePayload } from '../../state/actions/my-performance-version.action';
-import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
+import { SalesHierarchyType } from '../../enums/sales-hierarchy/sales-hierarchy-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
