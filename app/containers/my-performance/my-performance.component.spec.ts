@@ -32,7 +32,7 @@ import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/o
 import { getProductMetricsBrandMock,
          getProductMetricsSkuMock,
          getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
+import { CORPORATE_USER_POSITION_ID, HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -885,7 +885,7 @@ describe('MyPerformanceComponent', () => {
 
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.EXCPN_HIER;
-
+          stateMock.myPerformance.current.responsibilities.positionId = CORPORATE_USER_POSITION_ID;
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
@@ -910,6 +910,43 @@ describe('MyPerformanceComponent', () => {
           }));
         });
 
+        it('should NOT skip a level and shows ' +
+          'who is in that group when NSO role group is clicked WHEN positionId is NOT 0', () => {
+          rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG;
+          rowMock.metadata.entityName = EntityPeopleType['NATIONAL SALES ORG'];
+          rowMock.descriptionRow0 = EntityPeopleType['NATIONAL SALES ORG'];
+
+          // any number other than 0 as positionId
+          stateMock.myPerformance.current.responsibilities.positionId = chance.string({pool: '123456789'});
+          const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
+            positionId: rowMock.metadata.positionId,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            entityTypeGroupName: rowMock.metadata.entityName,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            entityType: rowMock.metadata.entityType,
+            entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName],
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityDescription: rowMock.descriptionRow0,
+            brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+            skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: false
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
+            positionId: rowMock.metadata.positionId,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityType: EntityType.RoleGroup,
+            selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+            inAlternateHierarchy: false
+          }));
+        });
+
         it('should skip a level by getting data for the single person in that role-group instead of showing' +
           ' who is in that group when DRAFT role group is clicked', () => {
           rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.DRAFT;
@@ -919,6 +956,7 @@ describe('MyPerformanceComponent', () => {
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.OFF_HIER;
 
+          stateMock.myPerformance.current.responsibilities.positionId = CORPORATE_USER_POSITION_ID;
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
@@ -929,6 +967,43 @@ describe('MyPerformanceComponent', () => {
             positionId: nextLevelEntity.positionId,
             filter: stateMock.myPerformanceFilter as any,
             selectedEntityDescription: nextLevelEntity.description,
+            brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+            skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: false
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
+            positionId: rowMock.metadata.positionId,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityType: EntityType.RoleGroup,
+            selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+            inAlternateHierarchy: false
+          }));
+        });
+
+        it('should NOT skip a level and shows ' +
+          'who is in that group when DRAFT role group is clicked WHEN positionId is NOT 0', () => {
+          rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.DRAFT;
+          rowMock.metadata.entityName = EntityPeopleType.DRAFT;
+          rowMock.descriptionRow0 = EntityPeopleType.DRAFT;
+
+          // any number other than 0 as positionId
+          stateMock.myPerformance.current.responsibilities.positionId = chance.string({pool: '123456789'});
+          const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
+            positionId: rowMock.metadata.positionId,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            entityTypeGroupName: rowMock.metadata.entityName,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            entityType: rowMock.metadata.entityType,
+            entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName],
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityDescription: rowMock.descriptionRow0,
             brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
             skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
             isMemberOfExceptionHierarchy: false

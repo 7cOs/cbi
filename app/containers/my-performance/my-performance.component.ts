@@ -505,6 +505,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       || this.entityType === EntityType.DistributorGroup;
   }
 
+  private isCorpUser(): boolean {
+    return this.currentState.responsibilities.positionId === CORPORATE_USER_POSITION_ID;
+  }
+
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
     this.clickedSalesHierarchyEntityName = parameters.row.descriptionRow0;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
@@ -519,8 +523,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    if (parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG
-      || parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.DRAFT) {
+    if ((parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG
+      || parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.DRAFT)
+      && this.isCorpUser()) {
       const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
       this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
     } else {
@@ -539,8 +544,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           }
         }
 
-        if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
-          || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
+        if ((parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
+          || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT)
+          && this.isCorpUser()) {
           const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
           const isExceptionHierarchy = nextLevelEntity.hierarchyType === SalesHierarchyType.EXCPN_HIER;
 
@@ -1001,7 +1007,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private handleTeamPerformanceDataRefresh(): void {
     if (this.currentState && this.productMetricsState) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
-        positionId: this.currentState.responsibilities.positionId === CORPORATE_USER_POSITION_ID
+        positionId: this.isCorpUser()
                     ? this.currentUserId
                     : this.currentState.responsibilities.positionId,
         groupedEntities: this.currentState.responsibilities.groupedEntities,
