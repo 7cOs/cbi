@@ -1,3 +1,5 @@
+import { PrimaryDistributor } from './lists.model';
+
 export interface StoreListDTO {
   address: string;
   cbiRecommendedSegmentCode: string;
@@ -13,6 +15,8 @@ export interface StoreListDTO {
   number: string;
   plannedNsvThreshold: number;
   postalCode: string;
+  segmentCode: string;
+  primaryBeerDistributor: PrimaryDistributor;
   premiseType: string;
   state: string;
   storeSourceCode: string;

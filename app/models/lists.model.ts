@@ -6,6 +6,8 @@ export interface StoreDetailsRow {
   postalCode: string;
   premiseType: string;
   state: string;
+  distributor: string;
+  segmentCode: string;
 }
 
 export interface ListHeaderDetails {
@@ -25,5 +27,10 @@ export interface CollaboratorOwnerDetails {
 
 export interface SurveyInfo {
   sfid: string;
+  name: string;
+}
+
+export interface PrimaryDistributor {
+  id: string;
   name: string;
 }

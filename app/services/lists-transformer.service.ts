@@ -33,7 +33,9 @@ export class ListsTransformerService {
       number: store.number,
       postalCode: store.postalCode,
       premiseType: store.premiseType,
-      state : store.state
+      state : store.state,
+      distributor: store.primaryBeerDistributor.name,
+      segmentCode: store.segmentCode
     };
     return storeData;
   }

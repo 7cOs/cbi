@@ -15,6 +15,8 @@ export function getStoreMock(): StoreDetailsRow {
     number: chance.string(),
     postalCode: chance.string(),
     premiseType: chance.string(),
-    state: chance.string()
+    state: chance.string(),
+    distributor: chance.string(),
+    segmentCode: chance.string()
   };
 }

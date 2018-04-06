@@ -20,6 +20,11 @@ export function getStoreDTOMock(): StoreListDTO {
     latitude: chance.floating(),
     longitude: chance.floating(),
     name: chance.string(),
+    segmentCode: chance.string(),
+    primaryBeerDistributor: {
+      id: chance.string(),
+      name: chance.string()
+    },
     number: chance.string(),
     plannedNsvThreshold: chance.floating(),
     postalCode: chance.string(),
