@@ -1857,7 +1857,8 @@ describe('MyPerformanceComponent', () => {
           stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
             stateMock.myPerformanceFilter.metricType,
             rowMock,
@@ -1933,7 +1934,8 @@ describe('MyPerformanceComponent', () => {
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
             stateMock.myPerformanceFilter.metricType,
             rowMock,
@@ -1961,7 +1963,8 @@ describe('MyPerformanceComponent', () => {
           stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
             stateMock.myPerformanceFilter.metricType,
             rowMock,
@@ -1994,7 +1997,8 @@ describe('MyPerformanceComponent', () => {
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock,
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
             stateMock.myPerformanceFilter.dateRangeCode,
             stateMock.myPerformanceFilter.metricType,
             rowMock,

@@ -1345,43 +1345,40 @@ describe('Unit: accountsController', function() {
     });
   });
 
-  describe('[Method] setPremiseType', function() {
+  describe('[Method] setPremiseType', () => {
     beforeEach(function() {
       spyOn(ctrl, 'updateChip').and.callThrough();
     });
 
     it('should update premiseType, filterService premiseType and updateChip to ON when passing ON', () => {
-      // Act
+
       ctrl.setPremiseType('On');
 
-      // Assert
       expect(ctrl.premiseTypeValue).toEqual('on');
       expect(filtersService.model.selected.premiseType).toEqual('on');
       expect(ctrl.updateChip).toHaveBeenCalledWith('On-Premise', 'premiseType');
     });
 
     it('should update premiseType, filterService premiseType and updateChip to Off when passing OFF', () => {
-      // Act
+
       ctrl.setPremiseType('Off');
 
-      // Assert
       expect(ctrl.premiseTypeValue).toEqual('off');
       expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.updateChip).toHaveBeenCalledWith('Off-Premise', 'premiseType');
     });
 
     it('should update premiseType, filterService premiseType and updateChip to All when passing All', () => {
-      // Act
+
       ctrl.setPremiseType('All');
 
-      // Assert
       expect(ctrl.premiseTypeValue).toEqual('all');
       expect(filtersService.model.selected.premiseType).toEqual('all');
       expect(ctrl.updateChip).toHaveBeenCalledWith('All', 'premiseType');
     });
   });
 
-  describe('[Method] isDisplayBrandSnapshotRow', function() {
+  describe('[Method] isDisplayBrandSnapshotRow', () => {
     it('should return true isPremiseCheckRequired', function() {
       filtersService.model.accountSelected.accountBrands = {value: 'testCategory'};
       expect(ctrl.isDisplayBrandSnapshotRow('testCategory', false, false)).toEqual(true);
