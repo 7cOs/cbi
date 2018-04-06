@@ -3,7 +3,7 @@
 const CompassAlertModalEvents = require('../../enums/compass-alert-modal-strings.enum').CompassAlertModalEvent;
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title, compassModalService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title, compassModalService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -141,12 +141,13 @@ module.exports = /*  @ngInject */
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
         vm.confirmToast = true;
         removeFooterToast();
+        toastService.showToast('deleted');
         sendGoogleAnalytics('Delete');
 
         $timeout(function() {
           vm.confirmToast = false;
           navigateToTL();
-        }, 2000);
+        }, 1000);
 
         // TO DO
         // userService.model.targetLists.splice(,1)
@@ -271,7 +272,6 @@ module.exports = /*  @ngInject */
           if (vm.pendingRemovals.length) {
             vm.removeCollaborator(vm.pendingRemovals);
           }
-
           vm.removeFooterToast();
           vm.sendGoogleAnalytics('Archive');
           vm.closeModal();

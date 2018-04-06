@@ -1926,11 +1926,21 @@ describe('MyPerformanceComponent', () => {
         currentMock.responsibilities.exceptionHierarchy = insideExceptionHierarchyMock;
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter, rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
+          rowMock,
+          stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            stateMock.myPerformanceFilter.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
@@ -1995,14 +2005,19 @@ describe('MyPerformanceComponent', () => {
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
           insideAlternateHierarchyMock,
           insideExceptionHierarchyMock,
-          stateMock.myPerformanceFilter,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
           rowMock,
           hierarchyEntityMock.premiseType
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
-            rowMock, hierarchyEntityMock.premiseType));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
@@ -2020,11 +2035,21 @@ describe('MyPerformanceComponent', () => {
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter, rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
+          rowMock,
+          stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            stateMock.myPerformanceFilter.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
@@ -2046,14 +2071,19 @@ describe('MyPerformanceComponent', () => {
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
           insideAlternateHierarchyMock,
           insideExceptionHierarchyMock,
-          stateMock.myPerformanceFilter,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
           rowMock,
           hierarchyEntityMock.premiseType
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
-            rowMock, hierarchyEntityMock.premiseType));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
