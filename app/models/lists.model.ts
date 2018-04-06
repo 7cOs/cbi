@@ -4,6 +4,7 @@ export interface StoreDetailsRow {
   name: string;
   number: string;
   postalCode: string;
+  sevenDigitId: string;
   premiseType: string;
   state: string;
   distributor: string;

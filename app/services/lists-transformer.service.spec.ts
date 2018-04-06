@@ -31,6 +31,7 @@ describe('Service: ListsTransformerService', () => {
           address: storesDTOMock[i].address,
           city: storesDTOMock[i].city,
           name: storesDTOMock[i].name,
+          sevenDigitId: storesDTOMock[i].storeSourceCode,
           number: storesDTOMock[i].number,
           postalCode: storesDTOMock[i].postalCode,
           premiseType: storesDTOMock[i].premiseType,

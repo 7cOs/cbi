@@ -33,6 +33,7 @@ export class ListsTransformerService {
       address: store.address,
       city: store.city,
       name: store.name,
+      sevenDigitId: store.storeSourceCode,
       number: store.number,
       postalCode: store.postalCode,
       premiseType: store.premiseType,
