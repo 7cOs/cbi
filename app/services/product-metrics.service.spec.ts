@@ -22,7 +22,7 @@ import { ProductMetrics, ProductMetricsDTO, ProductMetricsValues } from '../mode
 import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsService, ProductMetricsData } from './product-metrics.service';
 import * as ProductMetricsServiceConstants from '../models/product-metrics-service.model';
-import { ProductMetricsTransformerService } from '../services/product-metrics-transformer.service';
+import { ProductMetricsTransformerService } from '../services/transformers/product-metrics-transformer.service';
 import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
 import { SubAccountsApiService } from './api/v3/sub-accounts-api.service';

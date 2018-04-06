@@ -8,7 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import { DateRangeApiService } from '../../services/api/v3/date-range-api.service';
 import * as DateRangesActions from '../../state/actions/date-ranges.action';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
-import { DateRangeTransformerService } from '../../services/date-range-transformer.service';
+import { DateRangeTransformerService } from '../../services/transformers/date-range-transformer.service';
 
 @Injectable()
 export class DateRangesEffects {
