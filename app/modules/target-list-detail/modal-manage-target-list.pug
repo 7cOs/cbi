@@ -70,7 +70,3 @@ div.modal.target-list-modal
     button.link.align-left(ng-click="tld.showArchiveModal();tld.closeModal(true);") Archive List
     button.link.align-right(ng-click="tld.showDeleteModal();tld.closeModal(true);"
                             ng-disabled="tld.targetListService.model.currentList.collaborators.length > 1 || tld.pendingShares.length > 0") Delete List
-  div.success(ng-if="tld.confirmToast")
-    h4 Success!
-    p You have deleted this target list. You will be redirected to the Target List Library momentarily.
-    img(src="../../assets/img/icons/delete-target-list.svg")
