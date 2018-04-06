@@ -1,5 +1,5 @@
 import * as Chance from 'chance';
-import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
@@ -71,12 +71,13 @@ describe('ListDetailComponent', () => {
   });
 
   describe('ListDetailComponent initialization', () => {
-
+    let testBed: TestBed;
     let store: any;
-    beforeEach(inject([ Store ],
-      (_store: any) => {
-        store = _store;
-      }));
+
+    beforeEach(() => {
+      testBed = getTestBed();
+      store = testBed.get(Store);
+    });
 
     it('should call setTitle', () => {
       expect(titleMock.setTitle).toHaveBeenCalledWith(stateMock.current.title);
