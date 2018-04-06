@@ -16,6 +16,7 @@
   text-align: left;
   color: $gray-1;
   float: left;
+  font-weight: 400;
 }
 
 .compass-modal-header {
@@ -57,5 +58,10 @@
     padding-left: 20px;
     padding-right: 20px;
     cursor: pointer;
+    font-family: $roboto;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $cancel-blue;
   }
 }
