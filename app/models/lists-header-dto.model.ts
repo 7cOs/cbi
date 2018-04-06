@@ -8,6 +8,8 @@ export interface ListHeaderInfoDTO {
   createdOn: string;
   description: string;
   id: number;
+  numberOfClosedOpportunities: number;
+  totalOpportunities: number;
   name: string;
   numberOfAccounts: number;
   owner: CollaboratorOwnerDetails;

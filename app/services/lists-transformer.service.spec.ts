@@ -53,6 +53,8 @@ describe('Service: ListsTransformerService', () => {
       expect(actualHeaderData.numberOfAccounts).toBe(listHeaderDTOMock.numberOfAccounts);
       expect(actualHeaderData.ownerFirstName).toBe(listHeaderDTOMock.owner.firstName);
       expect(actualHeaderData.ownerLastName).toBe(listHeaderDTOMock.owner.lastName);
+      expect(actualHeaderData.totalOpportunities).toBe(listHeaderDTOMock.totalOpportunities);
+      expect(actualHeaderData.closedOpportunities).toBe(listHeaderDTOMock.numberOfClosedOpportunities);
     });
   });
 });

@@ -15,6 +15,8 @@ export function getListHeaderInfoDTOMock(): ListHeaderInfoDTO {
     }],
     createdOn: chance.string(),
     description: chance.string(),
+    numberOfClosedOpportunities: chance.floating(),
+    totalOpportunities: chance.floating(),
     id: chance.floating(),
     name: chance.string(),
     numberOfAccounts: chance.floating(),

@@ -7,6 +7,9 @@ export function getListHeaderInfoMock(): ListHeaderDetails {
   return {
     description: chance.string(),
     id: chance.floating(),
+    archived: chance.bool(),
+    closedOpportunities: chance.floating(),
+    totalOpportunities: chance.floating(),
     numberOfAccounts: chance.floating(),
     name: chance.string(),
     ownerFirstName : chance.string(),

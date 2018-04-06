@@ -17,6 +17,9 @@ export class ListsTransformerService {
   public formatListHeaderData(headerDataDTO: ListHeaderInfoDTO): ListHeaderDetails {
     return {
       description: headerDataDTO.description,
+      archived: headerDataDTO.archived,
+      closedOpportunities: headerDataDTO.numberOfClosedOpportunities,
+      totalOpportunities: headerDataDTO.totalOpportunities,
       id: headerDataDTO.id,
       name: headerDataDTO.name,
       numberOfAccounts: headerDataDTO.numberOfAccounts,
