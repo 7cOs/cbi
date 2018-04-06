@@ -1851,9 +1851,12 @@ describe('MyPerformanceComponent', () => {
         currentMock.responsibilities.exceptionHierarchy = insideExceptionHierarchyMock;
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter.dateRangeCode,
-          stateMock.myPerformanceFilter.metricType, rowMock,
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
+          rowMock,
           stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
@@ -1957,9 +1960,12 @@ describe('MyPerformanceComponent', () => {
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter.dateRangeCode,
-          stateMock.myPerformanceFilter.metricType, rowMock,
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
+          rowMock,
           stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
