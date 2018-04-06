@@ -9,6 +9,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { AppState } from '../../state/reducers/root.reducer';
 
 const chance = new Chance();
 
@@ -72,7 +73,7 @@ describe('ListDetailComponent', () => {
 
   describe('ListDetailComponent initialization', () => {
     let testBed: TestBed;
-    let store: any;
+    let store: Store<AppState>;
 
     beforeEach(() => {
       testBed = getTestBed();
