@@ -8,11 +8,11 @@ import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model
 import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
 import { getEntitySubAccountDTOMock } from '../../../models/entity-subaccount-dto.model.mock';
 import { getMetricTypeValueMock } from '../../../enums/metric-type.enum.mock';
-import { getPerformanceDTOMock } from '../../../models/performance.model.mock';
+import { getPerformanceDTOMock } from '../../../models/performance-dto.model.mock';
 import { getPremiseTypeValueMock } from '../../../enums/premise-type.enum.mock';
 import { getProductMetricsBrandDTOMock } from '../../../models/product-metrics.model.mock';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
-import { PerformanceDTO } from '../../../models/performance.model';
+import { PerformanceDTO } from '../../../models/performance-dto.model';
 import { ProductMetricsAggregationType } from '../../../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../../../models/product-metrics.model';
 import { SkuPackageType } from '../../../enums/sku-package-type.enum';

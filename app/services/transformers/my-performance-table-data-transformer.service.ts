@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 
-import { CORPORATE_USER_POSITION_ID } from '../containers/my-performance/my-performance.component';
-import { EntityWithPerformance } from '../models/entity-with-performance.model';
-import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
-import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
-import { Performance } from '../models/performance.model';
-import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
-import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
-import { SkuPackageType  } from '../enums/sku-package-type.enum';
-import { SpecializedAccountName } from '../enums/specialized-account-name.enum';
+import { CORPORATE_USER_POSITION_ID } from '../../containers/my-performance/my-performance.component';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
+import { PluralizedRoleGroup } from '../../enums/pluralized-role-group.enum';
+import { Performance } from '../../models/performance.model';
+import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { SkuPackageType  } from '../../enums/sku-package-type.enum';
+import { SpecializedAccountName } from '../../enums/specialized-account-name.enum';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -106,17 +105,13 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public getTotalRowData(performance: Performance): MyPerformanceTableRow {
-    const totalRow = {
+    return {
       descriptionRow0: 'Total',
       metricColumn0: performance.total,
       metricColumn1: performance.totalYearAgo,
       metricColumn2: performance.totalYearAgoPercent,
       ctv: 100
     };
-
-    if (performance.name) totalRow['descriptionRow1'] = performance.name;
-
-    return totalRow;
   }
 
   public getProductMetricsSelectedBrandRow(productMetricsValues: ProductMetricsValues): MyPerformanceTableRow {

@@ -1,12 +1,14 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { CalculatorService } from './calculator.service';
-import { EntityType } from '../enums/entity-responsibilities.enum';
-import { EntityWithPerformance } from '../models/entity-with-performance.model';
-import { getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
-import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
-import { HierarchyGroup } from '../models/hierarchy-group.model';
-import { Performance, PerformanceDTO } from '../models/performance.model';
+import { CalculatorService } from '../calculator.service';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
+import { getEntityPropertyResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
+import { getPerformanceDTOMock } from '../../models/performance-dto.model.mock';
+import { getPerformanceMock } from '../../models/performance.model.mock';
+import { HierarchyGroup } from '../../models/hierarchy-group.model';
+import { Performance } from '../../models/performance.model';
+import { PerformanceDTO } from '../../models/performance-dto.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
 
 describe('Service: PerformanceTransformerService', () => {

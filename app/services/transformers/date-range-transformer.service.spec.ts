@@ -1,12 +1,12 @@
 import * as Chance from 'chance';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { DateRange } from '../models/date-range.model';
-import { DateRangeDTO } from '../models/date-range-dto.model';
+import { DateRange } from '../../models/date-range.model';
+import { DateRangeDTO } from '../../models/date-range-dto.model';
 import { DateRangeTransformerService } from './date-range-transformer.service';
-import { dateRangeCollectionMock } from '../models/date-range-collection.model.mock';
-import { dateRangeDTOsMock } from '../models/date-range-dto-collection.model.mock';
-import { getDateRangeDTOMock } from '../models/date-range-dto.model.mock';
+import { dateRangeCollectionMock } from '../../models/date-range-collection.model.mock';
+import { dateRangeDTOsMock } from '../../models/date-range-dto-collection.model.mock';
+import { getDateRangeDTOMock } from '../../models/date-range-dto.model.mock';
 
 const chance = new Chance();
 

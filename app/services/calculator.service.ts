@@ -12,6 +12,10 @@ export class CalculatorService {
         : 0;
   }
 
+  public getPercentageOfTotal(total: number, count: number): number {
+    return Math.round((count / total) * 1000) / 10;
+  }
+
   public getYearAgoDelta(total: number, totalYearAgo: number): number {
     return Math.round(total - totalYearAgo);
   }

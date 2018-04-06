@@ -24,7 +24,7 @@ import * as MyPerformanceFilterActions from '../../state/actions/my-performance-
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
+import { MyPerformanceTableDataTransformerService } from '../../services/transformers/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
@@ -37,7 +37,7 @@ import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.en
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { RowType } from '../../enums/row-type.enum';
-import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
+import { SalesHierarchyType } from '../../enums/sales-hierarchy/sales-hierarchy-type.enum';
 import { SalesHierarchyViewType } from '../../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -505,6 +505,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       || this.entityType === EntityType.DistributorGroup;
   }
 
+  private isCorpUser(): boolean {
+    return this.currentState.responsibilities.positionId === CORPORATE_USER_POSITION_ID;
+  }
+
   private handleLeftRowDataElementClicked(parameters: HandleElementClickedParameters): void {
     this.clickedSalesHierarchyEntityName = parameters.row.descriptionRow0;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
@@ -519,8 +523,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.drillStatus = DrillStatus.Inactive;
     }
 
-    if (parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG
-      || parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.DRAFT) {
+    if ((parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG
+      || parameters.row.metadata.entityTypeCode === SpecialistRoleGroupEntityTypeCode.DRAFT)
+      && this.isCorpUser()) {
       const nextLevelEntityType = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0].entityType;
       this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(nextLevelEntityType));
     } else {
@@ -539,8 +544,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           }
         }
 
-        if (parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
-          || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT) {
+        if ((parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
+          || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT)
+          && this.isCorpUser()) {
           const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
           const isExceptionHierarchy = nextLevelEntity.hierarchyType === SalesHierarchyType.EXCPN_HIER;
 
@@ -1001,7 +1007,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private handleTeamPerformanceDataRefresh(): void {
     if (this.currentState && this.productMetricsState) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
-        positionId: this.currentState.responsibilities.positionId === CORPORATE_USER_POSITION_ID
+        positionId: this.isCorpUser()
                     ? this.currentUserId
                     : this.currentState.responsibilities.positionId,
         groupedEntities: this.currentState.responsibilities.groupedEntities,

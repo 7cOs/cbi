@@ -15,7 +15,8 @@ import { getEntitiesWithPerformancesMock,
          getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
 import { getEntityPeopleResponsibilitiesMock, getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
 import { getEntityTypeMock } from '../enums/entity-responsibilities.enum.mock';
-import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
+import { getPerformanceDTOMock } from '../models/performance-dto.model.mock';
+import { getPerformanceMock } from '../models/performance.model.mock';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getGroupedEntitiesMock } from '../models/grouped-entities.model.mock';
@@ -28,11 +29,12 @@ import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
-import { Performance, PerformanceDTO } from '../models/performance.model';
-import { PerformanceTransformerService } from '../services/performance-transformer.service';
+import { Performance } from '../models/performance.model';
+import { PerformanceDTO } from '../models/performance-dto.model';
+import { PerformanceTransformerService } from '../services/transformers/performance-transformer.service';
 import { PositionsApiService } from '../services/api/v3/positions-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
+import { ResponsibilitiesTransformerService } from '../services/transformers/responsibilities-transformer.service';
 import { ResponsibilitiesService,
          ResponsibilitiesData,
          SubAccountData,
