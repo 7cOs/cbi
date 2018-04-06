@@ -164,6 +164,7 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
     vm.filterTopBottom = filterTopBottom;
     vm.canOpenNote = canOpenNote;
     vm.getAccountTypePerformanceData = getAccountTypePerformanceData;
+    vm.setPremiseType = setPremiseType;
 
     init();
 
@@ -1128,6 +1129,10 @@ function accountsController($rootScope, $scope, $state, $log, $q, $window, $filt
         vm.premiseTypeValue = 'off';
         vm.filtersService.model.selected.premiseType = 'off';
         vm.updateChip('Off-Premise', 'premiseType');
+      } else if (premiseType === 'All') {
+        vm.premiseTypeValue = 'all';
+        vm.filtersService.model.selected.premiseType = 'all';
+        vm.updateChip('All', 'premiseType');
       }
     }
 

@@ -296,8 +296,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.myPerformanceService.accountDashboardStateParameters(
           this.isInsideAlternateHierarchy(),
           this.currentState.responsibilities.exceptionHierarchy,
-          this.filterState,
-          row);
+          this.filterState.dateRangeCode,
+          this.filterState.metricType,
+          row,
+          this.filterState.premiseType);
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       const accountName = Object.keys(this.currentState.responsibilities.groupedEntities)[0];
       const hierarchyEntity: HierarchyEntity = this.currentState.responsibilities.groupedEntities[accountName]
@@ -308,15 +310,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(
           this.isInsideAlternateHierarchy(),
           this.currentState.responsibilities.exceptionHierarchy,
-          this.filterState,
+          this.filterState.dateRangeCode,
+          this.filterState.metricType,
           row,
           premiseType);
       } else {
         accountDashboardStateParams = this.myPerformanceService.accountDashboardStateParameters(
           this.isInsideAlternateHierarchy(),
           this.currentState.responsibilities.exceptionHierarchy,
-          this.filterState,
-          row);
+          this.filterState.dateRangeCode,
+          this.filterState.metricType,
+          row,
+          this.filterState.premiseType);
       }
     }
 
