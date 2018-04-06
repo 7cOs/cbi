@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class AccountDashboardDistributorFilterTest extends BaseTestCase {
@@ -16,10 +17,12 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   private AccountDashboardPage accountDashboardPage;
 
   @BeforeMethod
-  public void setUp() throws MalformedURLException {
+  public void setUp(Method method) throws MalformedURLException {
     testUser = TestUser.ACTOR4;
 
-    this.startUpBrowser("Functional - AccountDashboard - Distributor Filter Test");
+    final String testCaseName = method.getAnnotation(Test.class).description();
+    final String sauceTitle = String.format("Functional - AccountDashboard - Distributor Filter Test - %s", testCaseName);
+    this.startUpBrowser(sauceTitle);
     PageFactory.initElements(driver, LoginPage.class).loginAs(testUser);
 
     accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
