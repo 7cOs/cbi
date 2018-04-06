@@ -15,20 +15,11 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   private static TestUser testUser;
   private AccountDashboardPage accountDashboardPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Functional - AccountDashboard - Distributor Filter Test");
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
-  }
-
   @BeforeMethod
-  public void setUp() {
+  public void setUp() throws MalformedURLException {
     testUser = TestUser.ACTOR4;
 
+    this.startUpBrowser("Functional - AccountDashboard - Distributor Filter Test");
     PageFactory.initElements(driver, LoginPage.class).loginAs(testUser);
 
     accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
@@ -38,6 +29,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
   @Test(description = "Filter by Distributor - default values")
