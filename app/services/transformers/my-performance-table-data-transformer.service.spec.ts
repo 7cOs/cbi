@@ -1,24 +1,24 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { sample } from 'lodash';
 
-import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
-import { EntityWithPerformance } from '../models/entity-with-performance.model';
-import { getEntityPeopleTypeMock } from '../enums/entity-responsibilities.enum.mock';
-import { getPerformanceMock } from '../models/performance.model.mock';
-import { getEntitiesWithPerformancesMock } from '../models/entity-with-performance.model.mock';
-import { getOpportunityCountMocks, getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../models/opportunity-count.model.mock';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
+import { getEntityPeopleTypeMock } from '../../enums/entity-responsibilities.enum.mock';
+import { getPerformanceMock } from '../../models/performance.model.mock';
+import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getOpportunityCountMocks, getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/opportunity-count.model.mock';
 import { getProductMetricsBrandMock,
          getProductMetricsWithBrandValuesMock,
-         getProductMetricsWithSkuValuesMock } from '../models/product-metrics.model.mock';
+         getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { OpportunitiesGroupedByBrandSkuPackageCode } from '../models/opportunity-count.model';
-import { Performance } from '../models/performance.model';
-import { PluralizedRoleGroup } from '../enums/pluralized-role-group.enum';
-import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
-import { ProductMetricsViewType } from '../enums/product-metrics-view-type.enum';
-import { SkuPackageType } from '../enums/sku-package-type.enum';
-import { SpecializedAccountName } from '../enums/specialized-account-name.enum';
+import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { OpportunitiesGroupedByBrandSkuPackageCode } from '../../models/opportunity-count.model';
+import { Performance } from '../../models/performance.model';
+import { PluralizedRoleGroup } from '../../enums/pluralized-role-group.enum';
+import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
+import { ProductMetricsViewType } from '../../enums/product-metrics-view-type.enum';
+import { SkuPackageType } from '../../enums/sku-package-type.enum';
+import { SpecializedAccountName } from '../../enums/specialized-account-name.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;

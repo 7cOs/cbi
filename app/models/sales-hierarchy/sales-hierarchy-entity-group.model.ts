@@ -1,11 +1,10 @@
-import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { Performance } from '../performance.model';
+import { SalesHierarchyEntityType } from '../../enums/sales-hierarchy/sales-hierarchy-entity-type.enum';
 
 export interface SalesHierarchyEntityGroup {
-  isAlternateHierarchyEntryPoint: boolean;
-  groupTypeCode: string;
   positionId: string;
+  type: SalesHierarchyEntityType;
+  groupTypeCode: string;
   name: string;
-  type: EntityType;
   performance?: Performance;
-  alternateHierarchyId?: string;
 }

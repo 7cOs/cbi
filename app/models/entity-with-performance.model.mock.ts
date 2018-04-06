@@ -1,6 +1,7 @@
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
-import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
+import { getPerformanceDTOMock } from '../models/performance-dto.model.mock';
+import { getPerformanceMock } from '../models/performance.model.mock';
 
 const entityTypeValues = Object.keys(EntityType).map(key => EntityType[key]);
 

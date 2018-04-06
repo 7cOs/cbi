@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import 'rxjs/add/operator/map';
 
-import { DateRange } from '../models/date-range.model';
-import { DateRangeDTO } from '../models/date-range-dto.model';
+import { DateRange } from '../../models/date-range.model';
+import { DateRangeDTO } from '../../models/date-range-dto.model';
 
 @Injectable()
 export class DateRangeTransformerService {
