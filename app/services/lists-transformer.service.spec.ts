@@ -34,6 +34,8 @@ describe('Service: ListsTransformerService', () => {
         expect(row.postalCode).toBe(storesDTOMock[i].postalCode);
         expect(row.premiseType).toBe(storesDTOMock[i].premiseType);
         expect(row.state).toBe(storesDTOMock[i].state);
+        expect(row.segmentCode).toBe(storesDTOMock[i].segmentCode);
+        expect(row.distributor).toBe(storesDTOMock[i].primaryBeerDistributor.name);
       });
     });
   });
