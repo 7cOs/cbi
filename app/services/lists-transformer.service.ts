@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { StoreListDTO } from '../models/lists-store-dto.model';
+import { ListStoreDTO } from '../models/lists-store-dto.model';
 import { StoreDetailsRow, ListHeaderDetails } from '../models/lists.model';
 import { ListHeaderInfoDTO } from '../models/lists-header-dto.model';
 
@@ -10,7 +10,7 @@ export class ListsTransformerService {
 
   constructor() { }
 
-  public formatStoresData(listStoresDTOs: Array<StoreListDTO>): Array<StoreDetailsRow> {
+  public formatStoresData(listStoresDTOs: Array<ListStoreDTO>): Array<StoreDetailsRow> {
     return listStoresDTOs.map(store => this.formatStoreData(store));
   }
 
@@ -28,7 +28,7 @@ export class ListsTransformerService {
     };
   }
 
-  private formatStoreData(store: StoreListDTO): StoreDetailsRow {
+  private formatStoreData(store: ListStoreDTO): StoreDetailsRow {
     const storeData: StoreDetailsRow = {
       address: store.address,
       city: store.city,

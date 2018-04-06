@@ -10,7 +10,7 @@ import * as ListActions from '../../state/actions/lists.action';
 import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { StoreListDTO } from '../../models/lists-store-dto.model';
+import { ListStoreDTO } from '../../models/lists-store-dto.model';
 import { ListHeaderInfoDTO } from '../../models/lists-header-dto.model';
 import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
 
@@ -23,12 +23,12 @@ describe('Lists Effects', () => {
   let listsApiService: ListsApiService;
   let listsTransformerService: ListsTransformerService;
   let listHeaderMock: ListHeaderInfoDTO;
-  let storeListMock: StoreListDTO[];
+  let storeListMock: ListStoreDTO[];
   let headerDetailMock: ListHeaderDetails;
   let storesData: Array<StoreDetailsRow> = getStoreListsMock();
 
   const listsApiServiceMock = {
-    getStoreListDetails(listIdMock: string): Observable<StoreListDTO[]> {
+    getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
       return Observable.of(storeListMock);
     },
     getHeaderInfo(listIdMock: string): Observable<ListHeaderInfoDTO> {
@@ -40,7 +40,7 @@ describe('Lists Effects', () => {
     formatListHeaderData(headerDataDTO: ListHeaderInfoDTO): ListHeaderDetails {
       return headerDetailMock;
     },
-    formatStoresData(store: Array<StoreListDTO>): Array<StoreDetailsRow> {
+    formatStoresData(store: Array<ListStoreDTO>): Array<StoreDetailsRow> {
       return storesData;
     },
   };

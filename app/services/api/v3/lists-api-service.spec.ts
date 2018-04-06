@@ -6,7 +6,7 @@ import { chanceStringOptions } from '../../../lib/spec-util';
 import { getStoreListsDTOMock } from '../../../models/lists-store-dto.model.mock';
 import { getListHeaderInfoDTOMock } from '../../../models/lists-header-dto.model.mock';
 import { ListsApiService } from './lists-api.service';
-import { StoreListDTO } from '../../../models/lists-store-dto.model';
+import { ListStoreDTO } from '../../../models/lists-store-dto.model';
 import { ListHeaderInfoDTO } from '../../../models/lists-header-dto.model';
 
 describe('ListsApiService', () => {
@@ -41,12 +41,12 @@ describe('ListsApiService', () => {
     });
 
     it('should call the stores list endpoint and return stores data for the given list ID', () => {
-      const storeInfoDTOResponseMock:  Array<StoreListDTO> = getStoreListsDTOMock();
+      const storeInfoDTOResponseMock:  Array<ListStoreDTO> = getStoreListsDTOMock();
 
       listsApiService.getStoreListDetails(
         listIdMock
       )
-        .subscribe((response: Array<StoreListDTO>) => {
+        .subscribe((response: Array<ListStoreDTO>) => {
           expect(response).toEqual(storeInfoDTOResponseMock);
         });
 

@@ -7,7 +7,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import * as ListActions from '../../state/actions/lists.action';
-import { StoreListDTO } from '../../models/lists-store-dto.model';
+import { ListStoreDTO } from '../../models/lists-store-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { ListHeaderInfoDTO } from '../../models/lists-header-dto.model';
 
@@ -24,7 +24,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListActions.FETCH_STORE_DETAILS)
       .switchMap((action: ListActions.FetchStoreDetails) => this.listsApiService.getStoreListDetails(action.payload.listId))
-      .switchMap((response: Array<StoreListDTO>) =>
+      .switchMap((response: Array<ListStoreDTO>) =>
         Observable.of(new ListActions.FetchStoreDetailsSuccess(this.listsTransformerService.formatStoresData(response))))
       .catch((error: Error) => Observable.of(new ListActions.FetchStoreDetailsFailure(error)));
   }

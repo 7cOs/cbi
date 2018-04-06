@@ -1,6 +1,6 @@
 import { PrimaryDistributor } from './lists.model';
 
-export interface StoreListDTO {
+export interface ListStoreDTO {
   address: string;
   cbiRecommendedSegmentCode: string;
   cbiRecommendedSegmentDescription: string;
