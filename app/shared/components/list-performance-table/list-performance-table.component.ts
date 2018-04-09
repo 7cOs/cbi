@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-
 import { CalculatorService } from '../../../services/calculator.service';
 import { CssClasses } from '../../../models/css-classes.model';
 import { LoadingState } from '../../../enums/loading-state.enum';
@@ -9,7 +8,6 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { MatCheckboxChange } from '@angular/material';
-import { ListPerformanceTableRowComponent } from '../list-performance-table-row/list-performance-table-row.component';
 
 @Component({
   selector: 'list-performance-table',
