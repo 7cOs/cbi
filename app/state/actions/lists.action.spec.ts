@@ -2,7 +2,7 @@ import * as Chance from 'chance';
 import * as ListsActions from './lists.action';
 
 import { getStoreListsMock } from '../../models/lists-store.model.mock';
-import { getListHeaderInfoMock } from '../../models/lists-header.model.mock';
+import { getListsSummaryMock } from '../../models/lists-header.model.mock';
 
 const chance = new Chance();
 
@@ -99,7 +99,7 @@ describe('Lists Actions', () => {
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      mockSuccessActionPayload = getListHeaderInfoMock();
+      mockSuccessActionPayload = getListsSummaryMock();
 
       action = new ListsActions.FetchHeaderDetailsSuccess(mockSuccessActionPayload);
     });

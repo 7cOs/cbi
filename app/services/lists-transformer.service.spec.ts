@@ -1,11 +1,12 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { getListsSummaryDTOMock } from '../models/lists-header-dto.model.mock';
 import { getStoreListsDTOMock } from '../models/lists-store-dto.model.mock';
-import { getListHeaderInfoDTOMock } from '../models/lists-header-dto.model.mock';
+import { ListsSummary } from '../models/lists-header.model';
+import { ListsSummaryDTO } from '../models/lists-header-dto.model';
 import { ListsTransformerService } from './lists-transformer.service';
 import { ListStoreDTO } from '../models/lists-store-dto.model';
-import { StoreDetailsRow, ListHeaderDetails } from '../models/lists.model';
-import { ListHeaderInfoDTO } from '../models/lists-header-dto.model';
+import { StoreDetails } from '../models/lists-store.model';
 
 describe('Service: ListsTransformerService', () => {
   let listsTransformerService: ListsTransformerService;
@@ -23,15 +24,15 @@ describe('Service: ListsTransformerService', () => {
     it('should transform the stores Data', () => {
       const storesDTOMock: Array<ListStoreDTO> = getStoreListsDTOMock();
 
-      const actualStoreData: StoreDetailsRow[] =
+      const actualStoreData: StoreDetails[] =
         listsTransformerService.formatStoresData(storesDTOMock);
 
-      actualStoreData.forEach((row: StoreDetailsRow, i: number) => {
+      actualStoreData.forEach((row: StoreDetails, i: number) => {
         expect(row).toEqual({
           address: storesDTOMock[i].address,
           city: storesDTOMock[i].city,
           name: storesDTOMock[i].name,
-          sevenDigitId: storesDTOMock[i].storeSourceCode,
+          unversionedStoreId: storesDTOMock[i].storeSourceCode,
           number: storesDTOMock[i].number,
           postalCode: storesDTOMock[i].postalCode,
           premiseType: storesDTOMock[i].premiseType,
@@ -45,10 +46,10 @@ describe('Service: ListsTransformerService', () => {
 
   describe('transformHeaderData', () => {
     it('should transform header Data', () => {
-      const listHeaderDTOMock: ListHeaderInfoDTO = getListHeaderInfoDTOMock();
+      const listHeaderDTOMock: ListsSummaryDTO = getListsSummaryDTOMock();
 
-      const actualHeaderData: ListHeaderDetails =
-        listsTransformerService.formatListHeaderData(listHeaderDTOMock);
+      const actualHeaderData: ListsSummary =
+        listsTransformerService.formatListsSummaryData(listHeaderDTOMock);
 
       expect(actualHeaderData).toEqual(jasmine.objectContaining({
         description: listHeaderDTOMock.description,

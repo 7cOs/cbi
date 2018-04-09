@@ -1,6 +1,6 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import { getStoreListsMock } from '../../models/lists-store.model.mock';
-import { getListHeaderInfoMock } from '../../models/lists-header.model.mock';
+import { getListsSummaryMock } from '../../models/lists-header.model.mock';
 import { listsReducer, initialState, ListsState } from './lists.reducer';
 import * as ListsActions from '../actions/lists.action';
 
@@ -12,7 +12,7 @@ describe('Lists Reducer', () => {
     it('should update the store details status to Fetching', () => {
       const expectedState = {
         status: ActionStatus.Fetching,
-        headerInfoStatus: initialState.headerInfoStatus,
+        summaryStatus: initialState.summaryStatus,
         stores: initialState.stores,
       };
 
@@ -28,7 +28,7 @@ describe('Lists Reducer', () => {
 
       const expectedState = {
         status: ActionStatus.Fetched,
-        headerInfoStatus: initialState.headerInfoStatus,
+        summaryStatus: initialState.summaryStatus,
         stores: stores,
       };
 
@@ -43,7 +43,7 @@ describe('Lists Reducer', () => {
     it('should should update the store details status to Error', () => {
       const expectedState: ListsState = {
         status: ActionStatus.Error,
-        headerInfoStatus: initialState.headerInfoStatus,
+        summaryStatus: initialState.summaryStatus,
         stores: initialState.stores,
       };
       const actualState: ListsState = listsReducer(
@@ -58,7 +58,7 @@ describe('Lists Reducer', () => {
     it('should update the header details status to Fetching', () => {
         const expectedState = {
           status: initialState.status,
-          headerInfoStatus: ActionStatus.Fetching,
+          summaryStatus: ActionStatus.Fetching,
           stores: initialState.stores,
         };
 
@@ -69,12 +69,12 @@ describe('Lists Reducer', () => {
         expect(actualState).toEqual(expectedState);
       });
     it('should update the header details and set the headers status to Fetched on success', () => {
-      const headersMock = getListHeaderInfoMock();
+      const headersMock = getListsSummaryMock();
 
       const expectedState = {
         status: initialState.status,
-        headerInfo: headersMock,
-        headerInfoStatus: ActionStatus.Fetched,
+        summary: headersMock,
+        summaryStatus: ActionStatus.Fetched,
         stores: initialState.stores
       };
 
@@ -88,7 +88,7 @@ describe('Lists Reducer', () => {
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
         status: initialState.status,
-        headerInfoStatus: ActionStatus.Error,
+        summaryStatus: ActionStatus.Error,
         stores: initialState.stores,
       };
       const actualState: ListsState = listsReducer(

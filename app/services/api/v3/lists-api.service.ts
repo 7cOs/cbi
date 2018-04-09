@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ListStoreDTO } from '../../../models/lists-store-dto.model';
-import { ListHeaderInfoDTO } from '../../../models/lists-header-dto.model';
+import { ListsSummaryDTO } from '../../../models/lists-header-dto.model';
 
 @Injectable()
 export class ListsApiService {
@@ -20,9 +20,9 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public getHeaderInfo(
+  public getListSummary(
     listsId: string
-  ): Observable<ListHeaderInfoDTO> {
+  ): Observable<ListsSummaryDTO> {
     const url = `/v3/lists/${ listsId }`;
 
     return this.http.get<ListStoreDTO[]>(url)

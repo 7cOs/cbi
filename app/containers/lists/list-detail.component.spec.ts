@@ -18,7 +18,7 @@ describe('ListDetailComponent', () => {
   let componentInstance: ListDetailComponent;
   let listDetailMock: ListsState = {
     status: ActionStatus.Fetching,
-    headerInfoStatus: ActionStatus.NotFetched,
+    summaryStatus: ActionStatus.NotFetched,
     stores: []
   };
 
@@ -91,8 +91,8 @@ describe('ListDetailComponent', () => {
       componentInstance.ngOnInit();
 
       expect(storeMock.select.calls.count()).toBe(1);
-      const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
-      expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.listsDetails);
+      const selectorFunction = storeMock.select.calls.argsFor(0)[0];
+      expect(selectorFunction(stateMock)).toBe(stateMock.listsDetails);
       expect(store.select).toHaveBeenCalled();
     });
 

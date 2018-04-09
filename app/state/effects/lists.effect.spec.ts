@@ -2,7 +2,7 @@ import * as Chance from 'chance';
 import { Action } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject, getTestBed } from '@angular/core/testing';
 
 import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/lists.action';
 import { getStoreListsMock } from '../../models/lists-store.model.mock';
@@ -11,8 +11,9 @@ import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { ListStoreDTO } from '../../models/lists-store-dto.model';
-import { ListHeaderInfoDTO } from '../../models/lists-header-dto.model';
-import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
+import { ListsSummaryDTO } from '../../models/lists-header-dto.model';
+import { ListsSummary } from '../../models/lists-header.model';
+import { StoreDetails } from '../../models/lists-store.model';
 
 const chance = new Chance();
 
@@ -22,25 +23,26 @@ describe('Lists Effects', () => {
   let listsEffects: ListsEffects;
   let listsApiService: ListsApiService;
   let listsTransformerService: ListsTransformerService;
-  let listHeaderMock: ListHeaderInfoDTO;
+  let listHeaderMock: ListsSummaryDTO;
   let storeListMock: ListStoreDTO[];
-  let headerDetailMock: ListHeaderDetails;
-  let storesData: Array<StoreDetailsRow> = getStoreListsMock();
+  let testBed: TestBed;
+  let headerDetailMock: ListsSummary;
+  let storesData: Array<StoreDetails> = getStoreListsMock();
 
   const listsApiServiceMock = {
     getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
       return Observable.of(storeListMock);
     },
-    getHeaderInfo(listIdMock: string): Observable<ListHeaderInfoDTO> {
+    getHeaderInfo(listIdMock: string): Observable<ListsSummaryDTO> {
       return Observable.of(listHeaderMock);
     }
   };
 
   let listsTransformerServiceMock = {
-    formatListHeaderData(headerDataDTO: ListHeaderInfoDTO): ListHeaderDetails {
+    formatListHeaderData(headerDataDTO: ListsSummaryDTO): ListsSummary {
       return headerDetailMock;
     },
-    formatStoresData(store: Array<ListStoreDTO>): Array<StoreDetailsRow> {
+    formatStoresData(store: Array<ListStoreDTO>): Array<StoreDetails> {
       return storesData;
     },
   };
@@ -64,17 +66,12 @@ describe('Lists Effects', () => {
     });
 
     actions$ = new ReplaySubject(1);
-  });
+    testBed = getTestBed();
 
-  beforeEach(inject([ ListsEffects, ListsApiService ],
-    (_listsEffects: ListsEffects,
-     _listsApiService: ListsApiService,
-     _listsTransformerService: ListsTransformerService) => {
-      listsEffects = _listsEffects;
-      listsApiService = _listsApiService;
-      listsTransformerService = _listsTransformerService;
-    }
-  ));
+    listsEffects = testBed.get(ListsEffects);
+    listsApiService = testBed.get(ListsApiService);
+    listsTransformerService = testBed.get(ListsTransformerService);
+  });
 
  describe('when a FetchStoreDetails actions is received', () => {
     let actionPayloadMock: FetchStoreDetailsPayload;
@@ -132,7 +129,7 @@ describe('Lists Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should call getHeaderDetails from the ListsService given the passed in action payload', (done) => {
-        const getOpportunitiesSpy = spyOn(listsApiService, 'getHeaderInfo').and.callThrough();
+        const getOpportunitiesSpy = spyOn(listsApiService, 'getListSummary').and.callThrough();
 
         listsEffects.fetchHeaderDetails$().subscribe(() => {
           done();
@@ -152,7 +149,7 @@ describe('Lists Effects', () => {
 
     describe('when an error is returned from getHeaderDetails', () => {
       it('should dispatch a FetchHeaderDetailsFailure action with the error', (done) => {
-        spyOn(listsApiService, 'getHeaderInfo').and.returnValue(Observable.throw(error));
+        spyOn(listsApiService, 'getListSummary').and.returnValue(Observable.throw(error));
 
         listsEffects.fetchHeaderDetails$().subscribe((response) => {
           expect(response).toEqual(new ListActions.FetchHeaderDetailsFailure(error));

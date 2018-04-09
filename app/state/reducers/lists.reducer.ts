@@ -1,17 +1,18 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
 import * as ListsActions from '../actions/lists.action';
-import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
+import { ListsSummary } from '../../models/lists-header.model';
+import { StoreDetails } from '../../models/lists-store.model';
 
 export interface ListsState extends State {
   status: ActionStatus;
-  headerInfoStatus: ActionStatus;
-  stores: Array<StoreDetailsRow>;
-  headerInfo?: ListHeaderDetails;
+  summaryStatus: ActionStatus;
+  stores: Array<StoreDetails>;
+  summary?: ListsSummary;
 }
 
 export const initialState: ListsState = {
   status: ActionStatus.NotFetched,
-  headerInfoStatus: ActionStatus.NotFetched,
+  summaryStatus: ActionStatus.NotFetched,
   stores: [],
 };
 
@@ -39,18 +40,18 @@ export function listsReducer(
 
     case ListsActions.FETCH_HEADER_DETAILS:
       return Object.assign({}, state, {
-        headerInfoStatus: ActionStatus.Fetching
+        summaryStatus: ActionStatus.Fetching
       });
 
     case ListsActions.FETCH_HEADER_DETAILS_SUCCESS:
       return Object.assign({}, state, {
-        headerInfo: action.payload,
-        headerInfoStatus: ActionStatus.Fetched
+        summary: action.payload,
+        summaryStatus: ActionStatus.Fetched
       });
 
     case ListsActions.FETCH_HEADER_DETAILS_FAILURE:
       return Object.assign({}, state, {
-        headerInfoStatus: ActionStatus.Error
+        summaryStatus: ActionStatus.Error
       });
 
     default:

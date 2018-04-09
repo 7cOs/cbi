@@ -3,11 +3,11 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
 
-import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import * as ListsActions from '../../state/actions//lists.action';
+import { ListsSummary } from '../../models/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
-import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
+import { StoreDetails } from '../../models/lists-store.model';
 
 @Component({
   selector: 'list-detail',
@@ -16,8 +16,8 @@ import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-  public storeList: StoreDetailsRow[];
-  public listHeader: ListHeaderDetails;
+  public storeList: StoreDetails[];
+  public listHeader: ListsSummary;
   private listDetailSubscription: Subscription;
 
   constructor(
@@ -34,12 +34,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
-        if (listDetail.status === ActionStatus.Fetched) {
           this.storeList = listDetail.stores;
-        }
-        if (listDetail.headerInfoStatus === ActionStatus.Fetched) {
-          this.listHeader = listDetail.headerInfo;
-        }
+          this.listHeader = listDetail.summary;
       });
   }
 

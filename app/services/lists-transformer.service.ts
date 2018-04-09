@@ -2,38 +2,39 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { ListStoreDTO } from '../models/lists-store-dto.model';
-import { StoreDetailsRow, ListHeaderDetails } from '../models/lists.model';
-import { ListHeaderInfoDTO } from '../models/lists-header-dto.model';
+import { ListsSummary } from '../models/lists-header.model';
+import { ListsSummaryDTO } from '../models/lists-header-dto.model';
+import { StoreDetails } from '../models/lists-store.model';
 
 @Injectable()
 export class ListsTransformerService {
 
   constructor() { }
 
-  public formatStoresData(listStoresDTOs: Array<ListStoreDTO>): Array<StoreDetailsRow> {
+  public formatStoresData(listStoresDTOs: Array<ListStoreDTO>): Array<StoreDetails> {
     return listStoresDTOs.map(store => this.formatStoreData(store));
   }
 
-  public formatListHeaderData(headerDataDTO: ListHeaderInfoDTO): ListHeaderDetails {
+  public formatListsSummaryData(summaryDataDTO: ListsSummaryDTO): ListsSummary {
     return {
-      description: headerDataDTO.description,
-      archived: headerDataDTO.archived,
-      closedOpportunities: headerDataDTO.numberOfClosedOpportunities,
-      totalOpportunities: headerDataDTO.totalOpportunities,
-      id: headerDataDTO.id,
-      name: headerDataDTO.name,
-      numberOfAccounts: headerDataDTO.numberOfAccounts,
-      ownerFirstName: headerDataDTO.owner.firstName,
-      ownerLastName: headerDataDTO.owner.lastName
+      description: summaryDataDTO.description,
+      archived: summaryDataDTO.archived,
+      closedOpportunities: summaryDataDTO.numberOfClosedOpportunities,
+      totalOpportunities: summaryDataDTO.totalOpportunities,
+      id: summaryDataDTO.id,
+      name: summaryDataDTO.name,
+      numberOfAccounts: summaryDataDTO.numberOfAccounts,
+      ownerFirstName: summaryDataDTO.owner.firstName,
+      ownerLastName: summaryDataDTO.owner.lastName
     };
   }
 
-  private formatStoreData(store: ListStoreDTO): StoreDetailsRow {
-    const storeData: StoreDetailsRow = {
+  private formatStoreData(store: ListStoreDTO): StoreDetails {
+    const storeData: StoreDetails = {
       address: store.address,
       city: store.city,
       name: store.name,
-      sevenDigitId: store.storeSourceCode,
+      unversionedStoreId: store.storeSourceCode,
       number: store.number,
       postalCode: store.postalCode,
       premiseType: store.premiseType,

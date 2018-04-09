@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { StoreDetailsRow, ListHeaderDetails } from '../../models/lists.model';
+import { ListsSummary } from '../../models/lists-header.model';
+import { StoreDetails } from '../../models/lists-store.model';
 
 export interface FetchStoreDetailsPayload {
   listId: string;
@@ -20,7 +21,7 @@ export const FETCH_STORE_DETAILS_SUCCESS = '[StoreDetails] FETCH_STORE_DETAILS_S
 export class FetchStoreDetailsSuccess implements Action {
   readonly type = FETCH_STORE_DETAILS_SUCCESS;
 
-  constructor(public payload: Array<StoreDetailsRow>) { }
+  constructor(public payload: Array<StoreDetails>) { }
 }
 
 export const FETCH_STORE_DETAILS_FAILURE = '[StoreDetails] FETCH_STORE_DETAILS_FAILURE';
@@ -41,7 +42,7 @@ export const FETCH_HEADER_DETAILS_SUCCESS = '[StoreDetails] FETCH_HEADER_DETAILS
 export class FetchHeaderDetailsSuccess implements Action {
   readonly type = FETCH_HEADER_DETAILS_SUCCESS;
 
-  constructor(public payload: ListHeaderDetails) { }
+  constructor(public payload: ListsSummary) { }
 }
 
 export const FETCH_HEADER_DETAILS_FAILURE = '[StoreDetails] FETCH_HEADER_DETAILS_FAILURE';

@@ -9,7 +9,7 @@ import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import * as ListActions from '../../state/actions/lists.action';
 import { ListStoreDTO } from '../../models/lists-store-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { ListHeaderInfoDTO } from '../../models/lists-header-dto.model';
+import { ListsSummaryDTO } from '../../models/lists-header-dto.model';
 
 @Injectable()
 export class ListsEffects {
@@ -42,9 +42,9 @@ export class ListsEffects {
   fetchHeaderDetails$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_HEADER_DETAILS)
-      .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getHeaderInfo(action.payload.listId))
-      .switchMap((response: ListHeaderInfoDTO) =>
-        Observable.of(new ListActions.FetchHeaderDetailsSuccess(this.listsTransformerService.formatListHeaderData(response))))
+      .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getListSummary(action.payload.listId))
+      .switchMap((response: ListsSummaryDTO) =>
+        Observable.of(new ListActions.FetchHeaderDetailsSuccess(this.listsTransformerService.formatListsSummaryData(response))))
       .catch((error: Error) => Observable.of(new ListActions.FetchHeaderDetailsFailure(error)));
   }
 

@@ -4,10 +4,10 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ApiRequestType } from '../../../enums/api-request-type.enum';
 import { chanceStringOptions } from '../../../lib/spec-util';
 import { getStoreListsDTOMock } from '../../../models/lists-store-dto.model.mock';
-import { getListHeaderInfoDTOMock } from '../../../models/lists-header-dto.model.mock';
+import { getListsSummaryDTOMock } from '../../../models/lists-header-dto.model.mock';
 import { ListsApiService } from './lists-api.service';
 import { ListStoreDTO } from '../../../models/lists-store-dto.model';
-import { ListHeaderInfoDTO } from '../../../models/lists-header-dto.model';
+import { ListsSummaryDTO } from '../../../models/lists-header-dto.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -64,12 +64,12 @@ describe('ListsApiService', () => {
     });
 
     it('should call the lists header information endpoint and return data for the given list ID', () => {
-      const expectedStoreHeaderInfoDTOMock: ListHeaderInfoDTO = getListHeaderInfoDTOMock();
+      const expectedStoreHeaderInfoDTOMock: ListsSummaryDTO = getListsSummaryDTOMock();
 
-      listsApiService.getHeaderInfo(
+      listsApiService.getListSummary(
         listIdMock
       )
-        .subscribe((response: ListHeaderInfoDTO) => {
+        .subscribe((response: ListsSummaryDTO) => {
           expect(response).toEqual(expectedStoreHeaderInfoDTOMock);
         });
 

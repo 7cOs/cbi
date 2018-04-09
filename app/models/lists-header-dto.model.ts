@@ -1,6 +1,6 @@
 import { CollaboratorOwnerDetails, SurveyInfo } from './lists.model';
 
-export interface ListHeaderInfoDTO {
+export interface ListsSummaryDTO {
   archived: boolean;
   category: string;
   collaboratorType: string;
