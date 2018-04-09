@@ -23,10 +23,14 @@ export class ListsEffects {
   fetchStoreDetails$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_STORE_DETAILS)
-      .switchMap((action: ListActions.FetchStoreDetails) => this.listsApiService.getStoreListDetails(action.payload.listId))
-      .switchMap((response: Array<ListStoreDTO>) =>
-        Observable.of(new ListActions.FetchStoreDetailsSuccess(this.listsTransformerService.formatStoresData(response))))
-      .catch((error: Error) => Observable.of(new ListActions.FetchStoreDetailsFailure(error)));
+      .switchMap((action: ListActions.FetchStoreDetails) => {
+        return this.listsApiService.getStoreListDetails(action.payload.listId)
+          .map((response: Array<ListStoreDTO>) => {
+            const transformedData = this.listsTransformerService.formatStoresData(response);
+            return new ListActions.FetchStoreDetailsSuccess(transformedData);
+          })
+          .catch((error: Error) => Observable.of(new ListActions.FetchStoreDetailsFailure(error)));
+      });
   }
 
   @Effect({dispatch: false})
@@ -42,10 +46,14 @@ export class ListsEffects {
   fetchHeaderDetails$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.FETCH_HEADER_DETAILS)
-      .switchMap((action: ListActions.FetchHeaderDetails) => this.listsApiService.getListSummary(action.payload.listId))
-      .switchMap((response: ListsSummaryDTO) =>
-        Observable.of(new ListActions.FetchHeaderDetailsSuccess(this.listsTransformerService.formatListsSummaryData(response))))
-      .catch((error: Error) => Observable.of(new ListActions.FetchHeaderDetailsFailure(error)));
+      .switchMap((action: ListActions.FetchHeaderDetails) => {
+        return this.listsApiService.getListSummary(action.payload.listId)
+          .map((response: ListsSummaryDTO) => {
+            const transformedData = this.listsTransformerService.formatListsSummaryData(response);
+            return new ListActions.FetchHeaderDetailsSuccess(transformedData);
+          })
+          .catch((error: Error) => Observable.of(new ListActions.FetchHeaderDetailsFailure(error)));
+      });
   }
 
   @Effect({dispatch: false})
