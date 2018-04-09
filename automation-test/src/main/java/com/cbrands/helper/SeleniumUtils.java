@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SeleniumUtils {
 
-	private static final int DEFAULT_WAIT_TIME = 20;
+	public static final int DEFAULT_WAIT_TIME = 20;
   private static final int DEFAULT_POLL_TIME = 5;
 
   /** The driver. */
@@ -365,24 +365,43 @@ public class SeleniumUtils {
 		waitForCondition(ExpectedConditions.visibilityOfElementLocated(by), timeout);
 	}
 
-  /**
-   * Waits for element to disappear from the DOM. If element is not present, swallows the exception.
-   *
-   * @param by the element handle
-   */
-  public static void waitForElementToDisappear(By by) {
-    try{
-      final WebElement element = findElement(by);
+	/**
+	 * Waits for element to disappear from the DOM. If element is not present, swallows the exception.
+	 *
+	 * @param by the element handle
+	 */
+	public static void waitForElementToDisappear(By by) {
+		final Wait<WebDriver> wait = getDefaultFluentWait();
+		waitForElementToDisappear(by, wait);
+	}
 
-      final Wait<WebDriver> wait = getDefaultFluentWait();
+	/**
+	 * Waits for element to disappear from the DOM using the given custom timeout in seconds.
+	 * If element is not present, swallows the exception.
+	 *
+	 * Use as last resort. Prefer default {@link #waitForElementToDisappear(By)} and fixing long wait times in the app
+	 * over using custom timeouts.
+	 *
+	 * @param by the element handle
+	 * @param timeout the timeout in seconds
+	 */
+	public static void waitForElementToDisappear(By by, int timeout) {
+		final Wait<WebDriver> wait = getCustomFluentWait(timeout, DEFAULT_POLL_TIME);
+		waitForElementToDisappear(by, wait);
+	}
+
+	private static void waitForElementToDisappear(By by, Wait<WebDriver> wait) {
+		try {
+			final WebElement element = findElement(by);
+
 			wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)));
 			wait.until(ExpectedConditions.stalenessOf(element));
-    } catch (NoSuchElementException | StaleElementReferenceException e) {
-      // Success. Element not present.
-    }
-  }
+		} catch (NoSuchElementException | StaleElementReferenceException e) {
+			// Success. Element not present.
+		}
+	}
 
-  /**
+	/**
    * Enter text into a given textbox while ensuring it has focus
    * @param expectedText text to enter
    * @param textBoxElement textbox element to receive text
