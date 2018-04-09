@@ -1,5 +1,4 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { ActionButtonComponent } from '../../shared/components/action-button/action-button.component';
 import { Title } from '@angular/platform-browser';
 
 @Component({
