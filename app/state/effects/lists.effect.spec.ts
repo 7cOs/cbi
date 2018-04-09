@@ -2,7 +2,7 @@ import * as Chance from 'chance';
 import { Action } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { TestBed, inject, getTestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/lists.action';
 import { getStoreListsMock } from '../../models/lists-store.model.mock';
