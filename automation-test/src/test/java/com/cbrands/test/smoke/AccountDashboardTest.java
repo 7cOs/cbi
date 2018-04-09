@@ -68,6 +68,43 @@ public class AccountDashboardTest extends BaseTestCase {
     drillRightPanelToTop();
   }
 
+  @Test(description = "Brands hierarchy - Drill all the way down and drill back up")
+  public void drillDownDrillUpBrands() {
+    accountDashboardPage
+      .brandSnapshotPanel.drillIntoFirstRow()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear();
+    Assert.assertTrue(
+      accountDashboardPage
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.SkuPackage),
+      "Left brands panel failed to load for SKU/Packages"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Distributors),
+      "Right accounts panel failed to reload for SKU/Packages"
+    );
+
+    accountDashboardPage
+      .brandSnapshotPanel.drillUp()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear();
+    Assert.assertTrue(
+      accountDashboardPage
+        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
+      "Left brands panel failed to load for Brands"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Distributors),
+      "Right accounts panel failed to reload for Brands"
+    );
+  }
+
+  @DataProvider public static Object[][] searchData() {
+    return new Object[][]{
+      {"COASTAL BEV CO", "WILMINGTON"}
+    };
+  }
+
   private void drillRightPanelToBottom() {
     accountDashboardPage
       .topBottomPanel.drillIntoFirstRow();
@@ -148,42 +185,5 @@ public class AccountDashboardTest extends BaseTestCase {
         .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
       "Left brands panel failed to reload for distributors"
     );
-  }
-
-  @Test(description = "Brands hierarchy - Drill all the way down and drill back up")
-  public void drillDownDrillUpBrands() {
-    accountDashboardPage
-      .brandSnapshotPanel.drillIntoFirstRow()
-      .brandSnapshotPanel.waitForLoaderToDisappear()
-      .topBottomPanel.waitForLoaderToDisappear();
-    Assert.assertTrue(
-      accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.SkuPackage),
-      "Left brands panel failed to load for SKU/Packages"
-    );
-    Assert.assertTrue(
-      accountDashboardPage.topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Distributors),
-      "Right accounts panel failed to reload for SKU/Packages"
-    );
-
-    accountDashboardPage
-      .brandSnapshotPanel.drillUp()
-      .brandSnapshotPanel.waitForLoaderToDisappear()
-      .topBottomPanel.waitForLoaderToDisappear();
-    Assert.assertTrue(
-      accountDashboardPage
-        .brandSnapshotPanel.areResultsLoadedFor(BrandSnapshotPanel.DrillLevel.Brand),
-      "Left brands panel failed to load for Brands"
-    );
-    Assert.assertTrue(
-      accountDashboardPage.topBottomPanel.areResultsLoadedFor(TopBottomPanel.DrillLevel.Distributors),
-      "Right accounts panel failed to reload for Brands"
-    );
-  }
-
-  @DataProvider public static Object[][] searchData() {
-    return new Object[][]{
-      {"COASTAL BEV CO", "WILMINGTON"}
-    };
   }
 }
