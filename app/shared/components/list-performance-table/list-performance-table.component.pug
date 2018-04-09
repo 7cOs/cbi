@@ -9,8 +9,9 @@ div
       tr.top-header.col-100-pct
         th.checkbox-col(colspan=1)
           mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
-          [checked]="isSelectAllChecked.checked",
-          (click)="toggleSelectAllStores()")
+          [checked]="isSelectAllChecked",
+          (change)="toggleSelectAllStores($event)",
+          [(indeterminate)]="isIndeterminateChecked")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
@@ -64,4 +65,5 @@ div
         [ngClass]="getEntityRowClasses(row)",
         list-performance-table-row,
         [rowData]="row",
-        (click)="onRowClicked(rowType.data, rowIndex, row)")
+        (click)="onRowClicked(rowType.data, rowIndex, row)",
+        (onChangeEventEmitter)="onCheckboxChange(row)")

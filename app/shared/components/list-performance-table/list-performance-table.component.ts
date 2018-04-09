@@ -8,6 +8,8 @@ import { ListPerformanceTableRow } from '../../../models/list-performance/list-p
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
+import { MatCheckboxChange } from '@angular/material';
+import { ListPerformanceTableRowComponent } from '../list-performance-table-row/list-performance-table-row.component';
 
 @Component({
   selector: 'list-performance-table',
@@ -44,6 +46,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public loadingStateEnum = LoadingState;
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
+  public isIndeterminateChecked = false;
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
@@ -60,6 +63,32 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public ngOnChanges(changes: SimpleChanges) {
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(loadingState);
+  }
+
+  public onCheckboxChange(row: ListPerformanceTableRow) {
+    const checkedTrue = this.sortedTableData.filter( function(tableRow) {
+      return tableRow.checked === true;
+    });
+
+    const checkedFalse = this.sortedTableData.filter( function(tableRow) {
+      return tableRow.checked === false;
+    });
+   this.setCheckboxStates(checkedFalse, checkedTrue);
+  }
+
+  public setCheckboxStates(checkedFalse: Array<ListPerformanceTableRow>, checkedTrue: Array<ListPerformanceTableRow>) {
+    if (this.isSelectAllChecked === false && checkedFalse.length !== this.sortedTableData.length) {
+      this.isSelectAllChecked = true;
+      this.isIndeterminateChecked = false;
+    }
+    if (this.isSelectAllChecked === true && checkedTrue.length !== this.sortedTableData.length) {
+      this.isSelectAllChecked = false;
+      this.isIndeterminateChecked = true;
+    }
+    if ( this.isIndeterminateChecked === true && checkedFalse.length === this.sortedTableData.length ) {
+      this.isIndeterminateChecked = false;
+      this.isSelectAllChecked = false;
+    }
   }
 
   public getTableBodyClasses(): string {
@@ -86,8 +115,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
-  public toggleSelectAllStores() {
-    this.isSelectAllChecked = !this.isSelectAllChecked;
+  public toggleSelectAllStores(event: MatCheckboxChange) {
+    this.isSelectAllChecked = event.checked;
     const updatedTableData = this.sortedTableData.map((row: ListPerformanceTableRow) => {
       return Object.assign({}, row, {
         checked: this.isSelectAllChecked

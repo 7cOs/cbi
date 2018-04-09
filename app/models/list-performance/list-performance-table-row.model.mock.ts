@@ -30,3 +30,15 @@ export function getListPerformanceTableRowMock(length: number) {
 export function getListPerformanceHeaderRowMock(): Array<string> {
   return ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
 }
+
+export function getListTrueCheckedRowMocks(performanceList: Array<ListPerformanceTableRow>): Array<ListPerformanceTableRow> {
+  return performanceList.filter(row => {
+    return row.checked === true;
+  });
+}
+
+export function getListFalseCheckedRowMocks(performanceList: Array<ListPerformanceTableRow>): Array<ListPerformanceTableRow> {
+  return performanceList.filter(row => {
+    return row.checked === false;
+  });
+}

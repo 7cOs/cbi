@@ -13,7 +13,7 @@ import { getListPerformanceTableRowMock,
 export class ListDetailComponent implements OnInit, OnDestroy {
 
   // TODO: Remove this when we get real data.
-  public tableData = getListPerformanceTableRowMock(4);
+  public tableData = getListPerformanceTableRowMock(100);
   public tableHeader = getListPerformanceHeaderRowMock();
   public totalRow = {
     descriptionRow0: 'Total',

@@ -5,7 +5,9 @@ import * as Chance from 'chance';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ListPerformanceColumnType } from '../../../enums/list-performance-column-types.enum';
-import { getListPerformanceTableRowMock } from '../../../models/list-performance/list-performance-table-row.model.mock';
+import { getListPerformanceTableRowMock,
+  getListTrueCheckedRowMocks,
+  getListFalseCheckedRowMocks } from '../../../models/list-performance/list-performance-table-row.model.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { ListPerformanceTableComponent } from './list-performance-table.component';
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
@@ -211,17 +213,17 @@ describe('ListPerformanceTableComponent', () => {
 
   describe('when isSelectAllChecked is false and it is clicked', () => {
     it('should check all the elements', () => {
-      componentInstance.tableData = getListPerformanceTableRowMock(2);
       componentInstance.isSelectAllChecked = false;
+      componentInstance.tableData = getListPerformanceTableRowMock(2);
       fixture.detectChanges();
 
-      fixture.debugElement.query(By.css('.select-all-checkbox')).triggerEventHandler('click', null);
+      componentInstance.toggleSelectAllStores({checked: true, source: fixture.nativeElement});
       fixture.detectChanges();
 
       expect(componentInstance.sortedTableData[0].checked).toEqual(true);
       expect(componentInstance.sortedTableData[1].checked).toEqual(true);
 
-      fixture.debugElement.query(By.css('.select-all-checkbox')).triggerEventHandler('click', null);
+      componentInstance.toggleSelectAllStores({checked: false, source: fixture.nativeElement});
       fixture.detectChanges();
 
       expect(componentInstance.sortedTableData[0].checked).toEqual(false);
@@ -242,6 +244,48 @@ describe('ListPerformanceTableComponent', () => {
         'performance-error': false,
         'selected-entity-row': rowData.checked
       });
+    });
+  });
+
+  describe('when isSelectedAllChecked is false', () => {
+    it('should set isIndeterminate to true for mixed checkboxes', () => {
+      componentInstance.isSelectAllChecked = false;
+      componentInstance.tableData = getListPerformanceTableRowMock(2);
+      componentInstance.sortedTableData[0].checked = true;
+      fixture.detectChanges();
+
+      componentInstance.setCheckboxStates(
+        getListTrueCheckedRowMocks(componentInstance.sortedTableData),
+        getListFalseCheckedRowMocks(componentInstance.sortedTableData)
+      );
+
+      expect(componentInstance.isIndeterminateChecked).toEqual(true);
+    });
+    it('should set isIndeterminate to false for all true checkboxes', () => {
+      componentInstance.isSelectAllChecked = false;
+      componentInstance.tableData = getListPerformanceTableRowMock(2);
+      componentInstance.sortedTableData[0].checked = true;
+      componentInstance.sortedTableData[1].checked = true;
+      fixture.detectChanges();
+
+      componentInstance.setCheckboxStates(
+        getListTrueCheckedRowMocks(componentInstance.sortedTableData),
+        getListFalseCheckedRowMocks(componentInstance.sortedTableData)
+      );
+      expect(componentInstance.isIndeterminateChecked).toEqual(false);
+    });
+    it('should set isIndeterminate to true', () => {
+      componentInstance.isSelectAllChecked = false;
+      componentInstance.tableData = getListPerformanceTableRowMock(2);
+      componentInstance.sortedTableData[0].checked = false;
+      componentInstance.sortedTableData[1].checked = false;
+      fixture.detectChanges();
+
+      componentInstance.setCheckboxStates(
+        getListTrueCheckedRowMocks(componentInstance.sortedTableData),
+        getListFalseCheckedRowMocks(componentInstance.sortedTableData)
+      );
+      expect(componentInstance.isIndeterminateChecked).toEqual(false);
     });
   });
 });
