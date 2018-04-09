@@ -33,13 +33,13 @@ describe('Lists Effects', () => {
     getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
       return Observable.of(storeListMock);
     },
-    getHeaderInfo(listIdMock: string): Observable<ListsSummaryDTO> {
+    getListSummary(listIdMock: string): Observable<ListsSummaryDTO> {
       return Observable.of(listHeaderMock);
     }
   };
 
   let listsTransformerServiceMock = {
-    formatListHeaderData(headerDataDTO: ListsSummaryDTO): ListsSummary {
+    formatListsSummaryData(headerDataDTO: ListsSummaryDTO): ListsSummary {
       return headerDetailMock;
     },
     formatStoresData(store: Array<ListStoreDTO>): Array<StoreDetails> {

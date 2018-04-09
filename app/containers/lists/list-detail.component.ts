@@ -17,7 +17,7 @@ import { StoreDetails } from '../../models/lists-store.model';
 
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
-  public listHeader: ListsSummary;
+  public listSummary: ListsSummary;
   private listDetailSubscription: Subscription;
 
   constructor(
@@ -35,7 +35,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
           this.storeList = listDetail.stores;
-          this.listHeader = listDetail.summary;
+          this.listSummary = listDetail.summary;
       });
   }
 
