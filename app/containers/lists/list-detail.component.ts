@@ -1,4 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ActionButtonComponent } from '../../shared/components/action-button/action-button.component';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -16,6 +17,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
+  }
+
+  captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
+    console.log(actionButtonProperties.actionType + ' - Action Button is clicked!');
   }
 
   ngOnDestroy() { }
