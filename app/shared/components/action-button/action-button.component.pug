@@ -1,1 +1,1 @@
-button.btn-action(type="button", (click)='onButtonClicked()') {{ actionLabel }}
+button.btn-action(type="button", (click)='onButtonClicked()', [disabled]="isDisabled") {{ actionLabel }}

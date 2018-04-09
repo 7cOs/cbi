@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 export class ActionButtonComponent {
     @Input() actionLabel: string;
+    @Input() isDisabled: boolean;
     @Output() onActionButtonClicked: EventEmitter<{actionType: string}> = new EventEmitter<{actionType: string}>();
     constructor() {}
 

@@ -1,9 +1,11 @@
 h1 List Stuff Goes Here!
 action-button(
     [actionLabel]="'Add To List'", 
+    [isDisabled]="true",
     (onActionButtonClicked)="captureActionButtonClicked($event)"
 )
 action-button.action-button-spacing(
     [actionLabel]="'Download'", 
+    [isDisabled]="false",
     (onActionButtonClicked)="captureActionButtonClicked($event)"
 )
