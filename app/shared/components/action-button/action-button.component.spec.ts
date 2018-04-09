@@ -31,4 +31,18 @@ describe('ActionButtonComponent', () => {
         expect(componentInstance.onActionButtonClicked.emit).toHaveBeenCalled();
         expect(componentInstance.onActionButtonClicked.emit).toHaveBeenCalledWith({actionType: 'Add To List'});
     }));
+
+    it('Should make the button disabled when passed from parent', () => {
+        componentInstance.isDisabled = true;
+        const element = fixture.debugElement.query(By.css('.btn-action')).nativeElement;
+        fixture.detectChanges();
+        expect(element.disabled).toBeTruthy();
+    });
+
+    it('Should make the button enabled when passed from parent', () => {
+        componentInstance.isDisabled = false;
+        const element = fixture.debugElement.query(By.css('.btn-action')).nativeElement;
+        fixture.detectChanges();
+        expect(element.disabled).toBeFalsy();
+    });
 });
