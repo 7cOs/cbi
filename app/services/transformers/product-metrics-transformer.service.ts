@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { CalculatorService } from './calculator.service';
-import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../models/opportunity-count.model';
-import { OpportunityCount } from '../models/opportunity-count.model';
-import { OpportunityCountDTO } from '../models/opportunity-count-dto.model';
-import { OpportunityTypeLabel } from '../enums/opportunity.enum';
-import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../models/product-metrics.model';
-import { ProductMetrics, ProductMetricsValues } from '../models/product-metrics.model';
+import { CalculatorService } from '../calculator.service';
+import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../../models/opportunity-count.model';
+import { OpportunityCount } from '../../models/opportunity-count.model';
+import { OpportunityCountDTO } from '../../models/opportunity-count-dto.model';
+import { OpportunityTypeLabel } from '../../enums/opportunity.enum';
+import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../../models/product-metrics.model';
+import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
 
 @Injectable()
 export class ProductMetricsTransformerService {

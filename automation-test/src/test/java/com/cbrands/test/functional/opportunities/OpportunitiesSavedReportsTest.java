@@ -196,6 +196,46 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   }
 
   @Test(
+      description = "Attempt to create saved report with duplicate name, then save with valid name",
+      dependsOnMethods = "createSavedReport",
+      dataProvider = "createDuplicateReportData"
+  )
+  public void attemptToCreateWithDuplicateName(String existingReportName, String distributor) {    
+    opportunitiesPage = this.setUpNewSavedReport(existingReportName, distributor);
+
+    final SavedReportModal savedReportModal = opportunitiesPage
+            .enterDistributorSearchText(distributor)
+            .clickSearchForDistributor()
+            .clickFirstDistributorResult()
+            .clickApplyFiltersButton()
+            .waitForLoaderToDisappear()
+            .clickSaveReportLink()
+            .enterReportName(existingReportName)
+            .clickSave();
+
+    Assert.assertTrue(
+      savedReportModal.isDuplicateNameErrorDisplayed(),
+      "Failed to display error when attempting to use the name of an existing report."
+    );
+
+    final String nonDuplicateReportName = generateNewEditedReportName(existingReportName);
+    opportunitiesPage = savedReportModal.enterReportName(nonDuplicateReportName)
+       .clickSave()
+       .waitForModalToClose();
+    
+    Assert.assertTrue(
+        opportunitiesPage.clickSavedReportsDropdown().doesSavedReportExistWithName(nonDuplicateReportName),
+        getCreateFailureMessage(nonDuplicateReportName, "Opportunities")
+      );
+
+    homePage.goToPage();
+    Assert.assertTrue(
+      homePage.clickSavedReportsDropdown().doesSavedReportExistWithName(nonDuplicateReportName),
+      getCreateFailureMessage(nonDuplicateReportName, "Home")
+    );    
+  }  
+
+  @Test(
     description = "Attempting to create a new Saved Report when the max allowed has already been reached",
     dependsOnMethods = "enableSavedReport",
     dataProvider = "distributorData"
@@ -245,6 +285,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     final String testReportName = "Functional Test: " + current_time_stamp;
     return new Object[][]{
       {"Edit Duplicate " + testReportName, "Healy Wholesale"}
+    };
+  }
+
+  @DataProvider
+  public static Object[][] createDuplicateReportData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Create Duplicate " + testReportName, "Healy Wholesale"}
     };
   }
 

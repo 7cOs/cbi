@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService;
+  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService, compassModalService;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -16,6 +16,13 @@ describe('Unit: expanded target list controller', function() {
         trackEvent: () => {}
       };
       $provide.value('analyticsService', analyticsService);
+    });
+
+    angular.mock.module(($provide) => {
+      compassModalService = {
+        showAlertModalDialog: () => {}
+      };
+      $provide.value('compassModalService', compassModalService);
     });
 
     inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_) {
@@ -50,6 +57,7 @@ describe('Unit: expanded target list controller', function() {
 
     expect(ctrl.loaderService).not.toBeUndefined();
     expect(typeof (ctrl.loaderService)).toEqual('object');
+
   });
 
   it('should expose public methods', function() {
@@ -529,7 +537,7 @@ describe('Unit: expanded target list controller', function() {
             ]
           }
         ];
-
+        spyOn(compassModalService, 'showAlertModalDialog').and.callFake(() => {});
         httpBackend.expectGET('/v2/targetLists').respond(200);
 
         spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
@@ -670,6 +678,7 @@ describe('Unit: expanded target list controller', function() {
           };
         });
 
+      spyOn(compassModalService, 'showAlertModalDialog').and.callFake(() => {});
       spyOn(toastService, 'showToast').and.callThrough();
 
       spyOn(analyticsService, 'trackEvent').and.callFake(() => {});

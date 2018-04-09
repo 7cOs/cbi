@@ -32,7 +32,7 @@ import { getOpportunitiesGroupedByBrandSkuPackageCodeMock } from '../../models/o
 import { getProductMetricsBrandMock,
          getProductMetricsSkuMock,
          getProductMetricsWithSkuValuesMock } from '../../models/product-metrics.model.mock';
-import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
+import { CORPORATE_USER_POSITION_ID, HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -42,7 +42,7 @@ import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter
 import { MyPerformanceFilterEvent, MyPerformanceFilter } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reducers/my-performance.reducer';
-import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
+import { MyPerformanceTableDataTransformerService } from '../../services/transformers/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow, TeamPerformanceTableOpportunity } from '../../models/my-performance-table-row.model';
 import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
@@ -62,7 +62,7 @@ import { ClearMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedSubaccountCode,
          SetMyPerformanceSelectedDistributorCode,
          SkuPackagePayload } from '../../state/actions/my-performance-version.action';
-import { SalesHierarchyType } from '../../enums/sales-hierarchy-type.enum';
+import { SalesHierarchyType } from '../../enums/sales-hierarchy/sales-hierarchy-type.enum';
 import { SkuPackageType } from '../../enums/sku-package-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -885,7 +885,7 @@ describe('MyPerformanceComponent', () => {
 
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.EXCPN_HIER;
-
+          stateMock.myPerformance.current.responsibilities.positionId = CORPORATE_USER_POSITION_ID;
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
@@ -910,6 +910,43 @@ describe('MyPerformanceComponent', () => {
           }));
         });
 
+        it('should NOT skip a level and shows ' +
+          'who is in that group when NSO role group is clicked WHEN positionId is NOT 0', () => {
+          rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.NATIONAL_SALES_ORG;
+          rowMock.metadata.entityName = EntityPeopleType['NATIONAL SALES ORG'];
+          rowMock.descriptionRow0 = EntityPeopleType['NATIONAL SALES ORG'];
+
+          // any number other than 0 as positionId
+          stateMock.myPerformance.current.responsibilities.positionId = chance.string({pool: '123456789'});
+          const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
+            positionId: rowMock.metadata.positionId,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            entityTypeGroupName: rowMock.metadata.entityName,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            entityType: rowMock.metadata.entityType,
+            entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName],
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityDescription: rowMock.descriptionRow0,
+            brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+            skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: false
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
+            positionId: rowMock.metadata.positionId,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityType: EntityType.RoleGroup,
+            selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+            inAlternateHierarchy: false
+          }));
+        });
+
         it('should skip a level by getting data for the single person in that role-group instead of showing' +
           ' who is in that group when DRAFT role group is clicked', () => {
           rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.DRAFT;
@@ -919,6 +956,7 @@ describe('MyPerformanceComponent', () => {
           const nextLevelEntity = stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName][0];
           nextLevelEntity.hierarchyType = SalesHierarchyType.OFF_HIER;
 
+          stateMock.myPerformance.current.responsibilities.positionId = CORPORATE_USER_POSITION_ID;
           const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
           componentInstance.handleElementClicked(params);
 
@@ -929,6 +967,43 @@ describe('MyPerformanceComponent', () => {
             positionId: nextLevelEntity.positionId,
             filter: stateMock.myPerformanceFilter as any,
             selectedEntityDescription: nextLevelEntity.description,
+            brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
+            skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
+            isMemberOfExceptionHierarchy: false
+          }));
+          expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetrics({
+            positionId: rowMock.metadata.positionId,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityType: EntityType.RoleGroup,
+            selectedBrandCode: stateMock.myPerformance.current.selectedBrandCode,
+            inAlternateHierarchy: false
+          }));
+        });
+
+        it('should NOT skip a level and shows ' +
+          'who is in that group when DRAFT role group is clicked WHEN positionId is NOT 0', () => {
+          rowMock.metadata.entityTypeCode = SpecialistRoleGroupEntityTypeCode.DRAFT;
+          rowMock.metadata.entityName = EntityPeopleType.DRAFT;
+          rowMock.descriptionRow0 = EntityPeopleType.DRAFT;
+
+          // any number other than 0 as positionId
+          stateMock.myPerformance.current.responsibilities.positionId = chance.string({pool: '123456789'});
+          const params: HandleElementClickedParameters = {leftSide: true, type: RowType.data, index: 0, row: rowMock};
+          componentInstance.handleElementClicked(params);
+
+          expect(storeMock.dispatch.calls.count()).toBe(4);
+          expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new SaveMyPerformanceState(expectedSaveMyPerformanceStatePayload));
+          expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new SetMyPerformanceSelectedEntityType(rowMock.metadata.entityType));
+          expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.FetchEntityWithPerformance({
+            positionId: rowMock.metadata.positionId,
+            alternateHierarchyId: stateMock.myPerformance.current.responsibilities.alternateHierarchyId,
+            entityTypeGroupName: rowMock.metadata.entityName,
+            entityTypeCode: rowMock.metadata.entityTypeCode,
+            entityType: rowMock.metadata.entityType,
+            entities: stateMock.myPerformance.current.responsibilities.groupedEntities[rowMock.metadata.entityName],
+            filter: stateMock.myPerformanceFilter as any,
+            selectedEntityDescription: rowMock.descriptionRow0,
             brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
             skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
             isMemberOfExceptionHierarchy: false
@@ -1851,11 +1926,21 @@ describe('MyPerformanceComponent', () => {
         currentMock.responsibilities.exceptionHierarchy = insideExceptionHierarchyMock;
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter, rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
+          rowMock,
+          stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            stateMock.myPerformanceFilter.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
@@ -1920,14 +2005,19 @@ describe('MyPerformanceComponent', () => {
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
           insideAlternateHierarchyMock,
           insideExceptionHierarchyMock,
-          stateMock.myPerformanceFilter,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
           rowMock,
           hierarchyEntityMock.premiseType
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
-            rowMock, hierarchyEntityMock.premiseType));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
@@ -1945,11 +2035,21 @@ describe('MyPerformanceComponent', () => {
         myPerformanceStateMock.current.responsibilities.groupedEntities[accountNameMock] = [hierarchyEntityMock];
         currentSubject.next(currentMock);
         componentInstance.handleSublineClicked(rowMock);
-        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith
-        (insideAlternateHierarchyMock, insideExceptionHierarchyMock, stateMock.myPerformanceFilter, rowMock);
+        expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
+          insideAlternateHierarchyMock,
+          insideExceptionHierarchyMock,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
+          rowMock,
+          stateMock.myPerformanceFilter.premiseType);
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter, rowMock));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            stateMock.myPerformanceFilter.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
@@ -1971,14 +2071,19 @@ describe('MyPerformanceComponent', () => {
         expect(myPerformanceServiceMock.accountDashboardStateParameters).toHaveBeenCalledWith(
           insideAlternateHierarchyMock,
           insideExceptionHierarchyMock,
-          stateMock.myPerformanceFilter,
+          stateMock.myPerformanceFilter.dateRangeCode,
+          stateMock.myPerformanceFilter.metricType,
           rowMock,
           hierarchyEntityMock.premiseType
         );
         expect(stateMock.href).toHaveBeenCalledWith(
           'accounts',
-          myPerformanceServiceMock.accountDashboardStateParameters(insideAlternateHierarchyMock, stateMock.myPerformanceFilter,
-            rowMock, hierarchyEntityMock.premiseType));
+          myPerformanceServiceMock.accountDashboardStateParameters(
+            insideAlternateHierarchyMock,
+            stateMock.myPerformanceFilter.dateRangeCode,
+            stateMock.myPerformanceFilter.metricType,
+            rowMock,
+            hierarchyEntityMock.premiseType));
         expect(windowServiceMock.nativeWindow).toHaveBeenCalled();
         expect(windowMock.open).toHaveBeenCalled();
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(

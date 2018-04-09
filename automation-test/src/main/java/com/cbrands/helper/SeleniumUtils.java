@@ -17,8 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SeleniumUtils {
 
-	/** The Constant DEFAULT_WAIT_TIME. */
-	public static final int DEFAULT_WAIT_TIME = 20;
+	private static final int DEFAULT_WAIT_TIME = 20;
   private static final int DEFAULT_POLL_TIME = 5;
 
   /** The driver. */
@@ -213,69 +212,6 @@ public class SeleniumUtils {
   }
 
 	/**
-	 * Check.
-	 *
-	 * @param by the by
-	 */
-	public static void check(By by) {
-		WebElement element = driver.findElement(by);
-		check(element);
-	}
-
-	/**
-	 * Check.
-	 *
-	 * @param element the element
-	 */
-	public static void check(WebElement element) {
-		if (!element.isSelected()) {
-			element.click();
-		}
-	}
-
-	/**
-	 * Uncheck.
-	 *
-	 * @param by the by
-	 */
-	public static void uncheck(By by) {
-		WebElement element = driver.findElement(by);
-		uncheck(element);
-	}
-
-	/**
-	 * Uncheck.
-	 *
-	 * @param element the element
-	 */
-	public static void uncheck(WebElement element) {
-		if (element.isSelected()) {
-			element.click();
-		}
-	}
-
-	/**
-	 * Checks if is checked.
-	 *
-	 * @param by the by
-	 * @return true, if is checked
-	 */
-	public static boolean isChecked(By by) {
-		WebElement element = driver.findElement(by);
-		return isChecked(element);
-	}
-
-	/**
-	 * Checks if is checked.
-	 *
-	 * @param element the element
-	 * @return true, if is checked
-	 */
-	public static boolean isChecked(WebElement element) {
-		return element.isSelected();
-	}
-
-	/**
 	 * Gets the select.
 	 *
 	 * @param by the by
@@ -378,16 +314,13 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for visible fluent wait.
+	 * Wait for a single element to be visible fluent wait.
 	 *
 	 * @param element the element
 	 * @return the web element
 	 */
-	@SuppressWarnings("unchecked")
 	public static WebElement waitForVisibleFluentWait(WebElement element) {
-		Wait<WebDriver> wait = new FluentWait(driver)
-	              .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-	              .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.MILLISECONDS)
+		final Wait<WebDriver> wait = getDefaultFluentWait()
 	              .ignoring(NoSuchElementException.class)
 	              .ignoring(ElementNotVisibleException.class);
 	   wait.until(ExpectedConditions.visibilityOf(element));
@@ -395,16 +328,13 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for visible fluent wait.
+	 * Wait for a single element to be visible fluent wait.
 	 *
 	 * @param by the element locator
 	 * @return the web element
 	 */
-	@SuppressWarnings("unchecked")
 	public static WebElement waitForVisibleFluentWait(By by) {
-		Wait<WebDriver> wait = new FluentWait(driver)
-	              .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-	              .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.MILLISECONDS)
+		final Wait<WebDriver> wait = getDefaultFluentWait()
 	              .ignoring(NoSuchElementException.class)
 	              .ignoring(ElementNotVisibleException.class);
 	   wait.until(ExpectedConditions.visibilityOfElementLocated(by));
@@ -412,16 +342,13 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for elements visible fluent wait.
+	 * Wait for multiple elements visible fluent wait.
 	 *
 	 * @param elements the elements
 	 * @return the list
 	 */
-	@SuppressWarnings("unchecked")
 	public static List<WebElement> waitForElementsVisibleFluentWait(List<WebElement> elements) {
-		Wait<WebDriver> wait = new FluentWait(driver)
-				.withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-				.pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS)
+		final Wait<WebDriver> wait = getDefaultFluentWait()
 				.ignoring(NoSuchElementException.class)
 				.ignoring(ElementNotVisibleException.class);
 		wait.until(ExpectedConditions.visibilityOfAllElements(elements));
@@ -438,21 +365,6 @@ public class SeleniumUtils {
 		waitForCondition(ExpectedConditions.visibilityOfElementLocated(by), timeout);
 	}
 
-	/**
-   * Waits for element to disappear from the DOM
-   *
-   * @param element the element
-   */
-  @SuppressWarnings("unchecked")
-  private static void waitForElementStalenessFluentWait(WebElement element) {
-    Wait<WebDriver> wait = new FluentWait(driver)
-      .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-      .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS)
-      .ignoring(NoSuchElementException.class)
-      .ignoring(ElementNotVisibleException.class);
-		wait.until(ExpectedConditions.stalenessOf(element));
-	}
-
   /**
    * Waits for element to disappear from the DOM. If element is not present, swallows the exception.
    *
@@ -461,8 +373,10 @@ public class SeleniumUtils {
   public static void waitForElementToDisappear(By by) {
     try{
       final WebElement element = findElement(by);
-      waitForCondition(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)), DEFAULT_WAIT_TIME);
-      waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
+
+      final Wait<WebDriver> wait = getDefaultFluentWait();
+			wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)));
+			wait.until(ExpectedConditions.stalenessOf(element));
     } catch (NoSuchElementException | StaleElementReferenceException e) {
       // Success. Element not present.
     }
@@ -539,16 +453,34 @@ public class SeleniumUtils {
 		return element;
 	}
 
-  /**
-   * Wait for a given element's attribute to contain a value
-   * @param element the element to inspect
-   * @param attribute the name of the attribute to inspect
-   * @param expectedValue the value the attribute should contain
-   * @return
+	/**
+	 * Waits for the given element to be checked.
+	 *
+	 * @param checkbox element on which to wait to be checked
+	 * @return checkbox element
    */
-	public static WebElement waitForElementAttributeToContain(WebElement element, String attribute, String expectedValue) {
-    waitForCondition(ExpectedConditions.attributeContains(element, attribute, expectedValue), DEFAULT_WAIT_TIME);
-		return element;
+	public static WebElement waitForElementToBeChecked(WebElement checkbox) {
+		final FluentWait<WebDriver> wait;
+
+		if (isBrowserTypeIE()) {
+			wait = getIECheckboxWait();
+		} else {
+			wait = getDefaultFluentWait();
+		}
+
+		wait.until(ExpectedConditions.attributeContains(checkbox, "aria-checked", "true"));
+
+		return checkbox;
+	}
+
+	/**
+	 * Workaround for IE-specific bug where faulty implementation of checkbox causes excessive lag time.
+	 * Remove this workaround when fixed.
+	 * See Rally ticket DE7112.
+	 * @return customized fluent wait
+   */
+	private static FluentWait<WebDriver> getIECheckboxWait() {
+		return getCustomFluentWait(DEFAULT_WAIT_TIME * 4, DEFAULT_POLL_TIME);
 	}
 
 	/**
@@ -563,13 +495,26 @@ public class SeleniumUtils {
 	}
 
 	/**
+	 * @deprecated Please keep wait logic contained within Selenium Utils, and use Fluent Wait instead of WebDriverWait.
+	 *
 	 * Wait for condition.
 	 *
 	 * @param conditon the conditon
 	 * @param timeout the timeout
 	 */
+	@Deprecated
 	public static void waitForCondition(ExpectedCondition conditon, int timeout) {
 		(new WebDriverWait(driver, timeout)).until(conditon);
+	}
+
+	private static FluentWait<WebDriver> getDefaultFluentWait() {
+		return getCustomFluentWait(DEFAULT_WAIT_TIME, DEFAULT_POLL_TIME);
+	}
+
+	private static FluentWait<WebDriver> getCustomFluentWait(int waitTime, int pollTime) {
+		return new FluentWait<>(driver)
+			.withTimeout(waitTime, TimeUnit.SECONDS)
+			.pollingEvery(pollTime, TimeUnit.SECONDS);
 	}
 
 	/**

@@ -7,7 +7,7 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangeApiService } from '../../services/api/v3/date-range-api.service';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
 import { DateRangesEffects } from './date-ranges.effect';
-import { DateRangeTransformerService } from '../../services/date-range-transformer.service';
+import { DateRangeTransformerService } from '../../services/transformers/date-range-transformer.service';
 import * as DateRangeActions from '../actions/date-ranges.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 

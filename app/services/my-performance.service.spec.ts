@@ -169,9 +169,10 @@ describe('Service: MyPerformanceService', () => {
       expect(myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
-        undefined)).toEqual({});
+        filterMock.premiseType)).toEqual({});
     });
 
     it('should return the correct option when metric type is depletions and entityType is distributor', () => {
@@ -180,9 +181,10 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
-        undefined);
+        filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         depletiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
@@ -198,9 +200,10 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
-        undefined);
+        filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
@@ -215,9 +218,10 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
-        undefined);
+        filterMock.premiseType);
       expect(accountDashboardParams).toEqual({myaccountsonly: !insideAlternateHierarchyMock,
         distributiontimeperiod: DateRangeTimePeriodValue[filterMock.dateRangeCode],
         distributorid: rowMock.metadata.positionId,
@@ -233,7 +237,8 @@ describe('Service: MyPerformanceService', () => {
       const accountDashboardParams = myPerformanceService.accountDashboardStateParameters(
         insideAlternateHierarchyMock,
         insideExceptionHierarchyMock,
-        filterMock,
+        filterMock.dateRangeCode,
+        filterMock.metricType,
         rowMock,
         premiseType);
 
