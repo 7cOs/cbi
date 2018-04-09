@@ -1,6 +1,7 @@
 package com.cbrands.pages;
 
 import com.cbrands.PremiseType;
+import com.cbrands.helper.SeleniumUtils;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -216,6 +217,8 @@ public class AccountDashboardPage extends TestNGBasePage {
   }
 
   public static class BrandSnapshotPanel {
+    private static final int CUSTOM_LOADER_TIMEOUT = SeleniumUtils.DEFAULT_WAIT_TIME * 2;
+
     private static final String CONTAINER_XPATH = "//div[contains(@class, 'scorecard-table')]";
     private static final String LOADER_XPATH = CONTAINER_XPATH + PANEL_LOADER_XPATH;
     private static final String ROW_XPATH = ".//md-tab-content[contains(@class, 'md-active')]//tr[@ng-repeat]";
@@ -257,7 +260,7 @@ public class AccountDashboardPage extends TestNGBasePage {
     }
 
     public AccountDashboardPage waitForLoaderToDisappear() {
-      waitForElementToDisappear(By.xpath(LOADER_XPATH));
+      waitForElementToDisappear(By.xpath(LOADER_XPATH), CUSTOM_LOADER_TIMEOUT);
       return PageFactory.initElements(driver, AccountDashboardPage.class);
     }
 
