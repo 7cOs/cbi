@@ -55,23 +55,6 @@ tbody {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-.loading {
-  opacity: 0;
-}
-
-.loaded {
-  opacity: 1;
-  transition: opacity 0.5s;
-}
-
-.individual-loader {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 50%;
-}
-
 th {
   font-weight: normal;
   font-size: 10px;
@@ -321,10 +304,17 @@ td, th {
     border-right: 1px solid $gray-8;
   }
 
-  th:nth-child(4),
-  th:nth-child(6) {
+  th:nth-child(4) {
     border-right: 1px solid $gray-8;
   }
+
+  th:nth-child(5),
+  th:nth-child(6) {
+    background-color: $gray-4;
+    border-right: 1px solid $gray-8;
+  }
+
+
 }
 
 .sub-header {
