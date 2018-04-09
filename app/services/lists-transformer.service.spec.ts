@@ -1,4 +1,4 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { getListsSummaryDTOMock } from '../models/lists-header-dto.model.mock';
 import { getStoreListsDTOMock } from '../models/lists-store-dto.model.mock';
@@ -15,10 +15,12 @@ describe('Service: ListsTransformerService', () => {
     providers: [ListsTransformerService]
   }));
 
-  beforeEach(inject([ListsTransformerService],
-    (_listsTransformerService: ListsTransformerService) => {
-      listsTransformerService = _listsTransformerService;
-    }));
+  let testBed: TestBed;
+
+  beforeEach(() => {
+    testBed = getTestBed();
+    listsTransformerService = testBed.get(ListsTransformerService);
+  });
 
   describe('transformStoresData', () => {
     it('should transform the stores Data', () => {
