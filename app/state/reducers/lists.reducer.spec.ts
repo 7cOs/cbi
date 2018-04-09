@@ -11,9 +11,10 @@ describe('Lists Reducer', () => {
   describe('when a FetchStoreDetails action is dispatched', () => {
     it('should update the store details status to Fetching', () => {
       const expectedState = {
-        status: ActionStatus.Fetching,
-        summaryStatus: initialState.summaryStatus,
-        stores: initialState.stores,
+        listSummary:  initialState.listSummary,
+        listStores:  Object.assign({}, initialState.listStores, {
+          storeStatus: ActionStatus.Fetching
+        })
       };
 
       const actualState = listsReducer(initialState, new ListsActions.FetchStoreDetails({
@@ -27,9 +28,11 @@ describe('Lists Reducer', () => {
       const stores = getStoreListsMock();
 
       const expectedState = {
-        status: ActionStatus.Fetched,
-        summaryStatus: initialState.summaryStatus,
-        stores: stores,
+        listSummary:  initialState.listSummary,
+        listStores:  Object.assign({}, initialState.listStores, {
+          storeStatus: ActionStatus.Fetched,
+          stores: stores
+        })
       };
 
       const actualState = listsReducer(
@@ -41,10 +44,11 @@ describe('Lists Reducer', () => {
     });
 
     it('should should update the store details status to Error', () => {
-      const expectedState: ListsState = {
-        status: ActionStatus.Error,
-        summaryStatus: initialState.summaryStatus,
-        stores: initialState.stores,
+      const expectedState = {
+        listSummary:  initialState.listSummary,
+        listStores:  Object.assign({}, initialState.listStores, {
+          storeStatus: ActionStatus.Error
+        })
       };
       const actualState: ListsState = listsReducer(
         initialState,
@@ -57,9 +61,10 @@ describe('Lists Reducer', () => {
   describe('when a FetchHeaderDetails action is dispatched', () => {
     it('should update the header details status to Fetching', () => {
         const expectedState = {
-          status: initialState.status,
-          summaryStatus: ActionStatus.Fetching,
-          stores: initialState.stores,
+          listStores:  initialState.listStores,
+          listSummary:  Object.assign({}, initialState.listSummary, {
+            summaryStatus: ActionStatus.Fetching
+          })
         };
 
         const actualState = listsReducer(initialState, new ListsActions.FetchHeaderDetails({
@@ -68,14 +73,16 @@ describe('Lists Reducer', () => {
 
         expect(actualState).toEqual(expectedState);
       });
+
     it('should update the header details and set the headers status to Fetched on success', () => {
       const headersMock = getListsSummaryMock();
 
       const expectedState = {
-        status: initialState.status,
-        summary: headersMock,
-        summaryStatus: ActionStatus.Fetched,
-        stores: initialState.stores
+        listStores:  initialState.listStores,
+        listSummary:  Object.assign({}, initialState.listSummary, {
+          summaryStatus: ActionStatus.Fetching,
+          summaryData: headersMock
+        })
       };
 
       const actualState = listsReducer(
@@ -85,11 +92,13 @@ describe('Lists Reducer', () => {
 
       expect(actualState).toEqual(expectedState);
     });
+
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
-        status: initialState.status,
-        summaryStatus: ActionStatus.Error,
-        stores: initialState.stores,
+        listStores:  initialState.listStores,
+        listSummary:  Object.assign({}, initialState.listSummary, {
+          summaryStatus: ActionStatus.Error
+        })
       };
       const actualState: ListsState = listsReducer(
         initialState,

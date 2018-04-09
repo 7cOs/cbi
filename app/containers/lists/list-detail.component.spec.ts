@@ -17,9 +17,24 @@ describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
   let listDetailMock: ListsState = {
-    status: ActionStatus.Fetching,
-    summaryStatus: ActionStatus.NotFetched,
-    stores: []
+    listSummary: {
+      summaryStatus: ActionStatus.NotFetched,
+      summaryData: {
+        archived: false,
+        description: '',
+        id: Number(''),
+        name: '',
+        closedOpportunities: Number(''),
+        totalOpportunities: Number(''),
+        numberOfAccounts: Number(''),
+        ownerFirstName: '',
+        ownerLastName: ''
+      }
+    },
+    listStores: {
+      storeStatus: ActionStatus.Fetching,
+      stores: []
+    }
   };
 
   const listsSubject: Subject<ListsState> = new Subject<ListsState>();

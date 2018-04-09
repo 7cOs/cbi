@@ -1,19 +1,42 @@
-import { ActionStatus, State } from '../../enums/action-status.enum';
+import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../actions/lists.action';
 import { ListsSummary } from '../../models/lists-header.model';
 import { StoreDetails } from '../../models/lists-store.model';
 
-export interface ListsState extends State {
-  status: ActionStatus;
+interface ListSummaryState {
   summaryStatus: ActionStatus;
-  stores: Array<StoreDetails>;
-  summary?: ListsSummary;
+  summaryData: ListsSummary;
+}
+
+interface ListStoresState {
+  storeStatus: ActionStatus;
+  stores: StoreDetails[];
+}
+
+export interface ListsState {
+  listSummary: ListSummaryState;
+  listStores: ListStoresState;
 }
 
 export const initialState: ListsState = {
-  status: ActionStatus.NotFetched,
-  summaryStatus: ActionStatus.NotFetched,
-  stores: [],
+    listSummary: {
+      summaryStatus: ActionStatus.NotFetched,
+      summaryData: {
+        archived: false,
+        description: '',
+        id: Number(''),
+        name: '',
+        closedOpportunities: Number(''),
+        totalOpportunities: Number(''),
+        numberOfAccounts: Number(''),
+        ownerFirstName: '',
+        ownerLastName: ''
+      }
+    },
+    listStores: {
+      storeStatus: ActionStatus.NotFetched,
+      stores: []
+    }
 };
 
 export function listsReducer(
@@ -23,36 +46,54 @@ export function listsReducer(
 
   switch (action.type) {
     case ListsActions.FETCH_STORE_DETAILS:
-      return Object.assign({}, state, {
-        status: ActionStatus.Fetching
-      });
+      return {
+        listSummary:  state.listSummary,
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.Fetching
+        })
+      };
 
     case ListsActions.FETCH_STORE_DETAILS_SUCCESS:
-      return Object.assign({}, state, {
-        status: ActionStatus.Fetched,
-        stores: action.payload
-      });
+      return {
+        listSummary:  state.listSummary,
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.Fetched,
+          stores: action.payload
+        })
+      };
 
     case ListsActions.FETCH_STORE_DETAILS_FAILURE:
-      return Object.assign({}, state, {
-        status: ActionStatus.Error
-      });
+      return {
+        listSummary:  state.listSummary,
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.Error
+        })
+      };
 
     case ListsActions.FETCH_HEADER_DETAILS:
-      return Object.assign({}, state, {
-        summaryStatus: ActionStatus.Fetching
-      });
+      return {
+        listStores:  state.listStores,
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Fetching
+        })
+      };
 
     case ListsActions.FETCH_HEADER_DETAILS_SUCCESS:
-      return Object.assign({}, state, {
-        summary: action.payload,
-        summaryStatus: ActionStatus.Fetched
-      });
+      return {
+        listStores:  state.listStores,
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Fetching,
+          summaryData: action.payload
+        })
+      };
 
     case ListsActions.FETCH_HEADER_DETAILS_FAILURE:
-      return Object.assign({}, state, {
-        summaryStatus: ActionStatus.Error
-      });
+      return {
+        listStores:  state.listStores,
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Error
+        })
+      };
 
     default:
       return state;
