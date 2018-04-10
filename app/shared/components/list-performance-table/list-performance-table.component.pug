@@ -12,7 +12,6 @@ div
           [checked]="isSelectAllChecked",
           (change)="toggleSelectAllStores($event)",
           [(indeterminate)]="isIndeterminateChecked",
-          [@.disabled]="true",
           [disableRipple]="true")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
           span {{ tableHeaderRow[0] }}

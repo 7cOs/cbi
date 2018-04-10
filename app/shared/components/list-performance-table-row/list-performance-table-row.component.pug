@@ -4,7 +4,6 @@ td.checkbox-col(colspan=1)
     aria-label="Select Store",
     [checked]='rowData.checked',
     (change)="toggleChecked($event)",
-    [@.disabled]="true",
     [disableRipple]="true")
 
 td.left-col(colspan=1)
