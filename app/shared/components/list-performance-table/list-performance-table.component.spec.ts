@@ -254,11 +254,7 @@ describe('ListPerformanceTableComponent', () => {
       componentInstance.sortedTableData[0].checked = true;
       fixture.detectChanges();
 
-      componentInstance.setCheckboxStates(
-        getListTrueCheckedRowMocks(componentInstance.sortedTableData),
-        getListFalseCheckedRowMocks(componentInstance.sortedTableData)
-      );
-
+      componentInstance.setCheckboxStates(1, 1);
       expect(componentInstance.isIndeterminateChecked).toEqual(true);
     });
     it('should set isIndeterminate to false for all true checkboxes', () => {
@@ -268,10 +264,7 @@ describe('ListPerformanceTableComponent', () => {
       componentInstance.sortedTableData[1].checked = true;
       fixture.detectChanges();
 
-      componentInstance.setCheckboxStates(
-        getListTrueCheckedRowMocks(componentInstance.sortedTableData),
-        getListFalseCheckedRowMocks(componentInstance.sortedTableData)
-      );
+      componentInstance.setCheckboxStates(2, 0);
       expect(componentInstance.isIndeterminateChecked).toEqual(false);
     });
     it('should set isIndeterminate to true', () => {
@@ -281,10 +274,7 @@ describe('ListPerformanceTableComponent', () => {
       componentInstance.sortedTableData[1].checked = false;
       fixture.detectChanges();
 
-      componentInstance.setCheckboxStates(
-        getListTrueCheckedRowMocks(componentInstance.sortedTableData),
-        getListFalseCheckedRowMocks(componentInstance.sortedTableData)
-      );
+      componentInstance.setCheckboxStates(0, 2);
       expect(componentInstance.isIndeterminateChecked).toEqual(false);
     });
   });

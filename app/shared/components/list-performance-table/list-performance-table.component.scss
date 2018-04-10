@@ -8,17 +8,22 @@ $table-body-height: $table-height - $row-height;
 $table-body-height-offset: 3px;
 $left-col-icon-width: 24px;
 
+.mat-checkbox {
+  transition: none;
+}
+
 table {
   border-top: 2px solid $gray-8;
   border-collapse: collapse;
   height: $table-height;
   width: 100%;
+  table-layout: auto;
+  display: table;
 }
 
 thead {
   text-align: left;
   display: block;
-  float: left;
   width: 100%;
 
   tr {
@@ -118,8 +123,17 @@ th {
 }
 
 /deep/.checkbox-col {
+  text-align: center;
   padding: 20px;
+  width: 5%;
   border-right: 2px solid $gray-8;
+
+  div.left-col-content {
+    div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
 }
 
 tr.one-right-column-present {

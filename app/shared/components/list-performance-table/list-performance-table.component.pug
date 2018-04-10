@@ -11,7 +11,9 @@ div
           mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
           [checked]="isSelectAllChecked",
           (change)="toggleSelectAllStores($event)",
-          [(indeterminate)]="isIndeterminateChecked")
+          [(indeterminate)]="isIndeterminateChecked",
+          [@.disabled]="true",
+          [disableRipple]="true")
         th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
           span {{ tableHeaderRow[0] }}
             sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
