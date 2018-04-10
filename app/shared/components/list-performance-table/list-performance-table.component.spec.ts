@@ -5,9 +5,7 @@ import * as Chance from 'chance';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { ListPerformanceColumnType } from '../../../enums/list-performance-column-types.enum';
-import { getListPerformanceTableRowMock,
-  getListTrueCheckedRowMocks,
-  getListFalseCheckedRowMocks } from '../../../models/list-performance/list-performance-table-row.model.mock';
+import { getListPerformanceTableRowMock } from '../../../models/list-performance/list-performance-table-row.model.mock';
 import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { ListPerformanceTableComponent } from './list-performance-table.component';
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
