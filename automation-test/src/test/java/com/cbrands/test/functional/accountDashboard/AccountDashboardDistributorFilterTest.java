@@ -43,46 +43,50 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   @Test(description = "Filter by Distributor", dataProvider = "distributorData")
   public void filterByDistributor(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName);
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName);
 
     Assert.assertEquals(
-      accountDashboardPage.getDistributorFieldText(),
+      accountDashboardPage.filterForm.getDistributorFieldText(),
       distributorName,
       "Failed to select Distributor"
     );
 
-    accountDashboardPage.clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+    accountDashboardPage
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear();
 
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsPanelLoaderToDisappear();
+    accountDashboardPage
+      .brandSnapshotPanel.drillIntoFirstRow()
+      .brandSnapshotPanel.waitForLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillUpLeftPanel().waitForBrandsPanelLoaderToDisappear();
+    accountDashboardPage
+      .brandSnapshotPanel.drillUp().brandSnapshotPanel.waitForLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
   }
 
   @Test(description = "Remove Distributor filter", dataProvider = "distributorData")
   public void removeDistributorFilter(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
-      .clickRemoveDistributorFilter();
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear()
+      .filterForm.clickRemoveDistributorFilterButton();
 
-    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
+    Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
 
     accountDashboardPage
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear();
     assertDefaultDistributorLabels();
   }
 
@@ -93,15 +97,15 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   )
   public void resetFilters(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
-      .clickResetFilters();
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear()
+      .filterForm.clickResetFilters();
 
-    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
+    Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
     assertDefaultDistributorLabels();
   }
 
@@ -119,12 +123,12 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       "Market Overview label failed to match expected default."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      accountDashboardPage.topBottomPanel.getSelectorContextLabel(),
       testUser.fullName().toUpperCase(),
       "The 'for' label for the right panel selector header failed to match expected default."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelHeader(),
+      accountDashboardPage.topBottomPanel.getHeaderTitle(),
       "DISTRIBUTORS",
       "Right panel header text failed to match expected default."
     );
@@ -137,12 +141,12 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       "Market Overview label failed to match applied Distributor filter."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      accountDashboardPage.topBottomPanel.getSelectorContextLabel(),
       distributorName,
       "The 'for' label for the right panel selector header failed to match applied Distributor filter."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelHeader(),
+      accountDashboardPage.topBottomPanel.getHeaderTitle(),
       shortenedDistributorName,
       "Right panel header text failed to match applied Distributor filter."
     );
