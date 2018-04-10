@@ -64,7 +64,6 @@ div
     tbody([ngClass]="getTableBodyClasses()")
       tr.entity-row.col-100-pct(
         *ngFor="let row of sortedTableData, let rowIndex = index",
-        [ngClass]="getEntityRowClasses(row)",
         list-performance-table-row,
         [rowData]="row",
         (click)="onRowClicked(rowType.data, rowIndex, row)",
