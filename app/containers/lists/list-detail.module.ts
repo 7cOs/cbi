@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   ],
   declarations: [
     ListDetailComponent,
-    ListsHeaderComponent
+    ListsHeaderComponent,
   ]
 })
 
