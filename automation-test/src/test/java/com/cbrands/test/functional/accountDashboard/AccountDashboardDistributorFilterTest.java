@@ -9,26 +9,20 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   private static TestUser testUser;
   private AccountDashboardPage accountDashboardPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Functional - AccountDashboard - Distributor Filter Test");
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
-  }
-
   @BeforeMethod
-  public void setUp() {
+  public void setUp(Method method) throws MalformedURLException {
     testUser = TestUser.ACTOR4;
 
+    final String testCaseName = method.getAnnotation(Test.class).description();
+    final String sauceTitle = String.format("Functional - AccountDashboard - Distributor Filter Test - %s", testCaseName);
+    this.startUpBrowser(sauceTitle);
     PageFactory.initElements(driver, LoginPage.class).loginAs(testUser);
 
     accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
@@ -38,6 +32,7 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
   @Test(description = "Filter by Distributor - default values")
@@ -48,64 +43,50 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   @Test(description = "Filter by Distributor", dataProvider = "distributorData")
   public void filterByDistributor(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName);
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName);
 
     Assert.assertEquals(
-      accountDashboardPage.getDistributorFieldText(),
+      accountDashboardPage.filterForm.getDistributorFieldText(),
       distributorName,
       "Failed to select Distributor"
     );
 
-    accountDashboardPage.clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+    accountDashboardPage
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear();
 
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillIntoFirstRowInLeftPanel().waitForBrandsPanelLoaderToDisappear();
+    accountDashboardPage
+      .brandSnapshotPanel.drillIntoFirstRow()
+      .brandSnapshotPanel.waitForLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
 
-    accountDashboardPage.drillUpLeftPanel().waitForBrandsPanelLoaderToDisappear();
+    accountDashboardPage
+      .brandSnapshotPanel.drillUp().brandSnapshotPanel.waitForLoaderToDisappear();
     assertDistributorLabelsMatch(distributorName, shortenedDistributorName);
-  }
-
-  private void assertDistributorLabelsMatch(String distributorName, String shortenedDistributorName) {
-    Assert.assertEquals(
-      accountDashboardPage.getOverviewMarketLabel(),
-      distributorName,
-      "Market Overview label failed to match applied Distributor filter."
-    );
-    Assert.assertEquals(
-      accountDashboardPage.getRightPanelSelectorContextLabel(),
-      distributorName,
-      "The 'for' label for the right panel selector header failed to match applied Distributor filter."
-    );
-    Assert.assertEquals(
-      accountDashboardPage.getRightPanelHeader(),
-      shortenedDistributorName,
-      "Right panel header text failed to match applied Distributor filter."
-    );
   }
 
   @Test(description = "Remove Distributor filter", dataProvider = "distributorData")
   public void removeDistributorFilter(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
-      .clickRemoveDistributorFilter();
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear()
+      .filterForm.clickRemoveDistributorFilterButton();
 
-    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
+    Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Clearing Distributor field failed.");
 
     accountDashboardPage
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear();
     assertDefaultDistributorLabels();
   }
 
@@ -116,16 +97,23 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
   )
   public void resetFilters(String distributorName, String shortenedDistributorName) {
     accountDashboardPage
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
-      .clickResetFilters();
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear()
+      .filterForm.clickResetFilters();
 
-    Assert.assertTrue(accountDashboardPage.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
+    Assert.assertTrue(accountDashboardPage.filterForm.getDistributorFieldText().isEmpty(), "Distributor field failed to clear.");
     assertDefaultDistributorLabels();
+  }
+
+  @DataProvider
+  public static Object[][] distributorData() {
+    return new Object[][]{
+      {"HEALY WHOLESALE CO INC - NC", "HEALY WHOLESALE C..."}
+    };
   }
 
   private void assertDefaultDistributorLabels() {
@@ -135,22 +123,33 @@ public class AccountDashboardDistributorFilterTest extends BaseTestCase {
       "Market Overview label failed to match expected default."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelSelectorContextLabel(),
+      accountDashboardPage.topBottomPanel.getSelectorContextLabel(),
       testUser.fullName().toUpperCase(),
       "The 'for' label for the right panel selector header failed to match expected default."
     );
     Assert.assertEquals(
-      accountDashboardPage.getRightPanelHeader(),
+      accountDashboardPage.topBottomPanel.getHeaderTitle(),
       "DISTRIBUTORS",
       "Right panel header text failed to match expected default."
     );
   }
 
-  @DataProvider
-  public static Object[][] distributorData() {
-    return new Object[][]{
-      {"HEALY WHOLESALE CO INC - NC", "HEALY WHOLESALE C..."}
-    };
+  private void assertDistributorLabelsMatch(String distributorName, String shortenedDistributorName) {
+    Assert.assertEquals(
+      accountDashboardPage.getOverviewMarketLabel(),
+      distributorName,
+      "Market Overview label failed to match applied Distributor filter."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.topBottomPanel.getSelectorContextLabel(),
+      distributorName,
+      "The 'for' label for the right panel selector header failed to match applied Distributor filter."
+    );
+    Assert.assertEquals(
+      accountDashboardPage.topBottomPanel.getHeaderTitle(),
+      shortenedDistributorName,
+      "Right panel header text failed to match applied Distributor filter."
+    );
   }
 
 }

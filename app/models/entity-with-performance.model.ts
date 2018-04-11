@@ -1,5 +1,6 @@
 import { EntityType } from '../enums/entity-responsibilities.enum';
-import { Performance, PerformanceDTO } from './performance.model';
+import { Performance } from './performance.model';
+import { PerformanceDTO } from './performance-dto.model';
 
 export interface EntityWithPerformanceDTO {
   id: string;

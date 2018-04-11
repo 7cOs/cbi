@@ -67,17 +67,6 @@ div.modal.target-list-modal
           label="{{tld.listID}}") Yes, Leave
       a.hide-row(ng-click="tld.removeFooterToast(); tld.leave = false")
   div.modal-footer.clearfix(ng-if="tld.editable" ng-class="{'toasted': tld.showToast}")
-    button.link.align-left(ng-click="tld.footerToast('archive')") Archive List
-    button.link.align-right(ng-click="tld.footerToast('delete')"
+    button.link.align-left(ng-click="tld.showArchiveModal();tld.closeModal(true);") Archive List
+    button.link.align-right(ng-click="tld.showDeleteModal();tld.closeModal(true);"
                             ng-disabled="tld.targetListService.model.currentList.collaborators.length > 1 || tld.pendingShares.length > 0") Delete List
-    .toast(ng-hide="!tld.showToast")
-      p Are you sure you want to <span ng-if="tld.deleting">delete</span><span ng-if="tld.archiving">archive</span> this target list?
-      p.bold.link(ng-if="tld.deleting && !tld.confirmToast")
-        a(ng-click="tld.pendingCheck()") Yes, Delete
-      p.bold.link(ng-if="tld.archiving && !tld.confirmToast")
-        a(ng-click="tld.updateList('archive')") Yes, Archive
-      a.hide-row(ng-click="tld.removeFooterToast()")
-  div.success(ng-if="tld.confirmToast")
-    h4 Success!
-    p You have deleted this target list. You will be redirected to the Target List Library momentarily.
-    img(src="../../assets/img/icons/delete-target-list.svg")

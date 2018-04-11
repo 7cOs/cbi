@@ -1,17 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { EntityDTO } from '../models/entity-dto.model';
-import { EntityType } from '../enums/entity-responsibilities.enum';
-import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { getEntityDTOMock } from '../models/entity-dto.model.mock';
-import { getEntityPeopleResponsibilitiesMock,
-         getHierarchyEntityDTO,
-         mockHierarchyEntityDTOCollection } from '../models/hierarchy-entity.model.mock';
+import { EntityDTO } from '../../models/entity-dto.model';
+import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntitySubAccountDTO } from '../../models/entity-subaccount-dto.model';
+import { getEntityDTOMock } from '../../models/entity-dto.model.mock';
+import { getHierarchyEntityDTO, mockHierarchyEntityDTOCollection } from '../../models/hierarchy-entity.model.mock';
 import { getEntitySubAccountDTOMock,
-         getEntitySubAccountMultiPremiseTypesDTOMock } from '../models/entity-subaccount-dto.model.mock';
-import { GroupedEntities } from '../models/grouped-entities.model';
-import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
-import { PremiseTypeValue } from '../enums/premise-type.enum';
+         getEntitySubAccountMultiPremiseTypesDTOMock } from '../../models/entity-subaccount-dto.model.mock';
+import { GroupedEntities } from '../../models/grouped-entities.model';
+import { HierarchyEntity, HierarchyEntityDTO } from '../../models/hierarchy-entity.model';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 
 describe('Service: ResponsibilitiesTransformerService', () => {
@@ -72,35 +70,6 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       const transformedgroupedEntities =
         responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockHierarchyEntityDTOCollection);
       expect(transformedgroupedEntities).toEqual(expectedgroupedEntities);
-    });
-  });
-
-  describe('groupPeopleEntitiesByRole', () => {
-    it('should return GroupedEntities grouped by entity description given a HierarchyEntity collection', () => {
-      const group1Mock = chance.string();
-      const group2Mock = chance.string();
-      const group3Mock = chance.string();
-      const hierarchyEntitiesMock: HierarchyEntity[] = [
-        getEntityPeopleResponsibilitiesMock(),
-        getEntityPeopleResponsibilitiesMock(),
-        getEntityPeopleResponsibilitiesMock(),
-        getEntityPeopleResponsibilitiesMock()
-      ];
-
-      hierarchyEntitiesMock[0].description = group1Mock;
-      hierarchyEntitiesMock[1].description = group2Mock;
-      hierarchyEntitiesMock[2].description = group3Mock;
-      hierarchyEntitiesMock[3].description = group1Mock;
-
-      const expectedGroupedEntities: GroupedEntities = {
-        [group1Mock]: [ hierarchyEntitiesMock[0], hierarchyEntitiesMock[3] ],
-        [group2Mock]: [ hierarchyEntitiesMock[1] ],
-        [group3Mock]: [ hierarchyEntitiesMock[2] ]
-      };
-
-      const actualGroupedEntities: GroupedEntities = responsibilitiesTransformerService.groupPeopleEntitiesByRole(hierarchyEntitiesMock);
-
-      expect(actualGroupedEntities).toEqual(expectedGroupedEntities);
     });
   });
 

@@ -4,7 +4,6 @@ import { AccountDashboardStateParameters } from '../models/account-dashboard-sta
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityType } from '../enums/entity-responsibilities.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
-import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ProductMetricHeaderProductType, SalesHierarchyHeaderEntityType } from '../enums/team-performance-table-header.enum';
@@ -78,9 +77,10 @@ export class MyPerformanceService {
   public accountDashboardStateParameters(
     insideAlternateHierarchy: boolean,
     insideExceptionHierarchy: boolean,
-    filter: MyPerformanceFilterState,
+    dateRangeCode: DateRangeTimePeriodValue,
+    metricType: MetricTypeValue,
     row: MyPerformanceTableRow,
-    premiseType?: PremiseTypeValue): AccountDashboardStateParameters {
+    premiseType: PremiseTypeValue): AccountDashboardStateParameters {
 
     let accountDashboardStateParams: AccountDashboardStateParameters = {myaccountsonly: !insideAlternateHierarchy};
     if (row.metadata.entityType === EntityType.Distributor) {
@@ -89,20 +89,20 @@ export class MyPerformanceService {
       }
       accountDashboardStateParams.distributorname = row.descriptionRow0;
       accountDashboardStateParams.distributorid = row.metadata.positionId;
-      accountDashboardStateParams.premisetype = PremiseTypeValue[filter.premiseType];
+      accountDashboardStateParams.premisetype = PremiseTypeValue[premiseType];
     } else if (row.metadata.entityType === EntityType.SubAccount) {
       accountDashboardStateParams.subaccountid = row.metadata.positionId;
       accountDashboardStateParams.subaccountname = row.descriptionRow0;
       accountDashboardStateParams.premisetype = PremiseTypeValue[premiseType];
     }
 
-    switch (filter.metricType) {
+    switch (metricType) {
       case MetricTypeValue.Depletions:
-          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
+          accountDashboardStateParams.depletiontimeperiod = DateRangeTimePeriodValue[dateRangeCode];
           break;
       case MetricTypeValue.Distribution:
       case MetricTypeValue.Velocity:
-          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriodValue[filter.dateRangeCode];
+          accountDashboardStateParams.distributiontimeperiod = DateRangeTimePeriodValue[dateRangeCode];
           break;
       default:
         return {};

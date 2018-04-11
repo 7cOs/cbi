@@ -1,7 +1,9 @@
 'use strict';
 
+const CompassAlertModalEvents = require('../../enums/compass-alert-modal-strings.enum').CompassAlertModalEvent;
+
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService, analyticsService, title, compassModalService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -28,7 +30,19 @@ module.exports = /*  @ngInject */
     vm.selectedCollaboratorId = '';
     vm.stayOnPage = true;
     vm.targetListAuthor = '';
-
+    vm.archiveModalStringInputs = {
+      'title': 'Are you sure?',
+      'body': 'By archiving this list, only limited set functionality will remain available.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Archive'
+    };
+    vm.deleteModalStringInputs =  {
+      'title': 'Are you sure?',
+      'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Delete'
+    };
+    vm.compassAlertModalAccept = CompassAlertModalEvents.Accept;
     // Services
     vm.targetListService = targetListService;
     vm.userService = userService;
@@ -58,6 +72,8 @@ module.exports = /*  @ngInject */
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
     vm.sendGoogleAnalytics = sendGoogleAnalytics;
+    vm.showArchiveModal = showArchiveModal;
+    vm.showDeleteModal = showDeleteModal;
 
     init();
 
@@ -125,12 +141,13 @@ module.exports = /*  @ngInject */
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
         vm.confirmToast = true;
         removeFooterToast();
+        toastService.showToast('deleted');
         sendGoogleAnalytics('Delete');
 
         $timeout(function() {
           vm.confirmToast = false;
           navigateToTL();
-        }, 2000);
+        }, 1000);
 
         // TO DO
         // userService.model.targetLists.splice(,1)
@@ -255,7 +272,6 @@ module.exports = /*  @ngInject */
           if (vm.pendingRemovals.length) {
             vm.removeCollaborator(vm.pendingRemovals);
           }
-
           vm.removeFooterToast();
           vm.sendGoogleAnalytics('Archive');
           vm.closeModal();
@@ -312,6 +328,24 @@ module.exports = /*  @ngInject */
         event + ' Target List',
         vm.listID
       );
+    }
+
+    function showArchiveModal() {
+      let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.archiveModalStringInputs);
+      compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+          if (value === vm.compassAlertModalAccept) {
+            updateList('archive');
+          }
+        });
+    }
+
+    function showDeleteModal() {
+      let compassModalOverlayRef = compassModalService.showAlertModalDialog(vm.deleteModalStringInputs);
+      compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+          if (value === vm.compassAlertModalAccept) {
+            pendingCheck();
+          }
+        });
     }
 
     // **************
