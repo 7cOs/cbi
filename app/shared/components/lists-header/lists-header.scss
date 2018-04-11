@@ -30,6 +30,27 @@
   .accent-blue {
     color: $dark-blue;
   }
+
+  &.archived-hero {
+    background: transparent;
+
+    .link,
+    .chevron-left-small {
+      color: $blue;
+    }
+
+    h1, .accent-blue, span, p {
+      color: $gray-2;
+    }
+
+    h1 {
+      padding-top: 66px;
+    }
+
+    .red-owner {
+      color: $red;
+    }
+  }
 }
 
 .opportunity-info {

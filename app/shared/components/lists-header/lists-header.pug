@@ -1,17 +1,17 @@
-div.header-container
+div.header-container([ngClass]="{'archived-hero': archived}")
   div(row)
     div(column="2")
       span.chevron-left-small
-      span.description.link Lists
+      span.description.link((click) = "listsLinkClicked.emit()") Lists
     div(column="10").align-right
       div
-        button.btn-action Manage
+        button.btn-action((click)= "manageButtonClicked.emit()", *ngIf="!archived") Manage
 
   div(row)
     div(column="12")
       h1.list-title some name
-      label.description.bold.accent-blue You are the owner
-      label.description.bold.accent-blue <span>JOHN UTTER</span> is the owner
+      label(*ngIf ="tld.targetListAuthor === 'current user'").description.bold.accent-blue You are the owner
+      label(*ngIf ="tld.targetListAuthor !== 'current user'").description.bold.accent-blue <span [ngClass]= "{'red-owner': archived}">JOHN UTTER</span> is the owner
 
   div(row)
     div(column="5")
@@ -21,7 +21,9 @@ div.header-container
     div(column="6 +1").opportunity-info
       div
         span 455
-        label.description.accent-blue Closed<br />Opportunities
+        label.description.accent-blue Closed
+          label.description.accent-blue Opportunities
       div
         span 564
-        label.description.accent-blue Total<br />Opportunities
+        label.description.accent-blue Total
+          label.description.accent-blue Opportunities

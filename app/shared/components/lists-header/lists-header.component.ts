@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, EventEmitter, OnChanges, Output, SimpleChanges, OnInit } from '@angular/core';
 
 @Component({
   selector: 'lists-header',
@@ -6,4 +6,7 @@ import { Component } from '@angular/core';
   styles: [ require('./lists-header.scss') ]
 })
 export class ListsHeaderComponent {
+  @Output() listsLinkClicked = new EventEmitter<any>();
+  @Output() manageButtonClicked = new EventEmitter<any>();
+  @Input() summaryData: ListsSummary;
 }
