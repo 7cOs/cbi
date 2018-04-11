@@ -11,5 +11,5 @@ export interface ListPerformanceTableRow {
   metricColumn5: number;
   depletionDate: string;
   performanceError?: boolean;
-  checked?: boolean;
+  checked: boolean;
 }

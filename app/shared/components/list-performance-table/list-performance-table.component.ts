@@ -72,16 +72,16 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
    this.setCheckboxStates(numCheckedFalse, numCheckedTrue);
   }
 
-  public setCheckboxStates(checkedFalse: number, checkedTrue: number) {
-    if (this.isSelectAllChecked === false && checkedFalse !== this.sortedTableData.length) {
+  public setCheckboxStates(checkedFalseCount: number, checkedTrueCount: number) {
+    if (this.isSelectAllChecked === false && checkedFalseCount !== this.sortedTableData.length) {
       this.isSelectAllChecked = true;
       this.isIndeterminateChecked = false;
     }
-    if (this.isSelectAllChecked === true && checkedTrue !== this.sortedTableData.length) {
+    if (this.isSelectAllChecked === true && checkedTrueCount !== this.sortedTableData.length) {
       this.isSelectAllChecked = false;
       this.isIndeterminateChecked = true;
     }
-    if ( this.isIndeterminateChecked === true && checkedFalse === this.sortedTableData.length ) {
+    if ( this.isIndeterminateChecked === true && checkedFalseCount === this.sortedTableData.length ) {
       this.isIndeterminateChecked = false;
       this.isSelectAllChecked = false;
     }
