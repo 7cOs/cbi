@@ -1,29 +1,29 @@
-div.header-container([ngClass]="{'archived-hero': archived}")
+div.header-container([ngClass]="{'archived-hero': headerData.archived}")
   div(row)
     div(column="2")
       span.chevron-left-small
       span.description.link((click) = "listsLinkClicked.emit()") Lists
     div(column="10").align-right
       div
-        button.btn-action((click)= "manageButtonClicked.emit()", *ngIf="!archived") Manage
+        button.btn-action((click)= "manageButtonClicked.emit()", *ngIf="!headerData.archived") Manage
 
   div(row)
     div(column="12")
-      h1.list-title some name
-      label(*ngIf ="tld.targetListAuthor === 'current user'").description.bold.accent-blue You are the owner
-      label(*ngIf ="tld.targetListAuthor !== 'current user'").description.bold.accent-blue <span [ngClass]= "{'red-owner': archived}">JOHN UTTER</span> is the owner
+      h1.list-title {{headerData.name}}
+      label(*ngIf ="currentuser").description.bold.accent-blue You are the owner
+      label(*ngIf ="!currentuser").description.bold.accent-blue <span [ngClass]= "{'red-owner': archived}">JOHN UTTER</span> is the owner
 
   div(row)
     div(column="5")
-      p some description
+      p {{headerData.description}}
 
 
     div(column="6 +1").opportunity-info
-      div
-        span 455
+      div(*ngIf ="headerData.closedOpportunities")
+        span {{headerData.closedOpportunities}}
         label.description.accent-blue Closed
           label.description.accent-blue Opportunities
-      div
-        span 564
+      div(*ngIf ="headerData.totalOpportunities")
+        span {{headerData.totalOpportunities}}
         label.description.accent-blue Total
           label.description.accent-blue Opportunities

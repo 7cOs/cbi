@@ -8,6 +8,7 @@ import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { ActionStatus } from '../../enums/action-status.enum';
 
 @Component({
   selector: 'list-detail',
@@ -34,12 +35,24 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
-          this.storeList = listDetail.listStores.stores;
+          if (listDetail.listStores.storeStatus === ActionStatus.Fetched) {
+            this.storeList = listDetail.listStores.stores;
+          }
+        if (listDetail.listSummary.summaryStatus === ActionStatus.Fetched) {
           this.listSummary = listDetail.listSummary.summaryData;
+        }
       });
   }
 
   ngOnDestroy() {
     this.listDetailSubscription.unsubscribe();
+  }
+
+  public handleManageButtonClick() {
+    console.log('manage button click');
+  }
+
+  public handleListsLinkClick() {
+    console.log('list link clicked');
   }
 }
