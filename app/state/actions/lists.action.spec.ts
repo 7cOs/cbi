@@ -3,6 +3,7 @@ import * as ListsActions from './lists.action';
 
 import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
 import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
+import { ListsActionTypes } from '../../enums/list-action-type.enum';
 
 const chance = new Chance();
 
@@ -22,7 +23,7 @@ describe('Lists Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(ListsActions.FETCH_STORE_DETAILS).toBe('[StoreDetails] FETCH_STORE_DETAILS');
+      expect(ListsActions.FETCH_STORE_DETAILS).toBe(ListsActionTypes.FETCH_STORE_DETAILS);
       expect(action.type).toBe(ListsActions.FETCH_STORE_DETAILS);
     });
 
@@ -43,7 +44,7 @@ describe('Lists Actions', () => {
 
     it('should have the correct type', () => {
       expect(ListsActions.FETCH_STORE_DETAILS_SUCCESS)
-        .toBe('[StoreDetails] FETCH_STORE_DETAILS_SUCCESS');
+        .toBe(ListsActionTypes.FETCH_STORE_DETAILS_SUCCESS);
       expect(action.type).toBe(ListsActions.FETCH_STORE_DETAILS_SUCCESS);
     });
 
@@ -62,7 +63,7 @@ describe('Lists Actions', () => {
 
     it('should have the correct type', () => {
       expect(ListsActions.FETCH_STORE_DETAILS_FAILURE)
-        .toBe('[StoreDetails] FETCH_STORE_DETAILS_FAILURE');
+        .toBe(ListsActionTypes.FETCH_STORE_DETAILS_FAILURE);
       expect(action.type).toBe(ListsActions.FETCH_STORE_DETAILS_FAILURE);
     });
 
@@ -85,7 +86,7 @@ describe('Lists Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(ListsActions.FETCH_HEADER_DETAILS).toBe('[StoreDetails] FETCH_HEADER_DETAILS');
+      expect(ListsActions.FETCH_HEADER_DETAILS).toBe(ListsActionTypes.FETCH_HEADER_DETAILS);
       expect(action.type).toBe(ListsActions.FETCH_HEADER_DETAILS);
     });
 
@@ -106,7 +107,7 @@ describe('Lists Actions', () => {
 
     it('should have the correct type', () => {
       expect(ListsActions.FETCH_HEADER_DETAILS_SUCCESS)
-        .toBe('[StoreDetails] FETCH_HEADER_DETAILS_SUCCESS');
+        .toBe(ListsActionTypes.FETCH_HEADER_DETAILS_SUCCESS);
       expect(action.type).toBe(ListsActions.FETCH_HEADER_DETAILS_SUCCESS);
     });
 
@@ -125,7 +126,7 @@ describe('Lists Actions', () => {
 
     it('should have the correct type', () => {
       expect(ListsActions.FETCH_HEADER_DETAILS_FAILURE)
-        .toBe('[StoreDetails] FETCH_HEADER_DETAILS_FAILURE');
+        .toBe(ListsActionTypes.FETCH_HEADER_DETAILS_FAILURE);
       expect(action.type).toBe(ListsActions.FETCH_HEADER_DETAILS_FAILURE);
     });
 

@@ -21,14 +21,14 @@ describe('ListDetailComponent', () => {
       summaryStatus: ActionStatus.NotFetched,
       summaryData: {
         archived: false,
-        description: '',
-        id: Number(''),
-        name: '',
-        closedOpportunities: Number(''),
-        totalOpportunities: Number(''),
-        numberOfAccounts: Number(''),
-        ownerFirstName: '',
-        ownerLastName: ''
+        description: null,
+        id: null,
+        name: null,
+        closedOpportunities: null,
+        totalOpportunities: null,
+        numberOfAccounts: null,
+        ownerFirstName: null,
+        ownerLastName: null
       }
     },
     listStores: {
