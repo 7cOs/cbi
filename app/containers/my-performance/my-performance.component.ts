@@ -378,7 +378,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.drillStatus = DrillStatus.Up;
     this.isOpportunityTableExtended = false;
-    this.handlePreviousStateVersion(clickedState, stepsBack);
+    this.handlePreviousStateVersion(clickedState, stepsBack, clickedIndex);
   }
 
   public handleDismissibleRowXClicked(): void {
@@ -855,7 +855,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     return status === ActionStatus.Error;
   }
 
-  private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
+  private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number, clickedIndx?: number): void {
     this.selectedSubaccountCode = null;
     this.selectedDistributorCode = null;
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
@@ -863,7 +863,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     if (!isEqual(this.filterState, previousState.filter)
       || this.selectedBrandCode !== previousState.selectedBrandCode
-      || this.selectedSkuPackageCode !== previousState.selectedSkuPackageCode) {
+      || this.selectedSkuPackageCode !== previousState.selectedSkuPackageCode
+      || clickedIndx === 0
+      || clickedIndx === 1) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: previousState.responsibilities.positionId,
         groupedEntities: previousState.responsibilities.groupedEntities,
@@ -878,7 +880,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         accountPositionId: previousState.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
       }));
-    }
+     }
   }
 
   private setSelectedDateRangeValues(): void {
