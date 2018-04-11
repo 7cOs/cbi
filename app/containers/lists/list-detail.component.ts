@@ -10,7 +10,7 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 
 export class ListDetailComponent implements OnInit, OnDestroy {
 
-  private actionButtonType: any = ActionButtonType;
+  public actionButtonType: any = ActionButtonType;
   constructor(
     private titleService: Title,
     @Inject('$state') private $state: any,
