@@ -5,9 +5,9 @@ import { Title } from '@angular/platform-browser';
 
 import { AppState } from '../../state/reducers/root.reducer';
 import * as ListsActions from '../../state/actions//lists.action';
-import { ListsSummary } from '../../models/lists-header.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
-import { StoreDetails } from '../../models/lists-store.model';
+import { StoreDetails } from '../../models/lists/lists-store.model';
 
 @Component({
   selector: 'list-detail',

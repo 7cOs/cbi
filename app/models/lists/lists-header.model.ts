@@ -1,7 +1,7 @@
 export interface ListsSummary {
   archived: boolean;
   description: string;
-  id: number;
+  id: string;
   name: string;
   closedOpportunities: number;
   totalOpportunities: number;

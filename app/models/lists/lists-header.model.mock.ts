@@ -1,12 +1,12 @@
 import * as Chance from 'chance';
-import { ListsSummary } from '../models/lists-header.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 
 let chance = new Chance();
 
 export function getListsSummaryMock(): ListsSummary {
   return {
     description: chance.string(),
-    id: chance.floating(),
+    id: chance.string(),
     archived: chance.bool(),
     closedOpportunities: chance.floating(),
     totalOpportunities: chance.floating(),

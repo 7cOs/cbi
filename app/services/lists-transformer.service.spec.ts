@@ -1,12 +1,12 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { getListsSummaryDTOMock } from '../models/lists-header-dto.model.mock';
-import { getStoreListsDTOMock } from '../models/lists-store-dto.model.mock';
-import { ListsSummary } from '../models/lists-header.model';
-import { ListsSummaryDTO } from '../models/lists-header-dto.model';
+import { getListsSummaryDTOMock } from '../models/lists/lists-header-dto.model.mock';
+import { getStoreListsDTOMock } from '../models/lists/lists-store-dto.model.mock';
+import { ListsSummary } from '../models/lists/lists-header.model';
+import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { ListsTransformerService } from './lists-transformer.service';
-import { ListStoreDTO } from '../models/lists-store-dto.model';
-import { StoreDetails } from '../models/lists-store.model';
+import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
+import { StoreDetails } from '../models/lists/lists-store.model';
 
 describe('Service: ListsTransformerService', () => {
   let listsTransformerService: ListsTransformerService;

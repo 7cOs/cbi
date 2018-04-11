@@ -5,11 +5,11 @@ import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
 
+import { AppState } from '../../state/reducers/root.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
 import { ListsState } from '../../state/reducers/lists.reducer';
-import { AppState } from '../../state/reducers/root.reducer';
 
 const chance = new Chance();
 

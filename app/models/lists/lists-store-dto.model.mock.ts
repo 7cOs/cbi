@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 import { ListStoreDTO } from './lists-store-dto.model';
-import { generateRandomSizedArray } from './util.model';
+import { generateRandomSizedArray } from '../util.model';
 
 let chance = new Chance();
 

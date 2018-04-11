@@ -7,7 +7,7 @@ export interface ListsSummaryDTO {
   collaborators: Array<CollaboratorOwnerDetails>;
   createdOn: string;
   description: string;
-  id: number;
+  id: string;
   numberOfClosedOpportunities: number;
   totalOpportunities: number;
   name: string;

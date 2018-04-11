@@ -5,15 +5,15 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/lists.action';
-import { getStoreListsMock } from '../../models/lists-store.model.mock';
+import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
 import * as ListActions from '../../state/actions/lists.action';
 import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { ListStoreDTO } from '../../models/lists-store-dto.model';
-import { ListsSummaryDTO } from '../../models/lists-header-dto.model';
-import { ListsSummary } from '../../models/lists-header.model';
-import { StoreDetails } from '../../models/lists-store.model';
+import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
+import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
+import { StoreDetails } from '../../models/lists/lists-store.model';
 
 const chance = new Chance();
 

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { ListsSummary } from '../../models/lists-header.model';
-import { StoreDetails } from '../../models/lists-store.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
+import { StoreDetails } from '../../models/lists/lists-store.model';
 
 export interface FetchStoreDetailsPayload {
   listId: string;

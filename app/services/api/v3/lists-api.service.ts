@@ -2,8 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ListStoreDTO } from '../../../models/lists-store-dto.model';
-import { ListsSummaryDTO } from '../../../models/lists-header-dto.model';
+import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
+import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 
 @Injectable()
 export class ListsApiService {

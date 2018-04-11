@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 import { StoreDetails } from './lists-store.model';
-import { generateRandomSizedArray } from './util.model';
+import { generateRandomSizedArray } from '../util.model';
 
 let chance = new Chance();
 

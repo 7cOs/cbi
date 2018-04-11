@@ -1,7 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../actions/lists.action';
-import { ListsSummary } from '../../models/lists-header.model';
-import { StoreDetails } from '../../models/lists-store.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
+import { StoreDetails } from '../../models/lists/lists-store.model';
 
 interface ListSummaryState {
   summaryStatus: ActionStatus;
@@ -23,14 +23,14 @@ export const initialState: ListsState = {
       summaryStatus: ActionStatus.NotFetched,
       summaryData: {
         archived: false,
-        description: '',
-        id: Number(''),
-        name: '',
-        closedOpportunities: Number(''),
-        totalOpportunities: Number(''),
-        numberOfAccounts: Number(''),
-        ownerFirstName: '',
-        ownerLastName: ''
+        description: null,
+        id: null,
+        name: null,
+        closedOpportunities: null,
+        totalOpportunities: null,
+        numberOfAccounts: null,
+        ownerFirstName: null,
+        ownerLastName: null
       }
     },
     listStores: {
@@ -82,7 +82,7 @@ export function listsReducer(
       return {
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
-          summaryStatus: ActionStatus.Fetching,
+          summaryStatus: ActionStatus.Fetched,
           summaryData: action.payload
         })
       };

@@ -7,9 +7,11 @@ import 'rxjs/add/operator/switchMap';
 
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import * as ListActions from '../../state/actions/lists.action';
-import { ListStoreDTO } from '../../models/lists-store-dto.model';
+import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
-import { ListsSummaryDTO } from '../../models/lists-header-dto.model';
+import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
+import { StoreDetails } from '../../models/lists/lists-store.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 
 @Injectable()
 export class ListsEffects {
@@ -26,7 +28,7 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchStoreDetails) => {
         return this.listsApiService.getStoreListDetails(action.payload.listId)
           .map((response: Array<ListStoreDTO>) => {
-            const transformedData = this.listsTransformerService.formatStoresData(response);
+            const transformedData: Array<StoreDetails> = this.listsTransformerService.formatStoresData(response);
             return new ListActions.FetchStoreDetailsSuccess(transformedData);
           })
           .catch((error: Error) => Observable.of(new ListActions.FetchStoreDetailsFailure(error)));
@@ -49,7 +51,7 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchHeaderDetails) => {
         return this.listsApiService.getListSummary(action.payload.listId)
           .map((response: ListsSummaryDTO) => {
-            const transformedData = this.listsTransformerService.formatListsSummaryData(response);
+            const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
             return new ListActions.FetchHeaderDetailsSuccess(transformedData);
           })
           .catch((error: Error) => Observable.of(new ListActions.FetchHeaderDetailsFailure(error)));

@@ -1,8 +1,8 @@
 import * as Chance from 'chance';
 import * as ListsActions from './lists.action';
 
-import { getStoreListsMock } from '../../models/lists-store.model.mock';
-import { getListsSummaryMock } from '../../models/lists-header.model.mock';
+import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
+import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
 
 const chance = new Chance();
 
