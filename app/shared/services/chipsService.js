@@ -369,6 +369,13 @@ module.exports = /*  @ngInject */
           case 'subaccounts':
           case 'account':
           case 'distributor':
+            if (result.ids) result.id = result.ids.join('|');
+            addAutocompleteChip(displayName, filter, null, result.id);
+            if (service.model.indexOf(result.id) === -1) pushUniqueValue(result, model);
+            filtersService.model.chain = '';
+            filtersService.model.store = '';
+            filtersService.model.filtersValidCount++;
+            break;
           case 'store':
             if (result.ids) result.id = result.ids.join('|');
             addAutocompleteChip(displayName, filter, null, result.id);

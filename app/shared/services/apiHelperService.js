@@ -241,7 +241,6 @@ module.exports = /*  @ngInject */
             for (var k = 0; k < obj[key2].length; k++) {
               if (obj[key2][k] && (key2 === 'opportunityType' && obj[key2][k].toUpperCase() === 'ALL TYPES') || key2 === 'priorityPackage') break;
               if (k === 0) queryParams += key2 + ':';
-
               // transform opp types to db format
               if (key2 === 'opportunityType') {
                 if (obj[key2][k].toUpperCase() === 'CUSTOM') {
@@ -270,13 +269,18 @@ module.exports = /*  @ngInject */
                 for (var l = 0; l < tradeChannelValue.length; l++) {
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
+              } else if (key2 === 'distributor') {
+                queryParams += obj[key2][k].id;
               } else {
                 queryParams += obj[key2][k];
               }
 
               // add separator if it's not last item
-              if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
-
+              if (key2 === 'distributor') {
+                if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
+              } else {
+                if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
+              }
               somethingAdded = true;
             }
           }
