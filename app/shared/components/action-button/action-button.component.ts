@@ -10,7 +10,6 @@ export class ActionButtonComponent {
     @Input() actionLabel: string;
     @Input() isDisabled: boolean;
     @Output() onActionButtonClicked: EventEmitter<{actionType: string}> = new EventEmitter<{actionType: string}>();
-    constructor() {}
 
     onButtonClicked(): void {
         this.onActionButtonClicked.emit({actionType: this.actionLabel});

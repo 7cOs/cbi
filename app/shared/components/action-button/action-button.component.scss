@@ -1,1 +1,31 @@
 @import '../../../assets/styles/base/variables';
+
+.btn-action {
+  background-color: $blue;
+  border: none;
+  border-bottom: 4px solid $dark-blue-2;
+  box-shadow: none;
+  color: $white;
+  font-family: $work-sans;
+  font-size: 1em;
+  font-weight: $semibold;
+  height: 40px;
+  padding: 15px 5px 30px;
+  text-transform: none;
+  width: 180px;
+
+  &[disabled],
+  &.disabled,
+  &[disabled]:hover,
+  &.disabled:hover {
+    color: $gray-8;
+    background-color: $gray-10;
+    border-bottom: 4px solid $gray-11;
+  }
+
+  &:hover {
+    background-color: $dark-blue-4;
+    border-bottom: 4px solid $dark-blue-5;
+    color: $white;
+  }
+}

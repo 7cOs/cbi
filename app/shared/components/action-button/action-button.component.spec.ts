@@ -1,10 +1,13 @@
 import { ComponentFixture, fakeAsync, TestBed,  tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActionButtonComponent } from './action-button.component';
+import { getActionButtonTypeValueMock } from '../../../enums/action-button-type.enum.mock';
+import { ActionButtonType } from '../../../enums/action-button-type.enum';
 
 describe('ActionButtonComponent', () => {
     let fixture: ComponentFixture<ActionButtonComponent>;
     let componentInstance: ActionButtonComponent;
+    const actionButtonTypeMock = ActionButtonType[getActionButtonTypeValueMock()];
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -24,12 +27,12 @@ describe('ActionButtonComponent', () => {
     }));
 
     it('Should emit onActionButtonClicked event when button is clicked', fakeAsync(() => {
-        componentInstance.actionLabel = 'Add To List';
+        componentInstance.actionLabel = actionButtonTypeMock;
         spyOn(componentInstance.onActionButtonClicked, 'emit');
         componentInstance.onButtonClicked();
         tick(1);
         expect(componentInstance.onActionButtonClicked.emit).toHaveBeenCalled();
-        expect(componentInstance.onActionButtonClicked.emit).toHaveBeenCalledWith({actionType: 'Add To List'});
+        expect(componentInstance.onActionButtonClicked.emit).toHaveBeenCalledWith({actionType: actionButtonTypeMock});
     }));
 
     it('Should make the button disabled when passed from parent', () => {

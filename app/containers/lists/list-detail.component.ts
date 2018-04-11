@@ -1,5 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { ActionButtonType } from '../../enums/action-button-type.enum';
 
 @Component({
   selector: 'list-detail',
@@ -9,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 
 export class ListDetailComponent implements OnInit, OnDestroy {
 
+  private actionButtonType: any = ActionButtonType;
   constructor(
     private titleService: Title,
     @Inject('$state') private $state: any,
