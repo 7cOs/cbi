@@ -30,8 +30,7 @@ public class NotesTest extends BaseTestCase {
     PageFactory.initElements(driver, AccountDashboardPage.class).goToPage();
 
     notesModal = PageFactory.initElements(driver, AccountDashboardPage.class)
-      .filterForStore("Taco Joint", "IL", "Ontario")
-      .clickApplyFilters()
+      .applyFiltersForStore("Taco Joint", "IL", "Ontario")
       .clickNotesButton()
       .waitForLoaderToDisappear();
   }
