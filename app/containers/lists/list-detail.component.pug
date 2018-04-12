@@ -1,6 +1,9 @@
-h1 List Stuff Goes Here!
 compass-tabs
   compass-tab([tabTitle]="'Stores'", [active]='true')
-    span stores placeholder
+    list-performance-table(
+      [totalRow]="totalRow",
+      [tableHeaderRow]="tableHeader",
+      [tableData]="tableData"
+    )
   compass-tab([tabTitle]="'Opportunities'")
     span opportunities placeholder 

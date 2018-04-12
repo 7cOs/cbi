@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { BeerLoaderComponent } from './components/beer-loader/beer-loader.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule }   from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +17,7 @@ import { CompassTooltipComponent } from './components/compass-tooltip/compass-to
 import { CompassTooltipPopupComponent } from './components/compass-tooltip-popup/compass-tooltip-popup.component';
 import { CompassTooltipService } from '../services/compass-tooltip.service';
 import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
+import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
 import { TabComponent } from './components/tab/tab.component';
 
 @NgModule({
@@ -29,6 +31,7 @@ import { TabComponent } from './components/tab/tab.component';
     OverlayModule
   ],
   exports: [
+    BeerLoaderComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
@@ -39,9 +42,11 @@ import { TabComponent } from './components/tab/tab.component';
     MatRippleModule,
     MatSidenavModule,
     OverlayModule,
+    SortIndicatorComponent,
     TabComponent
   ],
   declarations: [
+    BeerLoaderComponent,
     CompassCardComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
@@ -50,6 +55,7 @@ import { TabComponent } from './components/tab/tab.component';
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
     DismissibleXComponent,
+    SortIndicatorComponent,
     TabComponent
   ],
   providers: [

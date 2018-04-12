@@ -1,0 +1,16 @@
+.loading {
+  opacity: 0;
+}
+
+.loaded {
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.individual-loader {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+}
