@@ -21,7 +21,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
-    console.log([this.actionButtonType.actionType,  '- Action Button is clicked'].join(' '));
+    console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
 
   ngOnDestroy() { }
