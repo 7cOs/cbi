@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
+import { CompassListClassUtilService } from '../../../services/compass-list-class-util.service';
 import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
 import { MatCheckboxChange } from '@angular/material';
 
@@ -12,8 +13,9 @@ export class ListPerformanceTableRowComponent {
   @Input() rowData: ListPerformanceTableRow;
   @Output() onChangeEventEmitter: EventEmitter<any> = new EventEmitter();
 
+  public classUtilService: CompassListClassUtilService = new CompassListClassUtilService();
   public getTrendClass(num: number): string {
-    return num >= 0 ? 'positive' : 'negative';
+    return this.classUtilService.getTrendClass(num);
   }
 
   public toggleChecked(event: MatCheckboxChange) {

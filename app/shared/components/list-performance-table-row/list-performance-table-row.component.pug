@@ -26,12 +26,12 @@ td.segment-col(colspan=1)
 
 td.center-col(colspan=1) {{rowData.cytdColumn | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.cytdVersusYaColumn | number}}
+  span([ngClass]="getTrendClass(rowData.cytdVersusYaColumn)") {{rowData.cytdVersusYaColumn | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn2)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
+  span([ngClass]="getTrendClass(rowData.cytdVersusYaPercentColumn)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
 td.center-col(colspan=1) {{rowData.l90Column | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn4)") {{rowData.l90VersusYaColumn | number}}
+  span([ngClass]="getTrendClass(rowData.l90VersusYaColumn)") {{rowData.l90VersusYaColumn | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn5)") {{rowData.l90VersusYaPercentColumn | number:'1.1-1'}}%
+  span([ngClass]="getTrendClass(rowData.l90VersusYaPercentColumn)") {{rowData.l90VersusYaPercentColumn | number:'1.1-1'}}%
 td.right-col(colspan=1) {{rowData.lastDepletionDateColumn}}
