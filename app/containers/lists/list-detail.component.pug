@@ -8,4 +8,9 @@ compass-action-button.action-button-spacing(
     [actionLabel]="actionButtonType.Download", 
     [isDisabled]="false",
     (onActionButtonClicked)="captureActionButtonClicked($event)"
+    
+list-performance-table(
+  [totalRow]="totalRow",
+  [tableHeaderRow]="tableHeader",
+  [tableData]="tableData"
 )
