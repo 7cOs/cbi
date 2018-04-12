@@ -45,28 +45,28 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
   )
   public void enableOpportunitiesLink(PremiseType premiseType, String distributorName) {
     Assert.assertFalse(
-      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      accountDashboardPage.footer.isOpportunitiesFooterLinkEnabled(),
       "Opportunities link failed to be disabled by default, when no filters are applied."
     );
 
     accountDashboardPage
-      .selectPremiseType(premiseType)
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName);
+      .filterForm.selectPremiseType(premiseType)
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName);
 
     Assert.assertFalse(
-      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      accountDashboardPage.footer.isOpportunitiesFooterLinkEnabled(),
       "Opportunities link enabled pre-maturely. Should not be enabled until after filters are applied."
     );
 
     accountDashboardPage
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear();
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear();
 
     Assert.assertTrue(
-      accountDashboardPage.isOpportunitiesLinkEnabled(),
+      accountDashboardPage.footer.isOpportunitiesFooterLinkEnabled(),
       "Opportunities link failed to be enabled after valid Premise Type and Distributor filters are applied."
     );
   }
@@ -77,14 +77,14 @@ public class AccountDashboardViewOpportunitiesTest extends BaseTestCase {
   )
   public void viewOpportunities(PremiseType premiseType, String distributorName) {
     final OpportunitiesPage opportunitiesPage = accountDashboardPage
-      .selectPremiseType(premiseType)
-      .enterDistributorSearchText(distributorName)
-      .clickSearchForDistributor()
-      .selectDistributorFilterContaining(distributorName)
-      .clickApplyFilters()
-      .waitForBrandsPanelLoaderToDisappear()
-      .waitForMarketPanelLoaderToDisappear()
-      .clickSeeAllOpportunitiesLink()
+      .filterForm.selectPremiseType(premiseType)
+      .filterForm.enterDistributorSearchText(distributorName)
+      .filterForm.clickSearchForDistributor()
+      .filterForm.selectDistributorFilterContaining(distributorName)
+      .filterForm.clickApplyFilters()
+      .brandSnapshotPanel.waitForLoaderToDisappear()
+      .topBottomPanel.waitForLoaderToDisappear()
+      .footer.clickSeeAllOpportunitiesFooterLink()
       .waitForLoaderToDisappear();
 
     Assert.assertTrue(
