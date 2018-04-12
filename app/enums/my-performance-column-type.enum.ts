@@ -1,4 +1,4 @@
-export enum ColumnType {
+export enum MyPerformanceColumnType {
   descriptionRow0,
   descriptionRow1,
   metricColumn0,

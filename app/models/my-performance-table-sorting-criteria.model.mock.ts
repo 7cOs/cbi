@@ -1,12 +1,12 @@
 import * as Chance from 'chance';
 
-import { ColumnType } from '../enums/column-type.enum';
+import { MyPerformanceColumnType } from '../enums/my-performance-column-type.enum';
 import { SortingCriteria } from './my-performance-table-sorting-criteria.model';
 
 let chance = new Chance();
 
-const columnTypeValues = Object.keys(ColumnType)
-  .map(key => ColumnType[key])
+const columnTypeValues = Object.keys(MyPerformanceColumnType)
+  .map(key => MyPerformanceColumnType[key])
   .filter(value => typeof value === 'number');
 
 export function getSortingCriteriaMock(length: number) {

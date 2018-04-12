@@ -2,6 +2,9 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
+// TODO: Remove this when we get real data.
+import { getListPerformanceTableRowMock,
+  getListPerformanceHeaderRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 import { AppState } from '../../state/reducers/root.reducer';
 import * as ListsActions from '../../state/actions//lists.action';
@@ -18,6 +21,24 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
+
+  // TODO: Remove this when we get real data.
+  public tableData = getListPerformanceTableRowMock(1000);
+  public tableHeader = getListPerformanceHeaderRowMock();
+  public totalRow = {
+    storeColumn: 'Total',
+    distributorColumn: '',
+    segmentColumn: '',
+    cytdColumn: 0,
+    cytdVersusYaColumn: 1,
+    cytdVersusYaPercentColumn: 2,
+    l90Column: 3,
+    l90VersusYaColumn: 4,
+    l90VersusYaPercentColumn: 5,
+    lastDepletionDate: '',
+    performanceError: false
+  };
+
   private listDetailSubscription: Subscription;
 
   constructor(
