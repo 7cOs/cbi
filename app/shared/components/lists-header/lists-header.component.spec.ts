@@ -1,55 +1,78 @@
-import { ComponentFixture, fakeAsync, TestBed,  tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ListsHeaderComponent } from './lists-header.component';
-import { Component, Input } from '@angular/core';
-
-class BeerLoaderComponentMock {
-  @Input() showLoader: false;
-}
-
-@Component({
-  selector: '[lists-header]',
-  template: ''
-})
-
-class MockMyPerformanceTableRowComponent {
-  @Input() rowData: MyPerformanceTableRow;
-}
 
 describe('ListsHeaderComponent', () => {
   let fixture: ComponentFixture<ListsHeaderComponent>;
   let componentInstance: ListsHeaderComponent;
-  let tableHeaderRow: Array<string> = ['column1', 'column2', 'column3'];
+  let componentInstanceCopy: any;
+  const mockUserService = {
+    model: {
+      currentUser: {
+        firstName: chance.string(),
+        lastName: chance.string()
+      }
+    }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         ListsHeaderComponent
+      ],
+      providers: [
+        {
+          provide: 'userService',
+          useValue: mockUserService
+        }
       ]
     });
 
     fixture = TestBed.createComponent(ListsHeaderComponent);
     componentInstance = fixture.componentInstance;
-    componentInstance.tableHeaderRow = tableHeaderRow;
-
+    componentInstanceCopy = componentInstance as any;
   });
 
-  describe('when calling onRowClicked', () => {
+  describe('ngOnInit', () => {
 
-    it('Should call onButtonClicked when element is clicked', fakeAsync(() => {
-      spyOn(componentInstance, 'onButtonClicked').and.callThrough();
-      const element = fixture.debugElement.query(By.css('.btn-action')).nativeElement;
-      element.click();
-      expect(componentInstance.onButtonClicked).toHaveBeenCalled();
-    }));
+    beforeEach(() => {
+      componentInstance.ngOnInit();
+    });
 
-    it('should emit an event when the viewtype is accounts', () => {
-      componentInstance.actionLabel = 'Add To List';
-      spyOn(componentInstance.onActionButtonClicked, 'emit');
-      componentInstance.onButtonClicked();
-      componentInstance.onButtonClicked();
-      expect(componentInstance.onActionButtonClicked.emit).toHaveBeenCalled();
-      expect(componentInstance.onActionButtonClicked.emit).toHaveBeenCalledWith({actionType: 'Add To List'});
+    it('should get firstName and lastName from userService', () => {
+      expect(componentInstance.firstName).toBe(mockUserService.model.currentUser.firstName);
+      expect(componentInstance.lastName).toBe(mockUserService.model.currentUser.lastName);
+    });
+  });
+
+  describe('ngOnChange', () => {
+
+    beforeEach(() => {
+      componentInstance.ngOnChanges();
+    });
+
+    it('should get firstName and lastName from userService', () => {
+      spyOn(componentInstanceCopy, 'getOwnerName').and.callThrough();
+      expect(componentInstanceCopy.getOwnerName).toHaveBeenCalledWith(componentInstance.firstName, componentInstance.lastName);
+    });
+  });
+
+  describe('component outputs', () => {
+
+    it('should emit an event when the manage button is clicked', (done) => {
+      fixture.detectChanges();
+      componentInstance.manageButtonClicked.subscribe(() => {
+        done();
+      });
+      fixture.debugElement.query(By.css('.btn-action')).triggerEventHandler('click', null);
+    });
+
+    it('should emit an event when the lists link is clicked', (done) => {
+      fixture.detectChanges();
+      componentInstance.listsLinkClicked.subscribe(() => {
+        done();
+      });
+      fixture.debugElement.query(By.css('.link')).triggerEventHandler('click', null);
     });
 
   });

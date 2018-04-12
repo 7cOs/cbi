@@ -10,8 +10,8 @@ div.header-container([ngClass]="{'archived-hero': headerData.archived}")
   div(row)
     div(column="12")
       h1.list-title {{headerData.name}}
-      label(*ngIf ="currentuser").description.bold.accent-blue You are the owner
-      label(*ngIf ="!currentuser").description.bold.accent-blue <span [ngClass]= "{'red-owner': archived}">JOHN UTTER</span> is the owner
+      label(*ngIf ="currentUser").description.bold.accent-blue You are the owner
+      label(*ngIf ="!currentUser").description.bold.accent-blue <span [ngClass]= "{'red-owner': headerData.archived}">{{ headerData.ownerFirstName }} {{headerData.ownerLastName}}</span> is the owner
 
   div(row)
     div(column="5")
@@ -27,3 +27,4 @@ div.header-container([ngClass]="{'archived-hero': headerData.archived}")
         span {{headerData.totalOpportunities}}
         label.description.accent-blue Total
           label.description.accent-blue Opportunities
+
