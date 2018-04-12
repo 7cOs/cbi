@@ -13,7 +13,6 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
-
 @Component({
   selector: 'list-detail',
   template: require('./list-detail.component.pug'),
@@ -40,10 +39,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     lastDepletionDate: '',
     performanceError: false
   };
-
+  public actionButtonType: any = ActionButtonType;
   private listDetailSubscription: Subscription;
 
-  public actionButtonType: any = ActionButtonType;
   constructor(
     private store: Store<AppState>,
     private titleService: Title,
@@ -62,7 +60,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.listSummary = listDetail.listSummary.summaryData;
       });
   }
-
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));

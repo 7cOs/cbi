@@ -15,7 +15,6 @@ import { ListPerformanceTableRow } from '../../models/list-performance/list-perf
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
-
 const chance = new Chance();
 
 @Component({

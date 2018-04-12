@@ -6,7 +6,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { ListPerformanceTableComponent } from '../../shared/components/list-performance-table/list-performance-table.component';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { ListPerformanceTableRowComponent } from '../../shared/components/list-performance-table-row/list-performance-table-row.component';
-import { SharedModule } from '../../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material';
 
 @NgModule({
