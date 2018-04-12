@@ -1,0 +1,5 @@
+ul(class="nav-tabs")
+  li.tab(*ngFor="let tab of tabs", (click)="selectTab(tab)", [ngClass]="{'active-tab': tab.active}")
+    p {{ tab.title }}
+    
+ng-content
