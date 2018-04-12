@@ -46,14 +46,11 @@ describe('ListsHeaderComponent', () => {
   });
 
   describe('ngOnChange', () => {
-
-    beforeEach(() => {
-      componentInstance.ngOnChanges();
-    });
-
     it('should get firstName and lastName from userService', () => {
       spyOn(componentInstanceCopy, 'getOwnerName').and.callThrough();
-      expect(componentInstanceCopy.getOwnerName).toHaveBeenCalledWith(componentInstance.firstName, componentInstance.lastName);
+      componentInstance.ngOnChanges();
+      fixture.detectChanges();
+      expect(componentInstanceCopy.getOwnerName).toHaveBeenCalled();
     });
   });
 
