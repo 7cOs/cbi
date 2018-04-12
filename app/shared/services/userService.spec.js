@@ -280,7 +280,7 @@ describe('[Services.userService - performance]', function() {
     $httpBackend
     .expect('GET', urlBase + urlQuery)
     .respond(200, distributionPerformanceData);
-    debugger;
+
     returnPromise = userService.getTopBottomSnapshot(type, params);
     $httpBackend.flush();
     type.value = 3;
