@@ -1,0 +1,69 @@
+beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
+
+div
+
+  table.col-100-pct([ngClass]="tableClasses")
+
+    thead.col-100-pct
+
+      tr.top-header.col-100-pct
+        th.checkbox-col(colspan=1)
+          mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
+          [checked]="isSelectAllChecked",
+          (change)="toggleSelectAllStores($event)",
+          [(indeterminate)]="isIndeterminateChecked",
+          [disableRipple]="true")
+        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.storeColumn)")
+          span {{ tableHeaderRow[0] }}
+            sort-indicator([status]="getSortStatus(columnType.storeColumn)")
+        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.distributorColumn)")
+          span {{ tableHeaderRow[1] }}
+            sort-indicator([status]="getSortStatus(columnType.distributorColumn)")
+        th.segment-col.sort-indicator(colspan=1, (click)="sortRows(columnType.segmentColumn)")
+          span {{ tableHeaderRow[2] }}
+            sort-indicator([status]="getSortStatus(columnType.segmentColumn)")
+        th(colspan=3)
+          span {{ tableHeaderRow[3] }}
+        th(colspan=3)
+          span {{ tableHeaderRow[4] }}
+        th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.lastDepletionDateColumn)")
+          span {{ tableHeaderRow[5] }}
+            sort-indicator([status]="getSortStatus(columnType.lastDepletionDateColumn)")
+
+      tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
+        th(colspan=1)
+        th(colspan=1)
+        th(colspan=1)
+        th(colspan=1)
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytdColumn)")
+          span CYTD
+            sort-indicator([status]='getSortStatus(columnType.cytdColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytdVersusYaColumn)")
+          span VS YA
+            sort-indicator([status]='getSortStatus(columnType.cytdVersusYaColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytddVersusYaPercentColumn)")
+          span VS YA %
+            sort-indicator([status]='getSortStatus(columnType.cytddVersusYaPercentColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.l90Column)")
+          span L90
+            sort-indicator([status]='getSortStatus(columnType.l90Column)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.l90VersusYaColumn)")
+          span VS YA
+            sort-indicator([status]='getSortStatus(columnType.l90VersusYaColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.l90VersusYaPercentColumn)")
+          span VS YA %
+            sort-indicator([status]='getSortStatus(columnType.l90VersusYaPercentColumn)')
+        th(colspan=1)
+
+      tr.total-row.col-100-pct(
+        *ngIf="totalRow",
+        list-performance-table-row,
+        [rowData]="totalRow")
+
+    tbody([ngClass]="getTableBodyClasses()")
+      tr.entity-row.col-100-pct(
+        *ngFor="let row of sortedTableData, let rowIndex = index",
+        list-performance-table-row,
+        [rowData]="row",
+        (click)="onRowClicked(rowType.data, rowIndex, row)",
+        (onChangeEventEmitter)="onCheckboxChange(row)")

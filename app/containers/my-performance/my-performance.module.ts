@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AccountsApiService } from '../../services/api/v3/accounts-api.service';
-import { BeerLoaderComponent } from '../../shared/components/beer-loader/beer-loader.component';
 import { DistributorsApiService } from '../../services/api/v3/distributors-api.service';
 import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
 import { MyPerformanceComponent } from './my-performance.component';
@@ -19,7 +18,6 @@ import { ProductMetricsTransformerService } from  '../../services/transformers/p
 import { ResponsibilitiesTransformerService } from  '../../services/transformers/responsibilities-transformer.service';
 import { ResponsibilitiesService } from  '../../services/responsibilities.service';
 import { SharedModule } from '../../shared/shared.module';
-import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SubAccountsApiService } from '../../services/api/v3/sub-accounts-api.service';
 import { TeamPerformanceOpportunitiesComponent }
   from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
@@ -33,13 +31,11 @@ import { WindowService } from '../../services/window.service';
     SharedModule
   ],
   declarations: [
-    BeerLoaderComponent,
     MyPerformanceBreadcrumbComponent,
     MyPerformanceComponent,
     MyPerformanceFilterComponent,
     MyPerformanceTableComponent,
     MyPerformanceTableRowComponent,
-    SortIndicatorComponent,
     TeamPerformanceOpportunitiesComponent
   ],
   providers: [

@@ -22,6 +22,8 @@ module.exports = function(app) {
         v3BaseURLKey = 'distributors';
       } else if (req.url.match(/\/v3\/positions.+/)) {
         v3BaseURLKey = 'positions';
+      } else if (req.url.match(/\/v3\/lists/)) {
+        v3BaseURLKey = 'lists';
       }
 
       headers['X-CBI-API-AGENT'] = util.agentHeader();
