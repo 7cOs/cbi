@@ -2146,7 +2146,6 @@ describe('MyPerformanceComponent', () => {
     describe('when steps back are possible', () => {
       let breadcrumbTrailMock: string[];
       let breadcrumbSelectionIndex: number;
-      let breadcrumbTopTwoLevelsIndex: number;
       let expectedStepsBack: number;
       let expectedPositionId: string;
       let expectedEntityTypeCode: string;
