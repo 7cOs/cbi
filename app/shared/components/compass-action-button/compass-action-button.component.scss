@@ -1,6 +1,24 @@
 @import '../../../assets/styles/base/variables';
 
-.btn-action {
+button {
+  background: $white;
+  border: 1px solid $gray-4;
+  color: $blue;
+  font-size: 0.7em;
+  font-family: $rajdhani;
+  font-weight: $semibold;
+  margin-bottom: 2em;
+  outline: 0;
+  padding: 1.5em 1.5em 1.5em 1.75em;
+  position: relative;
+  text-transform: uppercase;
+
+  &:hover {
+    color: $dark-blue-6;
+  }
+}
+
+.btn-component-action {
   background-color: $blue;
   border: none;
   border-bottom: 4px solid $dark-blue-2;

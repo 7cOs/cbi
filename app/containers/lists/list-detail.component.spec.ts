@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 
 import { ListDetailComponent } from './list-detail.component';
-import { ActionButtonComponent } from '../../shared/components/action-button/action-button.component';
+import { CompassActionButtonComponent } from '../../shared/components/compass-action-button/compass-action-button.component';
 
 const chance = new Chance();
 
@@ -25,7 +25,7 @@ describe('ListDetailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ListDetailComponent,
-        ActionButtonComponent
+        CompassActionButtonComponent
       ],
       providers: [
         {

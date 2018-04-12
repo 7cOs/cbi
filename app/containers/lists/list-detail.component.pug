@@ -1,10 +1,10 @@
 h1 List Stuff Goes Here!
-action-button(
+compass-action-button(
     [actionLabel]="actionButtonType.AddToList", 
     [isDisabled]="true",
     (onActionButtonClicked)="captureActionButtonClicked($event)"
 )
-action-button.action-button-spacing(
+compass-action-button.action-button-spacing(
     [actionLabel]="actionButtonType.Download", 
     [isDisabled]="false",
     (onActionButtonClicked)="captureActionButtonClicked($event)"
