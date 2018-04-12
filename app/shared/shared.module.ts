@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 
+import { CompassActionButtonComponent } from './components/compass-action-button/compass-action-button.component';
 import { CompassCardComponent }  from './components/compass-card/compass-card.component';
 import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
@@ -29,6 +30,7 @@ import { SortIndicatorComponent } from './components/sort-indicator/sort-indicat
     OverlayModule
   ],
   exports: [
+    CompassActionButtonComponent,
     BeerLoaderComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
@@ -43,6 +45,7 @@ import { SortIndicatorComponent } from './components/sort-indicator/sort-indicat
   ],
   declarations: [
     BeerLoaderComponent,
+    CompassActionButtonComponent,
     CompassCardComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
