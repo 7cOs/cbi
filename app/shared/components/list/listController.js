@@ -788,7 +788,7 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreDistributor(opportunity) {
-      if (filtersService.model.selected.distributor[0]) {
+      if (filtersService.model.selected.distributor.length > 0) {
         return filtersService.model.selected.distributor[0].name;
       } else if (opportunity.store.distributors) {
         opportunity.store.distributors[0];
