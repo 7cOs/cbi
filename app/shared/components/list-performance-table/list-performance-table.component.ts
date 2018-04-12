@@ -48,7 +48,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
-    columnType: ListPerformanceColumnType.metricColumn0,
+    columnType: ListPerformanceColumnType.cytdColumn,
     ascending: false
   }];
 
@@ -102,7 +102,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public sortRows(colType: ListPerformanceColumnType) {
     const ascending = this._sortingCriteria[0].columnType === colType
       ? !this._sortingCriteria[0].ascending
-      : colType === ListPerformanceColumnType.descriptionRow0;
+      : colType === ListPerformanceColumnType.storeColumn;
     const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
     this.applySortingCriteria(criteria);
   }

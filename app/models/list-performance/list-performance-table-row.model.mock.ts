@@ -9,17 +9,18 @@ export function getListPerformanceTableRowMock(length: number) {
   for (let i = 0 ; i < length ; i++) {
     const depDate = chance.date({string: true, american: false});
     rows.push({
-      descriptionRow0: chance.string(),
-      descriptionRow0Sub1: `${chance.address({short_suffix: true})} ${chance.city()} ${chance.state()}  ${chance.zip()}`,
-      descriptionRow1: chance.string(),
-      descriptionRow2: chance.character({pool: 'ABC'}),
-      metricColumn0: chance.integer({min: 0, max: 40000}),
-      metricColumn1: chance.integer({min: -40000, max: 40000}),
-      metricColumn2: chance.d100(),
-      metricColumn3: chance.integer({min: 0, max: 40000}),
-      metricColumn4: chance.integer({min: -40000, max: 40000}),
-      metricColumn5: chance.d100(),
-      depletionDate: depDate.toString(),
+      storeColumn: chance.string(),
+      storeAddressSubline: `${chance.address({short_suffix: true})} ${chance.city()} ${chance.state()}  ${chance.zip()}`,
+      distributorColumn: chance.string(),
+      segmentColumn: chance.character({pool: 'ABC'}),
+      cytdColumn: chance.integer({min: 0, max: 40000}),
+      cytdVersusYaColumn: chance.integer({min: -40000, max: 40000}),
+      cytdVersusYaPercentColumn: chance.d100(),
+      l90Column: chance.integer({min: 0, max: 40000}),
+      l90VersusYaColumn: chance.integer({min: -40000, max: 40000}),
+      l90VersusYaPercentColumn: chance.d100(),
+      lastDepletionDateColumn: depDate.toString(),
+      performanceError: false,
       checked: false
     });
   }

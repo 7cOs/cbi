@@ -90,21 +90,21 @@ describe('ListPerformanceTableComponent', () => {
 
     it('should sort the data with two criteria', () => {
       let tableData = getListPerformanceTableRowMock(3);
-      tableData[0].descriptionRow0 = 'b';
-      tableData[0].metricColumn0 = 1;
-      tableData[1].descriptionRow0 = 'a';
-      tableData[1].metricColumn0 = 0;
-      tableData[2].descriptionRow0 = 'b';
-      tableData[2].metricColumn0 = 2;
+      tableData[0].storeColumn = 'b';
+      tableData[0].cytdColumn = 1;
+      tableData[1].storeColumn = 'a';
+      tableData[1].cytdColumn = 0;
+      tableData[2].storeColumn = 'b';
+      tableData[2].cytdColumn = 2;
       componentInstance.tableData = tableData.slice();
 
       const sortingCriteria = [
         {
-          columnType: ListPerformanceColumnType.descriptionRow0,
+          columnType: ListPerformanceColumnType.storeColumn,
           ascending: true
         },
         {
-          columnType: ListPerformanceColumnType.metricColumn0,
+          columnType: ListPerformanceColumnType.cytdColumn,
           ascending: false
         }
       ];

@@ -1,15 +1,15 @@
 export interface ListPerformanceTableRow {
-  descriptionRow0: string;
-  descriptionRow0Sub1: string;
-  descriptionRow1: string;
-  descriptionRow2: string;
-  metricColumn0: number;
-  metricColumn1: number;
-  metricColumn2: number;
-  metricColumn3: number;
-  metricColumn4: number;
-  metricColumn5: number;
-  depletionDate: string;
-  performanceError?: boolean;
+  storeColumn: string;
+  storeAddressSubline: string;
+  distributorColumn: string;
+  segmentColumn: string;
+  cytdColumn: number;
+  cytdVersusYaColumn: number;
+  cytdVersusYaPercentColumn: number;
+  l90Column: number;
+  l90VersusYaColumn: number;
+  l90VersusYaPercentColumn: number;
+  lastDepletionDateColumn: string;
+  performanceError: boolean;
   checked: boolean;
 }

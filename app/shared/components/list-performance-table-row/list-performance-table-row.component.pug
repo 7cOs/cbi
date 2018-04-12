@@ -1,6 +1,6 @@
 td.checkbox-col(colspan=1)
   div.left-col-content
-    mat-checkbox(*ngIf="rowData.descriptionRow0 != 'Total'",
+    mat-checkbox(*ngIf="rowData.storeColumn != 'Total'",
     aria-label="Select Store",
     [checked]='rowData.checked',
     (change)="toggleChecked($event)",
@@ -10,28 +10,28 @@ td.left-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0
-        span {{rowData.descriptionRow0}}
+        span {{rowData.storeColumn}}
       div.description-line-1
-        span.description-line-1 {{rowData.descriptionRow0Sub1}}
+        span.description-line-1 {{rowData.storeAddressSubline}}
 td.left-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0
-        span.description-line-0 {{rowData.descriptionRow1}}
+        span.description-line-0 {{rowData.distributorColumn}}
 td.segment-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0
-        span {{rowData.descriptionRow2}}
+        span {{rowData.segmentColumn}}
 
-td.center-col(colspan=1) {{rowData.metricColumn0 | number}}
+td.center-col(colspan=1) {{rowData.cytdColumn | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn1 | number}}
+  span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.cytdVersusYaColumn | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn2)") {{rowData.metricColumn2 | number:'1.1-1'}}%
-td.center-col(colspan=1) {{rowData.metricColumn3 | number}}
+  span([ngClass]="getTrendClass(rowData.metricColumn2)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
+td.center-col(colspan=1) {{rowData.l90Column | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn4)") {{rowData.metricColumn4 | number}}
+  span([ngClass]="getTrendClass(rowData.metricColumn4)") {{rowData.l90VersusYaColumn | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(rowData.metricColumn5)") {{rowData.metricColumn5 | number:'1.1-1'}}%
-td.right-col(colspan=1) {{rowData.depletionDate}}
+  span([ngClass]="getTrendClass(rowData.metricColumn5)") {{rowData.l90VersusYaPercentColumn | number:'1.1-1'}}%
+td.right-col(colspan=1) {{rowData.lastDepletionDateColumn}}

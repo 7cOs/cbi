@@ -13,46 +13,46 @@ div
           (change)="toggleSelectAllStores($event)",
           [(indeterminate)]="isIndeterminateChecked",
           [disableRipple]="true")
-        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow0)")
+        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.storeColumn)")
           span {{ tableHeaderRow[0] }}
-            sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
-        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow1)")
+            sort-indicator([status]="getSortStatus(columnType.storeColumn)")
+        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.distributorColumn)")
           span {{ tableHeaderRow[1] }}
-            sort-indicator([status]="getSortStatus(columnType.descriptionRow1)")
-        th.segment-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow2)")
+            sort-indicator([status]="getSortStatus(columnType.distributorColumn)")
+        th.segment-col.sort-indicator(colspan=1, (click)="sortRows(columnType.segmentColumn)")
           span {{ tableHeaderRow[2] }}
-            sort-indicator([status]="getSortStatus(columnType.descriptionRow2)")
+            sort-indicator([status]="getSortStatus(columnType.segmentColumn)")
         th(colspan=3)
           span {{ tableHeaderRow[3] }}
         th(colspan=3)
           span {{ tableHeaderRow[4] }}
-        th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.descriptionRow5)")
+        th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.lastDepletionDateColumn)")
           span {{ tableHeaderRow[5] }}
-            sort-indicator([status]="getSortStatus(columnType.descriptionRow5)")
+            sort-indicator([status]="getSortStatus(columnType.lastDepletionDateColumn)")
 
       tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
         th(colspan=1)
         th(colspan=1)
         th(colspan=1)
         th(colspan=1)
-        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn0)")
-          span CTYD
-            sort-indicator([status]='getSortStatus(columnType.metricColumn0)')
-        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn1)")
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytdColumn)")
+          span CYTD
+            sort-indicator([status]='getSortStatus(columnType.cytdColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytdVersusYaColumn)")
           span VS YA
-            sort-indicator([status]='getSortStatus(columnType.metricColumn1)')
-        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn2)")
+            sort-indicator([status]='getSortStatus(columnType.cytdVersusYaColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytddVersusYaPercentColumn)")
           span VS YA %
-            sort-indicator([status]='getSortStatus(columnType.metricColumn2)')
-        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn3)")
+            sort-indicator([status]='getSortStatus(columnType.cytddVersusYaPercentColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.l90Column)")
           span L90
-            sort-indicator([status]='getSortStatus(columnType.metricColumn3)')
-        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn4)")
+            sort-indicator([status]='getSortStatus(columnType.l90Column)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.l90VersusYaColumn)")
           span VS YA
-            sort-indicator([status]='getSortStatus(columnType.metricColumn4)')
-        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.metricColumn5)")
+            sort-indicator([status]='getSortStatus(columnType.l90VersusYaColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.l90VersusYaPercentColumn)")
           span VS YA %
-            sort-indicator([status]='getSortStatus(columnType.metricColumn5)')
+            sort-indicator([status]='getSortStatus(columnType.l90VersusYaPercentColumn)')
         th(colspan=1)
 
       tr.total-row.col-100-pct(

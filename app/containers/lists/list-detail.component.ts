@@ -13,19 +13,19 @@ import { getListPerformanceTableRowMock,
 export class ListDetailComponent implements OnInit, OnDestroy {
 
   // TODO: Remove this when we get real data.
-  public tableData = getListPerformanceTableRowMock(100);
+  public tableData = getListPerformanceTableRowMock(1000);
   public tableHeader = getListPerformanceHeaderRowMock();
   public totalRow = {
-    descriptionRow0: 'Total',
-    descriptionRow1: '',
-    descriptionRow2: '',
-    metricColumn0: 0,
-    metricColumn1: 1,
-    metricColumn2: 2,
-    metricColumn3: 3,
-    metricColumn4: 4,
-    metricColumn5: 5,
-    depletionDate: '',
+    storeColumn: 'Total',
+    distributorColumn: '',
+    segmentColumn: '',
+    cytdColumn: 0,
+    cytdVersusYaColumn: 1,
+    cytdVersusYaPercentColumn: 2,
+    l90Column: 3,
+    l90VersusYaColumn: 4,
+    l90VersusYaPercentColumn: 5,
+    lastDepletionDate: '',
     performanceError: false
   };
 
