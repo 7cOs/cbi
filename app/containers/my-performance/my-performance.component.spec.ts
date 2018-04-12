@@ -2160,8 +2160,7 @@ describe('MyPerformanceComponent', () => {
         previousVersion = versionsMock[versionsMock.length - 1];
         const breadcrumbTrailLength = versionsMock.length + 1;
         breadcrumbTrailMock = Array(breadcrumbTrailLength).fill('').map(() => chance.string());
-        breadcrumbSelectionIndex = chance.natural({min: 2, max: versionsMock.length - 2});
-        breadcrumbTopTwoLevelsIndex = chance.natural({min: 0, max: 1});
+        breadcrumbSelectionIndex = chance.natural({min: 1, max: versionsMock.length - 2});
         expectedStepsBack = breadcrumbTrailMock.length - breadcrumbSelectionIndex - 1;
         versionsMock[breadcrumbSelectionIndex].salesHierarchyViewType.viewType = selectedSalesHierarchyViewType;
         versionsMock[breadcrumbSelectionIndex].filter = stateMock.myPerformanceFilter;
@@ -2207,16 +2206,16 @@ describe('MyPerformanceComponent', () => {
       });
 
       it('should dispatch RestoreMyPerformanceState, FetchProductMetrics and RefreshAllPerformances ' +
-         'when selected step has roleGroups SalesHierarchyViewType and Breadcrumb clicked index is 0 or 1', () => {
+         'when selected step has roleGroups SalesHierarchyViewType and Breadcrumb clicked index is 0', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.roleGroups);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
-          entityDescription: breadcrumbTrailMock[breadcrumbTopTwoLevelsIndex]
+          entityDescription: breadcrumbTrailMock[0]
         });
-        const previousVersionMock = versionsMock[breadcrumbTopTwoLevelsIndex];
+        const previousVersionMock = versionsMock[0];
         expect(storeMock.dispatch.calls.count()).toBe(3);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState(
-          breadcrumbTrailMock.length - breadcrumbTopTwoLevelsIndex - 1
+          breadcrumbTrailMock.length - 1
         ));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
           positionId: previousVersionMock.responsibilities.positionId,

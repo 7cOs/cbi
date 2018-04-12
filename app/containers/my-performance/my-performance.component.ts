@@ -865,7 +865,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       || this.selectedBrandCode !== previousState.selectedBrandCode
       || this.selectedSkuPackageCode !== previousState.selectedSkuPackageCode
       || clickedIndx === 0
-      || clickedIndx === 1) {
+      || EntityPeopleType.GEOGRAPHY in previousState.responsibilities.groupedEntities) {
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: previousState.responsibilities.positionId,
         groupedEntities: previousState.responsibilities.groupedEntities,
