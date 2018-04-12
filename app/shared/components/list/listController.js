@@ -791,7 +791,7 @@ module.exports = /*  @ngInject */
       if (filtersService.model.selected.distributor.length > 0) {
         return filtersService.model.selected.distributor[0].name;
       } else if (opportunity.store.distributors) {
-        opportunity.store.distributors[0];
+        return opportunity.store.distributors[0];
       } else {
         return '';
       }
