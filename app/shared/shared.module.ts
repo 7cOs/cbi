@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 
+import { ActionButtonComponent } from './components/action-button/action-button.component';
 import { CompassCardComponent }  from './components/compass-card/compass-card.component';
 import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
@@ -27,6 +28,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     OverlayModule
   ],
   exports: [
+    ActionButtonComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
@@ -38,6 +40,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     OverlayModule
   ],
   declarations: [
+    ActionButtonComponent,
     CompassCardComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,

@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { ListDetailComponent } from '../../containers/lists/list-detail.component';
-import { ActionButtonComponent } from '../../shared/components/action-button/action-button.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
+  imports: [
+    SharedModule
+  ],
   declarations: [
-    ListDetailComponent,
-    ActionButtonComponent
+    ListDetailComponent
   ]
 })
 
