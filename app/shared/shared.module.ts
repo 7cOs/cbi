@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
+import { BeerLoaderComponent } from './components/beer-loader/beer-loader.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule }   from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 
+import { CompassActionButtonComponent } from './components/compass-action-button/compass-action-button.component';
 import { CompassCardComponent }  from './components/compass-card/compass-card.component';
 import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
@@ -15,6 +17,7 @@ import { CompassTooltipComponent } from './components/compass-tooltip/compass-to
 import { CompassTooltipPopupComponent } from './components/compass-tooltip-popup/compass-tooltip-popup.component';
 import { CompassTooltipService } from '../services/compass-tooltip.service';
 import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
+import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
 
 @NgModule({
   imports: [
@@ -27,6 +30,8 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     OverlayModule
   ],
   exports: [
+    CompassActionButtonComponent,
+    BeerLoaderComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
@@ -35,16 +40,20 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
     DismissibleXComponent,
     MatRippleModule,
     MatSidenavModule,
-    OverlayModule
+    OverlayModule,
+    SortIndicatorComponent
   ],
   declarations: [
+    BeerLoaderComponent,
+    CompassActionButtonComponent,
     CompassCardComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
-    DismissibleXComponent
+    DismissibleXComponent,
+    SortIndicatorComponent
   ],
   providers: [
     CompassModalService,
