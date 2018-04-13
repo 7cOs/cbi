@@ -2,10 +2,11 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
+
+import { ActionButtonType } from '../../enums/action-button-type.enum';
 // TODO: Remove this when we get real data.
 import { getListPerformanceTableRowMock,
   getListPerformanceHeaderRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
-
 import { AppState } from '../../state/reducers/root.reducer';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
@@ -38,7 +39,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     lastDepletionDate: '',
     performanceError: false
   };
-
+  public actionButtonType: any = ActionButtonType;
   private listDetailSubscription: Subscription;
 
   constructor(
@@ -58,6 +59,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.storeList = listDetail.listStores.stores;
           this.listSummary = listDetail.listSummary.summaryData;
       });
+  }
+
+  captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
+    console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
 
   ngOnDestroy() {
