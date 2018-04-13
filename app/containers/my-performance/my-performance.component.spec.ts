@@ -2159,7 +2159,7 @@ describe('MyPerformanceComponent', () => {
         previousVersion = versionsMock[versionsMock.length - 1];
         const breadcrumbTrailLength = versionsMock.length + 1;
         breadcrumbTrailMock = Array(breadcrumbTrailLength).fill('').map(() => chance.string());
-        breadcrumbSelectionIndex = chance.natural({min: 1, max: versionsMock.length - 2});
+        breadcrumbSelectionIndex = chance.natural({max: versionsMock.length - 2});
         expectedStepsBack = breadcrumbTrailMock.length - breadcrumbSelectionIndex - 1;
         versionsMock[breadcrumbSelectionIndex].salesHierarchyViewType.viewType = selectedSalesHierarchyViewType;
         versionsMock[breadcrumbSelectionIndex].filter = stateMock.myPerformanceFilter;
@@ -2201,44 +2201,6 @@ describe('MyPerformanceComponent', () => {
           inAlternateHierarchy: false,
           entityTypeCode: selectedVersion.responsibilities.entityTypeCode,
           contextPositionId: selectedVersion.responsibilities.positionId
-        }));
-      });
-
-      it('should dispatch RestoreMyPerformanceState, FetchProductMetrics and RefreshAllPerformances ' +
-         'when selected step has roleGroups SalesHierarchyViewType and Breadcrumb clicked index is 0', () => {
-        setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.roleGroups);
-        componentInstance.handleBreadcrumbEntityClicked({
-          trail: breadcrumbTrailMock,
-          entityDescription: breadcrumbTrailMock[0]
-        });
-        const previousVersionMock = versionsMock[0];
-        expect(storeMock.dispatch.calls.count()).toBe(3);
-        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceState(
-          breadcrumbTrailMock.length - 1
-        ));
-        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ProductMetricsActions.FetchProductMetrics({
-          positionId: previousVersionMock.responsibilities.positionId,
-          filter: stateMock.myPerformanceFilter as any,
-          selectedEntityType: previousVersionMock.selectedEntityType,
-          selectedBrandCode: expectedSelectedBrandCode,
-          inAlternateHierarchy: !!previousVersionMock.responsibilities.alternateHierarchyId,
-          entityTypeCode: previousVersionMock.responsibilities.entityTypeCode,
-          contextPositionId: previousVersionMock.responsibilities.alternateHierarchyId || previousVersionMock.responsibilities.positionId
-        }));
-
-        expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ResponsibilitiesActions.RefreshAllPerformances({
-          positionId: previousVersionMock.responsibilities.positionId,
-          groupedEntities: previousVersionMock.responsibilities.groupedEntities,
-          hierarchyGroups: previousVersionMock.responsibilities.hierarchyGroups,
-          selectedEntityType: previousVersionMock.selectedEntityType,
-          salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
-          filter: stateMock.myPerformanceFilter as any,
-          brandSkuCode: stateMock.myPerformance.current.selectedSkuPackageCode || stateMock.myPerformance.current.selectedBrandCode,
-          skuPackageType: stateMock.myPerformance.current.selectedSkuPackageType,
-          entityType: previousVersionMock.selectedEntityType,
-          alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
-          accountPositionId: previousVersionMock.responsibilities.accountPositionId,
-          isMemberOfExceptionHierarchy: false
         }));
       });
 

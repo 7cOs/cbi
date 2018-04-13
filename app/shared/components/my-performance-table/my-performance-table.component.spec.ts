@@ -87,7 +87,9 @@ describe('MyPerformanceTableComponent', () => {
       componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteria[0];
       const firstColumnType = MyPerformanceColumnType[sortingCriteria[0].columnType];
-
+      componentInstance.ngOnChanges({
+        myFakeObj: new SimpleChange(null, null, false)
+      });
       fixture.detectChanges();
       const mockElements = fixture.debugElement
         .queryAll(By.directive(MockMyPerformanceTableRowComponent));
@@ -132,6 +134,9 @@ describe('MyPerformanceTableComponent', () => {
       ];
       componentInstance.sortingCriteria = sortingCriteria;
 
+      componentInstance.ngOnChanges({
+        myFakeObj: new SimpleChange(null, null, false)
+      });
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -177,6 +182,9 @@ describe('MyPerformanceTableComponent', () => {
       ];
       componentInstance.sortingCriteria = sortingCriteria;
 
+      componentInstance.ngOnChanges({
+        myFakeObj: new SimpleChange(null, null, false)
+      });
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -223,6 +231,9 @@ describe('MyPerformanceTableComponent', () => {
       ];
       componentInstance.sortingCriteria = sortingCriteria;
 
+      componentInstance.ngOnChanges({
+        myFakeObj: new SimpleChange(null, null, false)
+      });
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -254,6 +265,9 @@ describe('MyPerformanceTableComponent', () => {
       const tableData = getMyPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
 
+      componentInstance.ngOnChanges({
+        myFakeObj: new SimpleChange(null, null, false)
+      });
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -451,6 +465,9 @@ describe('MyPerformanceTableComponent', () => {
       const onRowClickedSpy = spyOn(componentInstance, 'onRowClicked');
       spyOn(componentInstance, 'getSortStatus').and.callFake(() => SortStatus.ascending);
       componentInstance.tableData = getMyPerformanceTableRowMock(1);
+      componentInstance.ngOnChanges({
+        myFakeObj: new SimpleChange(null, null, false)
+      });
       fixture.detectChanges();
       fixture.nativeElement.querySelector('tbody tr').click();
       expect(onRowClickedSpy).toHaveBeenCalled();
