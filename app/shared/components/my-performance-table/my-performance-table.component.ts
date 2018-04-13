@@ -81,6 +81,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
       this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups || this.viewType === SalesHierarchyViewType.people)
         ? this.sortRoleGroups(sortedTableData)
         : sortedTableData;
+      this.tableDataReceived = null;
     }
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(viewType, loadingState);
