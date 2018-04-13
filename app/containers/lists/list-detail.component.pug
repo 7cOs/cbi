@@ -1,3 +1,15 @@
+compass-action-button(
+  [actionLabel]="actionButtonType.AddToList",
+  [isDisabled]="true",
+  (onActionButtonClicked)="captureActionButtonClicked($event)"
+)
+
+compass-action-button.action-button-spacing(
+  [actionLabel]="actionButtonType.Download",
+  [isDisabled]="false",
+  (onActionButtonClicked)="captureActionButtonClicked($event)"
+)
+
 lists-header(
   [summaryData] = "listSummary",
   (manageButtonClicked) = "handleManageButtonClick()",
@@ -13,22 +25,4 @@ compass-tabs
     )
   compass-tab([tabTitle]='secondTabTitle')
     span opportunities placeholder
-
-compass-action-button(
-    [actionLabel]="actionButtonType.AddToList",
-    [isDisabled]="true",
-    (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
-compass-action-button.action-button-spacing(
-    [actionLabel]="actionButtonType.Download",
-    [isDisabled]="false",
-    (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
-list-performance-table(
-  [totalRow]="totalRow",
-  [tableHeaderRow]="tableHeader",
-  [tableData]="tableData"
-)
 

@@ -37,7 +37,7 @@ export class ListsHeaderComponent implements OnInit, OnChanges {
 
   private getOwnerName(first: string , last: string) {
     this.currentUserFullName = `${first} ${last}`;
-    if ( this.headerData.ownerFirstName && this.headerData.ownerLastName) {
+    if (this.headerData.ownerFirstName && this.headerData.ownerLastName) {
       this.ownerName = `${this.headerData.ownerFirstName} ${this.headerData.ownerLastName}`;
     }
     if (this.currentUserFullName === this.ownerName) {
