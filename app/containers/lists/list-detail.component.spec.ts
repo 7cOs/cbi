@@ -10,9 +10,9 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
-import { CompassActionButtonComponent } from '../../shared/components/compass-action-button/compass-action-button.component';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
 const chance = new Chance();
@@ -78,7 +78,6 @@ describe('ListDetailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ListDetailComponent,
-        CompassActionButtonComponent,
         ListPerformanceTableComponentMock
       ],
       providers: [
@@ -94,6 +93,9 @@ describe('ListDetailComponent', () => {
           provide: Store,
           useValue: storeMock
         }
+      ],
+      imports: [
+        SharedModule
       ]
     });
 

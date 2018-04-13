@@ -13,11 +13,13 @@ import { CompassModalService } from '../services/compass-modal.service';
 import { CompassOverlayService } from '../services/compass-overlay.service';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
 import { CompassSelectComponent } from './components/compass-select/compass-select.component';
+import { CompassTabsComponent } from './components/compass-tabs/compass-tabs.component';
 import { CompassTooltipComponent } from './components/compass-tooltip/compass-tooltip.component';
 import { CompassTooltipPopupComponent } from './components/compass-tooltip-popup/compass-tooltip-popup.component';
 import { CompassTooltipService } from '../services/compass-tooltip.service';
 import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
 import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
+import { CompassTabComponent } from './components/compass-tabs/tab/tab.component';
 
 @NgModule({
   imports: [
@@ -35,13 +37,15 @@ import { SortIndicatorComponent } from './components/sort-indicator/sort-indicat
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
+    CompassTabsComponent,
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
     DismissibleXComponent,
     MatRippleModule,
     MatSidenavModule,
     OverlayModule,
-    SortIndicatorComponent
+    SortIndicatorComponent,
+    CompassTabComponent
   ],
   declarations: [
     BeerLoaderComponent,
@@ -50,10 +54,12 @@ import { SortIndicatorComponent } from './components/sort-indicator/sort-indicat
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
+    CompassTabsComponent,
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
     DismissibleXComponent,
-    SortIndicatorComponent
+    SortIndicatorComponent,
+    CompassTabComponent
   ],
   providers: [
     CompassModalService,
