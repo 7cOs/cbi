@@ -879,7 +879,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         accountPositionId: previousState.responsibilities.accountPositionId,
         isMemberOfExceptionHierarchy: this.selectedEntityIsMemberOfExceptionHierarchy()
       }));
-     }
+    }
   }
 
   private setSelectedDateRangeValues(): void {
