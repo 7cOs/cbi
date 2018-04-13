@@ -277,7 +277,7 @@ module.exports = /*  @ngInject */
 
               // add separator if it's not last item
               if (key2 === 'distributor') {
-                if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
+                if (obj[key2].length - 1 !== k && obj[key2][k].name.toUpperCase() !== 'ALL TYPES') queryParams += '|';
               } else {
                 if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
               }
