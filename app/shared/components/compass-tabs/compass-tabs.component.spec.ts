@@ -52,8 +52,10 @@ describe('CompassTabsComponent', () => {
 
   describe('selectTab', () => {
     it('should set the selected tab to active, and reset all other tabs to inactive', () => {
+      expect(tab1Component.active).toBeTruthy();
       expect(tab2Component.active).toBeFalsy();
       tabsContainerComponent.selectTab(tab2Component);
+      expect(tab1Component.active).toBeFalsy();
       expect(tab2Component.active).toBeTruthy();
     });
   });
