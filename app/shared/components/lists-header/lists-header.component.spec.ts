@@ -45,13 +45,16 @@ describe('ListsHeaderComponent', () => {
     });
   });
 
-  fdescribe('ngOnChange', () => {
+  describe('ngOnChange', () => {
+
+    beforeEach(() => {
+      componentInstance.ngOnInit();
+    });
+
     it('should get firstName and lastName from userService', () => {
-      spyOn(componentInstanceCopy, 'getOwnerName');
+      spyOn(componentInstanceCopy, 'getOwnerName').and.callThrough();
       componentInstance.ngOnChanges();
       fixture.detectChanges();
-      console.log(mockUserService.model.currentUser.firstName);
-      console.log(mockUserService.model.currentUser.lastName);
       expect(componentInstanceCopy.getOwnerName).toHaveBeenCalledWith(mockUserService.model.currentUser.firstName,
         mockUserService.model.currentUser.lastName);
     });
