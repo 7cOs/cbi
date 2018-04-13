@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
   selector: 'compass-tab',
   template: require('./tab.component.pug')
 })
-export class TabComponent {
+export class CompassTabComponent {
   @Input('tabTitle') title: string;
   @Input() active: boolean = false;
 }

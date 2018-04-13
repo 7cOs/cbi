@@ -1,22 +1,22 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TabComponent } from './tab.component';
+import { CompassTabComponent } from './tab.component';
 
 const chance = new Chance();
 
-describe('TabComponent', () => {
+describe('CompassTabComponent', () => {
 
-  let fixture: ComponentFixture<TabComponent>;
-  let componentInstance: TabComponent;
+  let fixture: ComponentFixture<CompassTabComponent>;
+  let componentInstance: CompassTabComponent;
   let tabElement: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ TabComponent ]
+      declarations: [ CompassTabComponent ]
     });
 
-    fixture = TestBed.createComponent(TabComponent);
+    fixture = TestBed.createComponent(CompassTabComponent);
     componentInstance = fixture.componentInstance;
     tabElement = fixture.debugElement.nativeElement.querySelector('div');
   });

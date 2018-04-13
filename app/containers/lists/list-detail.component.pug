@@ -11,11 +11,12 @@ compass-action-button.action-button-spacing(
 )
 
 compass-tabs
-  compass-tab([tabTitle]="'Stores'", [active]='true')
+  compass-tab([tabTitle]='firstTabTitle',
+              [active]='true')
     list-performance-table(
       [totalRow]="totalRow",
       [tableHeaderRow]="tableHeader",
       [tableData]="tableData"
     )
-  compass-tab([tabTitle]="'Opportunities'")
+  compass-tab([tabTitle]='secondTabTitle')
     span opportunities placeholder 

@@ -19,7 +19,7 @@ import { CompassTooltipPopupComponent } from './components/compass-tooltip-popup
 import { CompassTooltipService } from '../services/compass-tooltip.service';
 import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
 import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
-import { TabComponent } from './components/compass-tabs/tab/tab.component';
+import { CompassTabComponent } from './components/compass-tabs/tab/tab.component';
 
 @NgModule({
   imports: [
@@ -45,7 +45,7 @@ import { TabComponent } from './components/compass-tabs/tab/tab.component';
     MatSidenavModule,
     OverlayModule,
     SortIndicatorComponent,
-    TabComponent
+    CompassTabComponent
   ],
   declarations: [
     BeerLoaderComponent,
@@ -59,7 +59,7 @@ import { TabComponent } from './components/compass-tabs/tab/tab.component';
     CompassTooltipPopupComponent,
     DismissibleXComponent,
     SortIndicatorComponent,
-    TabComponent
+    CompassTabComponent
   ],
   providers: [
     CompassModalService,

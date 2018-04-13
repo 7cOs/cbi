@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CompassTabsComponent } from './compass-tabs.component';
-import { TabComponent } from './tab/tab.component';
+import { CompassTabComponent } from './tab/tab.component';
 
 describe('CompassTabsComponent', () => {
 
@@ -24,14 +24,14 @@ describe('CompassTabsComponent', () => {
   let componentInstance: TestComponent;
 
   let tabsContainerComponent: CompassTabsComponent;
-  let tab1Component: TabComponent;
-  let tab2Component: TabComponent;
+  let tab1Component: CompassTabComponent;
+  let tab2Component: CompassTabComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         CompassTabsComponent,
-        TabComponent,
+        CompassTabComponent,
         TestComponent
       ]
     });
@@ -45,7 +45,7 @@ describe('CompassTabsComponent', () => {
     tab2Component = tabsContainerComponent.tabs.last;
   });
   describe('afterContentInit', () => {
-    it('should set the first tab to active by default', () => {
+    it('should set the first tab to active by default when tab is given the active input', () => {
       expect(tab1Component.active).toBeTruthy();
     });
   });
