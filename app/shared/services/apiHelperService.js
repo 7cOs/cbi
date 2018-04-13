@@ -269,7 +269,7 @@ module.exports = /*  @ngInject */
                 for (var l = 0; l < tradeChannelValue.length; l++) {
                   if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
                 }
-              } else if (key2 === 'distributor') {
+              } else if (key2 === 'distributor' && obj[key2][k]) {
                 queryParams += obj[key2][k].id;
               } else {
                 queryParams += obj[key2][k];
@@ -277,7 +277,7 @@ module.exports = /*  @ngInject */
 
               // add separator if it's not last item
               if (key2 === 'distributor') {
-                if (obj[key2].length - 1 !== k && obj[key2][k].name.toUpperCase() !== 'ALL TYPES') queryParams += '|';
+                if (obj[key2].length - 1 !== k) queryParams += '|';
               } else {
                 if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
               }
