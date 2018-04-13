@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
@@ -12,6 +12,7 @@ import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
@@ -21,6 +22,12 @@ const chance = new Chance();
   selector: 'list-performance-table',
   template: ''
 })
+
+@Component({
+  selector: 'lists-header',
+  template: ''
+})
+
 class ListPerformanceTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListPerformanceTableRow>;
@@ -29,7 +36,13 @@ class ListPerformanceTableComponentMock {
   @Input() loadingState: boolean;
 }
 
-describe('ListDetailComponent', () => {
+class ListsHeaderComponentMock {
+  @Input() summaryData: ListsSummary;
+  @Output() manageButtonClicked= new EventEmitter();
+  @Output() listsLinkClicked = new EventEmitter();
+}
+
+fdescribe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
   let listDetailMock: ListsState = {
@@ -78,6 +91,7 @@ describe('ListDetailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ListDetailComponent,
+        ListsHeaderComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [

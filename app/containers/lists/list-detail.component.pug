@@ -11,9 +11,10 @@ compass-action-button.action-button-spacing(
 )
 
 lists-header(
-  [summaryData] = "listSummary",
-  (manageButtonClicked) = "handleManageButtonClick()",
-  (listsLinkClicked) = "handleListsLinkClick()")
+  [summaryData]="listSummary",
+  (manageButtonClicked)="handleManageButtonClick()",
+  (listsLinkClicked)="handleListsLinkClick()"
+)
 
 compass-tabs
   compass-tab([tabTitle]='firstTabTitle',
