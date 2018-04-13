@@ -1,5 +1,6 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
@@ -9,9 +10,24 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
+import { CompassActionButtonComponent } from '../../shared/components/compass-action-button/compass-action-button.component';
+import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
 const chance = new Chance();
+
+@Component({
+  selector: 'list-performance-table',
+  template: ''
+})
+class ListPerformanceTableComponentMock {
+  @Input() sortingCriteria: Array<SortingCriteria>;
+  @Input() tableData: Array<ListPerformanceTableRow>;
+  @Input() tableHeaderRow: Array<string>;
+  @Input() totalRow: ListPerformanceTableRow;
+  @Input() loadingState: boolean;
+}
 
 describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
@@ -61,7 +77,9 @@ describe('ListDetailComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ListDetailComponent
+        ListDetailComponent,
+        CompassActionButtonComponent,
+        ListPerformanceTableComponentMock
       ],
       providers: [
         {
