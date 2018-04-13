@@ -18,7 +18,7 @@ import { CompassTooltipPopupComponent } from './components/compass-tooltip-popup
 import { CompassTooltipService } from '../services/compass-tooltip.service';
 import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
 import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
-import { TabComponent } from './components/tab/tab.component';
+import { TabComponent } from './components/compass-tabs/tab/tab.component';
 
 @NgModule({
   imports: [

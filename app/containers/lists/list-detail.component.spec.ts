@@ -12,6 +12,7 @@ import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
 const chance = new Chance();
@@ -92,6 +93,9 @@ describe('ListDetailComponent', () => {
           provide: Store,
           useValue: storeMock
         }
+      ],
+      imports: [
+        SharedModule
       ]
     });
 

@@ -1,6 +1,5 @@
 import { Component, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
-import { TabComponent } from '../tab/tab.component';
-import { NgClass } from '@angular/common';
+import { TabComponent } from './tab/tab.component';
 
 @Component({
   selector: 'compass-tabs',
