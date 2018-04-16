@@ -531,6 +531,9 @@ describe('Unit: list controller', function() {
     describe('when downloading opportunity data with rationales', () => {
       beforeEach(() => {
         ctrl.csvDownloadOption = 'WithRationales';
+
+        filtersService.model.selected.distributor = [];
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST'};
       });
 
       it('should return a csvItem item for each selected opportunity with rationales', () => {
@@ -541,7 +544,7 @@ describe('Unit: list controller', function() {
 
         dataPromise.$$state.value.forEach((csvData, index) => {
           expect(csvData).toEqual({
-            storeDistributor: opportunityArrayMock[index].store.distributors[0],
+            storeDistributor: filtersService.model.selected.distributor[0].name,
             TDLinx: opportunityArrayMock[index].store.id,
             distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
             primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
@@ -607,6 +610,8 @@ describe('Unit: list controller', function() {
     describe('when downloading opportunity data without rationales', () => {
       beforeEach(() => {
         ctrl.csvDownloadOption = 'WithoutRationales';
+        filtersService.model.selected.distributor = [];
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST'};
       });
 
       it('should return a csvItem item for each selected opportunity with rationales', () => {
@@ -617,7 +622,7 @@ describe('Unit: list controller', function() {
 
         dataPromise.$$state.value.forEach((csvData, index) => {
           expect(csvData).toEqual({
-            storeDistributor: opportunityArrayMock[index].store.distributors[0],
+            storeDistributor: filtersService.model.selected.distributor[0].name,
             TDLinx: opportunityArrayMock[index].store.id,
             distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
             primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
@@ -693,6 +698,8 @@ describe('Unit: list controller', function() {
     describe('when downloading opportunity data with store data only', () => {
       beforeEach(() => {
         ctrl.csvDownloadOption = 'Stores';
+        filtersService.model.selected.distributor = [];
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST'};
       });
 
       it('should return csvItems with store only data', () => {
@@ -701,7 +708,7 @@ describe('Unit: list controller', function() {
 
         dataPromise.$$state.value.forEach((csvData, index) => {
           expect(csvData).toEqual({
-            storeDistributor: opportunityArrayMock[index].store.distributors[0],
+            storeDistributor: filtersService.model.selected.distributor[0].name,
             TDLinx: opportunityArrayMock[index].store.id,
             distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
             primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
@@ -735,7 +742,11 @@ describe('Unit: list controller', function() {
     });
 
     describe('when downloading any opportunity data', () => {
-      it('should return `` for storeDistributor when the store has no distributors', () => {
+      beforeEach(() => {
+        filtersService.model.selected.distributor = [];
+      });
+      it('should return `` for storeDistributor when the store has no distributors and no distributor is selected', () => {
+        filtersService.model.selected.distributor = [];
         opportunityArrayMock.forEach((opportunity) => {
           opportunity.store.distributors = undefined;
         });
