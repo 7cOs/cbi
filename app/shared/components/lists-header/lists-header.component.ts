@@ -16,11 +16,11 @@ export class ListsHeaderComponent implements OnInit, OnChanges {
   }
 
   public headerData: ListsSummary = <ListsSummary>{};
-  public firstName: string;
-  public lastName: string;
-  public currentUserFullName: string;
-  public ownerName: string;
   public currentUser: boolean;
+  public ownerName: string;
+  private firstName: string;
+  private lastName: string;
+  private currentUserFullName: string;
 
   constructor(
     @Inject('userService') private userService: any

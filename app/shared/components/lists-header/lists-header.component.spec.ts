@@ -40,8 +40,8 @@ describe('ListsHeaderComponent', () => {
     });
 
     it('should get firstName and lastName from userService', () => {
-      expect(componentInstance.firstName).toBe(mockUserService.model.currentUser.firstName);
-      expect(componentInstance.lastName).toBe(mockUserService.model.currentUser.lastName);
+      expect(componentInstanceCopy.firstName).toBe(mockUserService.model.currentUser.firstName);
+      expect(componentInstanceCopy.lastName).toBe(mockUserService.model.currentUser.lastName);
     });
   });
 
@@ -51,7 +51,7 @@ describe('ListsHeaderComponent', () => {
       componentInstance.ngOnInit();
     });
 
-    it('should get firstName and lastName from userService', () => {
+    it('should call the function `getOwnerName` with right parameters', () => {
       spyOn(componentInstanceCopy, 'getOwnerName').and.callThrough();
       componentInstance.ngOnChanges();
       fixture.detectChanges();
