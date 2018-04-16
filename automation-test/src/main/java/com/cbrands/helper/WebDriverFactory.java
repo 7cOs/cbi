@@ -72,7 +72,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
     Validate.notNull(
       webDriver.get(),
-      "Driver for " + BrowserType.chrome.name() + " could not be found at: " + HostType.local.name() +
+      "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
         "/n Have you downloaded the correct driver into your local target directory?"
     );
 
