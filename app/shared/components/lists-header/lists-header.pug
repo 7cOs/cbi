@@ -19,12 +19,12 @@ div.header-container([ngClass]="{'archived-hero': headerData.archived}")
 
 
     div(column="6 +1").opportunity-info
-      div(*ngIf ="headerData.closedOpportunities")
-        span {{headerData.closedOpportunities}}
+      div
+        span {{headerData.closedOpportunities || 0}}
         label.description.accent-blue Closed
           label.description.accent-blue Opportunities
-      div(*ngIf ="headerData.totalOpportunities")
-        span {{headerData.totalOpportunities}}
+      div
+        span {{headerData.totalOpportunities || 0}}
         label.description.accent-blue Total
           label.description.accent-blue Opportunities
 
