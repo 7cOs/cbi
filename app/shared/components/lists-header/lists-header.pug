@@ -11,7 +11,9 @@ div.header-container([ngClass]="{'archived-hero': headerData.archived}")
     div(column="12")
       h1.list-title {{headerData.name}}
       label(*ngIf ="currentUser").description.bold.accent-blue You are the owner
-      label(*ngIf ="!currentUser").description.bold.accent-blue <span [ngClass]= "{'red-owner': headerData.archived}">{{ headerData.ownerFirstName }} {{headerData.ownerLastName}}</span> is the owner
+      label(*ngIf ="!currentUser").description.bold.accent-blue
+        span([ngClass]= "{'red-owner': headerData.archived}") {{ headerData.ownerFirstName }} {{headerData.ownerLastName}}
+        |  is the owner
 
   div(row)
     div(column="5")
