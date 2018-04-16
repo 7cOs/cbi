@@ -60,12 +60,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
-          if (listDetail.listStores.storeStatus === ActionStatus.Fetched) {
-            this.storeList = listDetail.listStores.stores;
-          }
-        if (listDetail.listSummary.summaryStatus === ActionStatus.Fetched) {
+          this.storeList = listDetail.listStores.stores;
           this.listSummary = listDetail.listSummary.summaryData;
-        }
       });
   }
 
