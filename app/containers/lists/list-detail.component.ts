@@ -12,7 +12,6 @@ import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { ActionStatus } from '../../enums/action-status.enum';
 
 @Component({
   selector: 'list-detail',
