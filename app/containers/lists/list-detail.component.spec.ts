@@ -23,11 +23,6 @@ const chance = new Chance();
   template: ''
 })
 
-@Component({
-  selector: 'lists-header',
-  template: ''
-})
-
 class ListPerformanceTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListPerformanceTableRow>;
@@ -36,13 +31,18 @@ class ListPerformanceTableComponentMock {
   @Input() loadingState: boolean;
 }
 
+@Component({
+  selector: 'lists-header',
+  template: ''
+})
+
 class ListsHeaderComponentMock {
   @Input() summaryData: ListsSummary;
   @Output() manageButtonClicked= new EventEmitter();
   @Output() listsLinkClicked = new EventEmitter();
 }
 
-fdescribe('ListDetailComponent', () => {
+describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
   let listDetailMock: ListsState = {
