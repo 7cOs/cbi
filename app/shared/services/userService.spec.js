@@ -206,7 +206,7 @@ describe('[Services.userService - performance]', function() {
       myAccountsOnly: true,
       premiseType: 'all',
       retailer: 'Chain',
-      distributor: ['111111']
+      distributor: [{id: '111111'}]
     };
     const mockType = {
       value: 2
@@ -274,7 +274,7 @@ describe('[Services.userService - performance]', function() {
     });
 
     type.value = 2;
-    params['distributor'] = ['111111'];
+    params['distributor'] = [{id: '111111'}];
     urlQuery = 'accounts?filter=myAccountsOnly%3Atrue%2Cdistributor%3A111111';
 
     $httpBackend
@@ -306,7 +306,7 @@ describe('[Services.userService - performance]', function() {
     type.value = 2;
     urlQuery = 'accounts?filter=myAccountsOnly%3Atrue%2Cdistributor%3A111111';
     params = defaultParams;
-    params['distributor'] = ['111111'];
+    params['distributor'] = [{id: '111111'}];
 
     $httpBackend
     .expect('GET', urlBase + urlQuery)
