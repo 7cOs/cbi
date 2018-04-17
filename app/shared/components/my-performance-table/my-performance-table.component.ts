@@ -35,7 +35,11 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
     if (tableData) {
-      this.tableDataReceived = tableData;
+      let sortedTableData: Array<MyPerformanceTableRow> = typeof this.sortingFunction === 'function'
+        ? tableData.sort(this.sortingFunction)
+        : tableData;
+
+      this.sortedTableData = this.sortRoleGroups(sortedTableData);
     }
   }
 
@@ -55,7 +59,6 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   @Input() loadingState: LoadingState;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
-  public tableDataReceived: Array<MyPerformanceTableRow>;
   public columnType = MyPerformanceColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
@@ -73,16 +76,6 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges) {
     const viewType = changes.viewType ? changes.viewType.currentValue : this.viewType;
-    if (this.tableDataReceived) {
-      let sortedTableData: Array<MyPerformanceTableRow> = typeof this.sortingFunction === 'function'
-        ? this.tableDataReceived.sort(this.sortingFunction)
-        : this.tableDataReceived;
-
-      this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups || this.viewType === SalesHierarchyViewType.people)
-        ? this.sortRoleGroups(sortedTableData)
-        : sortedTableData;
-      this.tableDataReceived = null;
-    }
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(viewType, loadingState);
   }
