@@ -30,7 +30,7 @@ div
           span {{ tableHeaderRow[5] }}
             sort-indicator([status]="getSortStatus(columnType.lastDepletionDateColumn)")
 
-      tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
+      tr.sub-header.col-100-pct
         th(colspan=1)
         th(colspan=1)
         th(colspan=1)
@@ -60,7 +60,7 @@ div
         list-performance-table-row,
         [rowData]="totalRow")
 
-    tbody([ngClass]="getTableBodyClasses()")
+    tbody.total-row-present
       tr.entity-row.col-100-pct(
         *ngFor="let row of sortedTableData, let rowIndex = index",
         list-performance-table-row,
