@@ -443,4 +443,12 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
     return false;
   }
+  
+  public boolean isExpectedReportLabelDisplayed(String expectedReportLabel) {
+    final String displayedReportLabel = waitForElementToClickable(
+        findElement(By.xpath("//div[@class='saved-filter-select']")), true ).getText();
+    System.out.println( "displayedReportLabel: " + displayedReportLabel);
+    
+    return displayedReportLabel.equals( expectedReportLabel );
+  }
 }

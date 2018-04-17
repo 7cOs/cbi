@@ -78,13 +78,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     testCreateASingleSavedReport(reportName + " #2", distributorSearchText);
   }
 
-  @Test(
+ @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
     dataProvider = "runReportData"
   )
   public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
-    this.setUpNewSavedReport(reportName + " from Opportunities page", distributor);
+    reportName = (reportName + " from Opportunities page");
+    this.setUpNewSavedReport(reportName, distributor);
 
     opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
@@ -93,6 +94,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
     Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+    Assert.assertTrue( opportunitiesPage.isExpectedReportLabelDisplayed(reportName),
+        "Saved report label displayed does not match report name that was run.");
   }
 
   @Test(
@@ -101,7 +104,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     dataProvider = "runReportData"
   )
   public void runSavedReportFromHomePage(String reportName, String distributor) {
-    this.setUpNewSavedReport(reportName + " from Home page", distributor);
+    reportName = (reportName + " from Home page");
+    this.setUpNewSavedReport(reportName, distributor);
 
     homePage.goToPage();
     opportunitiesPage = homePage
@@ -111,6 +115,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
     Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+    Assert.assertTrue( opportunitiesPage.isExpectedReportLabelDisplayed(reportName),
+        "Saved report label displayed does not match report name that was run.");
   }
 
   @Test(
