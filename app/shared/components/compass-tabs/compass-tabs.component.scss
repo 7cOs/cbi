@@ -1,8 +1,8 @@
 @import '../../../assets/styles/base/variables';
 
 .compass-tabs-container {
-  position: absolute;
-  top: 484px;
+  position: relative;
+  margin-top: -60px;
 
   .compass-tab {
     cursor: pointer;

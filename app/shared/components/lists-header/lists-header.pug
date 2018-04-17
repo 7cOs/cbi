@@ -17,8 +17,7 @@ div.header-container([ngClass]="{'archived-hero': headerData.archived}")
 
   div(row)
     div(column="5")
-      p {{headerData.description}}
-
+      p.header-description {{ headerData.description }}
 
     div(column="6 +1").opportunity-info
       div
