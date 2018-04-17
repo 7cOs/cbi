@@ -10,7 +10,7 @@ export class ListsHeaderComponent implements OnInit, OnChanges {
   @Output() listsLinkClicked = new EventEmitter<any>();
   @Output() manageButtonClicked = new EventEmitter<any>();
   @Input() set summaryData(summaryData: ListsSummary) {
-      this.headerData = summaryData;
+    this.headerData = summaryData;
   }
 
   public headerData: ListsSummary = <ListsSummary>{};
