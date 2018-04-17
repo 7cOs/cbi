@@ -23,6 +23,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
 
+  public firstTabTitle: string = 'Performance';
+  public secondTabTitle: string = 'Opportunities';
+
   // TODO: Remove this when we get real data.
   public tableData = getListPerformanceTableRowMock(1000);
   public tableHeader = getListPerformanceHeaderRowMock();
