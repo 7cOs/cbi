@@ -64,10 +64,12 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     } else {
       System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
       final ChromeOptions options = new ChromeOptions();
-      final String executionMode = PropertiesCache.getInstance().getProperty("driver.executionMode");
       options.addArguments("--start-maximized");
       options.addArguments("--disable-infobars");
-      options.addArguments(executionMode); 
+      if(Boolean.parseBoolean(PropertiesCache.getInstance()
+          .getProperty("driver.isSilentMode"))) {
+        options.addArguments("headless"); 
+      }
       webDriver.set(new ChromeDriver(options));      
     }
 
