@@ -12,6 +12,10 @@ import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import {
+  getListOpportunitiesHeaderRowMock,
+  getListOpportunitiesTableRowMock
+} from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 
 @Component({
   selector: 'list-detail',
@@ -29,6 +33,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   // TODO: Remove this when we get real data.
   public tableData = getListPerformanceTableRowMock(1000);
   public tableHeader = getListPerformanceHeaderRowMock();
+  public opportunitiesTableData = getListOpportunitiesTableRowMock(5);
+  public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
   public totalRow = {
     storeColumn: 'Total',
     distributorColumn: '',
