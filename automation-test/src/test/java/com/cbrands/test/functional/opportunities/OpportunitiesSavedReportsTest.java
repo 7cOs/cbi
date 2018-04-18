@@ -78,7 +78,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     testCreateASingleSavedReport(reportName + " #2", distributorSearchText);
   }
 
- @Test(
+  @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
     dataProvider = "runReportOpportunitiesPageData"
