@@ -8,6 +8,8 @@ import { ListsTransformerService } from '../../services/lists-transformer.servic
 import { ListPerformanceTableRowComponent } from '../../shared/components/list-performance-table-row/list-performance-table-row.component';
 import { MatCheckboxModule } from '@angular/material';
 import { SharedModule } from '../../shared/shared.module';
+import { ListOpportunitiesTableRowComponent }
+        from '../../shared/components/list-opportunities-table-row/list-opportunities-table-row.component';
 
 @NgModule({
   imports: [
@@ -18,6 +20,7 @@ import { SharedModule } from '../../shared/shared.module';
   declarations: [
     ListDetailComponent,
     ListOpportunitiesTableComponent,
+    ListOpportunitiesTableRowComponent,
     ListPerformanceTableComponent,
     ListPerformanceTableRowComponent
   ],

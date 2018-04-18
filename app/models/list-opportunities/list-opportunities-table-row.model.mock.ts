@@ -15,7 +15,7 @@ export function getListOpportunitiesTableRowMock(length: number) {
       segmentColumn: chance.character({pool: 'ABC'}),
       cytdColumn: chance.integer({min: 0, max: 40000}),
       cytdVersusYaPercentColumn: chance.d100(),
-      opportunitiesColumn: chance.floating(),
+      opportunitiesColumn: chance.integer({min: 0, max: 10000}),
       lastDepletionDateColumn: depDate.toString(),
       performanceError: false,
       checked: false

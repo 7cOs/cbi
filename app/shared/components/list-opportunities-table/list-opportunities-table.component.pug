@@ -22,13 +22,12 @@ div
         th.segment-col.sort-indicator(colspan=1, (click)="sortRows(columnType.segmentColumn)")
           span {{ tableHeaderRow[2] }}
             sort-indicator([status]="getSortStatus(columnType.segmentColumn)")
-        th(colspan=3)
+        th(colspan=2)
           span {{ tableHeaderRow[3] }}
-        th(colspan=3)
+        th.right-col(colspan=1)
           span {{ tableHeaderRow[4] }}
-        th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.lastDepletionDateColumn)")
-          span {{ tableHeaderRow[5] }}
-            sort-indicator([status]="getSortStatus(columnType.lastDepletionDateColumn)")
+        th.checkbox-col(colspan=1)
+          span +
 
       tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
         th(colspan=1)
@@ -41,7 +40,8 @@ div
         th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytddVersusYaPercentColumn)")
           span VS YA %
             sort-indicator([status]='getSortStatus(columnType.cytddVersusYaPercentColumn)')
-        th(colspan=1)
+        th.right-col(colspan=1)
+        th.checkbox-col(colspan=1)
 
     tbody([ngClass]="getTableBodyClasses()")
       tr.entity-row.col-100-pct(
