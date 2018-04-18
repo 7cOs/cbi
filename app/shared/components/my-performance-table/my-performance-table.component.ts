@@ -39,9 +39,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
         ? tableData.sort(this.sortingFunction)
         : tableData;
 
-      this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups || this.viewType === SalesHierarchyViewType.people)
-        ? this.sortRoleGroups(sortedTableData)
-        : sortedTableData;
+      this.sortedTableData = this.sortRoleGroups(sortedTableData);
     }
   }
 
