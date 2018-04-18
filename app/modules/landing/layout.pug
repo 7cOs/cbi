@@ -73,9 +73,9 @@ section.landing-page
         p
           strong The Corona Family Can Incentive is underway through September 30th! 
           | Track your distributors' performance against this initiative
-          a.light-weight-link(href="{{ l.seBULink }}", target='_blank') here
+          a.light-weight-link(href="{{ l.seBULink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="Corona Can Link 1 (SEBU)") here
           |  for the SEBU and
-          a.light-weight-link(href="{{ l.otherBULink }}", target='_blank') here
+          a.light-weight-link(href="{{ l.otherBULink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="Corona Can Link 2 (ALL OTHER BUs)") here
           |  for all other BUs
       compass-card(
         [image]="l.enhancementCompassCard.image",
