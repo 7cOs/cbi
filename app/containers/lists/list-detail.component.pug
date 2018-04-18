@@ -1,11 +1,11 @@
 compass-action-button(
-    [actionLabel]="actionButtonType.AddToList", 
+    [actionLabel]="actionButtonType.AddToList",
     [isDisabled]="true",
     (onActionButtonClicked)="captureActionButtonClicked($event)"
 )
 
 compass-action-button.action-button-spacing(
-    [actionLabel]="actionButtonType.Download", 
+    [actionLabel]="actionButtonType.Download",
     [isDisabled]="false",
     (onActionButtonClicked)="captureActionButtonClicked($event)"
 )
@@ -19,4 +19,4 @@ compass-tabs
       [tableData]="tableData"
     )
   compass-tab([tabTitle]='secondTabTitle')
-    span opportunities placeholder 
+    list-opportunities-table()
