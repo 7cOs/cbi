@@ -864,6 +864,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (!isEqual(this.filterState, previousState.filter)
       || this.selectedBrandCode !== previousState.selectedBrandCode
       || this.selectedSkuPackageCode !== previousState.selectedSkuPackageCode) {
+
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: previousState.responsibilities.positionId,
         groupedEntities: previousState.responsibilities.groupedEntities,

@@ -131,7 +131,6 @@ describe('MyPerformanceTableComponent', () => {
         }
       ];
       componentInstance.sortingCriteria = sortingCriteria;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -176,7 +175,6 @@ describe('MyPerformanceTableComponent', () => {
         }
       ];
       componentInstance.sortingCriteria = sortingCriteria;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -222,7 +220,6 @@ describe('MyPerformanceTableComponent', () => {
         }
       ];
       componentInstance.sortingCriteria = sortingCriteria;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -253,7 +250,6 @@ describe('MyPerformanceTableComponent', () => {
 
       const tableData = getMyPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
