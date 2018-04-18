@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { MatCheckboxModule } from '@angular/material';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListDetailComponent } from '../../containers/lists/list-detail.component';
 import { ListsHeaderComponent } from '../../shared/components/lists-header/lists-header.component';
@@ -14,7 +13,6 @@ import { SharedModule } from '../../shared/shared.module';
   imports: [
     BrowserModule,
     CommonModule,
-    MatCheckboxModule,
     SharedModule
   ],
   declarations: [
