@@ -445,17 +445,13 @@ public class OpportunitiesPage extends TestNGBasePage {
   }
   
   /**
-   * Compares expected report label to label displayed in saved report drop-down 
-   * post new Saved Report save. Return true if expected report label and displayed label
-   * match or false otherwise. 
    * @param String expectedReportLabel
    * @return boolean
+   * @author SKARNEH
    */
   public boolean isExpectedReportLabelDisplayed(String expectedReportLabel) {
     final String displayedReportLabel = waitForElementToClickable(
-        findElement(By.xpath("//div[@class='saved-filter-select']")), true ).getText();
-    System.out.println( "displayedReportLabel: " + displayedReportLabel);
-    
+        findElement(By.xpath("//div[@class='saved-filter-select']")), true ).getText();   
     return displayedReportLabel.equals( expectedReportLabel );
   }
 }

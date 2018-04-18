@@ -81,10 +81,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
  @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "runReportData"
+    dataProvider = "runReportOpportunitiesPageData"
   )
   public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
-    reportName = (reportName + " from Opportunities page");
     this.setUpNewSavedReport(reportName, distributor);
 
     opportunitiesPage = opportunitiesPage
@@ -101,10 +100,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Running an Opportunities Saved Report from the Home page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "runReportData"
+    dataProvider = "runReportHomePageData"
   )
   public void runSavedReportFromHomePage(String reportName, String distributor) {
-    reportName = (reportName + " from Home page");
     this.setUpNewSavedReport(reportName, distributor);
 
     homePage.goToPage();
@@ -285,6 +283,22 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       {"Run " + testReportName, "Healy Wholesale"}
     };
   }
+  
+  @DataProvider
+  public static Object[][] runReportOpportunitiesPageData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Run " + testReportName + " from Opportunities page", "Healy Wholesale"}
+    };
+  }  
+
+  @DataProvider
+  public static Object[][] runReportHomePageData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Run " + testReportName + " from Home page", "Healy Wholesale"}
+    };
+  }  
 
   @DataProvider
   public static Object[][] editDuplicateReportData() {
