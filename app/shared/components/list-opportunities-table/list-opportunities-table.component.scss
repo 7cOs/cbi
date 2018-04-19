@@ -220,6 +220,10 @@ tr.one-right-column-present {
     border-right: 1px solid $gray-8;
   }
 
+  /deep/td:nth-child(6) {
+    border-right: 1px solid $gray-8;
+  }
+
   /deep/td:nth-child(10) {
     border-right: 1px solid $gray-8;
   }
@@ -352,6 +356,7 @@ td, th {
 
   th:nth-child(4),
   th:nth-child(7),
+  th:nth-child(6),
   th:nth-child(10),
   th:nth-child(11) {
     border-right: 1px solid $gray-8;
