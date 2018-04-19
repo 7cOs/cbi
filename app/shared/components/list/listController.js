@@ -1,5 +1,7 @@
 'use strict';
 
+const findIndex = require('lodash').findIndex;
+
 module.exports = /*  @ngInject */
   function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
@@ -788,7 +790,7 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreDistributor(opportunity) {
-      if (filtersService.model.selected.distributor.length > 0) {
+      if (filtersService.model.selected.distributor.length === 1) {
         return filtersService.model.selected.distributor[0].name;
       } else if (opportunity.store.distributors) {
         return opportunity.store.distributors[0];
@@ -971,6 +973,10 @@ module.exports = /*  @ngInject */
     function getDistributorCustomerCode(distributorsSalesInfo) {
       return distributorsSalesInfo.reduce((customerCode, salesInfo) => {
         if (salesInfo.primaryFlag === 'Y') customerCode = salesInfo.distributorCustomerCd;
+        if (filtersService.model.selected.distributor.length === 1) {
+          let matchedIndex = getMatchedDistributorToSalesInfo(distributorsSalesInfo);
+          return distributorsSalesInfo[matchedIndex].distributorCustomerCd;
+        }
         return customerCode;
       }, '');
     }
@@ -980,8 +986,19 @@ module.exports = /*  @ngInject */
         if (salesInfo.primaryFlag === 'Y') {
           salesRoute = salesInfo.salespersonName.length ? salesInfo.salespersonName : 'Unknown';
         }
+        if (filtersService.model.selected.distributor.length === 1) {
+          let matchedIndex = getMatchedDistributorToSalesInfo(distributorsSalesInfo);
+          return distributorsSalesInfo[matchedIndex].salespersonName.length ? distributorsSalesInfo[matchedIndex].salespersonName : 'Unknown';
+        }
         return salesRoute;
       }, '');
+    }
+
+    function getMatchedDistributorToSalesInfo(distributorsSalesInfo) {
+      let matchedIndex = findIndex(distributorsSalesInfo, function(salesInfoObj) {
+        return salesInfoObj.distributorCd === filtersService.model.selected.distributor[0].id;
+      });
+      return matchedIndex;
     }
 
     function impactSort (item) {

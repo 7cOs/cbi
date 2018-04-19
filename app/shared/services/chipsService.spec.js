@@ -313,12 +313,15 @@ describe('[Services.chipsService]', function() {
 
       it('should remove selected filter and decrement filtersValidCount given "distributor" chip', function() {
         // handle potential duplicate filters
-        filtersService.model.selected.distributor = ['555111', '555222', '555222', '555333'];
+        filtersService.model.selected.distributor = [{type: 'distributor', name: 'some distributor', id: '555111'},
+                                                     {type: 'distributor', name: 'some distributor', id: '555222'},
+                                                     {type: 'distributor', name: 'some distributor', id: '555222'},
+                                                     {type: 'distributor', name: 'some distributor', id: '555333'}];
         filtersService.model.filtersValidCount = 4;
 
         chipsService.removeFromFilterService({type: 'distributor', name: 'some distributor', id: '555111'});
-
-        expect(filtersService.model.selected.distributor).toEqual(['555222', '555333']);
+        expect(filtersService.model.selected.distributor[0].id).toEqual('555222');
+        expect(filtersService.model.selected.distributor[1].id).toEqual('555333');
         expect(filtersService.model.filtersValidCount).toEqual(3);
       });
 
