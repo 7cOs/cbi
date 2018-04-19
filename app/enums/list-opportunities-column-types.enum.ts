@@ -4,6 +4,5 @@ export enum ListOpportunitiesColumnType {
   segmentColumn,
   cytdColumn,
   cytdVersusYaPercentColumn,
-  opportunitiesColumn,
-  lastDepletionDateColumn
+  opportunitiesColumn
 }

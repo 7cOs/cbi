@@ -175,31 +175,6 @@ tr.one-right-column-present {
   padding-top: 20px;
 }
 
-.total-row {
-  height: $row-height;
-  border-bottom: 1px solid $gray-10;
-  text-transform: uppercase;
-  background-color: #002d61;
-  color: $white;
-
-  /deep/.left-col,
-  /deep/.center-col,
-  /deep/.right-col {
-    font-weight: $semibold;
-    background-color: #002d61;
-  }
-
-  /deep/.checkbox-col {
-    border: 0;
-  }
-
-  /deep/td:nth-child(4),
-  /deep/td:nth-child(7),
-  /deep/td:nth-child(10) {
-    border-right: 1px solid $gray-8;
-  }
-}
-
 .entity-row {
   border-right: 1px solid $gray-8;
   border-left: 1px solid $gray-8;
@@ -231,6 +206,7 @@ tr.one-right-column-present {
   }
 
   /deep/td:nth-child(7) {
+    background-color: $gray-4;
     border-right: 1px solid $gray-8;
   }
 
@@ -345,13 +321,17 @@ td, th {
     background-color: $gray-4;
     border-right: 1px solid $gray-8;
   }
+}
 
-
+.expand-icon {
+  width: 14px;
+  height: 20px;
+  cursor: pointer;
 }
 
 .sub-header {
   height: $row-height-header;
-  border-bottom: 1px solid $gray-10;
+  border-bottom: 1px solid $gray-15;
 
   th {
     font-family: $rajdhani;
@@ -425,6 +405,12 @@ td, th {
 
 .description-line-1 {
   font-size: 11px;
+}
+
+.store-name {
+  color: $cancel-blue;
+  font-family: $roboto;
+  line-height: 1.5;
 }
 
 .description-line-0 {
