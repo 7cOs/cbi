@@ -57,20 +57,19 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static WebDriver getLocalWebDriver() {
-    System.setProperty("webdriver.chrome.driver", "chromedriver");
     final String osName = System.getProperty("os.name").toLowerCase();
+    final boolean isSilentMode = Boolean.parseBoolean(
+        PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
+    final ChromeOptions options = new ChromeOptions();
+    options.addArguments("--start-maximized");
+    options.addArguments("--disable-infobars");
+    if(isSilentMode) { options.addArguments("headless"); }
+
     if(!osName.startsWith("windows")) {
-      webDriver.set(new ChromeDriver());
+      System.setProperty("webdriver.chrome.driver", "chromedriver");
+      webDriver.set(new ChromeDriver(options));
     } else {
       System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-      final ChromeOptions options = new ChromeOptions();
-      final boolean isSilentMode = Boolean.parseBoolean(
-          PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
-      options.addArguments("--start-maximized");
-      options.addArguments("--disable-infobars");
-      if(isSilentMode) {
-        options.addArguments("headless"); 
-      }
       webDriver.set(new ChromeDriver(options));      
     }
 
