@@ -77,4 +77,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.listDetailSubscription.unsubscribe();
   }
+
+  public handleManageButtonClick() {
+    console.log('manage button click');
+  }
+
+  public handleListsLinkClick() {
+    console.log('list link clicked');
+  }
 }
