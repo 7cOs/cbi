@@ -33,7 +33,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   // TODO: Remove this when we get real data.
   public tableData = getListPerformanceTableRowMock(1000);
   public tableHeader = getListPerformanceHeaderRowMock();
-  public opportunitiesTableData = getListOpportunitiesTableRowMock(5);
+  public opportunitiesTableData = getListOpportunitiesTableRowMock(25);
   public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
   public totalRow = {
     storeColumn: 'Total',
