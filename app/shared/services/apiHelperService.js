@@ -280,7 +280,8 @@ module.exports = /*  @ngInject */
               } else if (key2 === 'distributor' && obj[key2][k]) {
                 queryParams += obj[key2][k].id;
               } else if (key2 === 'masterSKU') {
-                queryParams += obj[key2][k].slice(0, obj[key2][k].search('@'));
+                let index = obj[key2][k].search('@');
+                queryParams += index === -1 ? obj[key2][k] : obj[key2][k].slice(0, index);
               } else {
                 queryParams += obj[key2][k];
               }
