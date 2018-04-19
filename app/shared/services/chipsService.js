@@ -1,4 +1,6 @@
 'use strict';
+var uniqBy = require('lodash').uniqBy;
+var findIndex = require('lodash').findIndex;
 
 module.exports = /*  @ngInject */
   function chipsService($filter, $state, $q, loaderService, filtersService, opportunitiesService, targetListService) {
@@ -225,7 +227,16 @@ module.exports = /*  @ngInject */
            } else if (chip.type === 'zipCode' && arr[i] === chip.name) {
             arr.splice(i, 1);
             break;
-          } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' ||
+          } else if (chip.type === 'distributor') {
+            let dedupedDistributor = uniqBy(arr, (distributor) => {
+              return distributor.id;
+            });
+            let removalIndex = findIndex(dedupedDistributor, (distributor) => { return distributor.id === chip.id; });
+            dedupedDistributor.splice(removalIndex, 1);
+            filtersService.model.selected[chip.type] = dedupedDistributor;
+            filtersService.model.filtersValidCount--;
+            break;
+          } else if (chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' ||
               chip.type === 'contact' || chip.type === 'masterSKU' || chip.type === 'brand') {
             // handle duplicate values for these fields, which may have been stored in a saved report
             var unique = arr.filter(function(elem, index, self) {
