@@ -415,7 +415,7 @@ describe('Unit: list controller', function() {
 
   describe('[list.getCSVData] method', () => {
     let opportunityArrayMock;
-    let distributorIdIndex = chance.string();
+    let distributorID = chance.string();
     beforeEach(() => {
       opportunityArrayMock = [{
         id: chance.string(),
@@ -464,7 +464,7 @@ describe('Unit: list controller', function() {
             primaryFlag: 'Y',
             salespersonName: chance.string()
           }, {
-            distributorCd: distributorIdIndex,
+            distributorCd: distributorID,
             distributorCustomerCd: chance.string(),
             primaryFlag: 'N',
             salespersonName: chance.string()
@@ -517,7 +517,7 @@ describe('Unit: list controller', function() {
             primaryFlag: 'Y',
             salespersonName: chance.string()
           }, {
-            distributorCd: distributorIdIndex,
+            distributorCd: distributorID,
             distributorCustomerCd: chance.string(),
             primaryFlag: 'N',
             salespersonName: chance.string()
@@ -533,7 +533,7 @@ describe('Unit: list controller', function() {
         ctrl.csvDownloadOption = 'WithRationales';
 
         filtersService.model.selected.distributor = [];
-        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorIdIndex};
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorID};
       });
 
       it('should return a csvItem item for each selected opportunity with rationales', () => {
@@ -611,7 +611,7 @@ describe('Unit: list controller', function() {
       beforeEach(() => {
         ctrl.csvDownloadOption = 'WithoutRationales';
         filtersService.model.selected.distributor = [];
-        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorIdIndex};
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorID};
       });
 
       it('should return a csvItem item for each selected opportunity with rationales', () => {
@@ -699,7 +699,7 @@ describe('Unit: list controller', function() {
       beforeEach(() => {
         ctrl.csvDownloadOption = 'Stores';
         filtersService.model.selected.distributor = [];
-        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorIdIndex};
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorID};
       });
 
       it('should return csvItems with store only data', () => {
