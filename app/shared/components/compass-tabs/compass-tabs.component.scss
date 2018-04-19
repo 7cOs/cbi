@@ -1,44 +1,51 @@
 @import '../../../assets/styles/base/variables';
 
-.compass-tab {
-  cursor: pointer;
-  display: inline-block;
-  line-height: 43px;
-  width: 150px;
-  height: 43px;
-  background-color: $gray-4;
-  border: solid 1px $border-gray;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
-  text-align: center;
+.compass-tabs-container {
+  position: relative;
+  margin-top: -60px;
 
-  p {
-    width: 100px;
-    height: 26px;
-    font-family: $roboto;
-    font-size: 17px;
-    font-weight: normal;
-    letter-spacing: normal;
+  .compass-tab {
+    cursor: pointer;
+    display: inline-block;
+    line-height: 43px;
+    width: 150px;
+    height: 43px;
+    background-color: $gray-4;
+    border: solid 1px $border-gray;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
     text-align: center;
-    margin: 0 auto;
-    color: $gray-1;
-  }
-
-  &:first-child {
-    margin-left: 0;
-  }
-
-  &.active-tab {
-    background-color: $white;
-    box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.2);
-    border-top: solid 1px $border-gray;
-    border-right: solid 1px $border-gray;
-    border-left: solid 1px $border-gray;
-    border-bottom: 0;
+    opacity: 0.9;
 
     p {
-      text-shadow: 0.6px 0 0 $black;
+      width: 100px;
+      height: 26px;
+      font-family: $roboto;
+      font-size: 17px;
+      font-weight: normal;
+      letter-spacing: normal;
       text-align: center;
+      margin: 0 auto;
+      color: $gray-1;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &.active-tab {
+      background-color: $white;
+      box-shadow: 0 -4px 6px 4px rgba(0, 0, 0, 0.2);
+      border-top: solid 1px $border-gray;
+      border-right: solid 1px $border-gray;
+      border-left: solid 1px $border-gray;
+      border-bottom: 0;
+      opacity: 1;
+
+      p {
+        text-shadow: 0.6px 0 0 $black;
+        text-align: center;
+      }
     }
   }
 }

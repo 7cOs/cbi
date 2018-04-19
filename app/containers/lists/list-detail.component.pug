@@ -1,22 +1,29 @@
 compass-action-button(
-    [actionLabel]="actionButtonType.AddToList", 
-    [isDisabled]="true",
-    (onActionButtonClicked)="captureActionButtonClicked($event)"
+  [actionLabel]="actionButtonType.AddToList",
+  [isDisabled]="true",
+  (onActionButtonClicked)="captureActionButtonClicked($event)"
 )
 
 compass-action-button.action-button-spacing(
-    [actionLabel]="actionButtonType.Download", 
-    [isDisabled]="false",
-    (onActionButtonClicked)="captureActionButtonClicked($event)"
+  [actionLabel]="actionButtonType.Download",
+  [isDisabled]="false",
+  (onActionButtonClicked)="captureActionButtonClicked($event)"
+)
+
+lists-header(
+  [summaryData]="listSummary",
+  (manageButtonClicked)="handleManageButtonClick()",
+  (listsLinkClicked)="handleListsLinkClick()"
 )
 
 compass-tabs
   compass-tab([tabTitle]='firstTabTitle',
-              [active]='true')
+  [active]='true')
     list-performance-table(
-      [totalRow]="totalRow",
-      [tableHeaderRow]="tableHeader",
-      [tableData]="tableData"
+    [totalRow]="totalRow",
+    [tableHeaderRow]="tableHeader",
+    [tableData]="tableData"
     )
   compass-tab([tabTitle]='secondTabTitle')
-    span opportunities placeholder 
+    span opportunities placeholder
+
