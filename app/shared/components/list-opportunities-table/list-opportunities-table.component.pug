@@ -2,11 +2,11 @@ beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [
 
 div
 
-  table.col-100-pct([ngClass]="tableClasses")
+  table
 
-    thead.col-100-pct
+    thead
 
-      tr.top-header.col-100-pct
+      tr.top-header
         th.checkbox-col(colspan=1)
           mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
           [checked]="isSelectAllChecked",
@@ -30,7 +30,7 @@ div
         th.checkbox-col(colspan=1)
           img.expand-icon(src="../../../assets/img/icons/add-expand-collapse.svg")
 
-      tr.sub-header.col-100-pct
+      tr.sub-header
         th(colspan=1)
         th(colspan=1)
         th(colspan=1)
@@ -45,7 +45,7 @@ div
         th.checkbox-col(colspan=1)
 
     tbody.total-row-absent
-      tr.entity-row.col-100-pct(
+      tr.entity-row(
         *ngFor="let row of sortedTableData, let rowIndex = index",
         list-opportunities-table-row,
         [rowData]="row",
