@@ -10,6 +10,7 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsSummary } from '../../models/lists/lists-header.model';
@@ -28,6 +29,18 @@ class ListPerformanceTableComponentMock {
   @Input() tableData: Array<ListPerformanceTableRow>;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: ListPerformanceTableRow;
+  @Input() loadingState: boolean;
+}
+
+@Component({
+  selector: 'list-opportunities-table',
+  template: ''
+})
+
+class ListOpportunitiesTableComponentMock {
+  @Input() sortingCriteria: Array<SortingCriteria>;
+  @Input() tableData: Array<ListOpportunitiesTableRow>;
+  @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
 }
 
@@ -92,6 +105,7 @@ describe('ListDetailComponent', () => {
       declarations: [
         ListDetailComponent,
         ListsHeaderComponentMock,
+        ListOpportunitiesTableComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [
