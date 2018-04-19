@@ -136,6 +136,20 @@ th {
   }
 }
 
+/deep/.expand-col {
+  text-align: center;
+  padding: 20px;
+  width: 5%;
+  border-right: 2px solid $gray-8;
+
+  div.left-col-content {
+    div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
 tr.one-right-column-present {
   /deep/.left-col {
     width: 35%;
@@ -360,6 +374,10 @@ td, th {
   th:nth-child(10),
   th:nth-child(11) {
     border-right: 1px solid $gray-8;
+  }
+
+  th:nth-child(7) {
+    background-color: $gray-4;
   }
 }
 
