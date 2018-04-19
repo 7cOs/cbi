@@ -1,5 +1,6 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
@@ -9,9 +10,37 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListDetailComponent } from './list-detail.component';
+import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListsSummary } from '../../models/lists/lists-header.model';
+import { SharedModule } from '../../shared/shared.module';
+import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
 const chance = new Chance();
+
+@Component({
+  selector: 'list-performance-table',
+  template: ''
+})
+
+class ListPerformanceTableComponentMock {
+  @Input() sortingCriteria: Array<SortingCriteria>;
+  @Input() tableData: Array<ListPerformanceTableRow>;
+  @Input() tableHeaderRow: Array<string>;
+  @Input() totalRow: ListPerformanceTableRow;
+  @Input() loadingState: boolean;
+}
+
+@Component({
+  selector: 'lists-header',
+  template: ''
+})
+
+class ListsHeaderComponentMock {
+  @Input() summaryData: ListsSummary;
+  @Output() manageButtonClicked= new EventEmitter();
+  @Output() listsLinkClicked = new EventEmitter();
+}
 
 describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
@@ -61,7 +90,9 @@ describe('ListDetailComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ListDetailComponent
+        ListDetailComponent,
+        ListsHeaderComponentMock,
+        ListPerformanceTableComponentMock
       ],
       providers: [
         {
@@ -76,6 +107,9 @@ describe('ListDetailComponent', () => {
           provide: Store,
           useValue: storeMock
         }
+      ],
+      imports: [
+        SharedModule
       ]
     });
 

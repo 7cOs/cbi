@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChange
 import { sortBy } from 'lodash';
 
 import { CalculatorService } from '../../../services/calculator.service';
-import { ColumnType } from '../../../enums/column-type.enum';
+import { MyPerformanceColumnType } from '../../../enums/my-performance-column-type.enum';
 import { CssClasses } from '../../../models/css-classes.model';
 import { DateRange } from '../../../models/date-range.model';
 import { EntityPeopleType } from '../../../enums/entity-responsibilities.enum';
@@ -39,9 +39,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
         ? tableData.sort(this.sortingFunction)
         : tableData;
 
-      this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups || this.viewType === SalesHierarchyViewType.people)
-        ? this.sortRoleGroups(sortedTableData)
-        : sortedTableData;
+      this.sortedTableData = this.sortRoleGroups(sortedTableData);
     }
   }
 
@@ -61,7 +59,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   @Input() loadingState: LoadingState;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
-  public columnType = ColumnType;
+  public columnType = MyPerformanceColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
   public rippleColor: string = 'rgba(17, 119, 184, 0.05)';
@@ -86,7 +84,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     return (this.totalRow || this.dismissibleTotalRow) ? 'total-row-present' : 'total-row-absent';
   }
 
-  public getSortStatus(columnType: ColumnType): SortStatus {
+  public getSortStatus(columnType: MyPerformanceColumnType): SortStatus {
     return this._sortingCriteria[0].columnType === columnType
       ? this._sortingCriteria[0].ascending
         ? SortStatus.ascending
@@ -94,11 +92,11 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
       : SortStatus.inactive;
   }
 
-  public sortRows(colType: ColumnType) {
+  public sortRows(colType: MyPerformanceColumnType) {
     // this will only sort on the FIRST criterion (for now)
     const ascending = this._sortingCriteria[0].columnType === colType
       ? !this._sortingCriteria[0].ascending
-      : colType === ColumnType.descriptionRow0;
+      : colType === MyPerformanceColumnType.descriptionRow0;
     const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
     this.applySortingCriteria(criteria);
   }
@@ -193,7 +191,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
         let currentSortOrder: number;
         this._sortingCriteria.every((criterion, idx) => {
           i = idx;
-          currentColumn = ColumnType[criterion.columnType];
+          currentColumn = MyPerformanceColumnType[criterion.columnType];
           currentSortOrder = this.calculatorService.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           return !currentSortOrder;
         });

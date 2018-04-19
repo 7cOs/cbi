@@ -9,7 +9,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
-import { ColumnType } from '../../enums/column-type.enum';
+import { MyPerformanceColumnType } from '../../enums/my-performance-column-type.enum';
 import { CompassTooltipPopupInputs } from '../../models/compass-tooltip-popup-inputs.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -75,7 +75,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public fetchOpportunitiesError: boolean = false;
   public showSalesContributionToVolume: boolean = false;
   public sortingCriteria: Array<SortingCriteria> = [{
-    columnType: ColumnType.metricColumn0,
+    columnType: MyPerformanceColumnType.metricColumn0,
     ascending: false
   }];
   public totalRowData: MyPerformanceTableRow;
@@ -864,6 +864,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (!isEqual(this.filterState, previousState.filter)
       || this.selectedBrandCode !== previousState.selectedBrandCode
       || this.selectedSkuPackageCode !== previousState.selectedSkuPackageCode) {
+
       this.store.dispatch(new ResponsibilitiesActions.RefreshAllPerformances({
         positionId: previousState.responsibilities.positionId,
         groupedEntities: previousState.responsibilities.groupedEntities,

@@ -5,7 +5,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { CalculatorService } from '../../../services/calculator.service';
-import { ColumnType } from '../../../enums/column-type.enum';
+import { MyPerformanceColumnType } from '../../../enums/my-performance-column-type.enum';
 import { getDateRangeMock } from '../../../models/date-range.model.mock';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { getProductMetricsViewTypeMock } from '../../../enums/product-metrics-view-type.enum.mock';
@@ -86,8 +86,7 @@ describe('MyPerformanceTableComponent', () => {
       const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteria[0];
-      const firstColumnType = ColumnType[sortingCriteria[0].columnType];
-
+      const firstColumnType = MyPerformanceColumnType[sortingCriteria[0].columnType];
       fixture.detectChanges();
       const mockElements = fixture.debugElement
         .queryAll(By.directive(MockMyPerformanceTableRowComponent));
@@ -122,16 +121,15 @@ describe('MyPerformanceTableComponent', () => {
 
       const sortingCriteria = [
         {
-          columnType: ColumnType.descriptionRow0,
+          columnType: MyPerformanceColumnType.descriptionRow0,
           ascending: true
         },
         {
-          columnType: ColumnType.metricColumn0,
+          columnType: MyPerformanceColumnType.metricColumn0,
           ascending: false
         }
       ];
       componentInstance.sortingCriteria = sortingCriteria;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -167,16 +165,15 @@ describe('MyPerformanceTableComponent', () => {
 
       const sortingCriteria = [
         {
-          columnType: ColumnType.descriptionRow0,
+          columnType: MyPerformanceColumnType.descriptionRow0,
           ascending: false
         },
         {
-          columnType: ColumnType.metricColumn0,
+          columnType: MyPerformanceColumnType.metricColumn0,
           ascending: false
         }
       ];
       componentInstance.sortingCriteria = sortingCriteria;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -213,16 +210,15 @@ describe('MyPerformanceTableComponent', () => {
 
       const sortingCriteria = [
         {
-          columnType: ColumnType.descriptionRow0,
+          columnType: MyPerformanceColumnType.descriptionRow0,
           ascending: false
         },
         {
-          columnType: ColumnType.metricColumn0,
+          columnType: MyPerformanceColumnType.metricColumn0,
           ascending: false
         }
       ];
       componentInstance.sortingCriteria = sortingCriteria;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement
@@ -249,11 +245,10 @@ describe('MyPerformanceTableComponent', () => {
       const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteria[0];
-      const firstColumnType = ColumnType[sortingCriteria[0].columnType];
+      const firstColumnType = MyPerformanceColumnType[sortingCriteria[0].columnType];
 
       const tableData = getMyPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
-
       fixture.detectChanges();
 
       const mockElements = fixture.debugElement

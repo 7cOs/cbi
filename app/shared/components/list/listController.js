@@ -735,7 +735,7 @@ module.exports = /*  @ngInject */
     function createCSVData(opportunities) {
       return opportunities.reduce((opportunityCSVDataArray, opportunity) => {
         const opportunityCSVData = {
-          storeDistributor: opportunity.store.distributors ? opportunity.store.distributors[0] : '',
+          storeDistributor: getStoreDistributor(opportunity),
           TDLinx: opportunity.store.id,
           distributorCustomerCode: getDistributorCustomerCode(opportunity.store.distributorsSalesInfo),
           primaryDistributorSalesRoute: getDistributorSalesRoute(opportunity.store.distributorsSalesInfo),
@@ -785,6 +785,16 @@ module.exports = /*  @ngInject */
       }
 
       return localCSVHeader;
+    }
+
+    function getStoreDistributor(opportunity) {
+      if (filtersService.model.selected.distributor.length > 0) {
+        return filtersService.model.selected.distributor[0].name;
+      } else if (opportunity.store.distributors) {
+        return opportunity.store.distributors[0];
+      } else {
+        return '';
+      }
     }
 
     /**

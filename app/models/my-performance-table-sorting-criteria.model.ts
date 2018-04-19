@@ -1,6 +1,6 @@
-import { ColumnType } from '../enums/column-type.enum';
+import { MyPerformanceColumnType } from '../enums/my-performance-column-type.enum';
 
 export interface SortingCriteria {
-  columnType: ColumnType;
+  columnType: MyPerformanceColumnType;
   ascending: boolean;
 }
