@@ -60,6 +60,7 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.addCollaborator = addCollaborator;
     vm.archiveTargetList = archiveTargetList;
+    vm.unarchiveTargetList = unarchiveTargetList;
     vm.closeModal = closeModal;
     vm.createNewList = createNewList;
     vm.createTargetList = createTargetList;
@@ -120,6 +121,38 @@ module.exports = /*  @ngInject */
         });
 
         toastService.showToast('archived', selectedTargetLists);
+        vm.selected = [];
+      });
+    }
+
+    function unarchiveTargetList() {
+      let selectedTargetLists = vm.selected,
+          unarchiveTargetListPromises = [];
+
+      // get selected target list ids and their promises
+      unarchiveTargetListPromises = selectedTargetLists.map((targetList) => {
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
+          'Unarchive Target List',
+          targetList.id
+        );
+        return targetListService.updateTargetList(targetList.id, {unarchived: true});
+      });
+
+      // run all archive requests at the same time
+      $q.all(unarchiveTargetListPromises).then((response) => {
+        angular.forEach(selectedTargetLists, (listItem, key) => {
+          listItem.archived = false;
+          // Remove the item from the archived list me.
+          userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(listItem), 1);
+
+          userService.model.targetLists.ownedArchived--;
+          userService.model.targetLists.ownedNotArchived++;
+
+          userService.model.targetLists.ownedNotArchivedTargetLists.unshift(listItem);
+        });
+
+        toastService.showToast('unarchived', selectedTargetLists);
         vm.selected = [];
       });
     }

@@ -710,4 +710,48 @@ describe('Unit: expanded target list controller', function() {
        expect(analyticsService.trackEvent).toHaveBeenCalled();
      });
    });
+   describe('[unarchiveTargetList]', function() {
+    it('should unarchive', function() {
+      var def = q.defer();
+      httpBackend.when('GET', '/v2/users/undefined/targetLists?archived=true').respond(200, {test: 1});
+      httpBackend.when('GET', '/v2/users/undefined/targetLists/').respond(200, {test: 2});
+      httpBackend.when('PATCH', '/v2/targetLists/1234').respond(200, {test: 3});
+
+     spyOn(targetListService, 'updateTargetList').and.callFake(function() {
+        return {
+          then: function(callback) { return q.when(callback(def)); }
+         };
+       });
+
+     spyOn(toastService, 'showToast').and.callThrough();
+
+     spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
+
+      ctrl.selected = [{
+        archived: true,
+        collaborators: [],
+        id: '1234'
+      }];
+      userService.model.targetLists = {
+        archived: [{
+          archived: true,
+          collaborators: [],
+          id: '1234'
+         }],
+        ownedArchived: 10,
+        ownedNotArchived: 60,
+        ownedNotArchivedTargetLists: []};
+      ctrl.unarchiveTargetList();
+      def.resolve();
+      scope.$apply();
+
+      expect(userService.model.targetLists.ownedArchived).toEqual(9);
+      expect(userService.model.targetLists.ownedNotArchived).toEqual(61);
+      expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([{ archived: false, collaborators: [  ], id: '1234' }]);
+      expect(userService.model.targetLists.archived).toEqual([]);
+      expect(ctrl.selected).toEqual([]);
+      expect(toastService.showToast).toHaveBeenCalled();
+      expect(analyticsService.trackEvent).toHaveBeenCalled();
+    });
+  });
 });
