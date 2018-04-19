@@ -995,7 +995,7 @@ module.exports = /*  @ngInject */
     }
 
     function getMatchedDistributorToSalesInfo(distributorsSalesInfo) {
-      let matchedIndex = findIndex(distributorsSalesInfo, function(salesInfoObj) {
+      let matchedIndex = findIndex(distributorsSalesInfo, (salesInfoObj) => {
         return salesInfoObj.distributorCd === filtersService.model.selected.distributor[0].id;
       });
       return matchedIndex;
