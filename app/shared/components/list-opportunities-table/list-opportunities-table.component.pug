@@ -30,7 +30,7 @@ div
         th.checkbox-col(colspan=1)
           img.expand-icon(src="../../../assets/img/icons/add-expand-collapse.svg")
 
-      tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
+      tr.sub-header.col-100-pct
         th(colspan=1)
         th(colspan=1)
         th(colspan=1)
@@ -44,7 +44,7 @@ div
         th.right-col(colspan=1)
         th.checkbox-col(colspan=1)
 
-    tbody([ngClass]="getTableBodyClasses()")
+    tbody.total-row-absent
       tr.entity-row.col-100-pct(
         *ngFor="let row of sortedTableData, let rowIndex = index",
         list-opportunities-table-row,

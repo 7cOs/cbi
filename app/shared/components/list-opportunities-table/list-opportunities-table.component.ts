@@ -86,10 +86,6 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     }
   }
 
-  public getTableBodyClasses(): string {
-    return 'total-row-absent';
-  }
-
   public getSortStatus(columnType: ListOpportunitiesColumnType): SortStatus {
     return this._sortingCriteria[0].columnType === columnType
       ? this._sortingCriteria[0].ascending
@@ -115,10 +111,6 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     this.sortedTableData.forEach((row: ListOpportunitiesTableRow) => {
       return row.checked = this.isSelectAllChecked;
     });
-  }
-
-  public getSubHeaderClasses(): string {
-    return '';
   }
 
   public getEntityRowClasses(row: ListOpportunitiesTableRow): CssClasses {
