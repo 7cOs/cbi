@@ -59,23 +59,24 @@ section.landing-page
     section(column="4")
       compass-card(
         [image]="l.salesCompassCard.image",
-        [title]="l.salesCompassCard.title",
-        [main-action]="l.salesCompassCard.mainActionName",
-        [analytics-properties]="{category: 'Navigation', label: 'Get More Information'}",
-        (on-main-action-clicked)="l.openWebPage(l.salesCompassCard.webPage)"
+        [title]="l.salesCompassCard.title"
       )
-        p.bold The Corona Premier 'Fast Start' Incentive is underway through April 30!  Are you ALL IN? Track performance against this initiative via the following dashboards:
-          span.sales-priority-tooltip
-            compass-tooltip([title]= "l.tooltip.title", [text]= "l.tooltip.descriptions")
-              img(src="../../assets/img/icons/help-circle.svg")
+        p <b>Spring Distribution KPIs are in focus through May 31st!</b> Monitor performance of Gaintain, Impact, and Innovation priority packages, as well Modelo Especial in the On-Premise via the following dashboards:
         div
           img(src='../../assets/img/icons/report.svg')
-          a(href="{{ l.reportLink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="Incentive Tracking") <b>Incentive Tracking</b>
-          p.top High-level performance by BU against incentive targets
+          a(href="{{ l.offPremiseLink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="Off-Premise Spring KPIs 2018") <b>Off-Premise Spring KPIs 2018</b>
+          p.top Performance by Priority and SKU vs GM KPI targets
         div
-          img(src='../../assets/img/icons/new-opportunity.svg')
-          a(href="{{ l.newOpportunityLink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="GM/MDM Opportunities") <b>GM/MDM Opportunities</b>
-          p.top Distribution relative to CL comp SKUs at GM and MDM levels, as well as associated opportunities
+          img(src='../../assets/img/icons/report.svg')
+          a(href="{{ l.onPremiseLink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="ME On-Premise Spring KPIs 2018") <b>ME On-Premise Spring KPIs 2018</b>
+          p.top Performance of Modelo Especial vs GM KPI targets
+        p
+          strong The Corona Family Can Incentive is underway through September 30th! 
+          | Track your distributors' performance against this initiative
+          a.light-weight-link(href="{{ l.seBULink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="Corona Can Link 1 (SEBU)") here
+          |  for the SEBU and
+          a.light-weight-link(href="{{ l.otherBULink }}", target='_blank', analytics-event-on="click", category="Navigation", action="Link Click", label="Corona Can Link 2 (ALL OTHER BUs)") here
+          |  for all other BUs
       compass-card(
         [image]="l.enhancementCompassCard.image",
         [title]="l.enhancementCompassCard.title",
