@@ -40,7 +40,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   @Input() loadingState: LoadingState.Loaded;
 
   public sortedTableData: Array<ListPerformanceTableRow>;
-  public numUnselectedRows = 0;
+  public numUnselectedRows: number = 0;
   public columnType = ListPerformanceColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
@@ -66,11 +66,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public onCheckboxChange(row: ListPerformanceTableRow) {
-    if (row.checked === true) {
-      this.numUnselectedRows--;
-    } else {
-      this.numUnselectedRows++;
-    }
+    row.checked ? this.numUnselectedRows-- : this.numUnselectedRows++;
     const numCheckedFalse = this.numUnselectedRows;
     const numCheckedTrue = this.sortedTableData.length - numCheckedFalse;
    this.setCheckboxStates(numCheckedFalse, numCheckedTrue);

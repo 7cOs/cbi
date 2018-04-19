@@ -2,8 +2,8 @@ td.checkbox-col(colspan=1)
   mat-checkbox(*ngIf="rowData.storeColumn != 'Total'",
   aria-label="Select Store",
   [checked]='rowData.checked',
-  (change)="toggleChecked($event)",
-  [disableRipple]="true")
+  [disableRipple]="true",
+  (change)="toggleChecked($event)")
 
 td.left-col(colspan=1)
   div.left-col-content
