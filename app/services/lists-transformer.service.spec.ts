@@ -1,9 +1,14 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { getListPerformanceDTOMock } from '../models/lists/list-performance-dto.model.mock';
 import { getListsSummaryDTOMock } from '../models/lists/lists-header-dto.model.mock';
 import { getStoreListsDTOMock } from '../models/lists/lists-store-dto.model.mock';
+import { ListPerformance } from '../models/lists/list-performance.model';
+import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
+import { ListStorePerformance } from '../models/lists/list-store-performance.model';
+import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
 import { ListsTransformerService } from './lists-transformer.service';
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
 import { StoreDetails } from '../models/lists/lists-store.model';
@@ -63,6 +68,39 @@ describe('Service: ListsTransformerService', () => {
         totalOpportunities: listHeaderDTOMock.totalOpportunities,
         closedOpportunities: listHeaderDTOMock.numberOfClosedOpportunities
       }));
+    });
+  });
+
+  describe('transformListPerformanceDTO', () => {
+    let listPerformanceDTOMock: ListPerformanceDTO;
+
+    beforeEach(() => {
+      listPerformanceDTOMock = getListPerformanceDTOMock();
+    });
+
+    it('should transform the given ListPerformanceDTO and its child ListStorePerformanceDTO collection into'
+    + ' ListPerformance and ListStorePerformance domain models', () => {
+      const expectedListStorePerformanceCollection: ListStorePerformance[] = listPerformanceDTOMock.storePerformance.map(
+        (listStorePerformanceDTO: ListStorePerformanceDTO) => {
+          return {
+            unversionedStoreId: listStorePerformanceDTO.storeSourceCode,
+            current: listStorePerformanceDTO.current,
+            currentSimple: listStorePerformanceDTO.currentSimple,
+            yearAgo: listStorePerformanceDTO.yearAgo,
+            yearAgoSimple: listStorePerformanceDTO.yearAgoSimple,
+            lastSoldDate: listStorePerformanceDTO.lastSoldDate
+          };
+      });
+
+      const actualListPerformance: ListPerformance = listsTransformerService.transformListPerformanceDTO(listPerformanceDTOMock);
+
+      expect(actualListPerformance).toEqual({
+        current: listPerformanceDTOMock.current,
+        currentSimple: listPerformanceDTOMock.currentSimple,
+        yearAgo: listPerformanceDTOMock.yearAgo,
+        yearAgoSimple: listPerformanceDTOMock.yearAgoSimple,
+        storePerformance: expectedListStorePerformanceCollection
+      });
     });
   });
 });

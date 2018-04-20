@@ -3,10 +3,18 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ApiRequestType } from '../../../enums/api-request-type.enum';
 import { chanceStringOptions } from '../../../lib/spec-util';
-import { getStoreListsDTOMock } from '../../../models/lists/lists-store-dto.model.mock';
+import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
+import { getDateRangeTimePeriodValueMock } from '../../../enums/date-range-time-period.enum.mock';
+import { getListBeverageTypeMock } from '../../../enums/list-beverage-type.enum.mock';
+import { getListPerformanceDTOMock } from '../../../models/lists/list-performance-dto.model.mock';
 import { getListsSummaryDTOMock } from '../../../models/lists/lists-header-dto.model.mock';
+import { getStoreListsDTOMock } from '../../../models/lists/lists-store-dto.model.mock';
+import { getListPerformanceTypeMock } from '../../../enums/list-performance-type.enum.mock';
 import { ListsApiService } from './lists-api.service';
+import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
+import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
 import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
+import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 
 describe('ListsApiService', () => {
@@ -75,6 +83,42 @@ describe('ListsApiService', () => {
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedStoreHeaderInfoDTOMock);
+
+      expect(req.request.method).toBe(ApiRequestType.GET);
+    });
+  });
+
+  describe('getListStorePerformance', () => {
+    let storePerformanceTypeMock: ListPerformanceType;
+    let beverageTypeMock: ListBeverageType;
+    let dateRangeCodeMock: DateRangeTimePeriodValue;
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      storePerformanceTypeMock = getListPerformanceTypeMock();
+      beverageTypeMock = getListBeverageTypeMock();
+      dateRangeCodeMock = getDateRangeTimePeriodValueMock();
+      expectedRequestUrl = `/v3/lists/${ listIdMock }/storePerformance`
+        + `?type=${ storePerformanceTypeMock }`
+        + `&beverageType=${ beverageTypeMock }`
+        + `&dateRangeCode=${ dateRangeCodeMock }`;
+    });
+
+    it('should call the lists store performance endpoint and return list performance dto data with the given parameters', () => {
+      const expectedListPerformanceDTO: ListPerformanceDTO = getListPerformanceDTOMock();
+
+      listsApiService.getListStorePerformance(
+        listIdMock,
+        storePerformanceTypeMock,
+        beverageTypeMock,
+        dateRangeCodeMock
+      )
+      .subscribe((response: ListPerformanceDTO) => {
+        expect(response).toEqual(expectedListPerformanceDTO);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedListPerformanceDTO);
 
       expect(req.request.method).toBe(ApiRequestType.GET);
     });

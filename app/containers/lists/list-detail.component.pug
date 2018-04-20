@@ -20,9 +20,9 @@ compass-tabs
   compass-tab([tabTitle]='firstTabTitle',
   [active]='true')
     list-performance-table(
-    [totalRow]="totalRow",
-    [tableHeaderRow]="tableHeader",
-    [tableData]="tableData"
+      [tableHeaderRow]="performanceTableHeader",
+      [totalRow]="performanceTableTotal",
+      [tableData]="performanceTableData"
     )
   compass-tab([tabTitle]='secondTabTitle')
     span opportunities placeholder

@@ -1,12 +1,19 @@
 import * as Chance from 'chance';
 import { Action } from '@ngrx/store';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { TestBed, getTestBed } from '@angular/core/testing';
 
-import { FetchHeaderDetailsPayload, FetchStoreDetailsPayload } from '../actions/lists.action';
+import { FetchHeaderDetailsPayload, FetchListPerformancePayload, FetchStoreDetailsPayload } from '../actions/lists.action';
+import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
+import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
+import { getListPerformanceDTOMock } from '../../models/lists/list-performance-dto.model.mock';
+import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
+import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
 import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
 import * as ListActions from '../../state/actions/lists.action';
+import { ListPerformance } from '../../models/lists/list-performance.model';
+import { ListPerformanceDTO } from '../../models/lists/list-performance-dto.model';
 import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
@@ -18,16 +25,19 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 const chance = new Chance();
 
 describe('Lists Effects', () => {
-  let error: Error;
-  let actions$: Subject<ListActions.Action>;
+  let testBed: TestBed;
   let listsEffects: ListsEffects;
   let listsApiService: ListsApiService;
+  let actions$: Subject<ListActions.Action>;
+
+  let errorMock: Error;
   let listsTransformerService: ListsTransformerService;
   let listHeaderMock: ListsSummaryDTO;
   let storeListMock: ListStoreDTO[];
-  let testBed: TestBed;
   let headerDetailMock: ListsSummary;
   let storesData: Array<StoreDetails> = getStoreListsMock();
+  let listPerformanceDTOMock: ListPerformanceDTO;
+  let listPerformanceMock: ListPerformance;
 
   const listsApiServiceMock = {
     getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
@@ -35,21 +45,25 @@ describe('Lists Effects', () => {
     },
     getListSummary(listIdMock: string): Observable<ListsSummaryDTO> {
       return Observable.of(listHeaderMock);
+    },
+    getListStorePerformance(listId: string): Observable<ListPerformanceDTO> {
+      return Observable.of(listPerformanceDTOMock);
     }
   };
 
-  let listsTransformerServiceMock = {
+  const listsTransformerServiceMock = {
     formatListsSummaryData(headerDataDTO: ListsSummaryDTO): ListsSummary {
       return headerDetailMock;
     },
     formatStoresData(store: Array<ListStoreDTO>): Array<StoreDetails> {
       return storesData;
     },
+    transformListPerformanceDTO(listPerformanceDTO: ListPerformanceDTO): ListPerformance {
+      return listPerformanceMock;
+    }
   };
 
   beforeEach(() => {
-    error = new Error(chance.string());
-
     TestBed.configureTestingModule({
       providers: [
         ListsEffects,
@@ -65,15 +79,18 @@ describe('Lists Effects', () => {
       ]
     });
 
-    actions$ = new ReplaySubject(1);
     testBed = getTestBed();
-
     listsEffects = testBed.get(ListsEffects);
     listsApiService = testBed.get(ListsApiService);
     listsTransformerService = testBed.get(ListsTransformerService);
+    actions$ = new ReplaySubject(1);
+
+    errorMock = new Error(chance.string());
+    listPerformanceDTOMock = getListPerformanceDTOMock();
+    listPerformanceMock = getListPerformanceMock();
   });
 
- describe('when a FetchStoreDetails actions is received', () => {
+  describe('when a FetchStoreDetails actions is received', () => {
     let actionPayloadMock: FetchStoreDetailsPayload;
 
     beforeEach(() => {
@@ -106,10 +123,10 @@ describe('Lists Effects', () => {
 
     describe('when an error is returned from getStoreDetails', () => {
       it('should dispatch a FetchStoreDetailsFailure action with the error', (done) => {
-        spyOn(listsApiService, 'getStoreListDetails').and.returnValue(Observable.throw(error));
+        spyOn(listsApiService, 'getStoreListDetails').and.returnValue(Observable.throw(errorMock));
 
         listsEffects.fetchStoreDetails$().subscribe((response) => {
-          expect(response).toEqual(new ListActions.FetchStoreDetailsFailure(error));
+          expect(response).toEqual(new ListActions.FetchStoreDetailsFailure(errorMock));
           done();
         });
       });
@@ -149,10 +166,132 @@ describe('Lists Effects', () => {
 
     describe('when an error is returned from getHeaderDetails', () => {
       it('should dispatch a FetchHeaderDetailsFailure action with the error', (done) => {
-        spyOn(listsApiService, 'getListSummary').and.returnValue(Observable.throw(error));
+        spyOn(listsApiService, 'getListSummary').and.returnValue(Observable.throw(errorMock));
 
         listsEffects.fetchHeaderDetails$().subscribe((response) => {
-          expect(response).toEqual(new ListActions.FetchHeaderDetailsFailure(error));
+          expect(response).toEqual(new ListActions.FetchHeaderDetailsFailure(errorMock));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('when an action of type FETCH_LIST_PERFORMANCE_VOLUME is received', () => {
+    let actionPayloadMock: FetchListPerformancePayload;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        listId: chance.string(),
+        performanceType: getListPerformanceTypeMock(),
+        beverageType: getListBeverageTypeMock(),
+        dateRangeCode: getDateRangeTimePeriodValueMock()
+      };
+
+      actions$.next(new ListActions.FetchListPerformanceVolume(actionPayloadMock));
+    });
+
+    it('should call reach out to the listsApiService and call getListStorePerformance with the action payload', (done) => {
+      spyOn(listsApiService, 'getListStorePerformance').and.callThrough();
+
+      listsEffects.fetchListPerformanceVolume$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.getListStorePerformance).toHaveBeenCalledWith(
+        actionPayloadMock.listId,
+        actionPayloadMock.performanceType,
+        actionPayloadMock.beverageType,
+        actionPayloadMock.dateRangeCode
+      );
+    });
+
+    describe('when the getListStorePerformance api call is successful', () => {
+      it('should reach out to the listsTransformerService and call transformListPerformanceDTO with'
+      + ' the returned ListPerformanceDTO data', (done) => {
+        spyOn(listsTransformerService, 'transformListPerformanceDTO').and.callThrough();
+
+        listsEffects.fetchListPerformanceVolume$().subscribe(() => {
+          done();
+        });
+
+        expect(listsTransformerService.transformListPerformanceDTO).toHaveBeenCalledWith(listPerformanceDTOMock);
+      });
+
+      it('should dispatch a FetchListPerformanceVolumeSuccess action with the transformed ListPerformance data', (done) => {
+        listsEffects.fetchListPerformanceVolume$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.FetchListPerformanceVolumeSuccess(listPerformanceMock));
+          done();
+        });
+      });
+    });
+
+    describe('when the getListStorePerformance api call returns an error', () => {
+      it('should dispatch a FetchListPerformanceVolumeError action containing the error', (done) => {
+        spyOn(listsApiService, 'getListStorePerformance').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.fetchListPerformanceVolume$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.FetchListPerformanceVolumeError(errorMock));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('when an action of type FETCH_LIST_PERFORMANCE_POD is received', () => {
+    let actionPayloadMock: FetchListPerformancePayload;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        listId: chance.string(),
+        performanceType: getListPerformanceTypeMock(),
+        beverageType: getListBeverageTypeMock(),
+        dateRangeCode: getDateRangeTimePeriodValueMock()
+      };
+
+      actions$.next(new ListActions.FetchListPerformancePOD(actionPayloadMock));
+    });
+
+    it('should call reach out to the listsApiService and call getListStorePerformance with the action payload', (done) => {
+      spyOn(listsApiService, 'getListStorePerformance').and.callThrough();
+
+      listsEffects.fetchListPerformancePOD$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.getListStorePerformance).toHaveBeenCalledWith(
+        actionPayloadMock.listId,
+        actionPayloadMock.performanceType,
+        actionPayloadMock.beverageType,
+        actionPayloadMock.dateRangeCode
+      );
+    });
+
+    describe('when the getListStorePerformance api call is successful', () => {
+      it('should reach out to the listsTransformerService and call transformListPerformanceDTO with'
+      + ' the returned ListPerformanceDTO data', (done) => {
+        spyOn(listsTransformerService, 'transformListPerformanceDTO').and.callThrough();
+
+        listsEffects.fetchListPerformancePOD$().subscribe(() => {
+          done();
+        });
+
+        expect(listsTransformerService.transformListPerformanceDTO).toHaveBeenCalledWith(listPerformanceDTOMock);
+      });
+
+      it('should dispatch a FetchListPerformancePODSuccess action with the transformed ListPerformance data', (done) => {
+        listsEffects.fetchListPerformancePOD$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.FetchListPerformancePODSuccess(listPerformanceMock));
+          done();
+        });
+      });
+    });
+
+    describe('when the getListStorePerformance api call returns an error', () => {
+      it('should dispatch a FetchListPerformancePODError action containing the error', (done) => {
+        spyOn(listsApiService, 'getListStorePerformance').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.fetchListPerformancePOD$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.FetchListPerformancePODError(errorMock));
           done();
         });
       });
