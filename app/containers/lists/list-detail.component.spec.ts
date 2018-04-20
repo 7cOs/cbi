@@ -145,15 +145,18 @@ describe('ListDetailComponent', () => {
       expect(store.select).toHaveBeenCalled();
     });
 
-    it('should dispatch actions for fetching stores and list headers', () => {
+    it('should dispatch actions for fetching stores, list headers and opportunities', () => {
       storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
-      expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.count()).toBe(3);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
         listId : stateMock.params.id
       }));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ListsActions.FetchHeaderDetails({
+        listId : stateMock.params.id
+      }));
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ListsActions.FetchOppsForList({
         listId : stateMock.params.id
       }));
     });
