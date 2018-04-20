@@ -2,11 +2,11 @@ beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [
 
 div
 
-  table.col-100-pct([ngClass]="tableClasses")
+  table
 
-    thead.col-100-pct
+    thead
 
-      tr.top-header.col-100-pct
+      tr.top-header
         th.checkbox-col(colspan=1)
           mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
           [checked]="isSelectAllChecked",
@@ -30,7 +30,7 @@ div
           span {{ tableHeaderRow[5] }}
             sort-indicator([status]="getSortStatus(columnType.lastDepletionDateColumn)")
 
-      tr.sub-header.col-100-pct([ngClass]="getSubHeaderClasses()")
+      tr.sub-header
         th(colspan=1)
         th(colspan=1)
         th(colspan=1)
@@ -55,13 +55,13 @@ div
             sort-indicator([status]='getSortStatus(columnType.l90VersusYaPercentColumn)')
         th(colspan=1)
 
-      tr.total-row.col-100-pct(
+      tr.total-row(
         *ngIf="totalRow",
         list-performance-table-row,
         [rowData]="totalRow")
 
-    tbody([ngClass]="getTableBodyClasses()")
-      tr.entity-row.col-100-pct(
+    tbody.total-row-present
+      tr.entity-row(
         *ngFor="let row of sortedTableData, let rowIndex = index",
         list-performance-table-row,
         [rowData]="row",
