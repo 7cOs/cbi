@@ -66,10 +66,12 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public onCheckboxChange(row: ListPerformanceTableRow): void {
-    row.checked ? this.numSelectedRows++ : this.numSelectedRows--;
-    const numCheckedTrue = this.numSelectedRows;
+    const checkedTrue = this.sortedTableData.filter( function(tableRow) {
+      return tableRow.checked === true;
+    });
+    const numCheckedTrue = checkedTrue.length;
     const numCheckedFalse = this.sortedTableData.length - numCheckedTrue;
-   this.setCheckboxStates(numCheckedFalse, numCheckedTrue);
+    this.setCheckboxStates(numCheckedFalse, numCheckedTrue);
   }
 
   public setCheckboxStates(checkedFalseCount: number, checkedTrueCount: number) {
