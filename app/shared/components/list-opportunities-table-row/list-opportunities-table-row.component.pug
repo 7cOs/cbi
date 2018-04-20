@@ -9,7 +9,7 @@ td.left-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0.store-name
-        span {{rowData.storeColumn}}
+        span {{ rowData.storeColumn | titlecase }}
       div.description-line-1
         span.description-line-1 {{rowData.storeAddressSubline}}
 td.left-col(colspan=1)

@@ -29,8 +29,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-        this.sortedTableData = sortedTableData;
-        this.numUnselectedRows = this.sortedTableData.length;
+      this.sortedTableData = sortedTableData;
     }
   }
 
@@ -40,7 +39,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   @Input() loadingState: LoadingState.Loaded;
 
   public sortedTableData: Array<ListPerformanceTableRow>;
-  public numUnselectedRows: number = 0;
   public columnType = ListPerformanceColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
@@ -66,9 +64,11 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public onCheckboxChange(row: ListPerformanceTableRow) {
-    row.checked ? this.numUnselectedRows-- : this.numUnselectedRows++;
-    const numCheckedFalse = this.numUnselectedRows;
-    const numCheckedTrue = this.sortedTableData.length - numCheckedFalse;
+    const checkedTrue = this.sortedTableData.filter( function(tableRow) {
+      return tableRow.checked === true;
+    });
+    const numCheckedTrue = checkedTrue.length;
+    const numCheckedFalse = this.sortedTableData.length - numCheckedTrue;
     this.setCheckboxStates(numCheckedFalse, numCheckedTrue);
   }
 
@@ -108,19 +108,14 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public onRowClicked(type: RowType, index: number, row?: ListPerformanceTableRow) {
-      this.onElementClicked.emit({type: type, index: index, row: row});
+    this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
   public toggleSelectAllStores(event: MatCheckboxChange) {
     this.isSelectAllChecked = event.checked;
-    if (this.isSelectAllChecked) {
-      this.numUnselectedRows = 0;
-    } else {
-      this.numUnselectedRows = this.sortedTableData.length;
-    }
-    for (let i = 0; i < this.sortedTableData.length; i++) {
-      this.sortedTableData[i].checked = this.isSelectAllChecked;
-    }
+    this.sortedTableData.forEach((row: ListPerformanceTableRow) => {
+      return row.checked = this.isSelectAllChecked;
+    });
   }
 
   public getSubHeaderClasses(): string {
