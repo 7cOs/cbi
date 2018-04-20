@@ -30,6 +30,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
         ? tableData.sort(this.sortingFunction)
         : tableData;
       this.sortedTableData = sortedTableData;
+      this.numSelectedRows = this.sortedTableData.length;
     }
   }
 
@@ -38,6 +39,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   @Input() loadingState: LoadingState.Loaded;
 
   public sortedTableData: Array<ListOpportunitiesTableRow>;
+  public numSelectedRows: number = 0;
   public columnType = ListOpportunitiesColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
@@ -62,10 +64,8 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     this.tableClasses = this.getTableClasses(loadingState);
   }
 
-  public onCheckboxChange(row: ListOpportunitiesTableRow) {
-    const checkedTrue = this.sortedTableData.filter( function(tableRow) {
-      return tableRow.checked === true;
-    });
+  public onCheckboxChange(row: ListOpportunitiesTableRow): void {
+    const checkedTrue = this.sortedTableData.filter(tableRow => tableRow.checked === true);
     const numCheckedTrue = checkedTrue.length;
     const numCheckedFalse = this.sortedTableData.length - numCheckedTrue;
     this.setCheckboxStates(numCheckedFalse, numCheckedTrue);
@@ -106,11 +106,12 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
-  public toggleSelectAllStores(event: MatCheckboxChange) {
+  public toggleSelectAllStores(event: MatCheckboxChange): void {
     this.isSelectAllChecked = event.checked;
-    this.sortedTableData.forEach((row: ListOpportunitiesTableRow) => {
-      return row.checked = this.isSelectAllChecked;
-    });
+    this.numSelectedRows = this.isSelectAllChecked ? this.sortedTableData.length : 0;
+    for (let i = 0; i < this.sortedTableData.length; i++) {
+      this.sortedTableData[i].checked = this.isSelectAllChecked;
+    }
   }
 
   public getEntityRowClasses(row: ListOpportunitiesTableRow): CssClasses {
