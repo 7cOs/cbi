@@ -5,6 +5,8 @@ import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { StoreDetails } from '../models/lists/lists-store.model';
+import { ListOpportunitiesDTO } from '../models/lists/lists-opportunities-dto.model';
+import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
 
 @Injectable()
 export class ListsTransformerService {
@@ -29,6 +31,10 @@ export class ListsTransformerService {
     };
   }
 
+  public formatListOpportunitiesData(listOpportunities: Array<ListOpportunitiesDTO>): Array<ListsOpportunities> {
+    return listOpportunities.map(listOpportunity => this.formatListOpportunityData(listOpportunity));
+  }
+
   private formatStoreData(store: ListStoreDTO): StoreDetails {
     const storeData: StoreDetails = {
       address: store.address,
@@ -43,5 +49,20 @@ export class ListsTransformerService {
       segmentCode: store.segmentCode
     };
     return storeData;
+  }
+
+  private formatListOpportunityData(listOpportunity: ListOpportunitiesDTO): ListsOpportunities {
+    return {
+      id: listOpportunity.id,
+      brandCode: listOpportunity.brandCode,
+      brandDescription: listOpportunity.brandDescription,
+      skuDescription: listOpportunity.skuDescription,
+      type: listOpportunity.type,
+      status: listOpportunity.status,
+      impact: listOpportunity.impact,
+      currentDepletions_CYTD: listOpportunity.currentDepletions_CYTD,
+      yearAgoDepletions_CYTD: listOpportunity.yearAgoDepletions_CYTD,
+      lastDepletionDate: listOpportunity.lastDepletionDate
+    };
   }
 }

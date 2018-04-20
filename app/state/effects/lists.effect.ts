@@ -12,6 +12,8 @@ import { ListsTransformerService } from '../../services/lists-transformer.servic
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
+import { ListOpportunitiesDTO } from '../../models/lists/lists-opportunities-dto.model';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 
 @Injectable()
 export class ListsEffects {
@@ -28,6 +30,7 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchStoreDetails) => {
         return this.listsApiService.getStoreListDetails(action.payload.listId)
           .map((response: Array<ListStoreDTO>) => {
+            console.log(response);
             const transformedData: Array<StoreDetails> = this.listsTransformerService.formatStoresData(response);
             return new ListActions.FetchStoreDetailsSuccess(transformedData);
           })
@@ -64,6 +67,22 @@ export class ListsEffects {
       .ofType(ListActions.FETCH_HEADER_DETAILS_FAILURE)
       .do((action: ListActions.FetchHeaderDetailsFailure) => {
         console.error('Header fetch failure:', action.payload);
+      });
+  }
+
+  @Effect()
+  fetchOppsforList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListActions.FETCH_OPPS_FOR_LIST)
+      .switchMap((action: ListActions.FetchOppsForList) => {
+        return this.listsApiService.getOppsDataForList(action.payload.listId)
+          .map((response: Array<ListOpportunitiesDTO>) => {
+            // const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
+            console.log(response);
+            const transformedData: Array<ListsOpportunities> = this.listsTransformerService.formatListOpportunitiesData(response);
+            return new ListActions.FetchOppsForListSuccess(transformedData);
+          })
+          .catch((error: Error) => Observable.of(new ListActions.FetchOppsForListFailure(error)));
       });
   }
 }

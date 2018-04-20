@@ -15,3 +15,17 @@ export enum OpportunityTypeLabel {
   'NEW_PLACEMENT_NO_REBUY' = 'New Placement (Quality)',
   'NEW_PLACEMENT_QUALITY' = 'New Placement (No Rebuy)'
 }
+
+export enum OpportunityStatus {
+  Active = 'active',
+  Closed = 'closed',
+  Open = 'open',
+  Unknown = 'unknown'
+}
+
+export enum OpportunityImpact {
+  Low = 'low',
+  Medium = 'medium',
+  High = 'high',
+  Unknown = 'unknown'
+}

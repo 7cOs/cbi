@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
+import { ListOpportunitiesDTO } from '../../../models/lists/lists-opportunities-dto.model';
 
 @Injectable()
 export class ListsApiService {
@@ -26,6 +27,15 @@ export class ListsApiService {
     const url = `/v3/lists/${ listsId }`;
 
     return this.http.get<ListStoreDTO[]>(url)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
+  public getOppsDataForList(
+    listId: string
+  ): Observable<Array<ListOpportunitiesDTO>> {
+    const url = `v3/lists/${ listId }/opportunities`;
+
+    return this.http.get<ListOpportunitiesDTO[]>(url)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 }
