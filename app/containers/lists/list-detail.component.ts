@@ -27,7 +27,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public secondTabTitle: string = 'Opportunities';
 
   // TODO: Remove this when we get real data.
-  public tableData = getListPerformanceTableRowMock(1000);
+  public tableData = getListPerformanceTableRowMock(500);
   public tableHeader = getListPerformanceHeaderRowMock();
   public totalRow = {
     storeColumn: 'Total',

@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -56,8 +57,21 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static WebDriver getLocalWebDriver() {
-    System.setProperty("webdriver.chrome.driver", "chromedriver");
-    webDriver.set(new ChromeDriver());
+    final String osName = System.getProperty("os.name").toLowerCase();
+    final boolean isSilentMode = Boolean.parseBoolean(
+        PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
+    final ChromeOptions options = new ChromeOptions();
+    options.addArguments("--start-maximized");
+    options.addArguments("--disable-infobars");
+    if(isSilentMode) { options.addArguments("headless"); }
+
+    if(!osName.startsWith("windows")) {
+      System.setProperty("webdriver.chrome.driver", "chromedriver");
+      webDriver.set(new ChromeDriver(options));
+    } else {
+      System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+      webDriver.set(new ChromeDriver(options));      
+    }
 
     Validate.notNull(
       webDriver.get(),
