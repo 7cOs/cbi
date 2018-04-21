@@ -62,7 +62,8 @@ export class ListsTransformerService {
       impact: listOpportunity.impact,
       currentDepletions_CYTD: listOpportunity.currentDepletions_CYTD,
       yearAgoDepletions_CYTD: listOpportunity.yearAgoDepletions_CYTD,
-      lastDepletionDate: listOpportunity.lastDepletionDate
+      lastDepletionDate: listOpportunity.lastDepletionDate,
+      storeSourceCode: listOpportunity.storeSourceCode
     };
   }
 }

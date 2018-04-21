@@ -11,6 +11,7 @@ import { AppState } from '../../state/reducers/root.reducer';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 @Component({
@@ -22,6 +23,8 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
+  public listOpps: ListsOpportunities[];
+  public storeOpps: ListsOpportunities[];
 
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
@@ -62,12 +65,27 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .subscribe((listDetail: ListsState)  => {
           this.storeList = listDetail.listStores.stores;
           this.listSummary = listDetail.listSummary.summaryData;
+          this.listOpps = listDetail.listOpportunities.opportunities;
+          const groupedData = this.groupOppsByStore(this.listOpps, (item: any) => item.storeSourceCode);
       });
   }
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
+
+  groupOppsByStore(allOpps: ListsOpportunities[], storeAsKey: any) {
+    const map = new Map();
+    allOpps.forEach((item) => {
+    const key = storeAsKey(item);
+    if (!map.has(key)) {
+        map.set(key, [item]);
+    } else {
+        // map.get(key).push(item);
+      }
+    });
+    return map;
+}
 
   ngOnDestroy() {
     this.listDetailSubscription.unsubscribe();

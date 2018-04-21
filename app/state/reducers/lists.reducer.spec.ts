@@ -15,7 +15,8 @@ describe('Lists Reducer', () => {
         listStores: {
           storeStatus: ActionStatus.Fetching,
           stores: initialState.listStores.stores
-        }
+        },
+        listOpportunities: initialState.listOpportunities
       };
 
       const actualState = listsReducer(initialState, new ListsActions.FetchStoreDetails({
@@ -33,7 +34,8 @@ describe('Lists Reducer', () => {
         listStores: {
           storeStatus: ActionStatus.Fetched,
           stores: stores
-        }
+        },
+        listOpportunities: initialState.listOpportunities
       };
 
       const actualState = listsReducer(
@@ -50,7 +52,8 @@ describe('Lists Reducer', () => {
         listStores: {
           storeStatus: ActionStatus.Error,
           stores: initialState.listStores.stores
-        }
+        },
+        listOpportunities: initialState.listOpportunities
       };
       const actualState: ListsState = listsReducer(
         initialState,
@@ -67,7 +70,8 @@ describe('Lists Reducer', () => {
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
             summaryData: initialState.listSummary.summaryData
-          }
+          },
+          listOpportunities: initialState.listOpportunities
         };
 
         const actualState = listsReducer(initialState, new ListsActions.FetchHeaderDetails({
@@ -85,7 +89,8 @@ describe('Lists Reducer', () => {
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
           summaryData: headersMock
-        }
+        },
+        listOpportunities: initialState.listOpportunities
       };
 
       const actualState = listsReducer(
@@ -102,7 +107,8 @@ describe('Lists Reducer', () => {
         listSummary: {
           summaryStatus: ActionStatus.Error,
           summaryData: initialState.listSummary.summaryData
-        }
+        },
+        listOpportunities: initialState.listOpportunities
       };
       const actualState: ListsState = listsReducer(
         initialState,

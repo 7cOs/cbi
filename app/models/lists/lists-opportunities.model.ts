@@ -10,9 +10,9 @@ export interface ListsOpportunities {
     currentDepletions_CYTD: number;
     yearAgoDepletions_CYTD: number;
     lastDepletionDate: string;
+    storeSourceCode: string;
     // rationale: string;
     // skuCode: string;
-    // storeSourceCode: string;
     // subBrandCode: string;
     // subBrandDescription: string;
 }

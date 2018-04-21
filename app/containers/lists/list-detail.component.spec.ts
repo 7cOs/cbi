@@ -15,6 +15,7 @@ import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
+import { Action } from 'rxjs/scheduler/Action';
 
 const chance = new Chance();
 
@@ -63,6 +64,10 @@ describe('ListDetailComponent', () => {
     listStores: {
       storeStatus: ActionStatus.Fetching,
       stores: []
+    },
+    listOpportunities: {
+      opportunitiesStatus: ActionStatus.Fetching,
+      opportunities: []
     }
   };
 
