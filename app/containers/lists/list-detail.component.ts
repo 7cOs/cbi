@@ -69,7 +69,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.storeList = listDetail.listStores.stores;
           this.listSummary = listDetail.listSummary.summaryData;
           this.listOpps = listDetail.listOpportunities.opportunities;
-          const groupedData = this.groupOppsByStore(this.listOpps, (item: any) => item.storeSourceCode);
+          // const groupedData = this.groupOppsByStore(this.listOpps, (item: any) => item.storeSourceCode);
         this.storeList = listDetail.listStores.stores;
         this.listSummary = listDetail.listSummary.summaryData;
 
