@@ -1,5 +1,10 @@
 import { Action } from '@ngrx/store';
+
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
+import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { ListPerformance } from '../../models/lists/list-performance.model';
+import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
@@ -9,6 +14,13 @@ export interface FetchStoreDetailsPayload {
 
 export interface FetchHeaderDetailsPayload {
   listId: string;
+}
+
+export interface FetchListPerformancePayload {
+  listId: string;
+  performanceType: ListPerformanceType;
+  beverageType: ListBeverageType;
+  dateRangeCode: DateRangeTimePeriodValue;
 }
 
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
@@ -74,8 +86,38 @@ export class FetchOppsForListFailure implements Action {
   constructor(public payload: Error) { }
 }
 
-export type Action =
-  FetchStoreDetails
+export class FetchListPerformanceVolume implements Action {
+  readonly type = ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME;
+  constructor(public payload: FetchListPerformancePayload) { }
+}
+
+export class FetchListPerformanceVolumeSuccess implements Action {
+  readonly type = ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME_SUCCESS;
+  constructor(public payload: ListPerformance) { }
+}
+
+export class FetchListPerformanceVolumeError implements Action {
+  readonly type = ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME_ERROR;
+  constructor(public payload: Error) { }
+}
+
+export class FetchListPerformancePOD implements Action {
+  readonly type = ListsActionTypes.FETCH_LIST_PERFORMANCE_POD;
+  constructor(public payload: FetchListPerformancePayload) { }
+}
+
+export class FetchListPerformancePODSuccess implements Action {
+  readonly type = ListsActionTypes.FETCH_LIST_PERFORMANCE_POD_SUCCESS;
+  constructor(public payload: ListPerformance) { }
+}
+
+export class FetchListPerformancePODError implements Action {
+  readonly type = ListsActionTypes.FETCH_LIST_PERFORMANCE_POD_ERROR;
+  constructor(public payload: Error) { }
+}
+
+export type Action
+  = FetchStoreDetails
   | FetchStoreDetailsSuccess
   | FetchStoreDetailsFailure
   | FetchHeaderDetails
@@ -83,4 +125,10 @@ export type Action =
   | FetchHeaderDetailsFailure
   | FetchOppsForList
   | FetchOppsForListSuccess
-  | FetchOppsForListFailure;
+  | FetchOppsForListFailure
+  | FetchListPerformanceVolume
+  | FetchListPerformanceVolumeSuccess
+  | FetchListPerformanceVolumeError
+  | FetchListPerformancePOD
+  | FetchListPerformancePODSuccess
+  | FetchListPerformancePODError;
