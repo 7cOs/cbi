@@ -139,7 +139,7 @@ export function listsReducer(
         listStores:  state.listStores,
         listSummary:  state.listSummary,
         listOpportunities: Object.assign({}, state.listOpportunities, {
-          opportunityStatus: ActionStatus.Fetching
+          opportunitiesStatus: ActionStatus.Fetching
         }),
         performance: state.performance
       };
@@ -149,7 +149,7 @@ export function listsReducer(
         listStores:  state.listStores,
         listSummary:  state.listSummary,
         listOpportunities: Object.assign({}, state.listOpportunities, {
-          opportunityStatus: ActionStatus.Fetched,
+          opportunitiesStatus: ActionStatus.Fetched,
           opportunities: action.payload
         }),
         performance: state.performance
@@ -160,7 +160,7 @@ export function listsReducer(
         listStores:  state.listStores,
         listSummary:  state.listSummary,
         listOpportunities: Object.assign({}, state.listOpportunities, {
-          opportunityStatus: ActionStatus.Error,
+          opportunitiesStatus: ActionStatus.Error
         }),
         performance: state.performance
       };

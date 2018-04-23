@@ -23,6 +23,10 @@ export interface FetchListPerformancePayload {
   dateRangeCode: DateRangeTimePeriodValue;
 }
 
+export interface FetchOppsForListPayload {
+  listId: string;
+}
+
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
 export class FetchStoreDetails implements Action {
   readonly type = FETCH_STORE_DETAILS;

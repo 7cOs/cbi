@@ -15,6 +15,7 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
+import { OpportunitiesByStore } from '../../models/lists/lists-opportunities-by-store.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 @Component({
@@ -28,6 +29,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public listSummary: ListsSummary;
   public listOpps: ListsOpportunities[];
   public storeOpps: ListsOpportunities[];
+  public oppsGroupedByStores: Array<OpportunitiesByStore>;
 
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
@@ -69,44 +71,33 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.storeList = listDetail.listStores.stores;
           this.listSummary = listDetail.listSummary.summaryData;
           this.listOpps = listDetail.listOpportunities.opportunities;
-          // const groupedData = this.groupOppsByStore(this.listOpps, (item: any) => item.storeSourceCode);
-        this.storeList = listDetail.listStores.stores;
-        this.listSummary = listDetail.listSummary.summaryData;
+          this.oppsGroupedByStores = this.listsTableTransformerService.groupOppsByStore(this.listOpps);
+          this.storeList = listDetail.listStores.stores;
+          this.listSummary = listDetail.listSummary.summaryData;
 
-        if (this.isListPerformanceFetched(
-          listDetail.listStores.storeStatus,
-          listDetail.performance.volumeStatus,
-          listDetail.performance.podStatus
-        )) {
-          this.performanceTableTotal = this.listsTableTransformerService.transformPerformanceTotal(
-            listDetail.performance.volume,
-            listDetail.performance.pod
-          );
-          this.performanceTableData = this.listsTableTransformerService.transformPerformanceCollection(
-            listDetail.listStores.stores,
-            listDetail.performance.volume.storePerformance,
-            listDetail.performance.pod.storePerformance
-          );
-        }
+          if (this.isListPerformanceFetched(
+            listDetail.listStores.storeStatus,
+            listDetail.performance.volumeStatus,
+            listDetail.performance.podStatus
+          )) {
+            this.performanceTableTotal = this.listsTableTransformerService.transformPerformanceTotal(
+              listDetail.performance.volume,
+              listDetail.performance.pod
+            );
+            this.performanceTableData = this.listsTableTransformerService.transformPerformanceCollection(
+              listDetail.listStores.stores,
+              listDetail.performance.volume.storePerformance,
+              listDetail.performance.pod.storePerformance
+            );
+          }
+
+          if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
       });
   }
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
-
-  groupOppsByStore(allOpps: ListsOpportunities[], storeAsKey: any) {
-    const map = new Map();
-    allOpps.forEach((item) => {
-    const key = storeAsKey(item);
-    if (!map.has(key)) {
-        map.set(key, [item]);
-    } else {
-        // map.get(key).push(item);
-      }
-    });
-    return map;
-}
 
   ngOnDestroy() {
     this.listDetailSubscription.unsubscribe();

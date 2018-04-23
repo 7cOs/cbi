@@ -4,9 +4,11 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 
-import { FetchHeaderDetailsPayload, FetchListPerformancePayload, FetchStoreDetailsPayload } from '../actions/lists.action';
+import { FetchHeaderDetailsPayload, FetchOppsForListPayload, FetchListPerformancePayload,
+  FetchStoreDetailsPayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
+import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceDTOMock } from '../../models/lists/list-performance-dto.model.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
@@ -21,6 +23,8 @@ import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { ListOpportunitiesDTO } from '../../models/lists/lists-opportunities-dto.model';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 
 const chance = new Chance();
 
@@ -36,6 +40,8 @@ describe('Lists Effects', () => {
   let storeListMock: ListStoreDTO[];
   let headerDetailMock: ListsSummary;
   let storesData: Array<StoreDetails> = getStoreListsMock();
+  let listOpportunities: Array<ListsOpportunities> = getListOpportunitiesMock();
+  let listOpportunitiesDTOMock: ListOpportunitiesDTO[];
   let listPerformanceDTOMock: ListPerformanceDTO;
   let listPerformanceMock: ListPerformance;
 
@@ -48,6 +54,9 @@ describe('Lists Effects', () => {
     },
     getListStorePerformance(listId: string): Observable<ListPerformanceDTO> {
       return Observable.of(listPerformanceDTOMock);
+    },
+    getOppsDataForList(listIdMock: string): Observable<ListOpportunitiesDTO[]> {
+      return Observable.of(listOpportunitiesDTOMock);
     }
   };
 
@@ -60,6 +69,9 @@ describe('Lists Effects', () => {
     },
     transformListPerformanceDTO(listPerformanceDTO: ListPerformanceDTO): ListPerformance {
       return listPerformanceMock;
+    },
+    formatListOpportunitiesData(oppotunity: Array<ListOpportunitiesDTO>): Array<ListsOpportunities> {
+      return listOpportunities;
     }
   };
 
@@ -292,6 +304,49 @@ describe('Lists Effects', () => {
 
         listsEffects.fetchListPerformancePOD$().subscribe((response: Action) => {
           expect(response).toEqual(new ListActions.FetchListPerformancePODError(errorMock));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('when a FetchOppsForList actions is received', () => {
+    let actionPayloadMock: FetchOppsForListPayload;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        listId: chance.string()
+      };
+
+      actions$.next(new ListActions.FetchOppsForList(actionPayloadMock));
+    });
+
+    describe('when everything returns successfully', () => {
+      it('should call getOppsDataForList from the ListsService given the passed in action payload', (done) => {
+        const getOpportunitiesForListSpy = spyOn(listsApiService, 'getOppsDataForList').and.callThrough();
+
+        listsEffects.fetchOppsforList$().subscribe(() => {
+          done();
+        });
+
+        expect(getOpportunitiesForListSpy.calls.count()).toBe(1);
+        expect(getOpportunitiesForListSpy.calls.argsFor(0)[0]).toEqual(actionPayloadMock.listId);
+      });
+
+      it('should dispatch a FetchOppsForListSuccess action with the returned Formatted Data', (done) => {
+        listsEffects.fetchOppsforList$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.FetchOppsForListSuccess(listOpportunities));
+          done();
+        });
+      });
+    });
+
+    describe('when an error is returned from getOppsDataForList', () => {
+      it('should dispatch a FetchOppsForListFailure action with the error', (done) => {
+        spyOn(listsApiService, 'getOppsDataForList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.fetchOppsforList$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.FetchOppsForListFailure(errorMock));
           done();
         });
       });

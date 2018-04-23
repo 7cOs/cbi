@@ -10,6 +10,7 @@ import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { StoreDetails } from '../models/lists/lists-store.model';
 import { ListOpportunitiesDTO } from '../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
+import { OpportunityImpact, OpportunityStatus, OpportunityType } from '../enums/opportunity.enum';
 
 @Injectable()
 export class ListsTransformerService {
@@ -70,13 +71,13 @@ export class ListsTransformerService {
       brandCode: listOpportunity.brandCode,
       brandDescription: listOpportunity.brandDescription,
       skuDescription: listOpportunity.skuDescription,
-      type: listOpportunity.type,
-      status: listOpportunity.status,
-      impact: listOpportunity.impact,
       currentDepletions_CYTD: listOpportunity.currentDepletions_CYTD,
       yearAgoDepletions_CYTD: listOpportunity.yearAgoDepletions_CYTD,
       lastDepletionDate: listOpportunity.lastDepletionDate,
-      storeSourceCode: listOpportunity.storeSourceCode
+      storeSourceCode: listOpportunity.storeSourceCode,
+      type: OpportunityType[listOpportunity.type],
+      status: OpportunityStatus[listOpportunity.status],
+      impact: OpportunityImpact[listOpportunity.impact]
     };
   }
 

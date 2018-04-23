@@ -15,5 +15,5 @@ export interface ListOpportunitiesDTO {
     subBrandDescription: string;
     type: OpportunityType;
     yearAgoDepletions_CYTD: number;
-    // TO DO - Add isSimpleDistributionOpportunity once it becomes available - story up for including this field for Ryan's Team
+    isSimpleDistributionOpportunity: boolean;
 }

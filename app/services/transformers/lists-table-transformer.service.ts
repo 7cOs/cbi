@@ -5,6 +5,8 @@ import { CalculatorService } from '../calculator.service';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListStorePerformance } from '../../models/lists/list-store-performance.model';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
+import { OpportunitiesByStore } from '../../models/lists/lists-opportunities-by-store.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 export const PERFORMANCE_TOTAL_ROW_NAME: string = 'Total';
@@ -63,6 +65,16 @@ export class ListsTableTransformerService {
       performanceError: false,
       checked: false
     };
+  }
+
+  public groupOppsByStore(allOpps: ListsOpportunities[]): Array<OpportunitiesByStore> {
+    const groups = {};
+    allOpps.forEach((opportunity) => {
+      let group = opportunity.storeSourceCode;
+      groups[group] = groups[group] ? groups[group] : { storeSourceCode: group, oppsForStore: [] };
+      groups[group].oppsForStore.push(opportunity);
+    });
+    return Object.keys(groups).map((key) => { return groups[key]; });
   }
 
   private getFullStoreAddress(store: StoreDetails): string {

@@ -11,8 +11,4 @@ export interface ListsOpportunities {
     yearAgoDepletions_CYTD: number;
     lastDepletionDate: string;
     storeSourceCode: string;
-    // rationale: string;
-    // skuCode: string;
-    // subBrandCode: string;
-    // subBrandDescription: string;
 }

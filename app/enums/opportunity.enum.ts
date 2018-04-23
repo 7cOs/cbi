@@ -12,20 +12,20 @@ export enum OpportunityTypeLabel {
   'AT_RISK' = 'At Risk',
   'LOW_VELOCITY' = 'Low Velocity',
   'MANUAL' = 'Manual',
-  'NEW_PLACEMENT_NO_REBUY' = 'New Placement (Quality)',
-  'NEW_PLACEMENT_QUALITY' = 'New Placement (No Rebuy)'
+  'NEW_PLACEMENT_NO_REBUY' = 'New Placement (No Rebuy)',
+  'NEW_PLACEMENT_QUALITY' = 'New Placement (Quality)'
 }
 
 export enum OpportunityStatus {
-  Active = 'active',
-  Closed = 'closed',
-  Open = 'open',
-  Unknown = 'unknown'
+  active = 'active',
+  closed = 'closed',
+  open = 'open',
+  unknown = 'unknown'
 }
 
 export enum OpportunityImpact {
-  Low = 'low',
-  Medium = 'medium',
-  High = 'high',
-  Unknown = 'unknown'
+  low = 'low',
+  medium = 'medium',
+  high = 'high',
+  unknown = 'unknown'
 }

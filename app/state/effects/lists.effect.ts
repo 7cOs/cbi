@@ -81,12 +81,19 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchOppsForList) => {
         return this.listsApiService.getOppsDataForList(action.payload.listId)
           .map((response: Array<ListOpportunitiesDTO>) => {
-            // const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
-            console.log(response);
             const transformedData: Array<ListsOpportunities> = this.listsTransformerService.formatListOpportunitiesData(response);
             return new ListActions.FetchOppsForListSuccess(transformedData);
           })
           .catch((error: Error) => Observable.of(new ListActions.FetchOppsForListFailure(error)));
+      });
+  }
+
+  @Effect({dispatch: false})
+  fetchOppsforListFailure$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListActions.FETCH_HEADER_DETAILS_FAILURE)
+      .do((action: ListActions.FetchOppsForListFailure) => {
+        console.error('Opportunities fetch failure:', action.payload);
       });
   }
 
