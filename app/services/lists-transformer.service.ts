@@ -74,7 +74,7 @@ export class ListsTransformerService {
       currentDepletions_CYTD: listOpportunity.currentDepletions_CYTD,
       yearAgoDepletions_CYTD: listOpportunity.yearAgoDepletions_CYTD,
       lastDepletionDate: listOpportunity.lastDepletionDate,
-      storeSourceCode: listOpportunity.storeSourceCode,
+      unversionedStoreId: listOpportunity.storeSourceCode,
       type: OpportunityType[listOpportunity.type],
       status: OpportunityStatus[listOpportunity.status],
       impact: OpportunityImpact[listOpportunity.impact]

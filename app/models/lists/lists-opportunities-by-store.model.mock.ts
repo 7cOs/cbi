@@ -7,7 +7,7 @@ let chance = new Chance();
 
 export function getListOpportunitiesByStoreMock(): OpportunitiesByStore {
  return {
-   storeSourceCode: chance.string(),
-   oppsForStore: getListOpportunitiesMock()
+    unversionedStoreId: chance.string(),
+    oppsForStore: getListOpportunitiesMock()
  };
 }

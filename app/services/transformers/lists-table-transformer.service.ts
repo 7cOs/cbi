@@ -70,8 +70,8 @@ export class ListsTableTransformerService {
   public groupOppsByStore(allOpps: ListsOpportunities[]): Array<OpportunitiesByStore> {
     const groups = {};
     allOpps.forEach((opportunity) => {
-      let group = opportunity.storeSourceCode;
-      groups[group] = groups[group] ? groups[group] : { storeSourceCode: group, oppsForStore: [] };
+      let group = opportunity.unversionedStoreId;
+      groups[group] = groups[group] ? groups[group] : { unversionedStoreId: group, oppsForStore: [] };
       groups[group].oppsForStore.push(opportunity);
     });
     return Object.keys(groups).map((key) => { return groups[key]; });

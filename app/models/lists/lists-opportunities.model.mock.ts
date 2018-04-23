@@ -22,6 +22,6 @@ export function getListOpportunityMock(): ListsOpportunities {
         currentDepletions_CYTD: chance.natural(),
         yearAgoDepletions_CYTD: chance.natural(),
         lastDepletionDate: chance.string(),
-        storeSourceCode: chance.string()
+        unversionedStoreId: chance.string()
     };
 }

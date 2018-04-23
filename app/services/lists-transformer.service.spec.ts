@@ -73,7 +73,7 @@ describe('Service: ListsTransformerService', () => {
           currentDepletions_CYTD: listsOpportunitiesDTOMock[i].currentDepletions_CYTD,
           yearAgoDepletions_CYTD: listsOpportunitiesDTOMock[i].yearAgoDepletions_CYTD,
           lastDepletionDate: listsOpportunitiesDTOMock[i].lastDepletionDate,
-          storeSourceCode: listsOpportunitiesDTOMock[i].storeSourceCode,
+          unversionedStoreId: listsOpportunitiesDTOMock[i].storeSourceCode
         });
       });
     });
