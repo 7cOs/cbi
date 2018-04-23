@@ -33,6 +33,22 @@ describe('ListsApiService', () => {
     http.verify();
   });
 
+  describe('getLists', () => {
+
+    it('should call the lists endpoint and return a collection of lists', () => {
+      const expectedRequestUrl: string = `/v3/lists`;
+      const expectedResponse: any  = {};
+      listsApiService.getLists().subscribe((response: any) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+
+      expect(req.request.method).toBe(ApiRequestType.GET);
+    });
+  });
+
   describe('getStoreListDetails', () => {
     let expectedRequestUrl: string;
 

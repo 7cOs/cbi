@@ -12,6 +12,12 @@ export class ListsApiService {
     private http: HttpClient
   ) { }
 
+  public getLists(): Observable<any> {
+    const url = `/v3/lists`;
+    return this.http.get(url)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
   public getStoreListDetails(
     listsId: string
   ): Observable<Array<ListStoreDTO>> {
