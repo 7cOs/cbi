@@ -443,12 +443,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     }
     return false;
   }
-  
-  /**
-   * @param String expectedReportLabel
-   * @return boolean
-   * @author SKARNEH
-   */
+
   public boolean isExpectedReportLabelDisplayed(String expectedReportLabel) {
     final String displayedReportLabel = waitForElementToClickable(
         findElement(By.xpath("//div[@class='saved-filter-select']")), true ).getText();   
