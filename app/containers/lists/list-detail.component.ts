@@ -28,7 +28,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
   public listOpps: ListsOpportunities[];
-  public storeOpps: ListsOpportunities[];
   public oppsGroupedByStores: Array<OpportunitiesByStore>;
 
   public firstTabTitle: string = 'Performance';
