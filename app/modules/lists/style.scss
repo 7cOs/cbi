@@ -1,0 +1,167 @@
+.hero {
+  padding: 40px 60px 30px;
+  margin: 0 -60px 1em;
+  background: linear-gradient(to right, $light-blue-5, $light-blue-6);
+
+  .chevron-left-small {
+    float: left;
+    margin: 0 4px;
+  }
+
+  h1, p, span, .white {
+    color: $white;
+  }
+
+  h1 {
+    margin-bottom: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .accent-blue {
+    color: $dark-blue;
+  }
+
+  &.archived-hero {
+    background: transparent;
+
+    .link,
+    .chevron-left-small {
+      color: $blue;
+    }
+
+    h1, .accent-blue, span, p {
+      color: $gray-2;
+    }
+
+    h1 {
+      padding-top: 66px;
+    }
+
+    .red-owner {
+      color: $red;
+    }
+  }
+}
+
+.hero-info {
+
+  div {
+    display: inline-block;
+    text-align: right;
+    margin: 16px 0 0 40px;
+    float: right;
+  }
+
+  span {
+    font-weight: $light;
+    font-size: 1.75em;
+
+    &.unit {
+      font-size: 0.5em;
+    }
+
+    &.bold {
+      font-weight: $bold;
+    }
+  }
+}
+
+.target-action-buttons {
+  float: right;
+  display: inline-block;
+}
+
+.accent-blue {
+  color: $blue;
+}
+
+.predicted-impact {
+
+  .nested-columns {
+    .md-label {
+
+      span {
+        position: absolute;
+        top: 1px;
+      }
+
+      .impact {
+        position: absolute;
+        right: -80px;
+        top: -5px;
+        width: 0;
+      }
+    }
+
+    margin-bottom: 2em;
+  }
+}
+
+.larger-margin {
+  margin-bottom: 2em;
+}
+
+
+.reset-filters {
+  float: right;
+}
+
+.reset-icon,
+.save-filterset-icon,
+.reset-icon-disabled,
+.save-filterset-icon-disabled,
+.save-report-hover,
+.reset-icon-hover  {
+
+  &:before {
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    content: '';
+    display: block;
+    height: 12px;
+    left: -18px;
+    top: 13px;
+    position: relative;
+  }
+}
+
+.secondary-button-container > a.disabled {
+  cursor: default;
+}
+
+.reset-icon:before {
+  background-image: url('../../assets/img/icons/reset.svg');
+  background-size: 11px;
+}
+
+.reset-icon-hover:before {
+  background-image: url('../../assets/img/icons/reset_roll.svg');
+  background-size: 11px;
+}
+
+.reset-icon-disabled:before {
+  background-image: url('../../assets/img/icons/reset-arrow-disabled.svg');
+  background-size: 11px;
+  cursor: default;
+}
+
+.save-filterset-icon:before {
+  background-image: url('../../assets/img/icons/save-filterset.svg');
+  background-size: 14px;
+  left: -20px;
+}
+
+.save-filterset-icon-disabled:before {
+  background-image: url('../../assets/img/icons/save-filterset-icon-disabled.svg');
+  background-size: 14px;
+  left: -20px;
+  cursor: default;
+}
+
+.save-report-hover:before {
+  background-image: url('../../assets/img/icons/save-filterset_roll.svg');
+  background-size: 14px;
+  left: -20px;
+}

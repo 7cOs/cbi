@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, listsApiService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -803,9 +803,14 @@ module.exports = /*  @ngInject */
     function getTargetLists() {
       if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
         userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
+          console.log(data);
           userService.model.targetLists = data;
         });
       }
+
+      listsApiService.getLists().toPromise().then((shit) => {
+        console.log(shit);
+      });
     }
 
     /**

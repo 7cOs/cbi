@@ -10,6 +10,7 @@ interface BaseList {
   archived: boolean;
   collaborators: Collaborator[];
   createdOn: string;
+  deleted?: boolean;
   description: string;
   id: string;
   name: string;
@@ -29,6 +30,8 @@ interface V3List extends BaseList {
 
 interface V2List extends BaseList {
   collaboratorPermissionLevel: string;
+  dateOpportunitiesUpdated?: string;
+  targetListAuthor?: string;
 }
 
 interface Collaborator {
@@ -45,7 +48,7 @@ interface User {
   id?: string;
 }
 
-interface V2ListCollection {
+interface V2ListSummary {
   owned: V2List[];
   ownedArchived: number;
   ownedNotArchived: number;
@@ -54,75 +57,103 @@ interface V2ListCollection {
   sharedWithMe: V2List[];
 }
 
+interface ListsCollectionSummary {
+  archived: V2List[];
+  owned: V2List[];
+  ownedNotArchivedTaretLists: V2List[];
+  sharedWithMe: V2List[];
+
+  ownedArchived: number;
+  ownedNotArchived: number;
+  sharedArchivedCount: number;
+  sharedNotArchivedCount: number;
+}
+
 @Injectable()
 export class ListsTransformerService {
 
   constructor() { }
 
-  public transformLists(v3Lists: V3List[], currentUserEmployeeID: string): V2ListCollection[] {
-    let owned = v3Lists.filter((list: V3List) => {
-      return list.owner.employeeId === currentUserEmployeeID;
-    });
+  public formatAuthorText(author: Collaborator, currentUserIsAuthor: boolean = false): string {
+    return currentUserIsAuthor
+      ? 'current user'
+      : `${author.user.firstName} ${author.user.lastName}`;
+  }
 
-    let sharedWithMe = v3Lists.filter((list: V3List) => {
-      return list.owner.employeeId !== currentUserEmployeeID;
-    });
+  public getListAuthor(collaborators: Collaborator[]): Collaborator {
+    return collaborators.find((collaborator: Collaborator) => collaborator.permissionLevel === 'author');
+  }
 
-    let newOwnedCollection: V2List[] = owned.map((list: V3List) => {
-      return {
-        archived: list.archived,
-        collaborators: list.collaborators,
-        collaboratorPermissionLevel: list.collaboratorType,
-        createdOn: list.createdOn,
-        description: list.description,
-        id: list.id,
-        name: list.name,
-        numberOfAccounts: list.numberOfAccounts,
-        numberOfClosedOpportunities: list.numberOfClosedOpportunities,
-        owner: list.owner,
-        survey: list.survey,
-        totalOpportunities: list.totalOpportunities,
-        type: list.type,
-        updatedOn: list.updatedOn
-      };
-    });
-
-    let newSharedWithMeCollection: V2List[] = sharedWithMe.map((list: V3List) => {
-      return {
-        archived: list.archived,
-        collaborators: list.collaborators,
-        collaboratorPermissionLevel: list.collaboratorType,
-        createdOn: list.createdOn,
-        description: list.description,
-        id: list.id,
-        name: list.name,
-        numberOfAccounts: list.numberOfAccounts,
-        numberOfClosedOpportunities: list.numberOfClosedOpportunities,
-        owner: list.owner,
-        survey: list.survey,
-        totalOpportunities: list.totalOpportunities,
-        type: list.type,
-        updatedOn: list.updatedOn
-      };
-    });
-
-    let newOwned: V2ListCollection = {
-      owned: newOwnedCollection,
-      sharedWithMe: [] as V2List[],
-      ownedArchived: 0,
-      ownedNotArchived: newOwnedCollection.filter((list: V2List) => !list.archived).length,
-      sharedArchived: 0,
-      sharedNotArchived: newSharedWithMeCollection.filter((list: V2List) => !list.archived).length
+  public transformV3ToV2(list: V3List, isOwnedList: boolean = false): V2List {
+    return {
+      archived: list.archived,
+      collaborators: list.collaborators,
+      collaboratorPermissionLevel: list.collaboratorType,
+      createdOn: list.createdOn,
+      dateOpportunitiesUpdated: list.updatedOn || list.createdOn,
+      deleted: list.deleted,
+      description: list.description,
+      id: list.id,
+      name: list.name,
+      numberOfAccounts: list.numberOfAccounts,
+      numberOfClosedOpportunities: list.numberOfClosedOpportunities,
+      owner: list.owner,
+      survey: list.survey,
+      targetListAuthor: this.formatAuthorText(this.getListAuthor(list.collaborators), isOwnedList),
+      totalOpportunities: list.totalOpportunities,
+      type: list.type,
+      updatedOn: list.updatedOn
     };
+  }
 
-    let newShared: V2ListCollection = {
-      owned: [] as V2List[],
-      sharedWithMe: newSharedWithMeCollection,
-      ownedArchived: newOwnedCollection.filter((list: V2List) => list.archived).length,
-      ownedNotArchived: 0,
-      sharedArchived: newSharedWithMeCollection.filter((list: V2List) => list.archived).length,
-      sharedNotArchived: 0
+  public getV2ListsSummary(v3Lists: V3List[], currentUserEmployeeID: string): ListsCollectionSummary {
+    const ownedLists: V3List[] = v3Lists.filter((list: V3List) => list.owner.employeeId === currentUserEmployeeID);
+    const archivedLists: V3List[] = v3Lists.filter((list: V3List) => list.archived);
+    const sharedWithMeLists: V3List[] = v3Lists.filter((list: V3List) => list.owner.employeeId !== currentUserEmployeeID);
+    const ownedNotArchivedLists: V3List[] = ownedLists.filter((ownedList: V3List) => !archivedLists.includes(ownedList));
+
+    const ownedArchivedListsCount: number = ownedLists.filter((ownedList: V3List) => archivedLists.includes(ownedList)).length;
+    const ownedNotArchivedListsCount: number = ownedNotArchivedLists.length;
+    const sharedArchivedListsCount: number = sharedWithMeLists.filter((sharedList: V3List) => archivedLists.includes(sharedList)).length;
+    const sharedNotArchivedListsCount: number =
+      sharedWithMeLists.filter((sharedList: V3List) => !archivedLists.includes(sharedList)).length;
+
+    const ownedV2Lists: V2List[] = ownedLists.map((list: V3List) => this.transformV3ToV2(list, true));
+    const archivedV2Lists: V2List[] = archivedLists.map((list: V3List) => this.transformV3ToV2(list));
+    const sharedWithMeV2Lists: V2List[] = sharedWithMeLists.map((list: V3List) => this.transformV3ToV2(list));
+    const ownedNotArchivedV2Lists: V2List[] = ownedNotArchivedLists.map((list: V3List) => this.transformV3ToV2(list, true));
+
+    return {
+      owned: ownedV2Lists,
+      archived: archivedV2Lists,
+      ownedNotArchivedTaretLists: ownedNotArchivedV2Lists,
+      sharedWithMe: sharedWithMeV2Lists,
+      sharedArchivedCount: sharedArchivedListsCount,
+      sharedNotArchivedCount: sharedNotArchivedListsCount,
+      ownedNotArchived: ownedNotArchivedListsCount,
+      ownedArchived: ownedArchivedListsCount
     };
+  }
+
+  public getV2ListSummary(ownedListCollection: V2List[], sharedListCollection: V2List[], archived: boolean = false) {
+    return {
+      owned: ownedListCollection,
+      sharedWithMe: sharedListCollection,
+      ownedNotArchived: ownedListCollection.filter((list: V2List) => archived ? list.archived : !list.archived ).length,
+      ownedArchived: ownedListCollection.filter((list: V2List) => archived ? list.archived : !list.archived ).length,
+      sharedNotArchived: sharedListCollection.filter((list: V2List) => archived ? list.archived : !list.archived).length,
+      sharedArchived: sharedListCollection.filter((list: V2List) => archived ? list.archived : !list.archived).length
+    };
+  }
+
+  public transformV3toV2Lists(v3Lists: V3List[], currentUserEmployeeID: string): V2ListSummary[] {
+    let owned = v3Lists.filter((list: V3List) => list.owner.employeeId === currentUserEmployeeID);
+    let sharedWithMe = v3Lists.filter((list: V3List) => list.owner.employeeId !== currentUserEmployeeID);
+    let newOwnedCollection: V2List[] = owned.map((list: V3List) => this.transformV3ToV2(list));
+    let newSharedWithMeCollection: V2List[] = sharedWithMe.map((list: V3List) => this.transformV3ToV2(list));
+
+    let newOwned: V2ListSummary = this.getV2ListSummary(newOwnedCollection, newSharedWithMeCollection, false);
+    let newShared: V2ListSummary = this.getV2ListSummary(newOwnedCollection, newSharedWithMeCollection, true);
 
     return [
       newOwned,
