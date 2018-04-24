@@ -4,11 +4,14 @@ import * as moment from 'moment';
 import { CalculatorService } from '../calculator.service';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListStorePerformanceMock } from '../../models/lists/list-store-performance.model.mock';
+import { getListOpportunityMock } from '../../models/lists/lists-opportunities.model.mock';
 import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListsTableTransformerService } from './lists-table-transformer.service';
 import { ListStorePerformance } from '../../models/lists/list-store-performance.model';
+import { OpportunitiesByStore } from '../../models/lists/lists-opportunities-by-store.model';
 import { PERFORMANCE_TOTAL_ROW_NAME } from './lists-table-transformer.service';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
@@ -119,6 +122,33 @@ describe('ListsTableTransformerService', () => {
           });
         });
       });
+    });
+  });
+
+  describe('groupOpportunitiesByStore', () => {
+    let opportunitiesMockFirst, opportunitiesMockSecond: ListsOpportunities;
+    let allOpps: ListsOpportunities[] = [];
+    const expectedArray: OpportunitiesByStore[] = [];
+    const oppsForFirstStore: ListsOpportunities[] = [];
+    const oppsForSecondStore: ListsOpportunities[] = [];
+
+    beforeEach(() => {
+      opportunitiesMockFirst = getListOpportunityMock();
+      opportunitiesMockSecond = getListOpportunityMock();
+
+      allOpps.push.apply(allOpps, [opportunitiesMockFirst, opportunitiesMockFirst]);
+      allOpps.push.apply(allOpps, [opportunitiesMockSecond, opportunitiesMockSecond, opportunitiesMockSecond]);
+
+      oppsForFirstStore.push.apply(oppsForFirstStore, [opportunitiesMockFirst, opportunitiesMockFirst]);
+      oppsForSecondStore.push.apply(oppsForSecondStore, [opportunitiesMockSecond, opportunitiesMockSecond, opportunitiesMockSecond]);
+
+      expectedArray.push({unversionedStoreId: opportunitiesMockFirst.unversionedStoreId, oppsForStore: oppsForFirstStore});
+      expectedArray.push({unversionedStoreId: opportunitiesMockSecond.unversionedStoreId, oppsForStore: oppsForSecondStore});
+    });
+
+    it('should group opportunties by stores', () => {
+      const groupedArray = listsTableTransformerService.groupOppsByStore(allOpps);
+      expect(groupedArray).toEqual(expectedArray);
     });
   });
 
