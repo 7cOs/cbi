@@ -3,7 +3,7 @@
 const CompassAlertModalEvents = require('../../../enums/compass-alert-modal-strings.enum').CompassAlertModalEvent;
 
 module.exports = /*  @ngInject */
-  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService, compassModalService) {
+  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService, compassModalService, listsApiService, listsTransformerService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -339,12 +339,15 @@ module.exports = /*  @ngInject */
       vm.allowDelete = true;
       vm.deleteError = false;
 
-      var promise1 = userService.getTargetLists(userService.model.currentUser.employeeID);
-      var promise2 = userService.getTargetLists(userService.model.currentUser.employeeID, '?archived=true');
+      // let promise1 = userService.getTargetLists(userService.model.currentUser.employeeID);
+      // let promise2 = userService.getTargetLists(userService.model.currentUser.employeeID, '?archived=true');
+      // let promise3 = listsApiService.getLists().toPromise();
 
-      var promiseArray = [promise1, promise2];
+      // let promiseArray = [promise1, promise2, promise3];
 
-      $q.all(promiseArray).then(function(data) {
+      // $q.all(promiseArray).then(function(data) {
+      listsApiService.getLists().toPromise().then((response) => {
+        const data = listsTransformerService.transformLists(response);
         loaderService.closeLoader();
 
         var combinedTargetList = {
@@ -399,6 +402,7 @@ module.exports = /*  @ngInject */
           };
         }
 
+        debugger;
         userService.model.targetLists = combinedTargetList;
       });
 
