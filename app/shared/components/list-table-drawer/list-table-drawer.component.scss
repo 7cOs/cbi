@@ -1,0 +1,30 @@
+@import '../../../assets/styles/base/variables';
+
+.list-table-drawer-component {
+
+  .list-table-drawer {
+    border-collapse: collapse;
+    width: 100%;
+
+    .list-table-drawer-header {
+      background-color: $cancel-blue;
+
+      .table-drawer-header-text {
+        color: $white;
+        font: $roboto;
+        font-size: 11px;
+        font-weight: $bold;
+        letter-spacing: 1px;
+        padding: 7px 0;
+        text-align: left;
+      }
+    }
+
+    .list-table-drawer-body {
+
+      .checkbox-column {
+        padding: 20px;
+      }
+    }
+  }
+}

@@ -9,4 +9,5 @@ export interface ListOpportunitiesTableRow {
   lastDepletionDateColumn: string;
   performanceError: boolean;
   checked: boolean;
+  expanded: boolean;
 }

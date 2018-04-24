@@ -27,5 +27,8 @@ td.center-col.table-font(colspan=1) {{rowData.cytdColumn | number}}
 td.center-col(colspan=1)
   span.table-font([ngClass]="getTrendClass(rowData.cytdVersusYaPercentColumn)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
 td.right-col.table-font(colspan=1) {{rowData.opportunitiesColumn | number}}
-td.expand-col(colspan=1)
+td.expand-col(
+  colspan=1,
+  (click)="expandIconClicked()"
+)
   img.expand-icon(src="../../../assets/img/icons/add-expand-collapse.svg")

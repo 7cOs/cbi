@@ -153,4 +153,8 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       this.sortedTableData = sortedData;
     }
   }
+
+  private onExpandButtonClicked(row: ListOpportunitiesTableRow): void {
+    row.expanded = !row.expanded;
+  }
 }

@@ -1,0 +1,36 @@
+.list-table-drawer-component
+  table.list-table-drawer
+    thead.list-table-drawer-header
+      tr
+        th(colspan=1)
+        th(colspan=1)
+          p.table-drawer-header-text BRAND
+        th(colspan=1)
+          p.table-drawer-header-text SKU/PACKAGE
+        th(colspan=1)
+          p.table-drawer-header-text TYPE
+        th(colspan=1)
+          p.table-drawer-header-text STATUS
+        th(colspan=1)
+          p.table-drawer-header-text IMPACT
+        th(colspan=1)
+          p.table-drawer-header-text DEPLETIONS
+        th(colspan=1)
+          p.table-drawer-header-text LAST DEPLETION
+        th(colspan=1)
+    tbody.list-table-drawer-body
+      tr
+        td.checkbox-column(colspan=1)
+          mat-checkbox(
+            [checked]="false",
+            [disableRipple]="true"
+          )
+        td(colspan=1) Corona Extra
+        td(colspan=1) 16OZ 6PK CAN
+        td(colspan=1) New Placement (No Rebuy)
+        td(colspan=1) Closed
+        td(colspan=1) |||
+        td(colspan=1) 12,212
+        td(colspan=1) 4.5%
+        td(colspan=1) 02/21/2018
+        td(colspan=1) ooo

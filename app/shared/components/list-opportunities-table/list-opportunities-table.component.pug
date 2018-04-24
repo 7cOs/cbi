@@ -44,10 +44,14 @@ div
         th.right-col(colspan=1)
         th.checkbox-col(colspan=1)
 
-    tbody.total-row-absent
+    tbody(*ngFor="let row of sortedTableData, let rowIndex = index")
       tr.entity-row(
-        *ngFor="let row of sortedTableData, let rowIndex = index",
         list-opportunities-table-row,
         [rowData]="row",
         (click)="onRowClicked(rowType.data, rowIndex, row)",
-        (onChangeEventEmitter)="onCheckboxChange(row)")
+        (onChangeEventEmitter)="onCheckboxChange(row)",
+        (onExpandClicked)="onExpandButtonClicked(row)"
+      )
+      tr(*ngIf="row.expanded")
+        td.table-drawer-cell(colspan=9)
+          list-table-drawer

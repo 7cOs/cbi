@@ -40,14 +40,6 @@ tbody {
     display: table-row;
     width: 100%;
   }
-
-  &.total-row-absent {
-    height: $table-body-height - $table-body-height-offset;
-  }
-
-  &.total-row-present {
-    height: $table-body-height - $row-height - $table-body-height-offset;
-  }
 }
 
 :host-context(.ie) tbody,
@@ -141,17 +133,11 @@ th {
 }
 
 /deep/.expand-col {
-  text-align: center;
-  padding: 20px;
-  width: 5%;
   border-right: 2px solid $gray-8;
-
-  div.left-col-content {
-    div {
-      display: inline-block;
-      vertical-align: middle;
-    }
-  }
+  cursor: pointer;
+  padding: 20px;
+  text-align: center;
+  width: 5%;
 }
 
 .performance-table-summary {
@@ -285,7 +271,6 @@ td, th {
 .expand-icon {
   width: 14px;
   height: 20px;
-  cursor: pointer;
 }
 
 .sub-header {
@@ -379,4 +364,9 @@ td, th {
 
 /deep/.mat-checkbox {
   animation: none;
+}
+
+.table-drawer-cell {
+  height: auto;
+  padding: 0;
 }

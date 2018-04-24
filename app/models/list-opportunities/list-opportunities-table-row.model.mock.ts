@@ -18,7 +18,8 @@ export function getListOpportunitiesTableRowMock(length: number) {
       opportunitiesColumn: chance.integer({min: 0, max: 10000}),
       lastDepletionDateColumn: depDate.toString(),
       performanceError: false,
-      checked: false
+      checked: false,
+      expanded: false
     });
   }
 

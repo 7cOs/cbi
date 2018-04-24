@@ -11,7 +11,9 @@ import { MatCheckboxChange } from '@angular/material';
 })
 export class ListOpportunitiesTableRowComponent {
   @Input() rowData: ListOpportunitiesTableRow;
+
   @Output() onChangeEventEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() onExpandClicked: EventEmitter<Event> = new EventEmitter();
 
   public classUtilService: CompassListClassUtilService = new CompassListClassUtilService();
   public getTrendClass(num: number): string {
@@ -21,5 +23,9 @@ export class ListOpportunitiesTableRowComponent {
   public toggleChecked(event: MatCheckboxChange) {
     this.rowData.checked = event.checked;
     this.onChangeEventEmitter.emit(event);
+  }
+
+  private expandIconClicked(): void {
+    this.onExpandClicked.emit();
   }
 }
