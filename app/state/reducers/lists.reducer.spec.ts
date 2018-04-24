@@ -1,9 +1,18 @@
-import { ActionStatus } from '../../enums/action-status.enum';
-import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
-import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
-import { listsReducer, initialState, ListsState } from './lists.reducer';
-import * as ListsActions from '../actions/lists.action';
+import * as Chance from 'chance';
 
+import { ActionStatus } from '../../enums/action-status.enum';
+import { FetchListPerformancePayload } from '../actions/lists.action';
+import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
+import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
+import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
+import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
+import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
+import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
+import { initialState, listsReducer, ListsState } from './lists.reducer';
+import * as ListsActions from '../actions/lists.action';
+import { ListPerformance } from '../../models/lists/list-performance.model';
+
+const chance = new Chance();
 const listIdMock = chance.string();
 
 describe('Lists Reducer', () => {
@@ -15,7 +24,8 @@ describe('Lists Reducer', () => {
         listStores: {
           storeStatus: ActionStatus.Fetching,
           stores: initialState.listStores.stores
-        }
+        },
+        performance: initialState.performance
       };
 
       const actualState = listsReducer(initialState, new ListsActions.FetchStoreDetails({
@@ -33,7 +43,8 @@ describe('Lists Reducer', () => {
         listStores: {
           storeStatus: ActionStatus.Fetched,
           stores: stores
-        }
+        },
+        performance: initialState.performance
       };
 
       const actualState = listsReducer(
@@ -50,7 +61,8 @@ describe('Lists Reducer', () => {
         listStores: {
           storeStatus: ActionStatus.Error,
           stores: initialState.listStores.stores
-        }
+        },
+        performance: initialState.performance
       };
       const actualState: ListsState = listsReducer(
         initialState,
@@ -67,7 +79,8 @@ describe('Lists Reducer', () => {
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
             summaryData: initialState.listSummary.summaryData
-          }
+          },
+          performance: initialState.performance
         };
 
         const actualState = listsReducer(initialState, new ListsActions.FetchHeaderDetails({
@@ -85,7 +98,8 @@ describe('Lists Reducer', () => {
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
           summaryData: headersMock
-        }
+        },
+        performance: initialState.performance
       };
 
       const actualState = listsReducer(
@@ -102,11 +116,154 @@ describe('Lists Reducer', () => {
         listSummary: {
           summaryStatus: ActionStatus.Error,
           summaryData: initialState.listSummary.summaryData
-        }
+        },
+        performance: initialState.performance
       };
       const actualState: ListsState = listsReducer(
         initialState,
         new ListsActions.FetchHeaderDetailsFailure(new Error()));
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchListPerformanceVolume action is received', () => {
+    it('should set the performance volumeStatus to Fetching', () => {
+      const payloadMock: FetchListPerformancePayload = {
+        listId: chance.string(),
+        performanceType: getListPerformanceTypeMock(),
+        beverageType: getListBeverageTypeMock(),
+        dateRangeCode: getDateRangeTimePeriodValueMock()
+      };
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        performance: {
+          podStatus: initialState.performance.podStatus,
+          pod: initialState.performance.pod,
+          volumeStatus: ActionStatus.Fetching,
+          volume: initialState.performance.volume
+        }
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.FetchListPerformanceVolume(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchListPerformanceVolumeSuccess action is received', () => {
+    it('should set the performance volumeStatus to Fetched and the performance volume to the payload', () => {
+      const payloadMock: ListPerformance = getListPerformanceMock();
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        performance: {
+          podStatus: initialState.performance.podStatus,
+          pod: initialState.performance.pod,
+          volumeStatus: ActionStatus.Fetched,
+          volume: payloadMock
+        }
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.FetchListPerformanceVolumeSuccess(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchListPerformanceVolumeError action is received', () => {
+    it('should set the performance volumeStatus to Error', () => {
+      const payloadMock: Error = new Error(chance.string());
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        performance: {
+          podStatus: initialState.performance.podStatus,
+          pod: initialState.performance.pod,
+          volumeStatus: ActionStatus.Error,
+          volume: initialState.performance.volume
+        }
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.FetchListPerformanceVolumeError(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchListPerformancePOD action is received', () => {
+    it('should set the performance podStatus to Fetching', () => {
+      const payloadMock: FetchListPerformancePayload = {
+        listId: chance.string(),
+        performanceType: getListPerformanceTypeMock(),
+        beverageType: getListBeverageTypeMock(),
+        dateRangeCode: getDateRangeTimePeriodValueMock()
+      };
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        performance: {
+          podStatus: ActionStatus.Fetching,
+          pod: initialState.performance.pod,
+          volumeStatus: initialState.performance.volumeStatus,
+          volume: initialState.performance.volume
+        }
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.FetchListPerformancePOD(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchListPerformancePODSuccess action is received', () => {
+    it('should set the performance podStatus to Fetched and the performance pod to the payload', () => {
+      const payloadMock: ListPerformance = getListPerformanceMock();
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        performance: {
+          podStatus: ActionStatus.Fetched,
+          pod: payloadMock,
+          volumeStatus: initialState.performance.volumeStatus,
+          volume: initialState.performance.volume
+        }
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.FetchListPerformancePODSuccess(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchListPerformancePODError action is received', () => {
+    it('should set the performance podStatus to Error', () => {
+      const payloadMock: Error = new Error(chance.string());
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        performance: {
+          podStatus: ActionStatus.Error,
+          pod: initialState.performance.pod,
+          volumeStatus: initialState.performance.volumeStatus,
+          volume: initialState.performance.volume
+        }
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.FetchListPerformancePODError(payloadMock)
+      );
 
       expect(actualState).toEqual(expectedState);
     });

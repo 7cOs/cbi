@@ -1,16 +1,15 @@
 td.checkbox-col(colspan=1)
-  div.left-col-content
-    mat-checkbox(*ngIf="rowData.storeColumn != 'Total'",
-    aria-label="Select Store",
-    [checked]='rowData.checked',
-    (change)="toggleChecked($event)",
-    [disableRipple]="true")
+  mat-checkbox(*ngIf="rowData.storeColumn != 'Total'",
+  aria-label="Select Store",
+  [checked]='rowData.checked',
+  [disableRipple]="true",
+  (change)="toggleChecked($event)")
 
 td.left-col(colspan=1)
   div.left-col-content
     div.left-col-text-content
       div.description-line-0
-        span {{rowData.storeColumn}}
+        span {{ rowData.storeColumn | titlecase }}
       div.description-line-1
         span.description-line-1 {{rowData.storeAddressSubline}}
 td.left-col(colspan=1)

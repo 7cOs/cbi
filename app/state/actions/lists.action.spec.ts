@@ -1,9 +1,15 @@
 import * as Chance from 'chance';
-import * as ListsActions from './lists.action';
 
+import { FetchListPerformancePayload } from './lists.action';
+import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
+import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
+import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
+import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
 import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
 import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
+import * as ListsActions from './lists.action';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
+import { ListPerformance } from '../../models/lists/list-performance.model';
 
 const chance = new Chance();
 
@@ -135,4 +141,73 @@ describe('Lists Actions', () => {
     });
   });
 
+  describe('FetchListPerformanceVolume', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: FetchListPerformancePayload = {
+        listId: chance.string(),
+        performanceType: getListPerformanceTypeMock(),
+        beverageType: getListBeverageTypeMock(),
+        dateRangeCode: getDateRangeTimePeriodValueMock()
+      };
+      const action = new ListsActions.FetchListPerformanceVolume(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('FetchListPerformanceVolumeSuccess', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: ListPerformance = getListPerformanceMock();
+      const action = new ListsActions.FetchListPerformanceVolumeSuccess(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME_SUCCESS);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('FetchListPerformanceVolumeError', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: Error = new Error(chance.string());
+      const action = new ListsActions.FetchListPerformanceVolumeError(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME_ERROR);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('FetchListPerformancePOD', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: FetchListPerformancePayload = {
+        listId: chance.string(),
+        performanceType: getListPerformanceTypeMock(),
+        beverageType: getListBeverageTypeMock(),
+        dateRangeCode: getDateRangeTimePeriodValueMock()
+      };
+      const action = new ListsActions.FetchListPerformancePOD(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.FETCH_LIST_PERFORMANCE_POD);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('FetchListPerformancePODSuccess', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: ListPerformance = getListPerformanceMock();
+      const action = new ListsActions.FetchListPerformancePODSuccess(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.FETCH_LIST_PERFORMANCE_POD_SUCCESS);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('FetchListPerformancePODError', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: Error = new Error(chance.string());
+      const action = new ListsActions.FetchListPerformancePODError(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.FETCH_LIST_PERFORMANCE_POD_ERROR);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
 });

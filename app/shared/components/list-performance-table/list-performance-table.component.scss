@@ -8,16 +8,12 @@ $table-body-height: $table-height - $row-height;
 $table-body-height-offset: 3px;
 $left-col-icon-width: 24px;
 
-.mat-checkbox {
-  transition: none;
-}
-
 table {
   border-top: 2px solid $gray-8;
   border-collapse: collapse;
   height: $table-height;
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
   display: table;
 }
 
@@ -63,6 +59,10 @@ tbody {
 th {
   font-weight: normal;
   font-size: 10px;
+
+  &:first-child {
+    border-right: 2px solid $gray-8;
+  }
 }
 
 .col-100-pct {
@@ -126,7 +126,10 @@ th {
   text-align: center;
   padding: 20px;
   width: 5%;
-  border-right: 2px solid $gray-8;
+
+  /deep/.mat-checkbox {
+    animation: none;
+  }
 
   div.left-col-content {
     div {
@@ -136,24 +139,7 @@ th {
   }
 }
 
-tr.one-right-column-present {
-  /deep/.left-col {
-    width: 35%;
-    min-width: $table-width * 0.35;
-  }
-
-  /deep/.center-col {
-    width: 17%;
-
-    &.spanned {
-      width: 51%;
-    }
-  }
-}
-
 .performance-table-summary {
-  box-shadow: $table-box-shadow;
-  background-color: $gray-4;
   border-bottom: 2px solid $gray-8;
   font-family: $rajdhani;
   height: 55px;
@@ -178,12 +164,6 @@ tr.one-right-column-present {
   /deep/.checkbox-col {
     border: 0;
   }
-
-  /deep/td:nth-child(4),
-  /deep/td:nth-child(7),
-  /deep/td:nth-child(10) {
-    border-right: 1px solid $gray-8;
-  }
 }
 
 .entity-row {
@@ -192,37 +172,6 @@ tr.one-right-column-present {
   border-bottom: 1px solid $gray-8;
   height: $row-height;
   position: relative;
-
-  /deep/.center-col {
-    text-align: center;
-  }
-
-  /deep/.right-col {
-    &.opportunities {
-      color: $blue;
-      font-weight: normal;
-    }
-
-    &.opportunities-error {
-      background-color: $very-light-red;
-    }
-  }
-
-  /deep/.left-col {
-    color: $black;
-  }
-
-  /deep/td:nth-child(4) {
-    border-right: 1px solid $gray-8;
-  }
-
-  /deep/td:nth-child(7) {
-    border-right: 1px solid $gray-8;
-  }
-
-  /deep/td:nth-child(10) {
-    border-right: 1px solid $gray-8;
-  }
 
   &.performance-error {
 
@@ -239,10 +188,7 @@ tr.one-right-column-present {
   &:hover {
     background-color: $light-blue-4;
 
-    /deep/.left-col,
-    /deep/.center-col,
-    /deep/.right-col,
-    /deep/.segment-col {
+    /deep/.center-col {
       background-color: $light-blue-4;
     }
 
@@ -266,6 +212,16 @@ span.link-out {
 
 td {
   height: 60px;
+
+  &:first-child {
+    border-right: 2px solid $gray-8;
+  }
+
+  &:nth-child(4),
+  &:nth-child(7),
+  &:nth-child(10) {
+    border-right: 1px solid $gray-8;
+  }
 }
 
 td, th {
@@ -358,10 +314,6 @@ td, th {
   }
 }
 
-.no-sub-header-border {
-  border: 0 solid $gray-10;
-}
-
 .summary-header {
   font-family: $work-sans;
   font-size: 24px;
@@ -406,4 +358,8 @@ td, th {
 
 .description-line-0 {
   font-size: 14px;
+}
+
+/deep/.mat-checkbox {
+  animation: none;
 }

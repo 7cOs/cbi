@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 
+import { ListPerformance } from '../models/lists/list-performance.model';
+import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
+import { ListStorePerformance } from '../models/lists/list-store-performance.model';
+import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { StoreDetails } from '../models/lists/lists-store.model';
@@ -29,6 +32,16 @@ export class ListsTransformerService {
     };
   }
 
+  public transformListPerformanceDTO(listPerformanceDTO: ListPerformanceDTO): ListPerformance {
+    return {
+      current: listPerformanceDTO.current,
+      currentSimple: listPerformanceDTO.currentSimple,
+      yearAgo: listPerformanceDTO.yearAgo,
+      yearAgoSimple: listPerformanceDTO.yearAgoSimple,
+      storePerformance: this.transformListStorePerformanceDTOS(listPerformanceDTO.storePerformance)
+    };
+  }
+
   private formatStoreData(store: ListStoreDTO): StoreDetails {
     const storeData: StoreDetails = {
       address: store.address,
@@ -43,5 +56,18 @@ export class ListsTransformerService {
       segmentCode: store.segmentCode
     };
     return storeData;
+  }
+
+  private transformListStorePerformanceDTOS(listStorePerformanceDTOS: ListStorePerformanceDTO[]): ListStorePerformance[] {
+    return listStorePerformanceDTOS.map((listStorePerformanceDTO: ListStorePerformanceDTO) => {
+      return {
+        unversionedStoreId: listStorePerformanceDTO.storeSourceCode,
+        current: listStorePerformanceDTO.current,
+        currentSimple: listStorePerformanceDTO.currentSimple,
+        yearAgo: listStorePerformanceDTO.yearAgo,
+        yearAgoSimple: listStorePerformanceDTO.yearAgoSimple,
+        lastSoldDate: listStorePerformanceDTO.lastSoldDate
+      };
+    });
   }
 }
