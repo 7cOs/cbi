@@ -71,8 +71,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.listSummary = listDetail.listSummary.summaryData;
           this.listOpps = listDetail.listOpportunities.opportunities;
           this.oppsGroupedByStores = this.listsTableTransformerService.groupOppsByStore(this.listOpps);
-          this.storeList = listDetail.listStores.stores;
-          this.listSummary = listDetail.listSummary.summaryData;
 
           if (this.isListPerformanceFetched(
             listDetail.listStores.storeStatus,

@@ -1,4 +1,5 @@
 import { OpportunityImpact, OpportunityStatus, OpportunityType } from '../../enums/opportunity.enum';
+
 export interface ListOpportunitiesDTO {
     brandCode: string;
     brandDescription: string;
