@@ -12,7 +12,7 @@
 
   .target-action-buttons
     button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.showArchiveModal()").btn-action Archive
-    button(ng-if="expanded.buttonState === 'archived'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.unarchiveTargetList()").btn-action Unarchive
+    button(ng-if="expanded.buttonState === 'archived'" ng-disabled="expanded.selected.length === 0 || expanded.checkAuthorPermissions()" ng-click="expanded.unarchiveTargetList()").btn-action Unarchive
     button.btn-action.action-button-spacing(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.showDeleteModal()").btn-action Delete
     button.btn-action.action-button-spacing(ng-click="expanded.createTargetList($event)") Create a New List
 

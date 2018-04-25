@@ -78,6 +78,7 @@ module.exports = /*  @ngInject */
     vm.toggleAll = toggleAll;
     vm.showArchiveModal = showArchiveModal;
     vm.showDeleteModal = showDeleteModal;
+    vm.checkAuthorPermissions = checkAuthorPermissions;
 
     init();
 
@@ -94,16 +95,12 @@ module.exports = /*  @ngInject */
     }
 
     function archiveTargetList() {
+      loaderService.openLoader();
       var selectedTargetLists = vm.selected,
           archiveTargetListPromises = [];
 
       // get selected target list ids and their promises
       archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
-        analyticsService.trackEvent(
-          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
-          'Archive Target List',
-          targetList.id
-        );
         return targetListService.updateTargetList(targetList.id, {archived: true});
       });
 
@@ -118,30 +115,43 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchived--;
 
           userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
-        });
 
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(item.permissionLevel, item.archived),
+            'Archive Target List',
+            item.id
+          );
+        });
+        loaderService.closeLoader();
         toastService.showToast('archived', selectedTargetLists);
         vm.selected = [];
       });
     }
 
+    function checkAuthorPermissions() {
+      // This check is only done to see if ALL selected items don't have author permissions, otherwise we will accept the action and purge in the unarchive method.
+      let selectedTargetLists = vm.selected;
+      let noOwnerPermissions = selectedTargetLists.filter((list) => {
+        return list.permissionLevel !== 'author';
+      });
+      return (noOwnerPermissions.length === selectedTargetLists.length);
+    }
     function unarchiveTargetList() {
+      loaderService.openLoader();
       let selectedTargetLists = vm.selected,
           unarchiveTargetListPromises = [];
+      let ownerPermissions = selectedTargetLists.filter((list) => {
+        return list.permissionLevel === 'author';
+      });
 
       // get selected target list ids and their promises
-      unarchiveTargetListPromises = selectedTargetLists.map((targetList) => {
-        analyticsService.trackEvent(
-          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
-          'Unarchive Target List',
-          targetList.id
-        );
+      unarchiveTargetListPromises = ownerPermissions.map((targetList) => {
         return targetListService.updateTargetList(targetList.id, {unarchived: true});
       });
 
       // run all archive requests at the same time
       $q.all(unarchiveTargetListPromises).then((response) => {
-        angular.forEach(selectedTargetLists, (listItem, key) => {
+        angular.forEach(ownerPermissions, (listItem, key) => {
           listItem.archived = false;
           // Remove the item from the archived list me.
           userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(listItem), 1);
@@ -150,9 +160,17 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchived++;
 
           userService.model.targetLists.ownedNotArchivedTargetLists.unshift(listItem);
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(listItem.permissionLevel, listItem.archived),
+            'Unarchive Target List',
+            listItem.id
+          );
         });
-
-        toastService.showToast('unarchived', selectedTargetLists);
+        loaderService.closeLoader();
+        if (selectedTargetLists.length !== ownerPermissions.length) {
+          toastService.showToast('unarchivedNoAuthor', ownerPermissions);
+        }
+        toastService.showToast('unarchived', ownerPermissions);
         vm.selected = [];
       });
     }

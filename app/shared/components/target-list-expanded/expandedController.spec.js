@@ -730,13 +730,15 @@ describe('Unit: expanded target list controller', function() {
       ctrl.selected = [{
         archived: true,
         collaborators: [],
-        id: '1234'
+        id: '1234',
+        permissionLevel: 'author'
       }];
       userService.model.targetLists = {
         archived: [{
           archived: true,
           collaborators: [],
-          id: '1234'
+          id: '1234',
+          permissionLevel: 'author'
          }],
         ownedArchived: 10,
         ownedNotArchived: 60,
@@ -747,7 +749,7 @@ describe('Unit: expanded target list controller', function() {
 
       expect(userService.model.targetLists.ownedArchived).toEqual(9);
       expect(userService.model.targetLists.ownedNotArchived).toEqual(61);
-      expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([{ archived: false, collaborators: [  ], id: '1234' }]);
+      expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([{ archived: false, collaborators: [  ], id: '1234', permissionLevel: 'author' }]);
       expect(userService.model.targetLists.archived).toEqual([]);
       expect(ctrl.selected).toEqual([]);
       expect(toastService.showToast).toHaveBeenCalled();
