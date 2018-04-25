@@ -5,7 +5,7 @@ import { getListPerformanceDTOMock } from '../models/lists/list-performance-dto.
 import { getListsSummaryDTOMock } from '../models/lists/lists-header-dto.model.mock';
 import { getStoreListsDTOMock } from '../models/lists/lists-store-dto.model.mock';
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
-import { ListOpportunitiesDTO } from '../models/lists/lists-opportunities-dto.model';
+import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
 import { ListPerformance } from '../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
@@ -56,7 +56,7 @@ describe('Service: ListsTransformerService', () => {
 
   describe('transformListOpportunitiesData', () => {
     it('should transform the list opportunities Data', () => {
-      const listsOpportunitiesDTOMock: Array<ListOpportunitiesDTO> = getListOpportunitiesDTOMock();
+      const listsOpportunitiesDTOMock: Array<ListOpportunityDTO> = getListOpportunitiesDTOMock();
 
       const actualListOppsData: ListsOpportunities[] =
         listsTransformerService.formatListOpportunitiesData(listsOpportunitiesDTOMock);

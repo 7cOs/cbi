@@ -7,10 +7,12 @@ import { ListStorePerformance } from '../models/lists/list-store-performance.mod
 import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
-import { StoreDetails } from '../models/lists/lists-store.model';
-import { ListOpportunitiesDTO } from '../models/lists/lists-opportunities-dto.model';
+import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
-import { OpportunityImpact, OpportunityStatus, OpportunityType } from '../enums/opportunity.enum';
+import { OpportunityImpact } from '../enums/list-opportunities/list-opportunity-impact.enum';
+import { OpportunityStatus } from '../enums/list-opportunities/list-opportunity-status.enum';
+import { OpportunityType } from '../enums/list-opportunities/list-opportunity-type.enum';
+import { StoreDetails } from '../models/lists/lists-store.model';
 
 @Injectable()
 export class ListsTransformerService {
@@ -35,7 +37,7 @@ export class ListsTransformerService {
     };
   }
 
-  public formatListOpportunitiesData(listOpportunities: Array<ListOpportunitiesDTO>): Array<ListsOpportunities> {
+  public formatListOpportunitiesData(listOpportunities: Array<ListOpportunityDTO>): Array<ListsOpportunities> {
     return listOpportunities.map(listOpportunity => this.formatListOpportunityData(listOpportunity));
   }
 
@@ -65,7 +67,7 @@ export class ListsTransformerService {
     return storeData;
   }
 
-  private formatListOpportunityData(listOpportunity: ListOpportunitiesDTO): ListsOpportunities {
+  private formatListOpportunityData(listOpportunity: ListOpportunityDTO): ListsOpportunities {
     return {
       id: listOpportunity.id,
       brandCode: listOpportunity.brandCode,

@@ -17,7 +17,7 @@ import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.m
 import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
-import { ListOpportunitiesDTO } from '../../../models/lists/lists-opportunities-dto.model';
+import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -51,12 +51,12 @@ describe('ListsApiService', () => {
     });
 
     it('should call the Opportunities endpoint and return opportunities data for the given list ID', () => {
-      const oppsForListDTOMock:  Array<ListOpportunitiesDTO> = getListOpportunitiesDTOMock();
+      const oppsForListDTOMock:  Array<ListOpportunityDTO> = getListOpportunitiesDTOMock();
 
       listsApiService.getOppsDataForList(
         listIdMock
       )
-        .subscribe((response: ListOpportunitiesDTO[]) => {
+        .subscribe((response: ListOpportunityDTO[]) => {
           expect(response).toEqual(oppsForListDTOMock);
         });
 

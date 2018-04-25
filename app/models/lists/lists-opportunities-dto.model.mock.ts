@@ -1,16 +1,18 @@
 import * as Chance from 'chance';
 import { generateRandomSizedArray } from '../util.model';
 
-import { ListOpportunitiesDTO } from './lists-opportunities-dto.model';
-import { getOpportunityImpactMock, getOpportunityStatusMock, getOpportunityTypeMock } from '../../enums/opportunity.enum.mock';
+import { ListOpportunityDTO } from './lists-opportunities-dto.model';
+import { getOpportunityTypeMock } from '../../enums/list-opportunities/list-opportunity-type.enum.mock';
+import { getOpportunityStatusMock } from '../../enums/list-opportunities/list-opportunity-status.enum.mock';
+import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-opportunity-impact.enum.mock';
 
 let chance = new Chance();
 
-export function getListOpportunitiesDTOMock(): ListOpportunitiesDTO[] {
-    return generateRandomSizedArray(1, 3).map(() => getListOpportunityDTOMock());
+export function getListOpportunitiesDTOMock(): ListOpportunityDTO[] {
+    return generateRandomSizedArray().map(() => getListOpportunityDTOMock());
 }
 
-export function getListOpportunityDTOMock(): ListOpportunitiesDTO {
+export function getListOpportunityDTOMock(): ListOpportunityDTO {
     return {
         brandCode: chance.string(),
         brandDescription: chance.string(),

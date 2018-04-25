@@ -15,7 +15,7 @@ import { ListsTransformerService } from '../../services/lists-transformer.servic
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { ListOpportunitiesDTO } from '../../models/lists/lists-opportunities-dto.model';
+import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 
 @Injectable()
@@ -77,10 +77,10 @@ export class ListsEffects {
   @Effect()
   fetchOppsforList$(): Observable<Action> {
     return this.actions$
-      .ofType(ListActions.FETCH_OPPS_FOR_LIST)
+      .ofType(ListsActionTypes.FETCH_OPPS_FOR_LIST)
       .switchMap((action: ListActions.FetchOppsForList) => {
         return this.listsApiService.getOppsDataForList(action.payload.listId)
-          .map((response: Array<ListOpportunitiesDTO>) => {
+          .map((response: Array<ListOpportunityDTO>) => {
             const transformedData: Array<ListsOpportunities> = this.listsTransformerService.formatListOpportunitiesData(response);
             return new ListActions.FetchOppsForListSuccess(transformedData);
           })
@@ -91,7 +91,7 @@ export class ListsEffects {
   @Effect({dispatch: false})
   fetchOppsforListFailure$(): Observable<Action> {
     return this.actions$
-      .ofType(ListActions.FETCH_HEADER_DETAILS_FAILURE)
+      .ofType(ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE)
       .do((action: ListActions.FetchOppsForListFailure) => {
         console.error('Opportunities fetch failure:', action.payload);
       });

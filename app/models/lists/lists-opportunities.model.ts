@@ -1,4 +1,7 @@
-import { OpportunityImpact, OpportunityStatus, OpportunityType } from '../../enums/opportunity.enum';
+import { OpportunityImpact } from '../../enums/list-opportunities/list-opportunity-impact.enum';
+import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
+import { OpportunityType } from '../../enums/list-opportunities/list-opportunity-type.enum';
+
 export interface ListsOpportunities {
     id: string;
     brandCode: string;

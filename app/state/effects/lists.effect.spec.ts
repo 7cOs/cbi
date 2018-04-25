@@ -23,7 +23,7 @@ import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { ListOpportunitiesDTO } from '../../models/lists/lists-opportunities-dto.model';
+import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 
 const chance = new Chance();
@@ -41,7 +41,7 @@ describe('Lists Effects', () => {
   let headerDetailMock: ListsSummary;
   let storesData: Array<StoreDetails> = getStoreListsMock();
   let listOpportunities: Array<ListsOpportunities> = getListOpportunitiesMock();
-  let listOpportunitiesDTOMock: ListOpportunitiesDTO[];
+  let listOpportunitiesDTOMock: ListOpportunityDTO[];
   let listPerformanceDTOMock: ListPerformanceDTO;
   let listPerformanceMock: ListPerformance;
 
@@ -55,7 +55,7 @@ describe('Lists Effects', () => {
     getListStorePerformance(listId: string): Observable<ListPerformanceDTO> {
       return Observable.of(listPerformanceDTOMock);
     },
-    getOppsDataForList(listIdMock: string): Observable<ListOpportunitiesDTO[]> {
+    getOppsDataForList(listIdMock: string): Observable<ListOpportunityDTO[]> {
       return Observable.of(listOpportunitiesDTOMock);
     }
   };
@@ -70,7 +70,7 @@ describe('Lists Effects', () => {
     transformListPerformanceDTO(listPerformanceDTO: ListPerformanceDTO): ListPerformance {
       return listPerformanceMock;
     },
-    formatListOpportunitiesData(oppotunity: Array<ListOpportunitiesDTO>): Array<ListsOpportunities> {
+    formatListOpportunitiesData(oppotunity: Array<ListOpportunityDTO>): Array<ListsOpportunities> {
       return listOpportunities;
     }
   };

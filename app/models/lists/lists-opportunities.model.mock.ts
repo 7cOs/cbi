@@ -2,7 +2,9 @@ import * as Chance from 'chance';
 import { generateRandomSizedArray } from '../util.model';
 
 import { ListsOpportunities } from './lists-opportunities.model';
-import { getOpportunityImpactMock, getOpportunityStatusMock, getOpportunityTypeMock } from '../../enums/opportunity.enum.mock';
+import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-opportunity-impact.enum.mock';
+import { getOpportunityStatusMock } from '../../enums/list-opportunities/list-opportunity-status.enum.mock';
+import { getOpportunityTypeMock } from '../../enums/list-opportunities/list-opportunity-type.enum.mock';
 
 let chance = new Chance();
 

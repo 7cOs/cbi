@@ -225,8 +225,7 @@ describe('Lists Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(ListsActions.FETCH_OPPS_FOR_LIST).toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST);
-      expect(action.type).toBe(ListsActions.FETCH_OPPS_FOR_LIST);
+      expect(action.type).toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST);
     });
 
     it('should contain the correct payload', () => {
@@ -245,9 +244,7 @@ describe('Lists Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(ListsActions.FETCH_OPPS_FOR_LIST_SUCCESS)
-        .toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS);
-      expect(action.type).toBe(ListsActions.FETCH_OPPS_FOR_LIST_SUCCESS);
+      expect(action.type).toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS);
     });
 
     it('should contain the mock payload', () => {
@@ -264,9 +261,7 @@ describe('Lists Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(ListsActions.FETCH_OPPS_FOR_LIST_FAILURE)
-        .toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE);
-      expect(action.type).toBe(ListsActions.FETCH_OPPS_FOR_LIST_FAILURE);
+      expect(action.type).toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE);
     });
 
     it('should contain the mock payload', () => {

@@ -134,7 +134,7 @@ export function listsReducer(
         performance: state.performance
       };
 
-    case ListsActions.FETCH_OPPS_FOR_LIST:
+    case ListsActionTypes.FETCH_OPPS_FOR_LIST:
       return {
         listStores:  state.listStores,
         listSummary:  state.listSummary,
@@ -144,7 +144,7 @@ export function listsReducer(
         performance: state.performance
       };
 
-    case ListsActions.FETCH_OPPS_FOR_LIST_SUCCESS:
+    case ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS:
       return {
         listStores:  state.listStores,
         listSummary:  state.listSummary,
@@ -155,7 +155,7 @@ export function listsReducer(
         performance: state.performance
       };
 
-    case ListsActions.FETCH_OPPS_FOR_LIST_FAILURE:
+    case ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE:
       return {
         listStores:  state.listStores,
         listSummary:  state.listSummary,
