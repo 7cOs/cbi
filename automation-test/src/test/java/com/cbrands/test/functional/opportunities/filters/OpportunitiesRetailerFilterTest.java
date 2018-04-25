@@ -10,31 +10,32 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class OpportunitiesRetailerFilterTest extends BaseTestCase {
 
   private OpportunitiesPage opportunitiesPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Functional - OpportunitiesFiltersTest");
-  }
+  @BeforeMethod
+  public void setUp(Method method) throws MalformedURLException {
+    final String testDescription = method.getAnnotation(Test.class).description();
+    final String testName = String.format("Functional - OpportunitiesFiltersTest - %s", testDescription);
+    this.startUpBrowser(testName);
+    PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
 
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
+    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
+    opportunitiesPage.goToPage();
   }
 
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
   @Test(description = "Filter Opportunities by Chain Retailer", dataProvider = "chainRetailersData")
-  public void filterByChainRetailer(TestUser user, String accountName, PremiseType premiseType) {
-    loginToOpportunitiesPage(user);
-
+  public void filterByChainRetailer(String accountName, PremiseType premiseType) {
     opportunitiesPage
       .clickRetailerTypeDropdown()
       .selectChainRetailerType()
@@ -64,9 +65,7 @@ public class OpportunitiesRetailerFilterTest extends BaseTestCase {
   }
 
   @Test(description = "Filter Opportunities by Store Retailer", dataProvider = "storeRetailersData")
-  public void filterByStoreRetailer(TestUser user, String accountName, String accountAddress, PremiseType premiseType) {
-    loginToOpportunitiesPage(user);
-
+  public void filterByStoreRetailer(String accountName, String accountAddress, PremiseType premiseType) {
     opportunitiesPage
       .clickRetailerTypeDropdown()
       .selectStoreRetailerType()
@@ -98,23 +97,16 @@ public class OpportunitiesRetailerFilterTest extends BaseTestCase {
   @DataProvider
   public static Object[][] chainRetailersData() {
     return new Object[][]{
-      {TestUser.ACTOR4, "Buffalo Wild Wings", PremiseType.On},
-      {TestUser.ACTOR4, "Walgreens", PremiseType.Off}
+      {"Buffalo Wild Wings", PremiseType.On},
+      {"Walgreens", PremiseType.Off}
     };
   }
 
   @DataProvider
   public static Object[][] storeRetailersData() {
     return new Object[][]{
-      {TestUser.ACTOR4, "Walgreens", "2550 E 88th Ave", PremiseType.On},
-      {TestUser.ACTOR4, "Walgreens", "1350 Sportsman Way", PremiseType.Off}
+      {"Walgreens", "2550 E 88th Ave", PremiseType.On},
+      {"Walgreens", "1350 Sportsman Way", PremiseType.Off}
     };
-  }
-
-  private void loginToOpportunitiesPage(TestUser user) {
-    PageFactory.initElements(driver, LoginPage.class).loginAs(user);
-
-    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
-    opportunitiesPage.goToPage();
   }
 }
