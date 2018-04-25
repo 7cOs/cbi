@@ -1,6 +1,5 @@
 package com.cbrands.test.functional.opportunities.filters;
 
-import com.cbrands.PremiseType;
 import com.cbrands.TestUser;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
