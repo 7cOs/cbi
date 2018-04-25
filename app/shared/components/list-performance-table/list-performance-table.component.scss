@@ -1,0 +1,365 @@
+@import '../../../assets/styles/base/variables';
+
+$table-height: 660px;
+$table-width: 565px;
+$row-height: 60px;
+$row-height-header: $row-height / 2;
+$table-body-height: $table-height - $row-height;
+$table-body-height-offset: 3px;
+$left-col-icon-width: 24px;
+
+table {
+  border-top: 2px solid $gray-8;
+  border-collapse: collapse;
+  height: $table-height;
+  width: 100%;
+  table-layout: fixed;
+  display: table;
+}
+
+thead {
+  text-align: left;
+  display: block;
+  width: 100%;
+
+  tr {
+    display: table-row;
+    width: 100%;
+  }
+}
+
+tbody {
+  display: table-row;
+  width: 100%;
+  max-height: $table-body-height;
+
+  /* Chrome and Safari support this non-standard overflow type */
+  overflow-y: overlay;
+
+  tr {
+    display: table-row;
+    width: 100%;
+  }
+
+  &.total-row-absent {
+    height: $table-body-height - $table-body-height-offset;
+  }
+
+  &.total-row-present {
+    height: $table-body-height - $row-height - $table-body-height-offset;
+  }
+}
+
+:host-context(.ie) tbody,
+:host-context(.edge) tbody {
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+th {
+  font-weight: normal;
+  font-size: 10px;
+
+  &:first-child {
+    border-right: 2px solid $gray-8;
+  }
+}
+
+.col-100-pct {
+  width: 100%;
+}
+
+/deep/.left-col {
+  width: 20%;
+  min-width: $table-width * 0.4;
+
+  padding-left: 16px;
+  padding-right: 8px;
+  text-align: left;
+  font-weight: $regular;
+
+  div.left-col-content {
+    div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .left-col-text-content {
+      width: 100%;
+
+      div {
+        display: block;
+      }
+    }
+
+    &.showing-image {
+      .left-col-text-content {
+        margin-left: 5px;
+        width: calc(100% - #{$left-col-icon-width} - 5px);
+      }
+    }
+  }
+}
+
+/deep/.center-col {
+  text-align: center;
+  background-color: $gray-4;
+  width: 5%;
+
+  &.spanned {
+    width: 60%;
+  }
+}
+
+/deep/.right-col {
+  text-align: center;
+  width: 10%;
+}
+
+/deep/.segment-col {
+  text-align: center;
+  width: 15%;
+  min-width: 0 px;
+}
+
+/deep/.checkbox-col {
+  text-align: center;
+  padding: 20px;
+  width: 5%;
+
+  /deep/.mat-checkbox {
+    animation: none;
+  }
+
+  div.left-col-content {
+    div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+.performance-table-summary {
+  border-bottom: 2px solid $gray-8;
+  font-family: $rajdhani;
+  height: 55px;
+  min-width: $table-width;
+  padding-top: 20px;
+}
+
+.total-row {
+  height: $row-height;
+  border-bottom: 1px solid $gray-10;
+  text-transform: uppercase;
+  background-color: #002d61;
+  color: $white;
+
+  /deep/.left-col,
+  /deep/.center-col,
+  /deep/.right-col {
+    font-weight: $semibold;
+    background-color: #002d61;
+  }
+
+  /deep/.checkbox-col {
+    border: 0;
+  }
+}
+
+.entity-row {
+  border-right: 1px solid $gray-8;
+  border-left: 1px solid $gray-8;
+  border-bottom: 1px solid $gray-8;
+  height: $row-height;
+  position: relative;
+
+  &.performance-error {
+
+    /deep/td {
+      background-color: $very-light-red;
+    }
+
+    /deep/span.positive,
+    /deep/span.negative {
+      color: inherit;
+    }
+  }
+
+  &:hover {
+    background-color: $light-blue-4;
+
+    /deep/.center-col {
+      background-color: $light-blue-4;
+    }
+
+    /deep/.checkbox-col {
+      background-color: $white;
+    }
+  }
+}
+
+span.positive {
+  color: $green;
+}
+
+span.negative {
+  color: $red;
+}
+
+span.link-out {
+  color: $blue;
+}
+
+td {
+  height: 60px;
+
+  &:first-child {
+    border-right: 2px solid $gray-8;
+  }
+
+  &:nth-child(4),
+  &:nth-child(7),
+  &:nth-child(10) {
+    border-right: 1px solid $gray-8;
+  }
+}
+
+td, th {
+  font-family: $work-sans;
+  font-size: 12px;
+  font-weight: $regular;
+  box-sizing: border-box;
+}
+
+.top-header {
+  margin-top: 0.5em;
+  height: $row-height-header;
+  padding: 20px;
+
+  th {
+    font-family: $rajdhani;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: center;
+    color: $gray-1;
+
+    &.right-col {
+      vertical-align: center;
+      padding-top: 20px;
+    }
+
+    &.center-col {
+      vertical-align: center;
+    }
+
+    &.segment-col {
+      padding-top: 20px;
+    }
+
+    &.left-col {
+      text-align: left;
+      margin-left: 16px;
+      padding-top: 20px;
+    }
+  }
+
+  th:first-child {
+    border-left: 1px solid $gray-8;
+  }
+
+  th:last-child {
+    border-right: 1px solid $gray-8;
+  }
+
+  th:nth-child(4) {
+    border-right: 1px solid $gray-8;
+  }
+
+  th:nth-child(5),
+  th:nth-child(6) {
+    background-color: $gray-4;
+    border-right: 1px solid $gray-8;
+  }
+
+
+}
+
+.sub-header {
+  height: $row-height-header;
+  border-bottom: 1px solid $gray-10;
+
+  th {
+    font-family: $rajdhani;
+    font-size: 10px;
+    font-weight: $semibold;
+    letter-spacing: 0.9px;
+    text-align: center;
+    text-transform: uppercase;
+    color: $gray-1;
+  }
+
+  th:nth-child(1) {
+    border-left: 1px solid $gray-8;
+    border-right: 2px solid $gray-8;
+  }
+
+  th:nth-child(4),
+  th:nth-child(7),
+  th:nth-child(10),
+  th:nth-child(11) {
+    border-right: 1px solid $gray-8;
+  }
+}
+
+.summary-header {
+  font-family: $work-sans;
+  font-size: 24px;
+  font-weight: 300;
+  text-align: left;
+  color: $gray-1;
+  padding-left: 16px;
+}
+
+.link {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.sort-indicator {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.selected-entity-row {
+  font-weight: $semibold;
+  background-color: $light-blue-4;
+
+  /deep/.left-col,
+  /deep/.center-col,
+  /deep/.right-col,
+  /deep/.segment-col {
+    font-weight: $semibold;
+    background-color: $light-blue-4;
+  }
+
+  /deep/.checkbox-col {
+    background-color: $white;
+  }
+}
+
+.description-line-1 {
+  font-size: 11px;
+}
+
+.description-line-0 {
+  font-size: 14px;
+}
+
+/deep/.mat-checkbox {
+  animation: none;
+}

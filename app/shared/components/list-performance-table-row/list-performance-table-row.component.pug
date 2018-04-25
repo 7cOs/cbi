@@ -1,0 +1,36 @@
+td.checkbox-col(colspan=1)
+  mat-checkbox(*ngIf="rowData.storeColumn != 'Total'",
+  aria-label="Select Store",
+  [checked]='rowData.checked',
+  [disableRipple]="true",
+  (change)="toggleChecked($event)")
+
+td.left-col(colspan=1)
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0
+        span {{ rowData.storeColumn | titlecase }}
+      div.description-line-1
+        span.description-line-1 {{rowData.storeAddressSubline}}
+td.left-col(colspan=1)
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0
+        span.description-line-0 {{rowData.distributorColumn}}
+td.segment-col(colspan=1)
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0
+        span {{rowData.segmentColumn}}
+
+td.center-col(colspan=1) {{rowData.cytdColumn | number}}
+td.center-col(colspan=1)
+  span([ngClass]="getTrendClass(rowData.cytdVersusYaColumn)") {{rowData.cytdVersusYaColumn | number}}
+td.center-col(colspan=1)
+  span([ngClass]="getTrendClass(rowData.cytdVersusYaPercentColumn)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
+td.center-col(colspan=1) {{rowData.l90Column | number}}
+td.center-col(colspan=1)
+  span([ngClass]="getTrendClass(rowData.l90VersusYaColumn)") {{rowData.l90VersusYaColumn | number}}
+td.center-col(colspan=1)
+  span([ngClass]="getTrendClass(rowData.l90VersusYaPercentColumn)") {{rowData.l90VersusYaPercentColumn | number:'1.1-1'}}%
+td.right-col(colspan=1) {{rowData.lastDepletionDateColumn}}
