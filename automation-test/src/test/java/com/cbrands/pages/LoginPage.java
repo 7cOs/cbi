@@ -10,6 +10,7 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import static com.cbrands.helper.SeleniumUtils.enterKeys;
 import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
@@ -57,16 +58,12 @@ public class LoginPage extends TestNGBasePage {
   }
 
   private LoginPage enterUserName(TestUser testUser) {
-    waitForElementToClickable(usernameField, true).click();
-    usernameField.sendKeys(testUser.userName());
-
+    enterKeys(usernameField, testUser.userName());
     return this;
   }
 
   private LoginPage enterPassword(TestUser testUser) {
-    waitForElementToClickable(passwordField, true).click();
-    passwordField.sendKeys(testUser.password());
-
+    enterKeys(passwordField, testUser.password());
     return this;
   }
 
