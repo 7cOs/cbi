@@ -10,7 +10,7 @@ interface BaseList {
   archived: boolean;
   collaborators: Collaborator[];
   createdOn: string;
-  deleted?: boolean;
+  deleted: boolean;
   description: string;
   id: string;
   name: string;
@@ -50,17 +50,18 @@ interface User {
 
 interface V2ListSummary {
   owned: V2List[];
+  sharedWithMe: V2List[];
+
   ownedArchived: number;
   ownedNotArchived: number;
   sharedArchived: number;
   sharedNotArchived: number;
-  sharedWithMe: V2List[];
 }
 
 interface ListsCollectionSummary {
   archived: V2List[];
   owned: V2List[];
-  ownedNotArchivedTaretLists: V2List[];
+  ownedNotArchivedTargetLists: V2List[];
   sharedWithMe: V2List[];
 
   ownedArchived: number;
@@ -75,7 +76,7 @@ export class ListsTransformerService {
   constructor() { }
 
   public formatAuthorText(author: Collaborator, currentUserIsAuthor: boolean = false): string {
-    return currentUserIsAuthor
+    return currentUserIsAuthor || !author
       ? 'current user'
       : `${author.user.firstName} ${author.user.lastName}`;
   }
@@ -91,7 +92,7 @@ export class ListsTransformerService {
       collaboratorPermissionLevel: list.collaboratorType,
       createdOn: list.createdOn,
       dateOpportunitiesUpdated: list.updatedOn || list.createdOn,
-      deleted: list.deleted,
+      deleted: list.deleted || false,
       description: list.description,
       id: list.id,
       name: list.name,
@@ -126,7 +127,7 @@ export class ListsTransformerService {
     return {
       owned: ownedV2Lists,
       archived: archivedV2Lists,
-      ownedNotArchivedTaretLists: ownedNotArchivedV2Lists,
+      ownedNotArchivedTargetLists: ownedNotArchivedV2Lists,
       sharedWithMe: sharedWithMeV2Lists,
       sharedArchivedCount: sharedArchivedListsCount,
       sharedNotArchivedCount: sharedNotArchivedListsCount,

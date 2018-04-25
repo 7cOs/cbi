@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListController($scope, $state, targetListService, userService, loaderService) {
+  function targetListController($scope, $state, targetListService, listsApiService, listsTransformerService, userService, loaderService) {
 
     // ****************
     // CONTROLLER SETUP
