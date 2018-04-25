@@ -77,11 +77,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           listDetail.performance.volumeStatus,
           listDetail.performance.podStatus
         )) {
-            this.performanceTableTotal = this.listsTableTransformerService.transformPerformanceTotal(
+          this.performanceTableTotal = this.listsTableTransformerService.transformPerformanceTotal(
             listDetail.performance.volume,
             listDetail.performance.pod
             );
-            this.performanceTableData = this.listsTableTransformerService.transformPerformanceCollection(
+          this.performanceTableData = this.listsTableTransformerService.transformPerformanceCollection(
             listDetail.listStores.stores,
             listDetail.performance.volume.storePerformance,
             listDetail.performance.pod.storePerformance
