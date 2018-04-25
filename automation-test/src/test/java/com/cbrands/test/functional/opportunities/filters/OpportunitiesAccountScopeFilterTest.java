@@ -9,25 +9,24 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class OpportunitiesAccountScopeFilterTest extends BaseTestCase {
 
   private OpportunitiesPage opportunitiesPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Functional - OpportunitiesFiltersTest");
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
+  @BeforeMethod
+  public void setUpClass(Method method) throws MalformedURLException {
+    final String testDescription = method.getAnnotation(Test.class).description();
+    final String testName = String.format("Functional - OpportunitiesFiltersTest - %s", testDescription);
+    this.startUpBrowser(testName);
   }
 
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
+    this.shutDownBrowser();
   }
 
   @Test(description = "Account Scope filter chips", dataProvider = "accountScopeChipUserData")
