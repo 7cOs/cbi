@@ -67,24 +67,24 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
-          this.storeList = listDetail.listStores.stores;
-          this.listSummary = listDetail.listSummary.summaryData;
-          this.listOpps = listDetail.listOpportunities.opportunities;
-          this.oppsGroupedByStores = this.listsTableTransformerService.groupOppsByStore(this.listOpps);
+        this.storeList = listDetail.listStores.stores;
+        this.listSummary = listDetail.listSummary.summaryData;
+        this.listOpps = listDetail.listOpportunities.opportunities;
+        this.oppsGroupedByStores = this.listsTableTransformerService.groupOppsByStore(this.listOpps);
 
-          if (this.isListPerformanceFetched(
-            listDetail.listStores.storeStatus,
-            listDetail.performance.volumeStatus,
-            listDetail.performance.podStatus
-          )) {
+        if (this.isListPerformanceFetched(
+          listDetail.listStores.storeStatus,
+          listDetail.performance.volumeStatus,
+          listDetail.performance.podStatus
+        )) {
             this.performanceTableTotal = this.listsTableTransformerService.transformPerformanceTotal(
-              listDetail.performance.volume,
-              listDetail.performance.pod
+            listDetail.performance.volume,
+            listDetail.performance.pod
             );
             this.performanceTableData = this.listsTableTransformerService.transformPerformanceCollection(
-              listDetail.listStores.stores,
-              listDetail.performance.volume.storePerformance,
-              listDetail.performance.pod.storePerformance
+            listDetail.listStores.stores,
+            listDetail.performance.volume.storePerformance,
+            listDetail.performance.pod.storePerformance
             );
           }
 
