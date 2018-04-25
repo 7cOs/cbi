@@ -6,7 +6,6 @@ export interface ListOpportunitiesTableRow {
   cytdColumn: number;
   cytdVersusYaPercentColumn: number;
   opportunitiesColumn: number;
-  lastDepletionDateColumn: string;
   performanceError: boolean;
   checked: boolean;
 }

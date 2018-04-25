@@ -7,7 +7,6 @@ export function getListOpportunitiesTableRowMock(length: number) {
   let rows: Array<ListOpportunitiesTableRow> = Array<ListOpportunitiesTableRow>();
 
   for (let i = 0 ; i < length ; i++) {
-    const depDate = chance.date({string: true, american: false});
     rows.push({
       storeColumn: chance.string(),
       storeAddressSubline: `${chance.address({short_suffix: true})} ${chance.city()} ${chance.state()}  ${chance.zip()}`,
@@ -16,7 +15,6 @@ export function getListOpportunitiesTableRowMock(length: number) {
       cytdColumn: chance.integer({min: 0, max: 40000}),
       cytdVersusYaPercentColumn: chance.d100(),
       opportunitiesColumn: chance.integer({min: 0, max: 10000}),
-      lastDepletionDateColumn: depDate.toString(),
       performanceError: false,
       checked: false
     });
