@@ -8,6 +8,7 @@ import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.m
 import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
+import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
 
 @Injectable()
 export class ListsApiService {
@@ -30,6 +31,15 @@ export class ListsApiService {
     const url = `/v3/lists/${ listsId }`;
 
     return this.http.get<ListStoreDTO[]>(url)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
+  public getOppsDataForList(
+    listId: string
+  ): Observable<Array<ListOpportunityDTO>> {
+    const url = `v3/lists/${ listId }/opportunities`;
+
+    return this.http.get<ListOpportunityDTO[]>(url)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 

@@ -7,6 +7,12 @@ import { ListStorePerformance } from '../models/lists/list-store-performance.mod
 import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
+import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
+import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
+import { OpportunitiesByStore } from '../models/lists/opportunities-by-store.model';
+import { OpportunityImpact } from '../enums/list-opportunities/list-opportunity-impact.enum';
+import { OpportunityStatus } from '../enums/list-opportunities/list-opportunity-status.enum';
+import { OpportunityType } from '../enums/list-opportunities/list-opportunity-type.enum';
 import { StoreDetails } from '../models/lists/lists-store.model';
 
 @Injectable()
@@ -30,6 +36,20 @@ export class ListsTransformerService {
       ownerFirstName: summaryDataDTO.owner.firstName,
       ownerLastName: summaryDataDTO.owner.lastName
     };
+  }
+
+  public formatListOpportunitiesData(listOpportunities: Array<ListOpportunityDTO>): Array<ListsOpportunities> {
+    return listOpportunities.map(listOpportunity => this.formatListOpportunityData(listOpportunity));
+  }
+
+  public groupOppsByStore(allOpps: ListsOpportunities[]): OpportunitiesByStore {
+    const groups: OpportunitiesByStore = {};
+    allOpps.forEach((opportunity) => {
+      let group = opportunity.unversionedStoreId;
+      groups[group] = groups[group] ? groups[group] : [];
+      groups[group].push(opportunity);
+    });
+    return groups;
   }
 
   public transformListPerformanceDTO(listPerformanceDTO: ListPerformanceDTO): ListPerformance {
@@ -56,6 +76,22 @@ export class ListsTransformerService {
       segmentCode: store.segmentCode
     };
     return storeData;
+  }
+
+  private formatListOpportunityData(listOpportunity: ListOpportunityDTO): ListsOpportunities {
+    return {
+      id: listOpportunity.id,
+      brandCode: listOpportunity.brandCode,
+      brandDescription: listOpportunity.brandDescription,
+      skuDescription: listOpportunity.skuDescription,
+      currentDepletions_CYTD: listOpportunity.currentDepletions_CYTD,
+      yearAgoDepletions_CYTD: listOpportunity.yearAgoDepletions_CYTD,
+      lastDepletionDate: listOpportunity.lastDepletionDate,
+      unversionedStoreId: listOpportunity.storeSourceCode,
+      type: OpportunityType[listOpportunity.type],
+      status: OpportunityStatus[listOpportunity.status],
+      impact: OpportunityImpact[listOpportunity.impact]
+    };
   }
 
   private transformListStorePerformanceDTOS(listStorePerformanceDTOS: ListStorePerformanceDTO[]): ListStorePerformance[] {

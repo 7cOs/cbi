@@ -82,6 +82,10 @@ describe('ListDetailComponent', () => {
       storeStatus: ActionStatus.Fetching,
       stores: []
     },
+    listOpportunities: {
+      opportunitiesStatus: ActionStatus.Fetching,
+      opportunities: {}
+    },
     performance: {
       podStatus: ActionStatus.NotFetched,
       pod: null,
@@ -172,24 +176,27 @@ describe('ListDetailComponent', () => {
       expect(store.select).toHaveBeenCalled();
     });
 
-    it('should dispatch actions for fetching stores, list headers, and list performance data', () => {
+    it('should dispatch actions for fetching stores, list headers, opportunities and list performance data', () => {
       storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
-      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
         listId : stateMock.params.id
       }));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ListsActions.FetchHeaderDetails({
         listId : stateMock.params.id
       }));
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ListsActions.FetchListPerformanceVolume({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ListsActions.FetchOppsForList({
+        listId : stateMock.params.id
+      }));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ListsActions.FetchListPerformanceVolume({
         listId : stateMock.params.id,
         performanceType: ListPerformanceType.Volume,
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.CYTDBDL
       }));
-      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ListsActions.FetchListPerformancePOD({
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ListsActions.FetchListPerformancePOD({
         listId : stateMock.params.id,
         performanceType: ListPerformanceType.POD,
         beverageType: ListBeverageType.Beer,

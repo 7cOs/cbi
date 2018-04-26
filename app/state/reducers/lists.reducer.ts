@@ -15,6 +15,11 @@ interface ListStoresState {
   stores: StoreDetails[];
 }
 
+interface ListsOpportunitiesState {
+  opportunitiesStatus: ActionStatus;
+  opportunities: {};
+}
+
 interface ListPerformanceState {
   pod: ListPerformance;
   podStatus: ActionStatus;
@@ -25,6 +30,7 @@ interface ListPerformanceState {
 export interface ListsState {
   listSummary: ListSummaryState;
   listStores: ListStoresState;
+  listOpportunities: ListsOpportunitiesState;
   performance: ListPerformanceState;
 }
 
@@ -47,6 +53,10 @@ export const initialState: ListsState = {
     storeStatus: ActionStatus.NotFetched,
     stores: []
   },
+  listOpportunities: {
+    opportunitiesStatus: ActionStatus.NotFetched,
+    opportunities: {}
+  },
   performance: {
     podStatus: ActionStatus.NotFetched,
     pod: null,
@@ -67,6 +77,7 @@ export function listsReducer(
         listStores:  Object.assign({}, state.listStores, {
           storeStatus: ActionStatus.Fetching
         }),
+        listOpportunities: state.listOpportunities,
         performance: state.performance
       };
 
@@ -77,6 +88,7 @@ export function listsReducer(
           storeStatus: ActionStatus.Fetched,
           stores: action.payload
         }),
+        listOpportunities: state.listOpportunities,
         performance: state.performance
       };
 
@@ -86,6 +98,7 @@ export function listsReducer(
         listStores:  Object.assign({}, state.listStores, {
           storeStatus: ActionStatus.Error
         }),
+        listOpportunities: state.listOpportunities,
         performance: state.performance
       };
 
@@ -95,6 +108,7 @@ export function listsReducer(
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Fetching
         }),
+        listOpportunities: state.listOpportunities,
         performance: state.performance
       };
 
@@ -105,6 +119,7 @@ export function listsReducer(
           summaryStatus: ActionStatus.Fetched,
           summaryData: action.payload
         }),
+        listOpportunities: state.listOpportunities,
         performance: state.performance
       };
 
@@ -113,6 +128,38 @@ export function listsReducer(
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Error
+        }),
+        listOpportunities: state.listOpportunities,
+        performance: state.performance
+      };
+
+    case ListsActionTypes.FETCH_OPPS_FOR_LIST:
+      return {
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.Fetching
+        }),
+        performance: state.performance
+      };
+
+    case ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS:
+      return {
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.Fetched,
+          opportunities: action.payload
+        }),
+        performance: state.performance
+      };
+
+    case ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE:
+      return {
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.Error
         }),
         performance: state.performance
       };
