@@ -1,3 +1,5 @@
+import { ListsTransformerService } from '../../../services/lists-transformer.service';
+
 'use strict';
 
 module.exports = /*  @ngInject */
@@ -802,10 +804,14 @@ module.exports = /*  @ngInject */
      */
     function getTargetLists() {
       if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
-        userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
-          console.log(data);
-          userService.model.targetLists = data;
+        const currentUserEmployeeID = userService.model.currentUser.employeeID;
+        listsApiService.getLists().toPromise().then((response) => {
+          userService.model.targetLists = ListsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
         });
+        // userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
+        //   console.log(data);
+        //   userService.model.targetLists = data;
+        // });
       }
 
       listsApiService.getLists().toPromise().then((shit) => {

@@ -30,6 +30,7 @@ interface V3List extends BaseList {
 
 interface V2List extends BaseList {
   collaboratorPermissionLevel: string;
+  opportunitiesSummary: OpportunitiesSummary;
   dateOpportunitiesUpdated?: string;
   targetListAuthor?: string;
 }
@@ -46,6 +47,11 @@ interface User {
   lastName: string;
   email?: string;
   id?: string;
+}
+
+interface OpportunitiesSummary {
+  closedOpportunitiesCount: number;
+  opportunitiesCount: number;
 }
 
 interface V2ListSummary {
@@ -97,13 +103,17 @@ export class ListsTransformerService {
       id: list.id,
       name: list.name,
       numberOfAccounts: list.numberOfAccounts,
-      numberOfClosedOpportunities: list.numberOfClosedOpportunities,
+      numberOfClosedOpportunities: list.numberOfClosedOpportunities || 0,
       owner: list.owner,
       survey: list.survey,
       targetListAuthor: this.formatAuthorText(this.getListAuthor(list.collaborators), isOwnedList),
-      totalOpportunities: list.totalOpportunities,
+      totalOpportunities: list.totalOpportunities || 0,
       type: list.type,
-      updatedOn: list.updatedOn
+      updatedOn: list.updatedOn,
+      opportunitiesSummary: {
+        closedOpportunitiesCount: list.numberOfClosedOpportunities || 0,
+        opportunitiesCount: list.totalOpportunities || 0
+      }
     };
   }
 

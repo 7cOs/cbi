@@ -68,7 +68,7 @@ div.expanded-target-lists
                 div(column="12")
                   h4(column="6").left {{list.name}}
                   h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
-                    span(ng-if="list.collaborators.length > 1")  collaborators
+                    span(ng-if="list.collaborators.length > 1 || !list.collaborators.length")  collaborators
                     span(ng-if="list.collaborators.length < 2")  collaborator
                     ul(ng-class="{'long-collaborators': list.collaborators.length > 4}").dropdown-menu
                       li(ng-class="{'long-collaborators': list.collaborators.length > 4}").member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
