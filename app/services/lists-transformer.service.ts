@@ -76,33 +76,7 @@ export class ListsTransformerService {
     };
   }
 
-  private formatStoreData(store: ListStoreDTO): StoreDetails {
-    const storeData: StoreDetails = {
-      address: store.address,
-      city: store.city,
-      name: store.name,
-      unversionedStoreId: store.storeSourceCode,
-      number: store.number,
-      postalCode: store.postalCode,
-      premiseType: store.premiseType,
-      state : store.state,
-      distributor: store.primaryBeerDistributor.name,
-      segmentCode: store.segmentCode
-    };
-    return storeData;
-  }
-
-  private formatAuthorText(author: Lists.Collaborator, currentUserIsAuthor: boolean = false): string {
-    return currentUserIsAuthor || !author
-      ? 'current user'
-      : `${author.user.firstName} ${author.user.lastName}`;
-  }
-
-  private getListAuthor(collaborators: Lists.Collaborator[]): Lists.Collaborator {
-    return collaborators.find((collaborator: Lists.Collaborator) => collaborator.permissionLevel === 'author');
-  }
-
-  private transformV3ToV2(list: Lists.V3List, isOwnedList: boolean = false): Lists.V2List {
+  public transformV3ToV2(list: Lists.V3List, isOwnedList: boolean = false): Lists.V2List {
     return {
       archived: list.archived,
       collaborators: list.collaborators,
@@ -128,7 +102,7 @@ export class ListsTransformerService {
     };
   }
 
-  private transformV2ToV3(list: Lists.V2List, isOwnedList: boolean = false): Lists.V3List {
+  public transformV2ToV3(list: Lists.V2List, isOwnedList: boolean = false): Lists.V3List {
     return {
       archived: list.archived,
       category: 'target_list',
@@ -147,5 +121,30 @@ export class ListsTransformerService {
       type: list.type,
       updatedOn: list.updatedOn
     };
+  }
+  private formatStoreData(store: ListStoreDTO): StoreDetails {
+    const storeData: StoreDetails = {
+      address: store.address,
+      city: store.city,
+      name: store.name,
+      unversionedStoreId: store.storeSourceCode,
+      number: store.number,
+      postalCode: store.postalCode,
+      premiseType: store.premiseType,
+      state : store.state,
+      distributor: store.primaryBeerDistributor.name,
+      segmentCode: store.segmentCode
+    };
+    return storeData;
+  }
+
+  private formatAuthorText(author: Lists.Collaborator, currentUserIsAuthor: boolean = false): string {
+    return currentUserIsAuthor || !author
+      ? 'current user'
+      : `${author.user.firstName} ${author.user.lastName}`;
+  }
+
+  private getListAuthor(collaborators: Lists.Collaborator[]): Lists.Collaborator {
+    return collaborators.find((collaborator: Lists.Collaborator) => collaborator.permissionLevel === 'author');
   }
 }

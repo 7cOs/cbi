@@ -109,8 +109,6 @@ module.exports = /*  @ngInject */
         vm.types.mine.total = lists.ownedNotArchived;
         vm.types.shared.records = lists.sharedWithMe;
         vm.types.shared.total = lists.sharedNotArchivedCount;
-        vm.types.archived.records = lists.archived;
-        vm.types.archived.total = lists.archived.length;
         loaderService.closeLoader();
       }, (error) => {
         console.log('Error: ' + error);
