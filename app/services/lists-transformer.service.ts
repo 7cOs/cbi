@@ -1,3 +1,4 @@
+import { includes } from 'lodash';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
@@ -16,14 +17,14 @@ export class ListsTransformerService {
     const ownedLists: Lists.V3List[] = v3Lists.filter((list: Lists.V3List) => list.owner.employeeId === currentUserEmployeeID);
     const archivedLists: Lists.V3List[] = v3Lists.filter((list: Lists.V3List) => list.archived);
     const sharedWithMeLists: Lists.V3List[] = v3Lists.filter((list: Lists.V3List) => list.owner.employeeId !== currentUserEmployeeID);
-    const ownedNotArchivedLists: Lists.V3List[] = ownedLists.filter((ownedList: Lists.V3List) => !archivedLists.includes(ownedList));
+    const ownedNotArchivedLists: Lists.V3List[] = ownedLists.filter((ownedList: Lists.V3List) => !includes(archivedLists, ownedList));
 
-    const ownedArchivedListsCount: number = ownedLists.filter((ownedList: Lists.V3List) => archivedLists.includes(ownedList)).length;
+    const ownedArchivedListsCount: number = ownedLists.filter((ownedList: Lists.V3List) => !includes(archivedLists, ownedList)).length;
     const ownedNotArchivedListsCount: number = ownedNotArchivedLists.length;
     const sharedArchivedListsCount: number =
-      sharedWithMeLists.filter((sharedList: Lists.V3List) => archivedLists.includes(sharedList)).length;
+      sharedWithMeLists.filter((sharedList: Lists.V3List) => includes(archivedLists, sharedList)).length;
     const sharedNotArchivedListsCount: number =
-      sharedWithMeLists.filter((sharedList: Lists.V3List) => !archivedLists.includes(sharedList)).length;
+      sharedWithMeLists.filter((sharedList: Lists.V3List) => !includes(archivedLists, sharedList)).length;
 
     const ownedV2Lists: Lists.V2List[] = ownedLists.map((list: Lists.V3List) => this.transformV3ToV2(list, true));
     const archivedV2Lists: Lists.V2List[] = archivedLists.map((list: Lists.V3List) => this.transformV3ToV2(list));
