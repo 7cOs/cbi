@@ -71,7 +71,7 @@ describe('ListDetailComponent', () => {
     },
     listOpportunities: {
       opportunitiesStatus: ActionStatus.Fetching,
-      opportunities: []
+      opportunities: {}
     },
     performance: {
       podStatus: ActionStatus.NotFetched,

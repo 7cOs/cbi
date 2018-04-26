@@ -76,15 +76,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.performanceTableTotal = this.listsTableTransformerService.transformPerformanceTotal(
             listDetail.performance.volume,
             listDetail.performance.pod
-            );
+          );
           this.performanceTableData = this.listsTableTransformerService.transformPerformanceCollection(
             listDetail.listStores.stores,
             listDetail.performance.volume.storePerformance,
             listDetail.performance.pod.storePerformance
-            );
-          }
+          );
+        }
 
-         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
+        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
       });
   }
 

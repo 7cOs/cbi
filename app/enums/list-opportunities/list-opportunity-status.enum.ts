@@ -1,6 +1,6 @@
 export enum OpportunityStatus {
-    active = 'active',
-    closed = 'closed',
-    open = 'open',
-    unknown = 'unknown'
+  active = 'active',
+  closed = 'closed',
+  open = 'open',
+  unknown = 'unknown'
 }

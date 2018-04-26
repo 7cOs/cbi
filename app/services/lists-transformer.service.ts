@@ -9,6 +9,7 @@ import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
+import { OpportunitiesByStore } from '../models/lists/opportunities-by-store.model';
 import { OpportunityImpact } from '../enums/list-opportunities/list-opportunity-impact.enum';
 import { OpportunityStatus } from '../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityType } from '../enums/list-opportunities/list-opportunity-type.enum';
@@ -41,8 +42,8 @@ export class ListsTransformerService {
     return listOpportunities.map(listOpportunity => this.formatListOpportunityData(listOpportunity));
   }
 
-  public groupOppsByStore(allOpps: ListsOpportunities[]): {} {
-    const groups = {};
+  public groupOppsByStore(allOpps: ListsOpportunities[]): OpportunitiesByStore {
+    const groups: OpportunitiesByStore = {};
     allOpps.forEach((opportunity) => {
       let group = opportunity.unversionedStoreId;
       groups[group] = groups[group] ? groups[group] : [];

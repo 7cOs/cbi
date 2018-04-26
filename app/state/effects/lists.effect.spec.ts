@@ -4,15 +4,18 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 
-import { FetchHeaderDetailsPayload, FetchOppsForListPayload, FetchListPerformancePayload,
-  FetchStoreDetailsPayload } from '../actions/lists.action';
+import { FetchHeaderDetailsPayload,
+         FetchOppsForListPayload,
+         FetchListPerformancePayload,
+         FetchStoreDetailsPayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
-import { getListOpportunitiesMock, getListOpportunityMock } from '../../models/lists/lists-opportunities.model.mock';
+import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceDTOMock } from '../../models/lists/list-performance-dto.model.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
 import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
+import { getOpportunitiesByStoreMock } from '../../models/lists/opportunities-by-store.model.mock';
 import * as ListActions from '../../state/actions/lists.action';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../../models/lists/list-performance-dto.model';
@@ -25,6 +28,7 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
+import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 
 const chance = new Chance();
 
@@ -41,9 +45,7 @@ describe('Lists Effects', () => {
   let headerDetailMock: ListsSummary;
   let storesData: Array<StoreDetails> = getStoreListsMock();
   let listOpportunities: Array<ListsOpportunities> = getListOpportunitiesMock();
-  let listOpportunityMock: ListsOpportunities = getListOpportunityMock();
-  let groupedOpportunities = {};
-  groupedOpportunities[listOpportunityMock.unversionedStoreId] = listOpportunityMock;
+  let groupedOppsObj: OpportunitiesByStore = getOpportunitiesByStoreMock();
   let listOpportunitiesDTOMock: ListOpportunityDTO[];
   let listPerformanceDTOMock: ListPerformanceDTO;
   let listPerformanceMock: ListPerformance;
@@ -76,8 +78,8 @@ describe('Lists Effects', () => {
     formatListOpportunitiesData(oppotunity: Array<ListOpportunityDTO>): Array<ListsOpportunities> {
       return listOpportunities;
     },
-    groupOppsByStore(allOpps: Array<ListsOpportunities>): {} {
-      return groupedOpportunities;
+    groupOppsByStore(allOpps: Array<ListsOpportunities>): OpportunitiesByStore {
+      return groupedOppsObj;
     }
   };
 
@@ -341,7 +343,7 @@ describe('Lists Effects', () => {
 
       it('should dispatch a FetchOppsForListSuccess action with the returned Formatted Data', (done) => {
         listsEffects.fetchOppsforList$().subscribe((action: Action) => {
-          expect(action).toEqual(new ListActions.FetchOppsForListSuccess(groupedOpportunities));
+          expect(action).toEqual(new ListActions.FetchOppsForListSuccess(groupedOppsObj));
           done();
         });
       });

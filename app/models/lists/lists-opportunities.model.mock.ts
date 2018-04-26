@@ -6,24 +6,24 @@ import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-op
 import { getOpportunityStatusMock } from '../../enums/list-opportunities/list-opportunity-status.enum.mock';
 import { getOpportunityTypeMock } from '../../enums/list-opportunities/list-opportunity-type.enum.mock';
 
-let chance = new Chance();
+const chance = new Chance();
 
 export function getListOpportunitiesMock(): ListsOpportunities[] {
-    return generateRandomSizedArray().map(() => getListOpportunityMock());
+  return generateRandomSizedArray().map(() => getListOpportunityMock());
 }
 
 export function getListOpportunityMock(): ListsOpportunities {
-    return {
-        id: chance.string(),
-        brandCode: chance.string(),
-        brandDescription: chance.string(),
-        skuDescription: chance.string(),
-        type: getOpportunityTypeMock(),
-        status: getOpportunityStatusMock(),
-        impact: getOpportunityImpactMock(),
-        currentDepletions_CYTD: chance.natural(),
-        yearAgoDepletions_CYTD: chance.natural(),
-        lastDepletionDate: chance.string(),
-        unversionedStoreId: chance.string()
-    };
+  return {
+    id: chance.string(),
+    brandCode: chance.string(),
+    brandDescription: chance.string(),
+    skuDescription: chance.string(),
+    type: getOpportunityTypeMock(),
+    status: getOpportunityStatusMock(),
+    impact: getOpportunityImpactMock(),
+    currentDepletions_CYTD: chance.natural(),
+    yearAgoDepletions_CYTD: chance.natural(),
+    lastDepletionDate: chance.string(),
+    unversionedStoreId: chance.string()
+  };
 }
