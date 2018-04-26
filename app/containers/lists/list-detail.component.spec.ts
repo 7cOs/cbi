@@ -12,6 +12,7 @@ import { CalculatorService } from '../../services/calculator.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent } from './list-detail.component';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import * as ListsActions from '../../state/actions/lists.action';
@@ -33,6 +34,18 @@ class ListPerformanceTableComponentMock {
   @Input() tableData: Array<ListPerformanceTableRow>;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: ListPerformanceTableRow;
+  @Input() loadingState: boolean;
+}
+
+@Component({
+  selector: 'list-opportunities-table',
+  template: ''
+})
+
+class ListOpportunitiesTableComponentMock {
+  @Input() sortingCriteria: Array<SortingCriteria>;
+  @Input() tableData: Array<ListOpportunitiesTableRow>;
+  @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
 }
 
@@ -103,6 +116,7 @@ describe('ListDetailComponent', () => {
       declarations: [
         ListDetailComponent,
         ListsHeaderComponentMock,
+        ListOpportunitiesTableComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [
