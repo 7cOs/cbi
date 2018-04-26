@@ -35,34 +35,34 @@ export interface ListsState {
 }
 
 export const initialState: ListsState = {
-    listSummary: {
-      summaryStatus: ActionStatus.NotFetched,
-      summaryData: {
-        archived: false,
-        description: null,
-        id: null,
-        name: null,
-        closedOpportunities: null,
-        totalOpportunities: null,
-        numberOfAccounts: null,
-        ownerFirstName: null,
-        ownerLastName: null
-      }
-    },
-    listStores: {
-      storeStatus: ActionStatus.NotFetched,
-      stores: []
-    },
-    listOpportunities: {
-      opportunitiesStatus: ActionStatus.NotFetched,
-      opportunities: {}
-    },
-    performance: {
-      podStatus: ActionStatus.NotFetched,
-      pod: null,
-      volumeStatus: ActionStatus.NotFetched,
-      volume: null
+  listSummary: {
+    summaryStatus: ActionStatus.NotFetched,
+    summaryData: {
+      archived: false,
+      description: null,
+      id: null,
+      name: null,
+      closedOpportunities: null,
+      totalOpportunities: null,
+      numberOfAccounts: null,
+      ownerFirstName: null,
+      ownerLastName: null
     }
+  },
+  listStores: {
+    storeStatus: ActionStatus.NotFetched,
+    stores: []
+  },
+  listOpportunities: {
+    opportunitiesStatus: ActionStatus.NotFetched,
+    opportunities: {}
+  },
+  performance: {
+    podStatus: ActionStatus.NotFetched,
+    pod: null,
+    volumeStatus: ActionStatus.NotFetched,
+    volume: null
+  }
 };
 
 export function listsReducer(
