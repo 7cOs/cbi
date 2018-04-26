@@ -1,36 +1,37 @@
 .list-table-drawer-component
   table.list-table-drawer
+
     thead.list-table-drawer-header
-      tr
+      tr.list-table-drawer-header-row
         th(colspan=1)
         th(colspan=1)
-          p.table-drawer-header-text BRAND
+          .table-drawer-header-text BRAND
         th(colspan=1)
-          p.table-drawer-header-text SKU/PACKAGE
+          .table-drawer-header-text SKU/PACKAGE
         th(colspan=1)
-          p.table-drawer-header-text TYPE
+          .table-drawer-header-text TYPE
         th(colspan=1)
-          p.table-drawer-header-text STATUS
+          .table-drawer-header-text STATUS
         th(colspan=1)
-          p.table-drawer-header-text IMPACT
+          .table-drawer-header-text.centered IMPACT
+        th(colspan=2)
+          .table-drawer-header-text.centered DEPLETIONS
         th(colspan=1)
-          p.table-drawer-header-text DEPLETIONS
+          .table-drawer-header-text.centered LAST DEPLETION
         th(colspan=1)
-          p.table-drawer-header-text LAST DEPLETION
-        th(colspan=1)
+
     tbody.list-table-drawer-body
-      tr
+      tr.list-table-drawer-row(*ngFor="let opportunity of opportunitiesData, let index = index")
+
         td.checkbox-column(colspan=1)
-          mat-checkbox(
-            [checked]="false",
-            [disableRipple]="true"
-          )
-        td(colspan=1) Corona Extra
-        td(colspan=1) 16OZ 6PK CAN
-        td(colspan=1) New Placement (No Rebuy)
-        td(colspan=1) Closed
-        td(colspan=1) |||
-        td(colspan=1) 12,212
-        td(colspan=1) 4.5%
-        td(colspan=1) 02/21/2018
-        td(colspan=1) ooo
+          mat-checkbox([checked]="opportunity.checked", [disableRipple]="true", (change)="onCheckboxClick($event.checked, index)")
+        td.brand-column(colspan=1) {{ opportunity.mandate }} {{ opportunity.brand }}
+        td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
+        td.type-column(colspan=1) {{ opportunity.type }}
+        td.status-column(colspan=1) {{ opportunity.status }}
+        td.impact-column.centered(colspan=1) {{ opportunity.impact }}
+        td.current-column.centered(colspan=1) {{ opportunity.current }}
+        td.year-ago-column.centered(colspan=1) {{ opportunity.yearAgo }}
+        td.depletion-date-column.centered(colspan=1) {{ opportunity.depletionDate }}
+        td.button-column.centered(colspan=1)
+          img.action-button(src="../../../assets/img/icons/more.svg")
