@@ -14,7 +14,7 @@ export interface PrimaryDistributor {
   name: string;
 }
 
-export interface BaseList {
+interface BaseList {
   archived: boolean;
   collaborators: Collaborator[];
   createdOn: string;
@@ -49,7 +49,7 @@ export interface Collaborator {
   user: User;
 }
 
-export interface User {
+interface User {
   employeeId: string;
   firstName: string;
   lastName: string;

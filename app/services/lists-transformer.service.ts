@@ -43,7 +43,11 @@ export class ListsTransformerService {
     };
   }
 
-  public getV2ListSummary(ownedListCollection: Lists.V2List[], sharedListCollection: Lists.V2List[], archived: boolean = false) {
+  public getV2ListSummary(
+    ownedListCollection: Lists.V2List[],
+    sharedListCollection: Lists.V2List[],
+    archived: boolean = false
+  ): Lists.V2ListSummary {
     return {
       owned: ownedListCollection,
       sharedWithMe: sharedListCollection,
@@ -54,7 +58,7 @@ export class ListsTransformerService {
     };
   }
 
-  public formatStoresData(listStoresDTOs: Array<ListStoreDTO>): Array<StoreDetails> {
+  public formatStoresData(listStoresDTOs: ListStoreDTO[]): StoreDetails[] {
     return listStoresDTOs.map(store => this.formatStoreData(store));
   }
 
@@ -124,4 +128,24 @@ export class ListsTransformerService {
     };
   }
 
+  private transformV2ToV3(list: Lists.V2List, isOwnedList: boolean = false): Lists.V3List {
+    return {
+      archived: list.archived,
+      category: 'target_list',
+      collaborators: list.collaborators,
+      collaboratorType: list.collaboratorPermissionLevel,
+      createdOn: list.createdOn,
+      deleted: list.deleted || false,
+      description: list.description,
+      id: list.id,
+      name: list.name,
+      numberOfAccounts: list.numberOfAccounts,
+      numberOfClosedOpportunities: list.numberOfClosedOpportunities || 0,
+      owner: list.owner,
+      survey: list.survey,
+      totalOpportunities: list.totalOpportunities || 0,
+      type: list.type,
+      updatedOn: list.updatedOn
+    };
+  }
 }
