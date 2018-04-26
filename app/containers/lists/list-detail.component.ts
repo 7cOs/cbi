@@ -13,9 +13,7 @@ import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
-import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
-import { OpportunitiesByStore } from '../../models/lists/lists-opportunities-by-store.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 @Component({
@@ -27,8 +25,7 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
-  public listOpps: ListsOpportunities[];
-  public oppsGroupedByStores: Array<OpportunitiesByStore>;
+  public oppsGroupedByStores: {};
 
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
@@ -69,8 +66,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .subscribe((listDetail: ListsState)  => {
         this.storeList = listDetail.listStores.stores;
         this.listSummary = listDetail.listSummary.summaryData;
-        this.listOpps = listDetail.listOpportunities.opportunities;
-        this.oppsGroupedByStores = this.listsTableTransformerService.groupOppsByStore(this.listOpps);
+        this.oppsGroupedByStores = listDetail.listOpportunities.opportunities;
 
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
@@ -88,7 +84,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             );
           }
 
-          if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
+         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
       });
   }
 

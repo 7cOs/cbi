@@ -3,7 +3,6 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 import * as ListsActions from '../actions/lists.action';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
-import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 interface ListSummaryState {
@@ -18,7 +17,7 @@ interface ListStoresState {
 
 interface ListsOpportunitiesState {
   opportunitiesStatus: ActionStatus;
-  opportunities: ListsOpportunities[];
+  opportunities: {};
 }
 
 interface ListPerformanceState {
@@ -56,7 +55,7 @@ export const initialState: ListsState = {
     },
     listOpportunities: {
       opportunitiesStatus: ActionStatus.NotFetched,
-      opportunities: []
+      opportunities: {}
     },
     performance: {
       podStatus: ActionStatus.NotFetched,

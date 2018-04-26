@@ -8,7 +8,7 @@ import { FetchHeaderDetailsPayload, FetchOppsForListPayload, FetchListPerformanc
   FetchStoreDetailsPayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
-import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
+import { getListOpportunitiesMock, getListOpportunityMock } from '../../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceDTOMock } from '../../models/lists/list-performance-dto.model.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
@@ -41,6 +41,9 @@ describe('Lists Effects', () => {
   let headerDetailMock: ListsSummary;
   let storesData: Array<StoreDetails> = getStoreListsMock();
   let listOpportunities: Array<ListsOpportunities> = getListOpportunitiesMock();
+  let listOpportunityMock: ListsOpportunities = getListOpportunityMock();
+  let groupedOpportunities = {};
+  groupedOpportunities[listOpportunityMock.unversionedStoreId] = listOpportunityMock;
   let listOpportunitiesDTOMock: ListOpportunityDTO[];
   let listPerformanceDTOMock: ListPerformanceDTO;
   let listPerformanceMock: ListPerformance;
@@ -72,6 +75,9 @@ describe('Lists Effects', () => {
     },
     formatListOpportunitiesData(oppotunity: Array<ListOpportunityDTO>): Array<ListsOpportunities> {
       return listOpportunities;
+    },
+    groupOppsByStore(allOpps: Array<ListsOpportunities>): {} {
+      return groupedOpportunities;
     }
   };
 
@@ -335,7 +341,7 @@ describe('Lists Effects', () => {
 
       it('should dispatch a FetchOppsForListSuccess action with the returned Formatted Data', (done) => {
         listsEffects.fetchOppsforList$().subscribe((action: Action) => {
-          expect(action).toEqual(new ListActions.FetchOppsForListSuccess(listOpportunities));
+          expect(action).toEqual(new ListActions.FetchOppsForListSuccess(groupedOpportunities));
           done();
         });
       });

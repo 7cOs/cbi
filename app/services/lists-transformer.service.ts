@@ -41,6 +41,16 @@ export class ListsTransformerService {
     return listOpportunities.map(listOpportunity => this.formatListOpportunityData(listOpportunity));
   }
 
+  public groupOppsByStore(allOpps: ListsOpportunities[]): {} {
+    const groups = {};
+    allOpps.forEach((opportunity) => {
+      let group = opportunity.unversionedStoreId;
+      groups[group] = groups[group] ? groups[group] : [];
+      groups[group].push(opportunity);
+    });
+    return groups;
+  }
+
   public transformListPerformanceDTO(listPerformanceDTO: ListPerformanceDTO): ListPerformance {
     return {
       current: listPerformanceDTO.current,

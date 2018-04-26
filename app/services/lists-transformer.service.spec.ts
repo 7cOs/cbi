@@ -1,6 +1,7 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { getListOpportunitiesDTOMock } from '../models/lists/lists-opportunities-dto.model.mock';
+import { getListOpportunityMock } from '../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceDTOMock } from '../models/lists/list-performance-dto.model.mock';
 import { getListsSummaryDTOMock } from '../models/lists/lists-header-dto.model.mock';
 import { getStoreListsDTOMock } from '../models/lists/lists-store-dto.model.mock';
@@ -76,6 +77,33 @@ describe('Service: ListsTransformerService', () => {
           unversionedStoreId: listsOpportunitiesDTOMock[i].storeSourceCode
         });
       });
+    });
+  });
+
+  describe('groupOpportunitiesByStore', () => {
+    let opportunitiesMockFirst, opportunitiesMockSecond: ListsOpportunities;
+    let allOpps: ListsOpportunities[] = [];
+    let expectedObject = {};
+    const oppsForFirstStore: ListsOpportunities[] = [];
+    const oppsForSecondStore: ListsOpportunities[] = [];
+
+    beforeEach(() => {
+      opportunitiesMockFirst = getListOpportunityMock();
+      opportunitiesMockSecond = getListOpportunityMock();
+
+      allOpps.push.apply(allOpps, [opportunitiesMockFirst, opportunitiesMockFirst]);
+      allOpps.push.apply(allOpps, [opportunitiesMockSecond, opportunitiesMockSecond, opportunitiesMockSecond]);
+
+      oppsForFirstStore.push.apply(oppsForFirstStore, [opportunitiesMockFirst, opportunitiesMockFirst]);
+      oppsForSecondStore.push.apply(oppsForSecondStore, [opportunitiesMockSecond, opportunitiesMockSecond, opportunitiesMockSecond]);
+
+      expectedObject[opportunitiesMockFirst.unversionedStoreId] = oppsForFirstStore;
+      expectedObject[opportunitiesMockSecond.unversionedStoreId] = oppsForSecondStore;
+    });
+
+    it('should group opportunties by stores', () => {
+      const groupedObj = listsTransformerService.groupOppsByStore(allOpps);
+      expect(groupedObj).toEqual(expectedObject);
     });
   });
 

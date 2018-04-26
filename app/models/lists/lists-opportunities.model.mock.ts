@@ -9,7 +9,7 @@ import { getOpportunityTypeMock } from '../../enums/list-opportunities/list-oppo
 let chance = new Chance();
 
 export function getListOpportunitiesMock(): ListsOpportunities[] {
-    return generateRandomSizedArray(1, 3).map(() => getListOpportunityMock());
+    return generateRandomSizedArray().map(() => getListOpportunityMock());
 }
 
 export function getListOpportunityMock(): ListsOpportunities {

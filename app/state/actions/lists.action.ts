@@ -69,21 +69,18 @@ export class FetchHeaderDetailsFailure implements Action {
   constructor(public payload: Error) { }
 }
 
-// export const FETCH_OPPS_FOR_LIST = ListsActionTypes.FETCH_OPPS_FOR_LIST;
 export class FetchOppsForList implements Action {
   readonly type = ListsActionTypes.FETCH_OPPS_FOR_LIST;
 
   constructor(public payload: any) { }
 }
 
-// export const FETCH_OPPS_FOR_LIST_SUCCESS = ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS;
 export class FetchOppsForListSuccess implements Action {
   readonly type = ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS;
 
   constructor(public payload: any) { }
 }
 
-// export const FETCH_OPPS_FOR_LIST_FAILURE = ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE;
 export class FetchOppsForListFailure implements Action {
   readonly type = ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE;
 

@@ -82,7 +82,8 @@ export class ListsEffects {
         return this.listsApiService.getOppsDataForList(action.payload.listId)
           .map((response: Array<ListOpportunityDTO>) => {
             const transformedData: Array<ListsOpportunities> = this.listsTransformerService.formatListOpportunitiesData(response);
-            return new ListActions.FetchOppsForListSuccess(transformedData);
+            const groupedOpportunities = this.listsTransformerService.groupOppsByStore(transformedData);
+            return new ListActions.FetchOppsForListSuccess(groupedOpportunities);
           })
           .catch((error: Error) => Observable.of(new ListActions.FetchOppsForListFailure(error)));
       });
