@@ -28,6 +28,8 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
+  public oppsGroupedByStores: {};
+
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
 
@@ -53,6 +55,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(this.$state.current.title);
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: this.$state.params.id}));
+    this.store.dispatch(new ListsActions.FetchOppsForList({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchListPerformanceVolume({
       listId: this.$state.params.id,
       performanceType: ListPerformanceType.Volume,
@@ -71,6 +74,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .subscribe((listDetail: ListsState)  => {
         this.storeList = listDetail.listStores.stores;
         this.listSummary = listDetail.listSummary.summaryData;
+        this.oppsGroupedByStores = listDetail.listOpportunities.opportunities;
 
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
@@ -87,6 +91,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.pod.storePerformance
           );
         }
+
+        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
       });
   }
 

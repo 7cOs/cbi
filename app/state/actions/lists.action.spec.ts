@@ -210,4 +210,62 @@ describe('Lists Actions', () => {
       expect(action.payload).toEqual(payloadMock);
     });
   });
+
+  describe('FetchListOpportunities', () => {
+    let action: ListsActions.FetchOppsForList;
+    let listIdMock: string;
+    let actionPayloadMock: any;
+
+    beforeEach(() => {
+      listIdMock = chance.string();
+      actionPayloadMock = {
+        listId: listIdMock,
+      };
+      action = new ListsActions.FetchOppsForList(actionPayloadMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(action.type).toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
+  describe('FetchListOpportunitiesSuccess', () => {
+    let action: ListsActions.FetchOppsForListSuccess;
+    let mockSuccessActionPayload: any;
+
+    beforeEach(() => {
+      mockSuccessActionPayload = getStoreListsMock();
+
+      action = new ListsActions.FetchOppsForListSuccess(mockSuccessActionPayload);
+    });
+
+    it('should have the correct type', () => {
+      expect(action.type).toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(mockSuccessActionPayload);
+    });
+  });
+
+  describe('FetchListOpportunitiesFailure', () => {
+    const error: Error = new Error(chance.string());
+    let action: ListsActions.FetchOppsForListFailure;
+
+    beforeEach(() => {
+      action = new ListsActions.FetchOppsForListFailure(error);
+    });
+
+    it('should have the correct type', () => {
+      expect(action.type).toBe(ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(error);
+    });
+  });
 });

@@ -4,6 +4,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { FetchListPerformancePayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
+import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
 import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
@@ -25,6 +26,7 @@ describe('Lists Reducer', () => {
           storeStatus: ActionStatus.Fetching,
           stores: initialState.listStores.stores
         },
+        listOpportunities: initialState.listOpportunities,
         performance: initialState.performance
       };
 
@@ -44,6 +46,7 @@ describe('Lists Reducer', () => {
           storeStatus: ActionStatus.Fetched,
           stores: stores
         },
+        listOpportunities: initialState.listOpportunities,
         performance: initialState.performance
       };
 
@@ -62,6 +65,7 @@ describe('Lists Reducer', () => {
           storeStatus: ActionStatus.Error,
           stores: initialState.listStores.stores
         },
+        listOpportunities: initialState.listOpportunities,
         performance: initialState.performance
       };
       const actualState: ListsState = listsReducer(
@@ -80,6 +84,7 @@ describe('Lists Reducer', () => {
             summaryStatus: ActionStatus.Fetching,
             summaryData: initialState.listSummary.summaryData
           },
+          listOpportunities: initialState.listOpportunities,
           performance: initialState.performance
         };
 
@@ -99,6 +104,7 @@ describe('Lists Reducer', () => {
           summaryStatus: ActionStatus.Fetched,
           summaryData: headersMock
         },
+        listOpportunities: initialState.listOpportunities,
         performance: initialState.performance
       };
 
@@ -117,6 +123,7 @@ describe('Lists Reducer', () => {
           summaryStatus: ActionStatus.Error,
           summaryData: initialState.listSummary.summaryData
         },
+        listOpportunities: initialState.listOpportunities,
         performance: initialState.performance
       };
       const actualState: ListsState = listsReducer(
@@ -138,6 +145,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
         performance: {
           podStatus: initialState.performance.podStatus,
           pod: initialState.performance.pod,
@@ -160,6 +168,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
         performance: {
           podStatus: initialState.performance.podStatus,
           pod: initialState.performance.pod,
@@ -182,6 +191,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
         performance: {
           podStatus: initialState.performance.podStatus,
           pod: initialState.performance.pod,
@@ -209,6 +219,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
         performance: {
           podStatus: ActionStatus.Fetching,
           pod: initialState.performance.pod,
@@ -231,6 +242,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
         performance: {
           podStatus: ActionStatus.Fetched,
           pod: payloadMock,
@@ -253,6 +265,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
         performance: {
           podStatus: ActionStatus.Error,
           pod: initialState.performance.pod,
@@ -264,6 +277,64 @@ describe('Lists Reducer', () => {
         initialState,
         new ListsActions.FetchListPerformancePODError(payloadMock)
       );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a FetchOppsForList action is dispatched', () => {
+    it('should update the opportunities status to Fetching', () => {
+      const expectedState: ListsState = {
+        listSummary: initialState.listSummary,
+        listStores: initialState.listStores,
+        listOpportunities: {
+          opportunitiesStatus: ActionStatus.Fetching,
+          opportunities: initialState.listOpportunities.opportunities
+        },
+        performance: initialState.performance
+      };
+
+      const actualState = listsReducer(initialState, new ListsActions.FetchOppsForList({
+        listId: listIdMock
+      }));
+
+      expect(actualState).toEqual(expectedState);
+    });
+
+    it('should store the list of opportunities and set the opportunitiesStatus to Fetched on success', () => {
+      const opportunities = getListOpportunitiesMock();
+
+      const expectedState: ListsState = {
+        listSummary: initialState.listSummary,
+        listStores: initialState.listStores,
+        listOpportunities: {
+          opportunitiesStatus: ActionStatus.Fetched,
+          opportunities: opportunities
+        },
+        performance: initialState.performance
+      };
+
+      const actualState = listsReducer(
+        initialState,
+        new ListsActions.FetchOppsForListSuccess(opportunities)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+
+    it('should should update the opportunitiesStatus to Error', () => {
+      const expectedState: ListsState = {
+        listSummary: initialState.listSummary,
+        listStores: initialState.listStores,
+        listOpportunities: {
+          opportunitiesStatus: ActionStatus.Error,
+          opportunities: initialState.listOpportunities.opportunities
+        },
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.FetchOppsForListFailure(new Error()));
 
       expect(actualState).toEqual(expectedState);
     });
