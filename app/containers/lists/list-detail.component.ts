@@ -7,10 +7,13 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { getListOpportunitiesHeaderRowMock,
+         getListOpportunitiesTableRowMock
+       } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
+import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
-import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
@@ -29,6 +32,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
+
+  // TODO: Remove this when we get real data.
+  public opportunitiesTableData = getListOpportunitiesTableRowMock(25);
+  public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
+
   public actionButtonType: any = ActionButtonType;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;

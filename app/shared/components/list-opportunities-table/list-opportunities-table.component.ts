@@ -2,20 +2,20 @@ import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChange
 import { CalculatorService } from '../../../services/calculator.service';
 import { CssClasses } from '../../../models/css-classes.model';
 import { LoadingState } from '../../../enums/loading-state.enum';
-import { ListPerformanceColumnType } from '../../../enums/list-performance-column-types.enum';
-import { ListPerformanceTableRow } from '../../../models/list-performance/list-performance-table-row.model';
+import { ListOpportunitiesColumnType } from '../../../enums/list-opportunities-column-types.enum';
+import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
+import { MatCheckboxChange } from '@angular/material';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { MatCheckboxChange } from '@angular/material';
 
 @Component({
-  selector: 'list-performance-table',
-  template: require('./list-performance-table.component.pug'),
-  styles: [ require('./list-performance-table.component.scss') ]
+  selector: 'list-opportunities-table',
+  template: require('./list-opportunities-table.component.pug'),
+  styles: [ require('./list-opportunities-table.component.scss') ]
 })
-export class ListPerformanceTableComponent implements OnInit, OnChanges  {
-  @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
+export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
+  @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListOpportunitiesTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
 
   @Input()
@@ -24,33 +24,32 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   @Input()
-  set tableData(tableData: Array<ListPerformanceTableRow>) {
+  set tableData(tableData: Array<ListOpportunitiesTableRow>) {
     if (tableData) {
-      const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
+      const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-        this.sortedTableData = sortedTableData;
-        this.numSelectedRows = this.sortedTableData.length;
+      this.sortedTableData = sortedTableData;
+      this.numSelectedRows = this.sortedTableData.length;
     }
   }
 
   @Input() performanceMetric: string;
   @Input() tableHeaderRow: Array<string>;
-  @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: LoadingState.Loaded;
 
-  public sortedTableData: Array<ListPerformanceTableRow>;
+  public sortedTableData: Array<ListOpportunitiesTableRow>;
   public numSelectedRows: number = 0;
-  public columnType = ListPerformanceColumnType;
+  public columnType = ListOpportunitiesColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
 
-  private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
+  private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
-    columnType: ListPerformanceColumnType.cytdColumn,
+    columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
 
@@ -65,7 +64,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
     this.tableClasses = this.getTableClasses(loadingState);
   }
 
-  public onCheckboxChange(row: ListPerformanceTableRow): void {
+  public onCheckboxChange(row: ListOpportunitiesTableRow): void {
     const checkedTrue = this.sortedTableData.filter(tableRow => tableRow.checked === true);
     const numCheckedTrue = checkedTrue.length;
     const numCheckedFalse = this.sortedTableData.length - numCheckedTrue;
@@ -87,11 +86,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
     }
   }
 
-  public getTableBodyClasses(): string {
-    return (this.totalRow) ? 'total-row-present' : 'total-row-absent';
-  }
-
-  public getSortStatus(columnType: ListPerformanceColumnType): SortStatus {
+  public getSortStatus(columnType: ListOpportunitiesColumnType): SortStatus {
     return this._sortingCriteria[0].columnType === columnType
       ? this._sortingCriteria[0].ascending
         ? SortStatus.ascending
@@ -99,15 +94,15 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       : SortStatus.inactive;
   }
 
-  public sortRows(colType: ListPerformanceColumnType) {
+  public sortRows(colType: ListOpportunitiesColumnType) {
     const ascending = this._sortingCriteria[0].columnType === colType
       ? !this._sortingCriteria[0].ascending
-      : colType === ListPerformanceColumnType.storeColumn;
+      : colType === ListOpportunitiesColumnType.storeColumn;
     const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
     this.applySortingCriteria(criteria);
   }
 
-  public onRowClicked(type: RowType, index: number, row?: ListPerformanceTableRow) {
+  public onRowClicked(type: RowType, index: number, row?: ListOpportunitiesTableRow) {
     this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
@@ -119,11 +114,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
     }
   }
 
-  public getSubHeaderClasses(): string {
-    return this.totalRow ? ' no-sub-header-border' : '';
-  }
-
-  public getEntityRowClasses(row: ListPerformanceTableRow): CssClasses {
+  public getEntityRowClasses(row: ListOpportunitiesTableRow): CssClasses {
     let classes: CssClasses = {
       'performance-error': row.performanceError,
       'selected-entity-row': row.checked
@@ -139,13 +130,13 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
-      this.sortingFunction = (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => {
+      this.sortingFunction = (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => {
         let i: number = 0;
         let currentColumn: string;
         let currentSortOrder: number;
         this._sortingCriteria.every((criterion, idx) => {
           i = idx;
-          currentColumn = ListPerformanceColumnType[criterion.columnType];
+          currentColumn = ListOpportunitiesColumnType[criterion.columnType];
           currentSortOrder = this.calculatorService.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           return !currentSortOrder;
         });
@@ -158,7 +149,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
     this._sortingCriteria = criteria;
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
-      const sortedData: Array<ListPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
+      const sortedData: Array<ListOpportunitiesTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
   }
