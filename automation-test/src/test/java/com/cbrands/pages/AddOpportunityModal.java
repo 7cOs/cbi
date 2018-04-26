@@ -10,14 +10,10 @@ import org.testng.Assert;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AddOpportunityModal extends TestNGBasePage {
-  private static final String LAUNCH_MODAL_XPATH = 
-      "//a[@action='Add Opportunity']";
-  private static final String MODAL_DIALOG_XPATH = 
-      "(//md-dialog//div[contains(@class, 'modal add-opportunity')])";
-  private static final String SAVE_BTN_XPATH = 
-      (MODAL_DIALOG_XPATH + "//button[@type='submit' and contains(.,'Add')]");
-  private static final String CANCEL_BTN_XPATH = 
-      (MODAL_DIALOG_XPATH + "//p[contains(@class,'cancel') and contains(.,'X Cancel')]");  
+  private static final String LAUNCH_MODAL_XPATH = "//a[@action='Add Opportunity']";
+  private static final String MODAL_DIALOG_XPATH = "(//md-dialog//div[contains(@class, 'modal add-opportunity')])";
+  private static final String SAVE_BTN_XPATH = (MODAL_DIALOG_XPATH + "//button[@type='submit' and contains(.,'Add')]");
+  private static final String CANCEL_BTN_XPATH = (MODAL_DIALOG_XPATH + "//p[contains(@class,'cancel') and contains(.,'X Cancel')]");  
   private static final String BODY_XPATH = "//body";
   
   @FindBy(how = How.XPATH, using = LAUNCH_MODAL_XPATH)
@@ -87,6 +83,13 @@ public class AddOpportunityModal extends TestNGBasePage {
     return findElement(By.xpath(xpath)).getText();
   }
 
+  /**
+   * NOTE: This method is to be used for discussion purposes only 
+   * as an approach open as to how required fields confirmation
+   * should be performed in during automation. It is included
+   * here for demo and discussion purposes only.
+   * @category DEMO_AND_DISCUSSION
+   */
   public AddOpportunityModal confirmRequiredFieldsErrorMessages() {
     String[][] os = {
         {"Account", "Please select an Account."},
