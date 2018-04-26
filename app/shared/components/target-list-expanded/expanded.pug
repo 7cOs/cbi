@@ -69,7 +69,7 @@ div.expanded-target-lists
                   h4(column="6").left {{list.name}}
                   h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
                     span(ng-if="list.collaborators.length > 1 || !list.collaborators.length")  collaborators
-                    span(ng-if="list.collaborators.length < 2")  collaborator
+                    span(ng-if="list.collaborators.length === 1")  collaborator
                     ul(ng-class="{'long-collaborators': list.collaborators.length > 4}").dropdown-menu
                       li(ng-class="{'long-collaborators': list.collaborators.length > 4}").member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
                       li(ng-class="{'long-collaborators': list.collaborators.length > 4}" ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'").member {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}

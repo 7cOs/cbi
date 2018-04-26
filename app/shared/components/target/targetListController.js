@@ -94,25 +94,6 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // **************
 
-    // function curriedFilterByArchived(yes) {
-    //   return function(item) {
-    //     /* eslint eqeqeq: 0 */
-    //     /* needed this so as to allow coercion */
-    //     return item.archived == yes;
-    //   };
-    // }
-
-    // // Filter archived or deleted target lists
-    // function filterTargetLists(list) {
-    //   var filteredList = [];
-    //   angular.forEach(list, function(value, key) {
-    //     if (!(value.deleted || value.archived)) {
-    //       filteredList.push(value);
-    //     }
-    //   });
-    //   return filteredList;
-    // }
-
     function init() {
       if (userService.model.targetLists) {
         userService.model.targetLists = null;
@@ -133,29 +114,5 @@ module.exports = /*  @ngInject */
         console.log('Error: ' + error);
         loaderService.closeLoader();
       });
-      // userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
-      //   loaderService.closeLoader();
-      //   userService.model.targetLists = data;
-      //   // split things into categories, but ignore archived
-      //   var mine = data.owned.filter(curriedFilterByArchived(false));
-      //   if (data.sharedWithMe) var shared = data.sharedWithMe.filter(curriedFilterByArchived(false));
-
-      //   // Get archived
-      //   var archived = data.owned.filter(curriedFilterByArchived(true));
-
-      //   // Send to model
-      //   vm.types.mine.records = filterTargetLists(mine);
-      //   vm.types.mine.total = mine.length;
-      //   userService.model.targetLists.owned = mine;
-
-      //   vm.types.shared.records = filterTargetLists(shared);
-      //   vm.types.shared.total = shared.length;
-      //   vm.types.archived.records = filterTargetLists(archived);
-      //   vm.types.archived.total = archived.length;
-      // }, function(reason) {
-      //   console.log('Error: ' + reason);
-      //   loaderService.closeLoader();
-      // });
-
     }
   };
