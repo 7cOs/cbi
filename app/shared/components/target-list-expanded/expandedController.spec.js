@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService, compassModalService;
+  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService, compassModalService, listsApiService, listsTransformerService;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -22,10 +22,18 @@ describe('Unit: expanded target list controller', function() {
       compassModalService = {
         showAlertModalDialog: () => {}
       };
+      listsApiService = {
+        getLists: () => {}
+      };
+      listsTransformerService = {
+        getV2ListsSummary: () => {}
+      };
       $provide.value('compassModalService', compassModalService);
+      $provide.value('listsApiService', listsApiService);
+      $provide.value('listsTransformerService', listsTransformerService);
     });
 
-    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_) {
+    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_, _listsApiService_, _listsTransformerService_) {
       state = {
         current: {
           name: 'opportunities'

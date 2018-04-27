@@ -215,25 +215,17 @@ module.exports = /*  @ngInject */
       vm.buttonDisabled = true;
 
       // create collaborator payload
-      var newPayload = [];
-      for (var i = 0; i < vm.newList.collaborators.length; i++) {
-        newPayload.push({
-          employeeId: vm.newList.collaborators[i].employeeId
-        });
-      }
+      listsApiService.createList(listsTransformerService.formatNewList(vm.newList))
+        .toPromise()
+        .then(v3List => {
 
-      // Create target list
-      userService.addTargetList(vm.newList).then(function(response) {
+        userService.model.ownedNotArchivedTargetLists.concat(v3List);
+        userService.model.ownedNotArchived++;
+
         closeModal();
         vm.buttonDisabled = false;
 
-        analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', response.id);
-
-        // add collaborators to newly created target list
-        return targetListService.addTargetListShares(response.id, newPayload);
-      })
-      .then(function(addCollaboratorResponse) {
-        userService.model.targetLists.ownedNotArchivedTargetLists[0].collaborators = addCollaboratorResponse.data;
+        analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', v3List.id);
 
         // reset model
         vm.newList = {
@@ -243,7 +235,9 @@ module.exports = /*  @ngInject */
           collaborators: [],
           collaborateAndInvite: false
         };
-      }).catch(function(response) { console.log(response); });
+      }).catch(response => {
+        console.log(response);
+      });
     }
 
     function searchOpportunities(e) {
