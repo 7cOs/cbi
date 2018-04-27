@@ -15,6 +15,8 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { CompassModalService } from '../../services/compass-modal.service';
+import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 
 @Component({
   selector: 'list-detail',
@@ -31,6 +33,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
+  public compassModalOverlayRef: CompassManageListModalOverlayRef;
+  public currentUser: any;
 
   private listDetailSubscription: Subscription;
 
@@ -38,11 +42,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     private listsTableTransformerService: ListsTableTransformerService,
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
-    private titleService: Title
+    private titleService: Title,
+    private compassModalService: CompassModalService,
+    @Inject('userService') private userService: any
   ) { }
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
+    this.currentUser = this.userService.model.currentUser;
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchListPerformanceVolume({
@@ -96,6 +103,23 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleListsLinkClick() {
     console.log('list link clicked');
+  }
+
+  public showModalTest() {
+    let listObject = {
+      name: 'TEST',
+      description: 'asdfasdfasdfasdf',
+      owner: {
+        user: { employeeId: '1002705'}
+      },
+      collaborators: [{firstName: 'Bob', lastName: 'B', permissionLevel: 'collaborator', user: {employeeId: '1234'}},
+      {firstName: 'Bob', lastName: 'B', permissionLevel: 'collaborator', user: {employeeId: '12345'}}] };
+    this.compassModalOverlayRef = this.compassModalService.showManageListModalDialog(
+      {title: 'Manage List',
+        acceptLabel: 'Save',
+        rejectLabel: 'close',
+        currentUser: this.currentUser,
+        listObject: listObject }, {});
   }
 
   private isListPerformanceFetched(
