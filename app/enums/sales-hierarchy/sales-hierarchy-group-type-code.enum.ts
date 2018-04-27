@@ -1,4 +1,5 @@
 export enum SalesHierarchyGroupTypeCode {
   Account = 'account',
-  Distributor = 'distributor'
+  Distributor = 'distributor',
+  Store = 'store'
 }

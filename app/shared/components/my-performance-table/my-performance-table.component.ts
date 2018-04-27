@@ -56,6 +56,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
   @Input() selectedSkuPackageCode: string;
   @Input() selectedSubaccountCode: string;
   @Input() selectedDistributorCode: string;
+  @Input() selectedStoreId: string;
   @Input() loadingState: LoadingState;
 
   public sortedTableData: Array<MyPerformanceTableRow>;
@@ -151,8 +152,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     let classes: CssClasses = {
       'performance-error': row.performanceError,
       'selected-sku': !!(this.selectedSkuPackageCode && row.metadata.skuPackageCode === this.selectedSkuPackageCode),
-      'selected-entity-row': !!((this.selectedSubaccountCode || this.selectedDistributorCode)
-        && (row.metadata.positionId === this.selectedSubaccountCode || row.metadata.positionId === this.selectedDistributorCode))
+      'selected-entity-row': this.isSingleSelectRow(row)
     };
 
     const columnWidthClass = this.getColumnWidthClass();
@@ -222,5 +222,17 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     return sortedRowDataMapping.map((row: SortWeight) => {
       return rowData[row.index];
     });
+  }
+
+  private isSingleSelectRow(row: MyPerformanceTableRow): boolean {
+    return !!((
+      this.selectedSubaccountCode
+      || this.selectedDistributorCode
+      || this.selectedStoreId
+    ) && (
+      row.metadata.positionId === this.selectedSubaccountCode
+      || row.metadata.positionId === this.selectedDistributorCode
+      || row.metadata.positionId === this.selectedStoreId
+    ));
   }
 }

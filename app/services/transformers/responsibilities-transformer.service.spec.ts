@@ -1,12 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { EntityDTO } from '../../models/entity-dto.model';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../../models/entity-subaccount-dto.model';
-import { getEntityDTOMock } from '../../models/entity-dto.model.mock';
+import { getEntityDTOMock, getStoreEntityDTOArrayMock } from '../../models/entity-dto.model.mock';
+import { getEntitySubAccountDTOMock, getEntitySubAccountMultiPremiseTypesDTOMock } from '../../models/entity-subaccount-dto.model.mock';
 import { getHierarchyEntityDTO, mockHierarchyEntityDTOCollection } from '../../models/hierarchy-entity.model.mock';
-import { getEntitySubAccountDTOMock,
-         getEntitySubAccountMultiPremiseTypesDTOMock } from '../../models/entity-subaccount-dto.model.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyEntity, HierarchyEntityDTO } from '../../models/hierarchy-entity.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -119,17 +118,17 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     });
   });
 
-  describe('groupsAccountsDistributors', () => {
+  describe('groupURIResponsibilities', () => {
 
     it('should group a collection of HierarchyEntity objects under the given group name given a collection of EntitiesDTO objects', () => {
-      const groupNameMock: string = chance.string();
+      const groupNameMock: EntityPeopleType = EntityPeopleType.ACCOUNT;
       const entitiesDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
 
       entitiesDTOMock.forEach((entityDTO: EntityDTO) => {
         entityDTO.type = EntityType.Account;
       });
 
-      const transformedAccountEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
+      const transformedAccountEntities = responsibilitiesTransformerService.groupURIResponsibilities(entitiesDTOMock, groupNameMock);
 
       expect(transformedAccountEntities).toEqual({
         [groupNameMock]: [{
@@ -147,7 +146,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         entityDTO.type = EntityType.Distributor;
       });
 
-      const transformedDistributorEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock, groupNameMock);
+      const transformedDistributorEntities = responsibilitiesTransformerService.groupURIResponsibilities(entitiesDTOMock, groupNameMock);
 
       expect(transformedDistributorEntities).toEqual({
         [groupNameMock]: [{
@@ -159,6 +158,26 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           positionId: entitiesDTOMock[1].id,
           entityType: EntityType.Distributor
         }]
+      });
+    });
+
+    it('should return a HierarchyEntity collection under a STORE field with store data when the passed in group name'
+    + ' is an EntityPeopleType of STORE', () => {
+      const groupNameMock: EntityPeopleType = EntityPeopleType.STORE;
+      const storeEntityDTOArrayMock: EntityDTO[] = getStoreEntityDTOArrayMock();
+      const transformedStores: GroupedEntities = responsibilitiesTransformerService.groupURIResponsibilities(
+        storeEntityDTOArrayMock,
+        groupNameMock
+      );
+
+      transformedStores[EntityPeopleType.STORE].forEach((store: HierarchyEntity, index: number) => {
+        expect(store).toEqual({
+          positionId: storeEntityDTOArrayMock[index].id,
+          unversionedStoreId: storeEntityDTOArrayMock[index].storeSourceCode,
+          storeNumber: storeEntityDTOArrayMock[index].storeNumber,
+          entityType: EntityType.Store,
+          name: storeEntityDTOArrayMock[index].name
+        });
       });
     });
   });
