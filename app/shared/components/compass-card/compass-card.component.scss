@@ -49,6 +49,13 @@
       letter-spacing: 1px;
       position: relative;
       top: -3px;
+
+      &.light-weight-link {
+        font-size: 12px;
+        text-transform: lowercase;
+        top: 0;
+        text-decoration: underline;
+      }
     }
 
     p, & {

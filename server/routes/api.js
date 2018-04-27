@@ -18,7 +18,7 @@ module.exports = function(app) {
         v3BaseURLKey = 'productMetrics';
       } else if (req.url.match(/\/v3\/(distributors|subAccounts).+\/opportunityCounts/)) {
         v3BaseURLKey = 'opportunities';
-      } else if (req.url.match(/\/v3\/(accounts|subAccounts)/)) {
+      } else if (req.url.match(/\/v3\/(accounts|subAccounts|versionedStores)/)) {
         v3BaseURLKey = 'accounts';
       } else if (req.url.match(/\/v3\/distributors.+/)) {
         v3BaseURLKey = 'distributors';

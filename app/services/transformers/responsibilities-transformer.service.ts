@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 
 import { EntityDTO } from '../../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../../models/entity-subaccount-dto.model';
-import { EntityType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { HierarchyEntityDTO } from '../../models/hierarchy-entity.model';
@@ -26,16 +25,10 @@ export class ResponsibilitiesTransformerService {
     }, {});
   }
 
-  public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>, entityType: string): GroupedEntities {
-    return accountsDistributors.reduce((groups: GroupedEntities, entity: EntityDTO) => {
-      groups[entityType].push({
-        name: entity.name,
-        positionId: entity.id,
-        entityType: EntityType[entity.type]
-      });
-
-      return groups;
-    }, {[entityType]: []});
+  public groupURIResponsibilities(uriResponsibilities: Array<EntityDTO>, groupName: EntityPeopleType): GroupedEntities {
+    return groupName === EntityPeopleType.STORE
+      ? this.groupStores(uriResponsibilities)
+      : this.groupAccountsOrDistributors(uriResponsibilities, groupName);
   }
 
   public transformSubAccountsDTO(subAccountsDTO: Array<EntitySubAccountDTO>, accountName: string): GroupedEntities {
@@ -68,5 +61,31 @@ export class ResponsibilitiesTransformerService {
       description: entity.description,
       entityType: EntityType.Person
     };
+  }
+
+  private groupAccountsOrDistributors(accountsOrDistributors: EntityDTO[], groupName: EntityPeopleType): GroupedEntities {
+    return accountsOrDistributors.reduce((groupedEntities: GroupedEntities, entity: EntityDTO) => {
+      groupedEntities[groupName].push({
+        name: entity.name,
+        positionId: entity.id,
+        entityType: entity.type as EntityType
+      });
+
+      return groupedEntities;
+    }, { [groupName]: [] });
+  }
+
+  private groupStores(storeDTOS: EntityDTO[]): GroupedEntities {
+    return storeDTOS.reduce((groupedStores: GroupedEntities, store: EntityDTO) => {
+      groupedStores[EntityPeopleType.STORE].push({
+        positionId: store.id,
+        unversionedStoreId: store.storeSourceCode,
+        storeNumber: store.storeNumber,
+        entityType: EntityType.Store,
+        name: store.name
+      });
+
+      return groupedStores;
+    }, { [EntityPeopleType.STORE]: [] });
   }
 }

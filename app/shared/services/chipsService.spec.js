@@ -313,12 +313,15 @@ describe('[Services.chipsService]', function() {
 
       it('should remove selected filter and decrement filtersValidCount given "distributor" chip', function() {
         // handle potential duplicate filters
-        filtersService.model.selected.distributor = ['555111', '555222', '555222', '555333'];
+        filtersService.model.selected.distributor = [{type: 'distributor', name: 'some distributor', id: '555111'},
+                                                     {type: 'distributor', name: 'some distributor', id: '555222'},
+                                                     {type: 'distributor', name: 'some distributor', id: '555222'},
+                                                     {type: 'distributor', name: 'some distributor', id: '555333'}];
         filtersService.model.filtersValidCount = 4;
 
         chipsService.removeFromFilterService({type: 'distributor', name: 'some distributor', id: '555111'});
-
-        expect(filtersService.model.selected.distributor).toEqual(['555222', '555333']);
+        expect(filtersService.model.selected.distributor[0].id).toEqual('555222');
+        expect(filtersService.model.selected.distributor[1].id).toEqual('555333');
         expect(filtersService.model.filtersValidCount).toEqual(3);
       });
 
@@ -585,10 +588,9 @@ describe('[Services.chipsService]', function() {
 
       chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', id: '80013438', name: 'CORONA EX 12PK CAN PROMO', type: 'sku'}, 'masterSKU');
 
-      expect(chipsService.model).toEqual([{name: 'Corona Ex 12pk Can Promo', id: '80013438', type: 'masterSKU', search: true, applied: false, removable: true, tradeChannel: false}]);
+      expect(chipsService.model).toEqual([{name: 'Corona Ex 12pk Can Promo', id: '80013438@228', type: 'masterSKU', search: true, applied: false, removable: true, tradeChannel: false}]);
       expect(chipsService.model.length).toEqual(1);
     });
-
     it('should apply arr filters for a MASTER SKU with no ID', function() {
       expect(chipsService.model).toEqual([]);
       filtersService.model.selected = {brand: []};

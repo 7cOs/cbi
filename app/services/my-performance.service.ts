@@ -123,6 +123,8 @@ export class MyPerformanceService {
         return SalesHierarchyHeaderEntityType.Account;
       case SalesHierarchyViewType.subAccounts:
         return SalesHierarchyHeaderEntityType.SubAccount;
+      case SalesHierarchyViewType.stores:
+        return SalesHierarchyHeaderEntityType.Store;
     }
   }
 
