@@ -2,7 +2,7 @@ beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [
 
 div
 
-  table
+  table.list-opportunities-table
 
     thead
 
@@ -52,6 +52,6 @@ div
         (onChangeEventEmitter)="onCheckboxChange(row)",
         (onExpandClicked)="onExpandButtonClicked(row)"
       )
-      tr(*ngIf="row.expanded")
+      tr.table-drawer-row(*ngIf="row.expanded")
         td.table-drawer-cell(colspan=9)
           list-table-drawer

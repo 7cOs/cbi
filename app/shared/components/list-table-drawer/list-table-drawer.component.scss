@@ -1,10 +1,5 @@
 @import '../../../assets/styles/base/variables';
 
-// $table-height: 160px;
-// $table-width: 565px;
-// $row-height: 60px;
-// $table-body-height: $table-height - $row-height;
-
 .list-table-drawer-component {
 
   .list-table-drawer {
@@ -14,24 +9,46 @@
     .list-table-drawer-header {
       background-color: $cancel-blue;
 
-      .table-drawer-header-text {
-        color: $white;
-        font: $roboto;
-        font-size: 11px;
-        font-weight: $bold;
-        letter-spacing: 1px;
-        padding: 7px 0;
-        text-align: left;
-      }
+      .list-table-drawer-header-row {
 
-      .centered {
-        text-align: center;
+        .table-drawer-header-text {
+          color: $white;
+          font: $roboto;
+          font-size: 11px;
+          font-weight: $bold;
+          letter-spacing: 1px;
+          padding: 7px 0;
+          text-align: left;
+
+          .brand-header-text {
+            padding-left: 5px;
+          }
+        }
+
+        .centered {
+          text-align: center;
+        }
       }
     }
 
     .list-table-drawer-body {
 
       .list-table-drawer-row {
+
+        .brand-column,
+        .sku-package-column,
+        .type-column,
+        .status-column,
+        .impact-column,
+        .current-column,
+        .year-ago-column,
+        .depletion-date-column,
+        .button-column {
+          font-size: 14px;
+          font: $roboto;
+          background-color: #F3F8FB;
+          border-bottom: 2px solid #DDDDDD;
+        }
 
         .checkbox-column {
           border-bottom: 2px solid #DDDDDD;
@@ -45,37 +62,66 @@
           }
         }
 
-        .brand-column,
-        .sku-package-column,
-        .type-column,
-        .status-column,
-        .impact-column,
-        .current-column,
-        .year-ago-column,
-        .depletion-date-column,
-        .button-column {
-          background-color: #F3F8FB;
-          border-bottom: 2px solid #DDDDDD;
+        .brand-column {
+          padding-top: 0;
+          padding-left: 5px;
+          width: 18%;
+
+          .brand-container {
+            display: inline-block;
+
+            .brand-mandate {
+              float: left;
+              margin-right: 5px;
+              margin-top: -26px;
+
+              .mandate-image {
+                width: 25px;
+                height: 25px;
+              }
+            }
+
+            .brand-text {
+              float: right;
+            }
+          }
+        }
+
+        .sku-package-column {
+          width: 14%;
         }
 
         .type-column {
           color: $cancel-blue;
+          cursor: pointer;
+        }
+
+        .impact-column {
+
+          .impact-image {
+            width: 20px;
+            height: 20px;
+          }
         }
 
         .current-column {
           border-left: 2px solid #DDDDDD;
+          width: 5.9%;
         }
 
         .year-ago-column {
           border-right: 2px solid #DDDDDD;
+          width: 5.9%;
         }
 
         .depletion-date-column {
           border-right: 2px solid #DDDDDD;
+          width: 11.8%;
         }
 
         .button-column {
-          width: 5%;
+          cursor: pointer;
+          width: 5.8%;
 
           .action-button {
             width: 20px;

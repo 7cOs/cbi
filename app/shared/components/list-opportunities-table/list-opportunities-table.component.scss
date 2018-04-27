@@ -13,7 +13,6 @@ table {
   border-collapse: collapse;
   height: $table-height;
   width: 100%;
-  table-layout: fixed;
   display: table;
 }
 
@@ -366,7 +365,13 @@ td, th {
   animation: none;
 }
 
-.table-drawer-cell {
-  height: auto;
-  padding: 0;
+.table-drawer-row {
+  box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
+
+  .table-drawer-cell {
+    border: none;
+    height: auto;
+    padding: 0;
+
+  }
 }
