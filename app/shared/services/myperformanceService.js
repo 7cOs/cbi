@@ -240,7 +240,7 @@ module.exports = /*  @ngInject */
       delete params.store;
 
       if (currentTopBottomFilters.distributors) {
-        params.distributor = currentTopBottomFilters.distributors.id;
+        params.distributor = [currentTopBottomFilters.distributors];
       }
 
       if (currentTopBottomFilters.accounts) {

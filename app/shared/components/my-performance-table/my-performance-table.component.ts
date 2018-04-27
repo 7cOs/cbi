@@ -205,9 +205,7 @@ export class MyPerformanceTableComponent implements OnInit, OnChanges {
     this.updateSortingFunction();
     if (this.sortedTableData && this.sortedTableData.length) {
       const sortedData: Array<MyPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
-      this.sortedTableData = (this.viewType === SalesHierarchyViewType.roleGroups || this.viewType === SalesHierarchyViewType.people)
-        ? this.sortRoleGroups(sortedData)
-        : sortedData;
+      this.sortedTableData = this.sortRoleGroups(sortedData);
     }
   }
 
