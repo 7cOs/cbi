@@ -39,6 +39,13 @@ deployment:
       - cd automation-test && mvn install -DskipTests=true
       - cd automation-test && bash ../scripts/ci-run-automation-tests.sh $runTestSuite $runTestSuiteEnvt:
           timeout: 1200
+          
+  ci7398:
+    branch: feature/US24438-AT-Opportunities-AttemptToAddCustomOpportunityWithBlankForm
+    commands:
+      - cd automation-test && mvn install -DskipTests=true
+      - cd automation-test && bash ../scripts/ci-run-automation-tests.sh $runTestSuite $runTestSuiteEnvt:
+          timeout: 1200
 
   ga-automation:
     branch: ga-automation
