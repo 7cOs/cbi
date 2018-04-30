@@ -90,6 +90,8 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     webDriver.set(new RemoteWebDriver(
       new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
         SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
+    
+    System.out.println( "Inside getSauceWebDriver... WebDriver=" +  webDriver.get() );
 
     //((RemoteWebDriver) getWebDriver()).manage().window().setSize(new Dimension(1024, 768));
     // set current sessionId
