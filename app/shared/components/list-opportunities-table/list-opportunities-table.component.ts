@@ -127,6 +127,20 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     console.log('onOpportunityTypeClicked', opportunity);
   }
 
+  public onTableRowClicked(row: ListOpportunitiesTableRow): void {
+    row.expanded = !row.expanded;
+  }
+
+  public onExpandAllClicked(): void {
+    this.isExpandAll = !this.isExpandAll;
+
+    if (this.sortedTableData) {
+      this.sortedTableData.forEach((row: ListOpportunitiesTableRow) => {
+        row.expanded = this.isExpandAll;
+      });
+    }
+  }
+
   private getTableClasses(loadingState: LoadingState): CssClasses {
     return {
       [loadingState]: true
@@ -157,17 +171,5 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       const sortedData: Array<ListOpportunitiesTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
-  }
-
-  private onTableRowClicked(row: ListOpportunitiesTableRow): void {
-    row.expanded = !row.expanded;
-  }
-
-  private onExpandAllClicked(): void {
-    this.isExpandAll = !this.isExpandAll;
-
-    this.sortedTableData.forEach((row: ListOpportunitiesTableRow) => {
-      row.expanded = this.isExpandAll;
-    });
   }
 }
