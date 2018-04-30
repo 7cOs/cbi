@@ -8,7 +8,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import com.cbrands.TestUser;
-import com.cbrands.pages.AddOpportunityModal;
+import com.cbrands.pages.CustomOpportunityModal;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
@@ -16,19 +16,18 @@ import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
 
 public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
-
   private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
-  private AddOpportunityModal addOpportunityModal;
+  private CustomOpportunityModal customOpportunityModal;
   
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
     final String testCaseName = method.getAnnotation(Test.class).description();
-    final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
+    final String sauceTitle = String.format("Functional - Opportunities - Custom Opportunity - %s", testCaseName);
     this.startUpBrowser(sauceTitle);
 
     homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
-    addOpportunityModal = PageFactory.initElements(driver, AddOpportunityModal.class);
+    customOpportunityModal = PageFactory.initElements(driver, CustomOpportunityModal.class);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();    
     Assert.assertTrue(
@@ -42,19 +41,20 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
     this.shutDownBrowser();
   }
-  
+
   @Test
   public void attemptToSaveBlankCustomOpportunity() {
-    addOpportunityModal = addOpportunityModal
+    customOpportunityModal = customOpportunityModal
         .launchModal()
-        .clickAddButton()
-        .confirmRequiredFieldsErrorMessages()
-        .clickOutsideModal();
-    
-    Assert.assertTrue(addOpportunityModal.isModalDisplayed(), 
+        .clickAddButton();
+
+    Assert.assertTrue(customOpportunityModal.areAllRequiredFieldErrorMessagesDisplayed(),
+          "Error verifying one or more required field message.");
+
+    Assert.assertTrue(customOpportunityModal.clickOutsideModal().isModalDisplayed(), 
         "Add Opportunity modal is NOT displayed after clicking outside modal dialog");
-    
-    Assert.assertFalse(addOpportunityModal.clickCancelButton().isModalClosed(),
+
+    Assert.assertFalse(customOpportunityModal.clickCancelButton().isModalClosed(),
         "Add Opportunity modal IS displayed after canceling modal dialog");
   }
 }

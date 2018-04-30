@@ -8,8 +8,11 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import static com.cbrands.helper.SeleniumUtils.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class AddOpportunityModal extends TestNGBasePage {
+public class CustomOpportunityModal extends TestNGBasePage {
+  private Log log = LogFactory.getLog(LoginPage.class);
   private static final String LAUNCH_MODAL_XPATH = "//a[@action='Add Opportunity']";
   private static final String MODAL_DIALOG_XPATH = "(//md-dialog//div[contains(@class, 'modal add-opportunity')])";
   private static final String SAVE_BTN_XPATH = (MODAL_DIALOG_XPATH + "//button[@type='submit' and contains(.,'Add')]");
@@ -33,7 +36,7 @@ public class AddOpportunityModal extends TestNGBasePage {
 
   private final WebDriver driver;
 
-  public AddOpportunityModal(WebDriver driver) {
+  public CustomOpportunityModal(WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
   }
@@ -50,22 +53,22 @@ public class AddOpportunityModal extends TestNGBasePage {
     return isElementPresent(By.xpath(MODAL_DIALOG_XPATH));
   }
 
-  public AddOpportunityModal launchModal() {
+  public CustomOpportunityModal launchModal() {
     waitForElementToClickable(launchModal, true).click();
     return this;
   }
 
-  public AddOpportunityModal clickAddButton() {
+  public CustomOpportunityModal clickAddButton() {
     waitForElementToClickable(modalSaveBtn, true).click();
     return this;
   }
 
-  public AddOpportunityModal clickCancelButton() {
+  public CustomOpportunityModal clickCancelButton() {
     waitForElementToClickable(modalCancelBtn, true).click();
     return this;
   }  
 
-  public AddOpportunityModal clickOutsideModal() {
+  public CustomOpportunityModal clickOutsideModal() {
     body.click();
     return this;
   }
@@ -86,41 +89,47 @@ public class AddOpportunityModal extends TestNGBasePage {
   /**
    * NOTE: This method is to be used for discussion purposes only 
    * as an approach open as to how required fields confirmation
-   * should be performed in during automation. It is included
+   * should be performed during automation. It is included
    * here for demo and discussion purposes only.
    * @category DEMO_AND_DISCUSSION
    */
-  public AddOpportunityModal confirmRequiredFieldsErrorMessages() {
-    String[][] os = {
-        {"Account", "Please select an Account."},
-        {"Recommended Package / SKU", "Please enter a Recommended Package / SKU."},
-        {"Rationale", "Please select a Rationale, or add another one."},
-        {"Impact", "Please select an impact level."}
+  public boolean areAllRequiredFieldErrorMessagesDisplayed() {
+    String[] requiredFields = {
+        "Account",
+        "Recommended Package / SKU",
+        "Rationale",
+        "Impact"
     };
-    for( String[] o : os) {
-      String xpdlg = "(//md-dialog//div[contains(@class, 'modal add-opportunity')]";
-      String xprfm = (xpdlg + "//label[contains(.,'[FIELD]')]/..//[TYPE]/../../..)"
+
+    for( String requiredField : requiredFields) {
+      log.info("Verifying required field message for " + requiredField);
+
+      String xpathModal = "(//md-dialog//div[contains(@class, 'modal add-opportunity')]";
+      String xpathForm = (xpathModal + "//label[contains(.,'[FIELD]')]/..//[TYPE]/../../..)"
           + "//p[contains(@class,'error-message')]");
-      String l, m; l=o[0]; m=o[1];
-      xprfm = xprfm.replace("[FIELD]", l);
-      switch( l ) {
+
+      xpathForm = xpathForm.replace("[FIELD]", requiredField);
+      switch( requiredField ) {
       case "Account":
       case "Recommended Package / SKU":
-        xprfm = xprfm.replace("[TYPE]", "input[@type='text']");
+        xpathForm = xpathForm.replace("[TYPE]", "input[@type='text']");
         break;
       case "Rationale":
       case "Impact":
-        xprfm = xprfm.replace("[TYPE]", "md-select");
-        if(l.equals("Rationale")) {
-          xprfm = "(" + xprfm + ")[1]";
+        xpathForm = xpathForm.replace("[TYPE]", "md-select");
+        if(requiredField.equals("Rationale")) {
+          xpathForm = "(" + xpathForm + ")[1]";
         }
         break;
       }
-      Assert.assertTrue(isElementPresent(By.xpath(xprfm)));
-      Assert.assertEquals(
-          getRequiredFieldErrorMessage(xprfm), 
-          "Reiquired field error message does not match expected value");
+
+      if( ! isElementPresent(By.xpath(xpathForm)) ) { 
+        return false; 
+      }
+
+      log.info("Required field message for " + requiredField  + " verified");
     }
-    return this;
+
+    return true;
   }
 }
