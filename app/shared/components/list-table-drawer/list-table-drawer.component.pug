@@ -22,21 +22,27 @@
 
     tbody.list-table-drawer-body
       tr.list-table-drawer-row(*ngFor="let opportunity of opportunitiesData, let index = index")
-
         td.checkbox-column(colspan=1)
-          mat-checkbox([checked]="opportunity.checked", [disableRipple]="true", (change)="onCheckboxClick($event.checked, index)")
+          mat-checkbox(
+            [checked]="opportunity.checked",
+            [disableRipple]="true",
+            (change)="onCheckboxClick($event.checked, index)"
+          )
         td.brand-column(colspan=1)
           .brand-container
             .brand-mandate(*ngIf="index === 0")
               img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
-        td.type-column(colspan=1) {{ opportunity.type }}
+        td.type-column(colspan=1, (click)="onTypeClicked(opportunity)") {{ opportunity.type }}
         td.status-column(colspan=1) {{ opportunity.status }}
         td.impact-column.centered(colspan=1)
           img.impact-image(src="../../../assets/img/icons/impact-high.svg")
         td.current-column.centered(colspan=1) {{ opportunity.current }}
         td.year-ago-column.centered(colspan=1) {{ opportunity.yearAgo }}
         td.depletion-date-column.centered(colspan=1) {{ opportunity.depletionDate }}
-        td.button-column.centered(colspan=1)
+        td.button-column.centered(
+          colspan=1,
+          (click)="onActionButtonClicked()"
+        )
           img.action-button(src="../../../assets/img/icons/more.svg")

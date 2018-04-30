@@ -13,9 +13,10 @@ export class ListOpportunitiesTableRowComponent {
   @Input() rowData: ListOpportunitiesTableRow;
 
   @Output() onChangeEventEmitter: EventEmitter<any> = new EventEmitter();
-  @Output() onExpandClicked: EventEmitter<Event> = new EventEmitter();
+  @Output() onTableRowClicked: EventEmitter<Event> = new EventEmitter();
 
   public classUtilService: CompassListClassUtilService = new CompassListClassUtilService();
+
   public getTrendClass(num: number): string {
     return this.classUtilService.getTrendClass(num);
   }
@@ -25,7 +26,7 @@ export class ListOpportunitiesTableRowComponent {
     this.onChangeEventEmitter.emit(event);
   }
 
-  private expandIconClicked(): void {
-    this.onExpandClicked.emit();
+  public tableCellClicked(): void {
+    this.onTableRowClicked.emit();
   }
 }

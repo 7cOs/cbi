@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'list-table-drawer',
@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
 })
 
 export class ListTableDrawerComponent {
+  @Output() onOpportunityTypeClicked: EventEmitter<Event> = new EventEmitter();
+
   public opportunitiesData: any = [{
     mandate: 'SP',
     brand: 'Corona Extra',
@@ -33,5 +35,13 @@ export class ListTableDrawerComponent {
 
   public onCheckboxClick(isChecked: boolean, index: number): void {
     this.opportunitiesData[index].checked = isChecked;
+  }
+
+  public onTypeClicked(opportunity: any): void {
+    this.onOpportunityTypeClicked.emit(opportunity);
+  }
+
+  public onActionButtonClicked(): void {
+    console.log('Table Drawer Action Button Clicked');
   }
 }
