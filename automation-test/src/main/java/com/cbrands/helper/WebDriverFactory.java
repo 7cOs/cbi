@@ -86,13 +86,13 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
     SauceHelpers.addSauceConnectTunnelId(capabilities);
 
+    System.out.println( "Inside getSauceWebDriver... Capabilities: " +  capabilities );
+    
     // Launch remote browser and set it as the current thread
     webDriver.set(new RemoteWebDriver(
       new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
           SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
     
-    System.out.println( "Inside getSauceWebDriver... WebDriver: " +  webDriver.get() );
-
     //((RemoteWebDriver) getWebDriver()).manage().window().setSize(new Dimension(1024, 768));
     // set current sessionId
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
