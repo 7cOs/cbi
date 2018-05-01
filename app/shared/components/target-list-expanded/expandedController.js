@@ -214,7 +214,6 @@ module.exports = /*  @ngInject */
 
       vm.buttonDisabled = true;
 
-      // create collaborator payload
       listsApiService.createList(listsTransformerService.formatNewList(vm.newList))
         .toPromise()
         .then(v3List => {

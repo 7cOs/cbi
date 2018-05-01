@@ -49,7 +49,28 @@ export interface Collaborator {
   user: User;
 }
 
-interface User {
+export interface UnformattedNewList {
+  description: string;
+  name: string;
+  opportunities: any[];
+  collaborators: User[];
+  targetListShares: {id: number}[];
+}
+
+export interface FormattedNewList {
+  category: ListCategory;
+  collaboratorType: CollaboratorType;
+  name: string;
+  type: ListType;
+
+  description?: string;
+  ownerEmployeeId?: string;
+  surveySfid?: any;
+  archived?: boolean;
+  collaboratorEmployeeIds?: string[];
+}
+
+export interface User {
   employeeId: string;
   firstName: string;
   lastName: string;
@@ -82,4 +103,20 @@ export interface ListsCollectionSummary {
   ownedNotArchived: number;
   sharedArchivedCount: number;
   sharedNotArchivedCount: number;
+}
+
+export enum ListType {
+  WatchList = 'Watch_List',
+  TargetList = 'Target_List',
+  SurveyList = 'Survey_List',
+  VisitList = 'Visit_List'
+}
+
+export enum ListCategory {
+  Beer = 'Beer',
+  Wine = 'Wine'
+}
+
+export enum CollaboratorType {
+  CollaborateAndInvite = 'collaborate_and_invite'
 }

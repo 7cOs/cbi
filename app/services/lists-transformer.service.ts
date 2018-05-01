@@ -102,26 +102,18 @@ export class ListsTransformerService {
     };
   }
 
-  public transformV2ToV3(list: Lists.V2List, isOwnedList: boolean = false): Lists.V3List {
+  public formatNewList(list: Lists.UnformattedNewList): Lists.FormattedNewList {
     return {
-      archived: list.archived,
-      category: 'target_list',
-      collaborators: list.collaborators,
-      collaboratorType: list.collaboratorPermissionLevel,
-      createdOn: list.createdOn,
-      deleted: list.deleted || false,
       description: list.description,
-      id: list.id,
       name: list.name,
-      numberOfAccounts: list.numberOfAccounts,
-      numberOfClosedOpportunities: list.numberOfClosedOpportunities || 0,
-      owner: list.owner,
-      survey: list.survey,
-      totalOpportunities: list.totalOpportunities || 0,
-      type: list.type,
-      updatedOn: list.updatedOn
+      type: Lists.ListType.TargetList,
+      archived: false,
+      collaboratorType: Lists.CollaboratorType.CollaborateAndInvite,
+      collaboratorEmployeeIds: list.collaborators.map((user: Lists.User) => user.employeeId),
+      category: Lists.ListCategory.Beer
     };
   }
+
   private formatStoreData(store: ListStoreDTO): StoreDetails {
     const storeData: StoreDetails = {
       address: store.address,
