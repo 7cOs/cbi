@@ -1,0 +1,50 @@
+@import '../../../assets/styles/base/variables';
+
+.opportunities-component-section {
+  color: $gray-1;
+  padding: 0;
+  width: 375px;
+
+  .opportunities-header {
+    background-color: $gray-4;
+    border-bottom: 2px solid $gray-8;
+    display: inline-block;
+    height: 75px;
+    width: 100%;
+
+    .header-summary {
+      float: left;
+
+      .header-title {
+        float: left;
+        font-size: 24px;
+        font-weight: $light;
+        margin-left: 25px;
+        margin-top: 20px;
+
+        .header-tooltip img {
+          height: 15px;
+          margin-left: 5px;
+          width: 15px;
+        }
+      }
+
+      .header-sub-title {
+        font-size: 11px;
+        font-weight: $semibold;
+        margin-left: 25px;
+        text-transform: uppercase;
+      }
+    }
+
+    .close-indicator-container {
+      float: right;
+      width: 10%;
+
+      .close-indicator {
+        cursor: pointer;
+        margin-top: 30px;
+      }
+    }
+  }
+}

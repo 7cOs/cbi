@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AccountsApiService } from '../../services/api/v3/accounts-api.service';
+import { CompassTableExtenderHeaderComponent }
+  from '../../shared/components/compass-table-extender-header/compass-table-extender-header.component';
 import { DistributorsApiService } from '../../services/api/v3/distributors-api.service';
 import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
 import { MyPerformanceComponent } from './my-performance.component';
@@ -20,8 +22,8 @@ import { ResponsibilitiesService } from  '../../services/responsibilities.servic
 import { SharedModule } from '../../shared/shared.module';
 import { StoresApiService } from '../../services/api/v3/stores-api.service';
 import { SubAccountsApiService } from '../../services/api/v3/sub-accounts-api.service';
-import { TeamPerformanceOpportunitiesComponent }
-  from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
+import { TeamPerformanceOpportunityBodyComponent }
+  from '../../shared/components/team-performance-opportunities-body/team-performance-opportunities-body.component';
 import { V3ApiHelperService } from '../../services/api/v3/v3-api-helper.service';
 import { WindowService } from '../../services/window.service';
 
@@ -32,12 +34,13 @@ import { WindowService } from '../../services/window.service';
     SharedModule
   ],
   declarations: [
+    CompassTableExtenderHeaderComponent,
     MyPerformanceBreadcrumbComponent,
     MyPerformanceComponent,
     MyPerformanceFilterComponent,
     MyPerformanceTableComponent,
     MyPerformanceTableRowComponent,
-    TeamPerformanceOpportunitiesComponent
+    TeamPerformanceOpportunityBodyComponent
   ],
   providers: [
     AccountsApiService,
