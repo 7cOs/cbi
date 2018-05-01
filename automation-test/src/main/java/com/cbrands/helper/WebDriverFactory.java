@@ -124,7 +124,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
     capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
     capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-    capabilities.setCapability("version", 11);
+    capabilities.setCapability("version", "11.103");
 
     capabilities.setCapability("name", getTestRunName(testName, BrowserType.ie.name()));
 
