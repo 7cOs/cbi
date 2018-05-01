@@ -18,6 +18,12 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
+import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
+
+interface ListPageClick {
+  pageNumber: number;
+}
 
 @Component({
   selector: 'list-detail',
@@ -34,7 +40,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public secondTabTitle: string = 'Opportunities';
 
   // TODO: Remove this when we get real data.
-  public opportunitiesTableData = getListOpportunitiesTableRowMock(25);
+  public opportunitiesTableData = getListOpportunitiesTableRowMock(390);
+  public opportunitiesTableSlicedData: Array<ListOpportunitiesTableRow> = this.opportunitiesTableData.slice(0, LIST_TABLE_SIZE);
   public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
 
   public actionButtonType: any = ActionButtonType;
@@ -102,6 +109,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.listDetailSubscription.unsubscribe();
+  }
+
+  public handlePageClick(event: ListPageClick) {
+    const p = event.pageNumber;
+    let pageStart = ((p - 1 ) * LIST_TABLE_SIZE);
+    let pageEnd = (p * LIST_TABLE_SIZE) ;
+    this.opportunitiesTableSlicedData = this.opportunitiesTableData.slice(pageStart, pageEnd);
   }
 
   public handleManageButtonClick() {

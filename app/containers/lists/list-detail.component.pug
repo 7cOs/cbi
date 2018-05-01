@@ -27,5 +27,9 @@ compass-tabs
   compass-tab([tabTitle]='secondTabTitle')
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
-      [tableData]="opportunitiesTableData"
+      [tableData]="opportunitiesTableSlicedData"
     )
+
+lists-pagination([tabName]='secondTabTitle',
+                (pageChangeClick)="handlePageClick($event)",
+                [tableDataSize]="opportunitiesTableData.length")
