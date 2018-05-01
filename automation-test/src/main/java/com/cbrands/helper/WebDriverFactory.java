@@ -89,7 +89,8 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     // Launch remote browser and set it as the current thread
     webDriver.set(new RemoteWebDriver(
       new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
-        SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
+        SauceHelpers.buildSauceUri() + "/wd/hub"), new DesiredCapabilities()));
+    // SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
     
     System.out.println( "Inside getSauceWebDriver... WebDriver: " +  webDriver.get() );
 
