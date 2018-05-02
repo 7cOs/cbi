@@ -1,4 +1,4 @@
-import { Component, ContentChildren, QueryList, AfterContentInit, EventEmitter, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, ContentChildren,  Output, QueryList } from '@angular/core';
 import { CompassTabComponent } from './tab/tab.component';
 
 @Component({

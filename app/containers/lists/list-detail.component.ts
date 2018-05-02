@@ -13,13 +13,13 @@ import { getListOpportunitiesHeaderRowMock,
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
-import { StoreDetails } from '../../models/lists/lists-store.model';
-import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
+import { StoreDetails } from '../../models/lists/lists-store.model';
 
 interface ListPageClick {
   pageNumber: number;

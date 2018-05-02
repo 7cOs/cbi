@@ -3,10 +3,8 @@ import { BeerLoaderComponent } from './components/beer-loader/beer-loader.compon
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule }   from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatRadioModule, MatRippleModule, MatSelectModule,
-  MatSidenavModule
-} from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatRadioModule, MatRippleModule, MatSelectModule,
+        MatSidenavModule } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { CompassActionButtonComponent } from './components/compass-action-button/compass-action-button.component';
@@ -44,9 +42,9 @@ import { CompassTabComponent } from './components/compass-tabs/tab/tab.component
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
     DismissibleXComponent,
+    MatButtonModule,
     MatCheckboxModule,
     MatRippleModule,
-    MatButtonModule,
     MatSidenavModule,
     OverlayModule,
     SortIndicatorComponent,

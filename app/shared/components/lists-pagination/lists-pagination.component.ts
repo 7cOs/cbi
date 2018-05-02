@@ -7,6 +7,7 @@ export const LIST_TABLE_SIZE: number = 20;
   template: require('./lists-pagination.pug'),
   styles: [ require('./lists-pagination.scss') ]
 })
+
 export class ListsPaginationComponent implements OnInit {
   @Input() tableDataSize: number;
   @Input() tabName: string;
