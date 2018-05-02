@@ -9,6 +9,5 @@ module.exports =
     require('./target-lists').name,
     require('./target-list-detail').name,
     require('./style-guide').name,
-    require('./help').name,
-    require('./lists').name
+    require('./help').name
   ]);
