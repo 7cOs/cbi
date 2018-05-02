@@ -25,6 +25,10 @@ interface ListPageClick {
   pageNumber: number;
 }
 
+interface TabSelected {
+  selectedTab: string;
+}
+
 @Component({
   selector: 'list-detail',
   template: require('./list-detail.component.pug'),
@@ -133,7 +137,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     console.log('manage button click');
   }
 
-  public tabSelectedClick(event: any) {
+  public tabSelectedClick(event: TabSelected) {
     this.selectedTab = event.selectedTab;
   }
 
