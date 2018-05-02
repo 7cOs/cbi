@@ -1,5 +1,6 @@
 import { By } from '@angular/platform-browser';
-import { Component, Input } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -10,6 +11,7 @@ import { ListOpportunitiesColumnType } from '../../../enums/list-opportunities-c
 import { ListOpportunitiesTableComponent } from './list-opportunities-table.component';
 import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
 import { MatCheckboxModule } from '@angular/material';
+import { MatSidenavModule } from '@angular/material';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
@@ -33,17 +35,48 @@ class MockListOpportunitiesTableRowComponent {
   @Input() rowData: ListOpportunitiesTableRow;
 }
 
+@Component({
+  selector: 'compass-table-extender-header',
+  template: ''
+})
+class CompassTableExtenderHeaderComponent {
+  @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+
+  @Input() mainTitle: string;
+  @Input() subtitle: string;
+}
+
+@Component({
+  selector: 'list-opportunity-extender-body',
+  template: ''
+})
+class ListOpportunityExtenderBodyComponent {
+}
+
+@Component({
+  selector: 'dismissible-x',
+  template: ''
+})
+class DismissibleXComponent { }
+
 describe('ListOpportunitiesTableComponent', () => {
   let fixture: ComponentFixture<ListOpportunitiesTableComponent>;
   let componentInstance: ListOpportunitiesTableComponent;
   let tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MatCheckboxModule],
+      imports: [
+        BrowserAnimationsModule,
+        MatCheckboxModule,
+        MatSidenavModule
+      ],
       declarations: [
         BeerLoaderComponentMock,
+        CompassTableExtenderHeaderComponent,
+        DismissibleXComponent,
         MockListOpportunitiesTableRowComponent,
         ListOpportunitiesTableComponent,
+        ListOpportunityExtenderBodyComponent,
         SortIndicatorComponent
       ],
       providers: [

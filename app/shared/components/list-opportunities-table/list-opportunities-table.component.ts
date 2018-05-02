@@ -47,6 +47,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
 
+  private isOpportunityTableExtended: boolean = true;
   private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
     columnType: ListOpportunitiesColumnType.cytdColumn,
@@ -120,6 +121,10 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       'selected-entity-row': row.checked
     };
     return classes;
+  }
+
+  public toggleOpportunityTable(): void {
+    this.isOpportunityTableExtended = !this.isOpportunityTableExtended;
   }
 
   private getTableClasses(loadingState: LoadingState): CssClasses {

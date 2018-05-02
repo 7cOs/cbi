@@ -13,11 +13,15 @@ import { CompassModalService } from '../services/compass-modal.service';
 import { CompassOverlayService } from '../services/compass-overlay.service';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
 import { CompassSelectComponent } from './components/compass-select/compass-select.component';
+import { CompassTableExtenderHeaderComponent }
+  from './components/compass-table-extender-header/compass-table-extender-header.component';
 import { CompassTabsComponent } from './components/compass-tabs/compass-tabs.component';
 import { CompassTooltipComponent } from './components/compass-tooltip/compass-tooltip.component';
 import { CompassTooltipPopupComponent } from './components/compass-tooltip-popup/compass-tooltip-popup.component';
 import { CompassTooltipService } from '../services/compass-tooltip.service';
 import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.component';
+import { ListOpportunityExtenderBodyComponent }
+  from './components/list-opportunity-extender-body/list-opportunity-extender-body.component';
 import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
 import { CompassTabComponent } from './components/compass-tabs/tab/tab.component';
 
@@ -37,6 +41,8 @@ import { CompassTabComponent } from './components/compass-tabs/tab/tab.component
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
+    CompassTabComponent,
+    CompassTableExtenderHeaderComponent,
     CompassTabsComponent,
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
@@ -45,8 +51,8 @@ import { CompassTabComponent } from './components/compass-tabs/tab/tab.component
     MatRippleModule,
     MatSidenavModule,
     OverlayModule,
-    SortIndicatorComponent,
-    CompassTabComponent
+    ListOpportunityExtenderBodyComponent,
+    SortIndicatorComponent
   ],
   declarations: [
     BeerLoaderComponent,
@@ -55,12 +61,14 @@ import { CompassTabComponent } from './components/compass-tabs/tab/tab.component
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
+    CompassTabComponent,
+    CompassTableExtenderHeaderComponent,
     CompassTabsComponent,
     CompassTooltipComponent,
     CompassTooltipPopupComponent,
     DismissibleXComponent,
+    ListOpportunityExtenderBodyComponent,
     SortIndicatorComponent,
-    CompassTabComponent
   ],
   providers: [
     CompassModalService,

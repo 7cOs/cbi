@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AccountsApiService } from '../../services/api/v3/accounts-api.service';
-import { CompassTableExtenderHeaderComponent }
-  from '../../shared/components/compass-table-extender-header/compass-table-extender-header.component';
 import { DistributorsApiService } from '../../services/api/v3/distributors-api.service';
 import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
 import { MyPerformanceComponent } from './my-performance.component';
@@ -34,7 +32,6 @@ import { WindowService } from '../../services/window.service';
     SharedModule
   ],
   declarations: [
-    CompassTableExtenderHeaderComponent,
     MyPerformanceBreadcrumbComponent,
     MyPerformanceComponent,
     MyPerformanceFilterComponent,
