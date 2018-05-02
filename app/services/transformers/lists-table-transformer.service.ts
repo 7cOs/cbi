@@ -2,16 +2,19 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 
 import { CalculatorService } from '../calculator.service';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { ListStorePerformance } from '../../models/lists/list-store-performance.model';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
+import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
+import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
-import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
-import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
-
 export const PERFORMANCE_TOTAL_ROW_NAME: string = 'Total';
+export const SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL: string = 'ANY';
 
 @Injectable()
 export class ListsTableTransformerService {
@@ -30,7 +33,6 @@ export class ListsTableTransformerService {
 
       const storeVolume: ListStorePerformance = this.getStorePerformance(store.unversionedStoreId, volumePerformance);
       const storeOpportunities: ListsOpportunities[] = opportunities[store.unversionedStoreId];
-      const isPerformanceError: boolean = !volumePerformance || !opportunities;
 
       opportunityRows.push({
         storeColumn: store.name,
@@ -40,34 +42,14 @@ export class ListsTableTransformerService {
         cytdColumn: storeVolume ? storeVolume.current : 0,
         cytdVersusYaPercentColumn: storeVolume ? this.calculatorService.getYearAgoPercent(storeVolume.current, storeVolume.yearAgo) : 0,
         opportunitiesColumn: storeOpportunities.length,
-        performanceError: isPerformanceError,
+        opportunities: this.transformStoreOpportunities(storeOpportunities),
+        performanceError: !storeVolume,
         checked: false,
         expanded: false
       });
 
       return opportunityRows;
     }, []);
-
-    // return stores.map((store: StoreDetails) => {
-    //   if (!opportunities[store.unversionedStoreId]) return;
-
-    //   const storeVolume: ListStorePerformance = this.getStorePerformance(store.unversionedStoreId, volumePerformance);
-    //   const storeOpportunities: ListsOpportunities[] = opportunities[store.unversionedStoreId];
-    //   const isPerformanceError: boolean = !volumePerformance || !opportunities;
-
-    //   return {
-    //     storeColumn: store.name,
-    //     storeAddressSubline: this.getFullStoreAddress(store),
-    //     distributorColumn: store.distributor,
-    //     segmentColumn: store.segmentCode,
-    //     cytdColumn: storeVolume ? storeVolume.current : 0,
-    //     cytdVersusYaPercentColumn: storeVolume ? this.calculatorService.getYearAgoPercent(storeVolume.current, storeVolume.yearAgo) : 0,
-    //     opportunitiesColumn: storeOpportunities.length,
-    //     performanceError: isPerformanceError,
-    //     checked: false,
-    //     expanded: false
-    //   };
-    // });
   }
 
   public transformPerformanceCollection(
@@ -117,6 +99,22 @@ export class ListsTableTransformerService {
       performanceError: false,
       checked: false
     };
+  }
+
+  private transformStoreOpportunities(opportunities: ListsOpportunities[]): ListTableDrawerRow[] {
+    return opportunities.map((opportunity: ListsOpportunities) => {
+      return {
+        brand: opportunity.brandDescription,
+        skuPackage: opportunity.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opportunity.skuDescription,
+        type: OpportunityTypeLabel[opportunity.type] || opportunity.type,
+        status: opportunity.status || '-' as OpportunityStatus,
+        impact: opportunity.impact,
+        current: opportunity.currentDepletions_CYTD || 0,
+        yearAgo: opportunity.yearAgoDepletions_CYTD || 0,
+        depletionDate: opportunity.lastDepletionDate ? moment(opportunity.lastDepletionDate).format('MM/DD/YY') : '-',
+        checked: false
+      };
+    });
   }
 
   private getFullStoreAddress(store: StoreDetails): string {

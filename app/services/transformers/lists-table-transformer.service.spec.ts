@@ -2,14 +2,21 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import * as moment from 'moment';
 
 import { CalculatorService } from '../calculator.service';
+import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListStorePerformanceMock } from '../../models/lists/list-store-performance.model.mock';
 import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
+
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { ListsTableTransformerService } from './lists-table-transformer.service';
 import { ListStorePerformance } from '../../models/lists/list-store-performance.model';
-import { PERFORMANCE_TOTAL_ROW_NAME } from './lists-table-transformer.service';
+import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
+import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
+import { SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL, PERFORMANCE_TOTAL_ROW_NAME } from './lists-table-transformer.service';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 const getExpectedStoreAddress = (store: StoreDetails): string => {
@@ -32,6 +39,110 @@ describe('ListsTableTransformerService', () => {
     testBed = getTestBed();
     listsTableTransformerService = testBed.get(ListsTableTransformerService);
     calculatorService = testBed.get(CalculatorService);
+  });
+
+  describe('transformOpportunitiesCollection', () => {
+    let storeDetailsMock: StoreDetails[];
+    let volumeStorePerformanceMock: ListStorePerformance[];
+    let opportunitiesByStoreMock: OpportunitiesByStore;
+
+    beforeEach(() => {
+      storeDetailsMock = getStoreListsMock();
+      volumeStorePerformanceMock = Array(storeDetailsMock.length).fill(getListStorePerformanceMock());
+    });
+
+    describe('when stores have Volume performance data and Opportunities', () => {
+      beforeEach(() => {
+        volumeStorePerformanceMock = volumeStorePerformanceMock.map((storePerformance: ListStorePerformance, index: number) => {
+          return Object.assign({}, storePerformance, {
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
+          });
+        });
+        opportunitiesByStoreMock = storeDetailsMock.reduce((opportunitiesByStore: OpportunitiesByStore, store: StoreDetails) => {
+          opportunitiesByStore[store.unversionedStoreId] = getListOpportunitiesMock();
+
+          return opportunitiesByStore;
+        }, {});
+      });
+
+      it('should return a ListOpportunitiesTableRow for each store with its matched performance data', () => {
+        const tableRows: ListOpportunitiesTableRow[] = listsTableTransformerService.transformOpportunitiesCollection(
+          storeDetailsMock,
+          volumeStorePerformanceMock,
+          opportunitiesByStoreMock
+        );
+
+        tableRows.forEach((row: ListOpportunitiesTableRow, index: number) => {
+          const matchedOpportunities: ListsOpportunities[] = opportunitiesByStoreMock[storeDetailsMock[index].unversionedStoreId];
+
+          expect(row).toEqual({
+            storeColumn: storeDetailsMock[index].name,
+            storeAddressSubline: getExpectedStoreAddress(storeDetailsMock[index]),
+            distributorColumn: storeDetailsMock[index].distributor,
+            segmentColumn: storeDetailsMock[index].segmentCode,
+            cytdColumn: volumeStorePerformanceMock[index].current,
+            cytdVersusYaPercentColumn: calculatorService.getYearAgoPercent(
+              volumeStorePerformanceMock[index].current,
+              volumeStorePerformanceMock[index].yearAgo
+            ),
+            opportunitiesColumn: matchedOpportunities.length,
+            opportunities: jasmine.any(Array) as any,
+            performanceError: false,
+            checked: false,
+            expanded: false
+          });
+
+          row.opportunities.forEach((opportunityRow: ListTableDrawerRow, rowIndex: number) => {
+            expect(opportunityRow).toEqual({
+              brand: matchedOpportunities[rowIndex].brandDescription,
+              skuPackage: matchedOpportunities[rowIndex].isSimpleDistribution
+                ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL
+                : matchedOpportunities[rowIndex].skuDescription,
+              type: OpportunityTypeLabel[matchedOpportunities[rowIndex].type],
+              status: matchedOpportunities[rowIndex].status,
+              impact: matchedOpportunities[rowIndex].impact,
+              current: matchedOpportunities[rowIndex].currentDepletions_CYTD,
+              yearAgo: matchedOpportunities[rowIndex].yearAgoDepletions_CYTD,
+              depletionDate: moment(matchedOpportunities[rowIndex].lastDepletionDate).format('MM/DD/YY'),
+              checked: false
+            });
+          });
+        });
+      });
+    });
+
+    describe('when stores do not have Volume performance data and opportunities', () => {
+
+      beforeEach(() => {
+        opportunitiesByStoreMock = {
+          [storeDetailsMock[0].unversionedStoreId]: getListOpportunitiesMock()
+        };
+      });
+
+      it('should return a ListOpportunitiesTableRow only if a store has opportunities and `0` values for performance fields, `-`'
+      + ' for non-performance fields, and performanceError set to true', () => {
+        const tableRows: ListOpportunitiesTableRow[] = listsTableTransformerService.transformOpportunitiesCollection(
+          storeDetailsMock,
+          volumeStorePerformanceMock,
+          opportunitiesByStoreMock
+        );
+
+        expect(tableRows.length).toBe(1);
+        expect(tableRows[0]).toEqual({
+          storeColumn: storeDetailsMock[0].name,
+          storeAddressSubline: getExpectedStoreAddress(storeDetailsMock[0]),
+          distributorColumn: storeDetailsMock[0].distributor,
+          segmentColumn: storeDetailsMock[0].segmentCode,
+          cytdColumn: 0,
+          cytdVersusYaPercentColumn: 0,
+          opportunitiesColumn: opportunitiesByStoreMock[storeDetailsMock[0].unversionedStoreId].length,
+          opportunities: jasmine.any(Array) as any,
+          performanceError: true,
+          checked: false,
+          expanded: false
+        });
+      });
+    });
   });
 
   describe('transformPerformanceCollection', () => {

@@ -1,6 +1,5 @@
 .list-table-drawer-component
   table.list-table-drawer
-
     thead.list-table-drawer-header
       tr.list-table-drawer-header-row
         th(colspan=1)
@@ -16,12 +15,11 @@
           .table-drawer-header-text.centered IMPACT
         th(colspan=2)
           .table-drawer-header-text.centered DEPLETIONS
-        th(colspan=1)
+        th(colspan=2)
           .table-drawer-header-text.centered LAST DEPLETION
         th(colspan=1)
-
     tbody.list-table-drawer-body
-      tr.list-table-drawer-row(*ngFor="let opportunity of opportunitiesData, let index = index")
+      tr.list-table-drawer-row(*ngFor="let opportunity of tableData, let index = index")
         td.checkbox-column(colspan=1)
           mat-checkbox(
             [checked]="opportunity.checked",
@@ -30,19 +28,19 @@
           )
         td.brand-column(colspan=1)
           .brand-container
-            .brand-mandate(*ngIf="index === 0")
-              img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
+            //- TODO: Mandage Code Here
+            //- .brand-mandate(*ngIf="opportunity.mandate")
+            //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
         td.type-column(colspan=1, (click)="onTypeClicked(opportunity)") {{ opportunity.type }}
-        td.status-column(colspan=1) {{ opportunity.status }}
-        td.impact-column.centered(colspan=1)
-          img.impact-image(src="../../../assets/img/icons/impact-high.svg")
+        td.status-column(colspan=1) {{ opportunity.status | titlecase }}
+        td.impact-column.centered(colspan=1, [ngSwitch]="opportunity.impact")
+          img.impact-image(*ngSwitchCase="opportunityImpact.high", src="../../../assets/img/icons/impact-high.svg")
+          img.impact-image(*ngSwitchCase="opportunityImpact.medium", src="../../../assets/img/icons/impact-medium.svg")
+          img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low.svg")
         td.current-column.centered(colspan=1) {{ opportunity.current }}
-        td.year-ago-column.centered(colspan=1) {{ opportunity.yearAgo }}
-        td.depletion-date-column.centered(colspan=1) {{ opportunity.depletionDate }}
-        td.button-column.centered(
-          colspan=1,
-          (click)="onActionButtonClicked()"
-        )
+        td.year-ago-column.centered(colspan=1) {{ opportunity.yearAgo }}%
+        td.depletion-date-column.centered(colspan=2) {{ opportunity.depletionDate }}
+        td.button-column.centered(colspan=1, (click)="onActionButtonClicked()")
           img.action-button(src="../../../assets/img/icons/more.svg")

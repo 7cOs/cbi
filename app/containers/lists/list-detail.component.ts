@@ -91,7 +91,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
-          console.log('this.opportunitiesTableData', this.opportunitiesTableData);
         }
       });
   }

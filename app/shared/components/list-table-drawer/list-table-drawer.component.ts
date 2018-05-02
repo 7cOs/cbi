@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
+import { OpportunityImpact } from '../../../enums/list-opportunities/list-opportunity-impact.enum';
 
 @Component({
   selector: 'list-table-drawer',
@@ -7,38 +10,20 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 
 export class ListTableDrawerComponent {
-  @Output() onOpportunityTypeClicked: EventEmitter<Event> = new EventEmitter();
+  @Output() onOpportunityCheckboxClicked: EventEmitter<Event> = new EventEmitter();
+  @Output() onOpportunityTypeClicked: EventEmitter<ListTableDrawerRow> = new EventEmitter();
 
-  public opportunitiesData: any = [{
-    mandate: 'SP',
-    brand: 'Corona Extra',
-    skuPackage: '16OZ 6PK CAN',
-    type: 'Low Velocity',
-    status: 'Closed',
-    impact: 'high',
-    current: '12,212',
-    yearAgo: '4.5%',
-    depletionDate: '02/21/2018',
-    checked: false
-  }, {
-    mandate: null,
-    brand: 'TOCAYO IPA',
-    skuPackage: 'ANY',
-    type: 'New Placement (No Rebuy)',
-    status: 'Targeted',
-    impact: 'low',
-    current: '12,212',
-    yearAgo: '4.5%',
-    depletionDate: '03/14/2018',
-    checked: true
-  }];
+  @Input() tableData: ListTableDrawerRow[];
+
+  public opportunityImpact: any = OpportunityImpact;
 
   public onCheckboxClick(isChecked: boolean, index: number): void {
-    this.opportunitiesData[index].checked = isChecked;
+    this.tableData[index].checked = isChecked;
+    this.onOpportunityCheckboxClicked.emit();
   }
 
-  public onTypeClicked(opportunity: any): void {
-    this.onOpportunityTypeClicked.emit(opportunity);
+  public onTypeClicked(opportunityRow: ListTableDrawerRow): void {
+    this.onOpportunityTypeClicked.emit(opportunityRow);
   }
 
   public onActionButtonClicked(): void {

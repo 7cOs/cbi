@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
@@ -9,6 +9,7 @@ import { getSortingCriteriaMock } from '../../../models/my-performance-table-sor
 import { ListOpportunitiesColumnType } from '../../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableComponent } from './list-opportunities-table.component';
 import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
+import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { MatCheckboxModule } from '@angular/material';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
@@ -33,10 +34,20 @@ class MockListOpportunitiesTableRowComponent {
   @Input() rowData: ListOpportunitiesTableRow;
 }
 
+@Component({
+  selector: 'list-table-drawer',
+  template: ''
+})
+class ListTableDrawerComponentMock {
+  @Output() onOpportunityTypeClicked: EventEmitter<Event> = new EventEmitter();
+  @Input() tableData: ListTableDrawerRow[];
+}
+
 describe('ListOpportunitiesTableComponent', () => {
   let fixture: ComponentFixture<ListOpportunitiesTableComponent>;
   let componentInstance: ListOpportunitiesTableComponent;
-  let tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
+  const tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [MatCheckboxModule],
@@ -44,6 +55,7 @@ describe('ListOpportunitiesTableComponent', () => {
         BeerLoaderComponentMock,
         MockListOpportunitiesTableRowComponent,
         ListOpportunitiesTableComponent,
+        ListTableDrawerComponentMock,
         SortIndicatorComponent
       ],
       providers: [

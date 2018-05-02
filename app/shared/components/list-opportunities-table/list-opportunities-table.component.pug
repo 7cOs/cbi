@@ -55,4 +55,8 @@ div
       )
       tr.table-drawer-row(*ngIf="row.expanded")
         td.table-drawer-cell(colspan=9)
-          list-table-drawer((onOpportunityTypeClicked)="onOpportunityTypeClicked($event)")
+          list-table-drawer(
+            [tableData]="row.opportunities",
+            (onOpportunityCheckboxClicked)="onOpportunityCheckboxClicked(row)",
+            (onOpportunityTypeClicked)="onOpportunityTypeClicked(row)"
+          )

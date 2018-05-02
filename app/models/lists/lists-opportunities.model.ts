@@ -14,4 +14,5 @@ export interface ListsOpportunities {
   yearAgoDepletions_CYTD: number;
   lastDepletionDate: string;
   unversionedStoreId: string;
+  isSimpleDistribution: boolean;
 }
