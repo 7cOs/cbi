@@ -7,22 +7,21 @@ div.compass-modal
       form([formGroup]='listForm')
         div.modal-input
           label Name
-          input(formControlName="targetName")
+          input(formControlName="targetName",
+          *ngIf="modalInputs.listObject.ownerId === modalInputs.currentUser.employeeID")
         div.modal-input
           label Description (optional)
-          textarea(formControlName="description")
+          textarea(formControlName="description",
+          *ngIf="modalInputs.listObject.ownerId === modalInputs.currentUser.employeeID")
         div.modal-input
           label Collaborators
           div.collaborator-list
             .collaborator.manage-list
-              .align-left(*ngIf="modalInputs.listObject.owner.user.employeeId === modalInputs.currentUser.employeeID") You
+              .align-left(*ngIf="modalInputs.listObject.ownerId === modalInputs.currentUser.employeeID") You
                 .accent Owner
-              .align-left(*ngIf="modalInputs.listObject.owner.user.employeeId !== modalInputs.currentUser.employeeID") {{modalInputs.listObject.owner.user.firstName | titlecase}} {{modalInputs.listObject.owner.user.firstName.lastName | titlecase}}
-            .collaborator.manage-list(*ngFor="let collaborator of modalInputs.listObject.collaborators")
+              .align-left(*ngIf="modalInputs.listObject.ownerId !== modalInputs.currentUser.employeeID") {{modalInputs.listObject.ownerFirstName | titlecase}} {{modalInputs.listObject.ownerLastName | titlecase}}
+            .collaborator.manage-list(*ngFor="let collaborator of collaborators")
               .align-left {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}}
-                .accent {{ collaborator.permissionLevel }}
-            .collaborator.manage-list(*ngFor="let pending of pendingCollaborators")
-              .align-left(ng-if="modalInputs.currentUser.employeeID !== pending.employeeId") {{pending.firstName | titlecase}} {{pending.lastName | titlecase}}
                 .accent Collaborator
         div.modal-input
           label Add Collaborators

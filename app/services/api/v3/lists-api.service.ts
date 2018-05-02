@@ -4,7 +4,12 @@ import { Observable } from 'rxjs';
 
 import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
-import { V3List } from '../../../models/lists/lists.model';
+import { V3List, FormattedNewList } from '../../../models/lists/lists.model';
+import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
+import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
+import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
+import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
+import { ListsSummary } from '../../../models/lists/lists-header.model';
 
 @Injectable()
 export class ListsApiService {
@@ -45,5 +50,28 @@ export class ListsApiService {
 
     return this.http.post(url, list)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+  }
+
+  public updateList(list: FormattedNewList, listsId: string): Observable<any> {
+    const url = `v3/lists/${ listsId }`;
+    return this.http.put(url, list)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+  }
+
+  public getListStorePerformance(
+    listId: string,
+    type: ListPerformanceType,
+    beverageType: ListBeverageType,
+    dateRangeCode: DateRangeTimePeriodValue
+  ): Observable<ListPerformanceDTO> {
+    const url = `/v3/lists/${ listId }/storePerformance`;
+    const params = {
+      type: type,
+      beverageType: beverageType,
+      dateRangeCode: dateRangeCode
+    };
+
+    return this.http.get<ListPerformanceDTO>(url, { params: params })
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 }

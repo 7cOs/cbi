@@ -6,6 +6,7 @@ import { COMPASS_MANAGE_LIST_MODAL_INPUTS } from '../../components/compass-manag
 import { CompassManageListModalEvent } from '../../../enums/compass-manage-list-modal-strings.enum';
 import { FormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { FormControl } from '@angular/forms';
+import { ListsSummary } from '../../../models/lists/lists-header.model';
 
 const ESCKEY = 27;
 
@@ -16,11 +17,11 @@ const ESCKEY = 27;
 })
 
 export class CompassManageListModalComponent {
-  @Output() buttonContainerEvent = new EventEmitter<CompassManageListModalEvent>();
+  @Output() buttonContainerEvent = new EventEmitter<ListsSummary>();
   public modalOverlayRef: CompassManageListModalOverlayRef;
   public compassManageListModalEvent = CompassManageListModalEvent;
   public listForm: FormGroup;
-  public pendingCollaborators: Array<object> = [];
+  public collaborators: Array<object> = [];
 
   constructor(
     @Inject(COMPASS_MANAGE_LIST_MODAL_INPUTS) public modalInputs: CompassManageListModalInputs,
@@ -39,6 +40,8 @@ export class CompassManageListModalComponent {
         description: modalInputs.listObject.description,
         userSearchTerm: ''
       });
+
+      this.collaborators = Object.assign([], modalInputs.listObject.collaborators);
     }
   }
 
@@ -51,18 +54,19 @@ export class CompassManageListModalComponent {
   }
 
   public addCollaborator(collaborator: object) {
-    this.pendingCollaborators.push(collaborator);
+    this.collaborators.push(collaborator);
   }
 
-  public transformFormPayload() {
-    let collaboratorsObj = Object.assign(this.modalInputs.listObject.collaborators, this.pendingCollaborators);
-    return Object.assign(this.listForm.value, {'collaborators': collaboratorsObj});
+  public convertFormPayload(): ListsSummary {
+    let payload = Object.assign({}, this.modalInputs.listObject);
+    payload.name = this.listForm.get('targetName').value;
+    payload.description = this.listForm.get('description').value;
+    payload.collaborators = this.collaborators;
+    return payload;
   }
   public hideModal(modalEventString: CompassManageListModalEvent): void {
     if ( modalEventString === CompassManageListModalEvent.Accept) {
-      this.buttonContainerEvent.emit(this.transformFormPayload());
-    } else {
-      this.buttonContainerEvent.emit(modalEventString);
+      this.buttonContainerEvent.emit(this.convertFormPayload());
     }
     if (this.modalOverlayRef) {
       this.modalOverlayRef.closeModal();

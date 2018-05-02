@@ -7,6 +7,7 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { V3List } from '../../models/lists/lists.model';
 
 export interface FetchStoreDetailsPayload {
   listId: string;
@@ -95,6 +96,27 @@ export class FetchListPerformancePODError implements Action {
   constructor(public payload: Error) { }
 }
 
+export const PATCH_LIST = ListsActionTypes.PATCH_LIST;
+export class PatchList implements Action {
+  readonly type = PATCH_LIST;
+
+  constructor(public payload: ListsSummary) { }
+}
+
+export const PATCH_LIST_SUCCESS = ListsActionTypes.PATCH_LIST_SUCCESS;
+export class PatchListSuccess implements Action {
+  readonly type = PATCH_LIST_SUCCESS;
+
+  constructor(public payload: ListsSummary) { }
+}
+
+export const PATCH_LIST_FAILURE = ListsActionTypes.PATCH_LIST_FAILURE;
+export class PatchListFailure implements Action {
+  readonly type = PATCH_LIST_FAILURE;
+
+  constructor(public payload: Error) { }
+}
+
 export type Action
   = FetchStoreDetails
   | FetchStoreDetailsSuccess
@@ -107,4 +129,7 @@ export type Action
   | FetchListPerformanceVolumeError
   | FetchListPerformancePOD
   | FetchListPerformancePODSuccess
-  | FetchListPerformancePODError;
+  | FetchListPerformancePODError
+  | PatchList
+  | PatchListSuccess
+  | PatchListFailure;

@@ -72,7 +72,24 @@ export class ListsTransformerService {
       name: summaryDataDTO.name,
       numberOfAccounts: summaryDataDTO.numberOfAccounts,
       ownerFirstName: summaryDataDTO.owner.firstName,
-      ownerLastName: summaryDataDTO.owner.lastName
+      ownerLastName: summaryDataDTO.owner.lastName,
+      collaborators: summaryDataDTO.collaborators,
+      ownerId: summaryDataDTO.owner.employeeId,
+      type: summaryDataDTO.type,
+      collaboratorType: summaryDataDTO.collaboratorType,
+      category: summaryDataDTO.category
+    };
+  }
+
+  public convertCollaborators(list: ListsSummary): Lists.FormattedNewList {
+    return {
+      description: list.description,
+      name: list.name,
+      type: Lists.ListType.TargetList,
+      archived: list.archived,
+      collaboratorType: Lists.CollaboratorType.CollaborateAndInvite,
+      collaboratorEmployeeIds: list.collaborators.map((user: Lists.User) => user.employeeId),
+      category: Lists.ListCategory.Beer
     };
   }
 

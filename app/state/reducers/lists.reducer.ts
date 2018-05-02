@@ -40,7 +40,12 @@ export const initialState: ListsState = {
       totalOpportunities: null,
       numberOfAccounts: null,
       ownerFirstName: null,
-      ownerLastName: null
+      ownerLastName: null,
+      collaborators: null,
+      ownerId: null,
+      collaboratorType: null,
+      category: null,
+      type: null
     }
   },
   listStores: {
@@ -160,6 +165,34 @@ export function listsReducer(
           podStatus: ActionStatus.Error
         })
       });
+
+    case ListsActions.PATCH_LIST:
+      return {
+        listStores:  state.listStores,
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Fetching
+        }),
+        performance: state.performance
+      };
+
+    case ListsActions.PATCH_LIST_SUCCESS:
+      return {
+        listStores:  state.listStores,
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Fetched,
+          summaryData: action.payload
+        }),
+        performance: state.performance
+      };
+
+    case ListsActions.PATCH_LIST_FAILURE:
+      return {
+        listStores:  state.listStores,
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Error
+        }),
+        performance: state.performance
+      };
 
     default:
       return state;
