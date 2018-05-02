@@ -17,28 +17,29 @@ const ESCKEY = 27;
 
 export class CompassManageListModalComponent {
   @Output() buttonContainerEvent = new EventEmitter<CompassManageListModalEvent>();
-
   public modalOverlayRef: CompassManageListModalOverlayRef;
-  public compassAlertModalEvent = CompassManageListModalEvent;
+  public compassManageListModalEvent = CompassManageListModalEvent;
   public listForm: FormGroup;
+  public pendingCollaborators: Array<object> = [];
 
   constructor(
     @Inject(COMPASS_MANAGE_LIST_MODAL_INPUTS) public modalInputs: CompassManageListModalInputs,
+    @Inject('searchService') private searchService: any,
     private fb: FormBuilder
   ) {
-
     if (modalInputs.listObject) {
       this.listForm = this.fb.group({
-        name: modalInputs.listObject.name,
-        description: modalInputs.listObject.description
+        targetName: modalInputs.listObject.name,
+        description: modalInputs.listObject.description,
+        userSearchTerm: ''
       });
 
       this.listForm.setValue({
-        name: modalInputs.listObject.name,
-        description: modalInputs.listObject.description
+        targetName: modalInputs.listObject.name,
+        description: modalInputs.listObject.description,
+        userSearchTerm: ''
       });
     }
-
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
@@ -49,40 +50,21 @@ export class CompassManageListModalComponent {
     }
   }
 
+  public addCollaborator(collaborator: object) {
+    this.pendingCollaborators.push(collaborator);
+  }
   public hideModal(modalEventString: CompassManageListModalEvent): void {
-    this.buttonContainerEvent.emit(modalEventString);
+    if ( modalEventString === CompassManageListModalEvent.Accept) {
+      this.buttonContainerEvent.emit(this.listForm.value);
+    } else {
+      this.buttonContainerEvent.emit(modalEventString);
+    }
     if (this.modalOverlayRef) {
       this.modalOverlayRef.closeModal();
     }
   }
-}
 
-interface BaseList {
-  archived: boolean;
-  collaborators: Collaborator[];
-  createdOn: string;
-  description: string;
-  id: string;
-  name: string;
-  numberOfAccounts: number;
-  numberOfClosedOpportunities: number;
-  owner: User;
-  survey: any;
-  totalOpportunities: number;
-  type: string;
-  updatedOn: string;
-}
-
-interface Collaborator {
-  lastViewed: string;
-  permissionLevel: string;
-  user: User;
-}
-
-interface User {
-  employeeId: string;
-  firstName: string;
-  lastName: string;
-  email?: string;
-  id?: string;
+  public changeListPermission() {
+    console.log('change list permissions!');
+  }
 }

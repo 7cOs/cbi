@@ -10,7 +10,9 @@ import { MatCardModule,
   MatSelectModule,
   MatSidenavModule,
   MatButtonModule,
-  MatMenuModule } from '@angular/material';
+  MatMenuModule,
+  MatAutocompleteModule
+} from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { CompassActionButtonComponent } from './components/compass-action-button/compass-action-button.component';
@@ -29,6 +31,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
 import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
 import { CompassTabComponent } from './components/compass-tabs/tab/tab.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CompassUserSearchComponent } from './components/compass-user-search/compass-user-search.component';
 
 @NgModule({
   imports: [
@@ -42,6 +45,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatMenuModule,
     MatRadioModule,
     MatSelectModule,
+    MatAutocompleteModule,
     OverlayModule
   ],
   exports: [
@@ -60,9 +64,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatMenuModule,
     MatRippleModule,
     MatSidenavModule,
+    MatAutocompleteModule,
     OverlayModule,
     SortIndicatorComponent,
-    CompassTabComponent
+    CompassTabComponent,
+    CompassUserSearchComponent
   ],
   declarations: [
     BeerLoaderComponent,
@@ -77,7 +83,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CompassTooltipPopupComponent,
     DismissibleXComponent,
     SortIndicatorComponent,
-    CompassTabComponent
+    CompassTabComponent,
+    CompassUserSearchComponent
   ],
   providers: [
     CompassModalService,

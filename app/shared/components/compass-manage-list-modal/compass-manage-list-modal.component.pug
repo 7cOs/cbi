@@ -7,46 +7,28 @@ div.compass-modal
     div.compass-modal-body
       form([formGroup]='listForm')
         div.modal-input
-          label name
-          input([formControl]="name")
+          label Name
+          input(formControlName="targetName")
         div.modal-input
           label Description (optional)
-          textarea([formControl]="description")
+          textarea(formControlName="description")
         div.modal-input
           label Collaborators
           div.collaborator-list
-            .collaborator.manage-list(ng-repeat="collaborator in modalInputs.listObject.collaborators | filter: {'permissionLevel' : 'author'}")
-              .align-left(ng-if="modalInputs.listObject.owner.user.employeeId === currentUser.employeeId") You
-              .align-left(ng-if="modalInputs.listObject.owner.user.employeeId !== currentUser.employeeId") {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
-              .accent Owner
-            .collaborator.manage-list(ng-repeat="collaborator in modalInputs.listObject.collaborators | filter: {'permissionLevel' : 'collaborate'} || {'permissionLevel' : 'collaborateandinvite'} | orderBy: ['permissionLevel','user.firstName']")
-              .align-left(ng-if="currentUser.employeeID !== collaborator.user.employeeId") {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
-              .align-left(ng-if="currentUser.employeeID === collaborator.user.employeeId") You
-              mat-menu
-                button((click)="$mdOpenMenu($event)" aria-label="Collaborator Options" ng-disabled="!tld.editable")
-                  span {{tld.permissionLabel(collaborator.permissionLevel)}}
-                  a(ng-hide="!tld.editable").chevron-down
-                div.collaborator-options(mat-menu-item,
-                    (click)="setSelectedNewOwner(collaborator.user.employeeId)",
-                    ng-disabled="") Make Owner
-                  div.collaborator-options(mat-menu-item,
-                  (click)="removeCollaborator(collaborator.user.employeeId)") Remove
-              .action-overlay(ng-class="{'confirm': newlySelectedOwner === collaborator.user.employeeId}")
-                div.overlay-wrapper
-                  p This will cause you to lose editing rights. &nbsp;
-                    a((click)="makeOwner(collaborator.user.employeeId)") Continue Transfer
-                div((click)="selectedNewOwnerId = ''").hide-wrapper.hide-icon-wrapper.hide-row
-            .collaborator.manage-list(ng-repeat="pending in pendingShares")
-              .align-left(ng-if="currentUser.employeeID !== pending.employee.employeeId") {{pending.employee.firstName | titlecase}} {{pending.employee.lastName | titlecase}}
-              .align-left(ng-if="currentUser.employeeID === pending.employee.employeeId") You
-              mat-menu
-                button((click)="$mdOpenMenu($event)" aria-label="Collaborator Options")
-                  span {{tld.permissionLabel(pending.permissionLevel) | titlecase}}
-                  a.chevron-down
-                div.collaborator-options
-                  span(mat-menu-item, (click)="tld.removeCollaborator([pending.employee.employeeId])") Remove
-        div(ng-hide="currentUser.employeeID !== pending.employee.employeeId").modal-input.clearfix
-          mat-checkbox((click)="changeListPermission()") Allow Collaborators to invite others
+            .collaborator.manage-list
+              .align-left(*ngIf="modalInputs.listObject.owner.user.employeeId === modalInputs.currentUser.employeeID") You
+                .accent Owner
+              .align-left(*ngIf="modalInputs.listObject.owner.user.employeeId !== modalInputs.currentUser.employeeID") {{modalInputs.listObject.owner.user.firstName | titlecase}} {{modalInputs.listObject.owner.user.firstName.lastName | titlecase}}
+            .collaborator.manage-list(*ngFor="let collaborator of modalInputs.listObject.collaborators")
+              .align-left {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}}
+                .accent {{ collaborator.permissionLevel }}
+            .collaborator.manage-list(*ngFor="let pending of pendingCollaborators")
+              .align-left(ng-if="modalInputs.currentUser.employeeID !== pending.employeeId") {{pending.firstName | titlecase}} {{pending.lastName | titlecase}}
+                .accent Collaborator
+        div.modal-input
+          label Add Collaborators
+          compass-user-search([parentGroup]='listForm',
+          (addedCollaboratorEvent)="addCollaborator($event)")
     div.compass-modal-action-bar
       span.compass-modal-btn((click)='hideModal(compassManageListModalEvent.Decline)') {{ modalInputs.rejectLabel }}
       button.btn-action((click)='hideModal(compassManageListModalEvent.Accept)') {{ modalInputs.acceptLabel }}

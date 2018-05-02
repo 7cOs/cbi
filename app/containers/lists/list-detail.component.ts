@@ -98,19 +98,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public handleManageButtonClick() {
-    console.log('manage button click');
-  }
-
-  public handleListsLinkClick() {
-    console.log('list link clicked');
-  }
-
-  public showModalTest() {
     let listObject = {
       name: 'TEST',
       description: 'asdfasdfasdfasdf',
       owner: {
-        user: { employeeId: '1002705'}
+        user: { employeeId: '1002705',
+                firstName: 'Not Bob',
+                lastName: 'B'}
       },
       collaborators: [{firstName: 'Bob', lastName: 'B', permissionLevel: 'collaborator', user: {employeeId: '1234'}},
       {firstName: 'Bob', lastName: 'B', permissionLevel: 'collaborator', user: {employeeId: '12345'}}] };
@@ -120,6 +114,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         rejectLabel: 'close',
         currentUser: this.currentUser,
         listObject: listObject }, {});
+        this.compassModalService.modalActionBtnContainerEvent(this.compassModalOverlayRef.modalInstance).then((result) => {
+
+        });
+  }
+
+  public handleListsLinkClick() {
+    console.log('list link clicked');
   }
 
   private isListPerformanceFetched(

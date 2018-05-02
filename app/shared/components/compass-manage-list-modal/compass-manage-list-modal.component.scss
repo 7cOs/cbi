@@ -2,7 +2,7 @@
 
 .compass-modal {
   width: 400px;
-  min-height: 280px;
+  height: auto;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 1px 2px 0 $gray-1;
@@ -14,18 +14,20 @@
   font-size: 21px;
   line-height: 1.52;
   text-align: left;
-  color: $gray-1;
+  color: $white;
   float: left;
   font-weight: 400;
 }
 
 .compass-modal-header {
   padding: 30px;
+  background-color: $blue;
 }
 
 .X-modal-btn {
   height: 20px;
   width: 20px;
+  color: $white;
 }
 
 .X-modal-btn-container {
@@ -35,7 +37,6 @@
 
 .compass-modal-body {
   width: 340px;
-  min-height: 42px;
   padding: 30px;
   font-family: $roboto;
   font-size: 14px;
@@ -51,8 +52,7 @@
 
 .compass-modal-action-bar {
   padding-top: 40px;
-  float: right;
-  padding-right: 20px;
+  padding-left: 110px;
 
   .compass-modal-btn {
     padding-left: 20px;
@@ -63,5 +63,117 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     color: $cancel-blue;
+  }
+}
+
+.collaborator-list {
+  background-color: $white;
+  display: inline-block;
+  margin-left: -15px;
+  margin-right: -15px;
+  position: relative;
+  width: 100%;
+  padding-left: 15px;
+  overflow: auto;
+  height: auto;
+  min-height: 200px;
+
+  .collaborator {
+    height: 30px;
+    padding: 10px 15px 5px;
+    text-align: left;
+    border-bottom: dotted $gray-4;
+
+    &.collaborator:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: $light-blue;
+    }
+
+    > div, md-menu {
+      float: right;
+      height: 25px;
+      line-height: 25px;
+      width: 50%;
+    }
+
+    &.manage-list {
+      .accent {
+        width: 5em;
+        margin-left: 15em;
+        margin-top: -15%;
+        font-family: $work-sans;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      > div, md-menu {
+        float: left;
+      }
+    }
+
+    md-menu {
+      padding: 0;
+
+      a {
+        position: relative;
+        right: -10px;
+        top: -4px;
+      }
+
+      button, .md-button {
+        height: 25px;
+        margin: 0;
+        min-height: 0;
+        font-size: 0.7em;
+      }
+
+      button.md-button.md-ink-ripple {
+        width: 130px;
+        float: right;
+        text-align: left;
+      }
+
+      span {
+        line-height: 25px;
+      }
+
+      .md-ripple-container {
+        height: 25px;
+      }
+    }
+
+    .action-overlay {
+      width: 100%;
+      height: 46px;
+      margin-top: -12px;
+
+      .overlay-wrapper p {
+        font-size: 0.8em;
+        margin-top: 0;
+        margin-left: -11px;
+        width: 100%;
+
+        a {
+          color: $white;
+          font-weight: 900;
+        }
+      }
+
+      .hide-icon-wrapper {
+        top: 10px;
+        margin-right: -25px;
+        padding: 0;
+
+      }
+
+      .hide-row:after,
+      .hide-row:before {
+        height: 1px;
+        width: 11px;
+      }
+    }
   }
 }
