@@ -46,9 +46,8 @@ export class ListsPaginationComponent implements OnInit {
       _end = this.currentPage + 5;
     }
 
-    let pageNumbersArray: any = [];
-    pageNumbersArray.length = _end - _start + 1;
-    return pageNumbersArray.fill()
-      .map((val: number, idx: number) => idx + _start - 1 );
+    return new Array(_end - _start + 1)
+      .fill('')
+      .map((val: number, idx: number) => idx + _start - 1);
   }
 }

@@ -38,6 +38,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
+  public selectedTab: string = 'Performance';
 
   // TODO: Remove this when we get real data.
   public opportunitiesTableData = getListOpportunitiesTableRowMock(390);
@@ -48,6 +49,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
+  public slicedPerformanceTableData: ListPerformanceTableRow[];
 
   private listDetailSubscription: Subscription;
 
@@ -97,6 +99,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.performance.pod.storePerformance
           );
+
+          this.slicedPerformanceTableData = this.performanceTableData.slice(0, LIST_TABLE_SIZE);
         }
 
         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
@@ -115,11 +119,19 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     const p = event.pageNumber;
     let pageStart = ((p - 1 ) * LIST_TABLE_SIZE);
     let pageEnd = (p * LIST_TABLE_SIZE) ;
-    this.opportunitiesTableSlicedData = this.opportunitiesTableData.slice(pageStart, pageEnd);
+    if (this.selectedTab === 'Opportunities') {
+      this.opportunitiesTableSlicedData = this.opportunitiesTableData.slice(pageStart, pageEnd);
+    } else {
+      this.slicedPerformanceTableData = this.performanceTableData.slice(pageStart, pageEnd);
+    }
   }
 
   public handleManageButtonClick() {
     console.log('manage button click');
+  }
+
+  public tabSelectedClick(event: any) {
+    this.selectedTab = event.selectedTab;
   }
 
   public handleListsLinkClick() {

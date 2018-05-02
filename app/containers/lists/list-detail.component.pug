@@ -16,13 +16,13 @@ lists-header(
   (listsLinkClicked)="handleListsLinkClick()"
 )
 
-compass-tabs
+compass-tabs((selectedTab) = "tabSelectedClick($event)")
   compass-tab([tabTitle]='firstTabTitle',
               [active]='true')
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [totalRow]="performanceTableTotal",
-      [tableData]="performanceTableData"
+      [tableData]="slicedPerformanceTableData"
     )
   compass-tab([tabTitle]='secondTabTitle')
     list-opportunities-table(
@@ -31,5 +31,11 @@ compass-tabs
     )
 
 lists-pagination([tabName]='secondTabTitle',
+                *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableData.length)',
                 (pageChangeClick)="handlePageClick($event)",
                 [tableDataSize]="opportunitiesTableData.length")
+
+lists-pagination([tabName]='firstTabTitle',
+                *ngIf='(selectedTab === "Performance") && (performanceTableData.length)',
+                (pageChangeClick)="handlePageClick($event)",
+                [tableDataSize]="performanceTableData.length")
