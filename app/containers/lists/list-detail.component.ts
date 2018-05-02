@@ -41,7 +41,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public selectedTab: string = 'Performance';
 
   // TODO: Remove this when we get real data.
-  public opportunitiesTableData = getListOpportunitiesTableRowMock(390);
+  public opportunitiesTableData: Array<ListOpportunitiesTableRow> = getListOpportunitiesTableRowMock(400);
+  public opportunitiesTableDataSize: number = this.opportunitiesTableData.length;
   public opportunitiesTableSlicedData: Array<ListOpportunitiesTableRow> = this.opportunitiesTableData.slice(0, LIST_TABLE_SIZE);
   public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
 
@@ -49,6 +50,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
+  public performanceTableDataSize: number;
   public slicedPerformanceTableData: ListPerformanceTableRow[];
 
   private listDetailSubscription: Subscription;
@@ -100,6 +102,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.pod.storePerformance
           );
 
+          this.performanceTableDataSize = this.performanceTableData.length;
           this.slicedPerformanceTableData = this.performanceTableData.slice(0, LIST_TABLE_SIZE);
         }
 

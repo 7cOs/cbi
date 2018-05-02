@@ -60,6 +60,17 @@ class ListsHeaderComponentMock {
   @Output() listsLinkClicked = new EventEmitter();
 }
 
+@Component({
+  selector: 'lists-pagination',
+  template: ''
+})
+
+class ListsPaginationComponentMock {
+  @Input() tableDataSize: number;
+  @Input() tabName: string;
+  @Output() pageChangeClick = new EventEmitter();
+}
+
 describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
@@ -121,6 +132,7 @@ describe('ListDetailComponent', () => {
         ListDetailComponent,
         ListsHeaderComponentMock,
         ListOpportunitiesTableComponentMock,
+        ListsPaginationComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [

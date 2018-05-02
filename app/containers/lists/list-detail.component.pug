@@ -30,12 +30,16 @@ compass-tabs((selectedTab) = "tabSelectedClick($event)")
       [tableData]="opportunitiesTableSlicedData"
     )
 
-lists-pagination([tabName]='secondTabTitle',
-                *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableData.length)',
-                (pageChangeClick)="handlePageClick($event)",
-                [tableDataSize]="opportunitiesTableData.length")
+lists-pagination(
+  *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableDataSize > 20)',
+  [tableDataSize]="opportunitiesTableDataSize",
+  [tabName]='secondTabTitle',
+  (pageChangeClick)="handlePageClick($event)"
+)
 
-lists-pagination([tabName]='firstTabTitle',
-                *ngIf='(selectedTab === "Performance") && (performanceTableData.length)',
-                (pageChangeClick)="handlePageClick($event)",
-                [tableDataSize]="performanceTableData.length")
+lists-pagination(
+  *ngIf='(selectedTab === "Performance") && (performanceTableDataSize > 20)',
+  [tableDataSize]="performanceTableDataSize",
+  [tabName]='firstTabTitle',
+  (pageChangeClick)="handlePageClick($event)"
+)

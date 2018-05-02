@@ -44,6 +44,7 @@ describe('CompassTabsComponent', () => {
     tab1Component = tabsContainerComponent.tabs.first;
     tab2Component = tabsContainerComponent.tabs.last;
   });
+
   describe('afterContentInit', () => {
     it('should set the first tab to active by default when tab is given the active input', () => {
       expect(tab1Component.active).toBeTruthy();
@@ -57,6 +58,12 @@ describe('CompassTabsComponent', () => {
       tabsContainerComponent.selectTab(tab2Component);
       expect(tab1Component.active).toBeFalsy();
       expect(tab2Component.active).toBeTruthy();
+    });
+
+    it('should check whether an event is emitted', () => {
+      spyOn(tabsContainerComponent.selectedTab, 'emit');
+      tabsContainerComponent.selectTab(tab2Component);
+      expect(tabsContainerComponent.selectedTab.emit).toHaveBeenCalledWith({selectedTab: tab2Component.title});
     });
   });
 });
