@@ -19,7 +19,7 @@
           .table-drawer-header-text.centered LAST DEPLETION
         th(colspan=1)
     tbody.list-table-drawer-body
-      tr.list-table-drawer-row(*ngFor="let opportunity of tableData, let index = index")
+      tr.list-table-drawer-row(*ngFor="let opportunity of sortedTableData, let index = index")
         td.checkbox-column(colspan=1)
           mat-checkbox(
             [checked]="opportunity.checked",
@@ -28,7 +28,7 @@
           )
         td.brand-column(colspan=1)
           .brand-container
-            //- TODO: Mandage Code Here
+            //- TODO: Update Mandate Markup Here Once We Get Data Back
             //- .brand-mandate(*ngIf="opportunity.mandate")
             //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}

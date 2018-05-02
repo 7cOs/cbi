@@ -1,4 +1,4 @@
-import { Component, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
+import { Component, ContentChildren, QueryList, AfterContentInit, Output, EventEmitter } from '@angular/core';
 import { CompassTabComponent } from './tab/tab.component';
 
 @Component({
@@ -7,7 +7,10 @@ import { CompassTabComponent } from './tab/tab.component';
   template: require('./compass-tabs.component.pug')
 })
 export class CompassTabsComponent implements AfterContentInit {
+  @Output() onTabClicked = new EventEmitter<string>();
+
   @ContentChildren(CompassTabComponent) tabs: QueryList<CompassTabComponent>;
+
   ngAfterContentInit(): void {
     const activeTabs = this.tabs.filter((tab: CompassTabComponent) => tab.active);
     if (!activeTabs.length) this.selectTab(this.tabs.first);
@@ -16,5 +19,7 @@ export class CompassTabsComponent implements AfterContentInit {
   public selectTab(selectedTab: CompassTabComponent): void {
     this.tabs.forEach((tab: CompassTabComponent) => tab.active = false);
     selectedTab.active = true;
+
+    this.onTabClicked.emit(selectedTab.title);
   }
 }

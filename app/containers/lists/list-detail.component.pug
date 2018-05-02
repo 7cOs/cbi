@@ -16,15 +16,19 @@ lists-header(
   (listsLinkClicked)="handleListsLinkClick()"
 )
 
-compass-tabs
-  compass-tab([tabTitle]='firstTabTitle',
-              [active]='true')
+compass-tabs(
+  (onTabClicked)="onTabClicked($event)"
+)
+  compass-tab(
+    [tabTitle]='performanceTabTitle',
+    [active]='true'
+  )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [totalRow]="performanceTableTotal",
       [tableData]="performanceTableData"
     )
-  compass-tab([tabTitle]='secondTabTitle')
+  compass-tab([tabTitle]='opportunitiesTabTitle')
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [tableData]="opportunitiesTableData"

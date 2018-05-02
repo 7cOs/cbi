@@ -14,6 +14,7 @@ import { ListPerformanceTableRow } from '../../models/list-performance/list-perf
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 
 @Component({
@@ -24,8 +25,8 @@ import { ListsTableTransformerService } from '../../services/transformers/lists-
 
 export class ListDetailComponent implements OnInit, OnDestroy {
   public listSummary: ListsSummary;
-  public firstTabTitle: string = 'Performance';
-  public secondTabTitle: string = 'Opportunities';
+  public performanceTabTitle: string = 'Performance';
+  public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
@@ -109,6 +110,30 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleListsLinkClick() {
     console.log('list link clicked');
+  }
+
+  public onTabClicked(tabName: string): void {
+    if (tabName === this.performanceTabTitle) {
+      this.clearOpportunitiesTableSelections();
+    }
+  }
+
+  public clearOpportunitiesTableSelections(): void {
+    const clearTableDrawerSelections = (opportunityRows: ListTableDrawerRow[]): ListTableDrawerRow[] => {
+      return opportunityRows.map((opportunityRow: ListTableDrawerRow) => {
+        return Object.assign({}, opportunityRow, {
+          checked: false
+        });
+      });
+    };
+
+    this.opportunitiesTableData = this.opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
+      return Object.assign({}, tableRow, {
+        opportunities: clearTableDrawerSelections(tableRow.opportunities),
+        checked: false,
+        expanded: false
+      });
+    });
   }
 
   private isListPerformanceFetched(
