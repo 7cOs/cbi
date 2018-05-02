@@ -118,24 +118,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clearOpportunitiesTableSelections(): void {
-    const clearTableDrawerSelections = (opportunityRows: ListTableDrawerRow[]): ListTableDrawerRow[] => {
-      return opportunityRows.map((opportunityRow: ListTableDrawerRow) => {
-        return Object.assign({}, opportunityRow, {
-          checked: false
-        });
-      });
-    };
-
-    this.opportunitiesTableData = this.opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
-      return Object.assign({}, tableRow, {
-        opportunities: clearTableDrawerSelections(tableRow.opportunities),
-        checked: false,
-        expanded: false
-      });
-    });
-  }
-
   private isListPerformanceFetched(
     storeStatus: ActionStatus,
     volumePerformanceStatus: ActionStatus,
@@ -154,5 +136,23 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && opportunitiesStatus === ActionStatus.Fetched;
+  }
+
+  private clearOpportunitiesTableSelections(): void {
+    const clearTableDrawerSelections = (opportunityRows: ListTableDrawerRow[]): ListTableDrawerRow[] => {
+      return opportunityRows.map((opportunityRow: ListTableDrawerRow) => {
+        return Object.assign({}, opportunityRow, {
+          checked: false
+        });
+      });
+    };
+
+    this.opportunitiesTableData = this.opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
+      return Object.assign({}, tableRow, {
+        opportunities: clearTableDrawerSelections(tableRow.opportunities),
+        checked: false,
+        expanded: false
+      });
+    });
   }
 }

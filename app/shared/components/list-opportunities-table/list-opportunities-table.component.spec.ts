@@ -1,7 +1,7 @@
 import { By } from '@angular/platform-browser';
+import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import * as Chance from 'chance';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { getListOpportunitiesTableRowMock } from '../../../models/list-opportunities/list-opportunities-table-row.model.mock';
@@ -47,6 +47,7 @@ describe('ListOpportunitiesTableComponent', () => {
   let fixture: ComponentFixture<ListOpportunitiesTableComponent>;
   let componentInstance: ListOpportunitiesTableComponent;
   const tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
+  let opportunitiesTableData: ListOpportunitiesTableRow[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -63,10 +64,15 @@ describe('ListOpportunitiesTableComponent', () => {
       ]
     });
 
+    opportunitiesTableData = getListOpportunitiesTableRowMock(3);
+
     fixture = TestBed.createComponent(ListOpportunitiesTableComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
+    componentInstance.tableData = opportunitiesTableData;
+
+    fixture.detectChanges();
   });
 
   describe('setSortingcriteria', () => {
@@ -180,6 +186,24 @@ describe('ListOpportunitiesTableComponent', () => {
         && rowComponent0.rowData[firstColumnType] > rowComponent1.rowData[firstColumnType];
       expect(sortingRespected).toBeTruthy();
     });
+
+    it('should set isExpandAll, isSelectAllChecked, and isIndeterminateChecked to false', () => {
+      expect(componentInstance.isExpandAll).toBe(false);
+      expect(componentInstance.isSelectAllChecked).toBe(false);
+      expect(componentInstance.isIndeterminateChecked).toBe(false);
+
+      componentInstance.isExpandAll = true;
+      componentInstance.isSelectAllChecked = true;
+      componentInstance.isIndeterminateChecked = true;
+      fixture.detectChanges();
+
+      componentInstance.tableData = getListOpportunitiesTableRowMock(2);
+      fixture.detectChanges();
+
+      expect(componentInstance.isExpandAll).toBe(false);
+      expect(componentInstance.isSelectAllChecked).toBe(false);
+      expect(componentInstance.isIndeterminateChecked).toBe(false);
+    });
   });
 
   describe('when calling onRowClicked', () => {
@@ -206,7 +230,7 @@ describe('ListOpportunitiesTableComponent', () => {
   });
 
   describe('when isSelectAllChecked is false and it is clicked', () => {
-    it('should check all the elements', () => {
+    it('should toggle the checked state of each table row and each child opportunity row between true/false', () => {
       componentInstance.isSelectAllChecked = false;
       componentInstance.tableData = getListOpportunitiesTableRowMock(2);
       fixture.detectChanges();
@@ -217,11 +241,23 @@ describe('ListOpportunitiesTableComponent', () => {
       expect(componentInstance.sortedTableData[0].checked).toEqual(true);
       expect(componentInstance.sortedTableData[1].checked).toEqual(true);
 
+      componentInstance.sortedTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        tableRow.opportunities.forEach((opportunityRow: ListTableDrawerRow) => {
+          expect(opportunityRow.checked).toBe(true);
+        });
+      });
+
       componentInstance.toggleSelectAllStores({checked: false, source: fixture.nativeElement});
       fixture.detectChanges();
 
       expect(componentInstance.sortedTableData[0].checked).toEqual(false);
       expect(componentInstance.sortedTableData[1].checked).toEqual(false);
+
+      componentInstance.sortedTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        tableRow.opportunities.forEach((opportunityRow: ListTableDrawerRow) => {
+          expect(opportunityRow.checked).toBe(false);
+        });
+      });
     });
   });
 
@@ -270,6 +306,52 @@ describe('ListOpportunitiesTableComponent', () => {
 
       componentInstance.setCheckboxStates(0, 2);
       expect(componentInstance.isIndeterminateChecked).toEqual(false);
+    });
+  });
+
+  describe('when an onCheckboxClicked event is emitted and onOpportunityCheckboxClicked is called', () => {
+    it('should set the checked state of the parent store row to true if every opportunity row is checked', () => {
+      opportunitiesTableData[0].opportunities[0].checked = true;
+      componentInstance.onOpportunityCheckboxClicked(opportunitiesTableData[0]);
+      fixture.detectChanges();
+
+      expect(opportunitiesTableData[0].checked).toBe(false);
+
+      opportunitiesTableData[0].opportunities.forEach((opportunityRow: ListTableDrawerRow) => {
+        opportunityRow.checked = true;
+      });
+      componentInstance.onOpportunityCheckboxClicked(opportunitiesTableData[0]);
+      fixture.detectChanges();
+
+      expect(opportunitiesTableData[0].checked).toBe(true);
+
+      opportunitiesTableData[0].opportunities[0].checked = false;
+      componentInstance.onOpportunityCheckboxClicked(opportunitiesTableData[0]);
+      fixture.detectChanges();
+
+      expect(opportunitiesTableData[0].checked).toBe(false);
+    });
+  });
+
+  describe('when the expand all column is clicked', () => {
+    it('should toggle the expanded field of every store row between true/false', () => {
+      opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        expect(tableRow.expanded).toBe(false);
+      });
+
+      fixture.debugElement.query(By.css('.expand-all-column')).nativeElement.click();
+      fixture.detectChanges();
+
+      opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        expect(tableRow.expanded).toBe(true);
+      });
+
+      fixture.debugElement.query(By.css('.expand-all-column')).nativeElement.click();
+      fixture.detectChanges();
+
+      opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        expect(tableRow.expanded).toBe(false);
+      });
     });
   });
 });

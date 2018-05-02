@@ -11,8 +11,9 @@ import { opportunityImpactSortWeight } from '../../../models/opportunity-impact-
 })
 
 export class ListTableDrawerComponent {
-  @Output() onOpportunityCheckboxClicked: EventEmitter<Event> = new EventEmitter();
+  @Output() onCheckboxClicked: EventEmitter<Event> = new EventEmitter();
   @Output() onOpportunityTypeClicked: EventEmitter<ListTableDrawerRow> = new EventEmitter();
+  @Output() onActionButtonClicked: EventEmitter<Event> = new EventEmitter();
 
   @Input() set tableData(tableData: ListTableDrawerRow[]) {
     if (tableData) this.sortedTableData = tableData.sort(this.sortTableData);
@@ -21,17 +22,17 @@ export class ListTableDrawerComponent {
   public opportunityImpact: any = OpportunityImpact;
   public sortedTableData: ListTableDrawerRow[];
 
-  public onCheckboxClick(isChecked: boolean, index: number): void {
-    this.tableData[index].checked = isChecked;
-    this.onOpportunityCheckboxClicked.emit();
+  public checkboxClicked(isChecked: boolean, index: number): void {
+    this.sortedTableData[index].checked = isChecked;
+    this.onCheckboxClicked.emit();
   }
 
-  public onTypeClicked(opportunityRow: ListTableDrawerRow): void {
+  public opportunityTypeClicked(opportunityRow: ListTableDrawerRow): void {
     this.onOpportunityTypeClicked.emit(opportunityRow);
   }
 
-  public onActionButtonClicked(): void {
-    console.log('Table Drawer Action Button Clicked');
+  public actionButtonClicked(): void {
+    this.onActionButtonClicked.emit();
   }
 
   private sortTableData(row1: ListTableDrawerRow, row2: ListTableDrawerRow): number {

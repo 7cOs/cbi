@@ -36,15 +36,14 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-      const selectedAllCheckboxState: OpportunitiesTableSelectAllCheckboxState = this.getSelectAllCheckboxState(sortedTableData);
 
       this.sortedTableData = sortedTableData;
-      this.numSelectedRows = this.sortedTableData.length;
       this.numberOfRows = this.sortedTableData.length;
-      this.isSelectAllChecked = selectedAllCheckboxState.isSelectAllChecked;
-      this.isIndeterminateChecked = selectedAllCheckboxState.isIndeterminateChecked;
+      this.numSelectedRows = this.sortedTableData.length;
       this.numExpandedRows = 0;
       this.isExpandAll = false;
+      this.isSelectAllChecked = false;
+      this.isIndeterminateChecked = false;
     }
   }
 
@@ -60,10 +59,10 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
+  public isExpandAll: boolean = false;
 
   private numberOfRows: number = 0;
   private numExpandedRows: number = 0;
-  private isExpandAll: boolean = false;
   private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
     columnType: ListOpportunitiesColumnType.cytdColumn,
