@@ -83,26 +83,14 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static WebDriver getSauceWebDriver(String testName) throws MalformedURLException {
-    // final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
-    // SauceHelpers.addSauceConnectTunnelId(capabilities);
+    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
+    SauceHelpers.addSauceConnectTunnelId(capabilities);
 
-    /*
-    DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-    capabilities.setCapability("platform", "Windows 10");
-    capabilities.setCapability("version", "65.0");
-    */
-    
-    // /*
-    DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-    capabilities.setCapability("platform", "Windows 10");
-    capabilities.setCapability("version", "11.103");
-    // */
-    
     // Launch remote browser and set it as the current thread
     webDriver.set(new RemoteWebDriver(
       new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
           SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
-    
+ 
     //((RemoteWebDriver) getWebDriver()).manage().window().setSize(new Dimension(1024, 768));
     // set current sessionId
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();

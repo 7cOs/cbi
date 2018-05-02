@@ -258,7 +258,6 @@ public class SeleniumUtils {
 	 * @param outputFileName the output file name
 	 */
 	public static void snapshot(String basePath, String outputFileName) {
-	    System.out.println( "basePath: " + basePath + ", outputFileName: " + outputFileName + ", driver: " + driver  );
 		File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 		File targetFile = new File(basePath, outputFileName);
 		try {
