@@ -58,5 +58,5 @@ div
           list-table-drawer(
             [tableData]="row.opportunities",
             (onOpportunityCheckboxClicked)="onOpportunityCheckboxClicked(row)",
-            (onOpportunityTypeClicked)="onOpportunityTypeClicked(row)"
+            (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row)"
           )

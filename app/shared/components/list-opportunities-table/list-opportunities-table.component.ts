@@ -136,8 +136,9 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     return classes;
   }
 
-  public onOpportunityTypeClicked(storeRow: ListOpportunitiesTableRow): void {
-    console.log('onOpportunityTypeClicked: Handle Table Extension Here');
+  public onOpportunityTypeClicked(oppRow: ListTableDrawerRow, storeRow: ListOpportunitiesTableRow): void {
+    console.log('oppRow', oppRow);
+    console.log('storeRow', storeRow);
   }
 
   public onTableRowClicked(row: ListOpportunitiesTableRow): void {
