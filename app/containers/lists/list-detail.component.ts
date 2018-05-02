@@ -7,17 +7,14 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { getListOpportunitiesHeaderRowMock,
-         getListOpportunitiesTableRowMock
-       } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
-import { StoreDetails } from '../../models/lists/lists-store.model';
 
 @Component({
   selector: 'list-detail',
@@ -26,21 +23,15 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-  public storeList: StoreDetails[];
   public listSummary: ListsSummary;
-  public oppsGroupedByStores: {};
-
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
-
-  // TODO: Remove this when we get real data.
-  public opportunitiesTableData = getListOpportunitiesTableRowMock(25);
-  public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
-
   public actionButtonType: any = ActionButtonType;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
+  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Opportunities', 'Last Depletion'];
+  public opportunitiesTableData: ListOpportunitiesTableRow[];
 
   private listDetailSubscription: Subscription;
 
@@ -72,9 +63,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
-        this.storeList = listDetail.listStores.stores;
         this.listSummary = listDetail.listSummary.summaryData;
-        this.oppsGroupedByStores = listDetail.listOpportunities.opportunities;
 
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
@@ -92,7 +81,17 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           );
         }
 
-        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
+        if (this.isListOpportunitiesFetched(
+          listDetail.listStores.storeStatus,
+          listDetail.performance.volumeStatus,
+          listDetail.listOpportunities.opportunitiesStatus
+        )) {
+          this.opportunitiesTableData = this.listsTableTransformerService.transformOpportunitiesCollection(
+            listDetail.listStores.stores,
+            listDetail.performance.volume.storePerformance,
+            listDetail.listOpportunities.opportunities
+          );
+        }
       });
   }
 
@@ -120,5 +119,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && podPerformanceStatus === ActionStatus.Fetched;
+  }
+
+  private isListOpportunitiesFetched(
+    storeStatus: ActionStatus,
+    volumePerformanceStatus: ActionStatus,
+    opportunitiesStatus: ActionStatus
+  ): boolean {
+    return storeStatus === ActionStatus.Fetched
+      && volumePerformanceStatus === ActionStatus.Fetched
+      && opportunitiesStatus === ActionStatus.Fetched;
   }
 }

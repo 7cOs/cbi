@@ -1,0 +1,124 @@
+@import '../../../assets/styles/base/variables';
+
+.list-table-drawer-component {
+
+  .list-table-drawer {
+    border-collapse: collapse;
+    width: 100%;
+
+    .list-table-drawer-header {
+      background-color: $cancel-blue;
+
+      .list-table-drawer-header-row {
+
+        .table-drawer-header-text {
+          color: $white;
+          font: $roboto;
+          font-size: 11px;
+          font-weight: $bold;
+          letter-spacing: 1px;
+          padding: 7px 0;
+          text-align: left;
+        }
+
+        .brand-header-text {
+          padding-left: 5px;
+        }
+
+        .centered {
+          text-align: center;
+        }
+      }
+    }
+
+    .list-table-drawer-body {
+
+      .list-table-drawer-row {
+        font: $roboto;
+        font-size: 14px;
+        border-bottom: 2px solid $table-border-gray;
+
+        td:not(.checkbox-column) {
+          background-color: $light-blue-4;
+        }
+
+        .checkbox-column {
+          border-right: 2px solid $table-border-gray;
+          box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+          padding: 25px;
+          width: 5%;
+
+          /deep/.mat-checkbox-frame {
+            border-color: $cancel-blue;
+          }
+        }
+
+        .brand-column {
+          padding-left: 5px;
+          padding-top: 0;
+
+          .brand-container {
+            display: inline-block;
+
+            .brand-mandate {
+              float: left;
+              margin-right: 5px;
+              margin-top: -26px;
+
+              .mandate-image {
+                height: 25px;
+                width: 25px;
+              }
+            }
+
+            .brand-text {
+              float: right;
+            }
+          }
+        }
+
+        .type-column {
+          color: $cancel-blue;
+          cursor: pointer;
+        }
+
+        .impact-column {
+
+          .impact-image {
+            height: 20px;
+            width: 20px;
+          }
+        }
+
+        .current-column {
+          border-left: 2px solid $table-border-gray;
+          width: 5.9%;
+        }
+
+        .year-ago-column {
+          border-right: 2px solid $table-border-gray;
+          width: 5.9%;
+        }
+
+        .depletion-date-column {
+          border-right: 2px solid $table-border-gray;
+          width: 11.8%;
+        }
+
+        .button-column {
+          cursor: pointer;
+          width: 5.8%;
+
+          .action-button {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .centered {
+          text-align: center;
+        }
+      }
+    }
+  }
+}

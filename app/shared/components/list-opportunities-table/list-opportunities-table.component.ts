@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+
 import { CalculatorService } from '../../../services/calculator.service';
 import { CssClasses } from '../../../models/css-classes.model';
 import { LoadingState } from '../../../enums/loading-state.enum';
 import { ListOpportunitiesColumnType } from '../../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
+import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { MatCheckboxChange } from '@angular/material';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
@@ -31,6 +33,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
         : tableData;
       this.sortedTableData = sortedTableData;
       this.numSelectedRows = this.sortedTableData.length;
+      this.numberOfRows = this.sortedTableData.length;
     }
   }
 
@@ -48,6 +51,9 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public isIndeterminateChecked = false;
 
   private isOpportunityTableExtended: boolean = true;
+  private numberOfRows: number = 0;
+  private numExpandedRows: number = 0;
+  private isExpandAll: boolean = false;
   private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
     columnType: ListOpportunitiesColumnType.cytdColumn,
@@ -70,6 +76,10 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     const numCheckedTrue = checkedTrue.length;
     const numCheckedFalse = this.sortedTableData.length - numCheckedTrue;
     this.setCheckboxStates(numCheckedFalse, numCheckedTrue);
+
+    row.opportunities.forEach((opportunityRow: ListTableDrawerRow) => {
+      opportunityRow.checked = row.checked;
+    });
   }
 
   public setCheckboxStates(checkedFalseCount: number, checkedTrueCount: number) {
@@ -112,6 +122,10 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     this.numSelectedRows = this.isSelectAllChecked ? this.sortedTableData.length : 0;
     for (let i = 0; i < this.sortedTableData.length; i++) {
       this.sortedTableData[i].checked = this.isSelectAllChecked;
+
+      this.sortedTableData[i].opportunities.forEach((opportunityRow: ListTableDrawerRow) => {
+        opportunityRow.checked = this.isSelectAllChecked;
+      });
     }
   }
 
@@ -125,6 +139,36 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
 
   public toggleOpportunityTable(): void {
     this.isOpportunityTableExtended = !this.isOpportunityTableExtended;
+  }
+
+  public onOpportunityTypeClicked(storeRow: ListOpportunitiesTableRow): void {
+    console.log('onOpportunityTypeClicked: Handle Table Extension Here');
+  }
+
+  public onTableRowClicked(row: ListOpportunitiesTableRow): void {
+    row.expanded ? this.numExpandedRows-- : this.numExpandedRows++;
+    row.expanded = !row.expanded;
+
+    if (this.numExpandedRows === this.numberOfRows) this.isExpandAll = true;
+    else if (this.numExpandedRows === 0) this.isExpandAll = false;
+  }
+
+  public onExpandAllClicked(): void {
+    this.isExpandAll = !this.isExpandAll;
+    this.isExpandAll ? this.numExpandedRows = this.numberOfRows : this.numExpandedRows = 0;
+
+    if (this.sortedTableData) {
+      this.sortedTableData.forEach((row: ListOpportunitiesTableRow) => {
+        row.expanded = this.isExpandAll;
+      });
+    }
+  }
+
+  public onOpportunityCheckboxClicked(storeRow: ListOpportunitiesTableRow): void {
+    storeRow.checked = storeRow.opportunities.reduce((isEveryOppChecked: boolean, opportunityRow: ListTableDrawerRow) => {
+      if (!opportunityRow.checked) isEveryOppChecked = false;
+      return isEveryOppChecked;
+    }, true);
   }
 
   private getTableClasses(loadingState: LoadingState): CssClasses {

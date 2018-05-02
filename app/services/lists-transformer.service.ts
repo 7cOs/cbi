@@ -90,7 +90,8 @@ export class ListsTransformerService {
       unversionedStoreId: listOpportunity.storeSourceCode,
       type: OpportunityType[listOpportunity.type],
       status: OpportunityStatus[listOpportunity.status],
-      impact: OpportunityImpact[listOpportunity.impact]
+      impact: OpportunityImpact[listOpportunity.impact],
+      isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity
     };
   }
 

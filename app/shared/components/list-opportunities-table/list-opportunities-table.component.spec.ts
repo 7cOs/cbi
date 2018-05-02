@@ -10,6 +10,7 @@ import { getSortingCriteriaMock } from '../../../models/my-performance-table-sor
 import { ListOpportunitiesColumnType } from '../../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableComponent } from './list-opportunities-table.component';
 import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
+import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { MatCheckboxModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
@@ -59,10 +60,20 @@ class ListOpportunityExtenderBodyComponent {
 })
 class DismissibleXComponent { }
 
+@Component({
+  selector: 'list-table-drawer',
+  template: ''
+})
+class ListTableDrawerComponentMock {
+  @Output() onOpportunityTypeClicked: EventEmitter<Event> = new EventEmitter();
+  @Input() tableData: ListTableDrawerRow[];
+}
+
 describe('ListOpportunitiesTableComponent', () => {
   let fixture: ComponentFixture<ListOpportunitiesTableComponent>;
   let componentInstance: ListOpportunitiesTableComponent;
-  let tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
+  const tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -77,6 +88,7 @@ describe('ListOpportunitiesTableComponent', () => {
         MockListOpportunitiesTableRowComponent,
         ListOpportunitiesTableComponent,
         ListOpportunityExtenderBodyComponent,
+        ListTableDrawerComponentMock,
         SortIndicatorComponent
       ],
       providers: [

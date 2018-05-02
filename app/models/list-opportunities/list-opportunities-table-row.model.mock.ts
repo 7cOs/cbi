@@ -16,7 +16,8 @@ export function getListOpportunitiesTableRowMock(length: number) {
       cytdVersusYaPercentColumn: chance.d100(),
       opportunitiesColumn: chance.integer({min: 0, max: 10000}),
       performanceError: false,
-      checked: false
+      checked: false,
+      expanded: false
     });
   }
 
