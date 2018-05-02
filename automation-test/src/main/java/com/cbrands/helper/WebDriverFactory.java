@@ -89,8 +89,8 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     // Launch remote browser and set it as the current thread
     webDriver.set(new RemoteWebDriver(
       new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
-          SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
- 
+        SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
+
     //((RemoteWebDriver) getWebDriver()).manage().window().setSize(new Dimension(1024, 768));
     // set current sessionId
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
@@ -122,7 +122,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
     capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
     capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-    capabilities.setCapability("version", "11.103");
 
     capabilities.setCapability("name", getTestRunName(testName, BrowserType.ie.name()));
 
