@@ -88,7 +88,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
     DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
     capabilities.setCapability("platform", "Windows 10");
-    capabilities.setCapability("version", "11.103");
+    capabilities.setCapability("version", "dev");
     
     // Launch remote browser and set it as the current thread
     webDriver.set(new RemoteWebDriver(
