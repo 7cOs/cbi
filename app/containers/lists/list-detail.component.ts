@@ -115,7 +115,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         currentUser: this.currentUser,
         listObject: listObject }, {});
         this.compassModalService.modalActionBtnContainerEvent(this.compassModalOverlayRef.modalInstance).then((result) => {
-
+          console.log(result);
         });
   }
 

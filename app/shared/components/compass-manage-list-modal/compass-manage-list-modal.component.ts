@@ -53,9 +53,14 @@ export class CompassManageListModalComponent {
   public addCollaborator(collaborator: object) {
     this.pendingCollaborators.push(collaborator);
   }
+
+  public transformFormPayload() {
+    let collaboratorsObj = Object.assign(this.modalInputs.listObject.collaborators, this.pendingCollaborators);
+    return Object.assign(this.listForm.value, {'collaborators': collaboratorsObj});
+  }
   public hideModal(modalEventString: CompassManageListModalEvent): void {
     if ( modalEventString === CompassManageListModalEvent.Accept) {
-      this.buttonContainerEvent.emit(this.listForm.value);
+      this.buttonContainerEvent.emit(this.transformFormPayload());
     } else {
       this.buttonContainerEvent.emit(modalEventString);
     }
