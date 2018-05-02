@@ -13,3 +13,110 @@ export interface PrimaryDistributor {
   id: string;
   name: string;
 }
+
+interface BaseList {
+  archived: boolean;
+  collaborators: Collaborator[];
+  createdOn: string;
+  deleted: boolean;
+  description: string;
+  id: string;
+  name: string;
+  numberOfAccounts: number;
+  numberOfClosedOpportunities: number;
+  owner: User;
+  survey: any;
+  totalOpportunities: number;
+  type: string;
+  updatedOn: string;
+}
+
+export interface V3List extends BaseList {
+  category: string;
+  collaboratorType: string;
+}
+
+export interface V2List extends BaseList {
+  collaboratorPermissionLevel: string;
+  opportunitiesSummary: OpportunitiesSummary;
+  dateOpportunitiesUpdated?: string;
+  targetListAuthor?: string;
+}
+
+export interface Collaborator {
+  lastViewed: string;
+  permissionLevel: string;
+  user: User;
+}
+
+export interface UnformattedNewList {
+  description: string;
+  name: string;
+  opportunities: any[];
+  collaborators: User[];
+  targetListShares: {id: number}[];
+}
+
+export interface FormattedNewList {
+  category: ListCategory;
+  collaboratorType: CollaboratorType;
+  name: string;
+  type: ListType;
+
+  description?: string;
+  ownerEmployeeId?: string;
+  surveySfid?: any;
+  archived?: boolean;
+  collaboratorEmployeeIds?: string[];
+}
+
+export interface User {
+  employeeId: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  id?: string;
+}
+
+export interface OpportunitiesSummary {
+  closedOpportunitiesCount: number;
+  opportunitiesCount: number;
+}
+
+export interface V2ListSummary {
+  owned: V2List[];
+  sharedWithMe: V2List[];
+
+  ownedArchived: number;
+  ownedNotArchived: number;
+  sharedArchived: number;
+  sharedNotArchived: number;
+}
+
+export interface ListsCollectionSummary {
+  archived: V2List[];
+  owned: V2List[];
+  ownedNotArchivedTargetLists: V2List[];
+  sharedWithMe: V2List[];
+
+  ownedArchived: number;
+  ownedNotArchived: number;
+  sharedArchivedCount: number;
+  sharedNotArchivedCount: number;
+}
+
+export enum ListType {
+  WatchList = 'Watch_List',
+  TargetList = 'Target_List',
+  SurveyList = 'Survey_List',
+  VisitList = 'Visit_List'
+}
+
+export enum ListCategory {
+  Beer = 'Beer',
+  Wine = 'Wine'
+}
+
+export enum CollaboratorType {
+  CollaborateAndInvite = 'collaborate_and_invite'
+}

@@ -3,7 +3,7 @@
 const CompassAlertModalEvents = require('../../../enums/compass-alert-modal-strings.enum').CompassAlertModalEvent;
 
 module.exports = /*  @ngInject */
-  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService, compassModalService) {
+  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService, compassModalService, listsApiService, listsTransformerService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -214,26 +214,17 @@ module.exports = /*  @ngInject */
 
       vm.buttonDisabled = true;
 
-      // create collaborator payload
-      var newPayload = [];
-      for (var i = 0; i < vm.newList.collaborators.length; i++) {
-        newPayload.push({
-          employeeId: vm.newList.collaborators[i].employeeId
-        });
-      }
+      listsApiService.createList(listsTransformerService.formatNewList(vm.newList))
+        .toPromise()
+        .then(v3List => {
 
-      // Create target list
-      userService.addTargetList(vm.newList).then(function(response) {
+        userService.model.ownedNotArchivedTargetLists.concat(v3List);
+        userService.model.ownedNotArchived++;
+
         closeModal();
         vm.buttonDisabled = false;
 
-        analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', response.id);
-
-        // add collaborators to newly created target list
-        return targetListService.addTargetListShares(response.id, newPayload);
-      })
-      .then(function(addCollaboratorResponse) {
-        userService.model.targetLists.ownedNotArchivedTargetLists[0].collaborators = addCollaboratorResponse.data;
+        analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', v3List.id);
 
         // reset model
         vm.newList = {
@@ -243,7 +234,9 @@ module.exports = /*  @ngInject */
           collaborators: [],
           collaborateAndInvite: false
         };
-      }).catch(function(response) { console.log(response); });
+      }).catch(response => {
+        console.log(response);
+      });
     }
 
     function searchOpportunities(e) {
@@ -339,67 +332,12 @@ module.exports = /*  @ngInject */
       vm.allowDelete = true;
       vm.deleteError = false;
 
-      var promise1 = userService.getTargetLists(userService.model.currentUser.employeeID);
-      var promise2 = userService.getTargetLists(userService.model.currentUser.employeeID, '?archived=true');
-
-      var promiseArray = [promise1, promise2];
-
-      $q.all(promiseArray).then(function(data) {
+      listsApiService.getLists().toPromise().then((response) =>  {
         loaderService.closeLoader();
-
-        var combinedTargetList = {
-          'archived': [],
-          'owned': [],
-          'ownedNotArchivedTargetLists': [],
-          'sharedWithMe': [],
-          'sharedArchivedCount': 0,
-          'sharedNotArchivedCount': 0,
-          'ownedNotArchived': 0,
-          'ownedArchived': 0
-        };
-
-        for (var i = 0; i < data.length; i++) {
-          for (var j = 0; j < data[i].owned.length; j++) {
-            if (data[i].owned[j].dateOpportunitiesUpdated === null) {
-              data[i].owned[j].dateOpportunitiesUpdated = data[i].owned[j].createdAt;
-            }
-
-            data[i].owned[j].targetListAuthor = 'current user';
-
-            if (data[i].owned[j].archived) {
-              combinedTargetList.ownedArchived++;
-              combinedTargetList.owned.push(data[i].owned[j]);
-              combinedTargetList.archived.push(data[i].owned[j]);
-
-            } else {
-              combinedTargetList.ownedNotArchived++;
-              combinedTargetList.owned.push(data[i].owned[j]);
-              combinedTargetList.ownedNotArchivedTargetLists.push(data[i].owned[j]);
-            }
-          }
-
-          for (j = 0; j < data[i].sharedWithMe.length; j++) {
-
-            if (data[i].sharedWithMe[j].dateOpportunitiesUpdated === null) {
-              data[i].sharedWithMe[j].dateOpportunitiesUpdated = data[i].sharedWithMe[j].createdAt;
-            }
-
-            vm.targetListAuthor = findTargetListAuthor(data[i].sharedWithMe[j].collaborators);
-
-            data[i].sharedWithMe[j].targetListAuthor = vm.targetListAuthor;
-
-            combinedTargetList.sharedWithMe.push(data[i].sharedWithMe[j]);
-
-            if (data[i].sharedWithMe[j].archived) {
-              combinedTargetList.sharedArchivedCount++;
-              combinedTargetList.archived.push(data[i].sharedWithMe[j]);
-            } else {
-              combinedTargetList.sharedNotArchivedCount++;
-            }
-          };
-        }
-
-        userService.model.targetLists = combinedTargetList;
+        const currentUserEmployeeID = userService.model.currentUser.employeeID;
+        const listsCollectionSummary = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
+        console.log(listsCollectionSummary);
+        userService.model.targetLists = listsCollectionSummary;
       });
 
       // reset after tabs are initialized
