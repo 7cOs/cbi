@@ -1,17 +1,23 @@
 import * as Chance from 'chance';
-import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
 
-import { AppState } from '../../state/reducers/root.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
-import * as ListsActions from '../../state/actions//lists.action';
+import { AppState } from '../../state/reducers/root.reducer';
+import { CalculatorService } from '../../services/calculator.service';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent } from './list-detail.component';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
+import { ListPerformanceType } from '../../enums/list-performance-type.enum';
+import * as ListsActions from '../../state/actions/lists.action';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
@@ -28,6 +34,18 @@ class ListPerformanceTableComponentMock {
   @Input() tableData: Array<ListPerformanceTableRow>;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: ListPerformanceTableRow;
+  @Input() loadingState: boolean;
+}
+
+@Component({
+  selector: 'list-opportunities-table',
+  template: ''
+})
+
+class ListOpportunitiesTableComponentMock {
+  @Input() sortingCriteria: Array<SortingCriteria>;
+  @Input() tableData: Array<ListOpportunitiesTableRow>;
+  @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
 }
 
@@ -63,6 +81,16 @@ describe('ListDetailComponent', () => {
     listStores: {
       storeStatus: ActionStatus.Fetching,
       stores: []
+    },
+    listOpportunities: {
+      opportunitiesStatus: ActionStatus.Fetching,
+      opportunities: {}
+    },
+    performance: {
+      podStatus: ActionStatus.NotFetched,
+      pod: null,
+      volumeStatus: ActionStatus.NotFetched,
+      volume: null
     }
   };
 
@@ -92,9 +120,12 @@ describe('ListDetailComponent', () => {
       declarations: [
         ListDetailComponent,
         ListsHeaderComponentMock,
+        ListOpportunitiesTableComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [
+        CalculatorService,
+        ListsTableTransformerService,
         {
           provide: Title,
           useValue: titleMock
@@ -145,16 +176,31 @@ describe('ListDetailComponent', () => {
       expect(store.select).toHaveBeenCalled();
     });
 
-    it('should dispatch actions for fetching stores and list headers', () => {
+    it('should dispatch actions for fetching stores, list headers, opportunities and list performance data', () => {
       storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
-      expect(storeMock.dispatch.calls.count()).toBe(2);
+      expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
         listId : stateMock.params.id
       }));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ListsActions.FetchHeaderDetails({
         listId : stateMock.params.id
+      }));
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ListsActions.FetchOppsForList({
+        listId : stateMock.params.id
+      }));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ListsActions.FetchListPerformanceVolume({
+        listId : stateMock.params.id,
+        performanceType: ListPerformanceType.Volume,
+        beverageType: ListBeverageType.Beer,
+        dateRangeCode: DateRangeTimePeriodValue.CYTDBDL
+      }));
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ListsActions.FetchListPerformancePOD({
+        listId : stateMock.params.id,
+        performanceType: ListPerformanceType.POD,
+        beverageType: ListBeverageType.Beer,
+        dateRangeCode: DateRangeTimePeriodValue.L90BDL
       }));
     });
   });

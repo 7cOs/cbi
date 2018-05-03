@@ -81,10 +81,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   @Test(
     description = "Running an Opportunities Saved Report from the Opportunities page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "runReportData"
+    dataProvider = "runReportOpportunitiesPageData"
   )
   public void runSavedReportFromOpportunitiesPage(String reportName, String distributor) {
-    this.setUpNewSavedReport(reportName + " from Opportunities page", distributor);
+    this.setUpNewSavedReport(reportName, distributor);
 
     opportunitiesPage = opportunitiesPage
       .clickSavedReportsDropdown()
@@ -93,15 +93,17 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
     Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+    Assert.assertTrue( opportunitiesPage.isExpectedReportLabelDisplayed(reportName),
+        "Saved report label displayed does not match report name that was run.");
   }
 
   @Test(
     description = "Running an Opportunities Saved Report from the Home page",
     dependsOnMethods = "createSavedReport",
-    dataProvider = "runReportData"
+    dataProvider = "runReportHomePageData"
   )
   public void runSavedReportFromHomePage(String reportName, String distributor) {
-    this.setUpNewSavedReport(reportName + " from Home page", distributor);
+    this.setUpNewSavedReport(reportName, distributor);
 
     homePage.goToPage();
     opportunitiesPage = homePage
@@ -111,6 +113,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     Assert.assertTrue(opportunitiesPage.isQueryChipPresent(distributor), "Expected filter is not present.");
     Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "Results failed to appear after applying filters.");
+    Assert.assertTrue( opportunitiesPage.isExpectedReportLabelDisplayed(reportName),
+        "Saved report label displayed does not match report name that was run.");
   }
 
   @Test(
@@ -279,6 +283,22 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
       {"Run " + testReportName, "Healy Wholesale"}
     };
   }
+  
+  @DataProvider
+  public static Object[][] runReportOpportunitiesPageData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Run " + testReportName + " from Opportunities page", "Healy Wholesale"}
+    };
+  }  
+
+  @DataProvider
+  public static Object[][] runReportHomePageData() {
+    final String testReportName = "Functional Test: " + current_time_stamp;
+    return new Object[][]{
+      {"Run " + testReportName + " from Home page", "Healy Wholesale"}
+    };
+  }  
 
   @DataProvider
   public static Object[][] editDuplicateReportData() {

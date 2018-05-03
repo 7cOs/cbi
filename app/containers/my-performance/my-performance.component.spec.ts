@@ -116,6 +116,7 @@ class MyPerformanceTableComponentMock {
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSubaccountCode: string;
   @Input() selectedDistributorCode: string;
+  @Input() selectedStoreId: string;
   @Input() loadingState: boolean;
 }
 
@@ -1308,13 +1309,13 @@ describe('MyPerformanceComponent', () => {
       });
     });
 
-    describe('when viewing anything but distributors or subAccounts', () => {
+    describe('when distributors, subAccounts, or stores on the sales hierarchy table', () => {
       beforeEach(() => {
-        const viewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]).filter(viewType =>
-          viewType !== SalesHierarchyViewType.distributors && viewType !== SalesHierarchyViewType.subAccounts
-        );
-
-        componentInstance.salesHierarchyViewType = sample(viewTypes);
+        componentInstance.salesHierarchyViewType = sample([
+          SalesHierarchyViewType.distributors,
+          SalesHierarchyViewType.subAccounts,
+          SalesHierarchyViewType.stores
+        ]);
       });
 
       it('should update the drillStatus indicator to Down', () => {
@@ -1323,7 +1324,7 @@ describe('MyPerformanceComponent', () => {
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Down);
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
     });
 
@@ -2337,8 +2338,8 @@ describe('MyPerformanceComponent', () => {
         setupVersionAndBreadcrumbMocks(SalesHierarchyViewType.people);
 
         const previousVersionMock = versionsMock[breadcrumbSelectionIndex];
-        componentInstanceCopy.selectedSkuPackageCode = null;
-        componentInstanceCopy.selectedSkuPackageType = null;
+        componentInstanceCopy.selectedSkuPackageCode = chance.string();
+        componentInstanceCopy.selectedSkuPackageType = chance.string();
 
         versionsMock[breadcrumbSelectionIndex].selectedBrandCode = versionsMock[breadcrumbSelectionIndex].selectedBrandCode + 'NOMATCH';
         versionsSubject.next(versionsMock);
@@ -2355,8 +2356,8 @@ describe('MyPerformanceComponent', () => {
           selectedEntityType: previousVersionMock.selectedEntityType,
           salesHierarchyViewType: previousVersionMock.salesHierarchyViewType.viewType,
           filter: stateMock.myPerformanceFilter,
-          brandSkuCode: stateMock.myPerformance.current.selectedBrandCode,
-          skuPackageType: null,
+          brandSkuCode: componentInstanceCopy.selectedSkuPackageCode,
+          skuPackageType: componentInstanceCopy.selectedSkuPackageType,
           entityType: previousVersionMock.selectedEntityType,
           alternateHierarchyId: previousVersionMock.responsibilities.alternateHierarchyId,
           accountPositionId: previousVersionMock.responsibilities.accountPositionId,
@@ -3197,7 +3198,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId,
@@ -3233,7 +3234,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId,
@@ -3275,7 +3276,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.selectedDistributorCode,
         filter: expectedFilterState,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId,
@@ -3310,7 +3311,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: !!currentMock.responsibilities.alternateHierarchyId,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.alternateHierarchyId,
@@ -3345,7 +3346,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId,
@@ -3380,7 +3381,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId,
@@ -3415,7 +3416,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId,
@@ -3449,7 +3450,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.responsibilities.positionId,
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId,
@@ -3489,7 +3490,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.selectedSubaccountCode,
         filter: expectedFilterState,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId,
@@ -3539,7 +3540,7 @@ describe('MyPerformanceComponent', () => {
         positionId: currentMock.selectedDistributorCode,
         filter: expectedFilterState,
         selectedEntityType: currentMock.selectedEntityType,
-        selectedBrandCode: currentMock.selectedBrandCode,
+        selectedBrandCode: componentInstanceCopy.selectedBrandCode,
         inAlternateHierarchy: false,
         entityTypeCode: currentMock.responsibilities.entityTypeCode,
         contextPositionId: currentMock.responsibilities.positionId,

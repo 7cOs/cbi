@@ -191,8 +191,16 @@ module.exports = /*  @ngInject */
     function applySimpleDist(filters) {
       let query = '';
 
-      if (filters && filters.simpleDistributionType === true) {
+      if (filters && filters.simpleDistributionType) {
         query = '&brandOpportunityType=true';
+        if (filters.masterSKU) {
+          filters.masterSKU.forEach(function(sku) {
+            (filters.brand)
+              ? (filters.brand).push(sku.slice(sku.search('@') + 1, sku.length))
+              : filters.brand = [sku.slice(sku.search('@') + 1, sku.length)];
+          });
+          delete filters.masterSKU;
+        }
       }
 
       return query;
@@ -271,6 +279,9 @@ module.exports = /*  @ngInject */
                 }
               } else if (key2 === 'distributor' && obj[key2][k]) {
                 queryParams += obj[key2][k].id;
+              } else if (key2 === 'masterSKU') {
+                let index = obj[key2][k].search('@');
+                queryParams += index === -1 ? obj[key2][k] : obj[key2][k].slice(0, index);
               } else {
                 queryParams += obj[key2][k];
               }
