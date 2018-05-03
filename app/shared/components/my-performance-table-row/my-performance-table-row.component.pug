@@ -16,7 +16,7 @@ td.center-col(colspan=1) {{tableRowData.metricColumn0 | number}}
 td.center-col(colspan=1)
   span([ngClass]="getTrendClass(tableRowData.metricColumn1)") {{tableRowData.metricColumn1 | number}}
 td.center-col(colspan=1)
-  span([ngClass]="getTrendClass(tableRowData.metricColumn1)") {{tableRowData.metricColumn2 | number:'1.1-1'}}%
+  span([ngClass]="getTrendClass(tableRowData.metricColumn2)") {{tableRowData.metricColumn2 | number:'1.1-1'}}%
 td.right-col(*ngIf="showContributionToVolume", colspan=1)
   span.ctv {{tableRowData.ctv | number:'1.1-1'}}%
 td.right-col(

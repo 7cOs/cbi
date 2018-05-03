@@ -10,12 +10,14 @@ import { getListPerformanceDTOMock } from '../../../models/lists/list-performanc
 import { getListsSummaryDTOMock } from '../../../models/lists/lists-header-dto.model.mock';
 import { getStoreListsDTOMock } from '../../../models/lists/lists-store-dto.model.mock';
 import { getListPerformanceTypeMock } from '../../../enums/list-performance-type.enum.mock';
+import { getListOpportunitiesDTOMock } from '../../../models/lists/lists-opportunities-dto.model.mock';
 import { ListsApiService } from './lists-api.service';
 import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
 import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
 import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
+import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -52,7 +54,28 @@ describe('ListsApiService', () => {
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedResponse);
+    });
+  });
 
+  describe('getOppsDataForList', () => {
+    let expectedRequestUrl: string;
+
+    beforeEach(() => {
+      expectedRequestUrl = `v3/lists/${ listIdMock }/opportunities`;
+    });
+
+    it('should call the Opportunities endpoint and return opportunities data for the given list ID', () => {
+      const oppsForListDTOMock:  Array<ListOpportunityDTO> = getListOpportunitiesDTOMock();
+
+      listsApiService.getOppsDataForList(
+        listIdMock
+      )
+        .subscribe((response: ListOpportunityDTO[]) => {
+          expect(response).toEqual(oppsForListDTOMock);
+        });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(oppsForListDTOMock);
       expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
@@ -81,6 +104,7 @@ describe('ListsApiService', () => {
     });
 
   });
+
   describe('getListHeaderDetail', () => {
     let expectedRequestUrl: string;
     beforeEach(() => {

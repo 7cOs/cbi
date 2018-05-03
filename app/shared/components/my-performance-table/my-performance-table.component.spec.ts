@@ -5,6 +5,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { CalculatorService } from '../../../services/calculator.service';
+import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceColumnType } from '../../../enums/my-performance-column-type.enum';
 import { getDateRangeMock } from '../../../models/date-range.model.mock';
 import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
@@ -540,6 +541,21 @@ describe('MyPerformanceTableComponent', () => {
         'performance-error': false,
         'selected-sku': false,
         'selected-entity-row': false,
+      });
+    });
+
+    it('should return true for `selected-entity-row` when the clicked row.metadata.position is the same as the'
+    + 'selectedStoreId input', () => {
+      componentInstance.selectedDistributorCode = chance.string();
+      componentInstance.selectedSubaccountCode = chance.string();
+      componentInstance.selectedStoreId = rowData.metadata.positionId;
+
+      const classObject: CssClasses = componentInstance.getEntityRowClasses(rowData);
+
+      expect(classObject).toEqual({
+        'performance-error': false,
+        'selected-sku': false,
+        'selected-entity-row': true,
       });
     });
   });

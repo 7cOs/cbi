@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 
 import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
-import { V3List, FormattedNewList } from '../../../models/lists/lists.model';
+import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
 import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
 import { ListsSummary } from '../../../models/lists/lists-header.model';
+import { V3List, FormattedNewList } from '../../../models/lists/lists.model';
 
 @Injectable()
 export class ListsApiService {
@@ -45,17 +46,33 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public createList(list: V3List): Observable<any> {
+  public createList(list: V3List): Observable<V3List> {
     const url = `/v3/lists`;
 
     return this.http.post(url, list)
-      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
+  public addOpportunitiesToList(listId: string, opportunityIds: string[]): Observable<any> {
+    const url = `/v3/lists/${ listId }/opportunities`;
+
+    return this.http.post(url, opportunityIds)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
   public updateList(list: FormattedNewList, listsId: string): Observable<any> {
     const url = `v3/lists/${ listsId }`;
     return this.http.put(url, list)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+  }
+
+  public getOppsDataForList(
+    listId: string
+  ): Observable<Array<ListOpportunityDTO>> {
+    const url = `v3/lists/${ listId }/opportunities`;
+
+    return this.http.get<ListOpportunityDTO[]>(url)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
   public getListStorePerformance(

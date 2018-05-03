@@ -3,7 +3,8 @@ export enum SalesHierarchyHeaderEntityType {
   Person = 'Person',
   Distributor = 'Distributor',
   Account = 'Account',
-  SubAccount = 'Sub-Account'
+  SubAccount = 'Sub-Account',
+  Store = 'Store'
 }
 
 export enum ProductMetricHeaderProductType {

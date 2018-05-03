@@ -415,7 +415,7 @@ describe('Unit: list controller', function() {
 
   describe('[list.getCSVData] method', () => {
     let opportunityArrayMock;
-
+    let distributorID = chance.string();
     beforeEach(() => {
       opportunityArrayMock = [{
         id: chance.string(),
@@ -464,7 +464,7 @@ describe('Unit: list controller', function() {
             primaryFlag: 'Y',
             salespersonName: chance.string()
           }, {
-            distributorCd: chance.string(),
+            distributorCd: distributorID,
             distributorCustomerCd: chance.string(),
             primaryFlag: 'N',
             salespersonName: chance.string()
@@ -517,7 +517,7 @@ describe('Unit: list controller', function() {
             primaryFlag: 'Y',
             salespersonName: chance.string()
           }, {
-            distributorCd: chance.string(),
+            distributorCd: distributorID,
             distributorCustomerCd: chance.string(),
             primaryFlag: 'N',
             salespersonName: chance.string()
@@ -533,7 +533,7 @@ describe('Unit: list controller', function() {
         ctrl.csvDownloadOption = 'WithRationales';
 
         filtersService.model.selected.distributor = [];
-        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST'};
+        filtersService.model.selected.distributor[0] = { name: 'SELECTEDDIST', id: distributorID };
       });
 
       it('should return a csvItem item for each selected opportunity with rationales', () => {
@@ -546,8 +546,8 @@ describe('Unit: list controller', function() {
           expect(csvData).toEqual({
             storeDistributor: filtersService.model.selected.distributor[0].name,
             TDLinx: opportunityArrayMock[index].store.id,
-            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
-            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
+            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[1].distributorCustomerCd,
+            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[1].salespersonName,
             storeName: opportunityArrayMock[index].store.name,
             storeNumber: opportunityArrayMock[index].store.storeNumber,
             storeAddress: opportunityArrayMock[index].store.streetAddress,
@@ -611,7 +611,7 @@ describe('Unit: list controller', function() {
       beforeEach(() => {
         ctrl.csvDownloadOption = 'WithoutRationales';
         filtersService.model.selected.distributor = [];
-        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST'};
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorID};
       });
 
       it('should return a csvItem item for each selected opportunity with rationales', () => {
@@ -624,8 +624,8 @@ describe('Unit: list controller', function() {
           expect(csvData).toEqual({
             storeDistributor: filtersService.model.selected.distributor[0].name,
             TDLinx: opportunityArrayMock[index].store.id,
-            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
-            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
+            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[1].distributorCustomerCd,
+            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[1].salespersonName,
             storeName: opportunityArrayMock[index].store.name,
             storeNumber: opportunityArrayMock[index].store.storeNumber,
             storeAddress: opportunityArrayMock[index].store.streetAddress,
@@ -699,7 +699,7 @@ describe('Unit: list controller', function() {
       beforeEach(() => {
         ctrl.csvDownloadOption = 'Stores';
         filtersService.model.selected.distributor = [];
-        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST'};
+        filtersService.model.selected.distributor[0] = {name: 'SELECTEDDIST', id: distributorID};
       });
 
       it('should return csvItems with store only data', () => {
@@ -710,8 +710,8 @@ describe('Unit: list controller', function() {
           expect(csvData).toEqual({
             storeDistributor: filtersService.model.selected.distributor[0].name,
             TDLinx: opportunityArrayMock[index].store.id,
-            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[0].distributorCustomerCd,
-            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[0].salespersonName,
+            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[1].distributorCustomerCd,
+            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[1].salespersonName,
             storeName: opportunityArrayMock[index].store.name,
             storeNumber: opportunityArrayMock[index].store.storeNumber,
             storeAddress: opportunityArrayMock[index].store.streetAddress,
@@ -738,6 +738,33 @@ describe('Unit: list controller', function() {
           'Volume Trend for Store CYTD vs CYTD Last Year',
           'Segmentation'
         ]);
+      });
+
+      it('should contain only one field per unique store based on store TDLINX ids', () => {
+        opportunityArrayMock.push(opportunityArrayMock[0]);
+        opportunityArrayMock.push(opportunityArrayMock[1]);
+
+        const dataPromise = ctrl.getCSVData(ctrl.csvDownloadOption);
+
+        expect(dataPromise.$$state.value.length).toBe(2);
+
+        dataPromise.$$state.value.forEach((csvData, index) => {
+          expect(csvData).toEqual({
+            storeDistributor: filtersService.model.selected.distributor[0].name,
+            TDLinx: opportunityArrayMock[index].store.id,
+            distributorCustomerCode: opportunityArrayMock[index].store.distributorsSalesInfo[1].distributorCustomerCd,
+            primaryDistributorSalesRoute: opportunityArrayMock[index].store.distributorsSalesInfo[1].salespersonName,
+            storeName: opportunityArrayMock[index].store.name,
+            storeNumber: opportunityArrayMock[index].store.storeNumber,
+            storeAddress: opportunityArrayMock[index].store.streetAddress,
+            storeCity: opportunityArrayMock[index].store.city,
+            storeZip: opportunityArrayMock[index].store.zip,
+            storeDepletionsCTD: opportunityArrayMock[index].store.depletionsCurrentYearToDate,
+            storeDepletionsCTDYA: opportunityArrayMock[index].store.depletionsCurrentYearToDateYA,
+            storeDepletionsCTDYAPercent: opportunityArrayMock[index].store.depletionsCurrentYearToDateYAPercent,
+            storeSegmentation: opportunityArrayMock[index].store.segmentation
+          });
+        });
       });
     });
 

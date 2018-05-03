@@ -4,4 +4,6 @@ export interface EntityDTO {
   id: string;
   name: string;
   type: EntityType;
+  storeSourceCode?: string;
+  storeNumber?: string;
 }

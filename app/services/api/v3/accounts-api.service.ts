@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
 
 import { EntitySubAccountDTO } from '../../../models/entity-subaccount-dto.model';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';

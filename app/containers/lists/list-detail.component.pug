@@ -18,11 +18,14 @@ lists-header(
 
 compass-tabs
   compass-tab([tabTitle]='firstTabTitle',
-  [active]='true')
+              [active]='true')
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [totalRow]="performanceTableTotal",
       [tableData]="performanceTableData"
     )
   compass-tab([tabTitle]='secondTabTitle')
-    span opportunities placeholder
+    list-opportunities-table(
+      [tableHeaderRow]="opportunitiesTableHeader",
+      [tableData]="opportunitiesTableData"
+    )
