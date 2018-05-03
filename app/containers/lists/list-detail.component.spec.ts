@@ -62,7 +62,12 @@ describe('ListDetailComponent', () => {
         totalOpportunities: null,
         numberOfAccounts: null,
         ownerFirstName: null,
-        ownerLastName: null
+        ownerLastName: null,
+        collaborators: null,
+        ownerId: null,
+        collaboratorType: null,
+        category: null,
+        type: null
       }
     },
     listStores: {

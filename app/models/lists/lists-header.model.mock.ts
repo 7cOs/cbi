@@ -13,6 +13,11 @@ export function getListsSummaryMock(): ListsSummary {
     numberOfAccounts: chance.floating(),
     name: chance.string(),
     ownerFirstName : chance.string(),
-    ownerLastName : chance.string()
+    ownerLastName : chance.string(),
+    collaborators: [],
+    ownerId: chance.string(),
+    type: chance.floating(),
+    collaboratorType: chance.string(),
+    category: chance.string()
   };
 }

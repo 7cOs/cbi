@@ -21,6 +21,7 @@ import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
 
 const chance = new Chance();
 
@@ -293,6 +294,43 @@ describe('Lists Effects', () => {
         listsEffects.fetchListPerformancePOD$().subscribe((response: Action) => {
           expect(response).toEqual(new ListActions.FetchListPerformancePODError(errorMock));
           done();
+        });
+      });
+    });
+
+    describe('when a patchList actions is received', () => {
+      let actionListPayloadMock: ListsSummary;
+      beforeEach(() => {
+        actionListPayloadMock = getListsSummaryMock();
+        actions$.next(new ListActions.PatchList(actionListPayloadMock));
+      });
+
+      describe('when everything returns successfully', () => {
+        it('should call updateList from the ListsService given the passed in action payload', (done) => {
+          const updateListSpy = spyOn(listsApiService, 'updateList').and.callThrough();
+          listsEffects.patchList$().subscribe(() => {
+            done();
+          });
+          expect(updateListSpy.calls.count()).toBe(1);
+          expect(updateListSpy.calls.argsFor(0)[0]).toEqual(actionListPayloadMock.id);
+        });
+
+        it('should dispatch a patchListSuccess action with the returned transformed data', (done) => {
+          listsEffects.patchList$().subscribe((action: Action) => {
+            expect(action).toEqual(new ListActions.PatchListSuccess(headerDetailMock));
+            done();
+          });
+        });
+      });
+
+      describe('when an error is returned from patchListSuccess', () => {
+        it('should dispatch a PatchListFailure action with the error', (done) => {
+          spyOn(listsApiService, 'updateList').and.returnValue(Observable.throw(errorMock));
+
+          listsEffects.patchList$().subscribe((response) => {
+            expect(response).toEqual(new ListActions.PatchListFailure(errorMock));
+            done();
+          });
         });
       });
     });
