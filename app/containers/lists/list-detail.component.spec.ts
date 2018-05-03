@@ -10,6 +10,8 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { getListOpportunitiesTableRowMock } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
+import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent } from './list-detail.component';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
@@ -214,6 +216,47 @@ describe('ListDetailComponent', () => {
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL
       }));
+    });
+  });
+
+  describe('when tabs are selected', () => {
+    it('should set the selected tab', () => {
+      componentInstance.tabSelectedClick({selectedTab: 'Performance'});
+      expect(componentInstance.selectedTab).toBe('Performance');
+    });
+  });
+
+  describe('when page is clicked on pagination', () => {
+    it('should set page start, page end for opportunities tab', () => {
+      componentInstance.selectedTab = 'Opportunities';
+      spyOn(componentInstance.opportunitiesTableData, 'slice');
+      componentInstance.handlePageClick({pageNumber: 5});
+      expect(componentInstance.opportunitiesTableData.slice).toHaveBeenCalledWith(80, 100);
+    });
+
+    it('should slice the data for opportunities tab', () => {
+      componentInstance.selectedTab = 'Opportunities';
+      componentInstance.opportunitiesTableData = getListOpportunitiesTableRowMock(300);
+      const expectedData = componentInstance.opportunitiesTableData.slice(80, 100);
+      componentInstance.handlePageClick({pageNumber: 5});
+      fixture.detectChanges();
+      debugger;
+      expect(componentInstance.opportunitiesTableSlicedData).toEqual(expectedData);
+    });
+
+    it('should set page start, page end for performance tab', () => {
+      componentInstance.selectedTab = 'Performance';
+      spyOn(componentInstance.performanceTableData, 'slice');
+      componentInstance.handlePageClick({pageNumber: 5});
+      expect(componentInstance.performanceTableData.slice).toHaveBeenCalledWith(80, 100);
+    });
+
+    it('should slice the data for performance tab', () => {
+      componentInstance.selectedTab = 'Performance';
+      componentInstance.performanceTableData = getListPerformanceTableRowMock(300);
+      const expectedData = componentInstance.performanceTableData.slice(80, 100);
+      componentInstance.handlePageClick({pageNumber: 5});
+      expect(componentInstance.slicedPerformanceTableData).toEqual(expectedData);
     });
   });
 });
