@@ -85,7 +85,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static WebDriver getSauceWebDriver(String testName) throws MalformedURLException {
     final String username = PropertiesCache.getInstance().getProperty("sauce.userName");
     final String accessKey = PropertiesCache.getInstance().getProperty("sauce.accessKey");;
-    final int port = 443;
+    final int port = 80;
 
     final String sauceURL = String.format("https://%s:%s@ondemand.saucelabs.com:%d/wd/hub", username, accessKey, port);
     final URL remoteAddress = new URL(sauceURL);
