@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import * as Lists from '../models/lists/lists.model';
 import { ListPerformance } from '../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
+import * as ListProperties from '../enums/lists/list-properties.enum';
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
 import { ListStorePerformance } from '../models/lists/list-store-performance.model';
 import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
@@ -115,11 +116,11 @@ export class ListsTransformerService {
     return {
       description: list.description,
       name: list.name,
-      type: Lists.ListType.TargetList,
+      type: ListProperties.ListType.TargetList,
       archived: false,
-      collaboratorType: Lists.CollaboratorType.CollaborateAndInvite,
+      collaboratorType: ListProperties.CollaboratorType.CollaborateAndInvite,
       collaboratorEmployeeIds: list.collaborators.map((user: Lists.User) => user.employeeId),
-      category: Lists.ListCategory.Beer
+      category: ListProperties.ListCategory.Beer
     };
   }
 

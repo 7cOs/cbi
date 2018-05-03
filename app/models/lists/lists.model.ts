@@ -1,18 +1,4 @@
-export interface CollaboratorOwnerDetails {
-  employeeId: string;
-  firstName: string;
-  lastName: string;
-}
-
-export interface SurveyInfo {
-  sfid: string;
-  name: string;
-}
-
-export interface PrimaryDistributor {
-  id: string;
-  name: string;
-}
+import * as ListProperties from '../../enums/lists/list-properties.enum';
 
 interface BaseList {
   archived: boolean;
@@ -29,6 +15,22 @@ interface BaseList {
   totalOpportunities: number;
   type: string;
   updatedOn: string;
+}
+
+export interface CollaboratorOwnerDetails {
+  employeeId: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface SurveyInfo {
+  sfid: string;
+  name: string;
+}
+
+export interface PrimaryDistributor {
+  id: string;
+  name: string;
 }
 
 export interface V3List extends BaseList {
@@ -58,10 +60,10 @@ export interface UnformattedNewList {
 }
 
 export interface FormattedNewList {
-  category: ListCategory;
-  collaboratorType: CollaboratorType;
+  category: ListProperties.ListCategory;
+  collaboratorType: ListProperties.CollaboratorType;
   name: string;
-  type: ListType;
+  type: ListProperties.ListType;
 
   description?: string;
   ownerEmployeeId?: string;
@@ -103,20 +105,4 @@ export interface ListsCollectionSummary {
   ownedNotArchived: number;
   sharedArchivedCount: number;
   sharedNotArchivedCount: number;
-}
-
-export enum ListType {
-  WatchList = 'Watch_List',
-  TargetList = 'Target_List',
-  SurveyList = 'Survey_List',
-  VisitList = 'Visit_List'
-}
-
-export enum ListCategory {
-  Beer = 'Beer',
-  Wine = 'Wine'
-}
-
-export enum CollaboratorType {
-  CollaborateAndInvite = 'collaborate_and_invite'
 }
