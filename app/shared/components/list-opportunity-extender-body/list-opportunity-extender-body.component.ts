@@ -7,6 +7,7 @@ import { ListsOpportunities } from '../../../models/lists/lists-opportunities.mo
 import { ListsState } from '../../../state/reducers/lists.reducer';
 import { OpportunityType } from '../../../enums/list-opportunities/list-opportunity-type.enum';
 import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
+import { OpportunitiesByStore } from '../../../models/lists/opportunities-by-store.model';
 
 @Component({
   selector: 'list-opportunity-extender-body',
@@ -20,7 +21,7 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
 
   public opportunityDetails: ListsOpportunities;
   public opportunityType: OpportunityTypeLabel | OpportunityType;
-  private allOpps: {};
+  public allOpps: OpportunitiesByStore;
   private listDetailSubscription: Subscription;
 
   constructor(private store: Store<AppState>) {
@@ -31,11 +32,18 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
           this.allOpps = listDetail.listOpportunities.opportunities;
-          this.opportunityDetails = this.allOpps[this.unversionedStoreId] ? this.allOpps[this.unversionedStoreId].find((el: any) => {
-            return el.id === this.opportunitySelected;
-          }) : '';
-          this.opportunityType = OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type;
+          this.setExtenderBodyFields(this.allOpps);
       });
+  }
+
+  setExtenderBodyFields(allOpps: OpportunitiesByStore) {
+    this.opportunityDetails = allOpps[this.unversionedStoreId] ?
+                                allOpps[this.unversionedStoreId].find((el: any) => {
+                                  return el.id === this.opportunitySelected;
+                                }) : null;
+    this.opportunityType =  this.opportunityDetails ?
+                              OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type
+                              : null;
   }
 
   ngOnDestroy() {

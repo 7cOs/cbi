@@ -1,14 +1,14 @@
 .inline
   .wrap
-    p <b>Brand: </b> {{ opportunityDetails.brandDescription }}
+    p <b>Brand: </b> {{ opportunityDetails ? opportunityDetails.brandDescription : '' }}
   .wrap
     p
       b Sku/Package:
-      |  {{ opportunityDetails.skuDescription }}
+      |  {{ opportunityDetails ? opportunityDetails.skuDescription : '' }}
   .wrap
-    p <b>Opportunity Type: </b> {{ opportunityType }}
+    p <b>Opportunity Type: </b> {{ opportunityDetails ? opportunityType : '' }}
   .wrap
-    p <b>Opportunity Rationale: </b> {{ opportunityDetails.rationale }}
+    p <b>Opportunity Rationale: </b> {{ opportunityDetails ? opportunityDetails.rationale : '' }}
   //- .wrap
   //-   p <b>Brand Mandate</b>
   //- .wrap

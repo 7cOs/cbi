@@ -9,6 +9,9 @@ import { AppState } from '../../../state/reducers/root.reducer';
 import { getOpportunitiesByStoreMock } from '../../../models/lists/opportunities-by-store.model.mock';
 import { ListOpportunityExtenderBodyComponent } from './list-opportunity-extender-body.component';
 import { ListsState } from '../../../state/reducers/lists.reducer';
+import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
+import { OpportunitiesByStore } from '../../../models/lists/opportunities-by-store.model';
+import { ListsOpportunities } from '../../../models/lists/lists-opportunities.model';
 
 const chance = new Chance();
 describe('Team Performance Opportunities Extender Body', () => {
@@ -97,6 +100,7 @@ describe('Team Performance Opportunities Extender Body', () => {
     it('should call select with the right arguments', () => {
       storeMock.select.calls.reset();
       listsSubject.next(stateMock.listsDetails);
+      spyOn(componentInstance, 'setExtenderBodyFields').and.callThrough();
       componentInstance.ngOnChanges();
       fixture.detectChanges();
 
@@ -104,6 +108,22 @@ describe('Team Performance Opportunities Extender Body', () => {
       const selectorFunction = storeMock.select.calls.argsFor(0)[0];
       expect(selectorFunction(stateMock)).toBe(stateMock.listsDetails);
       expect(store.select).toHaveBeenCalled();
+      expect(componentInstance.setExtenderBodyFields).toHaveBeenCalled();
+    });
+  });
+
+  describe('setExtenderBodyFields', () => {
+    it('Should pass in fields correctly from opportunities object', () => {
+      const oppsGroupedByStore: OpportunitiesByStore = getOpportunitiesByStoreMock();
+      const opportunityDetailsMock: ListsOpportunities = oppsGroupedByStore[Object.keys(oppsGroupedByStore)[0]][0];
+
+      componentInstance.unversionedStoreId = Object.keys(oppsGroupedByStore)[0];
+      componentInstance.opportunitySelected = opportunityDetailsMock.id;
+      componentInstance.setExtenderBodyFields(oppsGroupedByStore);
+      fixture.detectChanges();
+
+      expect(componentInstance.opportunityDetails).toBe(opportunityDetailsMock);
+      expect(componentInstance.opportunityType).toBe(OpportunityTypeLabel[opportunityDetailsMock.type]);
     });
   });
 });

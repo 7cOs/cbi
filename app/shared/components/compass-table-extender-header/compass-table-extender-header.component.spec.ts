@@ -10,7 +10,7 @@ import { NumberPipeMock } from '../../../pipes/number.pipe.mock';
 
 const chance = new Chance();
 
-describe('Team Performance Opportunities Component', () => {
+describe('CompassTableExtenderHeaderComponent', () => {
   let fixture: ComponentFixture<CompassTableExtenderHeaderComponent>;
   let componentInstance: CompassTableExtenderHeaderComponent;
 
