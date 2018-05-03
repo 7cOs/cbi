@@ -42,10 +42,10 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
                                 allOpps[this.unversionedStoreId].find((el: any) => {
                                   return el.id === this.opportunitySelected;
                                 }) : null;
-    this.opportunityType =  this.opportunityDetails ?
-                              OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type
-                              : null;
-    this.skuDescription = this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
+    if (this.opportunityDetails) {
+      this.opportunityType =  OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type;
+      this.skuDescription =  this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
+    }
   }
 
   ngOnDestroy() {
