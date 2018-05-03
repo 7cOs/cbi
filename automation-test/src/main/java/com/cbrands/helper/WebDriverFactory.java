@@ -84,7 +84,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
   private static WebDriver getSauceWebDriver(String testName) throws MalformedURLException {
     final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
-    SauceHelpers.addSauceConnectTunnelId(capabilities);
 
     webDriver.set(new RemoteWebDriver(
       new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
