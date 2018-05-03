@@ -88,7 +88,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId().toString());
     log.info("Targeted Host:" + HostType.sauce.name());
     log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-    Validate.notNull(webDriver.get(), "Driver could not be found at:" + HostType.sauce.name());
+    Validate.notNull(webDriver.get(), "Remote driver could not be found for SauceLabs");
 
     return webDriver.get();
   }
