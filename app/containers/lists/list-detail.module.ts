@@ -10,6 +10,7 @@ import { ListOpportunitiesTableRowComponent }
         from '../../shared/components/list-opportunities-table-row/list-opportunities-table-row.component';
 import { ListPerformanceTableComponent } from '../../shared/components/list-performance-table/list-performance-table.component';
 import { ListPerformanceTableRowComponent } from '../../shared/components/list-performance-table-row/list-performance-table-row.component';
+import { ListPerformanceSummaryComponent } from '../../shared/components/list-performance-summary/list-performance-summary.component';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -26,7 +27,8 @@ import { SharedModule } from '../../shared/shared.module';
     ListOpportunitiesTableComponent,
     ListOpportunitiesTableRowComponent,
     ListPerformanceTableComponent,
-    ListPerformanceTableRowComponent
+    ListPerformanceTableRowComponent,
+    ListPerformanceSummaryComponent
   ],
   providers: [
     ListsApiService,
