@@ -110,7 +110,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static DesiredCapabilities getSauceCapabilitiesByBrowser(String testName, String driverType) {
-    DesiredCapabilities capabilities;
+    final DesiredCapabilities capabilities;
 
     if (BrowserType.chrome.name().equals(driverType)) {
       capabilities = getSauceCapabilitiesForChrome(testName);
