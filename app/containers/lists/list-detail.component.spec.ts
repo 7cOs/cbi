@@ -241,7 +241,7 @@ describe('ListDetailComponent', () => {
       const expectedData = componentInstance.opportunitiesTableData.slice(80, 100);
       componentInstance.handlePageClick({pageNumber: 5});
       fixture.detectChanges();
-      expect(componentInstance.opportunitiesTableSlicedData).toEqual(expectedData);
+      expect(componentInstance.slicedOpportunitiesTableData).toEqual(expectedData);
     });
 
     it('should set page start, page end for performance tab', () => {
