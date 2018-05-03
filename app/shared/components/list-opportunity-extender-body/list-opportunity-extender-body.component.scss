@@ -3,7 +3,6 @@
 .inline {
   display: inline-block;
   overflow: auto;
-  line-height: 42px;
 }
 
 .opportunity-detail-row {
@@ -17,9 +16,10 @@
 
 .opportunity-detail-row p {
   display: table-cell;
-  vertical-align: middle;
   padding-left: 15px;
-  padding-right: 40px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   .right {
     float: right;
