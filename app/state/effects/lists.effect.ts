@@ -143,12 +143,13 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListActions.PATCH_LIST)
       .switchMap((action: ListActions.PatchList) => {
-        return this.listsApiService.updateList(this.listsTransformerService.convertCollaborators(action.payload), action.payload.id)
-          .map((response: ListsSummaryDTO) => {
-            const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
-            return new ListActions.PatchListSuccess(transformedData);
-          })
-          .catch((error: Error) => Observable.of(new ListActions.PatchListFailure(error)));
+        const convertedPayload = this.listsTransformerService.convertCollaborators(action.payload);
+        return this.listsApiService.updateList(convertedPayload, action.payload.id)
+        .map((response: ListsSummaryDTO) => {
+          const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
+          return new ListActions.PatchListSuccess(transformedData);
+        })
+        .catch((error: Error) => Observable.of(new ListActions.PatchListFailure(error)));
       });
   }
 

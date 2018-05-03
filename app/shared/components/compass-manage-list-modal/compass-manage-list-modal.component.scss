@@ -74,9 +74,9 @@
   position: relative;
   width: 100%;
   padding-left: 15px;
-  overflow: auto;
+  overflow-y: scroll;
   height: auto;
-  min-height: 200px;
+  min-height: 150px;
 
   .collaborator {
     height: 30px;

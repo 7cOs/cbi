@@ -120,6 +120,17 @@ describe('ListDetailComponent', () => {
     dispatch: jasmine.createSpy('dispatch')
   };
 
+  const userMock = {
+    model: {
+      currentUser: {
+        positionId: chance.integer().toString(),
+        employeeID: chance.integer().toString(),
+        firstName: chance.string(),
+        lastName: chance.string()
+      }
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -142,6 +153,10 @@ describe('ListDetailComponent', () => {
         {
           provide: Store,
           useValue: storeMock
+        },
+        {
+          provide: 'userService',
+          userValue: userMock
         }
       ],
       imports: [
