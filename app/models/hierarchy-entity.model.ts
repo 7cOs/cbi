@@ -12,6 +12,8 @@ export interface HierarchyEntity {
   hierarchyType?: string;
   entityType: EntityType;
   premiseType?: PremiseTypeValue;
+  unversionedStoreId?: string;
+  storeNumber?: string;
 }
 
 export interface HierarchyEntityDTO {

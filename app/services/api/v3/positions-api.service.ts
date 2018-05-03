@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
 
 import { EntityDTO } from '../../../models/entity-dto.model';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';
@@ -20,13 +19,6 @@ export class PositionsApiService {
     private v3ApiHelperService: V3ApiHelperService,
     private http: HttpClient
   ) { }
-
-  public getAccountsOrDistributors(entityURI: string): Observable<EntityDTO[]> {
-    const url = `/v3${ entityURI }`;
-
-    return this.http.get<EntityDTO[]>(url)
-      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
-  }
 
   public getAlternateHierarchy(
     positionId: string,
@@ -123,6 +115,13 @@ export class PositionsApiService {
         aggregationLevel,
         MetricTypeValue[params.metricType]
       ));
+  }
+
+  public getEntityURIResponsibilities(entityURI: string): Observable<EntityDTO[]> {
+    const url = `/v3${ entityURI }`;
+
+    return this.http.get<EntityDTO[]>(url)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
   public getGroupPerformance(

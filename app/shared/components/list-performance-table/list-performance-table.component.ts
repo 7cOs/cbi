@@ -108,7 +108,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public onRowClicked(type: RowType, index: number, row?: ListPerformanceTableRow) {
-      this.onElementClicked.emit({type: type, index: index, row: row});
+    this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
   public toggleSelectAllStores(event: MatCheckboxChange): void {

@@ -12,6 +12,7 @@ import { CalculatorService } from '../../services/calculator.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent } from './list-detail.component';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import * as ListsActions from '../../state/actions/lists.action';
@@ -33,6 +34,18 @@ class ListPerformanceTableComponentMock {
   @Input() tableData: Array<ListPerformanceTableRow>;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: ListPerformanceTableRow;
+  @Input() loadingState: boolean;
+}
+
+@Component({
+  selector: 'list-opportunities-table',
+  template: ''
+})
+
+class ListOpportunitiesTableComponentMock {
+  @Input() sortingCriteria: Array<SortingCriteria>;
+  @Input() tableData: Array<ListOpportunitiesTableRow>;
+  @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
 }
 
@@ -69,6 +82,10 @@ describe('ListDetailComponent', () => {
       storeStatus: ActionStatus.Fetching,
       stores: []
     },
+    listOpportunities: {
+      opportunitiesStatus: ActionStatus.Fetching,
+      opportunities: {}
+    },
     performance: {
       podStatus: ActionStatus.NotFetched,
       pod: null,
@@ -103,6 +120,7 @@ describe('ListDetailComponent', () => {
       declarations: [
         ListDetailComponent,
         ListsHeaderComponentMock,
+        ListOpportunitiesTableComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [
@@ -158,24 +176,27 @@ describe('ListDetailComponent', () => {
       expect(store.select).toHaveBeenCalled();
     });
 
-    it('should dispatch actions for fetching stores, list headers, and list performance data', () => {
+    it('should dispatch actions for fetching stores, list headers, opportunities and list performance data', () => {
       storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
-      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
         listId : stateMock.params.id
       }));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ListsActions.FetchHeaderDetails({
         listId : stateMock.params.id
       }));
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ListsActions.FetchListPerformanceVolume({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ListsActions.FetchOppsForList({
+        listId : stateMock.params.id
+      }));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ListsActions.FetchListPerformanceVolume({
         listId : stateMock.params.id,
         performanceType: ListPerformanceType.Volume,
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.CYTDBDL
       }));
-      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ListsActions.FetchListPerformancePOD({
+      expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ListsActions.FetchListPerformancePOD({
         listId : stateMock.params.id,
         performanceType: ListPerformanceType.POD,
         beverageType: ListBeverageType.Beer,

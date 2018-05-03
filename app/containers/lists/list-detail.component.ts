@@ -7,10 +7,13 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { getListOpportunitiesHeaderRowMock,
+         getListOpportunitiesTableRowMock
+       } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
+import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
-import * as ListsActions from '../../state/actions//lists.action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
@@ -25,8 +28,15 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 export class ListDetailComponent implements OnInit, OnDestroy {
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
+  public oppsGroupedByStores: {};
+
   public firstTabTitle: string = 'Performance';
   public secondTabTitle: string = 'Opportunities';
+
+  // TODO: Remove this when we get real data.
+  public opportunitiesTableData = getListOpportunitiesTableRowMock(25);
+  public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
+
   public actionButtonType: any = ActionButtonType;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
@@ -45,6 +55,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(this.$state.current.title);
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: this.$state.params.id}));
+    this.store.dispatch(new ListsActions.FetchOppsForList({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchListPerformanceVolume({
       listId: this.$state.params.id,
       performanceType: ListPerformanceType.Volume,
@@ -63,6 +74,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .subscribe((listDetail: ListsState)  => {
         this.storeList = listDetail.listStores.stores;
         this.listSummary = listDetail.listSummary.summaryData;
+        this.oppsGroupedByStores = listDetail.listOpportunities.opportunities;
 
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
@@ -79,6 +91,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.pod.storePerformance
           );
         }
+
+        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
       });
   }
 

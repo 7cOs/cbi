@@ -43,6 +43,7 @@ import { ResponsibilitiesService,
          RefreshTotalPerformanceData } from './responsibilities.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
+import { StoresApiService } from '../services/api/v3/stores-api.service';
 import { SubAccountsApiService } from '../services/api/v3/sub-accounts-api.service';
 
 const chance = new Chance();
@@ -94,9 +95,6 @@ describe('Responsibilities Service', () => {
   };
 
   const positionsApiServiceMock = {
-    getAccountsOrDistributors() {
-      return Observable.of(accountsDistributorsDTOMock);
-    },
     getAlternateHierarchy() {
       return Observable.of(peopleResponsibilitiesDTOMock);
     },
@@ -106,6 +104,9 @@ describe('Responsibilities Service', () => {
     getAlternateHierarchyPersonPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
+    getEntityURIResponsibilities() {
+      return Observable.of(accountsDistributorsDTOMock);
+    },
     getGroupPerformance() {
       return Observable.of(performanceDTOMock);
     },
@@ -113,6 +114,12 @@ describe('Responsibilities Service', () => {
       return Observable.of(peopleResponsibilitiesDTOMock);
     },
     getPersonPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    }
+  };
+
+  const storesApiServiceMock = {
+    getStorePerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     }
   };
@@ -127,7 +134,7 @@ describe('Responsibilities Service', () => {
     groupPeopleByGroupedEntities(mockArgs: any): GroupedEntities {
       return groupedEntitiesMock;
     },
-    groupsAccountsDistributors(mockArgs: any): GroupedEntities {
+    groupURIResponsibilities(mockArgs: any): GroupedEntities {
       return accountsDistributorsMock;
     },
     transformSubAccountsDTO(mockArgs: any): GroupedEntities {
@@ -192,6 +199,10 @@ describe('Responsibilities Service', () => {
       {
         provide: SubAccountsApiService,
         useValue: subAccountsApiServiceMock
+      },
+      {
+        provide: StoresApiService,
+        useValue: storesApiServiceMock
       },
       {
         provide: 'toastService',
@@ -774,7 +785,7 @@ describe('Responsibilities Service', () => {
     });
   });
 
-  describe('when getAccountsDistributors is called', () => {
+  describe('when getEntityURIResponsibilities is called', () => {
     describe('when called for distributors or accounts', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         salesHierarchyViewType: SalesHierarchyViewType.distributors,
@@ -788,7 +799,7 @@ describe('Responsibilities Service', () => {
       };
 
       it('returns accounts or distributors', (done) => {
-        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock)
+        responsibilitiesService.getEntityURIResponsibilities(responsibilitiesDataMock)
           .subscribe((responsibilitiesData: ResponsibilitiesData) => {
             expect(responsibilitiesData.groupedEntities).toEqual(accountsDistributorsMock);
 
@@ -796,31 +807,31 @@ describe('Responsibilities Service', () => {
           });
       });
 
-      it('calls getAccountsOrDistributors with the right parameters', (done) => {
-        const getAccountsDistributorsSpy = spyOn(positionsApiService, 'getAccountsOrDistributors').and.callThrough();
+      it('calls getEntityURIResponsibilities with the right parameters', (done) => {
+        const getEntityURIResponsibilitiesSpy = spyOn(positionsApiService, 'getEntityURIResponsibilities').and.callThrough();
 
-        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(() => {
+        responsibilitiesService.getEntityURIResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
         });
 
-        expect(getAccountsDistributorsSpy.calls.count()).toBe(1);
-        expect(getAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock.entitiesURL);
+        expect(getEntityURIResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(getEntityURIResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock.entitiesURL);
       });
 
-      it('calls groupsAccountsDistributors with the right parameters', (done) => {
+      it('calls groupURIResponsibilities with the right parameters', (done) => {
         const accountEntityDTOResponseMock: EntityDTO[] = [Object.assign({}, getEntityDTOMock(), {
           type: EntityType.Distributor
         })];
-        const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
+        const groupURIResponsibilitiesSpy = spyOn(responsibilitiesTransformerService, 'groupURIResponsibilities').and.callThrough();
 
-        spyOn(positionsApiService, 'getAccountsOrDistributors').and.returnValue(Observable.of(accountEntityDTOResponseMock));
+        spyOn(positionsApiService, 'getEntityURIResponsibilities').and.returnValue(Observable.of(accountEntityDTOResponseMock));
 
-        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(() => {
+        responsibilitiesService.getEntityURIResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
         });
 
-        expect(groupsAccountsDistributorsSpy.calls.count()).toBe(1);
-        expect(groupsAccountsDistributorsSpy.calls.argsFor(0)).toEqual([
+        expect(groupURIResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(groupURIResponsibilitiesSpy.calls.argsFor(0)).toEqual([
           accountEntityDTOResponseMock,
           'DISTRIBUTOR'
         ]);
@@ -829,18 +840,18 @@ describe('Responsibilities Service', () => {
       it('gives back the original parameters if not call with accounts or distributors', (done) => {
         responsibilitiesDataMock.salesHierarchyViewType = SalesHierarchyViewType.roleGroups;
 
-        const getAccountsDistributorsSpy = spyOn(positionsApiService, 'getAccountsOrDistributors').and.callThrough();
-        const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
+        const getEntityURIResponsibilitiesSpy = spyOn(positionsApiService, 'getEntityURIResponsibilities').and.callThrough();
+        const groupURIResponsibilitiesSpy = spyOn(responsibilitiesTransformerService, 'groupURIResponsibilities').and.callThrough();
 
-        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(
+        responsibilitiesService.getEntityURIResponsibilities(responsibilitiesDataMock).subscribe(
           (responsibilitiesData: ResponsibilitiesData) => {
             expect(responsibilitiesDataMock).toBe(responsibilitiesData);
 
             done();
           });
 
-        expect(getAccountsDistributorsSpy.calls.count()).toBe(0);
-        expect(groupsAccountsDistributorsSpy.calls.count()).toBe(0);
+        expect(getEntityURIResponsibilitiesSpy.calls.count()).toBe(0);
+        expect(groupURIResponsibilitiesSpy.calls.count()).toBe(0);
       });
     });
   });
@@ -2187,7 +2198,7 @@ describe('Responsibilities Service', () => {
     });
   });
 
-  describe('when getAlternateAccountsDistributors is called', () => {
+  describe('when getAlternateEntityURIResponsibilities is called', () => {
     let responsibilitiesDataMock: ResponsibilitiesData;
 
     beforeEach(() => {
@@ -2217,7 +2228,7 @@ describe('Responsibilities Service', () => {
       });
 
       it('should return the passed in responsibilitiesData without making any changes', (done) => {
-        responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesDataMock).subscribe((actualResponsibilitiesData) => {
+        responsibilitiesService.getAlternateEntityURIResponsibilities(responsibilitiesDataMock).subscribe((actualResponsibilitiesData) => {
           expect(actualResponsibilitiesData).toEqual(responsibilitiesDataMock);
           done();
         });
@@ -2226,26 +2237,26 @@ describe('Responsibilities Service', () => {
 
     describe('when an alternateEntitiesURL is present', () => {
       it('should reach out to positionsApiService.getAccountsOrDistributors to get accounts or distributors', (done) => {
-        const getAccountsDistributorsSpy = spyOn(positionsApiService, 'getAccountsOrDistributors').and.callThrough();
+        const getEntityURIResponsibilitiesSpy = spyOn(positionsApiService, 'getEntityURIResponsibilities').and.callThrough();
 
-        responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesDataMock).subscribe((actualResponsibilitiesData) => {
-          expect(getAccountsDistributorsSpy).toHaveBeenCalledWith(responsibilitiesDataMock.alternateEntitiesURL);
+        responsibilitiesService.getAlternateEntityURIResponsibilities(responsibilitiesDataMock).subscribe((actualResponsibilitiesData) => {
+          expect(getEntityURIResponsibilitiesSpy).toHaveBeenCalledWith(responsibilitiesDataMock.alternateEntitiesURL);
           done();
         });
       });
 
       it('should group received accounts or distributors under a GEOGRAPHY group by reaching out to' +
-      'responsibilitiesTransformerService.groupsAccountsDistributors', (done) => {
-        const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
+      'responsibilitiesTransformerService.groupURIResponsibilities', (done) => {
+        const groupURIResponsibilitiesSpy = spyOn(responsibilitiesTransformerService, 'groupURIResponsibilities').and.callThrough();
 
-        responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesDataMock).subscribe(() => {
-          expect(groupsAccountsDistributorsSpy).toHaveBeenCalledWith(accountsDistributorsDTOMock, EntityPeopleType.GEOGRAPHY);
+        responsibilitiesService.getAlternateEntityURIResponsibilities(responsibilitiesDataMock).subscribe(() => {
+          expect(groupURIResponsibilitiesSpy).toHaveBeenCalledWith(accountsDistributorsDTOMock, EntityPeopleType.GEOGRAPHY);
           done();
         });
       });
 
       it('should append new accounts/distributors geography group to existing entity types and grouped entities', (done) => {
-        spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.returnValue({
+        spyOn(responsibilitiesTransformerService, 'groupURIResponsibilities').and.returnValue({
           [EntityPeopleType.GEOGRAPHY]: [{
             name: accountsDistributorsDTOMock[0].name,
             positionId: accountsDistributorsDTOMock[0].id,
@@ -2277,7 +2288,7 @@ describe('Responsibilities Service', () => {
           hierarchyGroups: expectedHierarchyGroups
         });
 
-        responsibilitiesService.getAlternateAccountsDistributors(responsibilitiesDataMock)
+        responsibilitiesService.getAlternateEntityURIResponsibilities(responsibilitiesDataMock)
         .subscribe((responsibilitiesData: ResponsibilitiesData) => {
           expect(responsibilitiesData).toEqual(expectedResponsibilities);
           done();

@@ -24,6 +24,7 @@ import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './transformers/responsibilities-transformer.service';
 import { SalesHierarchyViewType } from '../enums/sales-hierarchy-view-type.enum';
 import { SkuPackageType } from '../enums/sku-package-type.enum';
+import { StoresApiService } from './api/v3/stores-api.service';
 import { SubAccountsApiService } from './api/v3/sub-accounts-api.service';
 
 const CORPORATE_USER_POSITION_ID = '0';
@@ -128,6 +129,7 @@ export class ResponsibilitiesService {
     private performanceTransformerService: PerformanceTransformerService,
     private positionsApiService: PositionsApiService,
     private responsibilitiesTransformerService: ResponsibilitiesTransformerService,
+    private storesApiService: StoresApiService,
     private subAccountsApiService: SubAccountsApiService,
     @Inject('toastService') private toastService: any
   ) { }
@@ -283,6 +285,31 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
+  public getStoresPerformance(
+    stores: HierarchyEntity[],
+    positionId: string,
+    brandSkuCode: string,
+    skuPackageType: SkuPackageType,
+    filter: MyPerformanceFilterState
+  ): Observable<EntityWithPerformance[]> {
+    const apiCalls: Observable<EntityWithPerformance>[] = stores.map((store: HierarchyEntity) => {
+      return this.storesApiService.getStorePerformance(
+        store.positionId,
+        positionId,
+        brandSkuCode,
+        skuPackageType,
+        filter
+      )
+      .map((response: PerformanceDTO) => this.performanceTransformerService.transformEntityWithPerformance(response, store))
+      .catch(() => {
+        this.toastService.showPerformanceDataErrorToast();
+        return Observable.of(this.performanceTransformerService.transformEntityWithPerformance(null, store));
+      });
+    });
+
+    return Observable.forkJoin(apiCalls);
+  }
+
   public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
     const subAccounts = subAccountData.groupedEntities[subAccountData.entityTypeAccountName]
       .map((subAccount: HierarchyEntity) => subAccount);
@@ -433,25 +460,22 @@ export class ResponsibilitiesService {
     }
   }
 
-  public getAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.distributors
-      || responsibilitiesData.salesHierarchyViewType === SalesHierarchyViewType.accounts) {
-      return this.positionsApiService.getAccountsOrDistributors(responsibilitiesData.entitiesURL)
-        .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
-          const hierarchyGroups: Array<HierarchyGroup> = [{
-            name: accountsOrDistributors[0].type.toUpperCase(),
-            type: accountsOrDistributors[0].type === EntityType.Distributor
-              ? HierarchyGroupTypeCode.distributors
-              : HierarchyGroupTypeCode.accounts,
-            entityType: accountsOrDistributors[0].type === EntityType.Distributor ? EntityType.DistributorGroup : EntityType.AccountGroup
+  public getEntityURIResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    if (this.isEntityURIViewType(responsibilitiesData.salesHierarchyViewType)) {
+      return this.positionsApiService.getEntityURIResponsibilities(responsibilitiesData.entitiesURL)
+        .switchMap((uriResponsibilities: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
+          const hierarchyGroup: Array<HierarchyGroup> = [{
+            name: uriResponsibilities[0].type.toUpperCase(),
+            type: this.getHierarchyGroupTypeCode(uriResponsibilities[0].type),
+            entityType: this.getHierarchyGroupEntityType(uriResponsibilities[0].type)
           }];
-          const groupedEntities: GroupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(
-            accountsOrDistributors,
-            EntityPeopleType[accountsOrDistributors[0].type.toUpperCase()]
+          const groupedEntities: GroupedEntities = this.responsibilitiesTransformerService.groupURIResponsibilities(
+            uriResponsibilities,
+            EntityPeopleType[uriResponsibilities[0].type.toUpperCase()]
           );
 
           return Observable.of(Object.assign({}, responsibilitiesData, {
-            hierarchyGroups: hierarchyGroups,
+            hierarchyGroups: hierarchyGroup,
             groupedEntities: groupedEntities
           }));
       });
@@ -508,16 +532,18 @@ export class ResponsibilitiesService {
     });
   }
 
-  public getAlternateAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+  public getAlternateEntityURIResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
     if (responsibilitiesData.alternateEntitiesURL) {
-      return this.positionsApiService.getAccountsOrDistributors(responsibilitiesData.alternateEntitiesURL)
+      return this.positionsApiService.getEntityURIResponsibilities(responsibilitiesData.alternateEntitiesURL)
         .switchMap((response: Array<EntityDTO>) => {
-          const groupedEntities = Object.assign({}, responsibilitiesData.groupedEntities,
-            this.responsibilitiesTransformerService.groupsAccountsDistributors(response, EntityPeopleType.GEOGRAPHY));
+          const groupedEntities: GroupedEntities = Object.assign({},
+            responsibilitiesData.groupedEntities,
+            this.responsibilitiesTransformerService.groupURIResponsibilities(response, EntityPeopleType.GEOGRAPHY)
+          );
           const alternateHierarchyGroup: HierarchyGroup = {
             name: EntityPeopleType.GEOGRAPHY,
-            type: response[0].type === EntityType.Distributor ? HierarchyGroupTypeCode.distributors : HierarchyGroupTypeCode.accounts,
-            entityType: response[0].type === EntityType.Distributor ? EntityType.DistributorGroup : EntityType.AccountGroup,
+            type: this.getHierarchyGroupTypeCode(response[0].type),
+            entityType: this.getHierarchyGroupEntityType(response[0].type),
             alternateHierarchyId: responsibilitiesData.positionId,
             isMemberOfExceptionHierarchy: responsibilitiesData.isMemberOfExceptionHierarchy
           };
@@ -534,9 +560,11 @@ export class ResponsibilitiesService {
     }
   }
 
-  public getEntitiesWithPerformanceForGroup(pipelineData: FetchEntityWithPerformanceData | RefreshAllPerformancesData)
-    : Observable<FetchEntityWithPerformanceData | RefreshAllPerformancesData> {
+  public getEntitiesWithPerformanceForGroup(
+    pipelineData: FetchEntityWithPerformanceData | RefreshAllPerformancesData
+  ): Observable<FetchEntityWithPerformanceData | RefreshAllPerformancesData> {
     let entityWithPerformanceObservable: Observable<(EntityWithPerformance | Error)[]>;
+
     switch (pipelineData.entityType) {
       case EntityType.RoleGroup:
         entityWithPerformanceObservable = this.getPositionsPerformances(
@@ -566,6 +594,15 @@ export class ResponsibilitiesService {
           pipelineData.skuPackageType
         );
         break;
+      case EntityType.StoreGroup:
+        entityWithPerformanceObservable = this.getStoresPerformance(
+          pipelineData.entities,
+          pipelineData.positionId,
+          pipelineData.brandSkuCode,
+          pipelineData.skuPackageType,
+          pipelineData.filter
+        );
+        break;
       default:
         throw new Error(`[getEntitiesWithPerformanceForGroup]: EntityType of ${ pipelineData.entityType } is not supported.`);
     }
@@ -587,6 +624,8 @@ export class ResponsibilitiesService {
         return SalesHierarchyViewType.distributors;
       case EntityType.AccountGroup:
         return SalesHierarchyViewType.accounts;
+      case EntityType.StoreGroup:
+        return SalesHierarchyViewType.stores;
       default:
         throw new Error(`[getEntityGroupViewType]: EntityType of ${ type } is not supported.`);
     }
@@ -687,11 +726,11 @@ export class ResponsibilitiesService {
   }
 
   private handleResponsibilitiesEntityURIResponse(entityURIArray: string[]): ResponsibilitiesData {
+    const lastUrlToken: string = entityURIArray[0].match(/([^\/]+$)/)[0];
+
     return {
       entitiesURL: entityURIArray[0],
-      salesHierarchyViewType: entityURIArray[0].search('distributors') !== -1
-        ? SalesHierarchyViewType.distributors
-        : SalesHierarchyViewType.accounts
+      salesHierarchyViewType: SalesHierarchyViewType[lastUrlToken]
     };
   }
 
@@ -805,5 +844,37 @@ export class ResponsibilitiesService {
     }
 
     return performanceObservable;
+  }
+
+  private isEntityURIViewType(salesHierarchyViewType: SalesHierarchyViewType) {
+    return salesHierarchyViewType === SalesHierarchyViewType.distributors
+      || salesHierarchyViewType === SalesHierarchyViewType.accounts
+      || salesHierarchyViewType === SalesHierarchyViewType.stores;
+  }
+
+  private getHierarchyGroupEntityType(groupResponsibilityType: EntityType): EntityType {
+    switch (groupResponsibilityType) {
+      case EntityType.Distributor:
+        return EntityType.DistributorGroup;
+      case EntityType.Account:
+        return EntityType.AccountGroup;
+      case EntityType.Store:
+        return EntityType.StoreGroup;
+      default:
+        throw new Error(`[getHierarchyGroupEntityType]: EntityType of ${ groupResponsibilityType } is not supported.`);
+    }
+  }
+
+  private getHierarchyGroupTypeCode(groupEntityType: EntityType): HierarchyGroupTypeCode {
+    switch (groupEntityType) {
+      case EntityType.Distributor:
+        return HierarchyGroupTypeCode.distributors;
+      case EntityType.Account:
+        return HierarchyGroupTypeCode.accounts;
+      case EntityType.Store:
+        return HierarchyGroupTypeCode.stores;
+      default:
+        throw new Error(`[getHierarchyGroupTypeCode]: EntityType of ${ groupEntityType } is not supported.`);
+    }
   }
 }

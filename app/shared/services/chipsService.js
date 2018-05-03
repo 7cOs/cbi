@@ -1,4 +1,6 @@
 'use strict';
+var uniqBy = require('lodash').uniqBy;
+var findIndex = require('lodash').findIndex;
 
 module.exports = /*  @ngInject */
   function chipsService($filter, $state, $q, loaderService, filtersService, opportunitiesService, targetListService) {
@@ -225,7 +227,16 @@ module.exports = /*  @ngInject */
            } else if (chip.type === 'zipCode' && arr[i] === chip.name) {
             arr.splice(i, 1);
             break;
-          } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' ||
+          } else if (chip.type === 'distributor') {
+            let dedupedDistributor = uniqBy(arr, (distributor) => {
+              return distributor.id;
+            });
+            let removalIndex = findIndex(dedupedDistributor, (distributor) => { return distributor.id === chip.id; });
+            dedupedDistributor.splice(removalIndex, 1);
+            filtersService.model.selected[chip.type] = dedupedDistributor;
+            filtersService.model.filtersValidCount--;
+            break;
+          } else if (chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' ||
               chip.type === 'contact' || chip.type === 'masterSKU' || chip.type === 'brand') {
             // handle duplicate values for these fields, which may have been stored in a saved report
             var unique = arr.filter(function(elem, index, self) {
@@ -394,8 +405,8 @@ module.exports = /*  @ngInject */
               filtersService.model.selected.brand = filtersService.model.selected.brand || [];
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
-              addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
-              if (service.model.indexOf(result.id) === -1) pushUniqueValue(result.id, model);
+              addAutocompleteChip($filter('titlecase')(result.name), filter, null, getMasterSku(result));
+              if (service.model.indexOf(result.id) === -1) pushUniqueValue(getMasterSku(result), model);
             }
             break;
           case 'tradeChannel':
@@ -547,5 +558,16 @@ module.exports = /*  @ngInject */
           removeChip('distributor');
           break;
       }
+    }
+
+    /**
+     * @name getMasterSku
+     * @desc Returns sku id and it's brandcode
+     * @params {Object} item
+     * @returns String
+     * @memberOf cf.common.services
+     */
+    function getMasterSku(item) {
+      return item.id + '@' + item.brandCode;
     }
   };

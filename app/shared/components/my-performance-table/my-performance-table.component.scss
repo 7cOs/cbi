@@ -647,8 +647,9 @@ div.ctv {
     }
   }
 
-  &.view-type-subAccounts ,
-  &.view-type-distributors {
+  &.view-type-subAccounts,
+  &.view-type-distributors,
+  &.view-type-stores {
 
     tr, td, th {
       cursor: pointer;

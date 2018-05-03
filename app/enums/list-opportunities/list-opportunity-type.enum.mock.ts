@@ -1,6 +1,6 @@
 import { sample } from 'lodash';
 
-import { OpportunityType } from './opportunity.enum';
+import { OpportunityType } from './list-opportunity-type.enum';
 
 const opportunityTypeValues = Object.keys(OpportunityType).map(key => OpportunityType[key]);
 

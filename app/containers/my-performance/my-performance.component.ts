@@ -110,6 +110,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private selectedSkuPackageCode: string;
   private selectedSubaccountCode: string;
   private selectedDistributorCode: string;
+  private selectedStoreId: string;
   private tableHeaderRowLeft: Array<string> = [
     this.myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.roleGroups),
     'DEPLETIONS',
@@ -518,8 +519,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.clickedSalesHierarchyEntityName = parameters.row.descriptionRow0;
     this.analyticsService.trackEvent('Team Snapshot', 'Link Click', parameters.row.descriptionRow0);
 
-    if (this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts &&
-        this.salesHierarchyViewType !== SalesHierarchyViewType.distributors) {
+    if (this.isSalesHierarchyBottomLevel()) {
       this.drillStatus = DrillStatus.Down;
       this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceState(Object.assign({}, this.currentState, {
         filter: this.filterState
@@ -551,7 +551,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if ((parameters.row.descriptionRow0 === EntityPeopleType['NATIONAL SALES ORG']
           || parameters.row.descriptionRow0 === EntityPeopleType.DRAFT)
-          && this.isCorpUser()) {
+          && this.isCorpUser()
+        ) {
           const nextLevelEntity = this.currentState.responsibilities.groupedEntities[parameters.row.metadata.entityName][0];
           const isExceptionHierarchy = nextLevelEntity.hierarchyType === SalesHierarchyType.EXCPN_HIER;
 
@@ -652,6 +653,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityType(EntityType.Person));
           this.handleTeamPerformanceDataRefresh();
         }
+        break;
+      case SalesHierarchyViewType.stores:
+        this.selectedStoreId = parameters.row.metadata.positionId;
         break;
       default:
         break;
@@ -858,6 +862,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private handlePreviousStateVersion(previousState: MyPerformanceEntitiesData, versionStepsBack: number): void {
     this.selectedSubaccountCode = null;
     this.selectedDistributorCode = null;
+    this.selectedStoreId = null;
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceState(versionStepsBack));
     this.fetchProductMetricsForPreviousState(previousState);
 
@@ -1058,5 +1063,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         filter: this.filterState
       }));
     }
+  }
+
+  private isSalesHierarchyBottomLevel(): boolean {
+    return this.salesHierarchyViewType !== SalesHierarchyViewType.subAccounts
+      && this.salesHierarchyViewType !== SalesHierarchyViewType.distributors
+      && this.salesHierarchyViewType !== SalesHierarchyViewType.stores;
   }
 }

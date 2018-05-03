@@ -5,5 +5,7 @@ export enum SalesHierarchyEntityType {
   DistributorGroup = 'DistributorGroup',
   Account = 'Account',
   AccountGroup = 'AccountGroup',
-  SubAccount = 'SubAccount'
+  SubAccount = 'SubAccount',
+  Store = 'Store',
+  StoreGroup = 'StoreGroup'
 }

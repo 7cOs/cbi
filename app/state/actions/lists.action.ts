@@ -23,6 +23,10 @@ export interface FetchListPerformancePayload {
   dateRangeCode: DateRangeTimePeriodValue;
 }
 
+export interface FetchOppsForListPayload {
+  listId: string;
+}
+
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
 export class FetchStoreDetails implements Action {
   readonly type = FETCH_STORE_DETAILS;
@@ -65,6 +69,24 @@ export class FetchHeaderDetailsFailure implements Action {
   constructor(public payload: Error) { }
 }
 
+export class FetchOppsForList implements Action {
+  readonly type = ListsActionTypes.FETCH_OPPS_FOR_LIST;
+
+  constructor(public payload: any) { }
+}
+
+export class FetchOppsForListSuccess implements Action {
+  readonly type = ListsActionTypes.FETCH_OPPS_FOR_LIST_SUCCESS;
+
+  constructor(public payload: any) { }
+}
+
+export class FetchOppsForListFailure implements Action {
+  readonly type = ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE;
+
+  constructor(public payload: Error) { }
+}
+
 export class FetchListPerformanceVolume implements Action {
   readonly type = ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME;
   constructor(public payload: FetchListPerformancePayload) { }
@@ -102,6 +124,9 @@ export type Action
   | FetchHeaderDetails
   | FetchHeaderDetailsSuccess
   | FetchHeaderDetailsFailure
+  | FetchOppsForList
+  | FetchOppsForListSuccess
+  | FetchOppsForListFailure
   | FetchListPerformanceVolume
   | FetchListPerformanceVolumeSuccess
   | FetchListPerformanceVolumeError
