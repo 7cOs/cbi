@@ -83,15 +83,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static WebDriver getSauceWebDriver(String testName) throws MalformedURLException {
-    final String username = PropertiesCache.getInstance().getProperty("sauce.userName");
-    final String accessKey = PropertiesCache.getInstance().getProperty("sauce.accessKey");;
-    final int port = 80;
-
-    final String sauceURL = String.format("https://%s:%s@ondemand.saucelabs.com:%d/wd/hub", username, accessKey, port);
-    final URL remoteAddress = new URL(sauceURL);
-    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
-
-    webDriver.set(new RemoteWebDriver(remoteAddress, capabilities));
+    webDriver.set(getRemoteSauceDriver(testName));
 
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
     sessionId.set(id);
@@ -100,6 +92,22 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     Validate.notNull(webDriver.get(), "Driver could not be found at:" + HostType.sauce.name());
 
     return webDriver.get();
+  }
+
+  private static RemoteWebDriver getRemoteSauceDriver(String testName) throws MalformedURLException {
+    final URL remoteAddress = buildSauceURI();
+    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
+
+    return new RemoteWebDriver(remoteAddress, capabilities);
+  }
+
+  private static URL buildSauceURI() throws MalformedURLException {
+    final String username = PropertiesCache.getInstance().getProperty("sauce.userName");
+    final String accessKey = PropertiesCache.getInstance().getProperty("sauce.accessKey");
+    final int port = 80;
+
+    final String sauceURL = String.format("https://%s:%s@ondemand.saucelabs.com:%d/wd/hub", username, accessKey, port);
+    return new URL(sauceURL);
   }
 
   private static DesiredCapabilities getSauceCapabilitiesByBrowser(String testName, String driverType) {
