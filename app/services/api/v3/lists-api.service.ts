@@ -40,10 +40,17 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public createList(list: V3List): Observable<any> {
+  public createList(list: V3List): Observable<V3List> {
     const url = `/v3/lists`;
 
     return this.http.post(url, list)
-      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
+  public addOpportunitiesToList(listId: string, opportunityIds: string[]): Observable<any> {
+    const url = `/v3/lists/${ listId }/opportunities`;
+
+    return this.http.post(url, opportunityIds)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 }

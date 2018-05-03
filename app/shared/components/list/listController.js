@@ -1,9 +1,7 @@
-import { ListsTransformerService } from '../../../services/lists-transformer.service';
-
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, listsApiService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, listsApiService, listsTransformerService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -234,17 +232,17 @@ module.exports = /*  @ngInject */
       if (listId && vm.selected.length) {
         loaderService.openLoader(true);
 
-        let opportunityIdsPromise = opportunityIdsToCopy();
-        opportunityIdsPromise.then(opportunityIds => {
-          targetListService.addTargetListOpportunities(listId, opportunityIds).then(() => {
-            updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
-            updateCopiedOpportunities();
-            vm.toggleSelectAllStores(false);
-
-            loaderService.closeLoader();
-
-            toastService.showToast('copied', opportunityIds);
-          }, function(err) {
+        opportunityIdsToCopy().then(opportunityIds => {
+          const formattedOpportunities = opportunityIds.map(opportunityId => { return { opportunityId: opportunityId }; });
+          listsApiService.addOpportunitiesToList(listId, formattedOpportunities)
+            .toPromise()
+            .then(result => {
+              updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
+              updateCopiedOpportunities();
+              vm.toggleSelectAllStores(false);
+              loaderService.closeLoader();
+              toastService.showToast('copied', opportunityIds);
+          }, err => {
             loaderService.closeLoader();
             console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
             getTargetLists();
@@ -332,33 +330,33 @@ module.exports = /*  @ngInject */
     function saveNewList(e) {
       vm.buttonDisabled = true;
 
-      userService.addTargetList(vm.newList).then(response => {
-        analyticsService.trackEvent(
-          'Target Lists - My Target Lists',
-          'Create Target List',
-          response.id
-        );
+      listsApiService.createList(listsTransformerService.formatNewList(vm.newList))
+        .toPromise()
+        .then(response => {
+          analyticsService.trackEvent(
+            'Target Lists - My Target Lists',
+            'Create Target List',
+            response.id
+          );
 
-        vm.addToTargetList(response.id);
-        vm.closeModal();
-        vm.buttonDisabled = false;
+          vm.addToTargetList(response.id);
+          vm.closeModal();
+          vm.buttonDisabled = false;
 
-        return targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
-      })
-      .then(addCollaboratorResponse => {
-        if (userService.model.targetLists) {
-         userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
-        }
-        vm.newList = {
-          name: '',
-          description: '',
-          opportunities: [],
-          collaborators: [],
-          targetListShares: [],
-          collaborateAndInvite: false
-        };
-      })
-      .catch(error => console.error('Error creating target list: ', error));
+          if (userService.model.targetLists) {
+            userService.model.targetLists.owned[0].collaborators = response.collaborators;
+          }
+
+          vm.newList = {
+            name: '',
+            description: '',
+            opportunities: [],
+            collaborators: [],
+            targetListShares: [],
+            collaborateAndInvite: false
+          };
+        })
+        .catch(error => console.error('Error creating target list: ', error));
     }
 
     function addCollaborator(e) {
@@ -376,13 +374,6 @@ module.exports = /*  @ngInject */
     function displayBrandIcon(haystack, needle) {
       return haystack.indexOf(needle) !== -1;
     }
-
-    // Check if all items are selected
-    /* not useful when you can uncheck alt j
-    function isChecked() {
-      return vm.selected.length === opportunitiesService.model.opportunities.length;
-    }
-    */
 
     function openShareModal(oId, ev) {
       vm.currentOpportunityId = oId;
@@ -806,7 +797,7 @@ module.exports = /*  @ngInject */
       if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
         const currentUserEmployeeID = userService.model.currentUser.employeeID;
         listsApiService.getLists().toPromise().then((response) => {
-          userService.model.targetLists = ListsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
+          userService.model.targetLists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
         });
         // userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
         //   console.log(data);
