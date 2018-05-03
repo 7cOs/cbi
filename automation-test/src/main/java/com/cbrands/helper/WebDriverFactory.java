@@ -85,8 +85,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static WebDriver getSauceWebDriver(String testName) throws MalformedURLException {
     webDriver.set(getRemoteSauceDriver(testName));
 
-    String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
-    sessionId.set(id);
+    sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId().toString());
     log.info("Targeted Host:" + HostType.sauce.name());
     log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
     Validate.notNull(webDriver.get(), "Driver could not be found at:" + HostType.sauce.name());
