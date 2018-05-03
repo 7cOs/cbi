@@ -28,6 +28,8 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
+  private static final String SAUCELABS_URI_FORMAT = "https://%s:%s@ondemand.saucelabs.com:%d/wd/hub";
+  private static final int DEFAULT_SAUCE_PORT = 80;
 
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
@@ -103,10 +105,8 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static URL buildSauceURI() throws MalformedURLException {
     final String username = PropertiesCache.getInstance().getProperty("sauce.userName");
     final String accessKey = PropertiesCache.getInstance().getProperty("sauce.accessKey");
-    final int port = 80;
 
-    final String sauceURL = String.format("https://%s:%s@ondemand.saucelabs.com:%d/wd/hub", username, accessKey, port);
-    return new URL(sauceURL);
+    return new URL(String.format(SAUCELABS_URI_FORMAT, username, accessKey, DEFAULT_SAUCE_PORT));
   }
 
   private static DesiredCapabilities getSauceCapabilitiesByBrowser(String testName, String driverType) {
