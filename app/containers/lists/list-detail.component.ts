@@ -47,7 +47,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   // TODO: Remove this when we get real data.
   public opportunitiesTableData: Array<ListOpportunitiesTableRow> = getListOpportunitiesTableRowMock(400);
   public opportunitiesTableDataSize: number = this.opportunitiesTableData.length;
-  public opportunitiesTableSlicedData: Array<ListOpportunitiesTableRow> = this.opportunitiesTableData.slice(0, LIST_TABLE_SIZE);
+  public slicedOpportunitiesTableData: Array<ListOpportunitiesTableRow> = this.opportunitiesTableData.slice(0, LIST_TABLE_SIZE);
   public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
 
   public actionButtonType: any = ActionButtonType;
@@ -127,7 +127,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     let pageStart = ((p - 1 ) * LIST_TABLE_SIZE);
     let pageEnd = (p * LIST_TABLE_SIZE) ;
     if (this.selectedTab === 'Opportunities') {
-      this.opportunitiesTableSlicedData = this.opportunitiesTableData.slice(pageStart, pageEnd);
+      this.slicedOpportunitiesTableData = this.opportunitiesTableData.slice(pageStart, pageEnd);
     } else {
       this.slicedPerformanceTableData = this.performanceTableData.slice(pageStart, pageEnd);
     }
