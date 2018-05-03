@@ -44,6 +44,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       this.isExpandAll = false;
       this.isSelectAllChecked = false;
       this.isIndeterminateChecked = false;
+      this.isOpportunityTableExtended = false;
     }
   }
 
