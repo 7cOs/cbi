@@ -152,8 +152,8 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   }
 
   public onTableRowClicked(row: ListOpportunitiesTableRow): void {
-    row.expanded ? this.numExpandedRows-- : this.numExpandedRows++;
     row.expanded = !row.expanded;
+    row.expanded ? this.numExpandedRows++ : this.numExpandedRows--;
 
     if (this.numExpandedRows === this.numberOfRows) this.isExpandAll = true;
     else if (this.numExpandedRows === 0) this.isExpandAll = false;

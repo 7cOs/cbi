@@ -114,7 +114,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public onTabClicked(tabName: string): void {
     if (tabName === this.performanceTabTitle) {
-      this.clearOpportunitiesTableSelections();
+      this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
     }
   }
 
@@ -138,7 +138,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       && opportunitiesStatus === ActionStatus.Fetched;
   }
 
-  private clearOpportunitiesTableSelections(): void {
+  private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
     const clearTableDrawerSelections = (opportunityRows: ListTableDrawerRow[]): ListTableDrawerRow[] => {
       return opportunityRows.map((opportunityRow: ListTableDrawerRow) => {
         return Object.assign({}, opportunityRow, {
@@ -147,7 +147,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
     };
 
-    this.opportunitiesTableData = this.opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
+    return opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
       return Object.assign({}, tableRow, {
         opportunities: clearTableDrawerSelections(tableRow.opportunities),
         checked: false,
