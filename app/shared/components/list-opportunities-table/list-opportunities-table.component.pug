@@ -27,7 +27,7 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
           th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.opportunitiesColumn)")
             span {{ tableHeaderRow[4] }}
               sort-indicator([status]="getSortStatus(columnType.opportunitiesColumn)")
-          th.checkbox-col.link(colspan=1, (click)="onExpandAllClicked()")
+          th.checkbox-col.link.expand-all-column(colspan=1, (click)="onExpandAllClicked()")
             img.expand-icon(*ngIf="!isExpandAll", src="../../../assets/img/icons/add-expand-collapse.svg")
             img.expand-icon(*ngIf="isExpandAll", src="../../../assets/img/icons/minus.svg")
 

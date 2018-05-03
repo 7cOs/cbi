@@ -12,7 +12,6 @@ import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { OpportunityType } from '../../enums/list-opportunities/list-opportunity-type.enum';
 
 export const PERFORMANCE_TOTAL_ROW_NAME: string = 'Total';
 export const SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL: string = 'ANY';

@@ -1,5 +1,4 @@
 import * as Chance from 'chance';
-import { By } from '@angular/platform-browser';
 import {  ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -86,7 +85,7 @@ describe('Team Performance Opportunities Extender Body', () => {
   listsSubject.next(listDetailMock);
   });
 
-  fdescribe('ListOpportunityExtenderBodyComponent initialization', () => {
+  describe('ListOpportunityExtenderBodyComponent initialization', () => {
     let testBed: TestBed;
     let store: Store<AppState>;
 
@@ -95,7 +94,7 @@ describe('Team Performance Opportunities Extender Body', () => {
       store = testBed.get(Store);
     });
 
-    fit('should call select with the right arguments', () => {
+    it('should call select with the right arguments', () => {
       storeMock.select.calls.reset();
       listsSubject.next(stateMock.listsDetails);
       componentInstance.ngOnChanges();

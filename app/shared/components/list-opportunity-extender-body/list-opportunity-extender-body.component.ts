@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { ActionStatus } from '../../../enums/action-status.enum';
 import { AppState } from '../../../state/reducers/root.reducer';
 import { Subscription } from 'rxjs/Subscription';
 import { ListsOpportunities } from '../../../models/lists/lists-opportunities.model';
