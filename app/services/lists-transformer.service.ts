@@ -100,7 +100,7 @@ export class ListsTransformerService {
       numberOfClosedOpportunities: list.numberOfClosedOpportunities || 0,
       owner: list.owner,
       survey: list.survey,
-      targetListAuthor: this.formatAuthorText(this.getListAuthor(list.collaborators), isOwnedList),
+      targetListAuthor: this.formatAuthorText(list.owner, isOwnedList),
       totalOpportunities: list.totalOpportunities || 0,
       type: list.type,
       updatedOn: list.updatedOn,
@@ -163,14 +163,10 @@ export class ListsTransformerService {
     return storeData;
   }
 
-  private formatAuthorText(author: Lists.Collaborator, currentUserIsAuthor: boolean = false): string {
+  private formatAuthorText(author: Lists.User, currentUserIsAuthor: boolean = false): string {
     return currentUserIsAuthor || !author
       ? 'current user'
-      : `${author.user.firstName} ${author.user.lastName}`;
-  }
-
-  private getListAuthor(collaborators: Lists.Collaborator[]): Lists.Collaborator {
-    return collaborators.find((collaborator: Lists.Collaborator) => collaborator.permissionLevel === 'author');
+      : `${author.firstName} ${author.lastName}`;
   }
 
   private formatListOpportunityData(listOpportunity: ListOpportunityDTO): ListsOpportunities {
