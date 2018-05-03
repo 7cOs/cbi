@@ -22,6 +22,7 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   public opportunityDetails: ListsOpportunities;
   public opportunityType: OpportunityTypeLabel | OpportunityType;
   public allOpps: OpportunitiesByStore;
+  public skuDescription: string;
   private listDetailSubscription: Subscription;
 
   constructor(private store: Store<AppState>) {
@@ -44,6 +45,7 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
     this.opportunityType =  this.opportunityDetails ?
                               OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type
                               : null;
+    this.skuDescription = this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
   }
 
   ngOnDestroy() {
