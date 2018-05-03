@@ -11,6 +11,11 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
+export interface OpportunitiesTableSelectAllCheckboxState {
+  isSelectAllChecked: boolean;
+  isIndeterminateChecked: boolean;
+}
+
 @Component({
   selector: 'list-opportunities-table',
   template: require('./list-opportunities-table.component.pug'),
@@ -31,9 +36,14 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
+
       this.sortedTableData = sortedTableData;
-      this.numSelectedRows = this.sortedTableData.length;
       this.numberOfRows = this.sortedTableData.length;
+      this.numSelectedRows = this.sortedTableData.length;
+      this.numExpandedRows = 0;
+      this.isExpandAll = false;
+      this.isSelectAllChecked = false;
+      this.isIndeterminateChecked = false;
     }
   }
 
@@ -52,11 +62,11 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public storeNameSelected: string;
   public opportunitySelected: string;
   public unversionedStoreId: string;
+  public isExpandAll: boolean = false;
 
   private isOpportunityTableExtended: boolean = false;
   private numberOfRows: number = 0;
   private numExpandedRows: number = 0;
-  private isExpandAll: boolean = false;
   private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
     columnType: ListOpportunitiesColumnType.cytdColumn,
@@ -175,6 +185,28 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       if (!opportunityRow.checked) isEveryOppChecked = false;
       return isEveryOppChecked;
     }, true);
+
+    const selectedAllCheckboxState: OpportunitiesTableSelectAllCheckboxState = this.getSelectAllCheckboxState(this.sortedTableData);
+
+    this.isSelectAllChecked = selectedAllCheckboxState.isSelectAllChecked;
+    this.isIndeterminateChecked = selectedAllCheckboxState.isIndeterminateChecked;
+  }
+
+  private getSelectAllCheckboxState(tableData: ListOpportunitiesTableRow[]): OpportunitiesTableSelectAllCheckboxState {
+    const selectAllCheckboxState: OpportunitiesTableSelectAllCheckboxState = tableData.reduce(
+      (selectAllState: OpportunitiesTableSelectAllCheckboxState, tableRow: ListOpportunitiesTableRow) => {
+        if (tableRow.checked) selectAllState.isIndeterminateChecked = true;
+        else selectAllState.isSelectAllChecked = false;
+
+        return selectAllState;
+      }, {
+        isSelectAllChecked: true,
+        isIndeterminateChecked: false
+    });
+
+    if (selectAllCheckboxState.isSelectAllChecked) selectAllCheckboxState.isIndeterminateChecked = false;
+
+    return selectAllCheckboxState;
   }
 
   private getTableClasses(loadingState: LoadingState): CssClasses {
