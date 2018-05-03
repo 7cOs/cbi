@@ -12,6 +12,7 @@ import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { OpportunityType } from '../../enums/list-opportunities/list-opportunity-type.enum';
 
 export const PERFORMANCE_TOTAL_ROW_NAME: string = 'Total';
 export const SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL: string = 'ANY';
@@ -45,7 +46,8 @@ export class ListsTableTransformerService {
         opportunities: this.transformStoreOpportunities(storeOpportunities),
         performanceError: !storeVolume,
         checked: false,
-        expanded: false
+        expanded: false,
+        unversionedStoreId: store.unversionedStoreId
       });
 
       return opportunityRows;
@@ -104,6 +106,7 @@ export class ListsTableTransformerService {
   private transformStoreOpportunities(opportunities: ListsOpportunities[]): ListTableDrawerRow[] {
     return opportunities.map((opportunity: ListsOpportunities) => {
       return {
+        id: opportunity.id,
         brand: opportunity.brandDescription,
         skuPackage: opportunity.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opportunity.skuDescription,
         type: OpportunityTypeLabel[opportunity.type] || opportunity.type,

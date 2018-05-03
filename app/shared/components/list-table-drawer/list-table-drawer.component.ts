@@ -11,7 +11,7 @@ import { OpportunityImpact } from '../../../enums/list-opportunities/list-opport
 
 export class ListTableDrawerComponent {
   @Output() onOpportunityCheckboxClicked: EventEmitter<Event> = new EventEmitter();
-  @Output() onOpportunityTypeClicked: EventEmitter<ListTableDrawerRow> = new EventEmitter();
+  @Output() onOpportunityTypeClicked: EventEmitter<string> = new EventEmitter();
 
   @Input() tableData: ListTableDrawerRow[];
 
@@ -23,7 +23,7 @@ export class ListTableDrawerComponent {
   }
 
   public onTypeClicked(opportunityRow: ListTableDrawerRow): void {
-    this.onOpportunityTypeClicked.emit(opportunityRow);
+    this.onOpportunityTypeClicked.emit(opportunityRow.id);
   }
 
   public onActionButtonClicked(): void {

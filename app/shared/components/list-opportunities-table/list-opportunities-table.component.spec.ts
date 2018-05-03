@@ -52,6 +52,8 @@ class CompassTableExtenderHeaderComponent {
   template: ''
 })
 class ListOpportunityExtenderBodyComponent {
+  @Input() opportunitySelected: string;
+  @Input() unversionedStoreId: string;
 }
 
 @Component({

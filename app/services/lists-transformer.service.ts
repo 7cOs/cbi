@@ -91,7 +91,8 @@ export class ListsTransformerService {
       type: OpportunityType[listOpportunity.type],
       status: OpportunityStatus[listOpportunity.status],
       impact: OpportunityImpact[listOpportunity.impact],
-      isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity
+      isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity,
+      rationale: listOpportunity.rationale
     };
   }
 

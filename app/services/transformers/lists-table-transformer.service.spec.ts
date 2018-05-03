@@ -89,11 +89,13 @@ describe('ListsTableTransformerService', () => {
             opportunities: jasmine.any(Array) as any,
             performanceError: false,
             checked: false,
-            expanded: false
+            expanded: false,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
 
           row.opportunities.forEach((opportunityRow: ListTableDrawerRow, rowIndex: number) => {
             expect(opportunityRow).toEqual({
+              id: matchedOpportunities[rowIndex].id,
               brand: matchedOpportunities[rowIndex].brandDescription,
               skuPackage: matchedOpportunities[rowIndex].isSimpleDistribution
                 ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL
@@ -139,7 +141,8 @@ describe('ListsTableTransformerService', () => {
           opportunities: jasmine.any(Array) as any,
           performanceError: true,
           checked: false,
-          expanded: false
+          expanded: false,
+          unversionedStoreId: storeDetailsMock[0].unversionedStoreId
         });
       });
     });

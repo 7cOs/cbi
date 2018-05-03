@@ -49,8 +49,11 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
+  public storeNameSelected: string;
+  public opportunitySelected: string;
+  public unversionedStoreId: string;
 
-  private isOpportunityTableExtended: boolean = true;
+  private isOpportunityTableExtended: boolean = false;
   private numberOfRows: number = 0;
   private numExpandedRows: number = 0;
   private isExpandAll: boolean = false;
@@ -141,8 +144,11 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     this.isOpportunityTableExtended = !this.isOpportunityTableExtended;
   }
 
-  public onOpportunityTypeClicked(storeRow: ListOpportunitiesTableRow): void {
-    console.log('onOpportunityTypeClicked: Handle Table Extension Here');
+  public onOpportunityTypeClicked(opportunityId: string, storeColumn: string, unversionedStoreId: string): void {
+    this.storeNameSelected = storeColumn;
+    this.opportunitySelected = opportunityId;
+    this.unversionedStoreId = unversionedStoreId;
+    this.isOpportunityTableExtended = true;
   }
 
   public onTableRowClicked(row: ListOpportunitiesTableRow): void {

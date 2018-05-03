@@ -58,11 +58,14 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
             list-table-drawer(
               [tableData]="row.opportunities",
               (onOpportunityCheckboxClicked)="onOpportunityCheckboxClicked(row)",
-              (onOpportunityTypeClicked)="onOpportunityTypeClicked(row)"
+              (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row.storeColumn, row.unversionedStoreId)"
             )
   mat-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
     compass-table-extender-header(
       [mainTitle]="'Opportunity Details'",
-      [subtitle]="'Grand & Wester Armanetti'",
+      [subtitle]="storeNameSelected",
       (onCloseIndicatorClicked)="toggleOpportunityTable()")
-      list-opportunity-extender-body()
+      list-opportunity-extender-body(
+        [opportunitySelected]="opportunitySelected",
+        [unversionedStoreId]="unversionedStoreId"
+      )

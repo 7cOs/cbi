@@ -1,34 +1,42 @@
 .inline
   .wrap
-    p <b>Brand: </b> CORONA EXTRA
+    p <b>Brand: </b> {{ opportunityDetails.brandDescription }}
   .wrap
     p
       b Sku/Package:
-      |  16OZ 6PK CAN
+      |  {{ opportunityDetails.skuDescription }}
   .wrap
-    p <b>Opportunity Type: </b> Low Velocity
+    p <b>Opportunity Type: </b> {{ opportunityType }}
   .wrap
-    p <b>Opportunity Rationale: </b> Rationale for low velocity goes here. This should be wrapped up if length is too much.
-  .wrap
-    p <b>Brand Mandate</b>
-  .wrap
-    p <b>Start date: </b> 11/14/18
-    p <b>End date: </b> None
-  .wrap
-    p <b>Reset Start: </b> 11/14/18
-    p <b>Reset End: </b> None
-  .wrap
-    p <b>Additional Notes: </b> N/A
-  .wrap
-    p <b>Every Day Low Price (Off Premsie) </b>
-  .wrap
-    p <b>Start date: </b> 11/14/18
-    p <b>End date: </b> None
-  .wrap
-    p <b>Price: </b> $11.99
-    p
-      b On Menu/Display?:
-      |  Y
-  .wrap
-    p <b>Additional Notes: </b> When long text like these occurs then the row automatically sizes to fit the content in the middle. If it is even longer like this, then the extender will become auto scrollable
+    p <b>Opportunity Rationale: </b> {{ opportunityDetails.rationale }}
+  //- .wrap
+  //-   p <b>Brand Mandate</b>
+  //- .wrap
+  //-   p
+  //-     span.left <b>Start date: </b>11/14/18
+  //-   p
+  //-     span.right <b>Start End: </b> None
+  //- .wrap
+  //-   p
+  //-     span.left <b>Reset date: </b>11/14/18
+  //-   p
+  //-     span.right <b>Reset End: </b> None
+  //- .wrap
+  //-   p <b>Additional Notes: </b> N/A
+  //- .wrap
+  //-   p <b>Every Day Low Price (Off Premsie) </b>
+  //- .wrap
+  //-   p
+  //-     span.left <b>Start date: </b>11/14/18
+  //-   p
+  //-     span.right <b>Start End: </b> None
+  //- .wrap
+  //-   p
+  //-     span.left <b>Price: </b> $11.99
+  //-   p
+  //-     span.right
+  //-       b On Menu/Display?:
+  //-       |  Y
+  //- .wrap
+  //-   p <b>Additional Notes: </b> When long text like these occurs then the row automatically sizes to fit the content in the middle. If it is even longer like this, then the extender will become auto scrollable
 

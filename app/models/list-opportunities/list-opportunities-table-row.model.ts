@@ -13,4 +13,5 @@ export interface ListOpportunitiesTableRow {
   performanceError: boolean;
   checked: boolean;
   expanded: boolean;
+  unversionedStoreId: string;
 }

@@ -17,7 +17,8 @@ export function getListOpportunitiesTableRowMock(length: number) {
       opportunitiesColumn: chance.integer({min: 0, max: 10000}),
       performanceError: false,
       checked: false,
-      expanded: false
+      expanded: false,
+      unversionedStoreId: chance.string()
     });
   }
 
