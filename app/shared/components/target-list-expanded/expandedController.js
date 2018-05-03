@@ -336,7 +336,6 @@ module.exports = /*  @ngInject */
         loaderService.closeLoader();
         const currentUserEmployeeID = userService.model.currentUser.employeeID;
         const listsCollectionSummary = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
-        console.log(listsCollectionSummary);
         userService.model.targetLists = listsCollectionSummary;
       });
 

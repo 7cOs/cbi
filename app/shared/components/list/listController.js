@@ -811,15 +811,7 @@ module.exports = /*  @ngInject */
         listsApiService.getLists().toPromise().then((response) => {
           userService.model.targetLists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
         });
-        // userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
-        //   console.log(data);
-        //   userService.model.targetLists = data;
-        // });
       }
-
-      listsApiService.getLists().toPromise().then((shit) => {
-        console.log(shit);
-      });
     }
 
     /**
