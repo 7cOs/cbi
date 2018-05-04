@@ -18,7 +18,7 @@ export class ListsApiService {
     private http: HttpClient
   ) { }
 
-  public getLists(): Observable<any> {
+  public getLists(): Observable<V3List[]> {
     const url = `/v3/lists`;
     const params = {
       includeCollaboratorLists: 'true',
@@ -52,7 +52,7 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public addOpportunitiesToList(listId: string, opportunities: {id: string}[]): Observable<ListOpportunityDTO[]> {
+  public addOpportunitiesToList(listId: string, opportunities: {opportunityId: string}[]): Observable<ListOpportunityDTO[]> {
     const url = `/v3/lists/${ listId }/opportunities`;
 
     return this.http.post(url, opportunities)

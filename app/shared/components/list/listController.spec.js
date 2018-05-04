@@ -1,12 +1,19 @@
 import * as Chance from 'chance';
+// import { Observable } from 'rxjs';
+
+const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
+const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
 
 const chance = new Chance();
 
-describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService, $state;
-  var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
+fdescribe('Unit: list controller', function() {
+  let scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService, $state, listsApiService, listsTransformerService;
+  let bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
+    listsApiService = listsApiServiceMock;
+    listsTransformerService = listsTransformerServiceMock;
+
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.filters');
@@ -17,10 +24,12 @@ describe('Unit: list controller', function() {
       analyticsService = {
         trackEvent: () => {}
       };
+      $provide.value('listsApiService', listsApiService);
       $provide.value('analyticsService', analyticsService);
+      $provide.value('listsTransformerService', listsTransformerService);
     });
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _listsApiService_, _listsTransformerService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
@@ -36,6 +45,8 @@ describe('Unit: list controller', function() {
       targetListService = _targetListService_;
       toastService = _toastService_;
       userService = _userService_;
+      listsApiService = _listsApiService_;
+      listsTransformerService = _listsTransformerService_;
 
       userService.model.currentUser.employeeID = 1;
 
@@ -965,10 +976,7 @@ describe('Unit: list controller', function() {
 
   describe('[list.saveNewList] method', function() {
     beforeEach(function() {
-      spyOn(userService, 'addTargetList').and.callFake(function() {
-        var deferred = q.defer();
-        return deferred.promise;
-      });
+      spyOn(listsApiService, 'createList').and.callThrough();
       spyOn(ctrl, 'closeModal').and.callThrough();
 
       ctrl.newList = {
@@ -981,55 +989,47 @@ describe('Unit: list controller', function() {
       };
     });
 
-    it('should call the userService create a target list', function() {
+    it('should call the listsApiService to create a list', function() {
       ctrl.saveNewList(ctrl.newList);
-      expect(userService.addTargetList).toHaveBeenCalled();
+      expect(listsApiService.createList).toHaveBeenCalled();
     });
   });
 
-  describe('list.saveNewList GA Event', () => {
-    let targetListResponseMock;
+  fdescribe('list.saveNewList GA Event', () => {
+    const createListResponseMockId = chance.string();
+    const createListResponseMock = {id: createListResponseMockId};
 
-    it('should log a GA event on userService.addTargetList success', () => {
-      targetListResponseMock = {id: '123-456-789'};
-      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
-      httpBackend.expectPOST('/v2/targetLists/123-456-789/shares').respond(200);
-
-      spyOn(userService, 'addTargetList').and.callFake(() => {
+    it('should log a GA event on create target list success', () => {
+      spyOn(ctrl, 'createV3List').and.callFake(() => {
         const defer = q.defer();
-        defer.resolve(targetListResponseMock);
+        defer.resolve(createListResponseMock);
         return defer.promise;
       });
+      spyOn(listsApiService, 'createList').and.callThrough();
       spyOn(analyticsService, 'trackEvent');
-
       ctrl.saveNewList();
       scope.$apply();
 
-      expect(userService.addTargetList).toHaveBeenCalled();
+      expect(listsApiService.createList).toHaveBeenCalled();
       expect(analyticsService.trackEvent).toHaveBeenCalledWith(
         'Target Lists - My Target Lists',
         'Create Target List',
-        targetListResponseMock.id
+        createListResponseMockId
       );
     });
 
-    it('should NOT log a GA event on userService.addTargetList error', () => {
-      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
-
-      spyOn(userService, 'addTargetList').and.callFake(() => {
-        const defer = q.defer();
-        defer.reject({ error: 'Error' });
-        return defer.promise;
-      });
-      spyOn(analyticsService, 'trackEvent');
+    it('should NOT log a GA event on listsApiService.createList error', (done) => {
+      spyOn(listsApiService, 'createList').and.returnValue(createListResponseMock);
+      spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
       spyOn(console, 'error');
 
       ctrl.saveNewList();
       scope.$apply();
 
-      expect(userService.addTargetList).toHaveBeenCalled();
+      expect(listsApiService.createList).toHaveBeenCalled();
       expect(analyticsService.trackEvent).not.toHaveBeenCalled();
       expect(console.error).toHaveBeenCalled();
+      done();
     });
   });
 

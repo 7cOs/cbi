@@ -83,6 +83,7 @@ module.exports = /*  @ngInject */
     vm.closeOrDismissOpportunity = closeOrDismissOpportunity;
     vm.collapseCallback = collapseCallback;
     vm.createNewList = createNewList;
+    vm.createV3List = createV3List;
     vm.depletionsVsYaPercent = depletionsVsYaPercent;
     vm.displayBrandIcon = displayBrandIcon;
     vm.downloadModal = downloadModal;
@@ -331,11 +332,14 @@ module.exports = /*  @ngInject */
       $mdDialog.hide();
     }
 
+    function createV3List(formattedList) {
+      return listsApiService.createList(formattedList).toPromise();
+    }
+
     function saveNewList(e) {
       vm.buttonDisabled = true;
-
-      listsApiService.createList(listsTransformerService.formatNewList(vm.newList))
-        .toPromise()
+      const formattedList = listsTransformerService.formatNewList(vm.newList);
+      createV3List(formattedList)
         .then(response => {
           analyticsService.trackEvent(
             'Target Lists - My Target Lists',
@@ -618,7 +622,6 @@ module.exports = /*  @ngInject */
     // Choose single memo from response/memo array based on most recent startDate
     function pickMemo(memos, productId, code) {
       const products = [];
-      console.log(code);
       memos.forEach(function(value, key) {
         if (value.packageID === productId && value.typeCode === code) {
           products.push(value);

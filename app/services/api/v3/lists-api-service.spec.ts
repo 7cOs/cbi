@@ -79,7 +79,7 @@ describe('ListsApiService', () => {
   describe('addOpportunitiesToList', () => {
     it('should post a list of opportunities to the lists/:id/opportunities endpoint', () => {
       const listId = chance.string();
-      const body = generateRandomSizedArray(1, 1000).map(() => { return {id: chance.string()}; });
+      const body = generateRandomSizedArray(1, 1000).map(() => { return {opportunityId: chance.string()}; });
       const expectedRequestUrl: string = `/v3/lists/${ listId }/opportunities`;
       const expectedResponse: any  = {};
       listsApiService.addOpportunitiesToList(listId, body).subscribe((response: any) => {

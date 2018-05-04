@@ -397,7 +397,6 @@ describe('Unit: expanded target list controller', function() {
         expect(newList).toBe(undefined);
         expect(userService.model.targetLists.ownedNotArchivedTargetLists[0].collaborators).toEqual({ id: '1234', name: 'collab name' });
         done();
-
       });
     });
 

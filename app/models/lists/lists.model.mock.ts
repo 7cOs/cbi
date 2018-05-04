@@ -7,26 +7,26 @@ import { generateRandomSizedArray } from '../util.model';
 
 const chance = new Chance();
 
-function getBaseListMock() {
+function getBaseListMock(): Lists.BaseList {
   return {
     archived: chance.bool(),
     collaborators: getCollaborators(chance.natural({min: 1, max: 5})),
-    createdon: chance.string(),
+    createdOn: chance.string(),
     deleted: chance.bool(),
     description: chance.string(),
     id: chance.string(),
     name: chance.string(),
-    numberofaccounts: chance.natural({min: 0, max: 1000}),
-    numberofclosedopportunities: chance.natural({min: 0, max: 1000}),
+    numberOfAccounts: chance.natural({min: 0, max: 1000}),
+    numberOfClosedOpportunities: chance.natural({min: 0, max: 1000}),
     owner: getUser(),
     survey: getSurvey(),
-    totalopportunities: chance.natural({min: 0, max: 1000}),
+    totalOpportunities: chance.natural({min: 0, max: 1000}),
     type: ListProperties.ListType.TargetList,
-    updatedon: chance.string()
+    updatedOn: chance.string()
   };
 }
 
-export function getV3ListMock() {
+export function getV3ListMock(): Lists.V3List {
   return Object.assign(
     getBaseListMock(),
     {
@@ -36,28 +36,28 @@ export function getV3ListMock() {
   );
 }
 
-export function getV2ListMock() {
+export function getV2ListMock(): Lists.V2List {
   return Object.assign(
     getBaseListMock(),
     {
       collaboratorPermissionLevel: ListProperties.CollaboratorType.CollaborateAndInvite,
       opportunitiesSummary: getOpportunitiesSummary(),
       dateOpportunitiesUpdated: chance.bool() ? chance.string() : null,
-      targetListAuthor: chance.bool() ? chance.string() : null;
+      targetListAuthor: chance.bool() ? chance.string() : null
     }
   );
 }
 
-export function getUnformattedNewList() {
+export function getUnformattedNewList(): Lists.UnformattedNewList {
   return {
     description: chance.string(),
     name: chance.string(),
     opportunities: [] as any[],
-    collaborators: getCollaborators(chance.natural({min: 1, max: 5}))
+    collaborators: getUsers(chance.natural({min: 1, max: 5}))
   };
 }
 
-export function getFormattedNewList() {
+export function getFormattedNewList(): Lists.FormattedNewList {
   return {
     category: ListProperties.ListCategory.Beer,
     collaboratorType: ListProperties.CollaboratorType.CollaborateAndInvite,
@@ -66,7 +66,7 @@ export function getFormattedNewList() {
   };
 }
 
-function getOpportunitiesSummary() {
+function getOpportunitiesSummary(): Lists.OpportunitiesSummary {
   const numberOfOpportunities = chance.natural({min: 0, max: 1000});
   return {
     closedOpportunitiesCount: numberOfOpportunities,
@@ -74,21 +74,23 @@ function getOpportunitiesSummary() {
   };
 }
 
-function getCollaborators(numberOfCollaborators: number): Lists.User[] {
-  return numberOfCollaborators
-    ? new Array(numberOfCollaborators).fill('').map(element => getUser())
+function getUsers(numberOfUsers: number): Lists.User[] {
+  return numberOfUsers
+    ? new Array(numberOfUsers).fill('').map(element => getUser())
     : [] as Lists.User[];
 }
 
-function getCollaborator() {
-  return {
-    lastViewed: chance.string(),
-    permissionLevel: ListProperties.CollaboratorType.CollaborateAndInvite,
-    user: getUser()
-  };
+function getCollaborators(numberOfCollaborators: number): Lists.Collaborator[] {
+  return new Array(numberOfCollaborators).fill('').map(() => {
+    return {
+      lastViewed: chance.string(),
+      permissionLevel: ListProperties.CollaboratorType.CollaborateAndInvite,
+      user: getUser()
+    };
+  });
 }
 
-function getUser() {
+function getUser(): Lists.User {
   return {
     employeeId: chance.string(),
     firstName: chance.string(),
@@ -98,9 +100,33 @@ function getUser() {
   };
 }
 
-function getSurvey() {
+function getSurvey(): Lists.SurveyInfo {
   return {
     sfid: chance.string(),
     name: chance.string()
+  };
+}
+
+export function getV2ListSummaryMock(): Lists.V2ListSummary {
+  return {
+    owned: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
+    sharedWithMe: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
+    sharedArchived: chance.natural(),
+    sharedNotArchived: chance.natural(),
+    ownedArchived: chance.natural(),
+    ownedNotArchived: chance.natural()
+  };
+}
+
+export function getListsCollectionSummaryMock(): Lists.ListsCollectionSummary {
+  return {
+    archived: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
+    owned: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
+    ownedNotArchivedTargetLists: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
+    sharedWithMe: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
+    sharedArchivedCount: chance.natural(),
+    sharedNotArchivedCount: chance.natural(),
+    ownedArchived: chance.natural(),
+    ownedNotArchived: chance.natural()
   };
 }
