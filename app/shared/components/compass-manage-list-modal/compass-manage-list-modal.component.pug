@@ -2,7 +2,7 @@ div.compass-modal
     div.compass-modal-header
       h1.compass-modal-title {{ modalInputs.title }}
       div.X-modal-btn-container((click)='hideModal(compassManageListModalEvent.Close)')
-        img.X-modal-btn(src="../../../assets/img/icons/thin-x.svg")
+        img.X-modal-btn(src="../../../assets/img/icons/thin-x-white.svg")
     div.compass-modal-body
       form([formGroup]='listForm')
         div.modal-input
@@ -30,3 +30,6 @@ div.compass-modal
     div.compass-modal-action-bar
       span.compass-modal-btn((click)='hideModal(compassManageListModalEvent.Decline)') {{ modalInputs.rejectLabel }}
       button.btn-action((click)='hideModal(compassManageListModalEvent.Accept)') {{ modalInputs.acceptLabel }}
+    div.compass-modal-action-bar
+      span.compass-modal-btn((click)="showArchiveModal()") Archive list
+      span.compass-modal-btn((click)="showDeleteModal()") Delete list

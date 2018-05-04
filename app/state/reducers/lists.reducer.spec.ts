@@ -339,4 +339,60 @@ describe('Lists Reducer', () => {
       expect(actualState).toEqual(expectedState);
     });
   });
+
+  fdescribe('when a PatchList action is dispatched', () => {
+    it('should update the list summary details status to Fetching', () => {
+        const expectedState: ListsState = {
+          listStores:  initialState.listStores,
+          listSummary: {
+            summaryStatus: ActionStatus.Fetching,
+            summaryData: initialState.listSummary.summaryData
+          },
+          listOpportunities: initialState.listOpportunities,
+          performance: initialState.performance
+        };
+
+        const actualState = listsReducer(initialState, new ListsActions.PatchList(getListsSummaryMock()));
+
+        expect(actualState).toEqual(expectedState);
+      });
+
+    it('should update the header details and set the headers status to Fetched on success', () => {
+      const headersMock = getListsSummaryMock();
+
+      const expectedState: ListsState = {
+        listStores:  initialState.listStores,
+        listSummary: {
+          summaryStatus: ActionStatus.Fetched,
+          summaryData: headersMock
+        },
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+
+      const actualState = listsReducer(
+        initialState,
+        new ListsActions.PatchListSuccess(headersMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+
+    it('should should update the headers status to Error', () => {
+      const expectedState: ListsState = {
+        listStores:  initialState.listStores,
+        listSummary: {
+          summaryStatus: ActionStatus.Error,
+          summaryData: initialState.listSummary.summaryData
+        },
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.PatchListFailure(new Error()));
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
 });

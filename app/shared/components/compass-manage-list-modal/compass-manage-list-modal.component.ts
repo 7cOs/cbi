@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Output, Inject, Input } from '@angular/core';
 
+import { CompassModalService } from '../../../services/compass-modal.service';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
 import { CompassManageListModalOverlayRef } from './compass-manage-list-modal.overlayref';
 import { COMPASS_MANAGE_LIST_MODAL_INPUTS } from '../../components/compass-manage-list-modal/compass-manage-list-modal.tokens';
@@ -7,6 +8,7 @@ import { CompassManageListModalEvent } from '../../../enums/compass-manage-list-
 import { FormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { ListsSummary } from '../../../models/lists/lists-header.model';
+import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
 
 const ESCKEY = 27;
 
@@ -22,11 +24,23 @@ export class CompassManageListModalComponent {
   public compassManageListModalEvent = CompassManageListModalEvent;
   public listForm: FormGroup;
   public collaborators: Array<object> = [];
+  public archiveModalStringInputs = {
+    'title': 'Are you sure?',
+    'body': 'By archiving this list, only limited set functionality will remain available.',
+    'rejectLabel': 'Cancel',
+    'acceptLabel': 'Archive'};
+  public deleteModalStringInputs =  {
+    'title': 'Are you sure?',
+    'body': 'Deleting a list cannot be undone. You\'ll lose all list store performance and opportunity progress.',
+    'rejectLabel': 'Cancel',
+    'acceptLabel': 'Delete'
+  };
 
   constructor(
     @Inject(COMPASS_MANAGE_LIST_MODAL_INPUTS) public modalInputs: CompassManageListModalInputs,
     @Inject('searchService') private searchService: any,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public compassModalService: CompassModalService
   ) {
     if (modalInputs.listObject) {
       this.listForm = this.fb.group({
@@ -73,7 +87,22 @@ export class CompassManageListModalComponent {
     }
   }
 
-  public changeListPermission() {
-    console.log('change list permissions!');
+  public showArchiveModal() {
+    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.archiveModalStringInputs, {});
+      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+      if (value === CompassAlertModalEvent.Accept) {
+        console.log('hit archive');
+      }
+    });
   }
+
+  public showDeleteModal() {
+    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.deleteModalStringInputs, {});
+    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+      if (value === CompassAlertModalEvent.Accept) {
+        console.log('hit delete');
+      }
+    });
+  }
+
 }
