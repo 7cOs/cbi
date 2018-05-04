@@ -51,7 +51,8 @@ describe('Lists Effects', () => {
   let listOpportunitiesDTOMock: ListOpportunityDTO[];
   let listPerformanceDTOMock: ListPerformanceDTO;
   let listPerformanceMock: ListPerformance;
-  let patchListPayloadMock: ListsSummary;
+  let patchListPayloadMock: ListsSummaryDTO;
+  let formattedListMock: FormattedNewList;
 
   const listsApiServiceMock = {
     getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
@@ -66,7 +67,7 @@ describe('Lists Effects', () => {
     getOppsDataForList(listIdMock: string): Observable<ListOpportunityDTO[]> {
       return Observable.of(listOpportunitiesDTOMock);
     },
-    updateList(payload: ListsSummary, listId: string): Observable<ListsSummary> {
+    updateList(formattedMock: FormattedNewList, listId: string): Observable<ListsSummaryDTO> {
       return Observable.of(patchListPayloadMock);
     }
   };
@@ -88,7 +89,7 @@ describe('Lists Effects', () => {
       return groupedOppsObj;
     },
     convertCollaborators(list: ListsSummary): any {
-      return list;
+      return formattedListMock;
     }
   };
 
@@ -327,7 +328,7 @@ describe('Lists Effects', () => {
     });
   });
 
-  fdescribe('when a patchList actions is received', () => {
+  describe('when a patchList actions is received', () => {
     let actionListPayloadMock = getListsSummaryMock();
     beforeEach(() => {
       actions$.next(new ListActions.PatchList(actionListPayloadMock));
@@ -335,9 +336,7 @@ describe('Lists Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should call updateList from the ListsService given the passed in action payload', (done) => {
-        spyOn(listsTransformerServiceMock, 'convertCollaborators').and.callFake(() => {
-          return actionListPayloadMock;
-        });
+        spyOn(listsTransformerService, 'convertCollaborators').and.callThrough();
         const updateListSpy = spyOn(listsApiService, 'updateList').and.callThrough();
         listsEffects.patchList$().subscribe(() => {
           done();
@@ -348,7 +347,7 @@ describe('Lists Effects', () => {
 
       it('should dispatch a patchListSuccess action with the returned transformed data', (done) => {
         listsEffects.patchList$().subscribe((action: Action) => {
-          expect(action).toEqual(new ListActions.PatchListSuccess(actionListPayloadMock));
+          expect(action).toEqual(new ListActions.PatchListSuccess(headerDetailMock));
           done();
         });
       });
