@@ -266,7 +266,7 @@ describe('ListOpportunitiesTableComponent', () => {
       componentInstance.opportunitiesTableData = getListOpportunitiesTableRowMock(300);
       componentInstance.handlePageChangeClicked({pageStart: 80, pageEnd: 100});
       expect(componentInstance.sliceStart).toBe(80);
-      expect(componentInstance.sliceStart).toBe(100);
+      expect(componentInstance.sliceEnd).toBe(100);
     });
   });
 });
