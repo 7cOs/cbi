@@ -31,14 +31,14 @@ compass-tabs((selectedTab) = "tabSelectedClick($event)")
     )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Performance") && (performanceTableDataSize > 20)',
+  *ngIf='(selectedTab === "Performance") && (performanceTableDataSize > listTableSize)',
   [tableDataSize]="performanceTableDataSize",
   [tabName]='firstTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableDataSize > 20)',
+  *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableDataSize > listTableSize)',
   [tableDataSize]="opportunitiesTableDataSize",
   [tabName]='secondTabTitle',
   (pageChangeClick)="handlePageClick($event)"

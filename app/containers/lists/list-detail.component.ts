@@ -56,6 +56,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableData: ListPerformanceTableRow[];
   public performanceTableDataSize: number;
   public slicedPerformanceTableData: ListPerformanceTableRow[];
+  public listTableSize: number = LIST_TABLE_SIZE;
 
   private listDetailSubscription: Subscription;
 
@@ -123,9 +124,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public handlePageClick(event: ListPageClick) {
-    const p = event.pageNumber;
-    let pageStart = ((p - 1 ) * LIST_TABLE_SIZE);
-    let pageEnd = (p * LIST_TABLE_SIZE) ;
+    const pageNumber = event.pageNumber;
+    let pageStart = ((pageNumber - 1 ) * LIST_TABLE_SIZE);
+    let pageEnd = (pageNumber * LIST_TABLE_SIZE) ;
     if (this.selectedTab === 'Opportunities') {
       this.slicedOpportunitiesTableData = this.opportunitiesTableData.slice(pageStart, pageEnd);
     } else {

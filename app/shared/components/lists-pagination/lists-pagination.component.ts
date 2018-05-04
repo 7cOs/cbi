@@ -31,24 +31,24 @@ export class ListsPaginationComponent implements OnInit {
   }
 
   public getPageNumbers(): Array<Number> {
-    let _start: number, _end: number;
+    let _startIndex: number, _endIndex: number;
 
     if (this.lastPage < 11) {
-      _start = 1;
-      _end = this.lastPage;
+      _startIndex = 1;
+      _endIndex = this.lastPage;
     } else if (this.currentPage < 6) {
-      _start = 1;
-      _end = this.lastPage < 10 ? this.lastPage : 10;
+      _startIndex = 1;
+      _endIndex = this.lastPage < 10 ? this.lastPage : 10;
     } else if (this.currentPage > this.lastPage - 5) {
-      _start = this.lastPage - 9;
-      _end = this.lastPage;
+      _startIndex = this.lastPage - 9;
+      _endIndex = this.lastPage;
     } else {
-      _start = this.currentPage - 4;
-      _end = this.currentPage + 5;
+      _startIndex = this.currentPage - 4;
+      _endIndex = this.currentPage + 5;
     }
 
-    return new Array(_end - _start + 1)
+    return new Array(_endIndex - _startIndex + 1)
       .fill('')
-      .map((val: number, idx: number) => idx + _start - 1);
+      .map((val: number, idx: number) => idx + _startIndex - 1);
   }
 }
