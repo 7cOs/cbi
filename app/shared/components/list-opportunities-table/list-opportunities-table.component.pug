@@ -46,7 +46,7 @@ div
 
     tbody.total-row-absent
       tr.entity-row(
-        *ngFor="let row of sortedTableData, let rowIndex = index",
+        *ngFor="let row of sortedTableData | slice:sliceStart:sliceEnd, let rowIndex = index",
         list-opportunities-table-row,
         [rowData]="row",
         (click)="onRowClicked(rowType.data, rowIndex, row)",

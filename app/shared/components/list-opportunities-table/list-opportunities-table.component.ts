@@ -32,7 +32,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-      this.sortedTableData = sortedTableData.slice(0, LIST_TABLE_SIZE);
+      this.sortedTableData = sortedTableData;
       this.numSelectedRows = this.sortedTableData.length;
     }
   }
@@ -53,6 +53,8 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public columnType = ListOpportunitiesColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
+  public sliceStart: number = 0;
+  public sliceEnd: number = LIST_TABLE_SIZE;
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
@@ -77,7 +79,8 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
 
   public handlePageChangeClicked(data: PageChangeData) {
     if (this.opportunitiesTableData) {
-      this.sortedTableData = this.opportunitiesTableData.slice(data.pageStart, data.pageEnd);
+      this.sliceStart = data.pageStart;
+      this.sliceEnd = data.pageEnd;
     }
   }
 
