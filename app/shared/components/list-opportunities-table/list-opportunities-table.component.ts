@@ -8,6 +8,7 @@ import { MatCheckboxChange } from '@angular/material';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
+import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
 
 @Component({
   selector: 'list-opportunities-table',
@@ -29,7 +30,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-      this.sortedTableData = sortedTableData;
+      this.sortedTableData = sortedTableData.slice(0, LIST_TABLE_SIZE);
       this.numSelectedRows = this.sortedTableData.length;
     }
   }

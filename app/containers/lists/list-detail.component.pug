@@ -22,12 +22,12 @@ compass-tabs((selectedTab) = "tabSelectedClick($event)")
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [totalRow]="performanceTableTotal",
-      [tableData]="slicedPerformanceTableData"
+      [tableData]="performanceTableData"
     )
   compass-tab([tabTitle]='secondTabTitle')
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
-      [tableData]="slicedOpportunitiesTableData"
+      [tableData]="opportunitiesTableData"
     )
 
 lists-pagination(
