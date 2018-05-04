@@ -219,38 +219,10 @@ describe('ListDetailComponent', () => {
     });
   });
 
-  /*describe('when page is clicked on pagination', () => {
-    it('should set page start, page end for opportunities tab', () => {
-      componentInstance.selectedTab = 'Opportunities';
-      componentInstance.opportunitiesTableData = getListOpportunitiesTableRowMock(300);
-      spyOn(componentInstance.opportunitiesTableData, 'slice');
-      componentInstance.handlePageClick({pageNumber: 5});
-      expect(componentInstance.opportunitiesTableData.slice).toHaveBeenCalledWith(80, 100);
+  describe('when tabs are selected', () => {
+    it('should set the selected tab', () => {
+      componentInstance.tabSelectedClick({selectedTab: 'Performance'});
+      expect(componentInstance.selectedTab).toBe('Performance');
     });
-
-    it('should slice the data for opportunities tab', () => {
-      componentInstance.selectedTab = 'Opportunities';
-      componentInstance.opportunitiesTableData = getListOpportunitiesTableRowMock(300);
-      const expectedData = componentInstance.opportunitiesTableData.slice(80, 100);
-      componentInstance.handlePageClick({pageNumber: 5});
-      fixture.detectChanges();
-      expect(componentInstance.slicedOpportunitiesTableData).toEqual(expectedData);
-    });
-
-    it('should set page start, page end for performance tab', () => {
-      componentInstance.selectedTab = 'Performance';
-      componentInstance.performanceTableData = getListPerformanceTableRowMock(300);
-      spyOn(componentInstance.performanceTableData, 'slice');
-      componentInstance.handlePageClick({pageNumber: 5});
-      expect(componentInstance.performanceTableData.slice).toHaveBeenCalledWith(80, 100);
-    });
-
-    it('should slice the data for performance tab', () => {
-      componentInstance.selectedTab = 'Performance';
-      componentInstance.performanceTableData = getListPerformanceTableRowMock(300);
-      const expectedData = componentInstance.performanceTableData.slice(80, 100);
-      componentInstance.handlePageClick({pageNumber: 5});
-      expect(componentInstance.slicedPerformanceTableData).toEqual(expectedData);
-    });
-  });*/
+  });
 });

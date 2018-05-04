@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
@@ -23,6 +23,10 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 
 interface ListPageClick {
   pageNumber: number;
+}
+
+interface TabSelected {
+  selectedTab: string;
 }
 
 export interface PageChangeData {
@@ -55,7 +59,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
   public performanceTableDataSize: number;
-  public slicedPerformanceTableData: ListPerformanceTableRow[];
   public listTableSize: number = LIST_TABLE_SIZE;
   public pageChangeData: PageChangeData;
 
@@ -132,6 +135,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleManageButtonClick() {
     console.log('manage button click');
+  }
+
+  public tabSelectedClick(event: TabSelected) {
+    this.selectedTab = event.selectedTab;
   }
 
   public handleListsLinkClick() {

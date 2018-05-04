@@ -16,7 +16,7 @@ lists-header(
   (listsLinkClicked)="handleListsLinkClick()"
 )
 
-compass-tabs
+compass-tabs((selectedTab) = "tabSelectedClick($event)")
   compass-tab([tabTitle]='firstTabTitle',
               [active]='true')
     list-performance-table(
