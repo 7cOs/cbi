@@ -62,7 +62,7 @@ div
 
     tbody.total-row-present
       tr.entity-row(
-        *ngFor="let row of sortedTableData, let rowIndex = index",
+        *ngFor="let row of sortedTableData | slice:sliceStart:sliceEnd, let rowIndex = index",
         list-performance-table-row,
         [rowData]="row",
         (click)="onRowClicked(rowType.data, rowIndex, row)",

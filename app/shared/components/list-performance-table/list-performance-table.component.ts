@@ -32,7 +32,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-        this.sortedTableData = sortedTableData.slice(0, LIST_TABLE_SIZE);
+        this.sortedTableData = sortedTableData;
         this.numSelectedRows = this.sortedTableData.length;
     }
   }
@@ -58,6 +58,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
   public peformanceTableData: Array<ListPerformanceTableRow>;
+  public sliceStart: number = 0;
+  public sliceEnd: number = LIST_TABLE_SIZE;
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
@@ -78,7 +80,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   public handlePageChangeClicked(data: PageChangeData) {
     if (this.peformanceTableData) {
-      this.sortedTableData = this.peformanceTableData.slice(data.pageStart, data.pageEnd);
+      this.sliceStart = data.pageStart;
+      this.sliceEnd = data.pageEnd;
     }
   }
 
