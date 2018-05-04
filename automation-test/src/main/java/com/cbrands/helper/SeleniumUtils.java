@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
 
 import java.io.File;
 import java.io.IOException;
@@ -258,8 +259,9 @@ public class SeleniumUtils {
 	 * @param outputFileName the output file name
 	 */
 	public static void snapshot(String basePath, String outputFileName) {
-		File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-		File targetFile = new File(basePath, outputFileName);
+		Assert.assertNotNull(driver, "Driver not available for screenshot.");
+		final File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		final File targetFile = new File(basePath, outputFileName);
 		try {
 			FileUtils.copyFile(srcFile, targetFile);
 		} catch (IOException ioe) {
