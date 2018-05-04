@@ -21,6 +21,7 @@ compass-tabs((selectedTab) = "tabSelectedClick($event)")
               [active]='true')
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
+      [sortingCriteria]="performanceSortingCriteria",
       [totalRow]="performanceTableTotal",
       [tableData]="performanceTableData",
       [pageChangeData]="pageChangeData"
@@ -28,6 +29,7 @@ compass-tabs((selectedTab) = "tabSelectedClick($event)")
   compass-tab([tabTitle]='secondTabTitle')
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
+      [sortingCriteria]="opportunitiesSortingCriteria",
       [tableData]="opportunitiesTableData",
       [pageChangeData]="pageChangeData"
     )

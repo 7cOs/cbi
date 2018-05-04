@@ -20,6 +20,9 @@ import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
+import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 
 interface ListPageClick {
   pageNumber: number;
@@ -61,6 +64,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableDataSize: number;
   public listTableSize: number = LIST_TABLE_SIZE;
   public pageChangeData: PageChangeData;
+  public performanceSortingCriteria: Array<SortingCriteria> = [{
+    columnType: ListPerformanceColumnType.cytdColumn,
+    ascending: false
+  }];
+  public opportunitiesSortingCriteria: Array<SortingCriteria> = [{
+    columnType: ListOpportunitiesColumnType.cytdColumn,
+    ascending: false
+  }];
 
   private listDetailSubscription: Subscription;
 
