@@ -18,11 +18,11 @@ public class SeleniumSnapshotRule extends TestListenerAdapter {
   @Override
   public void onTestFailure(ITestResult failedTest) {
     final String failedMethod = failedTest.getMethod().getMethodName();
-
-    SeleniumUtils.snapshot(SCREENSHOTS_PATH, getScreenshotNameFor(failedMethod));
     log.info("*****************************************************");
     log.info(String.format("TEST FAILED: %s!!", failedMethod));
     log.info("*****************************************************");
+
+    SeleniumUtils.snapshot(SCREENSHOTS_PATH,  getScreenshotNameFor(failedMethod));
   }
 
   @Override
