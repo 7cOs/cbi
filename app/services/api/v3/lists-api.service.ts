@@ -9,7 +9,7 @@ import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
-import { V3List } from '../../../models/lists/lists.model';
+import { FormattedNewList, V3List } from '../../../models/lists/lists.model';
 
 @Injectable()
 export class ListsApiService {
@@ -45,17 +45,17 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public createList(list: V3List): Observable<V3List> {
+  public createList(list: FormattedNewList): Observable<V3List> {
     const url = `/v3/lists`;
 
     return this.http.post(url, list)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public addOpportunitiesToList(listId: string, opportunityIds: string[]): Observable<any> {
+  public addOpportunitiesToList(listId: string, opportunities: {id: string}[]): Observable<ListOpportunityDTO[]> {
     const url = `/v3/lists/${ listId }/opportunities`;
 
-    return this.http.post(url, opportunityIds)
+    return this.http.post(url, opportunities)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
