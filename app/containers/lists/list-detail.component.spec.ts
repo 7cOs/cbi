@@ -218,8 +218,7 @@ describe('ListDetailComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should set every opportunities table store row checked and expanded field to false and every opportunity drawer'
-    + ' row checked field to false', () => {
+    it('should set every opportunities table and expanded table row checked/expanded fields to false', () => {
       componentInstance.opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
         expect(tableRow.checked).toBe(false);
         expect(tableRow.expanded).toBe(false);

@@ -11,7 +11,7 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
-export interface OpportunitiesTableSelectAllCheckboxState {
+interface OpportunitiesTableSelectAllCheckboxState {
   isSelectAllChecked: boolean;
   isIndeterminateChecked: boolean;
 }
