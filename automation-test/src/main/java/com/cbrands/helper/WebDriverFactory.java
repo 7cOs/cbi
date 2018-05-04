@@ -28,6 +28,8 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
+  private static final String SAUCELABS_URI_FORMAT = "https://%s:%s@ondemand.saucelabs.com:%d/wd/hub";
+  private static final int DEFAULT_SAUCE_PORT = 80;
 
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
@@ -83,27 +85,32 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static WebDriver getSauceWebDriver(String testName) throws MalformedURLException {
-    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
-    SauceHelpers.addSauceConnectTunnelId(capabilities);
+    webDriver.set(getRemoteSauceDriver(testName));
 
-    // Launch remote browser and set it as the current thread
-    webDriver.set(new RemoteWebDriver(
-      new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
-        SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
-
-    //((RemoteWebDriver) getWebDriver()).manage().window().setSize(new Dimension(1024, 768));
-    // set current sessionId
-    String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
-    sessionId.set(id);
+    sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId().toString());
     log.info("Targeted Host:" + HostType.sauce.name());
     log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-    Validate.notNull(webDriver.get(), "Driver could not be found at:" + HostType.sauce.name());
+    Validate.notNull(webDriver.get(), "Remote driver could not be found for SauceLabs");
 
     return webDriver.get();
   }
 
+  private static RemoteWebDriver getRemoteSauceDriver(String testName) throws MalformedURLException {
+    final URL remoteAddress = buildSauceURI();
+    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
+
+    return new RemoteWebDriver(remoteAddress, capabilities);
+  }
+
+  private static URL buildSauceURI() throws MalformedURLException {
+    final String username = PropertiesCache.getInstance().getProperty("sauce.userName");
+    final String accessKey = PropertiesCache.getInstance().getProperty("sauce.accessKey");
+
+    return new URL(String.format(SAUCELABS_URI_FORMAT, username, accessKey, DEFAULT_SAUCE_PORT));
+  }
+
   private static DesiredCapabilities getSauceCapabilitiesByBrowser(String testName, String driverType) {
-    DesiredCapabilities capabilities;
+    final DesiredCapabilities capabilities;
 
     if (BrowserType.chrome.name().equals(driverType)) {
       capabilities = getSauceCapabilitiesForChrome(testName);
