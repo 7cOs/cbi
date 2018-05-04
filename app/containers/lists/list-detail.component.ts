@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
@@ -25,8 +25,9 @@ interface ListPageClick {
   pageNumber: number;
 }
 
-interface TabSelected {
-  selectedTab: string;
+export interface PageChangeData {
+  pageStart: number;
+  pageEnd: number;
 }
 
 @Component({
@@ -47,7 +48,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   // TODO: Remove this when we get real data.
   public opportunitiesTableData: Array<ListOpportunitiesTableRow> = getListOpportunitiesTableRowMock(400);
   public opportunitiesTableDataSize: number = this.opportunitiesTableData.length;
-  public slicedOpportunitiesTableData: Array<ListOpportunitiesTableRow> = this.opportunitiesTableData.slice(0, LIST_TABLE_SIZE);
   public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
 
   public actionButtonType: any = ActionButtonType;
@@ -57,6 +57,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableDataSize: number;
   public slicedPerformanceTableData: ListPerformanceTableRow[];
   public listTableSize: number = LIST_TABLE_SIZE;
+  public pageChangeData: PageChangeData;
 
   private listDetailSubscription: Subscription;
 
@@ -108,7 +109,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           );
 
           this.performanceTableDataSize = this.performanceTableData.length;
-          this.slicedPerformanceTableData = this.performanceTableData.slice(0, LIST_TABLE_SIZE);
         }
 
         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
@@ -127,19 +127,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     const pageNumber = event.pageNumber;
     let pageStart = ((pageNumber - 1 ) * LIST_TABLE_SIZE);
     let pageEnd = (pageNumber * LIST_TABLE_SIZE) ;
-    if (this.selectedTab === 'Opportunities') {
-      this.slicedOpportunitiesTableData = this.opportunitiesTableData.slice(pageStart, pageEnd);
-    } else {
-      this.slicedPerformanceTableData = this.performanceTableData.slice(pageStart, pageEnd);
-    }
+    this.pageChangeData = {pageStart: pageStart, pageEnd: pageEnd};
   }
 
   public handleManageButtonClick() {
     console.log('manage button click');
-  }
-
-  public tabSelectedClick(event: TabSelected) {
-    this.selectedTab = event.selectedTab;
   }
 
   public handleListsLinkClick() {

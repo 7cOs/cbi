@@ -9,6 +9,7 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
+import { PageChangeData } from '../../../containers/lists/list-detail.component';
 
 @Component({
   selector: 'list-opportunities-table',
@@ -26,12 +27,20 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
 
   @Input()
   set tableData(tableData: Array<ListOpportunitiesTableRow>) {
+    this.opportunitiesTableData = tableData;
     if (tableData) {
       const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
       this.sortedTableData = sortedTableData.slice(0, LIST_TABLE_SIZE);
       this.numSelectedRows = this.sortedTableData.length;
+    }
+  }
+
+  @Input()
+  set pageChangeData(pageChangeData: PageChangeData) {
+    if (pageChangeData) {
+      this.handlePageChangeClicked(pageChangeData);
     }
   }
 
@@ -47,6 +56,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
+  public opportunitiesTableData: Array<ListOpportunitiesTableRow>;
 
   private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
@@ -63,6 +73,12 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public ngOnChanges(changes: SimpleChanges) {
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(loadingState);
+  }
+
+  public handlePageChangeClicked(data: PageChangeData) {
+    if (this.opportunitiesTableData) {
+      this.sortedTableData = this.opportunitiesTableData.slice(data.pageStart, data.pageEnd);
+    }
   }
 
   public onCheckboxChange(row: ListOpportunitiesTableRow): void {

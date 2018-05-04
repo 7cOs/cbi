@@ -276,4 +276,21 @@ describe('ListPerformanceTableComponent', () => {
       expect(componentInstance.isIndeterminateChecked).toEqual(false);
     });
   });
+
+  describe('when pageChange Data input is received', () => {
+    it('should set page start, page end', () => {
+      componentInstance.peformanceTableData = getListPerformanceTableRowMock(300);
+      spyOn(componentInstance.peformanceTableData, 'slice');
+      componentInstance.handlePageChangeClicked({pageStart: 80, pageEnd: 100});
+      expect(componentInstance.peformanceTableData.slice).toHaveBeenCalledWith(80, 100);
+    });
+
+    it('should slice the data', () => {
+      componentInstance.peformanceTableData = getListPerformanceTableRowMock(300);
+      const expectedData = componentInstance.peformanceTableData.slice(80, 100);
+      componentInstance.handlePageChangeClicked({pageStart: 80, pageEnd: 100});
+      fixture.detectChanges();
+      expect(componentInstance.sortedTableData).toEqual(expectedData);
+    });
+  });
 });

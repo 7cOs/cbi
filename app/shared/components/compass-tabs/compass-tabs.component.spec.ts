@@ -59,11 +59,5 @@ describe('CompassTabsComponent', () => {
       expect(tab1Component.active).toBeFalsy();
       expect(tab2Component.active).toBeTruthy();
     });
-
-    it('should check whether an event is emitted', () => {
-      spyOn(tabsContainerComponent.selectedTab, 'emit');
-      tabsContainerComponent.selectTab(tab2Component);
-      expect(tabsContainerComponent.selectedTab.emit).toHaveBeenCalledWith({selectedTab: tab2Component.title});
-    });
   });
 });

@@ -9,6 +9,7 @@ import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { MatCheckboxChange } from '@angular/material';
 import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
+import { PageChangeData } from '../../../containers/lists/list-detail.component';
 
 @Component({
   selector: 'list-performance-table',
@@ -26,12 +27,20 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   @Input()
   set tableData(tableData: Array<ListPerformanceTableRow>) {
+    this.peformanceTableData = this.tableData;
     if (tableData) {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
         this.sortedTableData = sortedTableData.slice(0, LIST_TABLE_SIZE);
         this.numSelectedRows = this.sortedTableData.length;
+    }
+  }
+
+  @Input()
+  set pageChangeData(pageChangeData: PageChangeData) {
+    if (pageChangeData) {
+      this.handlePageChangeClicked(pageChangeData);
     }
   }
 
@@ -48,6 +57,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
+  public peformanceTableData: Array<ListPerformanceTableRow>;
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
@@ -64,6 +74,12 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public ngOnChanges(changes: SimpleChanges) {
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(loadingState);
+  }
+
+  public handlePageChangeClicked(data: PageChangeData) {
+    if (this.peformanceTableData) {
+      this.sortedTableData = this.peformanceTableData.slice(data.pageStart, data.pageEnd);
+    }
   }
 
   public onCheckboxChange(row: ListPerformanceTableRow): void {

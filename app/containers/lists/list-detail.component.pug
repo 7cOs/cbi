@@ -16,18 +16,20 @@ lists-header(
   (listsLinkClicked)="handleListsLinkClick()"
 )
 
-compass-tabs((selectedTab) = "tabSelectedClick($event)")
+compass-tabs
   compass-tab([tabTitle]='firstTabTitle',
               [active]='true')
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [totalRow]="performanceTableTotal",
-      [tableData]="performanceTableData"
+      [tableData]="performanceTableData",
+      [pageChangeData]="pageChangeData"
     )
   compass-tab([tabTitle]='secondTabTitle')
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
-      [tableData]="opportunitiesTableData"
+      [tableData]="opportunitiesTableData",
+      [pageChangeData]="pageChangeData"
     )
 
 lists-pagination(

@@ -7,8 +7,6 @@ import { CompassTabComponent } from './tab/tab.component';
   template: require('./compass-tabs.component.pug')
 })
 export class CompassTabsComponent implements AfterContentInit {
-  @Output() selectedTab: EventEmitter<{selectedTab: string}> = new EventEmitter<any>();
-
   @ContentChildren(CompassTabComponent) tabs: QueryList<CompassTabComponent>;
   ngAfterContentInit(): void {
     const activeTabs = this.tabs.filter((tab: CompassTabComponent) => tab.active);
@@ -18,6 +16,5 @@ export class CompassTabsComponent implements AfterContentInit {
   public selectTab(selectedTab: CompassTabComponent): void {
     this.tabs.forEach((tab: CompassTabComponent) => tab.active = false);
     selectedTab.active = true;
-    this.selectedTab.emit({selectedTab: selectedTab.title});
   }
 }
