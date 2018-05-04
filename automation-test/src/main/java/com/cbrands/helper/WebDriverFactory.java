@@ -28,7 +28,7 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
-  private static final String SAUCELABS_URI_FORMAT = "https://%s:%s@ondemand.saucelabs.com:%d/wd/hub";
+  private static final String SAUCELABS_URI_FORMAT = "http://%s:%s@ondemand.saucelabs.com:%d/wd/hub";
   private static final int DEFAULT_SAUCE_PORT = 80;
 
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
