@@ -42,7 +42,7 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
     this.shutDownBrowser();
   }
 
-  @Test
+  @Test(description = "Attempt to save a custom opportunity without completing required fields")
   public void attemptToSaveBlankCustomOpportunity() {
     customOpportunityModal = customOpportunityModal
         .launchModal()
