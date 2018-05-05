@@ -6,12 +6,14 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { getListOpportunitiesHeaderRowMock,
          getListOpportunitiesTableRowMock
        } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
@@ -38,6 +40,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
 
   public actionButtonType: any = ActionButtonType;
+  public opportunityStatusOptions: Array<CompassSelectOption> = [];
+  public oppStatusSelected: string;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
@@ -53,6 +57,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
+    this.opportunityStatusOptions = listOpportunityStatusOptions;
+    this.oppStatusSelected = listOpportunityStatusOptions.find(status => status.display === 'All').value;
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchOppsForList({listId: this.$state.params.id}));
@@ -98,6 +104,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
+  }
+
+  opportunityStatusSelected(statusValue: string) {
+    this.oppStatusSelected = statusValue;
   }
 
   ngOnDestroy() {

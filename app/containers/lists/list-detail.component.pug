@@ -25,6 +25,13 @@ compass-tabs
       [tableData]="performanceTableData"
     )
   compass-tab([tabTitle]='secondTabTitle')
+    .opps-dropdown
+      compass-select(
+        [model]="oppStatusSelected",
+        [options]="opportunityStatusOptions",
+        [title]="'Opportunity Status'",
+        (onOptionSelected)="opportunityStatusSelected($event)"
+      )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [tableData]="opportunitiesTableData"
