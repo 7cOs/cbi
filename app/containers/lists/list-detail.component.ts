@@ -8,18 +8,16 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { getListOpportunitiesHeaderRowMock,
-         getListOpportunitiesTableRowMock
-       } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
-import { StoreDetails } from '../../models/lists/lists-store.model';
 
 @Component({
   selector: 'list-detail',
@@ -28,23 +26,17 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-  public storeList: StoreDetails[];
   public listSummary: ListsSummary;
-  public oppsGroupedByStores: {};
-
-  public firstTabTitle: string = 'Performance';
-  public secondTabTitle: string = 'Opportunities';
-
-  // TODO: Remove this when we get real data.
-  public opportunitiesTableData = getListOpportunitiesTableRowMock(25);
-  public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
-
+  public performanceTabTitle: string = 'Performance';
+  public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
   public opportunityStatusOptions: Array<CompassSelectOption> = [];
   public oppStatusSelected: string;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
+  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Opportunities', 'Last Depletion'];
+  public opportunitiesTableData: ListOpportunitiesTableRow[];
 
   private listDetailSubscription: Subscription;
 
@@ -78,9 +70,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
-        this.storeList = listDetail.listStores.stores;
         this.listSummary = listDetail.listSummary.summaryData;
-        this.oppsGroupedByStores = listDetail.listOpportunities.opportunities;
 
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
@@ -98,7 +88,17 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           );
         }
 
-        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
+        if (this.isListOpportunitiesFetched(
+          listDetail.listStores.storeStatus,
+          listDetail.performance.volumeStatus,
+          listDetail.listOpportunities.opportunitiesStatus
+        )) {
+          this.opportunitiesTableData = this.listsTableTransformerService.transformOpportunitiesCollection(
+            listDetail.listStores.stores,
+            listDetail.performance.volume.storePerformance,
+            listDetail.listOpportunities.opportunities
+          );
+        }
       });
   }
 
@@ -122,6 +122,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     console.log('list link clicked');
   }
 
+  public onTabClicked(tabName: string): void {
+    if (tabName === this.performanceTabTitle) {
+      this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
+    }
+  }
+
   private isListPerformanceFetched(
     storeStatus: ActionStatus,
     volumePerformanceStatus: ActionStatus,
@@ -130,5 +136,33 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && podPerformanceStatus === ActionStatus.Fetched;
+  }
+
+  private isListOpportunitiesFetched(
+    storeStatus: ActionStatus,
+    volumePerformanceStatus: ActionStatus,
+    opportunitiesStatus: ActionStatus
+  ): boolean {
+    return storeStatus === ActionStatus.Fetched
+      && volumePerformanceStatus === ActionStatus.Fetched
+      && opportunitiesStatus === ActionStatus.Fetched;
+  }
+
+  private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
+    const clearTableDrawerSelections = (opportunityRows: ListTableDrawerRow[]): ListTableDrawerRow[] => {
+      return opportunityRows.map((opportunityRow: ListTableDrawerRow) => {
+        return Object.assign({}, opportunityRow, {
+          checked: false
+        });
+      });
+    };
+
+    return opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
+      return Object.assign({}, tableRow, {
+        opportunities: clearTableDrawerSelections(tableRow.opportunities),
+        checked: false,
+        expanded: false
+      });
+    });
   }
 }
