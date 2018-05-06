@@ -98,6 +98,7 @@ module.exports = /*  @ngInject */
     vm.hasOpportunities = hasOpportunities;
     vm.openDismissModal = openDismissModal;
     vm.openShareModal = openShareModal;
+    vm.opportunityIdsToCopy = opportunityIdsToCopy;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
     vm.pickMemo = pickMemo;
     vm.removeOpportunity = removeOpportunity;
@@ -239,11 +240,11 @@ module.exports = /*  @ngInject */
 
         opportunityIdsToCopy().then(opportunityIds => {
           const formattedOpportunities = opportunityIds.map(opportunityId => { return { opportunityId: opportunityId }; });
+          updateCopiedOpportunities();
+          updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
           listsApiService.addOpportunitiesToList(listId, formattedOpportunities)
             .toPromise()
             .then(result => {
-              updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
-              updateCopiedOpportunities();
               vm.toggleSelectAllStores(false);
               loaderService.closeLoader();
               toastService.showToast('copied', opportunityIds);
@@ -339,7 +340,7 @@ module.exports = /*  @ngInject */
     function saveNewList(e) {
       vm.buttonDisabled = true;
       const formattedList = listsTransformerService.formatNewList(vm.newList);
-      createV3List(formattedList)
+      vm.createV3List(formattedList)
         .then(response => {
           analyticsService.trackEvent(
             'Target Lists - My Target Lists',
@@ -1025,6 +1026,7 @@ module.exports = /*  @ngInject */
     }
 
     function handleAddToTargetList(ev, targetList, idx, addAction) {
+      debugger;
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
@@ -1148,6 +1150,7 @@ module.exports = /*  @ngInject */
     }
 
     function updateTargetListOpportunityCountByListID(listID, opportunityCount) {
+      debugger;
       const foundListIdx = vm.userService.model.targetLists.owned.findIndex(targetList => targetList.id === listID);
       if (foundListIdx > -1) updateTargetListOpportunityCount(foundListIdx, opportunityCount);
     }
