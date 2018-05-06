@@ -14,7 +14,7 @@ function getLists(): Observable<V3List[]> {
   return Observable.of(v3ListsCollection);
 }
 
-function addOpportunitiesToList(): Observable<any> {
+function addOpportunitiesToList(...args: any[]): Observable<any> {
   return Observable.of({});
 }
 
