@@ -18,6 +18,6 @@ function addOpportunitiesToList(...args: any[]): Observable<any> {
   return Observable.of({});
 }
 
-function createList(): Observable<any> {
+function createList(): Observable<V3List> {
   return Observable.of(getV3ListMock());
 }
