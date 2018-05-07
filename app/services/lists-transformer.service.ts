@@ -53,21 +53,6 @@ export class ListsTransformerService {
     };
   }
 
-  public getV2ListSummary(
-    ownedListCollection: Lists.V2List[],
-    sharedListCollection: Lists.V2List[],
-    archived: boolean = false
-  ): Lists.V2ListSummary {
-    return {
-      owned: ownedListCollection,
-      sharedWithMe: sharedListCollection,
-      ownedNotArchived: ownedListCollection.filter((list: Lists.V2List) => archived ? list.archived : !list.archived ).length,
-      ownedArchived: ownedListCollection.filter((list: Lists.V2List) => archived ? list.archived : !list.archived ).length,
-      sharedNotArchived: sharedListCollection.filter((list: Lists.V2List) => archived ? list.archived : !list.archived).length,
-      sharedArchived: sharedListCollection.filter((list: Lists.V2List) => archived ? list.archived : !list.archived).length
-    };
-  }
-
   public formatStoresData(listStoresDTOs: ListStoreDTO[]): StoreDetails[] {
     return listStoresDTOs.map(store => this.formatStoreData(store));
   }

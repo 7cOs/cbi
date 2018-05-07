@@ -106,17 +106,6 @@ function getSurvey(): Lists.SurveyInfo {
   };
 }
 
-export function getV2ListSummaryMock(): Lists.V2ListSummary {
-  return {
-    owned: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
-    sharedWithMe: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
-    sharedArchived: chance.natural(),
-    sharedNotArchived: chance.natural(),
-    ownedArchived: chance.natural(),
-    ownedNotArchived: chance.natural()
-  };
-}
-
 export function getListsCollectionSummaryMock(): Lists.ListsCollectionSummary {
   return {
     archived: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
