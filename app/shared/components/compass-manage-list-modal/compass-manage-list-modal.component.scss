@@ -71,6 +71,27 @@
   }
 }
 
+.compass-modal-delete-archive-bar {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  border-top: solid 1px $gray-2;
+  font-family: $roboto;
+}
+
+.compass-modal-delete-btn {
+  float: left;
+  padding-left: 20px;
+  color: $gray-1;
+  cursor: pointer;
+}
+
+.compass-modal-archive-btn {
+  float: right;
+  padding-right: 20px;
+  color: $gray-1;
+  cursor: pointer;
+}
+
 .collaborator-list {
   background-color: $white;
   display: inline-block;

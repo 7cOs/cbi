@@ -18,7 +18,7 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { CompassModalService } from '../../services/compass-modal.service';
+import { CompassManageListModalService } from '../../services/compass-manage-list-modal.service';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 
 @Component({
@@ -53,7 +53,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
     private titleService: Title,
-    private compassModalService: CompassModalService,
+    private compassModalService: CompassManageListModalService,
     @Inject('userService') private userService: any
   ) { }
 

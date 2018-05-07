@@ -20,6 +20,7 @@ import { CompassCardComponent }  from './components/compass-card/compass-card.co
 import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
 import { CompassManageListModalComponent } from './components/compass-manage-list-modal/compass-manage-list-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
+import { CompassManageListModalService } from '../services/compass-manage-list-modal.service';
 import { CompassOverlayService } from '../services/compass-overlay.service';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
 import { CompassSelectComponent } from './components/compass-select/compass-select.component';
@@ -88,6 +89,7 @@ import { CompassUserSearchComponent } from './components/compass-user-search/com
   ],
   providers: [
     CompassModalService,
+    CompassManageListModalService,
     CompassOverlayService,
     CompassTooltipService
   ],

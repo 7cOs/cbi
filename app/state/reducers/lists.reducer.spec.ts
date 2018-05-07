@@ -340,7 +340,7 @@ describe('Lists Reducer', () => {
     });
   });
 
-  fdescribe('when a PatchList action is dispatched', () => {
+  describe('when a PatchList action is dispatched', () => {
     it('should update the list summary details status to Fetching', () => {
         const expectedState: ListsState = {
           listStores:  initialState.listStores,

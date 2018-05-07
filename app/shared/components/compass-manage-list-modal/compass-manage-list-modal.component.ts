@@ -1,6 +1,5 @@
 import { Component, EventEmitter, HostListener, Output, Inject, Input } from '@angular/core';
 
-import { CompassModalService } from '../../../services/compass-modal.service';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
 import { CompassManageListModalOverlayRef } from './compass-manage-list-modal.overlayref';
 import { COMPASS_MANAGE_LIST_MODAL_INPUTS } from '../../components/compass-manage-list-modal/compass-manage-list-modal.tokens';
@@ -9,6 +8,7 @@ import { FormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { ListsSummary } from '../../../models/lists/lists-header.model';
 import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
+import { CompassModalService } from '../../../services/compass-modal.service';
 
 const ESCKEY = 27;
 
