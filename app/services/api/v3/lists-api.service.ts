@@ -28,7 +28,7 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public getListsPromise(): any {
+  public getListsPromise(): Promise<V3List[]> {
     return this.getLists().toPromise();
   }
 

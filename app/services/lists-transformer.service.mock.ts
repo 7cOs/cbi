@@ -1,4 +1,4 @@
-import { FormattedNewList, V2ListSummary, ListsCollectionSummary } from '../models/lists/lists.model';
+import { FormattedNewList, ListsCollectionSummary } from '../models/lists/lists.model';
 import { getFormattedNewList, getListsCollectionSummaryMock } from '../models/lists/lists.model.mock';
 
 export const listsTransformerServiceMock = {
