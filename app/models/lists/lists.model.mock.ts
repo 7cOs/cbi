@@ -1,6 +1,5 @@
 import * as Lists from './lists.model';
 import * as ListProperties from '../../enums/lists/list-properties.enum';
-import { getListOpportunityMock } from '../../models/lists/lists-opportunities.model.mock';
 
 import * as Chance from 'chance';
 import { generateRandomSizedArray } from '../util.model';
