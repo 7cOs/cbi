@@ -1,0 +1,49 @@
+.list-table-drawer-component
+  table.list-table-drawer
+    thead.list-table-drawer-header
+      tr.list-table-drawer-header-row
+        th(colspan=1)
+        th(colspan=1)
+          .table-drawer-header-text.brand-header-text BRAND
+        th(colspan=1)
+          .table-drawer-header-text SKU/PACKAGE
+        th(colspan=1)
+          .table-drawer-header-text TYPE
+        th(colspan=1)
+          .table-drawer-header-text STATUS
+        th(colspan=1)
+          .table-drawer-header-text.centered IMPACT
+        th(colspan=2)
+          .table-drawer-header-text.centered DEPLETIONS
+        th(colspan=2)
+          .table-drawer-header-text.centered LAST DEPLETION
+        th(colspan=1)
+    tbody.list-table-drawer-body
+      tr.list-table-drawer-row(*ngFor="let opportunity of sortedTableData, let index = index")
+        td.checkbox-column(colspan=1)
+          mat-checkbox(
+            [checked]="opportunity.checked",
+            [disableRipple]="true",
+            (change)="checkboxClicked($event.checked, index)"
+          )
+        td.brand-column(colspan=1)
+          .brand-container
+            //- TODO: Update Mandate Markup Here Once We Get Data Back
+            //- .brand-mandate(*ngIf="opportunity.mandate")
+            //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
+            .brand-text {{ opportunity.brand }}
+        td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
+        td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
+        td.status-column(colspan=1) {{ opportunity.status | titlecase }}
+        td.impact-column.centered(colspan=1, [ngSwitch]="opportunity.impact")
+          img.impact-image(*ngSwitchCase="opportunityImpact.high", src="../../../assets/img/icons/impact-high-small.svg")
+          img.impact-image(*ngSwitchCase="opportunityImpact.medium", src="../../../assets/img/icons/impact-medium-small.svg")
+          img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low-small.svg")
+        td.current-column.centered(colspan=1) {{ opportunity.current }}
+        td.year-ago-column.centered(
+          colspan=1,
+          [ngClass]="{ 'positive': opportunity.yearAgo > 0, 'negative': opportunity.yearAgo < 0 }"
+        ) {{ opportunity.yearAgo }}%
+        td.depletion-date-column.centered(colspan=2) {{ opportunity.depletionDate }}
+        td.button-column.centered(colspan=1, (click)="actionButtonClicked(opportunity)")
+          img.action-button(src="../../../assets/img/icons/more.svg")

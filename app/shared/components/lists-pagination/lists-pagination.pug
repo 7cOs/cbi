@@ -1,0 +1,6 @@
+div(*ngIf="!!lastPage", column="12", class="pagination")
+  button(mat-button, class="mat-fab controls", aria-label="Back to first page", (click)='pageChange(0)', *ngIf="lastPage > 10", [disabled]='currentPage === firstPage')
+    | <<
+  button(mat-button, class="mat-fab numbered", aria-label="Page Control", *ngFor="let page of pageNumbers", [ngClass]="{active: (page + 1) === currentPage}", (click)='pageChange(page)') {{page + 1}}
+  button(mat-button, class="mat-fab controls", aria-label="Forward to last page", (click)='pageChange(lastPage -1)', *ngIf='lastPage > 10', [disabled]='currentPage === lastPage')
+    | >>
