@@ -1,13 +1,15 @@
 import { includes } from 'lodash';
 import { Injectable } from '@angular/core';
 
-import * as Lists from '../models/lists/lists.model';
+import { CollaboratorType } from '../enums/lists/collaborator-type.enum';
+import { ListCategory } from '../enums/lists/list-category.enum';
 import { ListPerformance } from '../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
-import * as ListProperties from '../enums/lists/list-properties.enum';
+import { ListType } from '../enums/lists/list-type.enum';
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
 import { ListStorePerformance } from '../models/lists/list-store-performance.model';
 import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
+import { ListsCollectionSummary } from '../models/lists/lists-collection-summary.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
@@ -17,29 +19,34 @@ import { OpportunityImpact } from '../enums/list-opportunities/list-opportunity-
 import { OpportunityStatus } from '../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityType } from '../enums/list-opportunities/list-opportunity-type.enum';
 import { StoreDetails } from '../models/lists/lists-store.model';
+import { V3List } from '../models/lists/v3-list.model';
+import { V2List } from '../models/lists/v2-list.model';
+import { UnformattedNewList } from '../models/lists/unformatted-new-list.model';
+import { FormattedNewList } from '../models/lists/formatted-new-list.model';
+import { User } from '../models/lists/user.model';
 
 @Injectable()
 export class ListsTransformerService {
 
   constructor() { }
 
-  public getV2ListsSummary(v3Lists: Lists.V3List[], currentUserEmployeeID: string): Lists.ListsCollectionSummary {
-    const ownedLists: Lists.V3List[] = v3Lists.filter((list: Lists.V3List) => list.owner.employeeId === currentUserEmployeeID);
-    const archivedLists: Lists.V3List[] = v3Lists.filter((list: Lists.V3List) => list.archived);
-    const sharedWithMeLists: Lists.V3List[] = v3Lists.filter((list: Lists.V3List) => list.owner.employeeId !== currentUserEmployeeID);
-    const ownedNotArchivedLists: Lists.V3List[] = ownedLists.filter((ownedList: Lists.V3List) => !includes(archivedLists, ownedList));
+  public getV2ListsSummary(v3Lists: V3List[], currentUserEmployeeID: string): ListsCollectionSummary {
+    const ownedLists: V3List[] = v3Lists.filter((list: V3List) => list.owner.employeeId === currentUserEmployeeID);
+    const archivedLists: V3List[] = v3Lists.filter((list: V3List) => list.archived);
+    const sharedWithMeLists: V3List[] = v3Lists.filter((list: V3List) => list.owner.employeeId !== currentUserEmployeeID);
+    const ownedNotArchivedLists: V3List[] = ownedLists.filter((ownedList: V3List) => !includes(archivedLists, ownedList));
 
-    const ownedArchivedListsCount: number = ownedLists.filter((ownedList: Lists.V3List) => !includes(archivedLists, ownedList)).length;
+    const ownedArchivedListsCount: number = ownedLists.filter((ownedList: V3List) => !includes(archivedLists, ownedList)).length;
     const ownedNotArchivedListsCount: number = ownedNotArchivedLists.length;
     const sharedArchivedListsCount: number =
-      sharedWithMeLists.filter((sharedList: Lists.V3List) => includes(archivedLists, sharedList)).length;
+      sharedWithMeLists.filter((sharedList: V3List) => includes(archivedLists, sharedList)).length;
     const sharedNotArchivedListsCount: number =
-      sharedWithMeLists.filter((sharedList: Lists.V3List) => !includes(archivedLists, sharedList)).length;
+      sharedWithMeLists.filter((sharedList: V3List) => !includes(archivedLists, sharedList)).length;
 
-    const ownedV2Lists: Lists.V2List[] = ownedLists.map((list: Lists.V3List) => this.transformV3ToV2(list, true));
-    const archivedV2Lists: Lists.V2List[] = archivedLists.map((list: Lists.V3List) => this.transformV3ToV2(list));
-    const sharedWithMeV2Lists: Lists.V2List[] = sharedWithMeLists.map((list: Lists.V3List) => this.transformV3ToV2(list));
-    const ownedNotArchivedV2Lists: Lists.V2List[] = ownedNotArchivedLists.map((list: Lists.V3List) => this.transformV3ToV2(list, true));
+    const ownedV2Lists: V2List[] = ownedLists.map((list: V3List) => this.transformV3ToV2(list, true));
+    const archivedV2Lists: V2List[] = archivedLists.map((list: V3List) => this.transformV3ToV2(list));
+    const sharedWithMeV2Lists: V2List[] = sharedWithMeLists.map((list: V3List) => this.transformV3ToV2(list));
+    const ownedNotArchivedV2Lists: V2List[] = ownedNotArchivedLists.map((list: V3List) => this.transformV3ToV2(list, true));
 
     return {
       owned: ownedV2Lists,
@@ -71,7 +78,7 @@ export class ListsTransformerService {
     };
   }
 
-  public transformV3ToV2(list: Lists.V3List, isOwnedList: boolean = false): Lists.V2List {
+  public transformV3ToV2(list: V3List, isOwnedList: boolean = false): V2List {
     return {
       archived: list.archived,
       collaborators: list.collaborators,
@@ -97,15 +104,15 @@ export class ListsTransformerService {
     };
   }
 
-  public formatNewList(list: Lists.UnformattedNewList): Lists.FormattedNewList {
+  public formatNewList(list: UnformattedNewList): FormattedNewList {
     return {
       description: list.description,
       name: list.name,
-      type: ListProperties.ListType.TargetList,
+      type: ListType.TargetList,
       archived: false,
-      collaboratorType: ListProperties.CollaboratorType.CollaborateAndInvite,
-      collaboratorEmployeeIds: list.collaborators.map((user: Lists.User) => user.employeeId),
-      category: ListProperties.ListCategory.Beer
+      collaboratorType: CollaboratorType.CollaborateAndInvite,
+      collaboratorEmployeeIds: list.collaborators.map((user: User) => user.employeeId),
+      category: ListCategory.Beer
     };
   }
 
@@ -149,7 +156,7 @@ export class ListsTransformerService {
     return storeData;
   }
 
-  private formatAuthorText(author: Lists.User, currentUserIsAuthor: boolean = false): string {
+  private formatAuthorText(author: User, currentUserIsAuthor: boolean = false): string {
     return currentUserIsAuthor || !author
       ? 'current user'
       : `${author.firstName} ${author.lastName}`;

@@ -1,7 +1,8 @@
-import { Observable } from 'rxjs';
-import { V3List } from '../../../models/lists/lists.model';
 import { getV3ListMock } from '../../../models/lists/lists.model.mock';
 import { generateRandomSizedArray } from '../../../models/util.model';
+import { V3List } from '../../../models/lists/v3-list.model';
+
+import { Observable } from 'rxjs';
 
 export const listApiServiceMock = {
   addOpportunitiesToList: addOpportunitiesToList,
