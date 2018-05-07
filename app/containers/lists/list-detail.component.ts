@@ -23,6 +23,7 @@ import { StoreDetails } from '../../models/lists/lists-store.model';
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
+import { Subject } from 'rxjs/Subject';
 
 interface ListPageClick {
   pageNumber: number;
@@ -44,6 +45,7 @@ export interface PageChangeData {
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
+  parentSubject: Subject<any> = new Subject();
   public storeList: StoreDetails[];
   public listSummary: ListsSummary;
   public oppsGroupedByStores: {};
@@ -72,7 +74,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
-
+  public sortClicked: boolean;
   private listDetailSubscription: Subscription;
 
   constructor(
@@ -146,6 +148,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleManageButtonClick() {
     console.log('manage button click');
+  }
+
+  public handleSortClicked () {
+    console.log('firing sort');
+    this.sortClicked = !this.sortClicked;
+    this.parentSubject.next('some value');
   }
 
   public tabSelectedClick(event: TabSelected) {

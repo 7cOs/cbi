@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 export const LIST_TABLE_SIZE: number = 20;
 
@@ -11,6 +12,13 @@ export const LIST_TABLE_SIZE: number = 20;
 export class ListsPaginationComponent implements OnInit {
   @Input() tableDataSize: number;
   @Input() tabName: string;
+  @Input() parentSubject: Subject<any>;
+  @Input()
+  set sortClicked(sortClicked: string){
+    console.log(sortClicked);
+    this.pageChange(0);
+  }
+
   @Output() pageChangeClick: EventEmitter<{pageNumber: number}> = new EventEmitter<any>();
 
   public currentPage: number = 1;
