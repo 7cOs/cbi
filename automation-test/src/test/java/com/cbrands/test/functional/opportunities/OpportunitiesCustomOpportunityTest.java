@@ -49,13 +49,13 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
         .clickAddButton();
 
     Assert.assertTrue(customOpportunityModal.areAllRequiredFieldErrorMessagesDisplayed(),
-          "Error verifying one or more required field message.");
+          "One or more required fields failed to display an error message when blank field is submitted");
 
     Assert.assertTrue(customOpportunityModal.clickOutsideModal().isModalDisplayed(), 
-        "Add Opportunity modal is NOT displayed after clicking outside modal dialog");
+        "Failed to prevent modal from closing after clicking outside modal dialog");
 
     Assert.assertFalse(customOpportunityModal.clickCancelButton().isModalClosed(),
-        "Add Opportunity modal IS displayed after canceling modal dialog");
+        "Add Opportunity modal failed to disappear after canceling modal dialog");
   }
 }
 

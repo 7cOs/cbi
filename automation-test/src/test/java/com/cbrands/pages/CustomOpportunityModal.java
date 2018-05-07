@@ -101,8 +101,8 @@ public class CustomOpportunityModal extends TestNGBasePage {
         "Impact"
     };
 
-    for( String requiredField : requiredFields) {
-      log.info("Verifying required field message for " + requiredField);
+    for( final String requiredField : requiredFields) {
+      log.debug("Verifying required field message for " + requiredField);
 
       String xpathModal = "(//md-dialog//div[contains(@class, 'modal add-opportunity')]";
       String xpathForm = (xpathModal + "//label[contains(.,'[FIELD]')]/..//[TYPE]/../../..)"
@@ -127,7 +127,7 @@ public class CustomOpportunityModal extends TestNGBasePage {
         return false; 
       }
 
-      log.info("Required field message for " + requiredField  + " verified");
+      log.debug("Required field message for " + requiredField  + " verified");
     }
 
     return true;
