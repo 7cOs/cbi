@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { CompassTabsComponent } from './compass-tabs.component';
 import { CompassTabComponent } from './tab/tab.component';
 
@@ -59,11 +60,16 @@ describe('CompassTabsComponent', () => {
       expect(tab1Component.active).toBeFalsy();
       expect(tab2Component.active).toBeTruthy();
     });
+  });
 
-    it('should check whether an event is emitted', () => {
-      spyOn(tabsContainerComponent.selectedTab, 'emit');
+  describe('when a tab is clicked', () => {
+    it('should emit an onTabClicked event containing the name of the tab', (done) => {
+      tabsContainerComponent.onTabClicked.subscribe((event: string) => {
+        expect(event).toEqual(tab2Component.title);
+        done();
+      });
+
       tabsContainerComponent.selectTab(tab2Component);
-      expect(tabsContainerComponent.selectedTab.emit).toHaveBeenCalledWith({selectedTab: tab2Component.title});
     });
   });
 });

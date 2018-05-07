@@ -1,3 +1,4 @@
+import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
@@ -10,6 +11,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { getListOpportunitiesTableRowMock } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent, PageChangeData } from './list-detail.component';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
@@ -19,6 +21,7 @@ import * as ListsActions from '../../state/actions/lists.action';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsSummary } from '../../models/lists/lists-header.model';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
@@ -219,10 +222,47 @@ describe('ListDetailComponent', () => {
     });
   });
 
-  describe('when tabs are selected', () => {
-    it('should set the selected tab', () => {
-      componentInstance.tabSelectedClick({selectedTab: 'Performance'});
-      expect(componentInstance.selectedTab).toBe('Performance');
+  describe('when the Performance tab is clicked', () => {
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+
+    beforeEach(() => {
+      opportunitiesTableData = getListOpportunitiesTableRowMock(10);
+
+      componentInstance.opportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+    });
+
+    it('should set every opportunities table and expanded table row checked/expanded fields to false', () => {
+      componentInstance.opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        expect(tableRow.checked).toBe(false);
+        expect(tableRow.expanded).toBe(false);
+
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
+          expect(oppRow.checked).toBe(false);
+        });
+      });
+
+      componentInstance.opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        tableRow.checked = true;
+        tableRow.expanded = true;
+
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
+          oppRow.checked = true;
+        });
+      });
+      fixture.detectChanges();
+
+      fixture.debugElement.queryAll(By.css('.compass-tab'))[0].triggerEventHandler('click', null);
+      fixture.detectChanges();
+
+      componentInstance.opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        expect(tableRow.checked).toBe(false);
+        expect(tableRow.expanded).toBe(false);
+
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
+          expect(oppRow.checked).toBe(false);
+        });
+      });
     });
   });
 });

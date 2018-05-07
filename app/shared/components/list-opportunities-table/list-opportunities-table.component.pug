@@ -2,7 +2,7 @@ beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [
 
 div
 
-  table
+  table.list-opportunities-table
 
     thead
 
@@ -27,8 +27,9 @@ div
         th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.opportunitiesColumn)")
           span {{ tableHeaderRow[4] }}
             sort-indicator([status]="getSortStatus(columnType.opportunitiesColumn)")
-        th.checkbox-col(colspan=1)
-          img.expand-icon(src="../../../assets/img/icons/add-expand-collapse.svg")
+        th.checkbox-col.link.expand-all-column(colspan=1, (click)="onExpandAllClicked()")
+          img.expand-icon(*ngIf="!isExpandAll", src="../../../assets/img/icons/add-expand-collapse.svg")
+          img.expand-icon(*ngIf="isExpandAll", src="../../../assets/img/icons/minus.svg")
 
       tr.sub-header
         th(colspan=1)
@@ -44,10 +45,18 @@ div
         th.right-col(colspan=1)
         th.checkbox-col(colspan=1)
 
-    tbody.total-row-absent
+    tbody(*ngFor="let row of sortedTableData | slice:sliceStart:sliceEnd, let rowIndex = index")
       tr.entity-row(
-        *ngFor="let row of sortedTableData | slice:sliceStart:sliceEnd, let rowIndex = index",
         list-opportunities-table-row,
         [rowData]="row",
         (click)="onRowClicked(rowType.data, rowIndex, row)",
-        (onChangeEventEmitter)="onCheckboxChange(row)")
+        (onChangeEventEmitter)="onCheckboxChange(row)",
+        (onTableRowClicked)="onTableRowClicked(row)"
+      )
+      tr.table-drawer-row(*ngIf="row.expanded")
+        td.table-drawer-cell(colspan=9)
+          list-table-drawer(
+            [tableData]="row.opportunities",
+            (onCheckboxClicked)="onOpportunityCheckboxClicked(row)",
+            (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row)"
+          )
