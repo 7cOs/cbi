@@ -6,14 +6,10 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
     styles: [require('./list-performance-summary.component.scss')]
 })
 export class ListPerformanceSummaryComponent implements OnInit, OnChanges {
-    // Input for depletionsTotal
-    public depletionsTotal: number = 2837;
-    // input for depletionsVsYA
-    public depletionsVsYA: number = -2.4;
-    // input for effectiveDistributionTotal
-    public distributionsTotal: number = 7474;
-    // input for effectiveDistributionVsYA
-    public distributionsVsYA: number = 2.2;
+    @Input() depletionsTotal: number;
+    @Input() depletionsVsYA: number;
+    @Input() distributionsTotal: number;
+    @Input() distributionsVsYA: number;
 
     public depletionsTitle: string = 'DEPLETIONS CYTD';
     public distributionsTitle: string = 'EFFECTIVE POD L90';
