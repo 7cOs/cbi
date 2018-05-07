@@ -156,7 +156,7 @@ describe('ListDetailComponent', () => {
         },
         {
           provide: 'userService',
-          userValue: userMock
+          useValue: userMock
         }
       ],
       imports: [

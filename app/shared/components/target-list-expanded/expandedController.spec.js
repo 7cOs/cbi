@@ -1,3 +1,6 @@
+const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
+const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
+
 describe('Unit: expanded target list controller', function() {
   let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService, compassModalService, listsApiService, listsTransformerService;
 
@@ -6,6 +9,9 @@ describe('Unit: expanded target list controller', function() {
   }));
 
   beforeEach(function() {
+    listsApiService = listsApiServiceMock;
+    listsTransformerService = listsTransformerServiceMock;
+
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');
@@ -15,19 +21,10 @@ describe('Unit: expanded target list controller', function() {
       analyticsService = {
         trackEvent: () => {}
       };
-      $provide.value('analyticsService', analyticsService);
-    });
-
-    angular.mock.module(($provide) => {
       compassModalService = {
         showAlertModalDialog: () => {}
       };
-      listsApiService = {
-        getLists: () => {}
-      };
-      listsTransformerService = {
-        getV2ListsSummary: () => {}
-      };
+      $provide.value('analyticsService', analyticsService);
       $provide.value('compassModalService', compassModalService);
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
@@ -45,6 +42,8 @@ describe('Unit: expanded target list controller', function() {
         }
       };
       scope = $rootScope.$new();
+      listsApiService = _listsApiService_;
+      listsTransformerService = _listsTransformerService_;
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
       userService = _userService_;
@@ -344,6 +343,12 @@ describe('Unit: expanded target list controller', function() {
     });
 
     describe('[expanded.saveNewList]', function() {
+      beforeEach(() => {
+        const deferred = q.defer();
+        deferred.resolve({id: '998877'});
+        spyOn(ctrl, 'createList').and.returnValue(deferred.promise);
+      });
+
       it('should return null if character length is greater than fourty', function() {
         ctrl.newList.name = 'This name is way way too long to be saved';
         expect(ctrl.newList.name.length).toBeGreaterThan(39);
@@ -353,35 +358,22 @@ describe('Unit: expanded target list controller', function() {
 
       it('should save new list and send analytics event', function(done) {
         ctrl.newList = {
-        name: 'Standard Name',
-        collaborators: [
-          {
-            'user': {
-              'id': '5648',
-              'employeeId': '1012132',
-              'firstName': 'FRED',
-              'lastName': 'BERRIOS',
-              'email': 'FRED.BERRIOS@CBRANDS.COM'
-            },
-            'permissionLevel': 'author',
-            'lastViewed': null
-          }]
+          name: 'Standard Name',
+          description: '',
+          opportunities: [],
+          collaborators: [
+            {
+              'user': {
+                'id': '5648',
+                'employeeId': '1012132',
+                'firstName': 'FRED',
+                'lastName': 'BERRIOS',
+                'email': 'FRED.BERRIOS@CBRANDS.COM'
+              },
+              'permissionLevel': 'author',
+              'lastViewed': null
+            }]
         };
-        expect(ctrl.newList.name.length).toBeLessThan(40);
-
-        spyOn(userService, 'addTargetList').and.callFake(function() {
-          return {
-            then: function(callback) { return callback({id: '998877'}); }
-          };
-        });
-
-        spyOn(targetListService, 'addTargetListShares').and.callFake(function() {
-          return {
-            then: function(callback) { return q.when(callback({data: {id: '1234', name: 'collab name'}})); }
-          };
-        });
-
-        spyOn(analyticsService, 'trackEvent');
 
         userService.model.targetLists = {
          ownedNotArchivedTargetLists: [{
@@ -390,15 +382,18 @@ describe('Unit: expanded target list controller', function() {
          id: '4567'
         }]};
 
-        var newList = ctrl.saveNewList();
-        expect(userService.addTargetList).toHaveBeenCalled();
+        expect(ctrl.newList.name.length).toBeLessThan(40);
+
+        spyOn(analyticsService, 'trackEvent');
+
+        ctrl.saveNewList();
+        scope.$apply();
+
+        expect(ctrl.createList).toHaveBeenCalled();
         expect(analyticsService.trackEvent).toHaveBeenCalledWith('Target Lists - My Target Lists', 'Create Target List', '998877');
         expect(ctrl.buttonDisabled).toEqual(false);
-        expect(newList).toBe(undefined);
-        expect(userService.model.targetLists.ownedNotArchivedTargetLists[0].collaborators).toEqual({ id: '1234', name: 'collab name' });
         done();
-
-      });
+    });
     });
 
     describe('[expanded.deleteTargetList]', function() {

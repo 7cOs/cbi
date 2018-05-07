@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, Component, Input } from '@angular/core';
 
 import { CompassManageListModalComponent } from './compass-manage-list-modal.component';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
@@ -9,17 +9,28 @@ import { COMPASS_MANAGE_LIST_MODAL_INPUTS } from './compass-manage-list-modal.to
 import { CompassManageListModalEvent } from '../../../enums/compass-manage-list-modal-strings.enum';
 import { ListsSummary } from '../../../models/lists/lists-header.model';
 import { User, CollaboratorOwnerDetails } from '../../../models/lists/lists.model';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
 
 const chance = new Chance();
 const modalOverlayRefMock = {
   closeModal: jasmine.createSpy('closeModal')
 };
 
+@Component({
+  selector: 'compass-user-search',
+  template: ''
+})
+class CompassUserSearchComponent {
+  @Input() parentGroup: FormGroup;
+}
+
 describe('Compass Manage Modal List Component', () => {
   let fixture: ComponentFixture<CompassManageListModalComponent>;
+  let dummyUserSearch: ComponentFixture<CompassUserSearchComponent>;
   let componentInstance: CompassManageListModalComponent;
   let fixtureDebugElement: DebugElement;
   let compassModalInputsMock: CompassManageListModalInputs;
+  let formBuilder: FormBuilder = new FormBuilder();
 
   let titleInputMock: string;
   let acceptLabelMock: string;
@@ -29,12 +40,17 @@ describe('Compass Manage Modal List Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, FormsModule],
       declarations: [ CompassManageListModalComponent ],
       providers: [
-      {
-        provide: COMPASS_MANAGE_LIST_MODAL_INPUTS,
-        userValue: compassModalInputsMock
-      }
+        {
+          provide: COMPASS_MANAGE_LIST_MODAL_INPUTS,
+          userValue: compassModalInputsMock
+        },
+        {
+          provide: FormBuilder,
+          useValue: formBuilder
+        }
       ]
     });
 
@@ -73,6 +89,8 @@ describe('Compass Manage Modal List Component', () => {
 
     fixture = TestBed.createComponent(CompassManageListModalComponent);
     componentInstance = fixture.componentInstance;
+    componentInstance.listForm = formBuilder.group({targetName: '', description: '', userSearchTerm: ''});
+    dummyUserSearch.componentInstance.parentGroup = componentInstance.listForm;
     componentInstance.modalInputs = compassModalInputsMock;
     componentInstance.modalOverlayRef = modalOverlayRefMock as any;
     fixtureDebugElement = fixture.debugElement;

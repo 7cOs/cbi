@@ -61,6 +61,7 @@ module.exports = /*  @ngInject */
     vm.addCollaborator = addCollaborator;
     vm.archiveTargetList = archiveTargetList;
     vm.closeModal = closeModal;
+    vm.createList = createList;
     vm.createNewList = createNewList;
     vm.createTargetList = createTargetList;
     vm.deleteTargetList = deleteTargetList;
@@ -208,18 +209,21 @@ module.exports = /*  @ngInject */
       return result;
     }
 
-    function saveNewList(e) {
+    function createList(formattedList) {
+      return listsApiService.createList(formattedList).toPromise();
+    }
 
+    function saveNewList(e) {
       if (vm.newList.name.length > 40) return;
 
       vm.buttonDisabled = true;
 
-      listsApiService.createList(listsTransformerService.formatNewList(vm.newList))
-        .toPromise()
+      const formattedList = listsTransformerService.formatNewList(vm.newList);
+      vm.createList(formattedList)
         .then(v3List => {
 
-        userService.model.ownedNotArchivedTargetLists.concat(v3List);
-        userService.model.ownedNotArchived++;
+        userService.model.targetLists.ownedNotArchivedTargetLists.concat(v3List);
+        userService.model.targetLists.ownedNotArchived++;
 
         closeModal();
         vm.buttonDisabled = false;

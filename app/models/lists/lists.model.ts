@@ -1,6 +1,6 @@
 import * as ListProperties from '../../enums/lists/list-properties.enum';
 
-interface BaseList {
+export interface BaseList {
   archived: boolean;
   collaborators: Collaborator[];
   createdOn: string;
@@ -11,7 +11,7 @@ interface BaseList {
   numberOfAccounts: number;
   numberOfClosedOpportunities: number;
   owner: User;
-  survey: any;
+  survey: SurveyInfo;
   totalOpportunities: number;
   type: string;
   updatedOn: string;
@@ -34,8 +34,8 @@ export interface PrimaryDistributor {
 }
 
 export interface V3List extends BaseList {
-  category: string;
-  collaboratorType: string;
+  category: ListProperties.ListCategory;
+  collaboratorType: ListProperties.CollaboratorType;
 }
 
 export interface V2List extends BaseList {
@@ -56,7 +56,7 @@ export interface UnformattedNewList {
   name: string;
   opportunities: any[];
   collaborators: User[];
-  targetListShares: {id: number}[];
+  targetListShares?: {id: number}[];
 }
 
 export interface FormattedNewList {

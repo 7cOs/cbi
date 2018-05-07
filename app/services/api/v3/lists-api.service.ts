@@ -19,7 +19,7 @@ export class ListsApiService {
     private http: HttpClient
   ) { }
 
-  public getLists(): Observable<any> {
+  public getLists(): Observable<V3List[]> {
     const url = `/v3/lists`;
     const params = {
       includeCollaboratorLists: 'true',
@@ -27,6 +27,10 @@ export class ListsApiService {
     };
     return this.http.get(url, { params: params })
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
+  public getListsPromise(): any {
+    return this.getLists().toPromise();
   }
 
   public getStoreListDetails(
@@ -46,17 +50,17 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public createList(list: V3List): Observable<V3List> {
+  public createList(list: FormattedNewList): Observable<V3List> {
     const url = `/v3/lists`;
 
     return this.http.post(url, list)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public addOpportunitiesToList(listId: string, opportunityIds: string[]): Observable<any> {
+  public addOpportunitiesToList(listId: string, opportunities: {opportunityId: string}[]): Observable<ListOpportunityDTO[]> {
     const url = `/v3/lists/${ listId }/opportunities`;
 
-    return this.http.post(url, opportunityIds)
+    return this.http.post(url, opportunities)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
