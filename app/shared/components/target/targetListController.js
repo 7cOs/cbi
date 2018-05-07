@@ -101,8 +101,8 @@ module.exports = /*  @ngInject */
 
       loaderService.openLoader();
       const currentUserEmployeeID = userService.model.currentUser.employeeID;
-      listsApiService.getLists().toPromise().then((response) => {
-        let lists = userService.model.targetLists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
+      listsApiService.getListsPromise().then((response) => {
+        let lists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
         userService.model.targetLists = lists;
 
         vm.types.mine.records = lists.ownedNotArchivedTargetLists;

@@ -28,6 +28,10 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
+  public getListsPromise(): any {
+    return this.getLists().toPromise();
+  }
+
   public getStoreListDetails(
     listsId: string
   ): Observable<Array<ListStoreDTO>> {

@@ -1026,7 +1026,6 @@ module.exports = /*  @ngInject */
     }
 
     function handleAddToTargetList(ev, targetList, idx, addAction) {
-      debugger;
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
@@ -1150,7 +1149,6 @@ module.exports = /*  @ngInject */
     }
 
     function updateTargetListOpportunityCountByListID(listID, opportunityCount) {
-      debugger;
       const foundListIdx = vm.userService.model.targetLists.owned.findIndex(targetList => targetList.id === listID);
       if (foundListIdx > -1) updateTargetListOpportunityCount(foundListIdx, opportunityCount);
     }
