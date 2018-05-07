@@ -8,6 +8,8 @@ import { MatCheckboxChange } from '@angular/material';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
+import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
+import { PageChangeData } from '../../../containers/lists/list-detail.component';
 
 @Component({
   selector: 'list-opportunities-table',
@@ -25,12 +27,20 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
 
   @Input()
   set tableData(tableData: Array<ListOpportunitiesTableRow>) {
+    this.opportunitiesTableData = tableData;
     if (tableData) {
       const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
       this.sortedTableData = sortedTableData;
       this.numSelectedRows = this.sortedTableData.length;
+    }
+  }
+
+  @Input()
+  set pageChangeData(pageChangeData: PageChangeData) {
+    if (pageChangeData) {
+      this.handlePageChangeClicked(pageChangeData);
     }
   }
 
@@ -43,9 +53,12 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public columnType = ListOpportunitiesColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
+  public sliceStart: number = 0;
+  public sliceEnd: number = LIST_TABLE_SIZE;
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
+  public opportunitiesTableData: Array<ListOpportunitiesTableRow>;
 
   private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
@@ -62,6 +75,13 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public ngOnChanges(changes: SimpleChanges) {
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(loadingState);
+  }
+
+  public handlePageChangeClicked(data: PageChangeData) {
+    if (this.opportunitiesTableData) {
+      this.sliceStart = data.pageStart;
+      this.sliceEnd = data.pageEnd;
+    }
   }
 
   public onCheckboxChange(row: ListOpportunitiesTableRow): void {

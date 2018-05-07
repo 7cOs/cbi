@@ -11,7 +11,7 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
-import { ListDetailComponent } from './list-detail.component';
+import { ListDetailComponent, PageChangeData } from './list-detail.component';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
@@ -33,6 +33,7 @@ class ListPerformanceTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListPerformanceTableRow>;
   @Input() tableHeaderRow: Array<string>;
+  @Input() pageChangeData: PageChangeData;
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
 }
@@ -45,6 +46,7 @@ class ListPerformanceTableComponentMock {
 class ListOpportunitiesTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListOpportunitiesTableRow>;
+  @Input() pageChangeData: PageChangeData;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
 }
@@ -58,6 +60,17 @@ class ListsHeaderComponentMock {
   @Input() summaryData: ListsSummary;
   @Output() manageButtonClicked= new EventEmitter();
   @Output() listsLinkClicked = new EventEmitter();
+}
+
+@Component({
+  selector: 'lists-pagination',
+  template: ''
+})
+
+class ListsPaginationComponentMock {
+  @Input() tableDataSize: number;
+  @Input() tabName: string;
+  @Output() pageChangeClick = new EventEmitter();
 }
 
 describe('ListDetailComponent', () => {
@@ -121,6 +134,7 @@ describe('ListDetailComponent', () => {
         ListDetailComponent,
         ListsHeaderComponentMock,
         ListOpportunitiesTableComponentMock,
+        ListsPaginationComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [
@@ -202,6 +216,13 @@ describe('ListDetailComponent', () => {
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL
       }));
+    });
+  });
+
+  describe('when tabs are selected', () => {
+    it('should set the selected tab', () => {
+      componentInstance.tabSelectedClick({selectedTab: 'Performance'});
+      expect(componentInstance.selectedTab).toBe('Performance');
     });
   });
 });
