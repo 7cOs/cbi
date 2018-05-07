@@ -346,11 +346,13 @@ describe('ListOpportunitiesTableComponent', () => {
 
   describe('when an onCheckboxClicked event is emitted and onOpportunityCheckboxClicked is called', () => {
     it('should set the checked state of the parent store row to true if every opportunity row is checked', () => {
+      const expectedCheckedState = opportunitiesTableData[0].opportunities.length > 1 ? false : true;
+
       opportunitiesTableData[0].opportunities[0].checked = true;
       componentInstance.onOpportunityCheckboxClicked(opportunitiesTableData[0]);
       fixture.detectChanges();
 
-      expect(opportunitiesTableData[0].checked).toBe(false);
+      expect(opportunitiesTableData[0].checked).toBe(expectedCheckedState);
 
       opportunitiesTableData[0].opportunities.forEach((opportunityRow: ListTableDrawerRow) => {
         opportunityRow.checked = true;
@@ -387,6 +389,15 @@ describe('ListOpportunitiesTableComponent', () => {
       opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
         expect(tableRow.expanded).toBe(false);
       });
+    });
+  });
+
+  describe('when pageChange Data input is received', () => {
+    it('should set page start, page end', () => {
+      componentInstance.opportunitiesTableData = getListOpportunitiesTableRowMock(300);
+      componentInstance.handlePageChangeClicked({pageStart: 80, pageEnd: 100});
+      expect(componentInstance.sliceStart).toBe(80);
+      expect(componentInstance.sliceEnd).toBe(100);
     });
   });
 });

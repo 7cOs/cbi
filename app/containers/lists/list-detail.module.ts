@@ -14,6 +14,7 @@ import { ListTableDrawerComponent } from '../../shared/components/list-table-dra
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { SharedModule } from '../../shared/shared.module';
+import { ListsPaginationComponent } from '../../shared/components/lists-pagination/lists-pagination.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { SharedModule } from '../../shared/shared.module';
     ListsHeaderComponent,
     ListOpportunitiesTableComponent,
     ListOpportunitiesTableRowComponent,
+    ListsPaginationComponent,
     ListPerformanceTableComponent,
     ListPerformanceTableRowComponent,
     ListTableDrawerComponent

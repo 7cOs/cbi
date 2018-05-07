@@ -36,11 +36,14 @@
         td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
         td.status-column(colspan=1) {{ opportunity.status | titlecase }}
         td.impact-column.centered(colspan=1, [ngSwitch]="opportunity.impact")
-          img.impact-image(*ngSwitchCase="opportunityImpact.high", src="../../../assets/img/icons/impact-high.svg")
-          img.impact-image(*ngSwitchCase="opportunityImpact.medium", src="../../../assets/img/icons/impact-medium.svg")
-          img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low.svg")
+          img.impact-image(*ngSwitchCase="opportunityImpact.high", src="../../../assets/img/icons/impact-high-small.svg")
+          img.impact-image(*ngSwitchCase="opportunityImpact.medium", src="../../../assets/img/icons/impact-medium-small.svg")
+          img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low-small.svg")
         td.current-column.centered(colspan=1) {{ opportunity.current }}
-        td.year-ago-column.centered(colspan=1) {{ opportunity.yearAgo }}%
+        td.year-ago-column.centered(
+          colspan=1,
+          [ngClass]="{ 'positive': opportunity.yearAgo > 0, 'negative': opportunity.yearAgo < 0 }"
+        ) {{ opportunity.yearAgo }}%
         td.depletion-date-column.centered(colspan=2) {{ opportunity.depletionDate }}
-        td.button-column.centered(colspan=1, (click)="actionButtonClicked()")
+        td.button-column.centered(colspan=1, (click)="actionButtonClicked(opportunity)")
           img.action-button(src="../../../assets/img/icons/more.svg")

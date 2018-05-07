@@ -100,17 +100,5 @@ describe('ListTableDrawerComponent', () => {
         fixture.detectChanges();
       });
     });
-
-    describe('when the row action button is clicked', () => {
-      it('should emit an empty onActionButtonClicked event', (done) => {
-        componentInstance.onActionButtonClicked.subscribe((event: Event) => {
-          expect(event).toBe(undefined);
-          done();
-        });
-
-        fixture.debugElement.queryAll(By.css('.button-column'))[0].nativeElement.click();
-        fixture.detectChanges();
-      });
-    });
   });
 });

@@ -16,6 +16,19 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
+import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
+import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
+import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
+
+interface ListPageClick {
+  pageNumber: number;
+}
+
+export interface PageChangeData {
+  pageStart: number;
+  pageEnd: number;
+}
 
 @Component({
   selector: 'list-detail',
@@ -33,6 +46,17 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableData: ListPerformanceTableRow[];
   public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Opportunities', 'Last Depletion'];
   public opportunitiesTableData: ListOpportunitiesTableRow[];
+  public performanceTableDataSize: number;
+  public listTableSize: number = LIST_TABLE_SIZE;
+  public pageChangeData: PageChangeData;
+  public performanceSortingCriteria: Array<SortingCriteria> = [{
+    columnType: ListPerformanceColumnType.cytdColumn,
+    ascending: false
+  }];
+  public opportunitiesSortingCriteria: Array<SortingCriteria> = [{
+    columnType: ListOpportunitiesColumnType.cytdColumn,
+    ascending: false
+  }];
 
   private listDetailSubscription: Subscription;
 
@@ -80,6 +104,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.performance.pod.storePerformance
           );
+
+          this.performanceTableDataSize = this.performanceTableData.length;
         }
 
         if (this.isListOpportunitiesFetched(
@@ -104,6 +130,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription.unsubscribe();
   }
 
+  public handlePageClick(event: ListPageClick) {
+    const pageNumber = event.pageNumber;
+    let pageStart = ((pageNumber - 1 ) * LIST_TABLE_SIZE);
+    let pageEnd = (pageNumber * LIST_TABLE_SIZE) ;
+    this.pageChangeData = {pageStart: pageStart, pageEnd: pageEnd};
+  }
+
   public handleManageButtonClick() {
     console.log('manage button click');
   }
@@ -114,7 +147,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public onTabClicked(tabName: string): void {
     if (tabName === this.performanceTabTitle) {
-      this.clearOpportunitiesTableSelections();
+      this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
     }
   }
 
@@ -138,7 +171,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       && opportunitiesStatus === ActionStatus.Fetched;
   }
 
-  private clearOpportunitiesTableSelections(): void {
+  private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
     const clearTableDrawerSelections = (opportunityRows: ListTableDrawerRow[]): ListTableDrawerRow[] => {
       return opportunityRows.map((opportunityRow: ListTableDrawerRow) => {
         return Object.assign({}, opportunityRow, {
@@ -147,7 +180,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
     };
 
-    this.opportunitiesTableData = this.opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
+    return opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
       return Object.assign({}, tableRow, {
         opportunities: clearTableDrawerSelections(tableRow.opportunities),
         checked: false,

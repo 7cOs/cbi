@@ -1,0 +1,31 @@
+@import '../../../assets/styles/base/variables';
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+
+  .mat-button {
+    margin-left: 25px;
+
+    &.controls, &.controls:hover {
+      background-color: $blue;
+      color: $white;
+    }
+
+    &.numbered, &.numbered:hover {
+      background-color: $white;
+      color: $gray-1;
+    }
+
+    &.active , &.active:hover {
+      background-color: $dark-blue;
+      color: $white;
+    }
+  }
+
+  .mat-button[disabled], .mat-button[disabled]:hover {
+    color: $gray-8;
+    background-color: $gray-10;
+  }
+}

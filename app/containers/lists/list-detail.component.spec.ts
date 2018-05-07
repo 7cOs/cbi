@@ -13,7 +13,7 @@ import { CalculatorService } from '../../services/calculator.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { getListOpportunitiesTableRowMock } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
-import { ListDetailComponent } from './list-detail.component';
+import { ListDetailComponent, PageChangeData } from './list-detail.component';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
@@ -36,6 +36,7 @@ class ListPerformanceTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListPerformanceTableRow>;
   @Input() tableHeaderRow: Array<string>;
+  @Input() pageChangeData: PageChangeData;
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
 }
@@ -48,6 +49,7 @@ class ListPerformanceTableComponentMock {
 class ListOpportunitiesTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListOpportunitiesTableRow>;
+  @Input() pageChangeData: PageChangeData;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
 }
@@ -61,6 +63,17 @@ class ListsHeaderComponentMock {
   @Input() summaryData: ListsSummary;
   @Output() manageButtonClicked= new EventEmitter();
   @Output() listsLinkClicked = new EventEmitter();
+}
+
+@Component({
+  selector: 'lists-pagination',
+  template: ''
+})
+
+class ListsPaginationComponentMock {
+  @Input() tableDataSize: number;
+  @Input() tabName: string;
+  @Output() pageChangeClick = new EventEmitter();
 }
 
 describe('ListDetailComponent', () => {
@@ -124,6 +137,7 @@ describe('ListDetailComponent', () => {
         ListDetailComponent,
         ListsHeaderComponentMock,
         ListOpportunitiesTableComponentMock,
+        ListsPaginationComponentMock,
         ListPerformanceTableComponentMock
       ],
       providers: [
@@ -218,8 +232,7 @@ describe('ListDetailComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should set every opportunities table store row checked and expanded field to false and every opportunity drawer'
-    + ' row checked field to false', () => {
+    it('should set every opportunities table and expanded table row checked/expanded fields to false', () => {
       componentInstance.opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
         expect(tableRow.checked).toBe(false);
         expect(tableRow.expanded).toBe(false);
