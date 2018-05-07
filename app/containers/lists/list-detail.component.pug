@@ -46,16 +46,16 @@ compass-tabs(
     )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Performance") && (performanceTableDataSize > listTableSize)',
+  *ngIf='(selectedTab === performanceTabTitle) && (performanceTableDataSize > listTableSize)',
   [tableDataSize]="performanceTableDataSize",
-  [tabName]='firstTabTitle',
+  [tabName]='performanceTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableDataSize > listTableSize)',
+  *ngIf='(selectedTab === opportunitiesTabTitle) && (opportunitiesTableDataSize > listTableSize)',
   [tableDataSize]="opportunitiesTableDataSize",
-  [tabName]='secondTabTitle',
+  [tabName]='opportunitiesTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
 

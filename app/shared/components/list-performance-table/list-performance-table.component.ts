@@ -32,8 +32,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-        this.sortedTableData = sortedTableData;
-        this.numSelectedRows = this.sortedTableData.length;
+      this.sortedTableData = sortedTableData;
+      this.numSelectedRows = this.sortedTableData.length;
     }
   }
 

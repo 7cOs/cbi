@@ -51,6 +51,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
+  public opportunitiesTableDataSize: number;
   public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Opportunities', 'Last Depletion'];
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
@@ -64,6 +65,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
+  public selectedTab: string;
 
   private listDetailSubscription: Subscription;
 
@@ -134,6 +136,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
               this.opportunitiesTableData
             );
           console.log('from subscription', this.filteredOpportunitiesTableData);
+          this.opportunitiesTableDataSize = this.opportunitiesTableData.length;
         }
       });
   }
@@ -184,6 +187,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public onTabClicked(tabName: string): void {
+    this.selectedTab = tabName;
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
     }
