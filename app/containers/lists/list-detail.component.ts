@@ -127,10 +127,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
-          console.log(this.opportunitiesTableData);
-          console.log('in list detail subs', this.oppStatusSelected);
-          this.filteredOpportunitiesTableData = this.filterOpportunitiesByStatus(
-            this.oppStatusSelected, this.opportunitiesTableData);
+
+          this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
+            this.opportunitiesTableData : this.filterOpportunitiesByStatus(
+              this.oppStatusSelected,
+              this.opportunitiesTableData
+            );
+          console.log('from subscription', this.filteredOpportunitiesTableData);
         }
       });
   }
@@ -142,12 +145,21 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   opportunityStatusSelected(statusValue: OpportunityStatus) {
     this.oppStatusSelected = statusValue;
     console.log(this.oppStatusSelected);
+    this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
+      this.opportunitiesTableData : this.filterOpportunitiesByStatus(
+        this.oppStatusSelected,
+        this.opportunitiesTableData
+      );
+    console.log('from status change method: ', this.filteredOpportunitiesTableData);
   }
 
   filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
     return oppsTableData.filter((store: ListOpportunitiesTableRow) => {
       return store.opportunities.filter((opportunity: ListTableDrawerRow) => {
-        return opportunity.status === status;
+        if (opportunity.status === OpportunityStatus.targeted)
+          return opportunity.status === OpportunityStatus.targeted || opportunity.status === OpportunityStatus.inactive;
+        else
+          return opportunity.status === OpportunityStatus.closed;
       });
     });
   }
