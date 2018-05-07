@@ -55,7 +55,7 @@ fdescribe('Compass User Search Component', () => {
       });
       componentInstance.parentGroup.controls['userSearchTerm'].setValue('tests');
       componentInstance.callSearch();
-      fixture.detectChanges();wan
+      fixture.detectChanges();
       expect(componentInstance.searchResults).toBe([{value: 'test'}]);
     });
   });
