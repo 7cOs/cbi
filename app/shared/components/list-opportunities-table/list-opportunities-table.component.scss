@@ -11,9 +11,7 @@ $left-col-icon-width: 24px;
 table {
   border-top: 2px solid $gray-8;
   border-collapse: collapse;
-  height: $table-height;
   width: 100%;
-  table-layout: fixed;
   display: table;
 }
 
@@ -39,14 +37,6 @@ tbody {
   tr {
     display: table-row;
     width: 100%;
-  }
-
-  &.total-row-absent {
-    height: $table-body-height - $table-body-height-offset;
-  }
-
-  &.total-row-present {
-    height: $table-body-height - $row-height - $table-body-height-offset;
   }
 }
 
@@ -141,17 +131,10 @@ th {
 }
 
 /deep/.expand-col {
-  text-align: center;
-  padding: 20px;
-  width: 5%;
   border-right: 2px solid $gray-8;
-
-  div.left-col-content {
-    div {
-      display: inline-block;
-      vertical-align: middle;
-    }
-  }
+  padding: 20px;
+  text-align: center;
+  width: 5%;
 }
 
 .performance-table-summary {
@@ -285,7 +268,6 @@ td, th {
 .expand-icon {
   width: 14px;
   height: 20px;
-  cursor: pointer;
 }
 
 .sub-header {
@@ -379,4 +361,15 @@ td, th {
 
 /deep/.mat-checkbox {
   animation: none;
+}
+
+.table-drawer-row {
+  box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
+
+  .table-drawer-cell {
+    border: none;
+    height: auto;
+    padding: 0;
+
+  }
 }

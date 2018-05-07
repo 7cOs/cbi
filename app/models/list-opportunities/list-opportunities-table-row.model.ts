@@ -1,3 +1,5 @@
+import { ListTableDrawerRow } from '../lists/list-table-drawer-row.model';
+
 export interface ListOpportunitiesTableRow {
   storeColumn: string;
   storeAddressSubline: string;
@@ -6,6 +8,8 @@ export interface ListOpportunitiesTableRow {
   cytdColumn: number;
   cytdVersusYaPercentColumn: number;
   opportunitiesColumn: number;
+  opportunities: ListTableDrawerRow[];
   performanceError: boolean;
   checked: boolean;
+  expanded: boolean;
 }

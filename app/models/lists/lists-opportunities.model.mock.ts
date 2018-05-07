@@ -1,5 +1,6 @@
 import * as Chance from 'chance';
 import { generateRandomSizedArray } from '../util.model';
+import * as moment from 'moment';
 
 import { ListsOpportunities } from './lists-opportunities.model';
 import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-opportunity-impact.enum.mock';
@@ -23,7 +24,8 @@ export function getListOpportunityMock(): ListsOpportunities {
     impact: getOpportunityImpactMock(),
     currentDepletions_CYTD: chance.natural(),
     yearAgoDepletions_CYTD: chance.natural(),
-    lastDepletionDate: chance.string(),
-    unversionedStoreId: chance.string()
+    lastDepletionDate: moment().format('YYYYMMDD'),
+    unversionedStoreId: chance.string(),
+    isSimpleDistribution: chance.bool()
   };
 }
