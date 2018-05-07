@@ -1,9 +1,9 @@
 section.list-performance-summary-section
     section.depletions-section
-        h3 {{ depletionsVsYA }}%
-        h3 {{ depletionsTotal }}
+        span.vsYa {{ depletionsVsYA | number:'1.1-1'}}%
+        span.total {{ depletionsTotal | number}}
         label {{ depletionsTitle }}
     section.distribution-section
-        h3 {{ distributionsVsYA }}%
-        h3 {{ distributionsTotal }}
+        span.vsYa {{ distributionsVsYA | number:'1.1-1'}}%
+        span.total {{ distributionsTotal | number}}
         label {{ distributionsTitle }}

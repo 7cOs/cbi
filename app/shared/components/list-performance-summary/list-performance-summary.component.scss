@@ -1,0 +1,32 @@
+@import '../../../assets/styles/base/variables';
+
+.list-performance-summary-section {
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  padding: 18px;
+  margin-top: 20px;
+
+  .depletions-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .distribution-section {
+    display: flex;
+    flex-direction: column;
+    margin-left: 40px;
+  }
+
+  /deep/.vsYa {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.8;
+  }
+
+  /deep/.total {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+}
