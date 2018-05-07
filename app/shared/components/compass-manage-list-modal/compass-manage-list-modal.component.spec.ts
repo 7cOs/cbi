@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Component, Input } from '@angular/core';
+import { DebugElement, Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { CompassManageListModalComponent } from './compass-manage-list-modal.component';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
@@ -10,26 +10,19 @@ import { CompassManageListModalEvent } from '../../../enums/compass-manage-list-
 import { ListsSummary } from '../../../models/lists/lists-header.model';
 import { User, CollaboratorOwnerDetails } from '../../../models/lists/lists.model';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
+import { CompassModalService } from '../../../services/compass-modal.service';
 
 const chance = new Chance();
 const modalOverlayRefMock = {
   closeModal: jasmine.createSpy('closeModal')
 };
 
-@Component({
-  selector: 'compass-user-search',
-  template: ''
-})
-class CompassUserSearchComponent {
-  @Input() parentGroup: FormGroup;
-}
-
-describe('Compass Manage Modal List Component', () => {
+fdescribe('Compass Manage Modal List Component', () => {
   let fixture: ComponentFixture<CompassManageListModalComponent>;
-  let dummyUserSearch: ComponentFixture<CompassUserSearchComponent>;
   let componentInstance: CompassManageListModalComponent;
   let fixtureDebugElement: DebugElement;
   let compassModalInputsMock: CompassManageListModalInputs;
+  let compassModalService: CompassModalService;
   let formBuilder: FormBuilder = new FormBuilder();
 
   let titleInputMock: string;
@@ -37,6 +30,19 @@ describe('Compass Manage Modal List Component', () => {
   let rejectLabelMock: string;
   let listObjectMock: ListsSummary;
   let currentUserMock: User;
+  let searchServiceMock = {
+    getUsers: getUsers,
+    setSearchActive: setSearchActive
+  };
+
+  function getUsers (value: string) {
+    return new Promise((resolve, reject) => {
+      resolve([{value: 'test'}]);
+    });
+  }
+  function setSearchActive() {
+    return true;
+  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -50,8 +56,17 @@ describe('Compass Manage Modal List Component', () => {
         {
           provide: FormBuilder,
           useValue: formBuilder
+        },
+        {
+          provide: 'searchService',
+          useValue: searchServiceMock
+        },
+        {
+          provide: CompassModalService,
+          useValue: compassModalService
         }
-      ]
+      ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     });
 
     titleInputMock = chance.string();
@@ -90,7 +105,6 @@ describe('Compass Manage Modal List Component', () => {
     fixture = TestBed.createComponent(CompassManageListModalComponent);
     componentInstance = fixture.componentInstance;
     componentInstance.listForm = formBuilder.group({targetName: '', description: '', userSearchTerm: ''});
-    dummyUserSearch.componentInstance.parentGroup = componentInstance.listForm;
     componentInstance.modalInputs = compassModalInputsMock;
     componentInstance.modalOverlayRef = modalOverlayRefMock as any;
     fixtureDebugElement = fixture.debugElement;
