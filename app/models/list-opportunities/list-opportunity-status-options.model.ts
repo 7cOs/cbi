@@ -7,7 +7,7 @@ export const listOpportunityStatusOptions: Array<CompassSelectOption> = [{
   },
   {
   display: 'Targeted',
-  value: OpportunityStatus.active
+  value: OpportunityStatus.targeted
   },
   {
   display: 'Closed',

@@ -18,6 +18,8 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
+import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 
 @Component({
   selector: 'list-detail',
@@ -30,6 +32,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
+  public filteredOpportunitiesTableData: ListOpportunitiesTableRow[];
   public opportunityStatusOptions: Array<CompassSelectOption> = [];
   public oppStatusSelected: string;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
@@ -98,6 +101,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
+          console.log(this.opportunitiesTableData);
+          console.log('in list detail subs', this.oppStatusSelected);
         }
       });
   }
@@ -108,6 +113,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   opportunityStatusSelected(statusValue: string) {
     this.oppStatusSelected = statusValue;
+    console.log(this.oppStatusSelected);
+  }
+
+  filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
+    return oppsTableData.filter((store: ListOpportunitiesTableRow) => {
+      return store.opportunities.filter((opportunity: ListTableDrawerRow) => {
+        return opportunity.status === status;
+      });
+    });
   }
 
   ngOnDestroy() {
