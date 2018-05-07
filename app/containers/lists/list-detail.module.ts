@@ -11,9 +11,11 @@ import { ListOpportunitiesTableRowComponent }
 import { ListPerformanceTableComponent } from '../../shared/components/list-performance-table/list-performance-table.component';
 import { ListPerformanceTableRowComponent } from '../../shared/components/list-performance-table-row/list-performance-table-row.component';
 import { ListPerformanceSummaryComponent } from '../../shared/components/list-performance-summary/list-performance-summary.component';
+import { ListTableDrawerComponent } from '../../shared/components/list-table-drawer/list-table-drawer.component';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { SharedModule } from '../../shared/shared.module';
+import { ListsPaginationComponent } from '../../shared/components/lists-pagination/lists-pagination.component';
 
 @NgModule({
   imports: [
@@ -26,9 +28,11 @@ import { SharedModule } from '../../shared/shared.module';
     ListsHeaderComponent,
     ListOpportunitiesTableComponent,
     ListOpportunitiesTableRowComponent,
+    ListsPaginationComponent,
     ListPerformanceTableComponent,
     ListPerformanceTableRowComponent,
-    ListPerformanceSummaryComponent
+    ListPerformanceSummaryComponent,
+    ListTableDrawerComponent
   ],
   providers: [
     ListsApiService,

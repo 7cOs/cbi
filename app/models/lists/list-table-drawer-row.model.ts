@@ -1,18 +1,16 @@
 import { OpportunityImpact } from '../../enums/list-opportunities/list-opportunity-impact.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityType } from '../../enums/list-opportunities/list-opportunity-type.enum';
+import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 
-export interface ListsOpportunities {
-  id: string;
-  brandCode: string;
-  brandDescription: string;
-  skuDescription: string;
-  type: OpportunityType;
+export interface ListTableDrawerRow {
+  brand: string;
+  skuPackage: string;
+  type: OpportunityTypeLabel | OpportunityType;
   status: OpportunityStatus;
   impact: OpportunityImpact;
-  currentDepletions_CYTD: number;
-  yearAgoDepletions_CYTD: number;
-  lastDepletionDate: string;
-  unversionedStoreId: string;
-  isSimpleDistribution: boolean;
+  current: number;
+  yearAgo: number;
+  depletionDate: string;
+  checked: boolean;
 }

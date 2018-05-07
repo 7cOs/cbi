@@ -16,9 +16,13 @@ lists-header(
   (listsLinkClicked)="handleListsLinkClick()"
 )
 
-compass-tabs
-  compass-tab([tabTitle]='firstTabTitle',
-              [active]='true')
+compass-tabs(
+  (onTabClicked)="onTabClicked($event)"
+)
+  compass-tab(
+    [tabTitle]='performanceTabTitle',
+    [active]='true'
+  )
     list-performance-summary(
       [depletionsTotal]="performanceTableTotal.cytdColumn",
       [depletionsVsYA]="performanceTableTotal.cytdVersusYaPercentColumn",
@@ -27,11 +31,30 @@ compass-tabs
     )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
+      [sortingCriteria]="performanceSortingCriteria",
       [totalRow]="performanceTableTotal",
-      [tableData]="performanceTableData"
+      [tableData]="performanceTableData",
+      [pageChangeData]="pageChangeData"
     )
-  compass-tab([tabTitle]='secondTabTitle')
+  compass-tab([tabTitle]='opportunitiesTabTitle')
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
-      [tableData]="opportunitiesTableData"
+      [sortingCriteria]="opportunitiesSortingCriteria",
+      [tableData]="opportunitiesTableData",
+      [pageChangeData]="pageChangeData"
     )
+
+lists-pagination(
+  *ngIf='(selectedTab === performanceTabTitle) && (performanceTableDataSize > listTableSize)',
+  [tableDataSize]="performanceTableDataSize",
+  [tabName]='performanceTabTitle',
+  (pageChangeClick)="handlePageClick($event)"
+)
+
+lists-pagination(
+  *ngIf='(selectedTab === opportunitiesTabTitle) && (opportunitiesTableDataSize > listTableSize)',
+  [tableDataSize]="opportunitiesTableDataSize",
+  [tabName]='opportunitiesTabTitle',
+  (pageChangeClick)="handlePageClick($event)"
+)
+

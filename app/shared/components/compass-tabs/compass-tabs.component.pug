@@ -1,8 +1,10 @@
 .compass-tabs-container
   ul(class="nav-tabs")
-    li.compass-tab(*ngFor="let tab of tabs",
-                  (click)="selectTab(tab)",
-                  [ngClass]="{'active-tab': tab.active}")
+    li.compass-tab(
+      *ngFor="let tab of tabs",
+      [ngClass]="{'active-tab': tab.active}",
+      (click)="selectTab(tab)"
+    )
       p {{ tab.title }}
-      
+
 ng-content
