@@ -4,14 +4,19 @@ import { getV3ListMock } from '../../../models/lists/lists.model.mock';
 import { generateRandomSizedArray } from '../../../models/util.model';
 
 export const listApiServiceMock = {
-  getLists: getLists,
   addOpportunitiesToList: addOpportunitiesToList,
-  createList: createList
+  createList: createList,
+  getLists: getLists,
+  getListsPromise: getListsPromise
 };
 
 function getLists(): Observable<V3List[]> {
   const v3ListsCollection = generateRandomSizedArray(1, 20).map(() => getV3ListMock());
   return Observable.of(v3ListsCollection);
+}
+
+function getListsPromise(): Promise<V3List[]> {
+  return getLists().toPromise();
 }
 
 function addOpportunitiesToList(...args: any[]): Observable<any> {

@@ -1,41 +1,51 @@
+// import { Observable } from 'rxjs';
+const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
+const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
+
 describe('Unit: target list controller', function() {
-  var scope, ctrl, userService;
+  let q, scope, ctrl, userService, listsApiService, listsTransformerService;
 
   beforeEach(function() {
+    listsApiService = listsApiServiceMock;
+    listsTransformerService = listsTransformerServiceMock;
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.target');
 
-    inject(function($controller, $rootScope, _userService_) {
+    angular.mock.module(($provide) => {
+      $provide.value('listsApiService', listsApiService);
+      $provide.value('listsTransformerService', listsTransformerService);
+    });
+    spyOn(listsTransformerService, 'getV2ListsSummary').and.returnValue({
+      ownedNotArchivedTargetLists: [
+          {id: '1', deleted: false, archived: false},
+          {id: '2', deleted: false, archived: false}
+      ],
+      sharedWithMe: [
+          {id: '5', deleted: false, archived: false},
+          {id: '6', deleted: false, archived: false}
+      ],
+      ownedNotArchived: 2,
+      sharedNotArchivedCount: 3
+    });
+
+    spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
+      const defer = q.defer();
+      defer.resolve();
+      return defer.promise;
+    });
+
+    inject(function($q, $controller, $rootScope, _userService_, _listsApiService_, _listsTransformerService_) {
       scope = $rootScope.$new();
-
+      q = $q;
       userService = _userService_;
-
-      spyOn(userService, 'getTargetLists').and.callFake(function() {
-       return {
-         then: function(callback) {
-             return callback({
-                 owned: [
-                     {id: '1', deleted: false, archived: false},
-                     {id: '2', deleted: false, archived: false},
-                     {id: '3', deleted: false, archived: true},
-                     {id: '4', deleted: true, archived: true}
-                     ],
-                 sharedWithMe: [
-                     {id: '5', deleted: false, archived: false},
-                     {id: '6', deleted: false, archived: false},
-                     {id: '7', deleted: true, archived: false},
-                     {id: '8', deleted: false, archived: true}
-                 ]
-            });
-        }
-       };
-     });
-
-      userService.model.currentUser.employeeID = '1234567';
+      listsApiService = _listsApiService_;
+      listsTransformerService = _listsTransformerService_;
       ctrl = $controller('targetListController', {$scope: scope});
     });
+
+    userService.model.currentUser.employeeID = '1234567';
   });
 
   it('should have services defined', function() {
@@ -43,21 +53,19 @@ describe('Unit: target list controller', function() {
   });
 
   it('should have updated the model', function() {
-      expect(ctrl.types.mine.total).toEqual(2);
-      expect(ctrl.types.mine.name).toEqual('My Lists');
-      expect(ctrl.types.mine.records).toEqual([
-                     {id: '1', deleted: false, archived: false},
-                     {id: '2', deleted: false, archived: false}
-      ]);
-      expect(ctrl.types.shared.total).toEqual(3);
-      expect(ctrl.types.shared.name).toEqual('Shared with Me');
-      expect(ctrl.types.shared.records).toEqual([
-                     {id: '5', deleted: false, archived: false},
-                     {id: '6', deleted: false, archived: false}
-      ]);
-      expect(ctrl.types.archived.total).toEqual(2);
-      expect(ctrl.types.archived.name).toEqual('Archived');
-      expect(ctrl.types.archived.records).toEqual([]);
+    scope.$apply();
+    expect(ctrl.types.mine.total).toEqual(2);
+    expect(ctrl.types.mine.name).toEqual('My Lists');
+    expect(ctrl.types.mine.records).toEqual([
+                    {id: '1', deleted: false, archived: false},
+                    {id: '2', deleted: false, archived: false}
+    ]);
+    expect(ctrl.types.shared.total).toEqual(3);
+    expect(ctrl.types.shared.name).toEqual('Shared with Me');
+    expect(ctrl.types.shared.records).toEqual([
+                    {id: '5', deleted: false, archived: false},
+                    {id: '6', deleted: false, archived: false}
+    ]);
   });
 
   it('test records shown length', function() {

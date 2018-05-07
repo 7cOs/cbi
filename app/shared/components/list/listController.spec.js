@@ -23,8 +23,8 @@ describe('Unit: list controller', function() {
       analyticsService = {
         trackEvent: () => {}
       };
-      $provide.value('listsApiService', listsApiService);
       $provide.value('analyticsService', analyticsService);
+      $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
     });
 
@@ -2232,7 +2232,6 @@ describe('Unit: list controller', function() {
         addToTargetListPromise.resolve(true);
 
         scope.$digest();
-        debugger;
         expect(ctrl.addToTargetList).toHaveBeenCalledWith(destTargetListMock.id);
         expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
         expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Add to Target List', destTargetListMock.id);
@@ -2253,7 +2252,6 @@ describe('Unit: list controller', function() {
 
         scope.$digest();
 
-        debugger;
         expect(ctrl.addToTargetList).toHaveBeenCalledWith(destTargetListMock.id);
         expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
         expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Copy to Target List', selectedListMock);

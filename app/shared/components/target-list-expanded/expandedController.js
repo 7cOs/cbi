@@ -210,12 +210,10 @@ module.exports = /*  @ngInject */
     }
 
     function createList(formattedList) {
-      console.log('in the actual thing');
       return listsApiService.createList(formattedList).toPromise();
     }
 
     function saveNewList(e) {
-      console.log('savenewlist');
       if (vm.newList.name.length > 40) return;
 
       vm.buttonDisabled = true;
@@ -227,11 +225,9 @@ module.exports = /*  @ngInject */
         userService.model.targetLists.ownedNotArchivedTargetLists.concat(v3List);
         userService.model.targetLists.ownedNotArchived++;
 
-        console.log(v3List.id);
         closeModal();
         vm.buttonDisabled = false;
 
-        console.log('callback');
         analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', v3List.id);
 
         // reset model
