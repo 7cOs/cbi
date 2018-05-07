@@ -45,7 +45,7 @@ div
         th.right-col(colspan=1)
         th.checkbox-col(colspan=1)
 
-    tbody(*ngFor="let row of sortedTableData, let rowIndex = index")
+    tbody(*ngFor="let row of sortedTableData | slice:sliceStart:sliceEnd, let rowIndex = index")
       tr.entity-row(
         list-opportunities-table-row,
         [rowData]="row",

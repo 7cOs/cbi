@@ -10,6 +10,13 @@ import { MatCheckboxChange } from '@angular/material';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
+import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
+import { PageChangeData } from '../../../containers/lists/list-detail.component';
+
+interface OpportunitiesTableSelectAllCheckboxState {
+  isSelectAllChecked: boolean;
+  isIndeterminateChecked: boolean;
+}
 
 interface OpportunitiesTableSelectAllCheckboxState {
   isSelectAllChecked: boolean;
@@ -32,6 +39,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
 
   @Input()
   set tableData(tableData: Array<ListOpportunitiesTableRow>) {
+    this.opportunitiesTableData = tableData;
     if (tableData) {
       const sortedTableData: Array<ListOpportunitiesTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
@@ -47,6 +55,13 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     }
   }
 
+  @Input()
+  set pageChangeData(pageChangeData: PageChangeData) {
+    if (pageChangeData) {
+      this.handlePageChangeClicked(pageChangeData);
+    }
+  }
+
   @Input() performanceMetric: string;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: LoadingState.Loaded;
@@ -56,10 +71,13 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public columnType = ListOpportunitiesColumnType;
   public rowType = RowType;
   public loadingStateEnum = LoadingState;
+  public sliceStart: number = 0;
+  public sliceEnd: number = LIST_TABLE_SIZE;
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
   public isExpandAll: boolean = false;
+  public opportunitiesTableData: Array<ListOpportunitiesTableRow>;
 
   private numberOfRows: number = 0;
   private numExpandedRows: number = 0;
@@ -78,6 +96,13 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public ngOnChanges(changes: SimpleChanges) {
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(loadingState);
+  }
+
+  public handlePageChangeClicked(data: PageChangeData) {
+    if (this.opportunitiesTableData) {
+      this.sliceStart = data.pageStart;
+      this.sliceEnd = data.pageEnd;
+    }
   }
 
   public onCheckboxChange(row: ListOpportunitiesTableRow): void {

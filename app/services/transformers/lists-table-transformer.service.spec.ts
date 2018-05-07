@@ -6,7 +6,6 @@ import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListStorePerformanceMock } from '../../models/lists/list-store-performance.model.mock';
 import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
-
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';

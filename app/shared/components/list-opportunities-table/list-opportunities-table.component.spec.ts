@@ -331,7 +331,7 @@ describe('ListOpportunitiesTableComponent', () => {
       componentInstance.onOpportunityCheckboxClicked(opportunitiesTableData[0]);
       fixture.detectChanges();
 
-      expect(opportunitiesTableData[0].checked).toBe(expectedCheckedState);
+      expect(opportunitiesTableData[0].checked).toBe(false);
     });
   });
 
@@ -354,6 +354,15 @@ describe('ListOpportunitiesTableComponent', () => {
       opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
         expect(tableRow.expanded).toBe(false);
       });
+    });
+  });
+
+  describe('when pageChange Data input is received', () => {
+    it('should set page start, page end', () => {
+      componentInstance.opportunitiesTableData = getListOpportunitiesTableRowMock(300);
+      componentInstance.handlePageChangeClicked({pageStart: 80, pageEnd: 100});
+      expect(componentInstance.sliceStart).toBe(80);
+      expect(componentInstance.sliceEnd).toBe(100);
     });
   });
 });

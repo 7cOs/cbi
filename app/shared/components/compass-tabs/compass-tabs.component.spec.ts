@@ -45,6 +45,7 @@ describe('CompassTabsComponent', () => {
     tab1Component = tabsContainerComponent.tabs.first;
     tab2Component = tabsContainerComponent.tabs.last;
   });
+
   describe('afterContentInit', () => {
     it('should set the first tab to active by default when tab is given the active input', () => {
       expect(tab1Component.active).toBeTruthy();
