@@ -19,7 +19,6 @@ import { PageChangeData } from '../../../containers/lists/list-detail.component'
 export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
-  @Output() sortClick: EventEmitter<{}> = new EventEmitter<any>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
@@ -33,8 +32,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-        this.sortedTableData = sortedTableData;
-        this.numSelectedRows = this.sortedTableData.length;
+      this.sortedTableData = sortedTableData;
+      this.numSelectedRows = this.sortedTableData.length;
     }
   }
 
@@ -182,6 +181,5 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       const sortedData: Array<ListPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
-    this.sortClick.emit();
   }
 }
