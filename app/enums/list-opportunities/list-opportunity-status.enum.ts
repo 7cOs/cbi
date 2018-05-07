@@ -3,5 +3,6 @@ export enum OpportunityStatus {
   closed = 'closed',
   open = 'open',
   unknown = 'unknown',
-  targeted = 'targeted'
+  targeted = 'targeted',
+  all = 'all'
 }

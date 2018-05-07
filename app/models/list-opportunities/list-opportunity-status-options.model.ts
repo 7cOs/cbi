@@ -3,7 +3,7 @@ import { OpportunityStatus } from '../../enums/list-opportunities/list-opportuni
 
 export const listOpportunityStatusOptions: Array<CompassSelectOption> = [{
   display: 'All',
-  value: 'All'
+  value: OpportunityStatus.all
   },
   {
   display: 'Targeted',

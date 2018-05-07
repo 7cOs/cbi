@@ -34,7 +34,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public actionButtonType: any = ActionButtonType;
   public filteredOpportunitiesTableData: ListOpportunitiesTableRow[];
   public opportunityStatusOptions: Array<CompassSelectOption> = [];
-  public oppStatusSelected: string;
+  public oppStatusSelected: OpportunityStatus;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
@@ -103,6 +103,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           );
           console.log(this.opportunitiesTableData);
           console.log('in list detail subs', this.oppStatusSelected);
+          this.filteredOpportunitiesTableData = this.filterOpportunitiesByStatus(
+            this.oppStatusSelected, this.opportunitiesTableData);
         }
       });
   }
@@ -111,7 +113,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
 
-  opportunityStatusSelected(statusValue: string) {
+  opportunityStatusSelected(statusValue: OpportunityStatus) {
     this.oppStatusSelected = statusValue;
     console.log(this.oppStatusSelected);
   }
