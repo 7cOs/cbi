@@ -69,7 +69,6 @@ describe('Team Performance Opportunities Component', () => {
 
     it('should display the passed in product name', () => {
       const productNameElement = fixture.debugElement.query(By.css('.product-name')).nativeElement;
-
       expect(productNameElement.textContent).toBe(productNameMock);
     });
 
