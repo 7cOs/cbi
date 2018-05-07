@@ -1,6 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { Title } from '@angular/platform-browser';
 
@@ -21,14 +20,9 @@ import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
-import { StoreDetails } from '../../models/lists/lists-store.model';
 
 interface ListPageClick {
   pageNumber: number;
-}
-
-interface TabSelected {
-  selectedTab: string;
 }
 
 export interface PageChangeData {
@@ -43,9 +37,6 @@ export interface PageChangeData {
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-  parentSubject: Subject<any> = new Subject();
-
-  public storeList: StoreDetails[];
   public listSummary: ListsSummary;
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
@@ -67,8 +58,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
-  public sortClicked: boolean;
   public selectedTab: string;
+
   private listDetailSubscription: Subscription;
 
   constructor(
@@ -129,6 +120,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
+          this.opportunitiesTableDataSize = this.opportunitiesTableData.length;
         }
       });
   }
@@ -152,24 +144,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     console.log('manage button click');
   }
 
-  public handleSortClicked () {
-    console.log('firing sort');
-    this.sortClicked = !this.sortClicked;
-    this.parentSubject.next('some value');
-  }
-
-  public tabSelectedClick(event: TabSelected) {
-    this.selectedTab = event.selectedTab;
-  }
-
   public handleListsLinkClick() {
     console.log('list link clicked');
   }
 
   public onTabClicked(tabName: string): void {
+    this.selectedTab = tabName;
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
-      this.opportunitiesTableDataSize = this.opportunitiesTableData.length;
     }
   }
 

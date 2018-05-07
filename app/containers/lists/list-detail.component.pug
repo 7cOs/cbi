@@ -28,32 +28,27 @@ compass-tabs(
       [sortingCriteria]="performanceSortingCriteria",
       [totalRow]="performanceTableTotal",
       [tableData]="performanceTableData",
-      [pageChangeData]="pageChangeData",
-      (sortClick)="handleSortClicked()"
+      [pageChangeData]="pageChangeData"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [sortingCriteria]="opportunitiesSortingCriteria",
       [tableData]="opportunitiesTableData",
-      [pageChangeData]="pageChangeData",
-      (sortClick)="handleSortClicked()"
+      [pageChangeData]="pageChangeData"
     )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Performance") && (performanceTableDataSize > listTableSize)',
+  *ngIf='(selectedTab === performanceTabTitle) && (performanceTableDataSize > listTableSize)',
   [tableDataSize]="performanceTableDataSize",
   [tabName]='performanceTabTitle',
-  [sortClicked]='sortClicked',
-  [parentSubject]="parentSubject",
   (pageChangeClick)="handlePageClick($event)"
 )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableDataSize > listTableSize)',
+  *ngIf='(selectedTab === opportunitiesTabTitle) && (opportunitiesTableDataSize > listTableSize)',
   [tableDataSize]="opportunitiesTableDataSize",
-  [tabName]='performanceTabTitle',
-  [sortClicked]='sortClicked',
+  [tabName]='opportunitiesTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
 
