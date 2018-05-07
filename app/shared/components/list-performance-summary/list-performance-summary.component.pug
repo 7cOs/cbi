@@ -1,9 +1,9 @@
 section.list-performance-summary-section
-    section.depletions-section
-        span.vsYa {{ depletionsVsYA | number:'1.1-1'}}%
-        span.total {{ depletionsTotal | number}}
+    .depletions-section
+        span.vsYa([ngClass]="depletionsVsYAColorClass") {{ (depletionsVsYA | number:'1.1-1') || 0}}%
+        span.total {{ (depletionsTotal | number) || 0}}
         label {{ depletionsTitle }}
-    section.distribution-section
-        span.vsYa {{ distributionsVsYA | number:'1.1-1'}}%
-        span.total {{ distributionsTotal | number}}
+    .distribution-section
+        span.vsYa([ngClass]="distributionsVsYAColorClass") {{ (distributionsVsYA | number:'1.1-1') || 0}}%
+        span.total {{ (distributionsTotal | number) || 0}}
         label {{ distributionsTitle }}
