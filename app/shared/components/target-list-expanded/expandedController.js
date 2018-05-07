@@ -61,7 +61,6 @@ module.exports = /*  @ngInject */
     vm.addCollaborator = addCollaborator;
     vm.archiveTargetList = archiveTargetList;
     vm.closeModal = closeModal;
-    vm.createList = createList;
     vm.createNewList = createNewList;
     vm.createTargetList = createTargetList;
     vm.deleteTargetList = deleteTargetList;
@@ -209,17 +208,13 @@ module.exports = /*  @ngInject */
       return result;
     }
 
-    function createList(formattedList) {
-      return listsApiService.createList(formattedList).toPromise();
-    }
-
     function saveNewList(e) {
       if (vm.newList.name.length > 40) return;
 
       vm.buttonDisabled = true;
 
       const formattedList = listsTransformerService.formatNewList(vm.newList);
-      vm.createList(formattedList)
+      listsApiService.createListPromise(formattedList)
         .then(v3List => {
 
         userService.model.targetLists.ownedNotArchivedTargetLists.concat(v3List);
@@ -336,7 +331,7 @@ module.exports = /*  @ngInject */
       vm.allowDelete = true;
       vm.deleteError = false;
 
-      listsApiService.getLists().toPromise().then((response) =>  {
+      listsApiService.getListsPromise().then((response) =>  {
         loaderService.closeLoader();
         const currentUserEmployeeID = userService.model.currentUser.employeeID;
         const listsCollectionSummary = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);

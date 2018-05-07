@@ -56,11 +56,19 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
+  public createListPromise(list: FormattedNewList): Promise<V3List> {
+    return this.createList(list).toPromise();
+  }
+
   public addOpportunitiesToList(listId: string, opportunities: {opportunityId: string}[]): Observable<ListOpportunityDTO[]> {
     const url = `/v3/lists/${ listId }/opportunities`;
 
     return this.http.post(url, opportunities)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
+  public addOpportunitiesToListPromise(listId: string, opportunities: {opportunityId: string}[]): Promise<ListOpportunityDTO[]> {
+    return this.addOpportunitiesToList(listId, opportunities).toPromise();
   }
 
   public getOppsDataForList(

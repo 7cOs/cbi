@@ -1,4 +1,5 @@
 import * as Chance from 'chance';
+import { getV3ListMock } from '../../../models/lists/lists.model.mock';
 
 const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
 const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
@@ -26,6 +27,12 @@ describe('Unit: list controller', function() {
       $provide.value('analyticsService', analyticsService);
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
+    });
+
+    spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
+      const defer = q.defer();
+      defer.resolve();
+      return defer.promise;
     });
 
     inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _listsApiService_, _listsTransformerService_) {
@@ -975,7 +982,11 @@ describe('Unit: list controller', function() {
 
   describe('[list.saveNewList] method', function() {
     beforeEach(function() {
-      spyOn(listsApiService, 'createList').and.callThrough();
+      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve(getV3ListMock);
+        return defer.promise;
+      });
       spyOn(ctrl, 'closeModal').and.callThrough();
 
       ctrl.newList = {
@@ -990,7 +1001,7 @@ describe('Unit: list controller', function() {
 
     it('should call the listsApiService to create a list', function() {
       ctrl.saveNewList(ctrl.newList);
-      expect(listsApiService.createList).toHaveBeenCalled();
+      expect(listsApiService.createListPromise).toHaveBeenCalled();
     });
   });
 
@@ -999,7 +1010,7 @@ describe('Unit: list controller', function() {
     const createListResponseMock = {id: createListResponseMockId};
 
     it('should log a GA event on create target list success', () => {
-      spyOn(ctrl, 'createV3List').and.callFake(() => {
+      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
         const defer = q.defer();
         defer.resolve(createListResponseMock);
         return defer.promise;
@@ -1009,7 +1020,7 @@ describe('Unit: list controller', function() {
       ctrl.saveNewList();
       scope.$apply();
 
-      expect(ctrl.createV3List).toHaveBeenCalled();
+      expect(listsApiService.createListPromise).toHaveBeenCalled();
       expect(analyticsService.trackEvent).toHaveBeenCalledWith(
         'Target Lists - My Target Lists',
         'Create Target List',
@@ -1018,9 +1029,9 @@ describe('Unit: list controller', function() {
     });
 
     it('should NOT log a GA event on listsApiService.createList error', () => {
-      spyOn(ctrl, 'createV3List').and.callFake(() => {
+      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
         const defer = q.defer();
-        defer.reject({});
+        defer.reject();
         return defer.promise;
       });
       spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
@@ -1029,7 +1040,7 @@ describe('Unit: list controller', function() {
       ctrl.saveNewList();
       scope.$apply();
 
-      expect(ctrl.createV3List).toHaveBeenCalled();
+      expect(listsApiService.createListPromise).toHaveBeenCalled();
       expect(analyticsService.trackEvent).not.toHaveBeenCalled();
       expect(console.error).toHaveBeenCalled();
     });
@@ -1819,21 +1830,29 @@ describe('Unit: list controller', function() {
     });
 
     it('should add opportunities to list', () => {
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
 
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
 
       scope.$apply();
 
-      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalled();
+      expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalled();
     });
 
     it('should request the IDs of all the opportunities without limit when selectAllOpportunities is true', () => {
       ctrl.isAllOpportunitiesSelected = true;
       const opportunitiesDeferred = q.defer();
 
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
 
       spyOn(opportunitiesService, 'getOpportunities').and.callFake(() => {
         return opportunitiesDeferred.promise;
@@ -1845,30 +1864,42 @@ describe('Unit: list controller', function() {
       opportunitiesDeferred.resolve(['fake1', 'fake2']);
       scope.$digest();
 
-      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalled();
+      expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalled();
       expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
     });
 
     it('should not call addOpportunitiesToList if opportunites are not selected', function() {
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
 
       ctrl.addToTargetList(listId);
-      expect(listsApiService.addOpportunitiesToList).not.toHaveBeenCalled();
+      expect(listsApiService.addOpportunitiesToListPromise).not.toHaveBeenCalled();
     });
 
     it('should not call addOpportunitiesToList if list id is null', function() {
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
       listId = null;
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
-      expect(listsApiService.addOpportunitiesToList).not.toHaveBeenCalled();
+      expect(listsApiService.addOpportunitiesToListPromise).not.toHaveBeenCalled();
     });
 
     it('should change the selected opportunities from open to targeted when they are changed from open to targeted and opportunityStatus is targeted', function() {
       // scaffold
       ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
 
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
       spyOn(toastService, 'showToast').and.callFake(() => true);
 
       filtersService.model.opportunityStatusTargeted = true;
@@ -1877,7 +1908,7 @@ describe('Unit: list controller', function() {
       // assert init
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(ctrl.selected.length).toEqual(1);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(0);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(0);
       expect(toastService.showToast.calls.count()).toEqual(0);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
 
@@ -1886,9 +1917,9 @@ describe('Unit: list controller', function() {
       scope.$digest();
 
       // assert
-      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
+      expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
       expect(ctrl.selected.length).toEqual(0);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(1);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities[0].status).toEqual('TARGETED');
 
@@ -1902,7 +1933,11 @@ describe('Unit: list controller', function() {
       // scaffold
       ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
 
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
       spyOn(toastService, 'showToast').and.callFake(() => true);
 
       filtersService.model.selected.opportunityStatus = [];
@@ -1910,7 +1945,7 @@ describe('Unit: list controller', function() {
       // assert init
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(ctrl.selected.length).toEqual(1);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(0);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(0);
       expect(toastService.showToast.calls.count()).toEqual(0);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities[0].status).toEqual('OPEN');
@@ -1920,9 +1955,9 @@ describe('Unit: list controller', function() {
       scope.$digest();
 
       // assert
-      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
+      expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
       expect(ctrl.selected.length).toEqual(0);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(1);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities[0].status).toEqual('TARGETED');
 
@@ -1934,7 +1969,11 @@ describe('Unit: list controller', function() {
       // scaffold
       ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
 
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
       spyOn(toastService, 'showToast').and.callFake(() => true);
 
       filtersService.model.opportunityStatusOpen = true;
@@ -1943,7 +1982,7 @@ describe('Unit: list controller', function() {
       // assert init
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(ctrl.selected.length).toEqual(1);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(0);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(0);
       expect(toastService.showToast.calls.count()).toEqual(0);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
 
@@ -1952,9 +1991,9 @@ describe('Unit: list controller', function() {
       scope.$digest();
 
       // assert
-      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
+      expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
       expect(ctrl.selected.length).toEqual(0);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(1);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(1);
       expect(opportunitiesService.model.opportunities.length).toEqual(1);
 
       // reset
@@ -2021,7 +2060,11 @@ describe('Unit: list controller', function() {
       // scaffold
       ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
 
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
       spyOn(toastService, 'showToast').and.callFake(() => true);
 
       filtersService.model.opportunityStatusOpen = true;
@@ -2084,7 +2127,7 @@ describe('Unit: list controller', function() {
       // assert init
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(ctrl.selected.length).toEqual(1);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(0);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(0);
       expect(toastService.showToast.calls.count()).toEqual(0);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(2);
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(1);
@@ -2094,9 +2137,9 @@ describe('Unit: list controller', function() {
       scope.$digest();
 
       // assert
-      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
+      expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalledWith(listId, [{opportunityId: '0080993___80013466___20160929'}]);
       expect(ctrl.selected.length).toEqual(0);
-      expect(listsApiService.addOpportunitiesToList.calls.count()).toEqual(1);
+      expect(listsApiService.addOpportunitiesToListPromise.calls.count()).toEqual(1);
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(1);
@@ -2104,7 +2147,11 @@ describe('Unit: list controller', function() {
 
     it('should update count of high opportunities if one is removed', function() {
       // scaffold
-      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+      spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
       spyOn(toastService, 'showToast').and.callFake(() => true);
 
       filtersService.model.opportunityStatusOpen = true;
@@ -2176,7 +2223,7 @@ describe('Unit: list controller', function() {
       scope.$digest();
 
       // assert
-      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalledWith(listId, [{opportunityId: '5231788___228-102___1474493257763'}]);
+      expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalledWith(listId, [{opportunityId: '5231788___228-102___1474493257763'}]);
       expect(ctrl.selected.length).toEqual(0);
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
@@ -2215,7 +2262,11 @@ describe('Unit: list controller', function() {
           }
         });
         spyOn(ctrl, 'addToTargetList').and.callThrough();
-        spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+        spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve();
+          return defer.promise;
+        });
       });
 
       it('should add to target list and send analytics event for "add" action', () => {

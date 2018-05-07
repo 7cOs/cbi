@@ -1,4 +1,3 @@
-// import { Observable } from 'rxjs';
 const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
 const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
 
@@ -17,6 +16,7 @@ describe('Unit: target list controller', function() {
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
     });
+
     spyOn(listsTransformerService, 'getV2ListsSummary').and.returnValue({
       ownedNotArchivedTargetLists: [
           {id: '1', deleted: false, archived: false},
