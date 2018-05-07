@@ -385,18 +385,15 @@ describe('Unit: expanded target list controller', function() {
         expect(ctrl.newList.name.length).toBeLessThan(40);
 
         spyOn(analyticsService, 'trackEvent');
-        // spyOn(listsTransformerService, 'formatNewList').and.callThrough();
 
         ctrl.saveNewList();
         scope.$apply();
 
-        setTimeout(() => {
-          expect(ctrl.createList).toHaveBeenCalled();
-          expect(analyticsService.trackEvent).toHaveBeenCalledWith('Target Lists - My Target Lists', 'Create Target List', '998877');
-          expect(ctrl.buttonDisabled).toEqual(false);
-          done();
-        }, 0);
-      });
+        expect(ctrl.createList).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Target Lists - My Target Lists', 'Create Target List', '998877');
+        expect(ctrl.buttonDisabled).toEqual(false);
+        done();
+    });
     });
 
     describe('[expanded.deleteTargetList]', function() {

@@ -1,11 +1,9 @@
-import { Observable } from 'rxjs';
-import { V3List, FormattedNewList, V2ListSummary, ListsCollectionSummary } from '../models/lists/lists.model';
-import { getV3ListMock, getFormattedNewList, getV2ListSummaryMock, getListsCollectionSummaryMock } from '../models/lists/lists.model.mock';
-import { generateRandomSizedArray } from '../models/util.model';
+import { FormattedNewList, V2ListSummary, ListsCollectionSummary } from '../models/lists/lists.model';
+import { getFormattedNewList, getV2ListSummaryMock, getListsCollectionSummaryMock } from '../models/lists/lists.model.mock';
 
 export const listsTransformerServiceMock = {
   formatNewList: formatNewList,
-  getV2ListSummary: getV2ListsSummary,
+  getV2ListSummary: getV2ListSummary,
   getV2ListsSummary: getV2ListsSummary
 };
 
