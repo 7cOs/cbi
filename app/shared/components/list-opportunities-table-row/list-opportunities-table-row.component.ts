@@ -15,7 +15,7 @@ export class ListOpportunitiesTableRowComponent {
   @Output() onChangeEventEmitter: EventEmitter<any> = new EventEmitter();
   @Output() onTableRowClicked: EventEmitter<Event> = new EventEmitter();
 
-  public classUtilService: CompassListClassUtilService = new CompassListClassUtilService();
+  constructor(private classUtilService: CompassListClassUtilService) { }
 
   public getTrendClass(num: number): string {
     return this.classUtilService.getTrendClass(num);
