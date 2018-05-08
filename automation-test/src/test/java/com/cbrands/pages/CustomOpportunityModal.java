@@ -109,7 +109,6 @@ public class CustomOpportunityModal extends TestNGBasePage {
       if( ! isElementPresent(By.xpath(xpathForm)) ) {
         isAllDisplayed = false;
       }
-
       log.debug("Required field message for " + requiredField  + " verified");
     }
 
@@ -125,10 +124,7 @@ public class CustomOpportunityModal extends TestNGBasePage {
 
     if("Account".equals(requiredField) || "Recommended Package / SKU".equals(requiredField)){
       xpathForm = String.format(BASE_XPATH, "input[@type='text']");
-    } else if ("Rationale".equals(requiredField)) {
-      xpathForm = String.format(BASE_XPATH, "md-select");
-    } else if("Impact".equals(requiredField)){
-      xpathForm = BASE_XPATH.replace("[TYPE]", "md-select");
+    } else if ("Rationale".equals(requiredField) || "Impact".equals(requiredField)) {
       xpathForm = String.format(BASE_XPATH, "md-select");
     }
 
