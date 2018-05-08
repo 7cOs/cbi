@@ -17,6 +17,8 @@ import { DateRangeService } from './services/date-range.service';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { MyPerformanceComponent } from './containers/my-performance/my-performance.component';
 import { ListDetailComponent } from './containers/lists/list-detail.component';
+import { ListsApiService } from './services/api/v3/lists-api.service';
+import { ListsTransformerService } from './services/lists-transformer.service';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 
@@ -47,9 +49,11 @@ export default angular.module('cf', [
   .directive('settings', AppUpgradeAdapter.downgradeNg2Component(SettingsComponent) as IDirectiveFactory)
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
   .directive('compassAlertModal', AppUpgradeAdapter.downgradeNg2Component(CompassAlertModalComponent) as IDirectiveFactory)
-  .factory('dateRangeService', downgradeInjectable(DateRangeService))
   .factory('analyticsService', downgradeInjectable(AnalyticsService))
   .factory('compassModalService', downgradeInjectable(CompassModalService))
+  .factory('dateRangeService', downgradeInjectable(DateRangeService))
+  .factory('listsApiService', downgradeInjectable(ListsApiService))
+  .factory('listsTransformerService', downgradeInjectable(ListsTransformerService))
   .factory('title', downgradeInjectable(Title))
   .config(require('./config'))
   .run(require('./run'));

@@ -14,6 +14,7 @@ module.exports = /*  @ngInject */
       distribution: [],
       topBottom: {}
     };
+
     var service = {
       model: model,
       getUsers: getUsers,
