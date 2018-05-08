@@ -101,35 +101,37 @@ public class CustomOpportunityModal extends TestNGBasePage {
         "Impact"
     };
 
+    boolean isAllDisplayed = true;
     for( final String requiredField : requiredFields) {
       log.debug("Verifying required field message for " + requiredField);
 
-      String xpathModal = "(//md-dialog//div[contains(@class, 'modal add-opportunity')]";
-      String xpathForm = (xpathModal + "//label[contains(.,'[FIELD]')]/..//[TYPE]/../../..)"
-          + "//p[contains(@class,'error-message')]");
-
-      xpathForm = xpathForm.replace("[FIELD]", requiredField);
-      switch( requiredField ) {
-      case "Account":
-      case "Recommended Package / SKU":
-        xpathForm = xpathForm.replace("[TYPE]", "input[@type='text']");
-        break;
-      case "Rationale":
-      case "Impact":
-        xpathForm = xpathForm.replace("[TYPE]", "md-select");
-        if(requiredField.equals("Rationale")) {
-          xpathForm = "(" + xpathForm + ")[1]";
-        }
-        break;
-      }
-
-      if( ! isElementPresent(By.xpath(xpathForm)) ) { 
-        return false; 
+      final String xpathForm = getXPathString(requiredField);
+      if( ! isElementPresent(By.xpath(xpathForm)) ) {
+        isAllDisplayed = false;
       }
 
       log.debug("Required field message for " + requiredField  + " verified");
     }
 
-    return true;
+    return isAllDisplayed;
+  }
+
+  private String getXPathString(String requiredField) {
+    final String MODAL_XPATH = "md-dialog//div[contains(@class, 'modal add-opportunity')]";
+    final String REQUIRED_FIELD_XPATH = "label[contains(.,'" + requiredField + "')]/..//%s/../../..)//..";
+    final String ERR_MSG_XPATH = "div[not(@aria-hidden='true')]/p[contains(@class,'error-message')]";
+    final String BASE_XPATH = String.format("((//%s//%s)/%s", MODAL_XPATH, REQUIRED_FIELD_XPATH, ERR_MSG_XPATH);
+    String xpathForm = null;
+
+    if("Account".equals(requiredField) || "Recommended Package / SKU".equals(requiredField)){
+      xpathForm = String.format(BASE_XPATH, "input[@type='text']");
+    } else if ("Rationale".equals(requiredField)) {
+      xpathForm = String.format(BASE_XPATH, "md-select");
+    } else if("Impact".equals(requiredField)){
+      xpathForm = BASE_XPATH.replace("[TYPE]", "md-select");
+      xpathForm = String.format(BASE_XPATH, "md-select");
+    }
+
+    return xpathForm;
   }
 }
