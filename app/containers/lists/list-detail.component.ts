@@ -41,11 +41,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
-  public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
+  public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
   public opportunitiesTableDataSize: number;
-  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Opportunities', 'Last Depletion'];
+  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
   public listTableSize: number = LIST_TABLE_SIZE;
@@ -58,7 +58,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
-  public selectedTab: string;
+  public selectedTab: string = this.performanceTabTitle;
 
   private listDetailSubscription: Subscription;
 
