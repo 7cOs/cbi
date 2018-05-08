@@ -58,7 +58,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
-  public selectedTab: string;
+  public selectedTab: string = this.performanceTabTitle;
 
   private listDetailSubscription: Subscription;
 
