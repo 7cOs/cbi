@@ -11,6 +11,7 @@ import { getListsSummaryDTOMock } from '../../../models/lists/lists-header-dto.m
 import { getStoreListsDTOMock } from '../../../models/lists/lists-store-dto.model.mock';
 import { getListPerformanceTypeMock } from '../../../enums/list-performance-type.enum.mock';
 import { getListOpportunitiesDTOMock } from '../../../models/lists/lists-opportunities-dto.model.mock';
+import { getFormattedNewList } from '../../../models/lists/lists.model.mock';
 import { ListsApiService } from './lists-api.service';
 import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
 import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
@@ -18,6 +19,7 @@ import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
+import { generateRandomSizedArray } from '../../../models/util.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -41,6 +43,54 @@ describe('ListsApiService', () => {
 
   afterEach(() => {
     http.verify();
+  });
+
+  describe('getLists', () => {
+
+    it('should call the lists endpoint', () => {
+      const expectedRequestUrl: string = `/v3/lists?includeCollaboratorLists=true&includeArchivedLists=true`;
+      const expectedResponse: any  = {};
+      listsApiService.getLists().subscribe((response: any) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+      expect(req.request.method).toBe(ApiRequestType.GET);
+    });
+  });
+
+  describe('createList', () => {
+    it('should post a new list to the lists endpoint', () => {
+      const body = getFormattedNewList();
+      const expectedRequestUrl: string = `/v3/lists`;
+      const expectedResponse: any  = {};
+      listsApiService.createList(body).subscribe((response: any) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+      expect(req.request.method).toBe(ApiRequestType.POST);
+      expect(req.request.body).toBe(body);
+    });
+  });
+
+  describe('addOpportunitiesToList', () => {
+    it('should post a list of opportunities to the lists/:id/opportunities endpoint', () => {
+      const listId = chance.string();
+      const body = generateRandomSizedArray(1, 1000).map(() => { return {opportunityId: chance.string()}; });
+      const expectedRequestUrl: string = `/v3/lists/${ listId }/opportunities`;
+      const expectedResponse: any  = {};
+      listsApiService.addOpportunitiesToList(listId, body).subscribe((response: any) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+      expect(req.request.method).toBe(ApiRequestType.POST);
+      expect(req.request.body).toBe(body);
+    });
   });
 
   describe('getOppsDataForList', () => {
