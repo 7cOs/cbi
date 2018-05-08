@@ -1,7 +1,18 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ListsPaginationComponent } from './lists-pagination.component';
+import { Component, Input } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
-describe('ListsHeaderComponent', () => {
+@Component({
+  selector: 'lists-pagination',
+  template: ''
+})
+
+class ListsPaginationComponentMock {
+  @Input() sortClick: Event;
+}
+
+describe('ListsPaginationComponent', () => {
   let fixture: ComponentFixture<ListsPaginationComponent>;
   let componentInstance: ListsPaginationComponent;
   let componentInstanceCopy: any;
@@ -9,17 +20,20 @@ describe('ListsHeaderComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ListsPaginationComponent
+        ListsPaginationComponent,
+        ListsPaginationComponentMock,
       ],
       providers: []
     });
 
     fixture = TestBed.createComponent(ListsPaginationComponent);
+    const sortSubject: Subject<Event> = new Subject<Event>();
+    componentInstance.sortClick = sortSubject;
     componentInstance = fixture.componentInstance;
     componentInstanceCopy = componentInstance as any;
   });
 
-  describe('ngOnInit', () => {
+  fdescribe('ngOnInit', () => {
 
     beforeEach(() => {
       componentInstance.tableDataSize = 200;
@@ -28,9 +42,22 @@ describe('ListsHeaderComponent', () => {
     it('should set last page and get pageNumbers', () => {
       spyOn(componentInstance, 'getPageNumbers');
       componentInstance.ngOnInit();
+      fixture.detectChanges();
       expect(componentInstance.totalPages).toBe(10);
       expect(componentInstance.lastPage).toBe(10);
       expect(componentInstance.getPageNumbers).toHaveBeenCalled();
+    });
+
+    it('should check if subscribe is called', (done: any) => {
+      spyOn(componentInstance, 'pageChange');
+      componentInstance.ngOnInit();
+      spyOn(componentInstance.sortClick, 'subscribe');
+      fixture.detectChanges();
+      expect(componentInstance.sortClick.subscribe).toHaveBeenCalled();
+      componentInstance.sortClick.subscribe(() => {
+        expect(componentInstance.pageChange).toHaveBeenCalledWith(0);
+        done();
+      });
     });
   });
 
