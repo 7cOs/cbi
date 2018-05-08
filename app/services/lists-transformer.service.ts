@@ -10,6 +10,7 @@ import { ListType } from '../enums/lists/list-type.enum';
 
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
 import { ListsCollectionSummary } from '../models/lists/lists-collection-summary.model';
+import { ListsCollectionSummary } from '../models/lists/lists-collection-summary.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';

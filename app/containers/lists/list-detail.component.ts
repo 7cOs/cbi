@@ -43,7 +43,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
-  public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
+  public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
   public opportunitiesTableDataSize: number;
@@ -162,6 +162,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleListsLinkClick() {
     this.$state.go('lists');
+  }
+
+  public onTabClicked(tabName: string): void {
+    this.selectedTab = tabName;
+    if (tabName === this.performanceTabTitle) {
+      this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
+    }
   }
 
   public onTabClicked(tabName: string): void {
