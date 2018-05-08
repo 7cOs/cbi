@@ -1,16 +1,10 @@
-import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { CompassUserSearchComponent } from '../compass-user-search/compass-user-search.component';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, FormBuilder } from '@angular/forms';
-
-const chance = new Chance();
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 describe('Compass User Search Component', () => {
   let fixture: ComponentFixture<CompassUserSearchComponent>;
   let componentInstance: CompassUserSearchComponent;
-  let fixtureDebugElement: DebugElement;
   let formBuilder: FormBuilder = new FormBuilder();
   let searchServiceMock = {
     getUsers: getUsers,
@@ -24,7 +18,6 @@ describe('Compass User Search Component', () => {
   function setSearchActive() {
     return true;
   }
-  let searchService: any;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, FormsModule],

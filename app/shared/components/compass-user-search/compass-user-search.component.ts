@@ -1,6 +1,5 @@
 import { Component, EventEmitter, HostListener, Output, Inject, Input } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { resolve } from 'dns';
+import { FormGroup } from '@angular/forms';
 
 const ENTER = 13;
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Output, Inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output, Inject, OnInit } from '@angular/core';
 
 import { CompassAlertModalEvent } from '../../../enums/compass-alert-modal-strings.enum';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
@@ -39,7 +39,6 @@ export class CompassManageListModalComponent implements OnInit {
 
   constructor(
     @Inject(COMPASS_MANAGE_LIST_MODAL_INPUTS) public modalInputs: CompassManageListModalInputs,
-    @Inject('searchService') private searchService: any,
     private fb: FormBuilder,
     public compassModalService: CompassModalService
   ) { }
@@ -78,7 +77,6 @@ export class CompassManageListModalComponent implements OnInit {
 
   public hideModal(modalEventString: CompassManageListModalEvent): void {
     if (modalEventString === CompassManageListModalEvent.Accept) this.buttonContainerEvent.emit(this.convertFormPayload());
-
     this.modalOverlayRef.closeModal();
   }
 

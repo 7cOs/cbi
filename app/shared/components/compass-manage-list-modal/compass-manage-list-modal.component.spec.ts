@@ -1,16 +1,14 @@
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, Component } from '@angular/core';
+import { DebugElement } from '@angular/core';
 
 import { CompassManageListModalComponent } from './compass-manage-list-modal.component';
-import { CompassManageListModalEvent } from '../../../enums/compass-manage-list-modal-strings.enum';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
 import { COMPASS_MANAGE_LIST_MODAL_INPUTS } from './compass-manage-list-modal.tokens';
 import { CompassModalService } from '../../../services/compass-modal.service';
 import { CompassUserSearchComponent } from '../compass-user-search/compass-user-search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ListsSummary } from '../../../models/lists/lists-header.model';
 
 const chance = new Chance();
 

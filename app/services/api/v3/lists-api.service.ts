@@ -9,7 +9,6 @@ import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
 import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
-import { ListsSummary } from '../../../models/lists/lists-header.model';
 import { V3List, FormattedNewList } from '../../../models/lists/lists.model';
 
 @Injectable()

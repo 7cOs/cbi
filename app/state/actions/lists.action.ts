@@ -7,7 +7,6 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { V3List } from '../../models/lists/lists.model';
 
 export interface FetchStoreDetailsPayload {
   listId: string;

@@ -5,10 +5,9 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { CompassOverlayConfig } from '../models/compass-overlay-config.model';
 import { CompassOverlayService } from './compass-overlay.service';
 
-import { CompassModalOverlayRef } from '../shared/components/compass-alert-modal/compass-alert-modal.overlayref';
-import { CompassManageListModalInputs } from '../models/compass-manage-list-modal-inputs.model';
 import { COMPASS_MANAGE_LIST_MODAL_INPUTS } from '../shared/components/compass-manage-list-modal/compass-manage-list-modal.tokens';
 import { CompassManageListModalComponent } from '../shared/components/compass-manage-list-modal/compass-manage-list-modal.component';
+import { CompassManageListModalInputs } from '../models/compass-manage-list-modal-inputs.model';
 import { CompassManageListModalOverlayRef } from '../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 
 @Injectable()
