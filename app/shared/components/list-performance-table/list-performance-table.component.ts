@@ -27,7 +27,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   @Input()
   set tableData(tableData: Array<ListPerformanceTableRow>) {
-    this.peformanceTableData = this.tableData;
+    this.performanceTableData = tableData;
     if (tableData) {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
@@ -57,7 +57,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
-  public peformanceTableData: Array<ListPerformanceTableRow>;
+  public performanceTableData: Array<ListPerformanceTableRow>;
   public sliceStart: number = 0;
   public sliceEnd: number = LIST_TABLE_SIZE;
 
@@ -79,7 +79,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public handlePageChangeClicked(data: PageChangeData) {
-    if (this.peformanceTableData) {
+    if (this.performanceTableData) {
       this.sliceStart = data.pageStart;
       this.sliceEnd = data.pageEnd;
     }
