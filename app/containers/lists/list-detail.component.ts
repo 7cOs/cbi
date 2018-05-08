@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassModalService } from '../../services/compass-modal.service';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
@@ -19,7 +20,6 @@ import { ListsTableTransformerService } from '../../services/transformers/lists-
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { CompassManageListModalService } from '../../services/compass-manage-list-modal.service';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 
@@ -71,7 +71,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
     private titleService: Title,
-    private compassModalService: CompassManageListModalService,
+    private compassModalService: CompassModalService,
     @Inject('userService') private userService: any
   ) { }
 
@@ -162,13 +162,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleListsLinkClick() {
     this.$state.go('lists');
-  }
-
-  public onTabClicked(tabName: string): void {
-    this.selectedTab = tabName;
-    if (tabName === this.performanceTabTitle) {
-      this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
-    }
   }
 
   public onTabClicked(tabName: string): void {
