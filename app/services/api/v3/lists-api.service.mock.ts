@@ -1,13 +1,16 @@
-import { Observable } from 'rxjs';
-import { V3List } from '../../../models/lists/lists.model';
 import { getV3ListMock } from '../../../models/lists/lists.model.mock';
 import { generateRandomSizedArray } from '../../../models/util.model';
+import { V3List } from '../../../models/lists/v3-list.model';
+
+import { Observable } from 'rxjs';
 
 export const listApiServiceMock = {
   addOpportunitiesToList: addOpportunitiesToList,
   createList: createList,
   getLists: getLists,
-  getListsPromise: getListsPromise
+  getListsPromise: getListsPromise,
+  createListPromise: createListPromise,
+  addOpportunitiesToListPromise: addOpportunitiesToListPromise
 };
 
 function getLists(): Observable<V3List[]> {
@@ -23,6 +26,14 @@ function addOpportunitiesToList(...args: any[]): Observable<any> {
   return Observable.of({});
 }
 
-function createList(): Observable<V3List> {
+function addOpportunitiesToListPromise(...args: any[]): Promise<any> {
+  return addOpportunitiesToList(...args).toPromise();
+}
+
+function createList(...args: any[]): Observable<V3List> {
   return Observable.of(getV3ListMock());
+}
+
+function createListPromise(...args: any[]): Promise<V3List> {
+  return createList().toPromise();
 }

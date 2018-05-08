@@ -1,12 +1,22 @@
-import * as Lists from './lists.model';
-import * as ListProperties from '../../enums/lists/list-properties.enum';
+import { BaseList } from './base-list.model';
+import { Collaborator } from './collaborator.model';
+import { CollaboratorType } from '../../enums/lists/collaborator-type.enum';
+import { FormattedNewList } from './formatted-new-list.model';
+import { generateRandomSizedArray } from '../util.model';
+import { ListCategory } from '../../enums/lists/list-category.enum';
+import { ListsCollectionSummary } from './lists-collection-summary.model';
+import { ListType } from '../../enums/lists/list-type.enum';
+import { OpportunitiesSummary } from './opportunities-summary.model';
+import { SurveyInfo } from './survey-info.model';
+import { UnformattedNewList } from './unformatted-new-list.model';
+import { User } from './user.model';
+import { V2List } from './v2-list.model';
+import { V3List } from './v3-list.model';
 
 import * as Chance from 'chance';
-import { generateRandomSizedArray } from '../util.model';
-
 const chance = new Chance();
 
-function getBaseListMock(): Lists.BaseList {
+function getBaseListMock(): BaseList {
   return {
     archived: chance.bool(),
     collaborators: getCollaborators(chance.natural({min: 1, max: 5})),
@@ -20,26 +30,26 @@ function getBaseListMock(): Lists.BaseList {
     owner: getUser(),
     survey: getSurvey(),
     totalOpportunities: chance.natural({min: 0, max: 1000}),
-    type: ListProperties.ListType.TargetList,
+    type: ListType.TargetList,
     updatedOn: chance.string()
   };
 }
 
-export function getV3ListMock(): Lists.V3List {
+export function getV3ListMock(): V3List {
   return Object.assign(
     getBaseListMock(),
     {
-      category: ListProperties.ListCategory.Beer,
-      collaboratorType: ListProperties.CollaboratorType.CollaborateAndInvite
+      category: ListCategory.Beer,
+      collaboratorType: CollaboratorType.CollaborateAndInvite
     }
   );
 }
 
-export function getV2ListMock(): Lists.V2List {
+export function getV2ListMock(): V2List {
   return Object.assign(
     getBaseListMock(),
     {
-      collaboratorPermissionLevel: ListProperties.CollaboratorType.CollaborateAndInvite,
+      collaboratorPermissionLevel: CollaboratorType.CollaborateAndInvite,
       opportunitiesSummary: getOpportunitiesSummary(),
       dateOpportunitiesUpdated: chance.bool() ? chance.string() : null,
       targetListAuthor: chance.bool() ? chance.string() : null
@@ -47,7 +57,7 @@ export function getV2ListMock(): Lists.V2List {
   );
 }
 
-export function getUnformattedNewList(): Lists.UnformattedNewList {
+export function getUnformattedNewList(): UnformattedNewList {
   return {
     description: chance.string(),
     name: chance.string(),
@@ -56,16 +66,16 @@ export function getUnformattedNewList(): Lists.UnformattedNewList {
   };
 }
 
-export function getFormattedNewList(): Lists.FormattedNewList {
+export function getFormattedNewList(): FormattedNewList {
   return {
-    category: ListProperties.ListCategory.Beer,
-    collaboratorType: ListProperties.CollaboratorType.CollaborateAndInvite,
+    category: ListCategory.Beer,
+    collaboratorType: CollaboratorType.CollaborateAndInvite,
     name: chance.string(),
-    type: ListProperties.ListType.TargetList
+    type: ListType.TargetList
   };
 }
 
-function getOpportunitiesSummary(): Lists.OpportunitiesSummary {
+function getOpportunitiesSummary(): OpportunitiesSummary {
   const numberOfOpportunities = chance.natural({min: 0, max: 1000});
   return {
     closedOpportunitiesCount: numberOfOpportunities,
@@ -73,23 +83,23 @@ function getOpportunitiesSummary(): Lists.OpportunitiesSummary {
   };
 }
 
-function getUsers(numberOfUsers: number): Lists.User[] {
+function getUsers(numberOfUsers: number): User[] {
   return numberOfUsers
     ? new Array(numberOfUsers).fill('').map(element => getUser())
-    : [] as Lists.User[];
+    : [] as User[];
 }
 
-function getCollaborators(numberOfCollaborators: number): Lists.Collaborator[] {
+function getCollaborators(numberOfCollaborators: number): Collaborator[] {
   return new Array(numberOfCollaborators).fill('').map(() => {
     return {
       lastViewed: chance.string(),
-      permissionLevel: ListProperties.CollaboratorType.CollaborateAndInvite,
+      permissionLevel: CollaboratorType.CollaborateAndInvite,
       user: getUser()
     };
   });
 }
 
-function getUser(): Lists.User {
+function getUser(): User {
   return {
     employeeId: chance.string(),
     firstName: chance.string(),
@@ -99,25 +109,14 @@ function getUser(): Lists.User {
   };
 }
 
-function getSurvey(): Lists.SurveyInfo {
+function getSurvey(): SurveyInfo {
   return {
     sfid: chance.string(),
     name: chance.string()
   };
 }
 
-export function getV2ListSummaryMock(): Lists.V2ListSummary {
-  return {
-    owned: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
-    sharedWithMe: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
-    sharedArchived: chance.natural(),
-    sharedNotArchived: chance.natural(),
-    ownedArchived: chance.natural(),
-    ownedNotArchived: chance.natural()
-  };
-}
-
-export function getListsCollectionSummaryMock(): Lists.ListsCollectionSummary {
+export function getListsCollectionSummaryMock(): ListsCollectionSummary {
   return {
     archived: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
     owned: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),

@@ -8,7 +8,7 @@ import { FetchHeaderDetailsPayload,
          FetchOppsForListPayload,
          FetchListPerformancePayload,
          FetchStoreDetailsPayload } from '../actions/lists.action';
-import { FormattedNewList } from '../../models/lists/lists.model';
+import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';

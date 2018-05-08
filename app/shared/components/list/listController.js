@@ -83,7 +83,6 @@ module.exports = /*  @ngInject */
     vm.closeOrDismissOpportunity = closeOrDismissOpportunity;
     vm.collapseCallback = collapseCallback;
     vm.createNewList = createNewList;
-    vm.createV3List = createV3List;
     vm.depletionsVsYaPercent = depletionsVsYaPercent;
     vm.displayBrandIcon = displayBrandIcon;
     vm.downloadModal = downloadModal;
@@ -242,8 +241,7 @@ module.exports = /*  @ngInject */
           const formattedOpportunities = opportunityIds.map(opportunityId => { return { opportunityId: opportunityId }; });
           updateCopiedOpportunities();
           updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
-          listsApiService.addOpportunitiesToList(listId, formattedOpportunities)
-            .toPromise()
+          listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
             .then(result => {
               vm.toggleSelectAllStores(false);
               loaderService.closeLoader();
@@ -333,14 +331,10 @@ module.exports = /*  @ngInject */
       $mdDialog.hide();
     }
 
-    function createV3List(formattedList) {
-      return listsApiService.createList(formattedList).toPromise();
-    }
-
     function saveNewList(e) {
       vm.buttonDisabled = true;
       const formattedList = listsTransformerService.formatNewList(vm.newList);
-      vm.createV3List(formattedList)
+      listsApiService.createListPromise(formattedList)
         .then(response => {
           analyticsService.trackEvent(
             'Target Lists - My Target Lists',
@@ -812,7 +806,7 @@ module.exports = /*  @ngInject */
     function getTargetLists() {
       if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
         const currentUserEmployeeID = userService.model.currentUser.employeeID;
-        listsApiService.getLists().toPromise().then((response) => {
+        listsApiService.getListsPromise().then((response) => {
           userService.model.targetLists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
         });
       }

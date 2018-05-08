@@ -2,7 +2,7 @@ const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.
 const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
 
 describe('Unit: expanded target list controller', function() {
-  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService, compassModalService, listsApiService, listsTransformerService;
+  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, analyticsService, compassModalService, listsApiService, listsTransformerService;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -30,7 +30,13 @@ describe('Unit: expanded target list controller', function() {
       $provide.value('listsTransformerService', listsTransformerService);
     });
 
-    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_, _listsApiService_, _listsTransformerService_) {
+    spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
+      const defer = q.defer();
+      defer.resolve();
+      return defer.promise;
+    });
+
+    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _toastService_, _listsApiService_, _listsTransformerService_) {
       state = {
         current: {
           name: 'opportunities'
@@ -47,8 +53,6 @@ describe('Unit: expanded target list controller', function() {
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
       userService = _userService_;
-      targetListService = _targetListService_;
-      toastService = _toastService_;
       q = _$q_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
@@ -59,12 +63,8 @@ describe('Unit: expanded target list controller', function() {
     expect(ctrl.userService).not.toBeUndefined();
     expect(typeof (ctrl.userService)).toEqual('object');
 
-    expect(ctrl.targetListService).not.toBeUndefined();
-    expect(typeof (ctrl.targetListService)).toEqual('object');
-
     expect(ctrl.loaderService).not.toBeUndefined();
     expect(typeof (ctrl.loaderService)).toEqual('object');
-
   });
 
   it('should expose public methods', function() {
@@ -346,7 +346,7 @@ describe('Unit: expanded target list controller', function() {
       beforeEach(() => {
         const deferred = q.defer();
         deferred.resolve({id: '998877'});
-        spyOn(ctrl, 'createList').and.returnValue(deferred.promise);
+        spyOn(listsApiService, 'createListPromise').and.returnValue(deferred.promise);
       });
 
       it('should return null if character length is greater than fourty', function() {
@@ -389,7 +389,7 @@ describe('Unit: expanded target list controller', function() {
         ctrl.saveNewList();
         scope.$apply();
 
-        expect(ctrl.createList).toHaveBeenCalled();
+        expect(listsApiService.createListPromise).toHaveBeenCalled();
         expect(analyticsService.trackEvent).toHaveBeenCalledWith('Target Lists - My Target Lists', 'Create Target List', '998877');
         expect(ctrl.buttonDisabled).toEqual(false);
         done();
@@ -621,96 +621,7 @@ describe('Unit: expanded target list controller', function() {
         ];
 
         expect(ctrl.findTargetListAuthor(collaboratorsTest)).toEqual('PETE MITCHELL');
-
-      });
-      it('should update the model to reflect deleted target list', function() {
-        var def = q.defer();
-        httpBackend.when('GET', '/v2/users/undefined/targetLists?archived=true').respond(200, {test: 1});
-        httpBackend.when('GET', '/v2/users/undefined/targetLists/').respond(200, {test: 2});
-        spyOn(targetListService, 'deleteTargetList').and.callFake(function() {
-         return {
-           then: function(callback) { return q.when(callback(def)); }
-          };
-        });
-
-        spyOn(toastService, 'showToast').and.callThrough();
-
-        ctrl.selected = [{
-         archived: true,
-         collaborators: [],
-         id: '1234'
-        }, {
-         archived: false,
-         collaborators: [],
-         id: '4567'
-       }];
-       userService.model.targetLists = {
-         archived: [{
-           archived: true,
-           collaborators: [],
-           id: '1234'
-          }],
-         ownedArchived: 10,
-         ownedNotArchived: 60,
-         ownedNotArchivedTargetLists: [{
-         archived: false,
-         collaborators: [],
-         id: '4567'
-        }]};
-
-        ctrl.deleteTargetList();
-        def.resolve();
-        scope.$apply();
-        expect(userService.model.targetLists.ownedNotArchived).toEqual(59);
-        expect(userService.model.targetLists.archived).toEqual([]);
-        expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([]);
-        expect(toastService.showToast).toHaveBeenCalled();
       });
     });
   });
-   describe('[archiveTargetList]', function() {
-     it('should archive', function() {
-       var def = q.defer();
-       httpBackend.when('GET', '/v2/users/undefined/targetLists?archived=true').respond(200, {test: 1});
-       httpBackend.when('GET', '/v2/users/undefined/targetLists/').respond(200, {test: 2});
-       httpBackend.when('PATCH', '/v2/targetLists/1234').respond(200, {test: 3});
-
-      spyOn(targetListService, 'updateTargetList').and.callFake(function() {
-         return {
-           then: function(callback) { return q.when(callback(def)); }
-          };
-        });
-
-      spyOn(compassModalService, 'showAlertModalDialog').and.callFake(() => {});
-      spyOn(toastService, 'showToast').and.callThrough();
-
-      spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
-
-       ctrl.selected = [{
-         archived: false,
-         collaborators: [],
-         id: '1234'
-       }];
-       userService.model.targetLists = {
-         archived: [],
-         ownedArchived: 10,
-         ownedNotArchived: 60,
-         ownedNotArchivedTargetLists: [{
-           archived: false,
-           collaborators: [],
-           id: '1234'
-          }]};
-       ctrl.archiveTargetList();
-       def.resolve();
-       scope.$apply();
-
-       expect(userService.model.targetLists.ownedArchived).toEqual(11);
-       expect(userService.model.targetLists.ownedNotArchived).toEqual(59);
-       expect(userService.model.targetLists.archived).toEqual([{ archived: true, collaborators: [  ], id: '1234' }]);
-       expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([]);
-       expect(ctrl.selected).toEqual([]);
-       expect(toastService.showToast).toHaveBeenCalled();
-       expect(analyticsService.trackEvent).toHaveBeenCalled();
-     });
-   });
 });

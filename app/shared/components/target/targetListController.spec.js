@@ -1,4 +1,3 @@
-// import { Observable } from 'rxjs';
 const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
 const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
 

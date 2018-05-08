@@ -1,4 +1,4 @@
-import { CollaboratorOwnerDetails } from './lists.model';
+import { CollaboratorOwnerDetails } from './collaborator-owner-details.model';
 
 export interface ListsSummary {
   archived: boolean;

@@ -7,19 +7,30 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { getListOpportunitiesHeaderRowMock,
-         getListOpportunitiesTableRowMock
-       } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
-import { StoreDetails } from '../../models/lists/lists-store.model';
+import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
+import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
+import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { CompassManageListModalService } from '../../services/compass-manage-list-modal.service';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
+import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
+
+interface ListPageClick {
+  pageNumber: number;
+}
+
+export interface PageChangeData {
+  pageStart: number;
+  pageEnd: number;
+}
 
 @Component({
   selector: 'list-detail',
@@ -28,23 +39,30 @@ import { CompassManageListModalOverlayRef } from '../../shared/components/compas
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-  public storeList: StoreDetails[];
   public listSummary: ListsSummary;
-  public oppsGroupedByStores: {};
-
-  public firstTabTitle: string = 'Performance';
-  public secondTabTitle: string = 'Opportunities';
-
-  // TODO: Remove this when we get real data.
-  public opportunitiesTableData = getListOpportunitiesTableRowMock(25);
-  public opportunitiesTableHeader = getListOpportunitiesHeaderRowMock();
-
+  public performanceTabTitle: string = 'Performance';
+  public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
+  public opportunitiesTableDataSize: number;
+  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Opportunities', 'Last Depletion'];
   public compassModalOverlayRef: CompassManageListModalOverlayRef;
   public currentUser: any;
+  public opportunitiesTableData: ListOpportunitiesTableRow[];
+  public performanceTableDataSize: number;
+  public listTableSize: number = LIST_TABLE_SIZE;
+  public pageChangeData: PageChangeData;
+  public performanceSortingCriteria: Array<SortingCriteria> = [{
+    columnType: ListPerformanceColumnType.cytdColumn,
+    ascending: false
+  }];
+  public opportunitiesSortingCriteria: Array<SortingCriteria> = [{
+    columnType: ListOpportunitiesColumnType.cytdColumn,
+    ascending: false
+  }];
+  public selectedTab: string;
 
   private listDetailSubscription: Subscription;
 
@@ -79,9 +97,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
-        this.storeList = listDetail.listStores.stores;
         this.listSummary = listDetail.listSummary.summaryData;
-        this.oppsGroupedByStores = listDetail.listOpportunities.opportunities;
 
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
@@ -97,9 +113,22 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.performance.pod.storePerformance
           );
+
+          this.performanceTableDataSize = this.performanceTableData.length;
         }
 
-        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.Fetched) console.log(this.oppsGroupedByStores);
+        if (this.isListOpportunitiesFetched(
+          listDetail.listStores.storeStatus,
+          listDetail.performance.volumeStatus,
+          listDetail.listOpportunities.opportunitiesStatus
+        )) {
+          this.opportunitiesTableData = this.listsTableTransformerService.transformOpportunitiesCollection(
+            listDetail.listStores.stores,
+            listDetail.performance.volume.storePerformance,
+            listDetail.listOpportunities.opportunities
+          );
+          this.opportunitiesTableDataSize = this.opportunitiesTableData.length;
+        }
       });
   }
 
@@ -109,6 +138,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.listDetailSubscription.unsubscribe();
+  }
+
+  public handlePageClick(event: ListPageClick) {
+    const pageNumber = event.pageNumber;
+    let pageStart = ((pageNumber - 1 ) * LIST_TABLE_SIZE);
+    let pageEnd = (pageNumber * LIST_TABLE_SIZE) ;
+    this.pageChangeData = {pageStart: pageStart, pageEnd: pageEnd};
   }
 
   public handleManageButtonClick() {
@@ -128,6 +164,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.$state.go('lists');
   }
 
+  public onTabClicked(tabName: string): void {
+    this.selectedTab = tabName;
+    if (tabName === this.performanceTabTitle) {
+      this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
+    }
+  }
+
   private isListPerformanceFetched(
     storeStatus: ActionStatus,
     volumePerformanceStatus: ActionStatus,
@@ -136,5 +179,33 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && podPerformanceStatus === ActionStatus.Fetched;
+  }
+
+  private isListOpportunitiesFetched(
+    storeStatus: ActionStatus,
+    volumePerformanceStatus: ActionStatus,
+    opportunitiesStatus: ActionStatus
+  ): boolean {
+    return storeStatus === ActionStatus.Fetched
+      && volumePerformanceStatus === ActionStatus.Fetched
+      && opportunitiesStatus === ActionStatus.Fetched;
+  }
+
+  private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
+    const clearTableDrawerSelections = (opportunityRows: ListTableDrawerRow[]): ListTableDrawerRow[] => {
+      return opportunityRows.map((opportunityRow: ListTableDrawerRow) => {
+        return Object.assign({}, opportunityRow, {
+          checked: false
+        });
+      });
+    };
+
+    return opportunitiesTableData.map((tableRow: ListOpportunitiesTableRow) => {
+      return Object.assign({}, tableRow, {
+        opportunities: clearTableDrawerSelections(tableRow.opportunities),
+        checked: false,
+        expanded: false
+      });
+    });
   }
 }
