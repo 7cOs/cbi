@@ -19,6 +19,7 @@ import { PageChangeData } from '../../../containers/lists/list-detail.component'
 export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
+  @Output() sortClick = new EventEmitter<any>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
@@ -27,7 +28,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   @Input()
   set tableData(tableData: Array<ListPerformanceTableRow>) {
-    this.peformanceTableData = this.tableData;
+    this.performanceTableData = tableData;
     if (tableData) {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
@@ -57,7 +58,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
-  public peformanceTableData: Array<ListPerformanceTableRow>;
+  public performanceTableData: Array<ListPerformanceTableRow>;
   public sliceStart: number = 0;
   public sliceEnd: number = LIST_TABLE_SIZE;
 
@@ -79,7 +80,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public handlePageChangeClicked(data: PageChangeData) {
-    if (this.peformanceTableData) {
+    if (this.performanceTableData) {
       this.sliceStart = data.pageStart;
       this.sliceEnd = data.pageEnd;
     }
@@ -181,5 +182,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       const sortedData: Array<ListPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
+    this.sortClick.emit();
   }
 }

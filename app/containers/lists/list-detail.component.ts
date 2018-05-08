@@ -1,6 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
 
 import { ActionButtonType } from '../../enums/action-button-type.enum';
@@ -37,6 +38,8 @@ export interface PageChangeData {
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
+  sortClick: Subject<Event> = new Subject();
+
   public listSummary: ListsSummary;
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
@@ -58,7 +61,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
-  public selectedTab: string;
+  public selectedTab: string = this.performanceTabTitle;
+  public activeTab: string = this.performanceTabTitle;
 
   private listDetailSubscription: Subscription;
 
@@ -150,9 +154,17 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public onTabClicked(tabName: string): void {
     this.selectedTab = tabName;
+    if (tabName !== this.activeTab) {
+      this.activeTab = tabName;
+      this.sortClick.next();
+    }
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
     }
+  }
+
+  public handleSortClicked() {
+    this.sortClick.next();
   }
 
   private isListPerformanceFetched(

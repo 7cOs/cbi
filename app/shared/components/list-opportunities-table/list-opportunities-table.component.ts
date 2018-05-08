@@ -26,6 +26,7 @@ interface OpportunitiesTableSelectAllCheckboxState {
 export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListOpportunitiesTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
+  @Output() sortClick = new EventEmitter<any>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
@@ -249,5 +250,6 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       const sortedData: Array<ListOpportunitiesTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
+    this.sortClick.emit();
   }
 }

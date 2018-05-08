@@ -39,6 +39,7 @@ class ListPerformanceTableComponentMock {
   @Input() pageChangeData: PageChangeData;
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
+  @Output() sortClick = new EventEmitter();
 }
 
 @Component({
@@ -52,6 +53,7 @@ class ListOpportunitiesTableComponentMock {
   @Input() pageChangeData: PageChangeData;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
+  @Output() sortClick = new EventEmitter();
 }
 
 @Component({
@@ -73,6 +75,7 @@ class ListsHeaderComponentMock {
 class ListsPaginationComponentMock {
   @Input() tableDataSize: number;
   @Input() tabName: string;
+  @Input() sortClick: Event;
   @Output() pageChangeClick = new EventEmitter();
 }
 
@@ -263,6 +266,14 @@ describe('ListDetailComponent', () => {
           expect(oppRow.checked).toBe(false);
         });
       });
+    });
+  });
+
+  describe('Outputs', () => {
+    it('should call "next" function click event is received', () => {
+      spyOn(componentInstance.sortClick, 'next');
+      componentInstance.handleSortClicked();
+      expect(componentInstance.sortClick.next).toHaveBeenCalled();
     });
   });
 });
