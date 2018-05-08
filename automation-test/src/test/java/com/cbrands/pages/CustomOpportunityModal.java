@@ -119,7 +119,7 @@ public class CustomOpportunityModal extends TestNGBasePage {
   private String getXPathString(String requiredField) {
     final String MODAL_XPATH = "md-dialog//div[contains(@class, 'modal add-opportunity')]";
     final String REQUIRED_FIELD_XPATH = "label[contains(.,'" + requiredField + "')]/..//%s/../../..)//..";
-    final String ERR_MSG_XPATH = "div[not(@aria-hidden='true')]/p[contains(@class,'error-message')]";
+    final String ERR_MSG_XPATH = "div[@aria-hidden='false']/p[contains(@class,'error-message')]";
     final String BASE_XPATH = String.format("((//%s//%s)/%s", MODAL_XPATH, REQUIRED_FIELD_XPATH, ERR_MSG_XPATH);
     String xpathForm = null;
 
