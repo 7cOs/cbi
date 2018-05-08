@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListPerformanceSummaryComponent } from './list-performance-summary.component';
 
-fdescribe('ListPerformanceSummaryComponent', () => {
+describe('ListPerformanceSummaryComponent', () => {
     let fixture: ComponentFixture<ListPerformanceSummaryComponent>;
     let componentInstance: ListPerformanceSummaryComponent;
 

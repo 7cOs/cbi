@@ -13,10 +13,10 @@ compass-tabs(
   )
     section.list-performance-summary-section
       list-performance-summary(
-        [depletionsTotal]="performanceTableTotal.cytdColumn",
-        [depletionsVsYA]="performanceTableTotal.cytdVersusYaPercentColumn",
-        [distributionsTotal]="performanceTableTotal.l90Column",
-        [distributionsVsYA]="performanceTableTotal.l90VersusYaPercentColumn"
+        [depletionsTotal]="performanceTableTotal?.cytdColumn",
+        [depletionsVsYA]="performanceTableTotal?.cytdVersusYaPercentColumn",
+        [distributionsTotal]="performanceTableTotal?.l90Column",
+        [distributionsVsYA]="performanceTableTotal?.l90VersusYaPercentColumn"
       )
       div.button-section
         compass-action-button(
