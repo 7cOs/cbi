@@ -129,13 +129,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
-          console.log('In Subs:', this.opportunitiesTableData);
           this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
             this.opportunitiesTableData : this.filterOpportunitiesByStatus(
               this.oppStatusSelected,
               this.opportunitiesTableData
             );
-          console.log('from subscription', this.filteredOpportunitiesTableData);
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
       });
@@ -147,13 +145,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {
     this.oppStatusSelected = statusValue;
-    console.log(this.oppStatusSelected);
     this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
       this.opportunitiesTableData : this.filterOpportunitiesByStatus(
         this.oppStatusSelected,
         this.opportunitiesTableData
       );
-    console.log('from status change method: ', this.filteredOpportunitiesTableData);
+    this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
   }
 
   filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
@@ -166,7 +163,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             opp => opp.status === OpportunityStatus.targeted
             || opp.status === OpportunityStatus.inactive);
         else
-          storeRow.opportunities = opps.filter(opp => opp.status === status);
+          storeRow.opportunities = opps.filter(opp => opp.status === OpportunityStatus.unknown);
 
         return storeRow.opportunities.length;
       }
@@ -198,6 +195,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.selectedTab = tabName;
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
+      this.oppStatusSelected = listOpportunityStatusOptions.find(status => status.value === OpportunityStatus.all).value;
+      this.filteredOpportunitiesTableData = this.opportunitiesTableData;
+      this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
     }
   }
 

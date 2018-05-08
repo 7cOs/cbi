@@ -31,18 +31,20 @@ compass-tabs(
       [pageChangeData]="pageChangeData"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
-    .opps-dropdown
-      compass-select(
-        [model]="oppStatusSelected",
-        [options]="opportunityStatusOptions",
-        [title]="'Opportunity Status'",
-        (onOptionSelected)="opportunityStatusSelected($event)"
-      )
+    .list-opportunities-section
+      .opps-dropdown
+        compass-select(
+          [model]="oppStatusSelected",
+          [options]="opportunityStatusOptions",
+          [title]="'Opportunity Status'",
+          (onOptionSelected)="opportunityStatusSelected($event)"
+        )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [sortingCriteria]="opportunitiesSortingCriteria",
       [tableData]="filteredOpportunitiesTableData",
-      [pageChangeData]="pageChangeData"
+      [pageChangeData]="pageChangeData",
+      [oppStatusSelected]="oppStatusSelected"
     )
 
 lists-pagination(

@@ -6,12 +6,13 @@ import { LoadingState } from '../../../enums/loading-state.enum';
 import { ListOpportunitiesColumnType } from '../../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
+import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
 import { MatCheckboxChange } from '@angular/material';
+import { OpportunityStatus } from '../../../enums/list-opportunities/list-opportunity-status.enum';
+import { PageChangeData } from '../../../containers/lists/list-detail.component';
 import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
-import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
-import { PageChangeData } from '../../../containers/lists/list-detail.component';
 
 interface OpportunitiesTableSelectAllCheckboxState {
   isSelectAllChecked: boolean;
@@ -65,6 +66,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   @Input() performanceMetric: string;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: LoadingState.Loaded;
+  @Input() oppStatusSelected: OpportunityStatus;
 
   public sortedTableData: Array<ListOpportunitiesTableRow>;
   public numSelectedRows: number = 0;
@@ -205,6 +207,10 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
 
     this.isSelectAllChecked = selectedAllCheckboxState.isSelectAllChecked;
     this.isIndeterminateChecked = selectedAllCheckboxState.isIndeterminateChecked;
+  }
+
+  public isOppsTableDataEmpty(): boolean {
+    return this.sortedTableData && this.sortedTableData.length === 0;
   }
 
   private getSelectAllCheckboxState(tableData: ListOpportunitiesTableRow[]): OpportunitiesTableSelectAllCheckboxState {
