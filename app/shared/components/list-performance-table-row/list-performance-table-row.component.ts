@@ -13,7 +13,8 @@ export class ListPerformanceTableRowComponent {
   @Input() rowData: ListPerformanceTableRow;
   @Output() onChangeEventEmitter: EventEmitter<any> = new EventEmitter();
 
-  public classUtilService: CompassListClassUtilService = new CompassListClassUtilService();
+  constructor(public classUtilService: CompassListClassUtilService) { }
+
   public getTrendClass(num: number): string {
     return this.classUtilService.getTrendClass(num);
   }
