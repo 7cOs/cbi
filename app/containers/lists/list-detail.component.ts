@@ -129,14 +129,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
-
+          console.log('In Subs:', this.opportunitiesTableData);
           this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
             this.opportunitiesTableData : this.filterOpportunitiesByStatus(
               this.oppStatusSelected,
               this.opportunitiesTableData
             );
           console.log('from subscription', this.filteredOpportunitiesTableData);
-          this.opportunitiesTableDataSize = this.opportunitiesTableData.length;
+          this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
       });
   }
@@ -157,14 +157,22 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
-    return oppsTableData.filter((store: ListOpportunitiesTableRow) => {
-      return store.opportunities.filter((opportunity: ListTableDrawerRow) => {
-        if (opportunity.status === OpportunityStatus.targeted)
-          return opportunity.status === OpportunityStatus.targeted || opportunity.status === OpportunityStatus.inactive;
+    let filteredOpps: ListOpportunitiesTableRow[] = JSON.parse(JSON.stringify(oppsTableData));
+    filteredOpps = filteredOpps.filter((storeRow: ListOpportunitiesTableRow) => {
+      let opps = storeRow.opportunities;
+      if (opps.length) {
+        if (status === OpportunityStatus.targeted)
+          storeRow.opportunities = opps.filter(
+            opp => opp.status === OpportunityStatus.targeted
+            || opp.status === OpportunityStatus.inactive);
         else
-          return opportunity.status === OpportunityStatus.closed;
-      });
+          storeRow.opportunities = opps.filter(opp => opp.status === status);
+
+        return storeRow.opportunities.length;
+      }
+      return false;
     });
+    return filteredOpps;
   }
 
   ngOnDestroy() {
