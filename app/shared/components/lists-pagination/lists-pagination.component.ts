@@ -33,7 +33,9 @@ export class ListsPaginationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.pageResetSubscription.unsubscribe();
+    if (this.pageResetSubscription) {
+      this.pageResetSubscription.unsubscribe();
+    }
   }
 
   public pageChange(pageNumber: number) {
