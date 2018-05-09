@@ -636,15 +636,16 @@ describe('Unit: expanded target list controller', function() {
         archived: true,
         collaborators: [],
         id: '1234',
-        permissionLevel: 'author'
+        owner: {employeeId: 1234}
       }];
+      userService.model.currentUser.employeeID = 1234;
       userService.model.targetLists = {};
       userService.model.targetLists = {
         archived: [{
           archived: true,
           collaborators: [],
           id: '1234',
-          permissionLevel: 'author'
+          owner: { employeeId: 1234 }
          }],
         ownedArchived: 10,
         ownedNotArchived: 60,
@@ -654,7 +655,7 @@ describe('Unit: expanded target list controller', function() {
 
       expect(userService.model.targetLists.ownedArchived).toEqual(9);
       expect(userService.model.targetLists.ownedNotArchived).toEqual(61);
-      expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([{ archived: false, collaborators: [  ], id: '1234', permissionLevel: 'author' }]);
+      expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([{ archived: false, collaborators: [  ], id: '1234', owner: { employeeId: 1234 } }]);
       expect(userService.model.targetLists.archived).toEqual([]);
       expect(ctrl.selected).toEqual([]);
       expect(analyticsService.trackEvent).toHaveBeenCalled();
