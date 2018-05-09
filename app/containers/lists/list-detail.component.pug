@@ -1,15 +1,3 @@
-compass-action-button(
-  [actionLabel]="actionButtonType.AddToList",
-  [isDisabled]="true",
-  (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
-compass-action-button.action-button-spacing(
-  [actionLabel]="actionButtonType.Download",
-  [isDisabled]="false",
-  (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
 lists-header(
   [summaryData]="listSummary",
   (manageButtonClicked)="handleManageButtonClick()",
@@ -23,6 +11,24 @@ compass-tabs(
     [tabTitle]='performanceTabTitle',
     [active]='true'
   )
+    section.list-performance-summary-section
+      list-performance-summary(
+        [depletionsTotal]="performanceTableTotal?.cytdColumn",
+        [depletionsVsYA]="performanceTableTotal?.cytdVersusYaPercentColumn",
+        [distributionsTotal]="performanceTableTotal?.l90Column",
+        [distributionsVsYA]="performanceTableTotal?.l90VersusYaPercentColumn"
+      )
+      div.button-section
+        compass-action-button(
+          [actionLabel]="actionButtonType.AddToList",
+          [isDisabled]="true",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Download",
+          [isDisabled]="false",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [sortingCriteria]="performanceSortingCriteria",
