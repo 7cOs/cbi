@@ -10,6 +10,7 @@ import { ListOpportunitiesTableRowComponent }
         from '../../shared/components/list-opportunities-table-row/list-opportunities-table-row.component';
 import { ListPerformanceTableComponent } from '../../shared/components/list-performance-table/list-performance-table.component';
 import { ListPerformanceTableRowComponent } from '../../shared/components/list-performance-table-row/list-performance-table-row.component';
+import { ListPerformanceSummaryComponent } from '../../shared/components/list-performance-summary/list-performance-summary.component';
 import { ListTableDrawerComponent } from '../../shared/components/list-table-drawer/list-table-drawer.component';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
@@ -30,6 +31,7 @@ import { ListsPaginationComponent } from '../../shared/components/lists-paginati
     ListsPaginationComponent,
     ListPerformanceTableComponent,
     ListPerformanceTableRowComponent,
+    ListPerformanceSummaryComponent,
     ListTableDrawerComponent
   ],
   providers: [

@@ -1,6 +1,7 @@
 import { ListOpportunitiesTableRowComponent } from './list-opportunities-table-row.component';
 import { MatCheckboxModule } from '@angular/material';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { CompassListClassUtilService } from '../../../services/compass-list-class-util.service';
 
 const chance = new Chance();
 
@@ -10,10 +11,8 @@ describe('ListOpportunitiesTableRowComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [MatCheckboxModule],
-      declarations: [
-        ListOpportunitiesTableRowComponent,
-      ],
-      providers: []
+      declarations: [ListOpportunitiesTableRowComponent],
+      providers: [CompassListClassUtilService]
     });
 
     fixture = TestBed.createComponent(ListOpportunitiesTableRowComponent);
