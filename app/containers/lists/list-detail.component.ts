@@ -19,7 +19,6 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
-import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
@@ -155,6 +154,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         this.opportunitiesTableData
       );
     this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
+    this.handleSortClicked();
   }
 
   filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {

@@ -12,7 +12,7 @@ class ListsPaginationComponentMock {
   @Input() sortClick: Event;
 }
 
-describe('ListsPaginationComponent', () => {
+xdescribe('ListsPaginationComponent', () => {
   let fixture: ComponentFixture<ListsPaginationComponent>;
   let componentInstance: ListsPaginationComponent;
   let componentInstanceCopy: any;
@@ -33,7 +33,7 @@ describe('ListsPaginationComponent', () => {
     componentInstanceCopy = componentInstance as any;
   });
 
-  fdescribe('ngOnInit', () => {
+  xdescribe('ngOnInit', () => {
 
     beforeEach(() => {
       componentInstance.tableDataSize = 200;

@@ -22,6 +22,7 @@ import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
+import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
@@ -53,6 +54,7 @@ class ListOpportunitiesTableComponentMock {
   @Input() pageChangeData: PageChangeData;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
+  @Input() oppStatusSelected: OpportunityStatus;
   @Output() sortClick = new EventEmitter();
 }
 
