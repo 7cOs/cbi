@@ -11,7 +11,7 @@ compass-tabs(
     [tabTitle]='performanceTabTitle',
     [active]='true'
   )
-    section.list-performance-summary-section
+    section.list-action-section
       list-performance-summary(
         [depletionsTotal]="performanceTableTotal?.cytdColumn",
         [depletionsVsYA]="performanceTableTotal?.cytdVersusYaPercentColumn",
@@ -38,7 +38,7 @@ compass-tabs(
       (sortClick)="handleSortClicked()"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
-    .list-opportunities-section
+    .list-action-section
       .opps-dropdown
         compass-select(
           [model]="oppStatusSelected",

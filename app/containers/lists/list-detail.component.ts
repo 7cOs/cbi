@@ -167,8 +167,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             opp => opp.status === OpportunityStatus.targeted
             || opp.status === OpportunityStatus.inactive);
         else
-          storeRow.opportunities = opps.filter(opp => opp.status === OpportunityStatus.unknown);
-
+          storeRow.opportunities = opps.filter(opp => opp.status === OpportunityStatus.closed);
+        storeRow.opportunitiesColumn = storeRow.opportunities.length;
         return storeRow.opportunities.length;
       }
       return false;
