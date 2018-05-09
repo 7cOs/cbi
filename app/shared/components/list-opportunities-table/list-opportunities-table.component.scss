@@ -29,7 +29,7 @@ thead {
 tbody {
   display: table-row;
   width: 100%;
-  max-height: $table-body-height;
+  //max-height: $table-body-height;
 
   /* Chrome and Safari support this non-standard overflow type */
   overflow-y: overlay;
@@ -312,7 +312,7 @@ td, th {
 }
 
 .tables-container {
-  height: 736px;
+  // height: 736px;
   margin-top: 30px;
   width: 1130px;
 
