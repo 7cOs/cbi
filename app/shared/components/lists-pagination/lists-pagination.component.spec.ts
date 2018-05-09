@@ -1,34 +1,23 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ListsPaginationComponent } from './lists-pagination.component';
-import { Component, Input } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-
-@Component({
-  selector: 'lists-pagination',
-  template: ''
-})
-
-class ListsPaginationComponentMock {
-  @Input() sortClick: Event;
-}
 
 describe('ListsPaginationComponent', () => {
   let fixture: ComponentFixture<ListsPaginationComponent>;
   let componentInstance: ListsPaginationComponent;
   let componentInstanceCopy: any;
-  const sortSubject: Subject<Event> = new Subject<Event>();
+  const pageResetSubject: Subject<Event> = new Subject<Event>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ListsPaginationComponent,
-        ListsPaginationComponentMock,
+        ListsPaginationComponent
       ],
       providers: []
     });
     fixture = TestBed.createComponent(ListsPaginationComponent);
     componentInstance = fixture.componentInstance;
-    componentInstance.sortClick = sortSubject;
+    componentInstance.paginationReset = pageResetSubject;
     componentInstanceCopy = componentInstance as any;
   });
 
@@ -49,21 +38,21 @@ describe('ListsPaginationComponent', () => {
 
     it('should check if subscription', (done: any) => {
       componentInstance.ngOnInit();
-      componentInstance.sortClick.subscribe((value) => {
+      componentInstance.paginationReset.subscribe((value) => {
         expect(value).toBe(undefined);
         done();
       });
-      sortSubject.next();
+      pageResetSubject.next();
     });
 
     it('should check if pageChange function is called', (done: any) => {
       componentInstance.ngOnInit();
       spyOn(componentInstance, 'pageChange');
-      componentInstance.sortClick.subscribe(() => {
+      componentInstance.paginationReset.subscribe(() => {
         expect(componentInstance.pageChange).toHaveBeenCalledWith(0);
         done();
       });
-      sortSubject.next();
+      pageResetSubject.next();
     });
   });
 

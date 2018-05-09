@@ -39,7 +39,7 @@ class ListPerformanceTableComponentMock {
   @Input() pageChangeData: PageChangeData;
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
-  @Output() sortClick = new EventEmitter();
+  @Output() paginationReset = new EventEmitter();
 }
 
 @Component({
@@ -53,7 +53,7 @@ class ListOpportunitiesTableComponentMock {
   @Input() pageChangeData: PageChangeData;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
-  @Output() sortClick = new EventEmitter();
+  @Output() paginationReset = new EventEmitter();
 }
 
 @Component({
@@ -75,7 +75,7 @@ class ListsHeaderComponentMock {
 class ListsPaginationComponentMock {
   @Input() tableDataSize: number;
   @Input() tabName: string;
-  @Input() sortClick: Event;
+  @Input() paginationReset: Event;
   @Output() pageChangeClick = new EventEmitter();
 }
 
@@ -283,18 +283,18 @@ describe('ListDetailComponent', () => {
 
   describe('Outputs', () => {
     it('should call "next" function click event is received', () => {
-      spyOn(componentInstance.sortClick, 'next');
-      componentInstance.handleSortClicked();
-      expect(componentInstance.sortClick.next).toHaveBeenCalled();
+      spyOn(componentInstance.paginationReset, 'next');
+      componentInstance.handlePaginationReset();
+      expect(componentInstance.paginationReset.next).toHaveBeenCalled();
     });
 
     it('should set the active tab and call pagination reset function when lists tab are clicked', () => {
       componentInstance.activeTab = 'Performance';
-      spyOn(componentInstance.sortClick, 'next');
+      spyOn(componentInstance.paginationReset, 'next');
       componentInstance.onTabClicked('Opportunities');
       expect(componentInstance.selectedTab).toBe('Opportunities');
       expect(componentInstance.activeTab).toBe('Opportunities');
-      expect(componentInstance.sortClick.next).toHaveBeenCalled();
+      expect(componentInstance.paginationReset.next).toHaveBeenCalled();
     });
   });
 });

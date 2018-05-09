@@ -13,7 +13,7 @@ export const LIST_TABLE_SIZE: number = 20;
 export class ListsPaginationComponent implements OnInit, OnDestroy {
   @Input() tableDataSize: number;
   @Input() tabName: string;
-  @Input() sortClick: Subject<Event>;
+  @Input() paginationReset: Subject<Event>;
 
   @Output() pageChangeClick: EventEmitter<{pageNumber: number}> = new EventEmitter<any>();
 
@@ -22,18 +22,18 @@ export class ListsPaginationComponent implements OnInit, OnDestroy {
   public lastPage: number;
   public pageNumbers: Array<Number>;
   public totalPages: number;
-  public sortSubscription: Subscription;
+  public pageResetSubscription: Subscription;
 
   ngOnInit() {
     this.lastPage = this.totalPages = Math.ceil(this.tableDataSize / LIST_TABLE_SIZE) || 0;
     this.pageNumbers = this.getPageNumbers();
-    this.sortSubscription = this.sortClick.subscribe(() => {
+    this.pageResetSubscription = this.paginationReset.subscribe(() => {
       this.pageChange(0);
     });
   }
 
   ngOnDestroy() {
-    this.sortSubscription.unsubscribe();
+    this.pageResetSubscription.unsubscribe();
   }
 
   public pageChange(pageNumber: number) {

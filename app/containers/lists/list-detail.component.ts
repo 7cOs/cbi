@@ -38,7 +38,7 @@ export interface PageChangeData {
 })
 
 export class ListDetailComponent implements OnInit, OnDestroy {
-  sortClick: Subject<Event> = new Subject();
+  paginationReset: Subject<Event> = new Subject();
 
   public listSummary: ListsSummary;
   public performanceTabTitle: string = 'Performance';
@@ -156,15 +156,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.selectedTab = tabName;
     if (tabName !== this.activeTab) {
       this.activeTab = tabName;
-      this.sortClick.next();
+      this.paginationReset.next();
     }
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
     }
   }
 
-  public handleSortClicked() {
-    this.sortClick.next();
+  public handlePaginationReset() {
+    this.paginationReset.next();
   }
 
   private isListPerformanceFetched(
