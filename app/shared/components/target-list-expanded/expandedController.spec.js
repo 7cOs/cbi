@@ -30,12 +30,6 @@ describe('Unit: expanded target list controller', function() {
       $provide.value('listsTransformerService', listsTransformerService);
     });
 
-    spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
-      const defer = q.defer();
-      defer.resolve();
-      return defer.promise;
-    });
-
     inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _toastService_, _listsApiService_, _listsTransformerService_) {
       state = {
         current: {
@@ -622,6 +616,49 @@ describe('Unit: expanded target list controller', function() {
 
         expect(ctrl.findTargetListAuthor(collaboratorsTest)).toEqual('PETE MITCHELL');
       });
+    });
+  });
+  describe('[unarchiveTargetList]', function() {
+    it('should unarchive', function() {
+
+     spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
+     spyOn(listsApiService, 'updateListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
+
+      spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
+        return;
+      });
+
+      ctrl.selected = [{
+        archived: true,
+        collaborators: [],
+        id: '1234',
+        owner: {employeeId: 1234}
+      }];
+      userService.model.currentUser.employeeID = 1234;
+      userService.model.targetLists = {};
+      userService.model.targetLists = {
+        archived: [{
+          archived: true,
+          collaborators: [],
+          id: '1234',
+          owner: { employeeId: 1234 }
+         }],
+        ownedArchived: 10,
+        ownedNotArchived: 60,
+        ownedNotArchivedTargetLists: []};
+      ctrl.unarchiveTargetList();
+      scope.$apply();
+
+      expect(userService.model.targetLists.ownedArchived).toEqual(9);
+      expect(userService.model.targetLists.ownedNotArchived).toEqual(61);
+      expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([{ archived: false, collaborators: [  ], id: '1234', owner: { employeeId: 1234 } }]);
+      expect(userService.model.targetLists.archived).toEqual([]);
+      expect(ctrl.selected).toEqual([]);
+      expect(analyticsService.trackEvent).toHaveBeenCalled();
     });
   });
 });
