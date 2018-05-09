@@ -10,8 +10,9 @@
       <class name="com.cbrands.test.functional.accountDashboard.AccountDashboardDistributorFilterTest" />
       <class name="com.cbrands.test.functional.accountDashboard.AccountDashboardViewOpportunitiesTest" />
       <class name="com.cbrands.test.functional.opportunities.OpportunitiesSavedReportsTest" />
-      <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesFiltersTest" />
-      <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesResetFiltersTest" />
+      <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesAccountScopeFilterTest" />
+      <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesDistributorFilterTest" />
+      <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesRetailerFilterTest" />
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
