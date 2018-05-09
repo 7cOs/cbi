@@ -3,7 +3,7 @@ import { OpportunitiesByStore } from './opportunities-by-store.model';
 
 export function getOpportunitiesByStoreMock(): OpportunitiesByStore {
   const mockOne = getListOpportunityMock();
-  let mockTwo = getListOpportunityMock();
+  const mockTwo = getListOpportunityMock();
   mockTwo.unversionedStoreId = mockOne.unversionedStoreId;
   const oppsArray = [];
   oppsArray.push(mockOne, mockTwo);
