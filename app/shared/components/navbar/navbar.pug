@@ -1,4 +1,6 @@
 .toast-header.success(ng-show="nb.archived") List<span ng-if="nb.multipleTargetListsSelected">s</span> Successfully Archived
+.toast-header.success(ng-show="nb.unarchived") List<span ng-if="nb.multipleTargetListsSelected">s</span> Successfully Unarchived
+.toast-header(ng-show="nb.unarchivedNoAuthor") We couldn't unarchive some of the lists selected because you're not the owner of the list<span ng-if="nb.multipleTargetListsSelected">s</span>
 .toast-header.success(ng-show="nb.deleted") List<span ng-if="nb.multipleTargetListsSelected">s</span> Successfully Deleted
 .toast-header.success(ng-show="nb.added") Opportunity Added
 .toast-header.success(ng-show="nb.reportDeleted") Report Successfully Deleted
