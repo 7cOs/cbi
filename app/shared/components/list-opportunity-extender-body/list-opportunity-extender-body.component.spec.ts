@@ -95,24 +95,34 @@ describe('Team Performance Opportunities Extender Body', () => {
     beforeEach(() => {
       testBed = getTestBed();
       store = testBed.get(Store);
+      fixture.detectChanges();
     });
 
     it('should call select with the right arguments', () => {
       storeMock.select.calls.reset();
       listsSubject.next(stateMock.listsDetails);
-      spyOn(componentInstance, 'setExtenderBodyFields').and.callThrough();
-      componentInstance.ngOnChanges();
+      componentInstance.ngOnInit();
       fixture.detectChanges();
 
       expect(storeMock.select.calls.count()).toBe(1);
       const selectorFunction = storeMock.select.calls.argsFor(0)[0];
       expect(selectorFunction(stateMock)).toBe(stateMock.listsDetails);
       expect(store.select).toHaveBeenCalled();
+    });
+
+    it('should call the method setExtenderBodyFileds', () => {
+      spyOn(componentInstance, 'setExtenderBodyFields').and.callThrough();
+      componentInstance.ngOnChanges();
+      fixture.detectChanges();
+
       expect(componentInstance.setExtenderBodyFields).toHaveBeenCalled();
     });
   });
 
   describe('setExtenderBodyFields', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+    });
     it('Should pass in fields correctly from opportunities object', () => {
       const oppsGroupedByStore: OpportunitiesByStore = getOpportunitiesByStoreMock();
       const opportunityDetailsMock: ListsOpportunities = oppsGroupedByStore[Object.keys(oppsGroupedByStore)[0]][0];

@@ -28,13 +28,16 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   constructor(private store: Store<AppState>) {
   }
 
-  ngOnChanges() {
+  ngOnInit() {
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
           this.allOpps = listDetail.listOpportunities.opportunities;
-          this.setExtenderBodyFields(this.allOpps);
       });
+  }
+
+  ngOnChanges() {
+    this.setExtenderBodyFields(this.allOpps);
   }
 
   setExtenderBodyFields(allOpps: OpportunitiesByStore) {
