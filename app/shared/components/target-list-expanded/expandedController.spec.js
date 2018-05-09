@@ -30,12 +30,6 @@ describe('Unit: expanded target list controller', function() {
       $provide.value('listsTransformerService', listsTransformerService);
     });
 
-    spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
-      const defer = q.defer();
-      defer.resolve();
-      return defer.promise;
-    });
-
     inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _toastService_, _listsApiService_, _listsTransformerService_) {
       state = {
         current: {
@@ -624,7 +618,7 @@ describe('Unit: expanded target list controller', function() {
       });
     });
   });
-  fdescribe('[unarchiveTargetList]', function() {
+  describe('[unarchiveTargetList]', function() {
     it('should unarchive', function() {
 
      spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
@@ -632,6 +626,10 @@ describe('Unit: expanded target list controller', function() {
         const defer = q.defer();
         defer.resolve();
         return defer.promise;
+      });
+
+      spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
+        return;
       });
 
       ctrl.selected = [{
