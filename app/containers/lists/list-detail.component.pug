@@ -35,7 +35,7 @@ compass-tabs(
       [totalRow]="performanceTableTotal",
       [tableData]="performanceTableData",
       [pageChangeData]="pageChangeData",
-      (sortClick)="handleSortClicked()"
+      (paginationReset)="handlePaginationReset()"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
     .list-action-section
@@ -52,13 +52,13 @@ compass-tabs(
       [tableData]="filteredOpportunitiesTableData",
       [pageChangeData]="pageChangeData",
       [oppStatusSelected]="oppStatusSelected",
-      (sortClick)="handleSortClicked()"
+      (paginationReset)="handlePaginationReset()"
     )
 
 lists-pagination(
   *ngIf='(selectedTab === performanceTabTitle) && (performanceTableDataSize > listTableSize)',
   [tableDataSize]="performanceTableDataSize",
-  [sortClick]='sortClick',
+  [paginationReset]='paginationReset',
   [tabName]='performanceTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
@@ -67,7 +67,7 @@ lists-pagination(
   *ngIf='(selectedTab === opportunitiesTabTitle) && (opportunitiesTableDataSize > listTableSize)',
   [tableDataSize]="opportunitiesTableDataSize",
   [tabName]='opportunitiesTabTitle',
-  [sortClick]='sortClick',
+  [paginationReset]='paginationReset',
   (pageChangeClick)="handlePageClick($event)"
 )
 
