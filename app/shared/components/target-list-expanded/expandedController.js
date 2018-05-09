@@ -117,11 +117,11 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchived--;
 
           userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
-
+          const listPermissionLevel = userService.model.currentUser.employeeID === item.owner.employeeId ? 'author' : '';
           analyticsService.trackEvent(
-            targetListService.getAnalyticsCategory(item.permissionLevel, item.archived),
-            'Archive Target List',
-            item.id
+            targetListService.getAnalyticsCategory(listPermissionLevel, item.archived),
+            'Archive List',
+            'Selected List'
           );
         });
         loaderService.closeLoader();
@@ -134,7 +134,7 @@ module.exports = /*  @ngInject */
       // This check is only done to see if ALL selected items don't have author permissions, otherwise we will accept the action and purge in the unarchive method.
       let selectedTargetLists = vm.selected;
       let noOwnerPermissions = selectedTargetLists.filter((list) => {
-        return list.permissionLevel !== 'author';
+        return list.owner.employeeId !== userService.model.currentUser.employeeID;
       });
       return (noOwnerPermissions.length === selectedTargetLists.length);
     }
@@ -143,7 +143,7 @@ module.exports = /*  @ngInject */
       let selectedTargetLists = vm.selected,
           unarchiveTargetListPromises = [];
       let ownerPermissions = selectedTargetLists.filter((list) => {
-        return list.permissionLevel === 'author';
+        return list.owner.employeeId === userService.model.currentUser.employeeID;
       });
 
       // get selected target list ids and their promises
@@ -164,10 +164,11 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchived++;
 
           userService.model.targetLists.ownedNotArchivedTargetLists.unshift(listItem);
+          const listPermissionLevel = userService.model.currentUser.employeeID === listItem.owner.employeeId ? 'author' : '';
           analyticsService.trackEvent(
-            targetListService.getAnalyticsCategory(listItem.permissionLevel, listItem.archived),
-            'Unarchive Target List',
-            listItem.id
+            targetListService.getAnalyticsCategory(listPermissionLevel, listItem.archived),
+            'Unarchive List',
+            'Selected List'
           );
         });
         loaderService.closeLoader();
