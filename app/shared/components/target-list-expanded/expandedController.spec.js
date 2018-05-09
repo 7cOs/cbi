@@ -624,22 +624,15 @@ describe('Unit: expanded target list controller', function() {
       });
     });
   });
-   describe('[unarchiveTargetList]', function() {
+  fdescribe('[unarchiveTargetList]', function() {
     it('should unarchive', function() {
-      var def = q.defer();
-      httpBackend.when('GET', '/v2/users/undefined/targetLists?archived=true').respond(200, {test: 1});
-      httpBackend.when('GET', '/v2/users/undefined/targetLists/').respond(200, {test: 2});
-      httpBackend.when('PATCH', '/v2/targetLists/1234').respond(200, {test: 3});
-
-     spyOn(targetListService, 'updateTargetList').and.callFake(function() {
-        return {
-          then: function(callback) { return q.when(callback(def)); }
-         };
-       });
-
-     spyOn(toastService, 'showToast').and.callThrough();
 
      spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
+     spyOn(listsApiService, 'updateListPromise').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve();
+        return defer.promise;
+      });
 
       ctrl.selected = [{
         archived: true,
@@ -647,6 +640,7 @@ describe('Unit: expanded target list controller', function() {
         id: '1234',
         permissionLevel: 'author'
       }];
+      userService.model.targetLists = {};
       userService.model.targetLists = {
         archived: [{
           archived: true,
@@ -658,7 +652,6 @@ describe('Unit: expanded target list controller', function() {
         ownedNotArchived: 60,
         ownedNotArchivedTargetLists: []};
       ctrl.unarchiveTargetList();
-      def.resolve();
       scope.$apply();
 
       expect(userService.model.targetLists.ownedArchived).toEqual(9);
@@ -666,7 +659,6 @@ describe('Unit: expanded target list controller', function() {
       expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([{ archived: false, collaborators: [  ], id: '1234', permissionLevel: 'author' }]);
       expect(userService.model.targetLists.archived).toEqual([]);
       expect(ctrl.selected).toEqual([]);
-      expect(toastService.showToast).toHaveBeenCalled();
       expect(analyticsService.trackEvent).toHaveBeenCalled();
     });
   });
