@@ -1,6 +1,5 @@
 package com.cbrands.test.functional.opportunities.filters;
 
-import com.cbrands.PremiseType;
 import com.cbrands.TestUser;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
@@ -10,122 +9,24 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
-public class OpportunitiesFiltersTest extends BaseTestCase {
+public class OpportunitiesAccountScopeFilterTest extends BaseTestCase {
 
   private OpportunitiesPage opportunitiesPage;
 
-  @BeforeClass
-  public void setUpClass() throws MalformedURLException {
-    this.startUpBrowser("Functional - OpportunitiesFiltersTest");
-  }
-
-  @AfterClass
-  public void tearDownClass() {
-    this.shutDownBrowser();
+  @BeforeMethod
+  public void setUpClass(Method method) throws MalformedURLException {
+    final String testDescription = method.getAnnotation(Test.class).description();
+    final String testName = String.format("Functional - OpportunitiesFiltersTest - %s", testDescription);
+    this.startUpBrowser(testName);
   }
 
   @AfterMethod
   public void tearDown() {
     PageFactory.initElements(driver, LogoutPage.class).goToPage();
-  }
-
-  @Test(description = "Filter Opportunities by Chain Retailer", dataProvider = "chainRetailersData")
-  public void filterByChainRetailer(TestUser user, String accountName, PremiseType premiseType) {
-    loginToOpportunitiesPage(user);
-
-    opportunitiesPage
-      .clickRetailerTypeDropdown()
-      .selectChainRetailerType()
-      .enterChainRetailerSearchText(accountName)
-      .clickSearchForChainRetailer()
-      .clickFirstChainRetailerResultContaining(accountName);
-
-    Assert.assertTrue(
-      opportunitiesPage.isPremiseFilterSelectedAs(premiseType),
-      "Premise Type filter failed to match premise type of selected Chain"
-    );
-    Assert.assertTrue(
-      opportunitiesPage.doesPremiseTypeChipMatch(premiseType),
-      "Premise Type chip failed to match premise type of selected Chain"
-    );
-    Assert.assertTrue(
-      opportunitiesPage.isQueryChipPresent(accountName),
-      "Query chip failed to appear for selected Chain"
-    );
-    Assert.assertTrue(opportunitiesPage.isChainSearchTextCleared(), "Chain searchbox failed to clear after selection");
-
-    opportunitiesPage.removeChipContaining(accountName);
-    Assert.assertFalse(
-      opportunitiesPage.isQueryChipPresent(accountName),
-      "Query chip failed to be removed for selected Chain"
-    );
-  }
-
-  @Test(description = "Filter Opportunities by Store Retailer", dataProvider = "storeRetailersData")
-  public void filterByStoreRetailer(TestUser user, String accountName, String accountAddress, PremiseType premiseType) {
-    loginToOpportunitiesPage(user);
-
-    opportunitiesPage
-      .clickRetailerTypeDropdown()
-      .selectStoreRetailerType()
-      .enterStoreRetailerSearchText(accountName)
-      .clickSearchForStoreRetailer()
-      .clickFirstStoreRetailerResultContaining(accountAddress);
-
-    Assert.assertTrue(
-      opportunitiesPage.isPremiseFilterSelectedAs(premiseType),
-      "Premise Type filter failed to match premise type of selected Store"
-    );
-    Assert.assertTrue(
-      opportunitiesPage.doesPremiseTypeChipMatch(premiseType),
-      "Premise Type chip failed to match premise type of selected Store"
-    );
-    Assert.assertTrue(
-      opportunitiesPage.isQueryChipPresent(accountAddress),
-      "Query chip failed to appear for selected Store"
-    );
-    Assert.assertTrue(opportunitiesPage.isStoreSearchTextCleared(), "Store searchbox failed to clear after selection");
-
-    opportunitiesPage.removeChipContaining(accountAddress);
-    Assert.assertFalse(
-      opportunitiesPage.isQueryChipPresent(accountAddress),
-      "Query chip failed to be removed for selected Store"
-    );
-  }
-
-  @Test(description = "Filter Opportunities by Distributor", dataProvider = "distributorsData")
-  public void filterByDistributor(TestUser user, String distributor) {
-    loginToOpportunitiesPage(user);
-
-    opportunitiesPage
-      .enterDistributorSearchText(distributor)
-      .clickSearchForDistributor()
-      .clickFirstDistributorResult();
-
-    Assert.assertTrue(
-      opportunitiesPage.isPremiseFilterSelectedAs(PremiseType.Off),
-      "Unexpected Premise Type filter default value"
-    );
-    Assert.assertTrue(
-      opportunitiesPage.doesPremiseTypeChipMatch(PremiseType.Off),
-      "Unexpected Premise Type chip default value"
-    );
-    Assert.assertTrue(
-      opportunitiesPage.isQueryChipPresent(distributor),
-      "Query chip failed to appear for selected Distributor"
-    );
-    Assert.assertTrue(
-      opportunitiesPage.isDistributorSearchTextCleared(),
-      "Distributor searchbox failed to clear after selection"
-    );
-
-    opportunitiesPage.removeChipContaining(distributor);
-    Assert.assertFalse(
-      opportunitiesPage.isQueryChipPresent(distributor),
-      "Query chip failed to be removed for selected Distributor"
-    );
+    this.shutDownBrowser();
   }
 
   @Test(description = "Account Scope filter chips", dataProvider = "accountScopeChipUserData")
@@ -232,29 +133,6 @@ public class OpportunitiesFiltersTest extends BaseTestCase {
         "\nFiltered count: " + filteredCountForOtherDistributor +
         "\nUnfiltered count: " + unfilteredCountForOtherDistributor
     );
-  }
-
-  @DataProvider
-  public static Object[][] chainRetailersData() {
-    return new Object[][]{
-      {TestUser.ACTOR4, "Buffalo Wild Wings", PremiseType.On},
-      {TestUser.ACTOR4, "Walgreens", PremiseType.Off}
-    };
-  }
-
-  @DataProvider
-  public static Object[][] storeRetailersData() {
-    return new Object[][]{
-      {TestUser.ACTOR4, "Walgreens", "2550 E 88th Ave", PremiseType.On},
-      {TestUser.ACTOR4, "Walgreens", "1350 Sportsman Way", PremiseType.Off}
-    };
-  }
-
-  @DataProvider
-  public static Object[][] distributorsData() {
-    return new Object[][]{
-      {TestUser.ACTOR4, "Healy Wholesale"}
-    };
   }
 
   @DataProvider

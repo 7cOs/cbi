@@ -76,6 +76,17 @@ class ListsPaginationComponentMock {
   @Output() pageChangeClick = new EventEmitter();
 }
 
+@Component({
+  selector: 'list-performance-summary',
+  template: ''
+})
+class ListPerformanceSummaryComponentMock {
+  @Input() depletionsTotal: number;
+  @Input() depletionsVsYA: number;
+  @Input() distributionsTotal: number;
+  @Input() distributionsVsYA: number;
+}
+
 describe('ListDetailComponent', () => {
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
@@ -138,7 +149,8 @@ describe('ListDetailComponent', () => {
         ListsHeaderComponentMock,
         ListOpportunitiesTableComponentMock,
         ListsPaginationComponentMock,
-        ListPerformanceTableComponentMock
+        ListPerformanceTableComponentMock,
+        ListPerformanceSummaryComponentMock
       ],
       providers: [
         CalculatorService,
