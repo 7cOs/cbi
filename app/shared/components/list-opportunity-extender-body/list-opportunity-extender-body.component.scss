@@ -2,7 +2,8 @@
 
 .inline {
   display: inline-block;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .opportunity-detail-row {
