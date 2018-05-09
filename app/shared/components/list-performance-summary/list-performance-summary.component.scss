@@ -1,0 +1,28 @@
+@import '../../../assets/styles/base/variables';
+
+.data-summary {
+  display: flex;
+
+  .depletions-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .distribution-section {
+    display: flex;
+    flex-direction: column;
+    margin-left: 40px;
+  }
+
+  .vsYa {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.8;
+  }
+
+  .total {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+}
