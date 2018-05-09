@@ -71,6 +71,7 @@ module.exports = /*  @ngInject */
           payload = {};
 
       if (p.archived) payload.archived = p.archived;
+      if (p.unarchived) payload.archived = false;
       if (p.deleted) payload.deleted = p.deleted;
       if (p.description) payload.description = p.description;
       if (p.name) payload.name = p.name;

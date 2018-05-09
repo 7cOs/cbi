@@ -61,6 +61,16 @@ export class ListsApiService {
     return this.createList(list).toPromise();
   }
 
+  public updateList(list: FormattedNewList, listsId: string): Observable<any> {
+    const url = `v3/lists/${ listsId }`;
+    return this.http.put(url, list)
+    .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+  }
+
+  public updateListPromise(list: FormattedNewList, listsId: string): Promise<any> {
+    return this.updateList(list, listsId).toPromise();
+  }
+
   public addOpportunitiesToList(listId: string, opportunities: {opportunityId: string}[]): Observable<ListOpportunityDTO[]> {
     const url = `/v3/lists/${ listId }/opportunities`;
 

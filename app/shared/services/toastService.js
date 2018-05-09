@@ -5,6 +5,8 @@ module.exports = /*  @ngInject */
 
     var model = {
       archived: false,
+      unarchived: false,
+      unarchivedNoAuthor: false,
       deleted: false,
       copied: false,
       added: false,
