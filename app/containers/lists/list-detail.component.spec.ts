@@ -287,5 +287,14 @@ describe('ListDetailComponent', () => {
       componentInstance.handleSortClicked();
       expect(componentInstance.sortClick.next).toHaveBeenCalled();
     });
+
+    it('should set the active tab and call pagination reset function when lists tab are clicked', () => {
+      componentInstance.activeTab = 'Performance';
+      spyOn(componentInstance.sortClick, 'next');
+      componentInstance.onTabClicked('Opportunities');
+      expect(componentInstance.selectedTab).toBe('Opportunities');
+      expect(componentInstance.activeTab).toBe('Opportunities');
+      expect(componentInstance.sortClick.next).toHaveBeenCalled();
+    });
   });
 });
