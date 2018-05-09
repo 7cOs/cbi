@@ -106,6 +106,8 @@ module.exports = /*  @ngInject */
       return toastService.model;
     }, (newWatchValues) => {
       vm.archived = newWatchValues.archived;
+      vm.unarchived = newWatchValues.unarchived;
+      vm.unarchivedNoAuthor = newWatchValues.unarchivedNoAuthor;
       vm.deleted = newWatchValues.deleted;
       vm.added = newWatchValues.added;
       vm.copied = newWatchValues.copied;
