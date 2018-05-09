@@ -41,10 +41,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
-  public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Effective POD', 'Last Depletion'];
+  public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
-  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depeletions', ' Opportunities', 'Last Depletion'];
+  public opportunitiesTableDataSize: number;
+  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
   public listTableSize: number = LIST_TABLE_SIZE;
@@ -57,6 +58,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     columnType: ListOpportunitiesColumnType.cytdColumn,
     ascending: false
   }];
+  public selectedTab: string = this.performanceTabTitle;
 
   private listDetailSubscription: Subscription;
 
@@ -118,6 +120,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
+          this.opportunitiesTableDataSize = this.opportunitiesTableData.length;
         }
       });
   }
@@ -146,6 +149,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public onTabClicked(tabName: string): void {
+    this.selectedTab = tabName;
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
     }

@@ -1,4 +1,4 @@
-import { PrimaryDistributor } from './lists.model';
+import { PrimaryDistributor } from './primary-distributor.model';
 
 export interface ListStoreDTO {
   address: string;

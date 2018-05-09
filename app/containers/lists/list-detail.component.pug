@@ -1,15 +1,3 @@
-compass-action-button(
-  [actionLabel]="actionButtonType.AddToList",
-  [isDisabled]="true",
-  (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
-compass-action-button.action-button-spacing(
-  [actionLabel]="actionButtonType.Download",
-  [isDisabled]="false",
-  (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
 lists-header(
   [summaryData]="listSummary",
   (manageButtonClicked)="handleManageButtonClick()",
@@ -23,6 +11,24 @@ compass-tabs(
     [tabTitle]='performanceTabTitle',
     [active]='true'
   )
+    section.list-performance-summary-section
+      list-performance-summary(
+        [depletionsTotal]="performanceTableTotal?.cytdColumn",
+        [depletionsVsYA]="performanceTableTotal?.cytdVersusYaPercentColumn",
+        [distributionsTotal]="performanceTableTotal?.l90Column",
+        [distributionsVsYA]="performanceTableTotal?.l90VersusYaPercentColumn"
+      )
+      div.button-section
+        compass-action-button(
+          [actionLabel]="actionButtonType.AddToList",
+          [isDisabled]="true",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Download",
+          [isDisabled]="false",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [sortingCriteria]="performanceSortingCriteria",
@@ -39,16 +45,16 @@ compass-tabs(
     )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Performance") && (performanceTableDataSize > listTableSize)',
+  *ngIf='(selectedTab === performanceTabTitle) && (performanceTableDataSize > listTableSize)',
   [tableDataSize]="performanceTableDataSize",
-  [tabName]='firstTabTitle',
+  [tabName]='performanceTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
 
 lists-pagination(
-  *ngIf='(selectedTab === "Opportunities") && (opportunitiesTableDataSize > listTableSize)',
+  *ngIf='(selectedTab === opportunitiesTabTitle) && (opportunitiesTableDataSize > listTableSize)',
   [tableDataSize]="opportunitiesTableDataSize",
-  [tabName]='secondTabTitle',
+  [tabName]='opportunitiesTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
 

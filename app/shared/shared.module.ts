@@ -25,6 +25,7 @@ import { ListOpportunityExtenderBodyComponent }
   from './components/list-opportunity-extender-body/list-opportunity-extender-body.component';
 import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
 import { CompassTabComponent } from './components/compass-tabs/tab/tab.component';
+import { CompassListClassUtilService } from '../services/compass-list-class-util.service';
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { CompassTabComponent } from './components/compass-tabs/tab/tab.component
   providers: [
     CompassModalService,
     CompassOverlayService,
-    CompassTooltipService
+    CompassTooltipService,
+    CompassListClassUtilService
   ],
   entryComponents: [
     CompassAlertModalComponent,

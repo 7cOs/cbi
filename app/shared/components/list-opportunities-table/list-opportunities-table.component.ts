@@ -222,7 +222,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       }, {
         isSelectAllChecked: true,
         isIndeterminateChecked: false
-    });
+      });
 
     if (selectAllCheckboxState.isSelectAllChecked) selectAllCheckboxState.isIndeterminateChecked = false;
 
