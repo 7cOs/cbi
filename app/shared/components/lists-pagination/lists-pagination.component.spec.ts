@@ -16,6 +16,7 @@ describe('ListsPaginationComponent', () => {
   let fixture: ComponentFixture<ListsPaginationComponent>;
   let componentInstance: ListsPaginationComponent;
   let componentInstanceCopy: any;
+  const sortSubject: Subject<Event> = new Subject<Event>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,15 +26,13 @@ describe('ListsPaginationComponent', () => {
       ],
       providers: []
     });
-
     fixture = TestBed.createComponent(ListsPaginationComponent);
-    const sortSubject: Subject<Event> = new Subject<Event>();
-    componentInstance.sortClick = sortSubject;
     componentInstance = fixture.componentInstance;
+    componentInstance.sortClick = sortSubject;
     componentInstanceCopy = componentInstance as any;
   });
 
-  fdescribe('ngOnInit', () => {
+  describe('ngOnInit', () => {
 
     beforeEach(() => {
       componentInstance.tableDataSize = 200;
@@ -48,16 +47,23 @@ describe('ListsPaginationComponent', () => {
       expect(componentInstance.getPageNumbers).toHaveBeenCalled();
     });
 
-    it('should check if subscribe is called', (done: any) => {
-      spyOn(componentInstance, 'pageChange');
+    it('should check if subscription', (done: any) => {
       componentInstance.ngOnInit();
-      spyOn(componentInstance.sortClick, 'subscribe');
-      fixture.detectChanges();
-      expect(componentInstance.sortClick.subscribe).toHaveBeenCalled();
+      componentInstance.sortClick.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      sortSubject.next();
+    });
+
+    it('should check if pageChange function is called', (done: any) => {
+      componentInstance.ngOnInit();
+      spyOn(componentInstance, 'pageChange');
       componentInstance.sortClick.subscribe(() => {
         expect(componentInstance.pageChange).toHaveBeenCalledWith(0);
         done();
       });
+      sortSubject.next();
     });
   });
 
