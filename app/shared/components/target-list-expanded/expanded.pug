@@ -52,7 +52,7 @@ div.expanded-target-lists
         .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
           loader
         div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.ownedNotArchivedTargetLists.length || expanded.userService.model.targetLists.ownedNotArchivedTargetLists.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunities
-          h4 It seems that you haven't created any Target Lists yet.
+          h4 It seems that you haven't created any Lists yet.
           p Click <a ng-click="expanded.createTargetList($event)">Create a New List</a> to get started.
         ul
           li(ng-repeat="list in expanded.userService.model.targetLists.ownedNotArchivedTargetLists | filter:{deleted:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
@@ -61,8 +61,8 @@ div.expanded-target-lists
             div.checkbox-sibling(column="12"
                                  ui-sref="list-detail({id: list.id})"
                                  analytics-event-on="click"
-                                 category="Target Lists - My Target Lists"
-                                 action="View Target List"
+                                 category="Lists - My Lists"
+                                 action="View List"
                                  label="{{list.id}}")
               div(row).stats
                 div(column="12")
@@ -176,7 +176,7 @@ div.expanded-target-lists
             div.checkbox-sibling.archived(column="12"
                                           ui-sref="list-detail({id: list.id})"
                                           analytics-event-on="click"
-                                          category="Target Lists - Archived"
+                                          category="Lists - Archived"
                                           action="View Target List"
                                           label="{{list.id}}")
               div(row)

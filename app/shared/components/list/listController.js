@@ -337,8 +337,8 @@ module.exports = /*  @ngInject */
       listsApiService.createListPromise(formattedList)
         .then(response => {
           analyticsService.trackEvent(
-            'Target Lists - My Target Lists',
-            'Create Target List',
+            'Lists - My Lists',
+            'Create List',
             response.id
           );
 

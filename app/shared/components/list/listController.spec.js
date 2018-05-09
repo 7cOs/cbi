@@ -1022,8 +1022,8 @@ describe('Unit: list controller', function() {
 
       expect(listsApiService.createListPromise).toHaveBeenCalled();
       expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        'Target Lists - My Target Lists',
-        'Create Target List',
+        'Lists - My Lists',
+        'Create List',
         createListResponseMockId
       );
     });

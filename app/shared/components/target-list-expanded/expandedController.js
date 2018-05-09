@@ -100,8 +100,8 @@ module.exports = /*  @ngInject */
       archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
         analyticsService.trackEvent(
           targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
-          'Archive Target List',
-          targetList.id
+          'Archive List',
+          'Selected List'
         );
         return targetListService.updateTargetList(targetList.id, {archived: true});
       });
@@ -176,8 +176,8 @@ module.exports = /*  @ngInject */
         deleteTargetListPromises = selectedItems.map(function(targetList) {
           analyticsService.trackEvent(
             targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
-            'Delete Target List',
-            targetList.id
+            'Delete List',
+            'Selected List'
           );
 
           return targetListService.deleteTargetList(targetList.id);
@@ -223,7 +223,7 @@ module.exports = /*  @ngInject */
         closeModal();
         vm.buttonDisabled = false;
 
-        analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', v3List.id);
+        analyticsService.trackEvent('Lists - My Lists', 'Create List', v3List.id);
 
         // reset model
         vm.newList = {

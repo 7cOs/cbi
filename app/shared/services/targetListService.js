@@ -381,10 +381,10 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getAnalyticsCategory(listPermissionLevel, listIsArchived) {
-      return `Target Lists - ${listIsArchived
+      return `Lists - ${listIsArchived
         ? 'Archived'
         : listPermissionLevel === 'author'
-          ? 'My Target Lists'
+          ? 'My Lists'
           : 'Shared With Me'}`;
     }
 
