@@ -276,4 +276,13 @@ describe('ListPerformanceTableComponent', () => {
       expect(componentInstance.isIndeterminateChecked).toEqual(false);
     });
   });
+
+  describe('when pageChange Data input is received', () => {
+    it('should set page start, page end', () => {
+      componentInstance.peformanceTableData = getListPerformanceTableRowMock(300);
+      componentInstance.handlePageChangeClicked({pageStart: 80, pageEnd: 100});
+      expect(componentInstance.sliceStart).toBe(80);
+      expect(componentInstance.sliceEnd).toBe(100);
+    });
+  });
 });

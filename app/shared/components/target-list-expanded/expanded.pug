@@ -60,7 +60,7 @@ div.expanded-target-lists
             div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(list, expanded.selected)")
               md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
             div.checkbox-sibling(column="12"
-                                 ui-sref="target-list-detail({id: list.id})"
+                                 ui-sref="list-detail({id: list.id})"
                                  analytics-event-on="click"
                                  category="Target Lists - My Target Lists"
                                  action="View Target List"
@@ -69,8 +69,8 @@ div.expanded-target-lists
                 div(column="12")
                   h4(column="6").left {{list.name}}
                   h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
-                    span(ng-if="list.collaborators.length > 1")  collaborators
-                    span(ng-if="list.collaborators.length < 2")  collaborator
+                    span(ng-if="list.collaborators.length > 1 || !list.collaborators.length")  collaborators
+                    span(ng-if="list.collaborators.length === 1")  collaborator
                     ul(ng-class="{'long-collaborators': list.collaborators.length > 4}").dropdown-menu
                       li(ng-class="{'long-collaborators': list.collaborators.length > 4}").member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
                       li(ng-class="{'long-collaborators': list.collaborators.length > 4}" ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'").member {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
@@ -117,7 +117,7 @@ div.expanded-target-lists
         ul
           li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
             div.target-list-element(column="12"
-                                    ui-sref="target-list-detail({id: list.id})"
+                                    ui-sref="list-detail({id: list.id})"
                                     analytics-event-on="click"
                                     category="Opportunities"
                                     action="View Target List"
@@ -175,7 +175,7 @@ div.expanded-target-lists
             div.checkbox-wrapper(ng-click="expanded.toggle(list, expanded.selected)")
               md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
             div.checkbox-sibling.archived(column="12"
-                                          ui-sref="target-list-detail({id: list.id})"
+                                          ui-sref="list-detail({id: list.id})"
                                           analytics-event-on="click"
                                           category="Target Lists - Archived"
                                           action="View Target List"

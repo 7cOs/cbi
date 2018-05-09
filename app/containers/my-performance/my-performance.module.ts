@@ -18,6 +18,7 @@ import { ProductMetricsTransformerService } from  '../../services/transformers/p
 import { ResponsibilitiesTransformerService } from  '../../services/transformers/responsibilities-transformer.service';
 import { ResponsibilitiesService } from  '../../services/responsibilities.service';
 import { SharedModule } from '../../shared/shared.module';
+import { StoresApiService } from '../../services/api/v3/stores-api.service';
 import { SubAccountsApiService } from '../../services/api/v3/sub-accounts-api.service';
 import { TeamPerformanceOpportunitiesComponent }
   from '../../shared/components/team-performance-opportunities/team-performance-opportunities.component';
@@ -49,6 +50,7 @@ import { WindowService } from '../../services/window.service';
     ProductMetricsTransformerService,
     ResponsibilitiesService,
     ResponsibilitiesTransformerService,
+    StoresApiService,
     SubAccountsApiService,
     Title,
     V3ApiHelperService,

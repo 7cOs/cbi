@@ -1,0 +1,62 @@
+beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
+
+div
+
+  table.list-opportunities-table
+
+    thead
+
+      tr.top-header
+        th.checkbox-col(colspan=1)
+          mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
+          [checked]="isSelectAllChecked",
+          (change)="toggleSelectAllStores($event)",
+          [(indeterminate)]="isIndeterminateChecked",
+          [disableRipple]="true")
+        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.storeColumn)")
+          span {{ tableHeaderRow[0] }}
+            sort-indicator([status]="getSortStatus(columnType.storeColumn)")
+        th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.distributorColumn)")
+          span {{ tableHeaderRow[1] }}
+            sort-indicator([status]="getSortStatus(columnType.distributorColumn)")
+        th.segment-col.sort-indicator(colspan=1, (click)="sortRows(columnType.segmentColumn)")
+          span {{ tableHeaderRow[2] }}
+            sort-indicator([status]="getSortStatus(columnType.segmentColumn)")
+        th(colspan=2)
+          span {{ tableHeaderRow[3] }}
+        th.right-col.sort-indicator(colspan=1, (click)="sortRows(columnType.opportunitiesColumn)")
+          span {{ tableHeaderRow[4] }}
+            sort-indicator([status]="getSortStatus(columnType.opportunitiesColumn)")
+        th.checkbox-col.link.expand-all-column(colspan=1, (click)="onExpandAllClicked()")
+          img.expand-icon(*ngIf="!isExpandAll", src="../../../assets/img/icons/add-expand-collapse.svg")
+          img.expand-icon(*ngIf="isExpandAll", src="../../../assets/img/icons/minus.svg")
+
+      tr.sub-header
+        th(colspan=1)
+        th(colspan=1)
+        th(colspan=1)
+        th(colspan=1)
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytdColumn)")
+          span CYTD
+            sort-indicator([status]='getSortStatus(columnType.cytdColumn)')
+        th.center-col.sort-indicator(colspan=1, (click)="sortRows(columnType.cytdVersusYaPercentColumn)")
+          span VS YA %
+            sort-indicator([status]='getSortStatus(columnType.cytdVersusYaPercentColumn)')
+        th.right-col(colspan=1)
+        th.checkbox-col(colspan=1)
+
+    tbody(*ngFor="let row of sortedTableData | slice:sliceStart:sliceEnd, let rowIndex = index")
+      tr.entity-row(
+        list-opportunities-table-row,
+        [rowData]="row",
+        (click)="onRowClicked(rowType.data, rowIndex, row)",
+        (onChangeEventEmitter)="onCheckboxChange(row)",
+        (onTableRowClicked)="onTableRowClicked(row)"
+      )
+      tr.table-drawer-row(*ngIf="row.expanded")
+        td.table-drawer-cell(colspan=9)
+          list-table-drawer(
+            [tableData]="row.opportunities",
+            (onCheckboxClicked)="onOpportunityCheckboxClicked(row)",
+            (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row)"
+          )

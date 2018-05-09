@@ -36,22 +36,14 @@ module.exports = /*  @ngInject */
     vm.l90DateRange = DateRangeTimePeriod.L90BDL;
     vm.savedReportsOpen = false;
 
-    vm.reportLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=68EAC36211E80AA173FA0080EF351071&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=1';
-    vm.newOpportunityLink = 'https://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?evt=3186&src=mstrWeb.3186&subscriptionID=20066AEA11E81D6411150080EF9592AF&Server=CBIGDC-PMSTK802&Project=Beer%20Analytics&Port=0&share=';
-    vm.tooltip = {
-      title: 'Premier "Fast Start" Dashboards',
-      descriptions: [
-        'Incentive Tracking',
-        'Use this to get an at-a-glance view of whether your BU is meeting the incentive targets.',
-        'GM/MDM Opportunities',
-        'Use this to see Premier 2018 distribution vs CL in 2017 at the GM and MDM levels.  Also use this to see where we have any CBI placements, but no Premier or where Premier has already been sold in.  Opportunities can be exported (see job aid) and used as a starting point for building a List in Compass.'],
-      position: 'below'
-    };
+    vm.offPremiseLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3140&src=mstrWeb.3140&documentID=26B10CE111E83F2B6DCB0080EF35C448&Server=CBIGDC-PMSTK801&Project=Beer%20Analytics&Port=0&share=1';
+    vm.onPremiseLink = 'http://iqweb.cbrands.com:80/MicroStrategy/servlet/mstrWeb?evt=3140&src=mstrWeb.3140&documentID=3CBD85BA11E83F3300000080EFF52A6E&Server=CBIGDC-PMSTK801&Project=Beer%20Analytics&Port=0&share=1';
+    vm.seBULink = 'http://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?evt=3140&src=mstrWeb.3140&documentID=5963EF3511E839BF839E0080EF75A4F5&Server=CBIGDC-PMSTK801&Project=Beer%20Analytics&Port=0&share=1';
+    vm.otherBULink = 'http://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?evt=3140&src=mstrWeb.3140&documentID=C09BCE9711E70FE151AE0080EF659C93&Server=CBIGDC-PMSTK801&Project=Beer%20Analytics&Port=0&share=1';
+
     vm.salesCompassCard = {
       image: 'product',
-      title: 'Sales Priority Spotlight',
-      mainActionName: 'GET MORE INFORMATION',
-      webPage: 'https://constel1.sharepoint.com/sites/goldnetwork/SitePages/General%20Information.aspx?RootFolder=%2Fsites%2Fgoldnetwork%2FGeneral%20Information%20Documents%2FCorona%20Premier%20Fast%20Start&FolderCTID=0x0120009A7F0B58AFC54C4F9822FBDA90FBAB61&View=%7BC8268790-72D5-453C-B2FB-27A6DFC93F7C%7D'
+      title: 'Sales Priority Spotlight'
     };
     vm.enhancementCompassCard = {
       image: 'tool',

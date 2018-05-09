@@ -8,6 +8,8 @@ import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { MatCheckboxChange } from '@angular/material';
+import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
+import { PageChangeData } from '../../../containers/lists/list-detail.component';
 
 @Component({
   selector: 'list-performance-table',
@@ -25,12 +27,20 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
 
   @Input()
   set tableData(tableData: Array<ListPerformanceTableRow>) {
+    this.peformanceTableData = this.tableData;
     if (tableData) {
       const sortedTableData: Array<ListPerformanceTableRow> = typeof this.sortingFunction === 'function'
         ? tableData.sort(this.sortingFunction)
         : tableData;
-        this.sortedTableData = sortedTableData;
-        this.numSelectedRows = this.sortedTableData.length;
+      this.sortedTableData = sortedTableData;
+      this.numSelectedRows = this.sortedTableData.length;
+    }
+  }
+
+  @Input()
+  set pageChangeData(pageChangeData: PageChangeData) {
+    if (pageChangeData) {
+      this.handlePageChangeClicked(pageChangeData);
     }
   }
 
@@ -47,6 +57,9 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
+  public peformanceTableData: Array<ListPerformanceTableRow>;
+  public sliceStart: number = 0;
+  public sliceEnd: number = LIST_TABLE_SIZE;
 
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
@@ -63,6 +76,13 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public ngOnChanges(changes: SimpleChanges) {
     const loadingState = changes.loadingState ? changes.loadingState.currentValue : this.loadingState;
     this.tableClasses = this.getTableClasses(loadingState);
+  }
+
+  public handlePageChangeClicked(data: PageChangeData) {
+    if (this.peformanceTableData) {
+      this.sliceStart = data.pageStart;
+      this.sliceEnd = data.pageEnd;
+    }
   }
 
   public onCheckboxChange(row: ListPerformanceTableRow): void {
@@ -108,7 +128,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   }
 
   public onRowClicked(type: RowType, index: number, row?: ListPerformanceTableRow) {
-      this.onElementClicked.emit({type: type, index: index, row: row});
+    this.onElementClicked.emit({type: type, index: index, row: row});
   }
 
   public toggleSelectAllStores(event: MatCheckboxChange): void {

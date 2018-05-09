@@ -120,7 +120,9 @@ export class OpportunitiesSearchHandoffService {
   }
 
   public setDistributorChipsAndFilters(name: string, distributorCode: string, type: string, premiseType: string): void {
-      this.filtersService.model.selected.distributor = [distributorCode];
+      this.filtersService.model.selected.distributor = [
+        { id: distributorCode }
+      ];
       this.chipsService.applyFilterArr(
         [],
         {

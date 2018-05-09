@@ -346,7 +346,7 @@ describe('Service: OpportunitiesSearchHandoffService', () => {
         'distributor',
         premiseTypeString
       );
-      expect(serviceCopy.filtersService.model.selected.distributor).toEqual([distributorCode]);
+      expect(serviceCopy.filtersService.model.selected.distributor).toEqual([{id: distributorCode}]);
       expect(serviceCopy.chipsService.applyFilterArr).toHaveBeenCalledWith(
           [],
           {

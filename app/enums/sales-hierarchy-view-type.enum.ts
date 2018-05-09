@@ -3,5 +3,6 @@ export enum SalesHierarchyViewType {
   people = 'people',
   distributors = 'distributors',
   accounts = 'accounts',
-  subAccounts = 'subAccounts'
+  subAccounts = 'subAccounts',
+  stores = 'stores'
 }

@@ -1,0 +1,39 @@
+td.checkbox-col(colspan=1)
+  mat-checkbox(
+    *ngIf="rowData.storeColumn != 'Total'",
+    aria-label="Select Store",
+    [checked]='rowData.checked',
+    [disableRipple]="true",
+    (change)="toggleChecked($event)"
+  )
+
+td.left-col.link(colspan=1, (click)="tableCellClicked()")
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0.store-name
+        span {{ rowData.storeColumn | titlecase }}
+      div.description-line-1
+        span.description-line-1 {{rowData.storeAddressSubline}}
+
+td.left-col.link(colspan=1, (click)="tableCellClicked()")
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0
+        span.description-line-0 {{rowData.distributorColumn}}
+
+td.segment-col.link(colspan=1, (click)="tableCellClicked()")
+  div.left-col-content
+    div.left-col-text-content
+      div.description-line-0
+        span {{rowData.segmentColumn}}
+
+td.center-col.table-font.link(colspan=1, (click)="tableCellClicked()") {{rowData.cytdColumn | number}}
+
+td.center-col.link(colspan=1, (click)="tableCellClicked()")
+  span.table-font([ngClass]="getTrendClass(rowData.cytdVersusYaPercentColumn)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
+
+td.right-col.table-font.link(colspan=1, (click)="tableCellClicked()") {{rowData.opportunitiesColumn | number}}
+
+td.expand-col.link(colspan=1, (click)="tableCellClicked()")
+  img.expand-icon(*ngIf="rowData.expanded", src="../../../assets/img/icons/minus.svg")
+  img.expand-icon(*ngIf="!rowData.expanded", src="../../../assets/img/icons/add-expand-collapse.svg")

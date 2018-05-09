@@ -5,7 +5,7 @@ import { CalculatorService } from '../calculator.service';
 import { OpportunitiesGroupedByBrandSkuPackageCode, OpportunitiesGroupedBySkuPackageCode } from '../../models/opportunity-count.model';
 import { OpportunityCount } from '../../models/opportunity-count.model';
 import { OpportunityCountDTO } from '../../models/opportunity-count-dto.model';
-import { OpportunityTypeLabel } from '../../enums/opportunity.enum';
+import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { ProductMetricsDTO, ProductMetricsValuesDTO } from '../../models/product-metrics.model';
 import { ProductMetrics, ProductMetricsValues } from '../../models/product-metrics.model';
 
