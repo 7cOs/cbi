@@ -19,11 +19,6 @@ interface OpportunitiesTableSelectAllCheckboxState {
   isIndeterminateChecked: boolean;
 }
 
-interface OpportunitiesTableSelectAllCheckboxState {
-  isSelectAllChecked: boolean;
-  isIndeterminateChecked: boolean;
-}
-
 @Component({
   selector: 'list-opportunities-table',
   template: require('./list-opportunities-table.component.pug'),
