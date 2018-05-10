@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { CssClasses } from '../../../models/css-classes.model';
@@ -12,6 +12,8 @@ import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
 import { PageChangeData } from '../../../containers/lists/list-detail.component';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 export interface OpportunitiesTableSelectAllCheckboxState {
   isSelectAllChecked: boolean;
@@ -23,12 +25,15 @@ export interface OpportunitiesTableSelectAllCheckboxState {
   template: require('./list-opportunities-table.component.pug'),
   styles: [ require('./list-opportunities-table.component.scss') ]
 })
-export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
+export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDestroy  {
+  @Input() sortReset: Subject<Event>;
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListOpportunitiesTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
+  @Output() paginationReset = new EventEmitter<any>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
+    this.defaultSortCriteria = criteria;
     this.applySortingCriteria(criteria);
   }
 
@@ -79,6 +84,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   public opportunitiesTableData: Array<ListOpportunitiesTableRow>;
 
   private isOpportunityTableExtended: boolean = false;
+  private defaultSortCriteria: Array<SortingCriteria>;
   private numberOfRows: number = 0;
   private numExpandedRows: number = 0;
   private sortingFunction: (elem0: ListOpportunitiesTableRow, elem1: ListOpportunitiesTableRow) => number;
@@ -87,10 +93,21 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
     ascending: false
   }];
 
+  private sortResetSubscription: Subscription;
+
   constructor (private calculatorService: CalculatorService) { }
 
   public ngOnInit() {
     this.tableClasses = this.getTableClasses(this.loadingState);
+    this.sortResetSubscription = this.sortReset.subscribe(() => {
+      this.applySortingCriteria(this.defaultSortCriteria);
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.sortResetSubscription) {
+      this.sortResetSubscription.unsubscribe();
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -259,5 +276,6 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
       const sortedData: Array<ListOpportunitiesTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
+    this.paginationReset.emit();
   }
 }

@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { Subject } from 'rxjs/Subject';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { getListOpportunitiesTableRowMock } from '../../../models/list-opportunities/list-opportunities-table-row.model.mock';
@@ -74,8 +75,10 @@ class ListTableDrawerComponentMock {
 describe('ListOpportunitiesTableComponent', () => {
   let fixture: ComponentFixture<ListOpportunitiesTableComponent>;
   let componentInstance: ListOpportunitiesTableComponent;
+  let componentInstanceCopy: any;
   const tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
   let opportunitiesTableData: ListOpportunitiesTableRow[];
+  const sortResetSubject: Subject<Event> = new Subject<Event>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -106,8 +109,31 @@ describe('ListOpportunitiesTableComponent', () => {
     componentInstance.tableHeaderRow = tableHeaderRow;
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
     componentInstance.tableData = opportunitiesTableData;
+    componentInstance.sortReset = sortResetSubject;
+    componentInstanceCopy = componentInstance as any;
 
     fixture.detectChanges();
+  });
+
+  describe('ngOnInit', () => {
+    it('should check if subscription for sortReset', (done: any) => {
+      componentInstance.ngOnInit();
+      componentInstance.sortReset.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      sortResetSubject.next();
+    });
+
+    it('should check if sortReset function is called', (done: any) => {
+      componentInstance.ngOnInit();
+      spyOn(componentInstanceCopy, 'applySortingCriteria');
+      componentInstance.sortReset.subscribe(() => {
+        expect(componentInstanceCopy.applySortingCriteria).toHaveBeenCalled();
+        done();
+      });
+      sortResetSubject.next();
+    });
   });
 
   describe('setSortingcriteria', () => {
