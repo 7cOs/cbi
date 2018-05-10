@@ -2,7 +2,6 @@ import { FormattedNewList } from '../models/lists/formatted-new-list.model';
 import { getFormattedNewList, getListsCollectionSummaryMock, getV2ListMock } from '../models/lists/lists.model.mock';
 import { ListsCollectionSummary } from '../models/lists/lists-collection-summary.model';
 import { V2List } from '../models/lists/v2-list.model';
-import { V3List } from '../models/lists/v3-list.model';
 
 export const listsTransformerServiceMock = {
   formatNewList: formatNewList,
