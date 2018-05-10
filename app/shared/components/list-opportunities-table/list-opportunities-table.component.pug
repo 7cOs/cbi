@@ -61,8 +61,8 @@ div
             (onCheckboxClicked)="onOpportunityCheckboxClicked(row)",
             (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row)"
           )
-    div.no-data-cover(*ngIf="isOppsTableDataEmpty()")
-      div.no-data-container
-        img.no-data-icon(src="../../../assets/img/icons/group.svg")
-        p.no-data-cover-message(*ngIf="oppStatusSelected !== 'closed'") You currently don't have any opportunities added to this list.
-        p.no-data-cover-message(*ngIf="oppStatusSelected === 'closed'") You currently don't have any closed opportunities.
+div.no-data-cover(*ngIf="isOppsTableDataEmpty()")
+  div.no-data-container
+    img.no-data-icon(src="../../../assets/img/icons/group.svg")
+    p.no-data-cover-message(*ngIf="oppStatusSelected !== 'closed'") You currently don't have any opportunities added to this list.
+    p.no-data-cover-message(*ngIf="oppStatusSelected === 'closed'") You currently don't have any closed opportunities.
