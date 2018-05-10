@@ -31,6 +31,7 @@ import { DismissibleXComponent } from './components/dismissible-x/dismissible-x.
 import { SortIndicatorComponent } from './components/sort-indicator/sort-indicator.component';
 import { CompassTabComponent } from './components/compass-tabs/tab/tab.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CompassListClassUtilService } from '../services/compass-list-class-util.service';
 import { CompassUserSearchComponent } from './components/compass-user-search/compass-user-search.component';
 
 @NgModule({
@@ -89,7 +90,8 @@ import { CompassUserSearchComponent } from './components/compass-user-search/com
   providers: [
     CompassModalService,
     CompassOverlayService,
-    CompassTooltipService
+    CompassTooltipService,
+    CompassListClassUtilService
   ],
   entryComponents: [
     CompassAlertModalComponent,

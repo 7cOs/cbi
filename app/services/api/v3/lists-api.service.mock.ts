@@ -10,7 +10,9 @@ export const listApiServiceMock = {
   getLists: getLists,
   getListsPromise: getListsPromise,
   createListPromise: createListPromise,
-  addOpportunitiesToListPromise: addOpportunitiesToListPromise
+  addOpportunitiesToListPromise: addOpportunitiesToListPromise,
+  updateListPromise: updateListPromise,
+  updateList: updateList
 };
 
 function getLists(): Observable<V3List[]> {
@@ -20,6 +22,14 @@ function getLists(): Observable<V3List[]> {
 
 function getListsPromise(): Promise<V3List[]> {
   return getLists().toPromise();
+}
+
+function updateList(): Observable<any> {
+  return Observable.of({});
+}
+
+function updateListPromise(): Promise<V3List[]> {
+  return updateList().toPromise();
 }
 
 function addOpportunitiesToList(...args: any[]): Observable<any> {

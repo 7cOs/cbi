@@ -191,9 +191,9 @@ export class ListsTransformerService {
       yearAgoDepletions_CYTD: listOpportunity.yearAgoDepletions_CYTD,
       lastDepletionDate: listOpportunity.lastDepletionDate,
       unversionedStoreId: listOpportunity.storeSourceCode,
-      type: OpportunityType[listOpportunity.type],
-      status: OpportunityStatus[listOpportunity.status],
-      impact: OpportunityImpact[listOpportunity.impact],
+      type: OpportunityType[listOpportunity.type] || listOpportunity.type,
+      status: OpportunityStatus[listOpportunity.status] || listOpportunity.status,
+      impact: OpportunityImpact[listOpportunity.impact] || listOpportunity.impact,
       isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity
     };
   }
