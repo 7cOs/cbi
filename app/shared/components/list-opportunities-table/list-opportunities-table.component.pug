@@ -29,7 +29,7 @@ div
           span {{ tableHeaderRow[4] }}
             sort-indicator([status]="getSortStatus(columnType.opportunitiesColumn)")
         th.checkbox-col.link.expand-all-column(colspan=1, (click)="onExpandAllClicked()")
-          img.expand-icon(*ngIf="!isExpandAll", src="../../../assets/img/icons/add-expand-collapse.svg", [hidden]="isOppsTableDataEmpty()")
+          img.expand-icon(*ngIf="!isExpandAll && !isOppsTableDataEmpty()", src="../../../assets/img/icons/add-expand-collapse.svg")
           img.expand-icon(*ngIf="isExpandAll", src="../../../assets/img/icons/minus.svg")
 
       tr.sub-header

@@ -206,7 +206,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges  {
   }
 
   public isOppsTableDataEmpty(): boolean {
-    return this.sortedTableData && this.sortedTableData.length === 0;
+    return this.sortedTableData && !this.sortedTableData.length;
   }
 
   private getSelectAllCheckboxState(tableData: ListOpportunitiesTableRow[]): OpportunitiesTableSelectAllCheckboxState {

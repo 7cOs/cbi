@@ -301,7 +301,7 @@ describe('ListDetailComponent', () => {
     });
   });
 
-  describe('Compass Select dropdown changes', () => {
+  describe('When the opportunity status filter is changed', () => {
 
     it('should trigger opportunityStatusSelected method when Opportunity status dropdown emits an event', () => {
       const mockSelectComponents = fixture.debugElement.queryAll(By.directive(CompassSelectComponent));
@@ -337,45 +337,32 @@ describe('ListDetailComponent', () => {
       expect(componentInstance.filterOpportunitiesByStatus(OpportunityStatus.closed, opportunitiesTableData)).toEqual([]);
     });
 
-    it('Should return stores count to be 1 when there is only one store with closed opps and opportunity status is closed', () => {
-      let expectedOpps: ListOpportunitiesTableRow[];
-      opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow, storeIndex: number) => {
-        const totalOpps = tableRow.opportunities.length;
-        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow, oppIndex: number) => {
-          if (storeIndex <= 1)
-            oppRow.status = oppIndex < totalOpps / 2 ? OpportunityStatus.targeted : OpportunityStatus.inactive;
-          else
-            oppRow.status = oppIndex < totalOpps / 2 ? OpportunityStatus.targeted : OpportunityStatus.closed;
+    it('Should return stores with closed opps and opportunity status is closed', () => {
+      const expectedOpps: ListOpportunitiesTableRow[] = componentInstance.filterOpportunitiesByStatus(
+        OpportunityStatus.closed,
+        opportunitiesTableData
+      );
+
+      fixture.detectChanges();
+      expectedOpps.forEach((tableRow: ListOpportunitiesTableRow) => {
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
+          expect(oppRow.status).toEqual(OpportunityStatus.closed);
         });
       });
-      fixture.detectChanges();
-      expectedOpps = JSON.parse(JSON.stringify(opportunitiesTableData));
-      expectedOpps[2].opportunities = expectedOpps[2].opportunities.filter(
-        (opp: ListTableDrawerRow) =>  opp.status === OpportunityStatus.closed
-      );
-      expectedOpps[2].opportunitiesColumn = expectedOpps[2].opportunities.length;
-      fixture.detectChanges();
-
-      expect(componentInstance.filterOpportunitiesByStatus(OpportunityStatus.closed, opportunitiesTableData).length).toEqual(1);
-      expect(componentInstance.filterOpportunitiesByStatus(OpportunityStatus.closed, opportunitiesTableData)).toEqual([expectedOpps[2]]);
     });
 
-    it('Should return stores count to be 2 when there are 2 stores with one only inactive and other both', () => {
-      opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow, storeIndex: number) => {
-        const totalOpps = tableRow.opportunities.length;
-        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow, oppIndex: number) => {
-          if (storeIndex === 0)
-            oppRow.status = oppIndex < totalOpps / 2 ? OpportunityStatus.targeted : OpportunityStatus.inactive;
-          else if (storeIndex === 1)
-            oppRow.status = OpportunityStatus.inactive;
-          else if (storeIndex === 2)
-          oppRow.status = OpportunityStatus.closed;
-        });
-      });
+    it('Should return stores that have opps as either targeted or inactive when filter is targeted', () => {
+      const expectedOpps: ListOpportunitiesTableRow[] = componentInstance.filterOpportunitiesByStatus(
+        OpportunityStatus.targeted,
+        opportunitiesTableData
+      );
 
       fixture.detectChanges();
-
-      expect(componentInstance.filterOpportunitiesByStatus(OpportunityStatus.targeted, opportunitiesTableData).length).toEqual(2);
+      expectedOpps.forEach((tableRow: ListOpportunitiesTableRow) => {
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
+          expect( oppRow.status === OpportunityStatus.targeted || oppRow.status === OpportunityStatus.inactive).toBe(true);
+        });
+      });
     });
   });
 });
