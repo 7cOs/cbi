@@ -12,7 +12,9 @@ import {
   getOpportunityNotificationMock,
   getStoreNotificationMock,
   getAccountNotificationMock,
-  getDistributorNotificationMock
+  getDistributorNotificationMock,
+  getListAddCollaboratorNotificationMock,
+  getListTransferOwnershipNotificationMock
 } from '../../../models/notification.model.mock';
 
 describe('NotificationsComponent', () => {
@@ -138,7 +140,9 @@ describe('NotificationsComponent', () => {
         getTargetListNotificationNotificationMock(),
         getAccountNotificationMock(),
         getStoreNotificationMock(),
-        getDistributorNotificationMock()
+        getDistributorNotificationMock(),
+        getListAddCollaboratorNotificationMock(),
+        getListTransferOwnershipNotificationMock()
       ];
       component.notifications = notificationsMock;
 
@@ -175,6 +179,20 @@ describe('NotificationsComponent', () => {
         'Navigation',
         'Read Note Notifications',
         notificationsMock[4].salesforceUserNoteID
+      ]);
+
+      component.clickOn(notificationsMock[5]);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(5)).toEqual([
+        'Navigation',
+        'Read Target List Notifications',
+        notificationsMock[5].objectId
+      ]);
+
+      component.clickOn(notificationsMock[6]);
+      expect(analyticsServiceMock.trackEvent.calls.argsFor(6)).toEqual([
+        'Navigation',
+        'Read Target List Notifications',
+        notificationsMock[6].objectId
       ]);
     }));
 

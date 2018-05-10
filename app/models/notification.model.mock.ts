@@ -26,6 +26,53 @@ export function getTargetListNotificationNotificationMock(): any {
     status: 'SEEN'
   };
 }
+export function getListAddCollaboratorNotificationMock(): any {
+  return {
+    dateCreated: moment(),
+    dateUpdated: moment(),
+    id: chance.string(),
+    objectType: 'LIST',
+    objectId: chance.string(),
+    action: 'LIST_COLLABORATOR_ADDED',
+    salesforceUserNoteID: null,
+    creator: {
+      id: chance.string(),
+      firstName: chance.string(),
+      lastName: chance.string(),
+      email: chance.string()
+    },
+    shortenedObject: {
+      id: chance.string(),
+      name: chance.string(),
+      valid: chance.bool()
+    },
+    status: 'SEEN'
+  };
+}
+
+export function getListTransferOwnershipNotificationMock(): any {
+  return {
+    dateCreated: moment(),
+    dateUpdated: moment(),
+    id: chance.string(),
+    objectType: 'LIST',
+    objectId: chance.string(),
+    action: 'LIST_OWNER_CHANGED',
+    salesforceUserNoteID: null,
+    creator: {
+      id: chance.string(),
+      firstName: chance.string(),
+      lastName: chance.string(),
+      email: chance.string()
+    },
+    shortenedObject: {
+      id: chance.string(),
+      name: chance.string(),
+      valid: chance.bool()
+    },
+    status: 'SEEN'
+  };
+}
 
 export function getOpportunityNotificationMock(): any {
   return {
