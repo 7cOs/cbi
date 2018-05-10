@@ -272,7 +272,7 @@ module.exports = /*  @ngInject */
       const formattedList = listsTransformerService.formatNewList(vm.newList);
       listsApiService.createListPromise(formattedList)
         .then(v3List => {
-          let newList = listsTransformerService.transformV3ToV2(v3List, true);
+          const newList = listsTransformerService.transformV3ToV2(v3List, true);
           userService.model.targetLists.ownedNotArchivedTargetLists.unshift(newList);
           userService.model.targetLists.ownedNotArchived++;
 
