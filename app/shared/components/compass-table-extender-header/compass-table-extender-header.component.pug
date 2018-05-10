@@ -1,0 +1,10 @@
+section.opportunities-component-section
+  .opportunities-header
+    .header-summary
+      .header-title {{ mainTitle }}
+        compass-tooltip.header-tooltip(*ngIf='tooltip', [title]= "tooltip.title", [text]="tooltip.text")
+          img(src="../../../assets/img/icons/help-circle.svg")
+      .header-sub-title {{ subtitle }}
+    .close-indicator-container
+      img.close-indicator(src="../../../assets/img/icons/thin-x.svg", (click)="onCloseIndicatorClicked.emit()")
+  ng-content

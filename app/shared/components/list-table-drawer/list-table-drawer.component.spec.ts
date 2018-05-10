@@ -91,8 +91,8 @@ describe('ListTableDrawerComponent', () => {
 
     describe('when the row opportunity type is clicked', () => {
       it('should emit an onOpportunityTypeClicked event containing the clicked row', (done) => {
-        componentInstance.onOpportunityTypeClicked.subscribe((event: ListTableDrawerRow) => {
-          expect(event).toEqual(componentInstance.sortedTableData[0]);
+        componentInstance.onOpportunityTypeClicked.subscribe((event: string) => {
+          expect(event).toEqual(componentInstance.sortedTableData[0].id);
           done();
         });
 

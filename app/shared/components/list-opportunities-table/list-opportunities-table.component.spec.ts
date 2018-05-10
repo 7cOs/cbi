@@ -1,4 +1,5 @@
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
@@ -12,6 +13,7 @@ import { ListOpportunitiesTableComponent } from './list-opportunities-table.comp
 import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { MatCheckboxModule } from '@angular/material';
+import { MatSidenavModule } from '@angular/material';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
@@ -36,6 +38,32 @@ class MockListOpportunitiesTableRowComponent {
 }
 
 @Component({
+  selector: 'compass-table-extender-header',
+  template: ''
+})
+class CompassTableExtenderHeaderComponent {
+  @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+
+  @Input() mainTitle: string;
+  @Input() subtitle: string;
+}
+
+@Component({
+  selector: 'list-opportunity-extender-body',
+  template: ''
+})
+class ListOpportunityExtenderBodyComponent {
+  @Input() opportunitySelected: string;
+  @Input() unversionedStoreId: string;
+}
+
+@Component({
+  selector: 'dismissible-x',
+  template: ''
+})
+class DismissibleXComponent { }
+
+@Component({
   selector: 'list-table-drawer',
   template: ''
 })
@@ -54,11 +82,18 @@ describe('ListOpportunitiesTableComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MatCheckboxModule],
+      imports: [
+        BrowserAnimationsModule,
+        MatCheckboxModule,
+        MatSidenavModule
+      ],
       declarations: [
         BeerLoaderComponentMock,
+        CompassTableExtenderHeaderComponent,
+        DismissibleXComponent,
         MockListOpportunitiesTableRowComponent,
         ListOpportunitiesTableComponent,
+        ListOpportunityExtenderBodyComponent,
         ListTableDrawerComponentMock,
         SortIndicatorComponent
       ],

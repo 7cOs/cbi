@@ -1,0 +1,16 @@
+.opportunities-summary
+  .product-name {{ productName }}
+  .product-premise-type {{ premiseType }} Opportunities
+
+.opportunities-table
+  .label-row
+    .type-label Opportunity Type
+    .count-label # Of Opportunities
+
+  .opportunity-row(*ngFor="let opportunity of opportunities")
+    div {{ opportunity.name }}
+    div((click)="handleOpportunityCountClicked(opportunity)") {{ opportunity.count | number }}
+
+  .opportunity-row.total-row
+    .total-row-label Total
+    .total-row-value {{ total | number }}

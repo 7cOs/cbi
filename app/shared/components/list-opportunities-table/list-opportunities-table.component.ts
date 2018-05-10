@@ -15,7 +15,7 @@ import { PageChangeData } from '../../../containers/lists/list-detail.component'
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
-interface OpportunitiesTableSelectAllCheckboxState {
+export interface OpportunitiesTableSelectAllCheckboxState {
   isSelectAllChecked: boolean;
   isIndeterminateChecked: boolean;
 }
@@ -52,6 +52,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
       this.isExpandAll = false;
       this.isSelectAllChecked = false;
       this.isIndeterminateChecked = false;
+      this.isOpportunityTableExtended = false;
     }
   }
 
@@ -76,9 +77,13 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
   public tableClasses: CssClasses = {};
   public isSelectAllChecked = false;
   public isIndeterminateChecked = false;
+  public storeNameSelected: string;
+  public opportunitySelected: string;
+  public unversionedStoreId: string;
   public isExpandAll: boolean = false;
   public opportunitiesTableData: Array<ListOpportunitiesTableRow>;
 
+  private isOpportunityTableExtended: boolean = false;
   private defaultSortCriteria: Array<SortingCriteria>;
   private numberOfRows: number = 0;
   private numExpandedRows: number = 0;
@@ -183,15 +188,20 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
     return classes;
   }
 
-  public onOpportunityTypeClicked(oppRow: ListTableDrawerRow, storeRow: ListOpportunitiesTableRow): void {
-    console.log('oppRow', oppRow);
-    console.log('storeRow', storeRow);
+  public toggleOpportunityTable(): void {
+    this.isOpportunityTableExtended = !this.isOpportunityTableExtended;
+  }
+
+  public onOpportunityTypeClicked(opportunityId: string, storeColumn: string, unversionedStoreId: string): void {
+    this.storeNameSelected = storeColumn;
+    this.opportunitySelected = opportunityId;
+    this.unversionedStoreId = unversionedStoreId;
+    this.isOpportunityTableExtended = true;
   }
 
   public onTableRowClicked(row: ListOpportunitiesTableRow): void {
     row.expanded = !row.expanded;
     row.expanded ? this.numExpandedRows++ : this.numExpandedRows--;
-
     if (this.numExpandedRows === this.numberOfRows) this.isExpandAll = true;
     else if (this.numExpandedRows === 0) this.isExpandAll = false;
   }
