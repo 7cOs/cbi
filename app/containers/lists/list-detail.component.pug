@@ -35,6 +35,7 @@ compass-tabs(
       [totalRow]="performanceTableTotal",
       [tableData]="performanceTableData",
       [pageChangeData]="pageChangeData",
+      [sortReset]="sortReset",
       (paginationReset)="handlePaginationReset()"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
@@ -43,6 +44,7 @@ compass-tabs(
       [sortingCriteria]="opportunitiesSortingCriteria",
       [tableData]="opportunitiesTableData",
       [pageChangeData]="pageChangeData",
+      [sortReset]="sortReset",
       (paginationReset)="handlePaginationReset()"
     )
 

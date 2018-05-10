@@ -39,6 +39,7 @@ export interface PageChangeData {
 
 export class ListDetailComponent implements OnInit, OnDestroy {
   paginationReset: Subject<Event> = new Subject();
+  sortReset: Subject<Event> = new Subject();
 
   public listSummary: ListsSummary;
   public performanceTabTitle: string = 'Performance';
@@ -157,6 +158,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (tabName !== this.activeTab) {
       this.activeTab = tabName;
       this.paginationReset.next();
+      this.sortReset.next();
     }
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
