@@ -348,13 +348,12 @@ describe('ListDetailComponent', () => {
             oppRow.status = oppIndex < totalOpps / 2 ? OpportunityStatus.targeted : OpportunityStatus.closed;
         });
       });
-
+      fixture.detectChanges();
       expectedOpps = JSON.parse(JSON.stringify(opportunitiesTableData));
       expectedOpps[2].opportunities = expectedOpps[2].opportunities.filter(
         (opp: ListTableDrawerRow) =>  opp.status === OpportunityStatus.closed
       );
       expectedOpps[2].opportunitiesColumn = expectedOpps[2].opportunities.length;
-
       fixture.detectChanges();
 
       expect(componentInstance.filterOpportunitiesByStatus(OpportunityStatus.closed, opportunitiesTableData).length).toEqual(1);
