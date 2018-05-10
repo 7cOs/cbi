@@ -1,0 +1,67 @@
+@import '../../../assets/styles/base/variables';
+
+.inline {
+  display: inline-block;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.opportunity-detail-row {
+  display: block;
+  width:   100%;
+  padding: 10px;
+  border-top:  solid 1px $border-gray;
+  font-family: $roboto;
+  font-size: 14px;
+}
+
+.opportunity-detail-row p {
+  display: table-cell;
+  padding-left: 15px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .right {
+    float: right;
+  }
+
+  .left {
+    float: left;
+  }
+}
+
+
+.flag-both,
+.flag-green,
+.flag-yellow {
+  &:before {
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 30%;
+    content: '';
+    height: 45px;
+    position: absolute;
+    width: (100% / 12);
+    top: 0;
+    left: 2%;
+  }
+}
+
+.flag-both {
+  &:before {
+    background-image: url('../../../assets/img/icons/status-both.svg');
+  }
+}
+
+.flag-green {
+  &:before {
+    background-image: url('../../../assets/img/icons/status-featured.svg');
+  }
+}
+
+.flag-yellow {
+  &:before {
+    background-image: url('../../../assets/img/icons/status-mandatory.svg');
+  }
+}

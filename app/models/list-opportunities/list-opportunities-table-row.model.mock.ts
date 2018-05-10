@@ -20,7 +20,8 @@ export function getListOpportunitiesTableRowMock(length: number): ListOpportunit
       opportunities: getListTableDrawerRowArrayMock(),
       performanceError: false,
       checked: false,
-      expanded: false
+      expanded: false,
+      unversionedStoreId: chance.string()
     });
   }
 

@@ -1,7 +1,9 @@
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { Subject } from 'rxjs/Subject';
 
 import { CalculatorService } from '../../../services/calculator.service';
 import { getListOpportunitiesTableRowMock } from '../../../models/list-opportunities/list-opportunities-table-row.model.mock';
@@ -11,6 +13,7 @@ import { ListOpportunitiesTableComponent } from './list-opportunities-table.comp
 import { ListOpportunitiesTableRow } from '../../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { MatCheckboxModule } from '@angular/material';
+import { MatSidenavModule } from '@angular/material';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
@@ -35,6 +38,32 @@ class MockListOpportunitiesTableRowComponent {
 }
 
 @Component({
+  selector: 'compass-table-extender-header',
+  template: ''
+})
+class CompassTableExtenderHeaderComponent {
+  @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+
+  @Input() mainTitle: string;
+  @Input() subtitle: string;
+}
+
+@Component({
+  selector: 'list-opportunity-extender-body',
+  template: ''
+})
+class ListOpportunityExtenderBodyComponent {
+  @Input() opportunitySelected: string;
+  @Input() unversionedStoreId: string;
+}
+
+@Component({
+  selector: 'dismissible-x',
+  template: ''
+})
+class DismissibleXComponent { }
+
+@Component({
   selector: 'list-table-drawer',
   template: ''
 })
@@ -46,16 +75,25 @@ class ListTableDrawerComponentMock {
 describe('ListOpportunitiesTableComponent', () => {
   let fixture: ComponentFixture<ListOpportunitiesTableComponent>;
   let componentInstance: ListOpportunitiesTableComponent;
+  let componentInstanceCopy: any;
   const tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
   let opportunitiesTableData: ListOpportunitiesTableRow[];
+  const sortResetSubject: Subject<Event> = new Subject<Event>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MatCheckboxModule],
+      imports: [
+        BrowserAnimationsModule,
+        MatCheckboxModule,
+        MatSidenavModule
+      ],
       declarations: [
         BeerLoaderComponentMock,
+        CompassTableExtenderHeaderComponent,
+        DismissibleXComponent,
         MockListOpportunitiesTableRowComponent,
         ListOpportunitiesTableComponent,
+        ListOpportunityExtenderBodyComponent,
         ListTableDrawerComponentMock,
         SortIndicatorComponent
       ],
@@ -71,8 +109,31 @@ describe('ListOpportunitiesTableComponent', () => {
     componentInstance.tableHeaderRow = tableHeaderRow;
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
     componentInstance.tableData = opportunitiesTableData;
+    componentInstance.sortReset = sortResetSubject;
+    componentInstanceCopy = componentInstance as any;
 
     fixture.detectChanges();
+  });
+
+  describe('ngOnInit', () => {
+    it('should check if subscription for sortReset', (done: any) => {
+      componentInstance.ngOnInit();
+      componentInstance.sortReset.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      sortResetSubject.next();
+    });
+
+    it('should check if sortReset function is called', (done: any) => {
+      componentInstance.ngOnInit();
+      spyOn(componentInstanceCopy, 'applySortingCriteria');
+      componentInstance.sortReset.subscribe(() => {
+        expect(componentInstanceCopy.applySortingCriteria).toHaveBeenCalled();
+        done();
+      });
+      sortResetSubject.next();
+    });
   });
 
   describe('setSortingcriteria', () => {
