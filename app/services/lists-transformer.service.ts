@@ -1,6 +1,5 @@
 import { includes } from 'lodash';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 
 import { CollaboratorType } from '../enums/lists/collaborator-type.enum';
 import { ListCategory } from '../enums/lists/list-category.enum';

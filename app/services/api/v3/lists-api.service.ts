@@ -2,15 +2,15 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { FormattedNewList } from '../../../models/lists/formatted-new-list.model';
-import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
-import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
-import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
-import { V3List } from '../../../models/lists/v3-list.model';
-import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
+import { FormattedNewList } from '../../../models/lists/formatted-new-list.model';
+import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
+import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
 import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
+import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
+import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
+import { V3List } from '../../../models/lists/v3-list.model';
 
 @Injectable()
 export class ListsApiService {
@@ -76,12 +76,6 @@ export class ListsApiService {
 
     return this.http.post(url, opportunities)
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
-  }
-
-  public updateList(list: FormattedNewList, listsId: string): Observable<any> {
-    const url = `v3/lists/${ listsId }`;
-    return this.http.put(url, list)
-      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
   }
 
   public addOpportunitiesToListPromise(listId: string, opportunities: {opportunityId: string}[]): Promise<ListOpportunityDTO[]> {
