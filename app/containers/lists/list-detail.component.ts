@@ -158,22 +158,24 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
-    let filteredOpps: ListOpportunitiesTableRow[] = JSON.parse(JSON.stringify(oppsTableData));
-    filteredOpps = filteredOpps.filter((storeRow: ListOpportunitiesTableRow) => {
-      let opps = storeRow.opportunities;
-      if (opps.length) {
-        if (status === OpportunityStatus.targeted)
-          storeRow.opportunities = opps.filter(
-            opp => opp.status === OpportunityStatus.targeted
-            || opp.status === OpportunityStatus.inactive);
-        else
-          storeRow.opportunities = opps.filter(opp => opp.status === OpportunityStatus.closed);
-        storeRow.opportunitiesColumn = storeRow.opportunities.length;
-        return storeRow.opportunities.length;
+    const filterOpportunities = (opportunityRows: ListTableDrawerRow[]) => {
+      return opportunityRows.filter((opp: ListTableDrawerRow) => {
+        return status === OpportunityStatus.targeted ?
+          opp.status === OpportunityStatus.targeted
+          || opp.status === OpportunityStatus.inactive : opp.status === OpportunityStatus.closed;
+      });
+    };
+
+    return oppsTableData.reduce((accmulatedStoreRows: ListOpportunitiesTableRow[], storeRow: ListOpportunitiesTableRow) => {
+      const storeRowFiltered = Object.assign({}, storeRow, {
+        opportunities: filterOpportunities(storeRow.opportunities)
+      });
+      if (storeRowFiltered.opportunities.length) {
+        storeRowFiltered.opportunitiesColumn = storeRowFiltered.opportunities.length;
+        accmulatedStoreRows.push(storeRowFiltered);
       }
-      return false;
-    });
-    return filteredOpps;
+      return accmulatedStoreRows;
+    }, []);
   }
 
   ngOnDestroy() {
