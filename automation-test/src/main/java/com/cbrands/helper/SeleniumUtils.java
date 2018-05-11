@@ -266,24 +266,14 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for text present.
+	 * Wait for text to be present for the element found by the given element locator.
 	 *
-	 * @param by the by
-	 * @param text the text
+	 * @param by the by locator
+	 * @param text the expected text
 	 */
 	public static void waitForTextPresent(By by, String text) {
 		waitForCondition(ExpectedConditions.textToBePresentInElementLocated(by, text), DEFAULT_WAIT_TIME);
 	}
-
-	/**
-   * Enter text into a given textbox while ensuring it has focus
-   * @param expectedText text to enter
-   * @param textBoxElement textbox element to receive text
-   */
-  public static void enterText(String expectedText, WebElement textBoxElement) {
-    waitForElementToClickable(textBoxElement, true).click();
-    driver.switchTo().activeElement().sendKeys(expectedText);
-  }
 
 	/**
 	 * Ensure text value is entered into text field without losing focus before the text is completely entered,
