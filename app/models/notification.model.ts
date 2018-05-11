@@ -28,6 +28,22 @@ export interface TargetListNotification extends Notification {
   };
 }
 
+export interface ListAddCollaboratorNotification extends Notification {
+  shortenedObject: {
+    id: string;
+    name: string;
+    valid: boolean;
+  };
+}
+
+export interface ListTransferOwnershipNotification extends Notification {
+  shortenedObject: {
+    id: string;
+    name: string;
+    valid: boolean;
+  };
+}
+
 export interface OpportunityNotification extends Notification {
   shortenedObject: {
     id: string;
@@ -66,6 +82,14 @@ export interface StoreNotification extends Notification {
 }
 
 export interface AccountNotification extends Notification {
+  shortenedObject: {
+    id: string;
+    name: string;
+    value: boolean;
+  };
+}
+
+export interface DistributorNotification extends Notification {
   shortenedObject: {
     id: string;
     name: string;
