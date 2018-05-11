@@ -11,7 +11,7 @@ compass-tabs(
     [tabTitle]='performanceTabTitle',
     [active]='true'
   )
-    section.list-performance-summary-section
+    section.list-action-section
       list-performance-summary(
         [depletionsTotal]="performanceTableTotal?.cytdColumn",
         [depletionsVsYA]="performanceTableTotal?.cytdVersusYaPercentColumn",
@@ -39,11 +39,20 @@ compass-tabs(
       (paginationReset)="handlePaginationReset()"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
+    .list-action-section
+      .opps-dropdown
+        compass-select(
+          [model]="oppStatusSelected",
+          [options]="opportunityStatusOptions",
+          [title]="'Opportunity Status'",
+          (onOptionSelected)="opportunityStatusSelected($event)"
+        )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [sortingCriteria]="opportunitiesSortingCriteria",
-      [tableData]="opportunitiesTableData",
+      [tableData]="filteredOpportunitiesTableData",
       [pageChangeData]="pageChangeData",
+      [oppStatusSelected]="oppStatusSelected",
       [sortReset]="sortReset",
       (paginationReset)="handlePaginationReset()"
     )
