@@ -4,6 +4,12 @@ div.nopad
       div(*ngIf="notification.objectType.toUpperCase() === 'TARGET_LIST'")
         p You've been added as a collaborator
         div.source {{notification.shortenedObject.name}}
+      div(*ngIf="notification.action === 'LIST_COLLABORATOR_ADDED'")
+        p You've been added as a collaborator
+        div.source {{notification.shortenedObject.name}}
+      div(*ngIf="notification.action === 'LIST_OWNER_CHANGED'")
+        p {{notification.creator.firstName}} {{notification.creator.lastName}} made you the owner of
+        div.source {{notification.shortenedObject.name}}
       div(*ngIf="notification.objectType.toUpperCase() === 'OPPORTUNITY'")
         p An opportunity has been shared with you
         div.source {{notification.shortenedObject.store.store_name | titlecase}}

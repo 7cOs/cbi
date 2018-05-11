@@ -272,26 +272,26 @@ module.exports = /*  @ngInject */
       const formattedList = listsTransformerService.formatNewList(vm.newList);
       listsApiService.createListPromise(formattedList)
         .then(v3List => {
+          const newList = listsTransformerService.transformV3ToV2(v3List, true);
+          userService.model.targetLists.ownedNotArchivedTargetLists.unshift(newList);
+          userService.model.targetLists.ownedNotArchived++;
 
-        userService.model.targetLists.ownedNotArchivedTargetLists.concat(v3List);
-        userService.model.targetLists.ownedNotArchived++;
+          closeModal();
+          vm.buttonDisabled = false;
 
-        closeModal();
-        vm.buttonDisabled = false;
+          analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', v3List.id);
 
-        analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', v3List.id);
-
-        // reset model
-        vm.newList = {
-          name: '',
-          description: '',
-          opportunities: [],
-          collaborators: [],
-          collaborateAndInvite: false
-        };
-      }).catch(response => {
-        console.log(response);
-      });
+          // reset model
+          vm.newList = {
+            name: '',
+            description: '',
+            opportunities: [],
+            collaborators: [],
+            collaborateAndInvite: false
+          };
+        }).catch(response => {
+          console.log(response);
+        });
     }
 
     function searchOpportunities(e) {
