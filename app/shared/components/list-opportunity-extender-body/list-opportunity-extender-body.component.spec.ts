@@ -12,7 +12,6 @@ import { ListsState } from '../../../state/reducers/lists.reducer';
 import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { OpportunitiesByStore } from '../../../models/lists/opportunities-by-store.model';
 import { ListsOpportunities } from '../../../models/lists/lists-opportunities.model';
-import { Category } from '@uirouter/core';
 
 const chance = new Chance();
 describe('Team Performance Opportunities Extender Body', () => {
