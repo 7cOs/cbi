@@ -39,7 +39,7 @@
           img.impact-image(*ngSwitchCase="opportunityImpact.high", src="../../../assets/img/icons/impact-high-small.svg")
           img.impact-image(*ngSwitchCase="opportunityImpact.medium", src="../../../assets/img/icons/impact-medium-small.svg")
           img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low-small.svg")
-        td.current-column.centered(colspan=1) {{ opportunity.current | number }}
+        td.current-column.centered(colspan=1) {{ opportunity.current | number:'1.0-0' }}
         td.year-ago-column.centered(
           colspan=1,
           [ngClass]="{ 'positive': opportunity.yearAgo > 0, 'negative': opportunity.yearAgo < 0 }"
