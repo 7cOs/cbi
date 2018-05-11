@@ -266,16 +266,6 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Gets the text.
-	 *
-	 * @param by the by
-	 * @return the text
-	 */
-	public static String getText(By by) {
-		return driver.findElement(by).getText();
-	}
-
-	/**
 	 * Wait for text present.
 	 *
 	 * @param by the by
@@ -283,18 +273,6 @@ public class SeleniumUtils {
 	 */
 	public static void waitForTextPresent(By by, String text) {
 		waitForCondition(ExpectedConditions.textToBePresentInElementLocated(by, text), DEFAULT_WAIT_TIME);
-	}
-
-	/**
-	 * Type.
-	 *
-	 * @param by the by
-	 * @param text the text
-	 */
-	public static void type(By by, String text) {
-		WebElement element = driver.findElement(by);
-		element.clear();
-		element.sendKeys(text);
 	}
 
 	/**
