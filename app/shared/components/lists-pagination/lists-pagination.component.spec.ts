@@ -1,10 +1,12 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ListsPaginationComponent } from './lists-pagination.component';
+import { Subject } from 'rxjs/Subject';
 
-describe('ListsHeaderComponent', () => {
+describe('ListsPaginationComponent', () => {
   let fixture: ComponentFixture<ListsPaginationComponent>;
   let componentInstance: ListsPaginationComponent;
   let componentInstanceCopy: any;
+  const pageResetSubject: Subject<Event> = new Subject<Event>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -13,9 +15,9 @@ describe('ListsHeaderComponent', () => {
       ],
       providers: []
     });
-
     fixture = TestBed.createComponent(ListsPaginationComponent);
     componentInstance = fixture.componentInstance;
+    componentInstance.paginationReset = pageResetSubject;
     componentInstanceCopy = componentInstance as any;
   });
 
@@ -28,9 +30,29 @@ describe('ListsHeaderComponent', () => {
     it('should set last page and get pageNumbers', () => {
       spyOn(componentInstance, 'getPageNumbers');
       componentInstance.ngOnInit();
+      fixture.detectChanges();
       expect(componentInstance.totalPages).toBe(10);
       expect(componentInstance.lastPage).toBe(10);
       expect(componentInstance.getPageNumbers).toHaveBeenCalled();
+    });
+
+    it('should check if subscription', (done: any) => {
+      componentInstance.ngOnInit();
+      componentInstance.paginationReset.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      pageResetSubject.next();
+    });
+
+    it('should check if pageChange function is called', (done: any) => {
+      componentInstance.ngOnInit();
+      spyOn(componentInstance, 'pageChange');
+      componentInstance.paginationReset.subscribe(() => {
+        expect(componentInstance.pageChange).toHaveBeenCalledWith(0);
+        done();
+      });
+      pageResetSubject.next();
     });
   });
 

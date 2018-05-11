@@ -12,7 +12,7 @@ import { opportunityImpactSortWeight } from '../../../models/opportunity-impact-
 
 export class ListTableDrawerComponent {
   @Output() onCheckboxClicked: EventEmitter<Event> = new EventEmitter();
-  @Output() onOpportunityTypeClicked: EventEmitter<ListTableDrawerRow> = new EventEmitter();
+  @Output() onOpportunityTypeClicked: EventEmitter<string> = new EventEmitter();
 
   @Input() set tableData(tableData: ListTableDrawerRow[]) {
     if (tableData) this.sortedTableData = tableData.sort(this.sortTableData);
@@ -27,7 +27,7 @@ export class ListTableDrawerComponent {
   }
 
   public opportunityTypeClicked(opportunityRow: ListTableDrawerRow): void {
-    this.onOpportunityTypeClicked.emit(opportunityRow);
+    this.onOpportunityTypeClicked.emit(opportunityRow.id);
   }
 
   public actionButtonClicked(opportunityRow: ListTableDrawerRow): void {

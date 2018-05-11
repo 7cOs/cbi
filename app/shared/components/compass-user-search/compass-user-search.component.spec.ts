@@ -1,17 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CompassUserSearchComponent } from '../compass-user-search/compass-user-search.component';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { UserDTO } from '../../../models/lists/user-dto.model';
 
 describe('Compass User Search Component', () => {
   let fixture: ComponentFixture<CompassUserSearchComponent>;
   let componentInstance: CompassUserSearchComponent;
   let formBuilder: FormBuilder = new FormBuilder();
+  let fakeUserDTO: UserDTO = {
+      accounts: [],
+      roles: [],
+      employeeId: '1234',
+      firstName: chance.string(),
+      lastName: chance.string(),
+      email: chance.string(),
+      id: chance.string()
+    };
+
   let searchServiceMock = {
     getUsers: jasmine.createSpy('getUsers').and.callFake((arg: any) => {
       return new Promise((resolve, reject) => {
-        resolve([{
-          value: 'test'
-        }]);
+        resolve([
+          fakeUserDTO
+        ]);
       });
     }),
     setSearchActive: setSearchActive
@@ -36,7 +47,6 @@ describe('Compass User Search Component', () => {
 
     fixture = TestBed.createComponent(CompassUserSearchComponent);
     fixture.componentInstance.showX = true;
-    fixture.componentInstance.selectedResult = {user: 'test'};
     componentInstance = fixture.componentInstance;
     componentInstance.parentGroup = formBuilder.group({userSearchTerm: ''});
     fixture.detectChanges();
@@ -48,7 +58,7 @@ describe('Compass User Search Component', () => {
       componentInstance.callSearch();
       fixture.detectChanges();
       fixture.whenStable().then(() => {
-        expect(componentInstance.searchResults).toEqual([{value: 'test'}]);
+        expect(componentInstance.searchResults).toEqual([fakeUserDTO]);
       });
     });
   });
@@ -60,7 +70,6 @@ describe('Compass User Search Component', () => {
       fixture.detectChanges();
       expect(componentInstance.showX).toBeFalsy();
       expect(componentInstance.parentGroup.controls['userSearchTerm'].value).toEqual('');
-      expect(componentInstance.selectedResult).toEqual( null );
     });
   });
 
@@ -76,7 +85,6 @@ describe('Compass User Search Component', () => {
 
       expect(componentInstance.showX).toBeFalsy();
       expect(componentInstance.showSearchIcon).toBeFalsy();
-      expect(componentInstance.selectedResult).toEqual({});
       expect(componentInstance.searchResults).toEqual([]);
       expect(componentInstance.showResults).toBeFalsy();
     });

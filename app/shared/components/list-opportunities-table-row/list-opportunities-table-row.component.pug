@@ -27,7 +27,7 @@ td.segment-col.link(colspan=1, (click)="tableCellClicked()")
       div.description-line-0
         span {{rowData.segmentColumn}}
 
-td.center-col.table-font.link(colspan=1, (click)="tableCellClicked()") {{rowData.cytdColumn | number}}
+td.center-col.table-font.link(colspan=1, (click)="tableCellClicked()") {{rowData.cytdColumn | number:'1.0-0'}}
 
 td.center-col.link(colspan=1, (click)="tableCellClicked()")
   span.table-font([ngClass]="getTrendClass(rowData.cytdVersusYaPercentColumn)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%

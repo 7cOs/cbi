@@ -16,7 +16,9 @@
   &.ADDED_NOTE,
   &.SHARE_OPPORTUNITY,
   &.SHARE_TARGET_LIST,
-  &.ARCHIVE_TARGET_LIST {
+  &.ARCHIVE_TARGET_LIST,
+  &.LIST_COLLABORATOR_ADDED,
+  &.LIST_OWNER_CHANGED {
     background-repeat: no-repeat;
   }
 
@@ -33,7 +35,9 @@
   }
 
   &.SHARE_TARGET_LIST,
-  &.ARCHIVE_TARGET_LIST {
+  &.ARCHIVE_TARGET_LIST,
+  &.LIST_COLLABORATOR_ADDED,
+  &.LIST_OWNER_CHANGED {
     background-image: url('../../../assets/img/icons/notification-collaborator.svg');
     background-position: 14px 1.25em;
     background-size: 20px 25px;

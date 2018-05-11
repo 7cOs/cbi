@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Output, Inject, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { UserDTO } from '../../../models/lists/user-dto.model';
 
 const ENTER = 13;
 
@@ -16,8 +17,7 @@ export class CompassUserSearchComponent {
   public showSearchIcon: boolean = false;
   public showResults: boolean = false;
   public errorMessage: string = '';
-  public searchResults: Array<any> = [];
-  public selectedResult: object = {};
+  public searchResults: Array<UserDTO> = [];
   public showLengthError: boolean = false;
   public loading: boolean = false;
   public showX: boolean = false;
@@ -39,7 +39,6 @@ export class CompassUserSearchComponent {
   }
 
   public clearModel(): void {
-    this.selectedResult = null;
     this.parentGroup.get('userSearchTerm').patchValue('');
     this.showX = false;
   }
@@ -50,14 +49,13 @@ export class CompassUserSearchComponent {
     }
     this.loading = true;
     this.searchResults = [];
-    this.selectedResult = {};
     this.errorMessage = null;
     this.showResults = true;
     this.showSearchIcon = true;
 
     this.searchService.setSearchActive(true);
 
-    this.searchService['getUsers'](this.parentGroup.get('userSearchTerm').value).then((data: Array<object>) => {
+    this.searchService['getUsers'](this.parentGroup.get('userSearchTerm').value).then((data: Array<UserDTO>) => {
       this.loading = false;
       this.searchResults = data;
     }, (reason: string) => {
@@ -69,14 +67,12 @@ export class CompassUserSearchComponent {
   public resultChosen(result: any): void {
     this.showSearchIcon = false;
     this.showX = false;
-    this.selectedResult = result;
-    this.addedCollaboratorEvent.emit(this.selectedResult);
+    this.addedCollaboratorEvent.emit(result);
     this.close();
   }
 
   public close(): void {
     this.parentGroup.get('userSearchTerm').patchValue('');
-    this.selectedResult = {};
     this.showX = false;
     this.loading = false;
     this.searchResults = [];

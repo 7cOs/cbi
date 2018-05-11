@@ -193,7 +193,8 @@ export class ListsTransformerService {
       type: OpportunityType[listOpportunity.type] || listOpportunity.type,
       status: OpportunityStatus[listOpportunity.status] || listOpportunity.status,
       impact: OpportunityImpact[listOpportunity.impact] || listOpportunity.impact,
-      isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity
+      isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity,
+      rationale: listOpportunity.rationale
     };
   }
 

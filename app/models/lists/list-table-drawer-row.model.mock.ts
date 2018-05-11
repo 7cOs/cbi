@@ -11,6 +11,7 @@ const chance = new Chance();
 
 export function getListTableDrawerRowMock(): ListTableDrawerRow {
   return {
+    id: chance.string(),
     brand: chance.string(),
     skuPackage: chance.string(),
     type: getOpportunityTypeLabelMock(),

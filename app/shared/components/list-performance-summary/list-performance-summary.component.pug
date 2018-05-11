@@ -1,7 +1,7 @@
 div.data-summary
   span.depletions-section
     span.vsYa([ngClass]='depletionsVsYAColorClass') {{ (depletionsVsYA | number:'1.1-1') || 0}}%
-    span.total {{ (depletionsTotal | number) || 0}}
+    span.total {{ (depletionsTotal | number:'1.0-0') || 0}}
     label {{ depletionsTitle }}
   span.distribution-section
     span.vsYa([ngClass]='distributionsVsYAColorClass') {{ (distributionsVsYA | number:'1.1-1') || 0}}%

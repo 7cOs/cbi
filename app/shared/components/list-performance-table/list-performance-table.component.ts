@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { CalculatorService } from '../../../services/calculator.service';
 import { CssClasses } from '../../../models/css-classes.model';
 import { LoadingState } from '../../../enums/loading-state.enum';
@@ -10,18 +10,23 @@ import { SortStatus } from '../../../enums/sort-status.enum';
 import { MatCheckboxChange } from '@angular/material';
 import { LIST_TABLE_SIZE } from '../lists-pagination/lists-pagination.component';
 import { PageChangeData } from '../../../containers/lists/list-detail.component';
+import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'list-performance-table',
   template: require('./list-performance-table.component.pug'),
   styles: [ require('./list-performance-table.component.scss') ]
 })
-export class ListPerformanceTableComponent implements OnInit, OnChanges  {
+export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestroy  {
+  @Input() sortReset: Subject<Event>;
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
+  @Output() paginationReset = new EventEmitter<any>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
+    this.defaultSortCriteria = criteria;
     this.applySortingCriteria(criteria);
   }
 
@@ -61,16 +66,28 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
   public sliceStart: number = 0;
   public sliceEnd: number = LIST_TABLE_SIZE;
 
+  private defaultSortCriteria: Array<SortingCriteria>;
   private sortingFunction: (elem0: ListPerformanceTableRow, elem1: ListPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = [{
     columnType: ListPerformanceColumnType.cytdColumn,
     ascending: false
   }];
 
+  private sortResetSubscription: Subscription;
+
   constructor (private calculatorService: CalculatorService) { }
 
   public ngOnInit() {
     this.tableClasses = this.getTableClasses(this.loadingState);
+    this.sortResetSubscription = this.sortReset.subscribe(() => {
+      this.applySortingCriteria(this.defaultSortCriteria);
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.sortResetSubscription) {
+      this.sortResetSubscription.unsubscribe();
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -181,5 +198,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges  {
       const sortedData: Array<ListPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
+    this.paginationReset.emit();
   }
 }
