@@ -1,0 +1,42 @@
+.inline
+  .opportunity-detail-row
+    p <b>Brand: </b> {{ opportunityDetails ? opportunityDetails.brandDescription : '' }}
+  .opportunity-detail-row
+    p
+      b Sku/Package:
+      |  {{ opportunityDetails ? skuDescription : ''}}
+  .opportunity-detail-row
+    p <b>Opportunity Type: </b> {{ opportunityDetails ? opportunityType : '' }}
+  .opportunity-detail-row
+    p <b>Opportunity Rationale: </b> {{ opportunityDetails ? opportunityDetails.rationale : '' }}
+  //- .opportunity-detail-row
+  //-   p <b>Brand Mandate</b>
+  //- .opportunity-detail-row
+  //-   p
+  //-     span.left <b>Start date: </b>11/14/18
+  //-   p
+  //-     span.right <b>Start End: </b> None
+  //- .opportunity-detail-row
+  //-   p
+  //-     span.left <b>Reset date: </b>11/14/18
+  //-   p
+  //-     span.right <b>Reset End: </b> None
+  //- .opportunity-detail-row
+  //-   p <b>Additional Notes: </b> N/A
+  //- .opportunity-detail-row
+  //-   p <b>Every Day Low Price (Off Premsie) </b>
+  //- .opportunity-detail-row
+  //-   p
+  //-     span.left <b>Start date: </b>11/14/18
+  //-   p
+  //-     span.right <b>Start End: </b> None
+  //- .opportunity-detail-row
+  //-   p
+  //-     span.left <b>Price: </b> $11.99
+  //-   p
+  //-     span.right
+  //-       b On Menu/Display?:
+  //-       |  Y
+  //- .opportunity-detail-row
+  //-   p <b>Additional Notes: </b> When long text like these occurs then the row automatically sizes to fit the content in the middle. If it is even longer like this, then the extender will become auto scrollable
+

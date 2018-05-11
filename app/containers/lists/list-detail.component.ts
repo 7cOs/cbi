@@ -12,6 +12,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
+import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
@@ -19,11 +20,10 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
-import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
+import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 
 interface ListPageClick {
   pageNumber: number;
@@ -42,6 +42,7 @@ export interface PageChangeData {
 
 export class ListDetailComponent implements OnInit, OnDestroy {
   paginationReset: Subject<Event> = new Subject();
+  sortReset: Subject<Event> = new Subject();
 
   public listSummary: ListsSummary;
   public performanceTabTitle: string = 'Performance';
@@ -202,6 +203,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (tabName !== this.activeTab) {
       this.activeTab = tabName;
       this.paginationReset.next();
+      this.sortReset.next();
     }
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);

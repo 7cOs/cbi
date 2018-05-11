@@ -45,7 +45,8 @@ export class ListsTableTransformerService {
         opportunities: this.transformStoreOpportunities(storeOpportunities),
         performanceError: !storeVolume,
         checked: false,
-        expanded: false
+        expanded: false,
+        unversionedStoreId: store.unversionedStoreId
       });
 
       return opportunityRows;
@@ -104,6 +105,7 @@ export class ListsTableTransformerService {
   private transformStoreOpportunities(opportunities: ListsOpportunities[]): ListTableDrawerRow[] {
     return opportunities.map((opportunity: ListsOpportunities) => {
       return {
+        id: opportunity.id,
         brand: opportunity.brandDescription,
         skuPackage: opportunity.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opportunity.skuDescription,
         type: OpportunityTypeLabel[opportunity.type] || opportunity.type,
