@@ -24,9 +24,6 @@ public class SeleniumUtils {
   /** The driver. */
 	private static WebDriver driver;
 
-	/** The base url. */
-	private static String baseUrl;
-
 	/**
 	 * Sets the driver.
 	 *
@@ -59,45 +56,10 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Open.
-	 *
-	 * @param url the url
-	 */
-	public static void open(String url) {
-		final String urlToOpen = url.indexOf("://") == -1 ? baseUrl + (!url.startsWith("/") ? "/" : "") + url : url;
-		driver.get(urlToOpen);
-	}
-
-	/**
-	 * Gets the location.
-	 *
-	 * @return the location
-	 */
-	public static String getLocation() {
-		return driver.getCurrentUrl();
-	}
-
-	/**
-	 * Back.
-	 */
-	public static void back() {
-		driver.navigate().back();
-	}
-
-	/**
 	 * Refresh.
 	 */
 	public static void refresh() {
 		driver.navigate().refresh();
-	}
-
-	/**
-	 * Gets the title.
-	 *
-	 * @return the title
-	 */
-	public static String getTitle() {
-		return driver.getTitle();
 	}
 
 	/**
@@ -165,16 +127,6 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Checks if is visible.
-	 *
-	 * @param by the by
-	 * @return true, if is visible
-	 */
-	public static boolean isVisible(By by) {
-		return driver.findElement(by).isDisplayed();
-	}
-
-	/**
 	 * Type.
 	 *
 	 * @param by the by
@@ -213,16 +165,6 @@ public class SeleniumUtils {
   }
 
 	/**
-	 * Gets the select.
-	 *
-	 * @param by the by
-	 * @return the select
-	 */
-	public static Select getSelect(By by) {
-		return new Select(driver.findElement(by));
-	}
-
-	/**
 	 * Gets the text.
 	 *
 	 * @param by the by
@@ -230,26 +172,6 @@ public class SeleniumUtils {
 	 */
 	public static String getText(By by) {
 		return driver.findElement(by).getText();
-	}
-
-	/**
-	 * Gets the value.
-	 *
-	 * @param by the by
-	 * @return the value
-	 */
-	public static String getValue(By by) {
-		return getValue(driver.findElement(by));
-	}
-
-	/**
-	 * Gets the value.
-	 *
-	 * @param element the element
-	 * @return the value
-	 */
-	public static String getValue(WebElement element) {
-		return element.getAttribute("value");
 	}
 
 	/**
@@ -266,44 +188,6 @@ public class SeleniumUtils {
 			FileUtils.copyFile(srcFile, targetFile);
 		} catch (IOException ioe) {
 		}
-	}
-
-	/**
-	 * Wait for title is.
-	 *
-	 * @param title the title
-	 */
-	public static void waitForTitleIs(String title) {
-		waitForCondition(ExpectedConditions.titleIs(title), DEFAULT_WAIT_TIME);
-	}
-
-	/**
-	 * Wait for title is.
-	 *
-	 * @param title the title
-	 * @param timeout the timeout
-	 */
-	public static void waitForTitleIs(String title, int timeout) {
-		waitForCondition(ExpectedConditions.titleIs(title), timeout);
-	}
-
-	/**
-	 * Wait for title contains.
-	 *
-	 * @param title the title
-	 */
-	public static void waitForTitleContains(String title) {
-		waitForCondition(ExpectedConditions.titleContains(title), DEFAULT_WAIT_TIME);
-	}
-
-	/**
-	 * Wait for title contains.
-	 *
-	 * @param title the title
-	 * @param timeout the timeout
-	 */
-	public static void waitForTitleContains(String title, int timeout) {
-		waitForCondition(ExpectedConditions.titleContains(title), timeout);
 	}
 
 	/**
@@ -424,27 +308,6 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for text present.
-	 *
-	 * @param by the by
-	 * @param text the text
-	 * @param timeout the timeout
-	 */
-	public static void waitForTextPresent(By by, String text, int timeout) {
-		waitForCondition(ExpectedConditions.textToBePresentInElementLocated(by, text), timeout);
-	}
-
-	/**
-	 * Wait for value present.
-	 *
-	 * @param by the by
-	 * @param value the value
-	 */
-	public static void waitForValuePresent(By by, String value) {
-		waitForCondition(ExpectedConditions.textToBePresentInElementValue(by, value), DEFAULT_WAIT_TIME);
-	}
-
-	/**
 	 * Wait for element visible.
 	 *
 	 * @param element the element
@@ -505,17 +368,6 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Wait for value present.
-	 *
-	 * @param by the by
-	 * @param value the value
-	 * @param timeout the timeout
-	 */
-	public static void waitForValuePresent(By by, String value, int timeout) {
-		waitForCondition(ExpectedConditions.textToBePresentInElementValue(by, value), timeout);
-	}
-
-	/**
 	 * @deprecated Please keep wait logic contained within Selenium Utils, and use Fluent Wait instead of WebDriverWait.
 	 *
 	 * Wait for condition.
@@ -536,41 +388,6 @@ public class SeleniumUtils {
 		return new FluentWait<>(driver)
 			.withTimeout(waitTime, TimeUnit.SECONDS)
 			.pollingEvery(pollTime, TimeUnit.SECONDS);
-	}
-
-	/**
-	 * Checks if is text present.
-	 *
-	 * @param text the text
-	 * @return true, if is text present
-	 */
-	public static boolean isTextPresent(String text) {
-		String bodyText = driver.findElement(By.tagName("body")).getText();
-		return bodyText.contains(text);
-	}
-
-	/**
-	 * Gets the table.
-	 *
-	 * @param table the table
-	 * @param rowIndex the row index
-	 * @param columnIndex the column index
-	 * @return the table
-	 */
-	public static String getTable(WebElement table, int rowIndex, int columnIndex) {
-		return table.findElement(By.xpath("//tr[" + (rowIndex + 1) + "]//td[" + (columnIndex + 1) + "]")).getText();
-	}
-
-	/**
-	 * Gets the table.
-	 *
-	 * @param by the by
-	 * @param rowIndex the row index
-	 * @param columnIndex the column index
-	 * @return the table
-	 */
-	public static String getTable(By by, int rowIndex, int columnIndex) {
-		return getTable(driver.findElement(by), rowIndex, columnIndex);
 	}
 
 	/**
