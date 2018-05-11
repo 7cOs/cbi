@@ -364,7 +364,7 @@ describe('ListDetailComponent', () => {
       fixture.detectChanges();
       expectedOpps.forEach((tableRow: ListOpportunitiesTableRow) => {
         tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
-          expect(oppRow.status === OpportunityStatus.targeted || oppRow.status === OpportunityStatus.inactive).toBe(true);
+          expect([OpportunityStatus.targeted, OpportunityStatus.inactive]).toContain(oppRow.status);
         });
       });
     });

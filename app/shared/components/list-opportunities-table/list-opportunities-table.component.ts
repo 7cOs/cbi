@@ -16,7 +16,7 @@ import { SortStatus } from '../../../enums/sort-status.enum';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
-interface OpportunitiesTableSelectAllCheckboxState {
+export interface OpportunitiesTableSelectAllCheckboxState {
   isSelectAllChecked: boolean;
   isIndeterminateChecked: boolean;
 }
