@@ -36,6 +36,7 @@ deployment:
     branch: test
     commands:
       - bash scripts/ci-deploy-to-heroku.sh app-orion-qa.git
+      - cd automation-test && mvn clean
       - cd automation-test && mvn install -DskipTests=true
       - cd automation-test && bash ../scripts/ci-run-automation-tests.sh $runTestSuite $runTestSuiteEnvt:
           timeout: 1200
