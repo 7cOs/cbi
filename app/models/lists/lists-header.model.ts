@@ -12,7 +12,7 @@ export interface ListsSummary {
   ownerLastName: string;
   collaborators: Array<CollaboratorOwnerDetails>;
   ownerId: string;
-  type: number;
+  type: string;
   collaboratorType: string;
   category: string;
 }

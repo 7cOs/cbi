@@ -16,7 +16,7 @@ export function getListsSummaryMock(): ListsSummary {
     ownerLastName : chance.string(),
     collaborators: [],
     ownerId: chance.string(),
-    type: chance.floating(),
+    type: chance.string(),
     collaboratorType: chance.string(),
     category: chance.string()
   };

@@ -3,15 +3,15 @@ import { BeerLoaderComponent } from './components/beer-loader/beer-loader.compon
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule }   from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule,
+import { MatAutocompleteModule,
+  MatButtonModule,
+  MatCardModule,
   MatCheckboxModule,
+  MatMenuModule,
   MatRadioModule,
   MatRippleModule,
   MatSelectModule,
-  MatSidenavModule,
-  MatButtonModule,
-  MatMenuModule,
-  MatAutocompleteModule
+  MatSidenavModule
 } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 

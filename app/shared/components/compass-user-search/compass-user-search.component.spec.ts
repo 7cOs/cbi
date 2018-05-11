@@ -7,14 +7,15 @@ describe('Compass User Search Component', () => {
   let componentInstance: CompassUserSearchComponent;
   let formBuilder: FormBuilder = new FormBuilder();
   let searchServiceMock = {
-    getUsers: getUsers,
+    getUsers: jasmine.createSpy('getUsers').and.callFake((arg: any) => {
+      return new Promise((resolve, reject) => {
+        resolve([{
+          value: 'test'
+        }]);
+      });
+    }),
     setSearchActive: setSearchActive
   };
-  function getUsers (value: string) {
-    return new Promise((resolve, reject) => {
-      resolve([{value: 'test'}]);
-    });
-  }
   function setSearchActive() {
     return true;
   }
@@ -43,11 +44,6 @@ describe('Compass User Search Component', () => {
 
   describe('User input ', () => {
     it('should return for user', () => {
-      spyOn(searchServiceMock, 'getUsers').and.callFake(function() {
-        return {
-          then: (callback: any) => { return callback([{value: 'test'}]); }
-        };
-      });
       componentInstance.parentGroup.controls['userSearchTerm'].setValue('tests');
       componentInstance.callSearch();
       fixture.detectChanges();
