@@ -40,6 +40,33 @@ tbody {
   }
 }
 
+.no-data-cover {
+  width: 100%;
+  z-index: 1;
+  display: block;
+  bottom: 0;
+  text-align: center;
+
+  .no-data-container {
+    display: inline-block;
+    margin-top: 120px;
+
+    .no-data-icon {
+      height: 117px;
+      margin: 20px auto;
+    }
+
+    .no-data-cover-message {
+      height: 66px;
+      font-family: $work-sans;
+      font-size: 16px;
+      line-height: 1.38;
+      text-align: center;
+      color: $gray-2;
+    }
+  }
+}
+
 :host-context(.ie) tbody,
 :host-context(.edge) tbody {
   overflow-y: auto;
