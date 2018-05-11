@@ -44,20 +44,20 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
           th.checkbox-col(colspan=1)
 
       tbody(*ngFor="let row of sortedTableData | slice:sliceStart:sliceEnd, let rowIndex = index")
-          tr.entity-row(
-            list-opportunities-table-row,
-            [rowData]="row",
-            (click)="onRowClicked(rowType.data, rowIndex, row)",
-            (onChangeEventEmitter)="onCheckboxChange(row)",
-            (onTableRowClicked)="onTableRowClicked(row)"
-          )
-          tr.table-drawer-row(*ngIf="row.expanded")
-            td.table-drawer-cell(colspan=9)
-              list-table-drawer(
-                [tableData]="row.opportunities",
-                (onOpportunityCheckboxClicked)="onOpportunityCheckboxClicked(row)",
-                (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row.storeColumn, row.unversionedStoreId)"
-              )
+        tr.entity-row(
+          list-opportunities-table-row,
+          [rowData]="row",
+          (click)="onRowClicked(rowType.data, rowIndex, row)",
+          (onChangeEventEmitter)="onCheckboxChange(row)",
+          (onTableRowClicked)="onTableRowClicked(row)"
+        )
+        tr.table-drawer-row(*ngIf="row.expanded")
+          td.table-drawer-cell(colspan=9)
+            list-table-drawer(
+              [tableData]="row.opportunities",
+              (onOpportunityCheckboxClicked)="onOpportunityCheckboxClicked(row)",
+              (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row.storeColumn, row.unversionedStoreId)"
+            )
   mat-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
     compass-table-extender-header(
       [mainTitle]="'Opportunity Details'",

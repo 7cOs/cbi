@@ -167,15 +167,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
     };
 
-    return oppsTableData.reduce((accmulatedStoreRows: ListOpportunitiesTableRow[], storeRow: ListOpportunitiesTableRow) => {
+    return oppsTableData.reduce((accumulatedStoreRows: ListOpportunitiesTableRow[], storeRow: ListOpportunitiesTableRow) => {
       const storeRowFiltered = Object.assign({}, storeRow, {
         opportunities: filterOpportunities(storeRow.opportunities)
       });
       if (storeRowFiltered.opportunities.length) {
         storeRowFiltered.opportunitiesColumn = storeRowFiltered.opportunities.length;
-        accmulatedStoreRows.push(storeRowFiltered);
+        accumulatedStoreRows.push(storeRowFiltered);
       }
-      return accmulatedStoreRows;
+      return accumulatedStoreRows;
     }, []);
   }
 
