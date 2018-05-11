@@ -127,18 +127,6 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Type.
-	 *
-	 * @param by the by
-	 * @param text the text
-	 */
-	public static void type(By by, String text) {
-		WebElement element = driver.findElement(by);
-		element.clear();
-		element.sendKeys(text);
-	}
-
-	/**
 	 * Click.
 	 *
 	 * @param by the by
@@ -163,16 +151,6 @@ public class SeleniumUtils {
 
     return element;
   }
-
-	/**
-	 * Gets the text.
-	 *
-	 * @param by the by
-	 * @return the text
-	 */
-	public static String getText(By by) {
-		return driver.findElement(by).getText();
-	}
 
 	/**
 	 * Snapshot.
@@ -288,6 +266,38 @@ public class SeleniumUtils {
 	}
 
 	/**
+	 * Gets the text.
+	 *
+	 * @param by the by
+	 * @return the text
+	 */
+	public static String getText(By by) {
+		return driver.findElement(by).getText();
+	}
+
+	/**
+	 * Wait for text present.
+	 *
+	 * @param by the by
+	 * @param text the text
+	 */
+	public static void waitForTextPresent(By by, String text) {
+		waitForCondition(ExpectedConditions.textToBePresentInElementLocated(by, text), DEFAULT_WAIT_TIME);
+	}
+
+	/**
+	 * Type.
+	 *
+	 * @param by the by
+	 * @param text the text
+	 */
+	public static void type(By by, String text) {
+		WebElement element = driver.findElement(by);
+		element.clear();
+		element.sendKeys(text);
+	}
+
+	/**
    * Enter text into a given textbox while ensuring it has focus
    * @param expectedText text to enter
    * @param textBoxElement textbox element to receive text
@@ -298,13 +308,18 @@ public class SeleniumUtils {
   }
 
 	/**
-	 * Wait for text present.
+	 * Ensure text value is entered into text field without losing focus before the text is completely entered,
+	 * by entering a single character at a time
 	 *
-	 * @param by the by
-	 * @param text the text
+	 * @param field WebElement field
+	 * @param value String to pass to text field
+	 * @author SKARNEH
 	 */
-	public static void waitForTextPresent(By by, String text) {
-		waitForCondition(ExpectedConditions.textToBePresentInElementLocated(by, text), DEFAULT_WAIT_TIME);
+	public static void enterKeys(WebElement field, String value) {
+		field.clear();
+		for (String c : value.split("")) {
+			field.sendKeys(c);
+		}
 	}
 
 	/**
@@ -395,20 +410,5 @@ public class SeleniumUtils {
 	 */
 	public static void maximize() {
 		driver.manage().window().maximize();
-	}
-
-	/**
-	 * Ensure text value is entered into text field without losing focus before the text is completely entered,
-	 * by entering a single character at a time
-	 *
-	 * @param field WebElement field
-	 * @param value String to pass to text field
-	 * @author SKARNEH
-	 */
-	public static void enterKeys(WebElement field, String value) {
-		field.clear();
-		for (String c : value.split("")) {
-			field.sendKeys(c);
-		}
 	}
 }
