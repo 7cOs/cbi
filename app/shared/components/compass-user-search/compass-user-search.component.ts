@@ -38,13 +38,13 @@ export class CompassUserSearchComponent {
     }
   }
 
-  public clearModel() {
+  public clearModel(): void {
     this.selectedResult = null;
     this.parentGroup.get('userSearchTerm').patchValue('');
     this.showX = false;
   }
 
-  public callSearch() {
+  public callSearch(): void {
     if (this.parentGroup.get('userSearchTerm').value.length < 3) {
       this.showLengthError = true;
     }
@@ -66,7 +66,7 @@ export class CompassUserSearchComponent {
     });
   }
 
-  public resultChosen(result: any) {
+  public resultChosen(result: any): void {
     this.showSearchIcon = false;
     this.showX = false;
     this.selectedResult = result;
@@ -74,7 +74,7 @@ export class CompassUserSearchComponent {
     this.close();
   }
 
-  public close() {
+  public close(): void {
     this.parentGroup.get('userSearchTerm').patchValue('');
     this.selectedResult = {};
     this.showX = false;
@@ -83,7 +83,7 @@ export class CompassUserSearchComponent {
     this.showResults = false;
   }
 
-  public checkSearchTermLength () {
+  public checkSearchTermLength (): boolean {
     return this.parentGroup.get('userSearchTerm').value.length > 2 ? true : false;
   }
 

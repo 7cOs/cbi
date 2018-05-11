@@ -150,8 +150,8 @@ describe('ListDetailComponent', () => {
   const userMock = {
     model: {
       currentUser: {
-        positionId: chance.integer().toString(),
-        employeeID: chance.integer().toString(),
+        positionId: chance.toString(),
+        employeeID: chance.toString(),
         firstName: chance.string(),
         lastName: chance.string()
       }

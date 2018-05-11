@@ -62,7 +62,6 @@ module.exports = /*  @ngInject */
     vm.archiveTargetList = archiveTargetList;
     vm.unarchiveTargetList = unarchiveTargetList;
     vm.closeModal = closeModal;
-    vm.createList = createList;
     vm.createNewList = createNewList;
     vm.createTargetList = createTargetList;
     vm.deleteTargetList = deleteTargetList;
@@ -265,9 +264,6 @@ module.exports = /*  @ngInject */
       return result;
     }
 
-    function createList(formattedList) {
-      return listsApiService.createList(formattedList).toPromise();
-    }
     function saveNewList(e) {
       if (vm.newList.name.length > 40) return;
 

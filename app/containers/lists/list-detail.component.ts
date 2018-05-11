@@ -22,6 +22,7 @@ import { ListPerformanceColumnType } from '../../enums/list-performance-column-t
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
+import { User } from '../../models/lists/user.model';
 
 interface ListPageClick {
   pageNumber: number;
@@ -49,7 +50,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public opportunitiesTableDataSize: number;
   public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
   public compassModalOverlayRef: CompassManageListModalOverlayRef;
-  public currentUser: any;
+  public currentUser: User;
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
   public listTableSize: number = LIST_TABLE_SIZE;
