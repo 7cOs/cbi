@@ -41,13 +41,15 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   }
 
   setExtenderBodyFields(allOpps: OpportunitiesByStore) {
-    this.opportunityDetails = allOpps[this.unversionedStoreId] ?
-                                allOpps[this.unversionedStoreId].find((el: ListsOpportunities) => {
-                                  return el.id === this.opportunitySelected;
-                                }) : null;
-    if (this.opportunityDetails) {
-      this.opportunityType =  OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type;
-      this.skuDescription =  this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
+    if (allOpps) {
+      this.opportunityDetails = allOpps[this.unversionedStoreId] ?
+                                  allOpps[this.unversionedStoreId].find((el: ListsOpportunities) => {
+                                    return el.id === this.opportunitySelected;
+                                  }) : null;
+      if (this.opportunityDetails) {
+        this.opportunityType =  OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type;
+        this.skuDescription =  this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
+      }
     }
   }
 

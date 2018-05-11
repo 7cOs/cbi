@@ -1,18 +1,16 @@
 beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
 mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()")
   div
-
     table.list-opportunities-table
-
       thead
-
         tr.top-header
           th.checkbox-col(colspan=1)
             mat-checkbox.select-all-checkbox(aria-label="Select All Stores",
             [checked]="isSelectAllChecked",
             (change)="toggleSelectAllStores($event)",
             [(indeterminate)]="isIndeterminateChecked",
-            [disableRipple]="true")
+            [disableRipple]="true",
+            [hidden]="isOppsTableDataEmpty()")
           th.left-col.sort-indicator(colspan=1, (click)="sortRows(columnType.storeColumn)")
             span {{ tableHeaderRow[0] }}
               sort-indicator([status]="getSortStatus(columnType.storeColumn)")
@@ -28,7 +26,7 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
             span {{ tableHeaderRow[4] }}
               sort-indicator([status]="getSortStatus(columnType.opportunitiesColumn)")
           th.checkbox-col.link.expand-all-column(colspan=1, (click)="onExpandAllClicked()")
-            img.expand-icon(*ngIf="!isExpandAll", src="../../../assets/img/icons/add-expand-collapse.svg")
+            img.expand-icon(*ngIf="!isExpandAll && !isOppsTableDataEmpty()", src="../../../assets/img/icons/add-expand-collapse.svg")
             img.expand-icon(*ngIf="isExpandAll", src="../../../assets/img/icons/minus.svg")
 
         tr.sub-header
@@ -69,3 +67,8 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
         [opportunitySelected]="opportunitySelected",
         [unversionedStoreId]="unversionedStoreId"
       )
+div.no-data-cover(*ngIf="isOppsTableDataEmpty()")
+  div.no-data-container
+    img.no-data-icon(src="../../../assets/img/icons/group.svg")
+    p.no-data-cover-message(*ngIf="oppStatusSelected !== 'closed'") You currently don't have any opportunities added to this list.
+    p.no-data-cover-message(*ngIf="oppStatusSelected === 'closed'") You currently don't have any closed opportunities.

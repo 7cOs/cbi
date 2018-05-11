@@ -7,9 +7,12 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
+import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
@@ -19,8 +22,8 @@ import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.mod
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
+import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 
 interface ListPageClick {
   pageNumber: number;
@@ -45,6 +48,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
   public actionButtonType: any = ActionButtonType;
+  public filteredOpportunitiesTableData: ListOpportunitiesTableRow[];
+  public opportunityStatusOptions: Array<CompassSelectOption> = [];
+  public oppStatusSelected: OpportunityStatus;
   public performanceTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Effective POD', 'Last Depletion'];
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
@@ -76,6 +82,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
+    this.opportunityStatusOptions = listOpportunityStatusOptions;
+    this.oppStatusSelected = OpportunityStatus.all;
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchOppsForList({listId: this.$state.params.id}));
@@ -125,13 +133,50 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.listOpportunities.opportunities
           );
-          this.opportunitiesTableDataSize = this.opportunitiesTableData.length;
+          this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
+            this.opportunitiesTableData : this.filterOpportunitiesByStatus(
+              this.oppStatusSelected,
+              this.opportunitiesTableData
+            );
+          this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
       });
   }
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
+  }
+
+  opportunityStatusSelected(statusValue: OpportunityStatus) {
+    this.oppStatusSelected = statusValue;
+    this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
+      this.opportunitiesTableData : this.filterOpportunitiesByStatus(
+        this.oppStatusSelected,
+        this.opportunitiesTableData
+      );
+    this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
+    this.paginationReset.next();
+  }
+
+  filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
+    const filterOpportunities = (opportunityRows: ListTableDrawerRow[]) => {
+      return opportunityRows.filter((opp: ListTableDrawerRow) => {
+        return status === OpportunityStatus.targeted ?
+          opp.status === OpportunityStatus.targeted
+          || opp.status === OpportunityStatus.inactive : opp.status === OpportunityStatus.closed;
+      });
+    };
+
+    return oppsTableData.reduce((accumulatedStoreRows: ListOpportunitiesTableRow[], storeRow: ListOpportunitiesTableRow) => {
+      const storeRowFiltered = Object.assign({}, storeRow, {
+        opportunities: filterOpportunities(storeRow.opportunities)
+      });
+      if (storeRowFiltered.opportunities.length) {
+        storeRowFiltered.opportunitiesColumn = storeRowFiltered.opportunities.length;
+        accumulatedStoreRows.push(storeRowFiltered);
+      }
+      return accumulatedStoreRows;
+    }, []);
   }
 
   ngOnDestroy() {
@@ -162,6 +207,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
+      this.oppStatusSelected = listOpportunityStatusOptions.find(status => status.value === OpportunityStatus.all).value;
+      this.filteredOpportunitiesTableData = this.opportunitiesTableData;
+      this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
     }
   }
 
