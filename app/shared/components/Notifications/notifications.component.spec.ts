@@ -16,6 +16,7 @@ import {
   getListAddCollaboratorNotificationMock,
   getListTransferOwnershipNotificationMock
 } from '../../../models/notification.model.mock';
+import { NotificationStatus } from '../../../enums/notification.enum';
 
 describe('NotificationsComponent', () => {
 
@@ -78,8 +79,8 @@ describe('NotificationsComponent', () => {
         getAccountNotificationMock()
       ];
 
-      notificationsMock[0].status = 'READ';
-      notificationsMock[1].status = 'READ';
+      notificationsMock[0].status = NotificationStatus.READ;
+      notificationsMock[1].status = NotificationStatus.READ;
 
       componentInstance.notifications = notificationsMock;
 
