@@ -62,6 +62,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
     if (pageChangeData) {
       this.handlePageChangeClicked(pageChangeData);
     }
+    this.isOpportunityTableExtended = false;
   }
 
   @Input() performanceMetric: string;
