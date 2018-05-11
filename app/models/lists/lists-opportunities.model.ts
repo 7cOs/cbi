@@ -15,4 +15,5 @@ export interface ListsOpportunities {
   lastDepletionDate: string;
   unversionedStoreId: string;
   isSimpleDistribution: boolean;
+  rationale: string;
 }
