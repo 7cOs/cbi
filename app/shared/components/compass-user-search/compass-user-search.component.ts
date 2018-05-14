@@ -12,7 +12,7 @@ const ENTER = 13;
 
 export class CompassUserSearchComponent {
   @Input() parentGroup: FormGroup;
-  @Output() addedCollaboratorEvent  = new EventEmitter<object>();
+  @Output() addedCollaboratorEvent  = new EventEmitter<UserDTO>();
 
   public showSearchIcon: boolean = false;
   public showResults: boolean = false;
@@ -64,7 +64,7 @@ export class CompassUserSearchComponent {
     });
   }
 
-  public resultChosen(result: any): void {
+  public resultChosen(result: UserDTO): void {
     this.showSearchIcon = false;
     this.showX = false;
     this.addedCollaboratorEvent.emit(result);
@@ -83,7 +83,7 @@ export class CompassUserSearchComponent {
     return this.parentGroup.get('userSearchTerm').value.length > 2 ? true : false;
   }
 
-  public userDataFormat(user: any) {
+  public userDataFormat(user: UserDTO) {
     if (user) {
       if (user.roles.length > 0) {
         return user.roles[0] + ' | ' + user.email;
