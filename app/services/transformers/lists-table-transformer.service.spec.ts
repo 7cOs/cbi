@@ -79,7 +79,10 @@ describe('ListsTableTransformerService', () => {
             storeAddressSubline: getExpectedStoreAddress(storeDetailsMock[index]),
             distributorColumn: storeDetailsMock[index].distributor,
             segmentColumn: storeDetailsMock[index].segmentCode,
-            cytdColumn: volumeStorePerformanceMock[index].current,
+            cytdColumn: calculatorService.getYearAgoDelta(
+              volumeStorePerformanceMock[index].current,
+              volumeStorePerformanceMock[index].yearAgo
+            ),
             cytdVersusYaPercentColumn: calculatorService.getYearAgoPercent(
               volumeStorePerformanceMock[index].current,
               volumeStorePerformanceMock[index].yearAgo
@@ -186,7 +189,10 @@ describe('ListsTableTransformerService', () => {
             distributorColumn: storeDetailsMock[index].distributor,
             segmentColumn: storeDetailsMock[index].segmentCode,
             cytdColumn: volumeStorePerformanceMock[index].current,
-            cytdVersusYaColumn: volumeStorePerformanceMock[index].yearAgo,
+            cytdVersusYaColumn: calculatorService.getYearAgoDelta(
+              volumeStorePerformanceMock[index].current,
+              volumeStorePerformanceMock[index].yearAgo
+            ),
             cytdVersusYaPercentColumn: calculatorService.getYearAgoPercent(
               volumeStorePerformanceMock[index].current,
               volumeStorePerformanceMock[index].yearAgo
@@ -256,7 +262,7 @@ describe('ListsTableTransformerService', () => {
         distributorColumn: '',
         segmentColumn: '',
         cytdColumn: volumePerformanceMock.current,
-        cytdVersusYaColumn: volumePerformanceMock.yearAgo,
+        cytdVersusYaColumn: calculatorService.getYearAgoDelta(volumePerformanceMock.current, volumePerformanceMock.yearAgo),
         cytdVersusYaPercentColumn: calculatorService.getYearAgoPercent(volumePerformanceMock.current, volumePerformanceMock.yearAgo),
         l90Column: podPerformanceMock.current,
         l90VersusYaColumn: podPerformanceMock.yearAgo,
