@@ -2324,7 +2324,7 @@ describe('Unit: list controller', function() {
         targetListService.model.currentList.id = selectedListMock;
       });
 
-      it('should add to target list and send analytics category of opportunity Add to List', () => {
+      it('should add to list and send analytics category of opportunity Add to List', () => {
         $state.current.name = 'opportunities';
         expect($state.current.name).toEqual('opportunities');
         spyOn(analyticsService, 'trackEvent');
@@ -2342,7 +2342,7 @@ describe('Unit: list controller', function() {
 
       });
 
-      it('should add to target list and send analytics category of opportunity Copy to List', () => {
+      it('should add to list and send analytics category of opportunity Copy to List', () => {
         $state.current.name = 'opportunities';
         expect($state.current.name).toEqual('opportunities');
         spyOn(analyticsService, 'trackEvent');
