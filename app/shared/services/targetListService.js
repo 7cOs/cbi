@@ -383,7 +383,7 @@ module.exports = /*  @ngInject */
      */
     function getAnalyticsCategory(listPermissionLevel, listIsArchived) {
       return `Lists - ${listIsArchived
-        ? 'Archived'
+        ? 'Archived Lists'
         : listPermissionLevel === 'author'
           ? 'My Lists'
           : 'Shared With Me'}`;

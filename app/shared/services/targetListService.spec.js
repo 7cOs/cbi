@@ -591,7 +591,7 @@ describe('[Services.targetListService]', function() {
   describe('getAnalyticsCategory', () => {
     it('returns proper string when archived', () => {
       const result = targetListService.getAnalyticsCategory('permissionLevelMock', true);
-      expect(result).toBe('Lists - Archived');
+      expect(result).toBe('Lists - Archived Lists');
     });
 
     it('returns proper string when not archived and permission level is author', () => {

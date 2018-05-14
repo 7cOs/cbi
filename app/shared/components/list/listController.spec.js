@@ -2285,7 +2285,7 @@ describe('Unit: list controller', function() {
         scope.$digest();
         expect(ctrl.addToTargetList).toHaveBeenCalledWith(destTargetListMock.id);
         expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
-        expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Add to Target List', destTargetListMock.id);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Add to List', destTargetListMock.id);
       });
 
       it('should add to target list and send analytics event for "copy" action', () => {
@@ -2305,7 +2305,7 @@ describe('Unit: list controller', function() {
 
         expect(ctrl.addToTargetList).toHaveBeenCalledWith(destTargetListMock.id);
         expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
-        expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Copy to Target List', selectedListMock);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Copy to List', selectedListMock);
       });
     });
 
@@ -2324,7 +2324,7 @@ describe('Unit: list controller', function() {
         targetListService.model.currentList.id = selectedListMock;
       });
 
-      it('should add to target list and send analytics category of opportunity Add to Target List', () => {
+      it('should add to target list and send analytics category of opportunity Add to List', () => {
         $state.current.name = 'opportunities';
         expect($state.current.name).toEqual('opportunities');
         spyOn(analyticsService, 'trackEvent');
@@ -2338,11 +2338,11 @@ describe('Unit: list controller', function() {
         };
 
         ctrl.handleAddToTargetList(fakeEvent, destTargetListMock, 0, true);
-        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Add to Target List', destTargetListMock.id);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Add to List', destTargetListMock.id);
 
       });
 
-      it('should add to target list and send analytics category of opportunity Copy to Target List', () => {
+      it('should add to target list and send analytics category of opportunity Copy to List', () => {
         $state.current.name = 'opportunities';
         expect($state.current.name).toEqual('opportunities');
         spyOn(analyticsService, 'trackEvent');
@@ -2355,7 +2355,7 @@ describe('Unit: list controller', function() {
         };
 
         ctrl.handleAddToTargetList(fakeEvent, destTargetListMock, 0, false);
-        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Copy to Target List', selectedListMock);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Copy to List', selectedListMock);
 
       });
     });
@@ -2510,7 +2510,7 @@ describe('Unit: list controller', function() {
 
         expect(analyticsService.trackEvent).toHaveBeenCalledWith(
           analyticsCategoryMock,
-          'Download Target List - With Rationales',
+          'Download List - With Rationales',
           selectedListMock);
       });
 
@@ -2520,7 +2520,7 @@ describe('Unit: list controller', function() {
 
         expect(analyticsService.trackEvent).toHaveBeenCalledWith(
           analyticsCategoryMock,
-          'Download Target List - Without Rationales',
+          'Download List - Without Rationales',
           selectedListMock);
       });
 
@@ -2530,7 +2530,7 @@ describe('Unit: list controller', function() {
 
         expect(analyticsService.trackEvent).toHaveBeenCalledWith(
           analyticsCategoryMock,
-          'Download Target List - Stores Only',
+          'Download List - Stores Only',
           selectedListMock);
       });
     });
