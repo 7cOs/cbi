@@ -198,7 +198,10 @@ describe('ListsTableTransformerService', () => {
               volumeStorePerformanceMock[index].yearAgo
             ),
             l90Column: podStorePerformanceMock[index].current,
-            l90VersusYaColumn: podStorePerformanceMock[index].yearAgo,
+            l90VersusYaColumn: calculatorService.getYearAgoDelta(
+              podStorePerformanceMock[index].current,
+              podStorePerformanceMock[index].yearAgo
+            ),
             l90VersusYaPercentColumn: calculatorService.getYearAgoPercent(
               podStorePerformanceMock[index].current,
               podStorePerformanceMock[index].yearAgo
@@ -265,7 +268,7 @@ describe('ListsTableTransformerService', () => {
         cytdVersusYaColumn: calculatorService.getYearAgoDelta(volumePerformanceMock.current, volumePerformanceMock.yearAgo),
         cytdVersusYaPercentColumn: calculatorService.getYearAgoPercent(volumePerformanceMock.current, volumePerformanceMock.yearAgo),
         l90Column: podPerformanceMock.current,
-        l90VersusYaColumn: podPerformanceMock.yearAgo,
+        l90VersusYaColumn: calculatorService.getYearAgoDelta(podPerformanceMock.current, podPerformanceMock.yearAgo),
         l90VersusYaPercentColumn: calculatorService.getYearAgoPercent(podPerformanceMock.current, podPerformanceMock.yearAgo),
         lastDepletionDateColumn: '',
         performanceError: false,
