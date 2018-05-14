@@ -21,7 +21,7 @@ module.exports = function (config) {
   };
 
   config.api = {
-    url: 'https://internal.api.cbrands.com',
+    url: 'https://cbi-api-internal-qa.herokuapp.com',
     key: process.env.API_SECRET,
     apiKey: 'compass-beer-portal',
 
@@ -37,9 +37,9 @@ module.exports = function (config) {
   };
 
   config.saml = {
-    entryPoint: 'https://sso.cbrands.com/oamfed/idp/samlv20',
-    logoutBase: 'https://sso.cbrands.com/oam/server/logout',
-    issuer: 'https://compass-stage.cbrands.com',
+    entryPoint: 'https://stage-sso.cbrands.com/oamfed/idp/samlv20',
+    logoutBase: 'https://stage-sso.cbrands.com/oam/server/logout',
+    issuer: 'https://compass-qa.cbrands.com',
     cert: process.env.SSO_CERT,
     privateCert: '',
     signatureAlgorithm: 'sha1'
@@ -47,13 +47,13 @@ module.exports = function (config) {
 
   config.sfdcSec = {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
-    assertionEndpoint: 'https://cbrands--Full.cs3.my.salesforce.com/services/oauth2/token?so=00DQ000000EeY1O',
+    assertionEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
     // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
     privateKey: process.env.SFDC_SIGNING_KEY,
     certfile: process.env.SFDC_CERTIFICATE,
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
     issuer: process.env.SFDC_ISSUER,
-    recipient: 'https://cbrands--Full.cs3.my.salesforce.com?so=00DQ000000EeY1O',
+    recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
     // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
     audience: 'https://saml.salesforce.com',
     // These algorithms should not be touched.  They are used to encrypt the certificates.
