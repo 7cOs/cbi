@@ -10,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
+import { CompassSelectComponent } from '../../shared/components/compass-select/compass-select.component';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { getListOpportunitiesTableRowMock } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
@@ -22,6 +23,7 @@ import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
+import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
 
@@ -39,6 +41,8 @@ class ListPerformanceTableComponentMock {
   @Input() pageChangeData: PageChangeData;
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
+  @Input() sortReset: Event;
+  @Output() paginationReset = new EventEmitter();
 }
 
 @Component({
@@ -52,6 +56,9 @@ class ListOpportunitiesTableComponentMock {
   @Input() pageChangeData: PageChangeData;
   @Input() tableHeaderRow: Array<string>;
   @Input() loadingState: boolean;
+  @Input() oppStatusSelected: OpportunityStatus;
+  @Input() sortReset: Event;
+  @Output() paginationReset = new EventEmitter();
 }
 
 @Component({
@@ -73,6 +80,7 @@ class ListsHeaderComponentMock {
 class ListsPaginationComponentMock {
   @Input() tableDataSize: number;
   @Input() tabName: string;
+  @Input() paginationReset: Event;
   @Output() pageChangeClick = new EventEmitter();
 }
 
@@ -273,6 +281,90 @@ describe('ListDetailComponent', () => {
 
         tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
           expect(oppRow.checked).toBe(false);
+        });
+      });
+    });
+  });
+
+  describe('Outputs', () => {
+    it('should call "next" function click event is received', () => {
+      spyOn(componentInstance.paginationReset, 'next');
+      componentInstance.handlePaginationReset();
+      expect(componentInstance.paginationReset.next).toHaveBeenCalled();
+    });
+
+    it('should set the active tab and call pagination reset function when lists tab are clicked', () => {
+      componentInstance.activeTab = 'Performance';
+      spyOn(componentInstance.paginationReset, 'next');
+      spyOn(componentInstance.sortReset, 'next');
+      componentInstance.onTabClicked('Opportunities');
+      expect(componentInstance.selectedTab).toBe('Opportunities');
+      expect(componentInstance.activeTab).toBe('Opportunities');
+      expect(componentInstance.paginationReset.next).toHaveBeenCalled();
+      expect(componentInstance.sortReset.next).toHaveBeenCalled();
+    });
+  });
+
+  describe('When the opportunity status filter is changed', () => {
+
+    it('should trigger opportunityStatusSelected method when Opportunity status dropdown emits an event', () => {
+      const mockSelectComponents = fixture.debugElement.queryAll(By.directive(CompassSelectComponent));
+      const oppStatusCompassSelect = mockSelectComponents[0].injector.get(CompassSelectComponent) as CompassSelectComponent;
+      spyOn(componentInstance, 'opportunityStatusSelected');
+      oppStatusCompassSelect.onOptionSelected.emit(OpportunityStatus.all);
+      fixture.detectChanges();
+
+      expect(componentInstance.opportunityStatusSelected).toHaveBeenCalled();
+      expect(componentInstance.opportunityStatusSelected).toHaveBeenCalledWith(OpportunityStatus.all);
+      expect(componentInstance.oppStatusSelected).toBe(OpportunityStatus.all);
+    });
+  });
+
+  describe('[Method] filterOpportunitiesByStatus', () => {
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+
+    beforeEach(() => {
+      opportunitiesTableData = getListOpportunitiesTableRowMock(3);
+
+      componentInstance.opportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+    });
+
+    it('Should return empty array when there are no closed opps and opportunity status is closed', () => {
+      opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
+        const totalOpps = tableRow.opportunities.length;
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow, oppIndex: number) => {
+          oppRow.status = oppIndex < totalOpps / 2 ? OpportunityStatus.targeted : OpportunityStatus.inactive;
+        });
+      });
+      fixture.detectChanges();
+      expect(componentInstance.filterOpportunitiesByStatus(OpportunityStatus.closed, opportunitiesTableData)).toEqual([]);
+    });
+
+    it('Should return stores with closed opps and opportunity status is closed', () => {
+      const expectedOpps: ListOpportunitiesTableRow[] = componentInstance.filterOpportunitiesByStatus(
+        OpportunityStatus.closed,
+        opportunitiesTableData
+      );
+
+      fixture.detectChanges();
+      expectedOpps.forEach((tableRow: ListOpportunitiesTableRow) => {
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
+          expect(oppRow.status).toEqual(OpportunityStatus.closed);
+        });
+      });
+    });
+
+    it('Should return stores that have opps as either targeted or inactive when filter is targeted', () => {
+      const expectedOpps: ListOpportunitiesTableRow[] = componentInstance.filterOpportunitiesByStatus(
+        OpportunityStatus.targeted,
+        opportunitiesTableData
+      );
+
+      fixture.detectChanges();
+      expectedOpps.forEach((tableRow: ListOpportunitiesTableRow) => {
+        tableRow.opportunities.forEach((oppRow: ListTableDrawerRow) => {
+          expect([OpportunityStatus.targeted, OpportunityStatus.inactive]).toContain(oppRow.status);
         });
       });
     });

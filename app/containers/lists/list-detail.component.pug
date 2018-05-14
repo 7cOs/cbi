@@ -11,7 +11,7 @@ compass-tabs(
     [tabTitle]='performanceTabTitle',
     [active]='true'
   )
-    section.list-performance-summary-section
+    section.list-action-section
       list-performance-summary(
         [depletionsTotal]="performanceTableTotal?.cytdColumn",
         [depletionsVsYA]="performanceTableTotal?.cytdVersusYaPercentColumn",
@@ -34,19 +34,33 @@ compass-tabs(
       [sortingCriteria]="performanceSortingCriteria",
       [totalRow]="performanceTableTotal",
       [tableData]="performanceTableData",
-      [pageChangeData]="pageChangeData"
+      [pageChangeData]="pageChangeData",
+      [sortReset]="sortReset",
+      (paginationReset)="handlePaginationReset()"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
+    .list-action-section
+      .opps-dropdown
+        compass-select(
+          [model]="oppStatusSelected",
+          [options]="opportunityStatusOptions",
+          [title]="'Opportunity Status'",
+          (onOptionSelected)="opportunityStatusSelected($event)"
+        )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [sortingCriteria]="opportunitiesSortingCriteria",
-      [tableData]="opportunitiesTableData",
-      [pageChangeData]="pageChangeData"
+      [tableData]="filteredOpportunitiesTableData",
+      [pageChangeData]="pageChangeData",
+      [oppStatusSelected]="oppStatusSelected",
+      [sortReset]="sortReset",
+      (paginationReset)="handlePaginationReset()"
     )
 
 lists-pagination(
   *ngIf='(selectedTab === performanceTabTitle) && (performanceTableDataSize > listTableSize)',
   [tableDataSize]="performanceTableDataSize",
+  [paginationReset]='paginationReset',
   [tabName]='performanceTabTitle',
   (pageChangeClick)="handlePageClick($event)"
 )
@@ -55,6 +69,7 @@ lists-pagination(
   *ngIf='(selectedTab === opportunitiesTabTitle) && (opportunitiesTableDataSize > listTableSize)',
   [tableDataSize]="opportunitiesTableDataSize",
   [tabName]='opportunitiesTabTitle',
+  [paginationReset]='paginationReset',
   (pageChangeClick)="handlePageClick($event)"
 )
 

@@ -4,6 +4,7 @@ import { OpportunityType } from '../../enums/list-opportunities/list-opportunity
 import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 
 export interface ListTableDrawerRow {
+  id: string;
   brand: string;
   skuPackage: string;
   type: OpportunityTypeLabel | OpportunityType;

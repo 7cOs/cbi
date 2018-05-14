@@ -60,6 +60,7 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.addCollaborator = addCollaborator;
     vm.archiveTargetList = archiveTargetList;
+    vm.unarchiveTargetList = unarchiveTargetList;
     vm.closeModal = closeModal;
     vm.createNewList = createNewList;
     vm.createTargetList = createTargetList;
@@ -77,6 +78,7 @@ module.exports = /*  @ngInject */
     vm.toggleAll = toggleAll;
     vm.showArchiveModal = showArchiveModal;
     vm.showDeleteModal = showDeleteModal;
+    vm.checkAuthorPermissions = checkAuthorPermissions;
 
     init();
 
@@ -93,17 +95,15 @@ module.exports = /*  @ngInject */
     }
 
     function archiveTargetList() {
+      loaderService.openLoader();
       var selectedTargetLists = vm.selected,
           archiveTargetListPromises = [];
 
       // get selected target list ids and their promises
       archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
-        analyticsService.trackEvent(
-          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
-          'Archive List',
-          'Selected List'
-        );
-        return targetListService.updateTargetList(targetList.id, {archived: true});
+        let convertedList = listsTransformerService.formatNewList(targetList);
+        convertedList.archived = true;
+        return listsApiService.updateListPromise(convertedList, targetList.id);
       });
 
       // run all archive requests at the same time
@@ -117,9 +117,65 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchived--;
 
           userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
+          const listPermissionLevel = userService.model.currentUser.employeeID === item.owner.employeeId ? 'author' : '';
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(listPermissionLevel, item.archived),
+            'Archive List',
+            'Selected List'
+          );
         });
-
+        loaderService.closeLoader();
         toastService.showToast('archived', selectedTargetLists);
+        vm.selected = [];
+      });
+    }
+
+    function checkAuthorPermissions() {
+      // This check is only done to see if ALL selected items don't have author permissions, otherwise we will accept the action and purge in the unarchive method.
+      let selectedTargetLists = vm.selected;
+      let noOwnerPermissions = selectedTargetLists.filter((list) => {
+        return list.owner.employeeId !== userService.model.currentUser.employeeID;
+      });
+      return (noOwnerPermissions.length === selectedTargetLists.length);
+    }
+    function unarchiveTargetList() {
+      loaderService.openLoader();
+      let selectedTargetLists = vm.selected,
+          unarchiveTargetListPromises = [];
+      let ownerPermissions = selectedTargetLists.filter((list) => {
+        return list.owner.employeeId === userService.model.currentUser.employeeID;
+      });
+
+      // get selected target list ids and their promises
+      unarchiveTargetListPromises = ownerPermissions.map((targetList) => {
+        let convertedList = listsTransformerService.formatNewList(targetList);
+        convertedList.archived = false;
+        return listsApiService.updateListPromise(convertedList, targetList.id);
+      });
+
+      // run all archive requests at the same time
+      $q.all(unarchiveTargetListPromises).then((response) => {
+        angular.forEach(ownerPermissions, (listItem, key) => {
+          listItem.archived = false;
+          // Remove the item from the archived list me.
+          userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(listItem), 1);
+
+          userService.model.targetLists.ownedArchived--;
+          userService.model.targetLists.ownedNotArchived++;
+
+          userService.model.targetLists.ownedNotArchivedTargetLists.unshift(listItem);
+          const listPermissionLevel = userService.model.currentUser.employeeID === listItem.owner.employeeId ? 'author' : '';
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(listPermissionLevel, listItem.archived),
+            'Unarchive List',
+            'Selected List'
+          );
+        });
+        loaderService.closeLoader();
+        if (selectedTargetLists.length !== ownerPermissions.length) {
+          toastService.showToast('unarchivedNoAuthor', ownerPermissions);
+        }
+        toastService.showToast('unarchived', ownerPermissions);
         vm.selected = [];
       });
     }
@@ -216,26 +272,26 @@ module.exports = /*  @ngInject */
       const formattedList = listsTransformerService.formatNewList(vm.newList);
       listsApiService.createListPromise(formattedList)
         .then(v3List => {
+          const newList = listsTransformerService.transformV3ToV2(v3List, true);
+          userService.model.targetLists.ownedNotArchivedTargetLists.unshift(newList);
+          userService.model.targetLists.ownedNotArchived++;
 
-        userService.model.targetLists.ownedNotArchivedTargetLists.concat(v3List);
-        userService.model.targetLists.ownedNotArchived++;
-
-        closeModal();
-        vm.buttonDisabled = false;
+          closeModal();
+          vm.buttonDisabled = false;
 
         analyticsService.trackEvent('Lists - My Lists', 'Create List', v3List.id);
 
-        // reset model
-        vm.newList = {
-          name: '',
-          description: '',
-          opportunities: [],
-          collaborators: [],
-          collaborateAndInvite: false
-        };
-      }).catch(response => {
-        console.log(response);
-      });
+          // reset model
+          vm.newList = {
+            name: '',
+            description: '',
+            opportunities: [],
+            collaborators: [],
+            collaborateAndInvite: false
+          };
+        }).catch(response => {
+          console.log(response);
+        });
     }
 
     function searchOpportunities(e) {
