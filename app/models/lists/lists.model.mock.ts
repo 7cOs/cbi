@@ -118,10 +118,10 @@ function getSurvey(): SurveyInfo {
 
 export function getListsCollectionSummaryMock(): ListsCollectionSummary {
   return {
-    archived: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
-    owned: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
-    ownedNotArchivedTargetLists: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
-    sharedWithMe: generateRandomSizedArray(1, 500).map(() => getV2ListMock()),
+    archived: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
+    owned: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
+    ownedNotArchivedTargetLists: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
+    sharedWithMe: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
     sharedArchivedCount: chance.natural(),
     sharedNotArchivedCount: chance.natural(),
     ownedArchived: chance.natural(),
