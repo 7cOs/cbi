@@ -18,13 +18,22 @@ public class CustomOpportunityModal extends TestNGBasePage {
   private static final String SAVE_BTN_XPATH = (MODAL_DIALOG_XPATH + "//button[@type='submit' and contains(.,'Add')]");
   private static final String CANCEL_BTN_XPATH = (MODAL_DIALOG_XPATH + "//p[contains(@class,'cancel') and contains(.,'X Cancel')]");  
   private static final String BODY_XPATH = "//body";
-  
+  public static final String REQUIRED_FIELD_ERROR_XPATH = "/../../..//div[@aria-hidden='false']/p[contains(@class,'error-message')]";
+  private static final String ACCOUNT_FIELD = (MODAL_DIALOG_XPATH + "//label[contains(.,'Account')]/..//input[@type='text']");
+  private static final String ACCOUNT_FIELD_ERROR_XPATH = ACCOUNT_FIELD + REQUIRED_FIELD_ERROR_XPATH;
+  private static final String RECOMMENDED_PKG_SKU_FIELD_XPATH = (MODAL_DIALOG_XPATH + "//label[contains(.,'Recommended Package / SKU')]/..//input[@type='text']");
+  private static final String RECOMMENDED_PKG_SKU_ERROR_FIELD_XPATH = RECOMMENDED_PKG_SKU_FIELD_XPATH + REQUIRED_FIELD_ERROR_XPATH;
+  private static final String RATIONALE_FIELD = (MODAL_DIALOG_XPATH + "//label[contains(.,'Rationale')]/..//md-select");
+  private static final String RATIONALE_FIELD_ERROR_XPATH = RATIONALE_FIELD + REQUIRED_FIELD_ERROR_XPATH;
+  private static final String IMPACT_FIELD_XPATH =  (MODAL_DIALOG_XPATH + "//label[contains(.,'Impact')]/..//md-select");
+  private static final String IMPACT_FIELD_ERROR_XPATH = IMPACT_FIELD_XPATH + REQUIRED_FIELD_ERROR_XPATH;
+
   @FindBy(how = How.XPATH, using = LAUNCH_MODAL_XPATH)
   private WebElement launchModal;
-  
+
   @FindBy(how = How.XPATH, using = MODAL_DIALOG_XPATH)
   private WebElement modalDialog;
-  
+
   @FindBy(how = How.XPATH, using = SAVE_BTN_XPATH)
   private WebElement modalSaveBtn;
 
@@ -33,12 +42,16 @@ public class CustomOpportunityModal extends TestNGBasePage {
 
   @FindBy(how = How.XPATH, using = BODY_XPATH)
   private WebElement body;
-
+  
   private final WebDriver driver;
 
   public CustomOpportunityModal(WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
+  }
+
+  public WebDriver getDriver() {
+    return driver;
   }
 
   @Override
@@ -86,48 +99,19 @@ public class CustomOpportunityModal extends TestNGBasePage {
     return findElement(By.xpath(xpath)).getText();
   }
 
-  /**
-   * NOTE: This method is to be used for discussion purposes only 
-   * as an approach open as to how required fields confirmation
-   * should be performed during automation. It is included
-   * here for demo and discussion purposes only.
-   * @category DEMO_AND_DISCUSSION
-   */
-  public boolean areAllRequiredFieldErrorMessagesDisplayed() {
-    String[] requiredFields = {
-        "Account",
-        "Recommended Package / SKU",
-        "Rationale",
-        "Impact"
-    };
-
-    boolean isAllDisplayed = true;
-    for( final String requiredField : requiredFields) {
-      log.debug("Verifying required field message for " + requiredField);
-
-      final String xpathForm = getXPathString(requiredField);
-      if( ! isElementPresent(By.xpath(xpathForm)) ) {
-        isAllDisplayed = false;
-      }
-      log.debug("Required field message for " + requiredField  + " verified");
-    }
-
-    return isAllDisplayed;
+  public boolean isAccountRequiredFieldErrorDisplayed() {
+    return isElementPresent(By.xpath(ACCOUNT_FIELD_ERROR_XPATH));
   }
 
-  private String getXPathString(String requiredField) {
-    final String MODAL_XPATH = "md-dialog//div[contains(@class, 'modal add-opportunity')]";
-    final String REQUIRED_FIELD_XPATH = "label[contains(.,'" + requiredField + "')]/..//%s/../../..)//..";
-    final String ERR_MSG_XPATH = "div[@aria-hidden='false']/p[contains(@class,'error-message')]";
-    final String BASE_XPATH = String.format("((//%s//%s)/%s", MODAL_XPATH, REQUIRED_FIELD_XPATH, ERR_MSG_XPATH);
-    String xpathForm = null;
+  public boolean isRecommnededPackagSkuRequiredFieldErrorDisplayed() {
+    return isElementPresent(By.xpath(RECOMMENDED_PKG_SKU_ERROR_FIELD_XPATH));
+  }
 
-    if("Account".equals(requiredField) || "Recommended Package / SKU".equals(requiredField)){
-      xpathForm = String.format(BASE_XPATH, "input[@type='text']");
-    } else if ("Rationale".equals(requiredField) || "Impact".equals(requiredField)) {
-      xpathForm = String.format(BASE_XPATH, "md-select");
-    }
+  public boolean isRationaleRequiredFieldErrorDisplayed() {
+    return isElementPresent(By.xpath(RATIONALE_FIELD_ERROR_XPATH));
+  }
 
-    return xpathForm;
+  public boolean isImpactRequiredFieldErrorDisplayed() {
+    return isElementPresent(By.xpath(IMPACT_FIELD_ERROR_XPATH));
   }
 }

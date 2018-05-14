@@ -19,7 +19,7 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
   private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
   private CustomOpportunityModal customOpportunityModal;
-  
+
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
     final String testCaseName = method.getAnnotation(Test.class).description();
@@ -48,8 +48,17 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
         .launchModal()
         .clickAddButton();
 
-    Assert.assertTrue(customOpportunityModal.areAllRequiredFieldErrorMessagesDisplayed(),
-          "One or more required fields failed to display an error message when blank field is submitted");
+    Assert.assertTrue(customOpportunityModal.isAccountRequiredFieldErrorDisplayed(), 
+        "Account required field message is not displayed" );
+
+    Assert.assertTrue(customOpportunityModal.isRecommnededPackagSkuRequiredFieldErrorDisplayed(), 
+        "Recommeded Package/SKU required field message is not displayed" );
+
+    Assert.assertTrue(customOpportunityModal.isRationaleRequiredFieldErrorDisplayed(), 
+        "Rationale required field message is not displayed" );
+
+    Assert.assertTrue(customOpportunityModal.isImpactRequiredFieldErrorDisplayed(), 
+        "Impact required field message is not displayed" );
 
     Assert.assertTrue(customOpportunityModal.clickOutsideModal().isModalDisplayed(), 
         "Failed to prevent modal from closing after clicking outside modal dialog");
@@ -58,5 +67,3 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
         "Add Opportunity modal failed to disappear after canceling modal dialog");
   }
 }
-
-
