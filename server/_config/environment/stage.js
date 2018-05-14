@@ -64,7 +64,7 @@ module.exports = function (config) {
   };
 
   config.sfdcSettings = {
-    noteRecordTypeId: '012G0000001BSRRIA4'
+    noteRecordTypeId: '012m00000004plsAAA'
   };
 
   return config;
