@@ -75,12 +75,11 @@ describe('Compass User Search Component', () => {
 
   describe('resultChosen function', () => {
     it('should select a user and emit an event and call close to hide the ui', () => {
-      let testUser = {user: 'test'};
-      componentInstance.resultChosen(testUser);
+      componentInstance.resultChosen(fakeUserDTO);
       fixture.detectChanges();
 
-      componentInstance.addedCollaboratorEvent.subscribe((value: object) => {
-        expect(value).toEqual(testUser);
+      componentInstance.addedCollaboratorEvent.subscribe((value: UserDTO) => {
+        expect(value).toEqual(fakeUserDTO);
       });
 
       expect(componentInstance.showX).toBeFalsy();
