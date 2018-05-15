@@ -35,14 +35,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<>();
 
-	/**
-   * @deprecated Please use {@link #createDriver(String) createDriver(String)} and supply a test case name instead
-   */
-  @Deprecated
-  public static WebDriver createDriver() throws MalformedURLException {
-    return createDriver("Automated Test");
-  }
-
   public static WebDriver createDriver(String testName) throws MalformedURLException {
     final WebDriver driver;
 
