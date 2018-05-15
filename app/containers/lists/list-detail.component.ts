@@ -24,6 +24,7 @@ import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { forEach } from '@uirouter/core';
 
 interface ListPageClick {
   pageNumber: number;
@@ -144,6 +145,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
+    if (this.selectedTab === this.performanceTabTitle) {
+      console.log(actionButtonProperties.actionType + ' - on performance tab');
+      const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
+      console.log(checkedStores);
+    }
+    if (this.selectedTab === this.opportunitiesTabTitle) {
+      console.log(actionButtonProperties.actionType + ' - on opp tab');
+    }
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
 

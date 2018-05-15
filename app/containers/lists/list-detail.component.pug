@@ -29,6 +29,11 @@ compass-tabs(
           [isDisabled]="false",
           (onActionButtonClicked)="captureActionButtonClicked($event)"
         )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Remove",
+          [isDisabled]="false",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [sortingCriteria]="performanceSortingCriteria",
@@ -46,6 +51,12 @@ compass-tabs(
           [options]="opportunityStatusOptions",
           [title]="'Opportunity Status'",
           (onOptionSelected)="opportunityStatusSelected($event)"
+        )
+      div.button-section
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Remove",
+          [isDisabled]="false",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
         )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
