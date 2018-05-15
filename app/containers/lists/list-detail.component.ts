@@ -25,6 +25,8 @@ import { ListPerformanceColumnType } from '../../enums/list-performance-column-t
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { forEach } from '@uirouter/core';
+import { Observable } from 'rxjs/Observable';
+import { ListsApiService } from '../../services/api/v3/lists-api.service';
 
 interface ListPageClick {
   pageNumber: number;
@@ -78,7 +80,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     private listsTableTransformerService: ListsTableTransformerService,
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
-    private titleService: Title
+    private titleService: Title,
+    private listApiService: ListsApiService
   ) { }
 
   ngOnInit() {
@@ -152,6 +155,21 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }
     if (this.selectedTab === this.opportunitiesTabTitle) {
       console.log(actionButtonProperties.actionType + ' - on opp tab');
+      const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+        store.opportunities.forEach((opp) => {
+         if (opp.checked === true) totalOpps.push(opp);
+        });
+        return totalOpps;
+      }, []);
+      console.log(checkedOpps);
+      let apiCalls: Observable<any>[] = [];
+      checkedOpps.forEach((opp) => {
+        apiCalls.push(this.listApiService.removeOpportunityFromList(this.listSummary.id, opp.id));
+      });
+      Observable.forkJoin(apiCalls).subscribe((results) => {
+        console.log('output of remove from opps call');
+        console.log(results);
+      });
     }
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
