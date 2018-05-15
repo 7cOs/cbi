@@ -78,8 +78,19 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
+  public addStoresToList(listId: string, stores: {storeId: string}[]): Observable<ListStoreDTO[]> {
+    const url = `/v3/lists/${ listId }/stores`;
+
+    return this.http.post(url, stores)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
   public addOpportunitiesToListPromise(listId: string, opportunities: {opportunityId: string}[]): Promise<ListOpportunityDTO[]> {
     return this.addOpportunitiesToList(listId, opportunities).toPromise();
+  }
+
+  public addStoresToListPromise(listId: string, stores: {storeId: string}[]): Promise<ListStoreDTO[]> {
+    return this.addStoresToList(listId, stores).toPromise();
   }
 
   public getOppsDataForList(
