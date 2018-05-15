@@ -49,7 +49,7 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
     Assert.assertTrue(customOpportunityModal.isAccountRequiredFieldErrorDisplayed(), 
         "Required field message for Account failed to display" );
 
-    Assert.assertTrue(customOpportunityModal.isRecommendedPackagSkuRequiredFieldErrorDisplayed(), 
+    Assert.assertTrue(customOpportunityModal.isRecommendedPackageSkuRequiredFieldErrorDisplayed(), 
         "Required field message for Recommended Package/SKU failed to display" );
 
     Assert.assertTrue(customOpportunityModal.isRationaleRequiredFieldErrorDisplayed(), 

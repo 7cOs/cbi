@@ -18,14 +18,10 @@ public class CustomOpportunityModal extends TestNGBasePage {
   private static final String CANCEL_BTN_XPATH = (MODAL_DIALOG_XPATH + "//p[contains(@class,'cancel') and contains(.,'X Cancel')]");  
   private static final String BODY_XPATH = "//body";
   public static final String REQUIRED_FIELD_ERROR_XPATH = "/../../..//div[@aria-hidden='false']/p[contains(@class,'error-message')]";
-  private static final String ACCOUNT_FIELD = (MODAL_DIALOG_XPATH + "//label[contains(.,'Account')]/..//input[@type='text']");
-  private static final String ACCOUNT_FIELD_ERROR_XPATH = ACCOUNT_FIELD + REQUIRED_FIELD_ERROR_XPATH;
-  private static final String RECOMMENDED_PKG_SKU_FIELD_XPATH = (MODAL_DIALOG_XPATH + "//label[contains(.,'Recommended Package / SKU')]/..//input[@type='text']");
-  private static final String RECOMMENDED_PKG_SKU_ERROR_FIELD_XPATH = RECOMMENDED_PKG_SKU_FIELD_XPATH + REQUIRED_FIELD_ERROR_XPATH;
-  private static final String RATIONALE_FIELD = (MODAL_DIALOG_XPATH + "//label[contains(.,'Rationale')]/..//md-select");
-  private static final String RATIONALE_FIELD_ERROR_XPATH = RATIONALE_FIELD + REQUIRED_FIELD_ERROR_XPATH;
-  private static final String IMPACT_FIELD_XPATH =  (MODAL_DIALOG_XPATH + "//label[contains(.,'Impact')]/..//md-select");
-  private static final String IMPACT_FIELD_ERROR_XPATH = IMPACT_FIELD_XPATH + REQUIRED_FIELD_ERROR_XPATH;
+  private static final String ACCOUNT_FIELD_XPATH = "//label[contains(.,'Account')]/..//input[@type='text']";
+  private static final String PACKAGE_SKU_FIELD_XPATH = "//label[contains(.,'Recommended Package / SKU')]/..//input[@type='text']";
+  private static final String RATIONALE_FIELD_XPATH = "//label[contains(.,'Rationale')]/..//md-select";
+  private static final String IMPACT_FIELD_XPATH = "//label[contains(.,'Impact')]/..//md-select";
 
   @FindBy(how = How.XPATH, using = LAUNCH_MODAL_XPATH)
   private WebElement launchModal;
@@ -95,18 +91,22 @@ public class CustomOpportunityModal extends TestNGBasePage {
   }
 
   public boolean isAccountRequiredFieldErrorDisplayed() {
-    return isElementPresent(By.xpath(ACCOUNT_FIELD_ERROR_XPATH));
+    return isElementPresent(By.xpath(getRequiredErrorMessageXPathFor(ACCOUNT_FIELD_XPATH)));
   }
 
-  public boolean isRecommendedPackagSkuRequiredFieldErrorDisplayed() {
-    return isElementPresent(By.xpath(RECOMMENDED_PKG_SKU_ERROR_FIELD_XPATH));
+  public boolean isRecommendedPackageSkuRequiredFieldErrorDisplayed() {
+    return isElementPresent(By.xpath(getRequiredErrorMessageXPathFor(PACKAGE_SKU_FIELD_XPATH)));
   }
 
   public boolean isRationaleRequiredFieldErrorDisplayed() {
-    return isElementPresent(By.xpath(RATIONALE_FIELD_ERROR_XPATH));
+    return isElementPresent(By.xpath(getRequiredErrorMessageXPathFor(RATIONALE_FIELD_XPATH)));
   }
 
   public boolean isImpactRequiredFieldErrorDisplayed() {
-    return isElementPresent(By.xpath(IMPACT_FIELD_ERROR_XPATH));
+    return isElementPresent(By.xpath(getRequiredErrorMessageXPathFor(IMPACT_FIELD_XPATH)));
+  }
+
+  private String getRequiredErrorMessageXPathFor(String fieldXPath) {
+    return MODAL_DIALOG_XPATH + fieldXPath + REQUIRED_FIELD_ERROR_XPATH;
   }
 }
