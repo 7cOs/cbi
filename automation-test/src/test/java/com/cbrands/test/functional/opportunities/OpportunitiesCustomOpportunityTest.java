@@ -61,7 +61,7 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
     Assert.assertTrue(customOpportunityModal.clickOutsideModal().isModalDisplayed(), 
         "Add Opportunity Modal failed to close after clicking outside modal dialog");
 
-    Assert.assertFalse(customOpportunityModal.clickCancelButton().isModalClosed(),
+    Assert.assertTrue(customOpportunityModal.clickCancelButton().isModalClosed(),
         "Add Opportunity modal failed to close after canceling modal dialog");
   }
 }

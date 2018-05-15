@@ -87,7 +87,7 @@ public class CustomOpportunityModal extends TestNGBasePage {
  
   public boolean isModalClosed() {
     waitForElementToDisappear(By.xpath(MODAL_DIALOG_XPATH));
-    return isModalDisplayed();
+    return ! isModalDisplayed();
   }
 
   public boolean isAccountRequiredFieldErrorDisplayed() {
