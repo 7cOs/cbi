@@ -24,6 +24,9 @@ import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
+import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
+import { CompassModalService } from '../../services/compass-modal.service';
 
 interface ListPageClick {
   pageNumber: number;
@@ -70,11 +73,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
+  public downloadAllModalStringInputs: CompassAlertModalInputs;
+  public compassAlertModalAccept = CompassAlertModalEvent.Accept;
+  public copyHTMLBody: string;
 
   private listDetailSubscription: Subscription;
 
   constructor(
     private listsTableTransformerService: ListsTableTransformerService,
+    private compassModalService: CompassModalService,
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
     private titleService: Title
@@ -163,6 +170,18 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       return totalStores;
     }, []);
     console.log(checkedStores, 'perf');
+    this.downloadAllModalStringInputs = {
+      'title': 'Copy to List',
+      'body': this.copyHTMLBody,
+      'rejectLabel': 'Cancel',
+      'acceptLabel': 'Copy'};
+    this.copyHTMLBody = 'LIST';
+    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.downloadAllModalStringInputs, null);
+    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+      if (value === this.compassAlertModalAccept) {
+        console.log('accept clicked!');
+      }
+    });
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {
