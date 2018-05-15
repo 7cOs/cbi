@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CompassListClassUtilService } from '../../../services/compass-list-class-util.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { CompassListClassUtilService } from '../../../services/compass-list-clas
   template: require('./list-performance-summary.component.pug'),
   styles: [require('./list-performance-summary.component.scss')]
 })
-export class ListPerformanceSummaryComponent implements OnInit {
+export class ListPerformanceSummaryComponent implements OnChanges {
   @Input() depletionsTotal: number;
   @Input() depletionsVsYA: number;
   @Input() distributionsTotal: number;
@@ -19,7 +19,7 @@ export class ListPerformanceSummaryComponent implements OnInit {
 
   constructor(private classUtilService: CompassListClassUtilService) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.depletionsVsYAColorClass = this.getPercentColorClass(
       this.depletionsVsYA
     );
