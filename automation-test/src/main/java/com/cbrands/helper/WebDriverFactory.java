@@ -149,7 +149,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   public enum BrowserType {
-    firefox,
     ie,
     chrome
   }
