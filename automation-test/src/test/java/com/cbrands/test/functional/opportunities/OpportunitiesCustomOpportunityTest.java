@@ -9,14 +9,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import com.cbrands.TestUser;
 import com.cbrands.pages.CustomOpportunityModal;
-import com.cbrands.pages.HomePage;
 import com.cbrands.pages.LoginPage;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
 
 public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
-  private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
   private CustomOpportunityModal customOpportunityModal;
 
@@ -26,7 +24,7 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
     final String sauceTitle = String.format("Functional - Opportunities - Custom Opportunity - %s", testCaseName);
     this.startUpBrowser(sauceTitle);
 
-    homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
+    PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     customOpportunityModal = PageFactory.initElements(driver, CustomOpportunityModal.class);
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();    
@@ -49,21 +47,21 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
         .clickAddButton();
 
     Assert.assertTrue(customOpportunityModal.isAccountRequiredFieldErrorDisplayed(), 
-        "Account required field message is not displayed" );
+        "Required field message for Account failed to display" );
 
-    Assert.assertTrue(customOpportunityModal.isRecommnededPackagSkuRequiredFieldErrorDisplayed(), 
-        "Recommeded Package/SKU required field message is not displayed" );
+    Assert.assertTrue(customOpportunityModal.isRecommendedPackagSkuRequiredFieldErrorDisplayed(), 
+        "Required field message for Recommended Package/SKU failed to display" );
 
     Assert.assertTrue(customOpportunityModal.isRationaleRequiredFieldErrorDisplayed(), 
         "Rationale required field message is not displayed" );
 
     Assert.assertTrue(customOpportunityModal.isImpactRequiredFieldErrorDisplayed(), 
-        "Impact required field message is not displayed" );
+        "Required field message for Impact failed to display" );
 
     Assert.assertTrue(customOpportunityModal.clickOutsideModal().isModalDisplayed(), 
-        "Failed to prevent modal from closing after clicking outside modal dialog");
+        "Add Opportunity Modal failed to close after clicking outside modal dialog");
 
     Assert.assertFalse(customOpportunityModal.clickCancelButton().isModalClosed(),
-        "Add Opportunity modal failed to disappear after canceling modal dialog");
+        "Add Opportunity modal failed to close after canceling modal dialog");
   }
 }

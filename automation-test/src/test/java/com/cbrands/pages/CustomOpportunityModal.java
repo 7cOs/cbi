@@ -12,7 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class CustomOpportunityModal extends TestNGBasePage {
-  private Log log = LogFactory.getLog(LoginPage.class);
   private static final String LAUNCH_MODAL_XPATH = "//a[@action='Add Opportunity']";
   private static final String MODAL_DIALOG_XPATH = "(//md-dialog//div[contains(@class, 'modal add-opportunity')])";
   private static final String SAVE_BTN_XPATH = (MODAL_DIALOG_XPATH + "//button[@type='submit' and contains(.,'Add')]");
@@ -95,15 +94,11 @@ public class CustomOpportunityModal extends TestNGBasePage {
     return isModalDisplayed();
   }
 
-  public String getRequiredFieldErrorMessage(String xpath) {
-    return findElement(By.xpath(xpath)).getText();
-  }
-
   public boolean isAccountRequiredFieldErrorDisplayed() {
     return isElementPresent(By.xpath(ACCOUNT_FIELD_ERROR_XPATH));
   }
 
-  public boolean isRecommnededPackagSkuRequiredFieldErrorDisplayed() {
+  public boolean isRecommendedPackagSkuRequiredFieldErrorDisplayed() {
     return isElementPresent(By.xpath(RECOMMENDED_PKG_SKU_ERROR_FIELD_XPATH));
   }
 
