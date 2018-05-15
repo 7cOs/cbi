@@ -15,13 +15,13 @@ import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.test.BaseTestCase;
 
 public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
-  private OpportunitiesPage opportunitiesPage;
   private CustomOpportunityModal customOpportunityModal;
 
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
     final String testCaseName = method.getAnnotation(Test.class).description();
     final String sauceTitle = String.format("Functional - Opportunities - Custom Opportunity - %s", testCaseName);
+    final OpportunitiesPage opportunitiesPage;
     this.startUpBrowser(sauceTitle);
 
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
