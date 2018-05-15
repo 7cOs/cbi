@@ -20,11 +20,15 @@ describe('ListPerformanceSummaryComponent', () => {
     it('should check if  component to be defined', () => {
       expect(componentInstance).toBeDefined();
     });
+  });
 
+  describe('Component changes', () => {
     it('should put class values into css variables', () => {
+      expect(componentInstance.depletionsVsYAColorClass).toBe(undefined);
+      expect(componentInstance.distributionsVsYAColorClass).toBe(undefined);
       componentInstance.depletionsVsYA = 1;
       componentInstance.distributionsVsYA = 1;
-
+      componentInstance.ngOnChanges();
       fixture.detectChanges();
       expect(componentInstance.depletionsVsYAColorClass).toBe('positive');
       expect(componentInstance.distributionsVsYAColorClass).toBe('positive');
