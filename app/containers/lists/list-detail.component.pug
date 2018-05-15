@@ -22,7 +22,7 @@ compass-tabs(
         compass-action-button(
           [actionLabel]="actionButtonType.CopyToList",
           [isDisabled]="false",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
+          (onActionButtonClicked)="performanceCopyToListClick()"
         )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Download",
@@ -51,7 +51,7 @@ compass-tabs(
         compass-action-button(
         [actionLabel]="actionButtonType.CopyToList",
         [isDisabled]="false",
-        (onActionButtonClicked)="captureActionButtonClicked($event)"
+        (onActionButtonClicked)="opportunityCopyToListClick()"
         )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",

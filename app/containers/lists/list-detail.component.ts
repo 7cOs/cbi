@@ -147,6 +147,24 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
   }
 
+  public opportunityCopyToListClick(): void {
+    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+      store.opportunities.forEach((opp) => {
+        if (opp.checked === true) totalOpps.push(opp.id);
+      });
+      return totalOpps;
+    }, []);
+    console.log(checkedOpps, 'Opps');
+  }
+
+  public performanceCopyToListClick(): void {
+    const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
+      if (store.checked === true) totalStores.push(store.unversionedStoreId);
+      return totalStores;
+    }, []);
+    console.log(checkedStores, 'perf');
+  }
+
   opportunityStatusSelected(statusValue: OpportunityStatus) {
     this.oppStatusSelected = statusValue;
     this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?

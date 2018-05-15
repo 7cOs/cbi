@@ -21,7 +21,8 @@ export function getListPerformanceTableRowMock(length: number) {
       l90VersusYaPercentColumn: chance.d100(),
       lastDepletionDateColumn: depDate.toString(),
       performanceError: false,
-      checked: false
+      checked: false,
+      unversionedStoreId: chance.string(),
     });
   }
 
