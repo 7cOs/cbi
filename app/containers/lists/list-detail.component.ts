@@ -239,7 +239,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public handleManageButtonClick() {
-    console.log(this.listSummary);
     this.compassModalOverlayRef = this.compassModalService.showManageListModalDialog(
       { title: 'Manage List',
         acceptLabel: 'Save',
