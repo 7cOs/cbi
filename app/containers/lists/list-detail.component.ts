@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import * as ListsActions from '../../state/actions//lists.action';
@@ -26,7 +27,8 @@ import { OpportunityStatus } from '../../enums/list-opportunities/list-opportuni
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
 import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
-import { CompassModalService } from '../../services/compass-modal.service';
+import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
+import { User } from '../../models/lists/user.model';
 
 interface ListPageClick {
   pageNumber: number;
@@ -59,6 +61,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableData: ListPerformanceTableRow[];
   public opportunitiesTableDataSize: number;
   public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
+  public compassModalOverlayRef: CompassManageListModalOverlayRef;
+  public currentUser: User;
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
   public listTableSize: number = LIST_TABLE_SIZE;
@@ -84,11 +88,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     private compassModalService: CompassModalService,
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
-    private titleService: Title
+    private titleService: Title,
+    @Inject('userService') private userService: any
   ) { }
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
+    this.currentUser = this.userService.model.currentUser;
     this.opportunityStatusOptions = listOpportunityStatusOptions;
     this.oppStatusSelected = OpportunityStatus.all;
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
@@ -228,11 +234,20 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public handleManageButtonClick() {
-    console.log('manage button click');
+    this.compassModalOverlayRef = this.compassModalService.showManageListModalDialog(
+      { title: 'Manage List',
+        acceptLabel: 'Save',
+        rejectLabel: 'close',
+        currentUser: this.currentUser,
+        listObject: this.listSummary
+      }, {});
+    this.compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((payload: ListsSummary) => {
+      this.store.dispatch(new ListsActions.PatchList(payload));
+    });
   }
 
   public handleListsLinkClick() {
-    console.log('list link clicked');
+    this.$state.go('lists');
   }
 
   public onTabClicked(tabName: string): void {

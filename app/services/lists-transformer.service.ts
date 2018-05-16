@@ -6,14 +6,15 @@ import { ListCategory } from '../enums/lists/list-category.enum';
 import { ListPerformance } from '../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
 import { ListType } from '../enums/lists/list-type.enum';
+
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
-import { ListStorePerformance } from '../models/lists/list-store-performance.model';
-import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
 import { ListsCollectionSummary } from '../models/lists/lists-collection-summary.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
+import { ListStorePerformance } from '../models/lists/list-store-performance.model';
+import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
 import { OpportunitiesByStore } from '../models/lists/opportunities-by-store.model';
 import { OpportunityImpact } from '../enums/list-opportunities/list-opportunity-impact.enum';
 import { OpportunityStatus } from '../enums/list-opportunities/list-opportunity-status.enum';
@@ -74,7 +75,24 @@ export class ListsTransformerService {
       name: summaryDataDTO.name,
       numberOfAccounts: summaryDataDTO.numberOfAccounts,
       ownerFirstName: summaryDataDTO.owner.firstName,
-      ownerLastName: summaryDataDTO.owner.lastName
+      ownerLastName: summaryDataDTO.owner.lastName,
+      collaborators: summaryDataDTO.collaborators,
+      ownerId: summaryDataDTO.owner.employeeId,
+      type: summaryDataDTO.type,
+      collaboratorType: summaryDataDTO.collaboratorType,
+      category: summaryDataDTO.category
+    };
+  }
+
+  public convertCollaborators(list: ListsSummary): FormattedNewList {
+    return {
+      description: list.description,
+      name: list.name,
+      type: ListType.TargetList,
+      archived: list.archived,
+      collaboratorType: CollaboratorType.CollaborateAndInvite,
+      collaboratorEmployeeIds: list.collaborators.map((user: User) => user.employeeId),
+      category: ListCategory.Beer
     };
   }
 

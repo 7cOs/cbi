@@ -1,0 +1,22 @@
+.inline-search
+  div([formGroup]="parentGroup")
+    input(formControlName="userSearchTerm",
+      type="text",
+      placeholder="Enter names or CBI Email addresses")
+    input.submit-btn.remove-btn([ngClass]="{'visible': showX}",
+      (click)="clearModel()")
+    input.submit-btn((click)="callSearch()",
+      [ngClass]="{'visible': checkSearchTermLength(), 'hidden': !showSearchIcon}")
+    .results-container([ngClass]="{'open': showResults}",
+      *ngIf="showResults")
+      .close-btn(*ngIf="!loading && searchResults.length === 0",
+        (click)="close()",
+        aria-label="Close") x
+      ul.results(*ngIf="!loading")
+        li(*ngFor="let result of searchResults",
+          (click)="resultChosen(result)") {{result.firstName | titlecase}} {{result.lastName | titlecase}}
+          br
+          span(class="user-data") {{userDataFormat(result)}}
+      p.no-results(*ngIf="!loading && !errorMessage && searchResults.length === 0") No results found
+      p.no-results(*ngIf="errorMessage") Something went wrong.<br>Please try again.
+    label.error(*ngIf="showLengthError") Please input at least 3 characters.

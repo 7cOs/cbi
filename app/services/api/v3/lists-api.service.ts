@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
 import { FormattedNewList } from '../../../models/lists/formatted-new-list.model';
 import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
-import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
-import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
-import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
-import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
+import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
+import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
+import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
+import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 import { V3List } from '../../../models/lists/v3-list.model';
 
 @Injectable()

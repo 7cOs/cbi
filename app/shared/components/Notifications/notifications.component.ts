@@ -36,7 +36,7 @@ export class NotificationsComponent {
     'ACCOUNT': 'Read Note Notifications',
     'STORE': 'Read Note Notifications',
     'DISTRIBUTOR': 'Read Note Notifications',
-    'LIST': 'Read Target List Notifications'
+    'LIST': 'Read List Notifications'
   };
 
   constructor(
