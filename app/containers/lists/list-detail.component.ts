@@ -9,7 +9,6 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
-import { CompassActionModalEvent } from '../../enums/compass-action-modal-strings.enum';
 import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { RadioInputModel } from '../../models/compass-radio-input.model';
@@ -88,12 +87,35 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
   public downloadAllModalStringInputs: CompassActionModalInputs;
-  public compassAlertModalAccept = CompassActionModalEvent.Accept;
+  public copyToListModalStringInputs: CompassActionModalInputs;
   public radioInputModel: RadioInputModel = {
     selected: ListsDownloadType.Stores,
     radioOptions: downloadRadioOptions,
     title: 'OPTIONS',
     stacked: false
+  };
+  public abc =
+      [{
+        display: 'Choose a List',
+        value: 'Choose a List'
+      },
+      {
+        display: 'All',
+        value: OpportunityStatus.all
+      },
+      {
+        display: 'Targeted',
+        value: OpportunityStatus.targeted
+      },
+      {
+        display: 'Closed',
+          value: OpportunityStatus.closed
+      }];
+
+  public dropdownInputModel = {
+    selected: this.abc[0].value,
+    dropdownOptions: this.abc,
+    title: 'LIST'
   };
 
   public downloadBodyHTML: string;
@@ -175,45 +197,27 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
-    if (actionButtonProperties.actionType === ActionButtonType.Download) {
-      // This logic will eventually go it's own function
-      this.downloadBodyHTML = 'Body text goes here!';
-      this.downloadAllModalStringInputs = {
-        'title': 'Download',
-        'bodyText': this.downloadBodyHTML,
-        'radioInputModel': this.radioInputModel,
-        'acceptLabel': 'Download',
-        'rejectLabel': 'Cancel'
-      };
-      let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
-      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-          console.log('radio option selected: ', value.radioOptionSelected);
-          console.log('dropdown option selected: ', value.dropdownOptionSelected);
+    this.showModal(actionButtonProperties.actionType);
+  }
+
+  public copyToListClick(): void {
+    if (this.selectedTab === this.performanceTabTitle) {
+      const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+        store.opportunities.forEach((opp) => {
+          if (opp.checked === true) totalOpps.push(opp.id);
         });
-      // Rest of logic according to selections made by the user
-    } else if (actionButtonProperties.actionType === ActionButtonType.CopyToList) {
-      // add logic to send appropriate fields in model as needed
-    } else if (actionButtonProperties.actionType === ActionButtonType.AddToList) {
-      // add logic to send appropriate fields in model as needed
+        return totalOpps;
+      }, []);
+      console.log(checkedOpps, 'Opps');
+      this.copyToListModal();
+    } else {
+      const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
+        if (store.checked === true) totalStores.push(store.unversionedStoreId);
+        return totalStores;
+      }, []);
+      console.log(checkedStores, 'perf');
+      this.copyToListModal();
     }
-  }
-
-  public opportunityCopyToListClick(): void {
-    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
-      store.opportunities.forEach((opp) => {
-        if (opp.checked === true) totalOpps.push(opp.id);
-      });
-      return totalOpps;
-    }, []);
-    console.log(checkedOpps, 'Opps');
-  }
-
-  public performanceCopyToListClick(): void {
-    const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
-      if (store.checked === true) totalStores.push(store.unversionedStoreId);
-      return totalStores;
-    }, []);
-    console.log(checkedStores, 'perf');
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {
@@ -313,6 +317,20 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && opportunitiesStatus === ActionStatus.Fetched;
+  }
+
+  private copyToListModal() {
+      this.copyToListModalStringInputs = {
+        'title': 'Copy to List',
+        'dropdownInputModel': this.dropdownInputModel,
+        'acceptLabel': 'COPY',
+        'rejectLabel': 'CANCEL'
+      };
+      let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
+      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+        console.log('dropdown option selected: ', value.dropdownOptionSelected);
+        console.log('accept clicked');
+      });
   }
 
   private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {

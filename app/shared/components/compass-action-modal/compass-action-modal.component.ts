@@ -36,16 +36,8 @@ export class CompassActionModalComponent implements OnInit {
 
   ngOnInit() {
     this.radioOptionSelected = ListsDownloadType.Stores;
-    this.dropdownOptionSelected = 'All';
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
-    // this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
-
-    // just for example - remove all this logic and uncomment the above line when sending real data
-    this.dropdownInputModel = {
-      selected: 'All',
-      dropdownOptions: listOpportunityStatusOptions,
-      title: 'List'
-    };
+    this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
