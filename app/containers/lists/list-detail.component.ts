@@ -228,6 +228,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.filteredOpportunitiesTableData = this.opportunitiesTableData;
       this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
     }
+    if (tabName === this.opportunitiesTabTitle) {
+      this.performanceTableData = this.getDeselectedPerformanceTableData(this.performanceTableData);
+    }
   }
 
   public handlePaginationReset() {
@@ -252,6 +255,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && opportunitiesStatus === ActionStatus.Fetched;
+  }
+
+  private getDeselectedPerformanceTableData(performanceTableData: ListPerformanceTableRow[]): ListPerformanceTableRow[] {
+    return performanceTableData.map((tableRow: ListPerformanceTableRow) => {
+      return Object.assign({}, tableRow, {
+        checked: false
+      });
+    });
   }
 
   private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
