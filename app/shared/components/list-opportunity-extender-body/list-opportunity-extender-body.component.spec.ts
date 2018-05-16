@@ -32,7 +32,12 @@ describe('Team Performance Opportunities Extender Body', () => {
         totalOpportunities: null,
         numberOfAccounts: null,
         ownerFirstName: null,
-        ownerLastName: null
+        ownerLastName: null,
+        collaborators: [],
+        ownerId: null,
+        type: null,
+        collaboratorType: null,
+        category: null
       }
     },
     listStores: {
