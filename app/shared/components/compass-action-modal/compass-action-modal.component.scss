@@ -3,6 +3,7 @@
 .compass-modal {
   width: 400px;
   min-height: 280px;
+  overflow: hidden;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 1px 2px 0 $gray-1;
@@ -35,33 +36,74 @@
 
 .compass-modal-body {
   width: 340px;
-  height: 42px;
+  height: 21px;
   padding: 30px;
   font-family: $roboto;
-  font-size: 14px;
-  line-height: 1.5;
   text-align: left;
-  color: $gray-1;
 
   p {
     font-family: $roboto;
-    font-size: 14px;
+    color: $gray-1;
   }
+}
+
+.compass-radio {
+  font-size: 14px;
+  font-family: $roboto;
+  color: $gray-1;
+  padding: 30px;
+
+  .mat-radio-label {
+    margin-right: 40px;
+  }
+
+  .mat-radio-label-content {
+    padding-left: 8px;
+    padding-right: 30px;
+  }
+
+  .compass-radio-value {
+    line-height: 0;
+  }
+}
+
+.compass-dropdown {
+  font-size: 14px;
+  font-family: $roboto;
+  border-radius: 5px;
+  color: $gray-1;
+  padding: 30px;
 }
 
 .compass-modal-action-bar {
   padding-top: 40px;
   float: right;
-  padding-right: 20px;
+  padding-right: 30px;
 
   .compass-modal-btn {
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 30px;
     cursor: pointer;
     font-family: $roboto;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: $cancel-blue;
+    width: 115px;
+  }
+
+  .btn-action {
+    background-color: #218ACE;
+    box-shadow: none;
+    color: #FFFFFF;
+    font-family: $roboto;
+    font-size: 1em;
+    font-weight: 600;
+    height: 40px;
+    padding: 15px 5px 30px;
+    text-transform: none;
+    width: 115px;
+    border-radius: 5px;
+    border-bottom: none;
   }
 }

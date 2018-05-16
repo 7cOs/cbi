@@ -8,8 +8,9 @@ import { MatButtonModule, MatCardModule, MatCheckboxModule, MatRadioModule, MatR
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { CompassActionButtonComponent } from './components/compass-action-button/compass-action-button.component';
-import { CompassCardComponent }  from './components/compass-card/compass-card.component';
+import { CompassActionModalComponent } from './components/compass-action-modal/compass-action-modal.component';
 import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
+import { CompassCardComponent }  from './components/compass-card/compass-card.component';
 import { CompassModalService } from '../services/compass-modal.service';
 import { CompassOverlayService } from '../services/compass-overlay.service';
 import { CompassRadioComponent } from './components/compass-radio/compass-radio.component';
@@ -40,6 +41,7 @@ import { CompassListClassUtilService } from '../services/compass-list-class-util
   exports: [
     CompassActionButtonComponent,
     BeerLoaderComponent,
+    CompassActionModalComponent,
     CompassAlertModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
@@ -62,6 +64,7 @@ import { CompassListClassUtilService } from '../services/compass-list-class-util
     CompassActionButtonComponent,
     CompassCardComponent,
     CompassAlertModalComponent,
+    CompassActionModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
     CompassTabComponent,
@@ -80,6 +83,7 @@ import { CompassListClassUtilService } from '../services/compass-list-class-util
     CompassListClassUtilService
   ],
   entryComponents: [
+    CompassActionModalComponent,
     CompassAlertModalComponent,
     CompassTooltipPopupComponent
   ]

@@ -21,12 +21,14 @@ compass-tabs(
       div.button-section
         compass-action-button(
           [actionLabel]="actionButtonType.AddToList",
-          [isDisabled]="true",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.CopyToList",
           (onActionButtonClicked)="captureActionButtonClicked($event)"
         )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Download",
-          [isDisabled]="false",
           (onActionButtonClicked)="captureActionButtonClicked($event)"
         )
     list-performance-table(

@@ -4,8 +4,8 @@ import { DropdownInputModel } from '../models/compass-dropdown-input.model';
 export interface CompassActionModalInputs {
   title: string;
   bodyText?: string;
-  radioInputModel: RadioInputModel;
-  dropdownInputModel: DropdownInputModel;
+  radioInputModel?: RadioInputModel;
+  dropdownInputModel?: DropdownInputModel;
   acceptLabel: string;
   rejectLabel: string;
 }

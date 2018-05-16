@@ -8,11 +8,14 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
+import { CompassModalService } from '../../services/compass-modal.service';
+import { CompassActionModalEvent } from '../../enums/compass-action-modal-strings.enum';
+import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DropdownInputModel } from '../../models/compass-dropdown-input.model';
 import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
@@ -35,6 +38,14 @@ export interface PageChangeData {
   pageStart: number;
   pageEnd: number;
 }
+
+export const downloadRadioOptions: Array<CompassSelectOption> = [{
+  display: 'Stores',
+  value: ListsDownloadType.Stores
+}, {
+  display: 'Stores and Opportunities',
+  value: ListsDownloadType.Opportunities
+}];
 
 @Component({
   selector: 'list-detail',
@@ -72,6 +83,16 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
+  public downloadAllModalStringInputs: CompassActionModalInputs;
+  public compassAlertModalAccept = CompassActionModalEvent.Accept;
+  public radioInputModel: RadioInputModel = {
+    selected: ListsDownloadType.Stores,
+    radioOptions: downloadRadioOptions,
+    title: 'OPTIONS',
+    stacked: false
+  };
+
+  public downloadBodyHTML: string;
 
   private listDetailSubscription: Subscription;
 
@@ -79,7 +100,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     private listsTableTransformerService: ListsTableTransformerService,
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
-    private titleService: Title
+    private titleService: Title,
+    private compassModalService: CompassModalService
   ) { }
 
   ngOnInit() {
@@ -147,6 +169,27 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
+    if (actionButtonProperties.actionType === ActionButtonType.Download) {
+      // This logic will eventually go it's own function
+      this.downloadBodyHTML = 'Body text goes here!';
+      this.downloadAllModalStringInputs = {
+        'title': 'Download',
+        'bodyText': this.downloadBodyHTML,
+        'radioInputModel': this.radioInputModel,
+        'acceptLabel': 'Download',
+        'rejectLabel': 'Cancel'
+      };
+      let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
+      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+          console.log('radio option selected: ', value.radioOptionSelected);
+          console.log('dropdown option selected: ', value.dropdownOptionSelected);
+        });
+      // Rest of logic according to selections made by the user
+    } else if (actionButtonProperties.actionType === ActionButtonType.CopyToList) {
+      // add logic to send appropriate fields in model as needed
+    } else if (actionButtonProperties.actionType === ActionButtonType.AddToList) {
+      // add logic to send appropriate fields in model as needed
+    }
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {
