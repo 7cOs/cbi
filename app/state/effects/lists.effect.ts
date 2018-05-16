@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
@@ -24,7 +24,8 @@ export class ListsEffects {
   constructor(
     private actions$: Actions,
     private listsApiService: ListsApiService,
-    private listsTransformerService: ListsTransformerService
+    private listsTransformerService: ListsTransformerService,
+    @Inject('ToastService') private toastService: any
   ) { }
 
   @Effect()
