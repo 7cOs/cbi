@@ -200,10 +200,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public copyToListClick(): void {
-    if (this.selectedTab === this.performanceTabTitle) {
+    if (this.selectedTab === this.opportunitiesTabTitle) {
       const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
         store.opportunities.forEach((opp) => {
-          if (opp.checked === true) totalOpps.push(opp.id);
+          if (opp.checked === true) totalOpps.push({'opportunityId': opp.id});
         });
         return totalOpps;
       }, []);
@@ -211,7 +211,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.copyToListModal(checkedOpps, this.selectedTab);
     } else {
       const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
-        if (store.checked === true) totalStores.push(store.unversionedStoreId);
+        if (store.checked === true) totalStores.push({'storeSourceCode': store.unversionedStoreId});
         return totalStores;
       }, []);
       console.log(checkedStores, 'perf');
