@@ -118,8 +118,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     title: 'LIST'
   };
 
-  public downloadBodyHTML: string;
-
   private listDetailSubscription: Subscription;
 
   constructor(

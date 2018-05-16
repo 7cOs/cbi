@@ -4,6 +4,14 @@
   margin-left: 8px;
 }
 
+.individual-loader {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+}
+
 .list-action-section {
   border-radius: 4px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
