@@ -9,9 +9,13 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
+import { CompassActionModalEvent } from '../../enums/compass-action-modal-strings.enum';
+import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
@@ -25,8 +29,6 @@ import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
-import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { User } from '../../models/lists/user.model';
 
@@ -38,6 +40,14 @@ export interface PageChangeData {
   pageStart: number;
   pageEnd: number;
 }
+
+export const downloadRadioOptions: Array<CompassSelectOption> = [{
+  display: 'Stores',
+  value: ListsDownloadType.Stores
+}, {
+  display: 'Stores and Opportunities',
+  value: ListsDownloadType.Opportunities
+}];
 
 @Component({
   selector: 'list-detail',
@@ -77,9 +87,16 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
-  public downloadAllModalStringInputs: CompassAlertModalInputs;
-  public compassAlertModalAccept = CompassAlertModalEvent.Accept;
-  public copyHTMLBody: string;
+  public downloadAllModalStringInputs: CompassActionModalInputs;
+  public compassAlertModalAccept = CompassActionModalEvent.Accept;
+  public radioInputModel: RadioInputModel = {
+    selected: ListsDownloadType.Stores,
+    radioOptions: downloadRadioOptions,
+    title: 'OPTIONS',
+    stacked: false
+  };
+
+  public downloadBodyHTML: string;
 
   private listDetailSubscription: Subscription;
 
@@ -158,6 +175,27 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
+    if (actionButtonProperties.actionType === ActionButtonType.Download) {
+      // This logic will eventually go it's own function
+      this.downloadBodyHTML = 'Body text goes here!';
+      this.downloadAllModalStringInputs = {
+        'title': 'Download',
+        'bodyText': this.downloadBodyHTML,
+        'radioInputModel': this.radioInputModel,
+        'acceptLabel': 'Download',
+        'rejectLabel': 'Cancel'
+      };
+      let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
+      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+          console.log('radio option selected: ', value.radioOptionSelected);
+          console.log('dropdown option selected: ', value.dropdownOptionSelected);
+        });
+      // Rest of logic according to selections made by the user
+    } else if (actionButtonProperties.actionType === ActionButtonType.CopyToList) {
+      // add logic to send appropriate fields in model as needed
+    } else if (actionButtonProperties.actionType === ActionButtonType.AddToList) {
+      // add logic to send appropriate fields in model as needed
+    }
   }
 
   public opportunityCopyToListClick(): void {
@@ -176,18 +214,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       return totalStores;
     }, []);
     console.log(checkedStores, 'perf');
-    this.downloadAllModalStringInputs = {
-      'title': 'Copy to List',
-      'body': this.copyHTMLBody,
-      'rejectLabel': 'Cancel',
-      'acceptLabel': 'Copy'};
-    this.copyHTMLBody = 'LIST';
-    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.downloadAllModalStringInputs, null);
-    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-      if (value === this.compassAlertModalAccept) {
-        console.log('accept clicked!');
-      }
-    });
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {

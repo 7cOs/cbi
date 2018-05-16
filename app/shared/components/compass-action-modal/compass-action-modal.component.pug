@@ -1,0 +1,26 @@
+div.compass-modal
+  div
+    div.compass-modal-header
+      h1.compass-modal-title {{ modalInputs.title }}
+      div.X-modal-btn-container((click)='hideModal(compassActionModalEvent.Close)')
+        img.X-modal-btn(src="../../../assets/img/icons/thin-x.svg")
+    div.compass-modal-body(*ngIf="modalInputs.bodyText")
+      p([innerHTML]="modalInputs.bodyText")
+    div.compass-radio(*ngIf="radioInputModel")
+      compass-radio(
+        [model]="radioInputModel.selected",
+        [options]="radioInputModel.radioOptions",
+        [title]="radioInputModel.title",
+        [stacked]="radioInputModel.stacked",
+        (onRadioClicked)="onRadioSelected($event)"
+      )
+    div.compass-dropdown(*ngIf="dropdownInputModel")
+      compass-select(
+        [model]="dropdownInputModel.selected",
+        [options]="dropdownInputModel.dropdownOptions",
+        [title]="dropdownInputModel.title",
+        (onOptionSelected)="onDropdownSelected($event)"
+      )
+    div.compass-modal-action-bar
+      span.compass-modal-btn((click)='hideModal(compassActionModalEvent.Decline)') {{ modalInputs.rejectLabel }}
+      button.btn-action((click)='hideModal(compassActionModalEvent.Accept)') {{ modalInputs.acceptLabel }}
