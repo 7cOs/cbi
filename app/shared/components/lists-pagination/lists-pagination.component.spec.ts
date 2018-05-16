@@ -56,6 +56,22 @@ describe('ListsPaginationComponent', () => {
     });
   });
 
+  describe('ngOnChanges', () => {
+
+    beforeEach(() => {
+      componentInstance.tableDataSize = 200;
+    });
+
+    it('should set last page and get pageNumbers', () => {
+      spyOn(componentInstance, 'getPageNumbers');
+      componentInstance.ngOnChanges();
+      fixture.detectChanges();
+      expect(componentInstance.totalPages).toBe(10);
+      expect(componentInstance.lastPage).toBe(10);
+      expect(componentInstance.getPageNumbers).toHaveBeenCalled();
+    });
+  });
+
   describe('when page is changed', () => {
     it('should emit an event and set the current page', fakeAsync(() => {
       const expectedPageNumbers = [0, 1, 2, 3, 4, 5, 6];
