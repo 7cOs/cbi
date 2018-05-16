@@ -16,7 +16,6 @@ describe('Unit: target list controller', function() {
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
     });
-
     spyOn(listsTransformerService, 'getV2ListsSummary').and.returnValue({
       ownedNotArchivedTargetLists: [
           {id: '1', deleted: false, archived: false},
