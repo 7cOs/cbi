@@ -384,7 +384,7 @@ describe('Unit: expanded target list controller', function() {
         scope.$apply();
 
         expect(listsApiService.createListPromise).toHaveBeenCalled();
-        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Target Lists - My Target Lists', 'Create Target List', '998877');
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Lists - My Lists', 'Create List', '998877');
         expect(ctrl.buttonDisabled).toEqual(false);
         done();
     });

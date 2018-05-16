@@ -8,6 +8,7 @@ import { FetchHeaderDetailsPayload,
          FetchOppsForListPayload,
          FetchListPerformancePayload,
          FetchStoreDetailsPayload } from '../actions/lists.action';
+import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
@@ -27,6 +28,7 @@ import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
+import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 
@@ -49,6 +51,8 @@ describe('Lists Effects', () => {
   let listOpportunitiesDTOMock: ListOpportunityDTO[];
   let listPerformanceDTOMock: ListPerformanceDTO;
   let listPerformanceMock: ListPerformance;
+  let patchListPayloadMock: ListsSummaryDTO;
+  let formattedListMock: FormattedNewList;
 
   const listsApiServiceMock = {
     getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
@@ -62,6 +66,9 @@ describe('Lists Effects', () => {
     },
     getOppsDataForList(listIdMock: string): Observable<ListOpportunityDTO[]> {
       return Observable.of(listOpportunitiesDTOMock);
+    },
+    updateList(formattedMock: FormattedNewList, listId: string): Observable<ListsSummaryDTO> {
+      return Observable.of(patchListPayloadMock);
     }
   };
 
@@ -80,6 +87,9 @@ describe('Lists Effects', () => {
     },
     groupOppsByStore(allOpps: Array<ListsOpportunities>): OpportunitiesByStore {
       return groupedOppsObj;
+    },
+    convertCollaborators(list: ListsSummary): any {
+      return formattedListMock;
     }
   };
 
@@ -312,6 +322,42 @@ describe('Lists Effects', () => {
 
         listsEffects.fetchListPerformancePOD$().subscribe((response: Action) => {
           expect(response).toEqual(new ListActions.FetchListPerformancePODError(errorMock));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('when a patchList actions is received', () => {
+    let actionListPayloadMock = getListsSummaryMock();
+    beforeEach(() => {
+      actions$.next(new ListActions.PatchList(actionListPayloadMock));
+    });
+
+    describe('when everything returns successfully', () => {
+      it('should call updateList from the ListsService given the passed in action payload', (done) => {
+        const updateListSpy = spyOn(listsApiService, 'updateList').and.returnValue(Observable.of(actionListPayloadMock));
+        listsEffects.patchList$().subscribe(() => {
+          done();
+        });
+        expect(updateListSpy.calls.count()).toBe(1);
+        expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.id);
+      });
+
+      it('should dispatch a patchListSuccess action with the returned transformed data', (done) => {
+        listsEffects.patchList$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.PatchListSuccess(headerDetailMock));
+          done();
+        });
+      });
+    });
+
+    describe('when an error is returned from patchListSuccess', () => {
+      it('should dispatch a PatchListFailure action with the error', (done) => {
+        spyOn(listsApiService, 'updateList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.patchList$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.PatchListFailure(errorMock));
           done();
         });
       });

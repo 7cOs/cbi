@@ -137,4 +137,28 @@ export class ListsEffects {
         .catch((error: Error) => Observable.of(new ListActions.FetchListPerformancePODError(error)));
       });
   }
+
+  @Effect()
+  patchList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListActions.PATCH_LIST)
+      .switchMap((action: ListActions.PatchList) => {
+        const convertedPayload = this.listsTransformerService.convertCollaborators(action.payload);
+        return this.listsApiService.updateList(convertedPayload, action.payload.id)
+        .map((response: ListsSummaryDTO) => {
+          const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
+          return new ListActions.PatchListSuccess(transformedData);
+        })
+        .catch((error: Error) => Observable.of(new ListActions.PatchListFailure(error)));
+      });
+  }
+
+  @Effect({dispatch: false})
+  patchListFailure$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListActions.PATCH_LIST_FAILURE)
+      .do((action: ListActions.PatchListFailure) => {
+        console.error('Update List failure:', action.payload);
+      });
+  }
 }
