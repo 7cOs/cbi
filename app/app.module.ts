@@ -42,6 +42,7 @@ AppUpgradeAdapter.upgradeNg1Provider('$transitions');
 AppUpgradeAdapter.upgradeNg1Provider('chipsService');
 AppUpgradeAdapter.upgradeNg1Provider('filtersService');
 AppUpgradeAdapter.upgradeNg1Provider('ieHackService');
+AppUpgradeAdapter.upgradeNg1Provider('searchService');
 AppUpgradeAdapter.upgradeNg1Provider('toastService');
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');

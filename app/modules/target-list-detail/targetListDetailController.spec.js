@@ -935,8 +935,8 @@ describe('Unit: targetListDetailController', function() {
 
           ctrl.sendGoogleAnalytics('Archive');
           expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-            'Target Lists - My Target Lists',
-            'Archive Target List',
+            'Lists – My Lists',
+            'Archive List',
             '111'
           );
         });
