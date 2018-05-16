@@ -21,12 +21,11 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
   public void setUp(Method method) throws MalformedURLException {
     final String testCaseName = method.getAnnotation(Test.class).description();
     final String sauceTitle = String.format("Functional - Opportunities - Custom Opportunity - %s", testCaseName);
-    final OpportunitiesPage opportunitiesPage;
+    final OpportunitiesPage opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     this.startUpBrowser(sauceTitle);
 
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     customOpportunityModal = PageFactory.initElements(driver, CustomOpportunityModal.class);
-    opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();    
     Assert.assertTrue(
         opportunitiesPage.dismissStrayBackdropElement(),
@@ -53,7 +52,7 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
         "Required field message for Recommended Package/SKU failed to display" );
 
     Assert.assertTrue(customOpportunityModal.isRationaleRequiredFieldErrorDisplayed(), 
-        "Rationale required field message is not displayed" );
+        "Rationale required field message for Rationale failed to display" );
 
     Assert.assertTrue(customOpportunityModal.isImpactRequiredFieldErrorDisplayed(), 
         "Required field message for Impact failed to display" );
