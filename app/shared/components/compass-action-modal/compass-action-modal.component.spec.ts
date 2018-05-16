@@ -109,7 +109,7 @@ describe('Compass Action Modal Component', () => {
       expect(titleElement.nativeElement.textContent).toEqual('');
     });
     it('should contain a body element when the injection has a body text', () => {
-      let bodyElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-body'));
+      let bodyElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-body-text'));
       expect(bodyElement.nativeElement.textContent).toEqual(compassModalInputsMock.bodyText);
     });
     it('should contain radio buttons group when the injection has a radioInputModel', () => {

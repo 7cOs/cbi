@@ -167,31 +167,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  // captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
-  //   console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
-  //   if (actionButtonProperties.actionType === ActionButtonType.Download) {
-  //     // This logic will eventually go it's own function
-  //     this.downloadBodyHTML = 'Body text goes here!';
-  //     this.downloadAllModalStringInputs = {
-  //       'title': 'Download',
-  //       'bodyText': this.downloadBodyHTML,
-  //       'radioInputModel': this.radioInputModel,
-  //       'acceptLabel': 'Download',
-  //       'rejectLabel': 'Cancel'
-  //     };
-  //     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
-  //     this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-  //         console.log('radio option selected: ', value.radioOptionSelected);
-  //         console.log('dropdown option selected: ', value.dropdownOptionSelected);
-  //       });
-  //     // Rest of logic according to selections made by the user
-  //   } else if (actionButtonProperties.actionType === ActionButtonType.CopyToList) {
-  //     // add logic to send appropriate fields in model as needed
-  //   } else if (actionButtonProperties.actionType === ActionButtonType.AddToList) {
-  //     // add logic to send appropriate fields in model as needed
-  //   }
-  // }
-
   downloadActionButtonClicked() {
     if (this.selectedTab === this.performanceTabTitle) {
       console.log('Download All - performance tab seclected');
