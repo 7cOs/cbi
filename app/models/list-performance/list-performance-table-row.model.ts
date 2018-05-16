@@ -11,6 +11,6 @@ export interface ListPerformanceTableRow {
   l90VersusYaPercentColumn: number;
   lastDepletionDateColumn: string;
   performanceError: boolean;
-  checked: boolean
+  checked: boolean;
   unversionedStoreId: string;
 }
