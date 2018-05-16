@@ -336,8 +336,7 @@ describe('Lists Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should call updateList from the ListsService given the passed in action payload', (done) => {
-        spyOn(listsTransformerService, 'convertCollaborators').and.callThrough();
-        const updateListSpy = spyOn(listsApiService, 'updateList').and.callThrough();
+        const updateListSpy = spyOn(listsApiService, 'updateList').and.returnValue(Observable.of(actionListPayloadMock));
         listsEffects.patchList$().subscribe(() => {
           done();
         });
