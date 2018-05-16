@@ -1,0 +1,217 @@
+@import '../../../assets/styles/base/variables';
+
+.compass-modal {
+  width: 400px;
+  height: auto;
+  border-radius: 4px;
+  background-color: $white;
+  box-shadow: 0 1px 2px 0 $gray-1;
+}
+
+.compass-modal-title {
+  height: 28px;
+  font-family: $roboto;
+  font-size: 21px;
+  line-height: 1;
+  color: $white;
+  float: left;
+  font-weight: 400;
+}
+
+.compass-modal-header {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 30px;
+  padding-bottom: 40px;
+  background-color: $blue;
+}
+
+.modal-input {
+  padding-bottom: 5px;
+}
+
+.X-modal-btn {
+  height: 20px;
+  width: 20px;
+}
+
+.X-modal-btn-container {
+  float: right;
+  cursor: pointer;
+}
+
+.compass-modal-body {
+  width: 340px;
+  padding: 30px;
+  font-family: $roboto;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+  color: $gray-1;
+
+  p {
+    font-family: $roboto;
+    font-size: 14px;
+  }
+}
+
+.compass-modal-action-bar {
+  padding-top: 40px;
+  padding-left: 110px;
+
+  .compass-modal-btn {
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+    font-family: $roboto;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $cancel-blue;
+  }
+}
+
+.compass-modal-delete-archive-bar {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  border-top: solid 1px $gray-2;
+  font-family: $roboto;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.compass-modal-delete-btn {
+  float: left;
+  padding-left: 20px;
+  color: $cancel-blue;
+  cursor: pointer;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.compass-modal-archive-btn {
+  float: right;
+  padding-right: 20px;
+  color: $cancel-blue;
+  cursor: pointer;
+}
+
+.collaborator-list {
+  background-color: $white;
+  display: inline-block;
+  margin-left: -15px;
+  margin-right: -15px;
+  position: relative;
+  width: 100%;
+  padding-left: 15px;
+  overflow-y: scroll;
+  height: auto;
+  min-height: 150px;
+
+  .collaborator {
+    height: 30px;
+    padding: 10px 15px 5px;
+    text-align: left;
+    border-bottom: dotted $gray-4;
+
+    &.collaborator:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: $light-blue;
+    }
+
+    > div, md-menu {
+      float: right;
+      height: 25px;
+      line-height: 25px;
+      width: 50%;
+    }
+
+    &.manage-list {
+      .accent {
+        width: 5em;
+        margin-left: 15em;
+        margin-top: -15%;
+        font-family: $work-sans;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      > div, md-menu {
+        float: left;
+      }
+    }
+
+    md-menu {
+      padding: 0;
+
+      a {
+        position: relative;
+        right: -10px;
+        top: -4px;
+      }
+
+      button, .md-button {
+        height: 25px;
+        margin: 0;
+        min-height: 0;
+        font-size: 0.7em;
+      }
+
+      button.md-button.md-ink-ripple {
+        width: 130px;
+        float: right;
+        text-align: left;
+      }
+
+      span {
+        line-height: 25px;
+      }
+
+      .md-ripple-container {
+        height: 25px;
+      }
+    }
+
+    .action-overlay {
+      width: 100%;
+      height: 46px;
+      margin-top: -12px;
+
+      .overlay-wrapper p {
+        font-size: 0.8em;
+        margin-top: 0;
+        margin-left: -11px;
+        width: 100%;
+
+        a {
+          color: $white;
+          font-weight: 900;
+        }
+      }
+
+      .hide-icon-wrapper {
+        top: 10px;
+        margin-right: -25px;
+        padding: 0;
+
+      }
+
+      .hide-row:after,
+      .hide-row:before {
+        height: 1px;
+        width: 11px;
+      }
+    }
+  }
+}
+
+:host-context(.ie) .collaborator-list,
+:host-context(.edge) .collaborator-list {
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}

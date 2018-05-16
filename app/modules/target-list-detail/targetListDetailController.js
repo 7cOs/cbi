@@ -324,8 +324,8 @@ module.exports = /*  @ngInject */
 
     function sendGoogleAnalytics(event) {
       analyticsService.trackEvent(
-        'Target Lists - My Target Lists',
-        event + ' Target List',
+        'Lists – My Lists',
+        event + ' List',
         vm.listID
       );
     }
