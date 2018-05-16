@@ -1,3 +1,5 @@
+import { CollaboratorOwnerDetails } from './collaborator-owner-details.model';
+
 export interface ListsSummary {
   archived: boolean;
   description: string;
@@ -8,4 +10,9 @@ export interface ListsSummary {
   numberOfAccounts: number;
   ownerFirstName: string;
   ownerLastName: string;
+  collaborators: Array<CollaboratorOwnerDetails>;
+  ownerId: string;
+  type: string;
+  collaboratorType: string;
+  category: string;
 }
