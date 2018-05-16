@@ -55,7 +55,7 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
           td.table-drawer-cell(colspan=9)
             list-table-drawer(
               [tableData]="row.opportunities",
-              (onOpportunityCheckboxClicked)="onOpportunityCheckboxClicked(row)",
+              (onCheckboxClicked)="onOpportunityCheckboxClicked(row)",
               (onOpportunityTypeClicked)="onOpportunityTypeClicked($event, row.storeColumn, row.unversionedStoreId)"
             )
   mat-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
