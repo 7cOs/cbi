@@ -4,7 +4,7 @@ import { CompassActionModalInputs } from '../../../models/compass-action-modal-i
 import { CompassActionModalOutputs } from '../../../models/compass-action-modal-outputs.model';
 import { CompassActionModalOverlayRef } from './compass-action-modal.overlayref';
 import { COMPASS_ACTION_MODAL_INPUTS } from '../../components/compass-action-modal/compass-action-modal.tokens';
-import { CompassActionModalEvent } from '../../../enums/compass-action-modal-strings.enum';
+import { CompassActionModalEvent } from '../../../enums/compass-action-modal-event.enum';
 import { DropdownInputModel } from '../../../models/compass-dropdown-input.model';
 import { ListsDownloadType } from '../../../enums/lists/list-download-type.enum';
 import { RadioInputModel } from '../../../models/compass-radio-input.model';
@@ -56,11 +56,11 @@ export class CompassActionModalComponent implements OnInit {
     }
   }
 
-  public onRadioSelected(optionSelected: string) {
+  public onRadioSelected(optionSelected: string): void {
     this.radioOptionSelected = optionSelected;
   }
 
-  public onDropdownSelected(optionSelected: string) {
+  public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
   }
 

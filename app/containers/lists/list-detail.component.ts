@@ -9,7 +9,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { CompassModalService } from '../../services/compass-modal.service';
-import { CompassActionModalEvent } from '../../enums/compass-action-modal-strings.enum';
+import { CompassActionModalEvent } from '../../enums/compass-action-modal-event.enum';
 import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { RadioInputModel } from '../../models/compass-radio-input.model';
@@ -167,29 +167,51 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
-    console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
-    if (actionButtonProperties.actionType === ActionButtonType.Download) {
-      // This logic will eventually go it's own function
-      this.downloadBodyHTML = 'Body text goes here!';
-      this.downloadAllModalStringInputs = {
-        'title': 'Download',
-        'bodyText': this.downloadBodyHTML,
-        'radioInputModel': this.radioInputModel,
-        'acceptLabel': 'Download',
-        'rejectLabel': 'Cancel'
-      };
-      let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
-      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-          console.log('radio option selected: ', value.radioOptionSelected);
-          console.log('dropdown option selected: ', value.dropdownOptionSelected);
-        });
-      // Rest of logic according to selections made by the user
-    } else if (actionButtonProperties.actionType === ActionButtonType.CopyToList) {
-      // add logic to send appropriate fields in model as needed
-    } else if (actionButtonProperties.actionType === ActionButtonType.AddToList) {
-      // add logic to send appropriate fields in model as needed
+  // captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
+  //   console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
+  //   if (actionButtonProperties.actionType === ActionButtonType.Download) {
+  //     // This logic will eventually go it's own function
+  //     this.downloadBodyHTML = 'Body text goes here!';
+  //     this.downloadAllModalStringInputs = {
+  //       'title': 'Download',
+  //       'bodyText': this.downloadBodyHTML,
+  //       'radioInputModel': this.radioInputModel,
+  //       'acceptLabel': 'Download',
+  //       'rejectLabel': 'Cancel'
+  //     };
+  //     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
+  //     this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+  //         console.log('radio option selected: ', value.radioOptionSelected);
+  //         console.log('dropdown option selected: ', value.dropdownOptionSelected);
+  //       });
+  //     // Rest of logic according to selections made by the user
+  //   } else if (actionButtonProperties.actionType === ActionButtonType.CopyToList) {
+  //     // add logic to send appropriate fields in model as needed
+  //   } else if (actionButtonProperties.actionType === ActionButtonType.AddToList) {
+  //     // add logic to send appropriate fields in model as needed
+  //   }
+  // }
+
+  downloadActionButtonClicked() {
+    if (this.selectedTab === this.performanceTabTitle) {
+      console.log('Download All - performance tab seclected');
+    } else {
+      console.log('Download All - opps tab seclected');
     }
+
+    this.downloadBodyHTML = 'Body text goes here!';
+    this.downloadAllModalStringInputs = {
+      'title': 'Download',
+      'bodyText': this.downloadBodyHTML,
+      'radioInputModel': this.radioInputModel,
+      'acceptLabel': 'Download',
+      'rejectLabel': 'Cancel'
+    };
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
+    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+        console.log('radio option selected: ', value.radioOptionSelected);
+        console.log('dropdown option selected: ', value.dropdownOptionSelected);
+    });
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {

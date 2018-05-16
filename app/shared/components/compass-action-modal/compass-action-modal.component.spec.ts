@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CompassActionModalComponent } from './compass-action-modal.component';
 import { CompassActionModalInputs } from '../../../models/compass-action-modal-inputs.model';
 import { COMPASS_ACTION_MODAL_INPUTS } from './compass-action-modal.tokens';
-import { CompassActionModalEvent } from '../../../enums/compass-action-modal-strings.enum';
+import { CompassActionModalEvent } from '../../../enums/compass-action-modal-event.enum';
 import { CompassRadioComponent } from '../compass-radio/compass-radio.component';
 import { CompassSelectComponent } from '../compass-select/compass-select.component';
 import { MatSelectModule, MatRadioModule } from '@angular/material';

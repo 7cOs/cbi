@@ -19,17 +19,9 @@ compass-tabs(
         [distributionsVsYA]="performanceTableTotal?.l90VersusYaPercentColumn"
       )
       div.button-section
-        compass-action-button(
-          [actionLabel]="actionButtonType.AddToList",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
-        )
-        compass-action-button.action-button-spacing(
-          [actionLabel]="actionButtonType.CopyToList",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
-        )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Download",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
+          (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
@@ -49,6 +41,11 @@ compass-tabs(
           [title]="'Opportunity Status'",
           (onOptionSelected)="opportunityStatusSelected($event)"
         )
+      div.button-section
+        compass-action-button.action-button-spacing(
+            [actionLabel]="actionButtonType.Download",
+            (onActionButtonClicked)="downloadActionButtonClicked($event)"
+          )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [sortingCriteria]="opportunitiesSortingCriteria",
