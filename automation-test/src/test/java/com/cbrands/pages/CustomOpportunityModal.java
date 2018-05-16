@@ -8,34 +8,28 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import static com.cbrands.helper.SeleniumUtils.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class CustomOpportunityModal extends TestNGBasePage {
-  private static final String LAUNCH_MODAL_XPATH = "//a[@action='Add Opportunity']";
   private static final String MODAL_DIALOG_XPATH = "(//md-dialog//div[contains(@class, 'modal add-opportunity')])";
-  private static final String SAVE_BTN_XPATH = (MODAL_DIALOG_XPATH + "//button[@type='submit' and contains(.,'Add')]");
-  private static final String CANCEL_BTN_XPATH = (MODAL_DIALOG_XPATH + "//p[contains(@class,'cancel') and contains(.,'X Cancel')]");  
-  private static final String BODY_XPATH = "//body";
-  public static final String REQUIRED_FIELD_ERROR_XPATH = "/../../..//div[@aria-hidden='false']/p[contains(@class,'error-message')]";
+  private static final String REQUIRED_FIELD_ERROR_XPATH = "/../../..//div[@aria-hidden='false']/p[contains(@class,'error-message')]";
   private static final String ACCOUNT_FIELD_XPATH = "//label[contains(.,'Account')]/..//input[@type='text']";
   private static final String PACKAGE_SKU_FIELD_XPATH = "//label[contains(.,'Recommended Package / SKU')]/..//input[@type='text']";
   private static final String RATIONALE_FIELD_XPATH = "//label[contains(.,'Rationale')]/..//md-select";
   private static final String IMPACT_FIELD_XPATH = "//label[contains(.,'Impact')]/..//md-select";
 
-  @FindBy(how = How.XPATH, using = LAUNCH_MODAL_XPATH)
+  @FindBy(how = How.XPATH, using = "//a[@action='Add Opportunity']")
   private WebElement launchModal;
 
   @FindBy(how = How.XPATH, using = MODAL_DIALOG_XPATH)
   private WebElement modalDialog;
 
-  @FindBy(how = How.XPATH, using = SAVE_BTN_XPATH)
+  @FindBy(how = How.XPATH, using = MODAL_DIALOG_XPATH + "//button[@type='submit' and contains(.,'Add')]")
   private WebElement modalSaveBtn;
 
-  @FindBy(how = How.XPATH, using = CANCEL_BTN_XPATH)
+  @FindBy(how = How.XPATH, using = MODAL_DIALOG_XPATH + "//p[contains(@class,'cancel') and contains(.,'X Cancel')]")
   private WebElement modalCancelBtn;  
 
-  @FindBy(how = How.XPATH, using = BODY_XPATH)
+  @FindBy(how = How.XPATH, using = "//body")
   private WebElement body;
   
   private final WebDriver driver;
