@@ -67,7 +67,8 @@ export class CompassModalService {
     return modalOverlayRef;
   }
 
-  public modalActionBtnContainerEvent(modalComponentInstance: CompassAlertModalComponent | CompassActionModalComponent): Promise<{}> {
+  public modalActionBtnContainerEvent(modalComponentInstance: CompassAlertModalComponent | CompassActionModalComponent
+    |CompassManageListModalComponent): Promise<{}> {
     return modalComponentInstance.buttonContainerEvent.first( ( result: any) => {
       return result;
     } ).toPromise();

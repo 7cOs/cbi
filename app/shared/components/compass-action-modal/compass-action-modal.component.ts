@@ -9,9 +9,6 @@ import { DropdownInputModel } from '../../../models/compass-dropdown-input.model
 import { ListsDownloadType } from '../../../enums/lists/list-download-type.enum';
 import { RadioInputModel } from '../../../models/compass-radio-input.model';
 
-// just for example - remove this when working with real data
-import { listOpportunityStatusOptions } from '../../../models/list-opportunities/list-opportunity-status-options.model';
-
 const ESCKEY = 27;
 
 @Component({
@@ -29,6 +26,7 @@ export class CompassActionModalComponent implements OnInit {
   public dropdownInputModel: DropdownInputModel;
   public radioOptionSelected: string;
   public dropdownOptionSelected: string;
+  public copyButtonDisabled: boolean;
 
   constructor(
     @Inject(COMPASS_ACTION_MODAL_INPUTS) public modalInputs: CompassActionModalInputs
@@ -38,6 +36,8 @@ export class CompassActionModalComponent implements OnInit {
     this.radioOptionSelected = ListsDownloadType.Stores;
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
     this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
+    this.copyButtonDisabled = this.dropdownInputModel.selected === 'Choose a List';
+    console.log(this.copyButtonDisabled);
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
