@@ -12,6 +12,7 @@ import { ListPerformanceTableRow } from '../../../models/list-performance/list-p
 import { MatCheckboxModule } from '@angular/material';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
+import { Subject } from 'rxjs/Subject';
 
 const chance = new Chance();
 
@@ -35,6 +36,8 @@ describe('ListPerformanceTableComponent', () => {
   let fixture: ComponentFixture<ListPerformanceTableComponent>;
   let componentInstance: ListPerformanceTableComponent;
   let tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
+  let componentInstanceCopy: any;
+  const sortResetSubject: Subject<Event> = new Subject<Event>();
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [MatCheckboxModule],
@@ -53,6 +56,29 @@ describe('ListPerformanceTableComponent', () => {
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
+    componentInstance.sortReset = sortResetSubject;
+    componentInstanceCopy = componentInstance as any;
+  });
+
+  describe('ngOnInit', () => {
+    it('should check if subscription for sortReset', (done: any) => {
+      componentInstance.ngOnInit();
+      componentInstance.sortReset.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      sortResetSubject.next();
+    });
+
+    it('should check if sortReset function is called', (done: any) => {
+      componentInstance.ngOnInit();
+      spyOn(componentInstanceCopy, 'applySortingCriteria');
+      componentInstance.sortReset.subscribe(() => {
+        expect(componentInstanceCopy.applySortingCriteria).toHaveBeenCalled();
+        done();
+      });
+      sortResetSubject.next();
+    });
   });
 
   describe('setSortingcriteria', () => {
@@ -274,6 +300,15 @@ describe('ListPerformanceTableComponent', () => {
 
       componentInstance.setCheckboxStates(0, 2);
       expect(componentInstance.isIndeterminateChecked).toEqual(false);
+    });
+  });
+
+  describe('when pageChange Data input is received', () => {
+    it('should set page start, page end', () => {
+      componentInstance.performanceTableData = getListPerformanceTableRowMock(300);
+      componentInstance.handlePageChangeClicked({pageStart: 80, pageEnd: 100});
+      expect(componentInstance.sliceStart).toBe(80);
+      expect(componentInstance.sliceEnd).toBe(100);
     });
   });
 });

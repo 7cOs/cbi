@@ -71,6 +71,7 @@ module.exports = /*  @ngInject */
           payload = {};
 
       if (p.archived) payload.archived = p.archived;
+      if (p.unarchived) payload.archived = false;
       if (p.deleted) payload.deleted = p.deleted;
       if (p.description) payload.description = p.description;
       if (p.name) payload.name = p.name;
@@ -381,10 +382,10 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getAnalyticsCategory(listPermissionLevel, listIsArchived) {
-      return `Target Lists - ${listIsArchived
-        ? 'Archived'
+      return `Lists - ${listIsArchived
+        ? 'Archived Lists'
         : listPermissionLevel === 'author'
-          ? 'My Target Lists'
+          ? 'My Lists'
           : 'Shared With Me'}`;
     }
 

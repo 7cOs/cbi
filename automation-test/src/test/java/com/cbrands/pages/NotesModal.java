@@ -97,10 +97,8 @@ public class NotesModal extends TestNGBasePage {
   public NotesModal enterNoteText(String noteText) {
     final By noteTextXPathSelector = By.xpath(".//text-angular//div[@contenteditable='true']");
 
-    enterText(
-      noteText,
-      modalContainer.findElement(noteTextXPathSelector)
-    );
+    waitForElementToClickable(modalContainer.findElement(noteTextXPathSelector), true).click();
+    driver.switchTo().activeElement().sendKeys(noteText);
     waitForTextPresent(noteTextXPathSelector, noteText);
 
     return this;

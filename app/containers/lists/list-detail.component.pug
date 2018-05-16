@@ -1,29 +1,75 @@
-compass-action-button(
-  [actionLabel]="actionButtonType.AddToList",
-  [isDisabled]="true",
-  (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
-compass-action-button.action-button-spacing(
-  [actionLabel]="actionButtonType.Download",
-  [isDisabled]="false",
-  (onActionButtonClicked)="captureActionButtonClicked($event)"
-)
-
 lists-header(
   [summaryData]="listSummary",
   (manageButtonClicked)="handleManageButtonClick()",
   (listsLinkClicked)="handleListsLinkClick()"
 )
 
-compass-tabs
-  compass-tab([tabTitle]='firstTabTitle',
-  [active]='true')
+compass-tabs(
+  (onTabClicked)="onTabClicked($event)"
+)
+  compass-tab(
+    [tabTitle]='performanceTabTitle',
+    [active]='true'
+  )
+    section.list-action-section
+      list-performance-summary(
+        [depletionsTotal]="performanceTableTotal?.cytdColumn",
+        [depletionsVsYA]="performanceTableTotal?.cytdVersusYaPercentColumn",
+        [distributionsTotal]="performanceTableTotal?.l90Column",
+        [distributionsVsYA]="performanceTableTotal?.l90VersusYaPercentColumn"
+      )
+      div.button-section
+        compass-action-button(
+          [actionLabel]="actionButtonType.AddToList",
+          [isDisabled]="true",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Download",
+          [isDisabled]="false",
+          (onActionButtonClicked)="captureActionButtonClicked($event)"
+        )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
+      [sortingCriteria]="performanceSortingCriteria",
       [totalRow]="performanceTableTotal",
-      [tableData]="performanceTableData"
+      [tableData]="performanceTableData",
+      [pageChangeData]="pageChangeData",
+      [sortReset]="sortReset",
+      (paginationReset)="handlePaginationReset()"
     )
-  compass-tab([tabTitle]='secondTabTitle')
-    span opportunities placeholder
+  compass-tab([tabTitle]='opportunitiesTabTitle')
+    .list-action-section
+      .opps-dropdown
+        compass-select(
+          [model]="oppStatusSelected",
+          [options]="opportunityStatusOptions",
+          [title]="'Opportunity Status'",
+          (onOptionSelected)="opportunityStatusSelected($event)"
+        )
+    list-opportunities-table(
+      [tableHeaderRow]="opportunitiesTableHeader",
+      [sortingCriteria]="opportunitiesSortingCriteria",
+      [tableData]="filteredOpportunitiesTableData",
+      [pageChangeData]="pageChangeData",
+      [oppStatusSelected]="oppStatusSelected",
+      [sortReset]="sortReset",
+      (paginationReset)="handlePaginationReset()"
+    )
+
+lists-pagination(
+  *ngIf='(selectedTab === performanceTabTitle) && (performanceTableDataSize > listTableSize)',
+  [tableDataSize]="performanceTableDataSize",
+  [paginationReset]='paginationReset',
+  [tabName]='performanceTabTitle',
+  (pageChangeClick)="handlePageClick($event)"
+)
+
+lists-pagination(
+  *ngIf='(selectedTab === opportunitiesTabTitle) && (opportunitiesTableDataSize > listTableSize)',
+  [tableDataSize]="opportunitiesTableDataSize",
+  [tabName]='opportunitiesTabTitle',
+  [paginationReset]='paginationReset',
+  (pageChangeClick)="handlePageClick($event)"
+)
 

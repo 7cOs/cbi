@@ -1,4 +1,5 @@
-import { CollaboratorOwnerDetails, SurveyInfo } from './lists.model';
+import { CollaboratorOwnerDetails } from './collaborator-owner-details.model';
+import { SurveyInfo } from './survey-info.model';
 
 export interface ListsSummaryDTO {
   archived: boolean;
@@ -14,6 +15,6 @@ export interface ListsSummaryDTO {
   numberOfAccounts: number;
   owner: CollaboratorOwnerDetails;
   survey: SurveyInfo;
-  type: number;
+  type: string;
   updatedOn: string;
 }

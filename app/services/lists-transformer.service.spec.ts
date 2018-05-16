@@ -1,8 +1,12 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { getListOpportunitiesDTOMock } from '../models/lists/lists-opportunities-dto.model.mock';
+import { getListOpportunityMock } from '../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceDTOMock } from '../models/lists/list-performance-dto.model.mock';
 import { getListsSummaryDTOMock } from '../models/lists/lists-header-dto.model.mock';
 import { getStoreListsDTOMock } from '../models/lists/lists-store-dto.model.mock';
+import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
+import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
 import { ListPerformance } from '../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
@@ -48,6 +52,60 @@ describe('Service: ListsTransformerService', () => {
           distributor: storesDTOMock[i].primaryBeerDistributor.name
         });
       });
+    });
+  });
+
+  describe('transformListOpportunitiesData', () => {
+    it('should transform the list opportunities Data', () => {
+      const listsOpportunitiesDTOMock: Array<ListOpportunityDTO> = getListOpportunitiesDTOMock();
+
+      const actualListOppsData: ListsOpportunities[] =
+        listsTransformerService.formatListOpportunitiesData(listsOpportunitiesDTOMock);
+
+        actualListOppsData.forEach((row: ListsOpportunities, i: number) => {
+        expect(row).toEqual({
+          id: listsOpportunitiesDTOMock[i].id,
+          brandCode: listsOpportunitiesDTOMock[i].brandCode,
+          brandDescription: listsOpportunitiesDTOMock[i].brandDescription,
+          skuDescription: listsOpportunitiesDTOMock[i].skuDescription,
+          type: listsOpportunitiesDTOMock[i].type,
+          status: listsOpportunitiesDTOMock[i].status,
+          impact: listsOpportunitiesDTOMock[i].impact,
+          currentDepletions_CYTD: listsOpportunitiesDTOMock[i].currentDepletions_CYTD,
+          yearAgoDepletions_CYTD: listsOpportunitiesDTOMock[i].yearAgoDepletions_CYTD,
+          lastDepletionDate: listsOpportunitiesDTOMock[i].lastDepletionDate,
+          unversionedStoreId: listsOpportunitiesDTOMock[i].storeSourceCode,
+          isSimpleDistribution: listsOpportunitiesDTOMock[i].isSimpleDistributionOpportunity,
+          rationale: listsOpportunitiesDTOMock[i].rationale
+        });
+      });
+    });
+  });
+
+  describe('groupOpportunitiesByStore', () => {
+    let opportunitiesMockFirst, opportunitiesMockSecond: ListsOpportunities;
+    let allOpps: ListsOpportunities[] = [];
+    let expectedObject = {};
+    const oppsForFirstStore: ListsOpportunities[] = [];
+    const oppsForSecondStore: ListsOpportunities[] = [];
+
+    beforeEach(() => {
+      opportunitiesMockFirst = getListOpportunityMock();
+      opportunitiesMockSecond = getListOpportunityMock();
+
+      allOpps.push.apply(allOpps, [opportunitiesMockFirst, opportunitiesMockFirst]);
+      allOpps.push.apply(allOpps, [opportunitiesMockSecond, opportunitiesMockSecond, opportunitiesMockSecond]);
+
+      oppsForFirstStore.push.apply(oppsForFirstStore, [opportunitiesMockFirst, opportunitiesMockFirst]);
+      oppsForSecondStore.push.apply(oppsForSecondStore, [opportunitiesMockSecond, opportunitiesMockSecond, opportunitiesMockSecond]);
+
+      expectedObject[opportunitiesMockFirst.unversionedStoreId] = oppsForFirstStore;
+      expectedObject[opportunitiesMockSecond.unversionedStoreId] = oppsForSecondStore;
+    });
+
+    it('should group opportunties by stores', () => {
+      const groupedObj = listsTransformerService.groupOppsByStore(allOpps);
+      expect(groupedObj).toEqual(expectedObject);
     });
   });
 

@@ -259,12 +259,14 @@ describe('Service: MyPerformanceService', () => {
       const actualDistributorsLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.distributors);
       const actualAccountsLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.accounts);
       const actualSubAccountsLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.subAccounts);
+      const actualStoresLabel = myPerformanceService.getSalesHierarchyViewTypeLabel(SalesHierarchyViewType.stores);
 
       expect(actualRoleGroupLabel).toBe(SalesHierarchyHeaderEntityType.Group);
       expect(actualPeopleLabel).toBe(SalesHierarchyHeaderEntityType.Person);
       expect(actualDistributorsLabel).toBe(SalesHierarchyHeaderEntityType.Distributor);
       expect(actualAccountsLabel).toBe(SalesHierarchyHeaderEntityType.Account);
       expect(actualSubAccountsLabel).toBe(SalesHierarchyHeaderEntityType.SubAccount);
+      expect(actualStoresLabel).toBe(SalesHierarchyHeaderEntityType.Store);
     });
   });
 

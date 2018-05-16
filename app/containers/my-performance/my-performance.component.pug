@@ -26,6 +26,7 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
       [viewType]="salesHierarchyViewType",
       [selectedSubaccountCode]="selectedSubaccountCode",
       [selectedDistributorCode]="selectedDistributorCode",
+      [selectedStoreId]="selectedStoreId",
       [showContributionToVolume]="showSalesContributionToVolume",
       [showOpportunities]="false",
       [loadingState]="salesHierarchyLoadingState",
@@ -58,12 +59,14 @@ mat-sidenav-container.tables-container((backdropClick)="toggleOpportunityTable()
         p.error-cover-message Sorry, something went wrong. Try refreshing the page or navigate back to a previous view.
 
   mat-sidenav.opportunities-container([align]="'end'", [opened]="isOpportunityTableExtended")
-    team-performance-opportunities(
-      [opportunities]="teamPerformanceTableOpportunities",
-      [productName]="selectedBrandSkuPackageName",
-      [premiseType]="currentPremiseTypeLabel",
+    compass-table-extender-header(
+      [mainTitle]="'Opportunities'",
       [subtitle]="selectedSalesHierarchyEntityName",
-      [total]="selectedOpportunityCountTotal",
       [tooltip]="opportunitiesTooltipInputData",
-      (onCloseIndicatorClicked)="toggleOpportunityTable()",
-      (onOpportunityCountClicked)="handleOpportunityClicked($event)")
+      (onCloseIndicatorClicked)="toggleOpportunityTable()")
+      team-performance-opportunities-body(
+        [premiseType]="currentPremiseTypeLabel",
+        [productName]="selectedBrandSkuPackageName",
+        [total]="selectedOpportunityCountTotal",
+        [opportunities]="teamPerformanceTableOpportunities",
+        (onOpportunityCountClicked)="handleOpportunityClicked($event)")

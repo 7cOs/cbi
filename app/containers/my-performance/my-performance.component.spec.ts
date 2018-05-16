@@ -116,6 +116,7 @@ class MyPerformanceTableComponentMock {
   @Input() viewType: SalesHierarchyViewType | ProductMetricsViewType;
   @Input() selectedSubaccountCode: string;
   @Input() selectedDistributorCode: string;
+  @Input() selectedStoreId: string;
   @Input() loadingState: boolean;
 }
 
@@ -131,18 +132,27 @@ class CompassTooltipComponentMock {
 }
 
 @Component({
-  selector: 'team-performance-opportunities',
+  selector: 'compass-table-extender-header',
   template: ''
 })
-class TeamPerformanceOpportunitiesComponentMock {
+class CompassTableExtenderHeaderComponentMock {
   @Output() onCloseIndicatorClicked = new EventEmitter<any>();
+
+  @Input() mainTitle: string;
+  @Input() subtitle: string;
+  @Input() tooltip: CompassTooltipComponentMock;
+}
+
+@Component({
+  selector: 'team-performance-opportunities-body',
+  template: ''
+})
+class TeamPerformanceOpportunityBodyComponentMock {
   @Output() onOpportunityCountClicked = new EventEmitter<TeamPerformanceTableOpportunity>();
 
   @Input() opportunities: Array<TeamPerformanceTableOpportunity>;
-  @Input() tooltip: CompassTooltipComponentMock;
   @Input() premiseType: string;
   @Input() productName: string;
-  @Input() subtitle: string;
   @Input() total: number;
 }
 
@@ -262,6 +272,7 @@ describe('MyPerformanceComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
+        CompassTableExtenderHeaderComponentMock,
         DismissibleXComponent,
         MyPerformanceBreadcrumbComponentMock,
         MyPerformanceFilterComponentMock,
@@ -269,7 +280,7 @@ describe('MyPerformanceComponent', () => {
         MyPerformanceComponent,
         MyPerformanceTableRowComponent,
         SortIndicatorComponent,
-        TeamPerformanceOpportunitiesComponentMock
+        TeamPerformanceOpportunityBodyComponentMock
       ],
       imports: [
         NoopAnimationsModule,
@@ -1308,13 +1319,13 @@ describe('MyPerformanceComponent', () => {
       });
     });
 
-    describe('when viewing anything but distributors or subAccounts', () => {
+    describe('when distributors, subAccounts, or stores on the sales hierarchy table', () => {
       beforeEach(() => {
-        const viewTypes = Object.keys(SalesHierarchyViewType).map(key => SalesHierarchyViewType[key]).filter(viewType =>
-          viewType !== SalesHierarchyViewType.distributors && viewType !== SalesHierarchyViewType.subAccounts
-        );
-
-        componentInstance.salesHierarchyViewType = sample(viewTypes);
+        componentInstance.salesHierarchyViewType = sample([
+          SalesHierarchyViewType.distributors,
+          SalesHierarchyViewType.subAccounts,
+          SalesHierarchyViewType.stores
+        ]);
       });
 
       it('should update the drillStatus indicator to Down', () => {
@@ -1323,7 +1334,7 @@ describe('MyPerformanceComponent', () => {
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
         componentInstance.handleElementClicked(params);
 
-        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Down);
+        expect(componentInstanceCopy.drillStatus).toBe(DrillStatus.Inactive);
       });
     });
 

@@ -15,6 +15,8 @@ import { ListsTransformerService } from '../../services/lists-transformer.servic
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 
 @Injectable()
 export class ListsEffects {
@@ -32,6 +34,7 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchStoreDetails) => {
         return this.listsApiService.getStoreListDetails(action.payload.listId)
           .map((response: Array<ListStoreDTO>) => {
+            console.log(response);
             const transformedData: Array<StoreDetails> = this.listsTransformerService.formatStoresData(response);
             return new ListActions.FetchStoreDetailsSuccess(transformedData);
           })
@@ -72,6 +75,30 @@ export class ListsEffects {
   }
 
   @Effect()
+  fetchOppsforList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.FETCH_OPPS_FOR_LIST)
+      .switchMap((action: ListActions.FetchOppsForList) => {
+        return this.listsApiService.getOppsDataForList(action.payload.listId)
+          .map((response: Array<ListOpportunityDTO>) => {
+            const transformedData: Array<ListsOpportunities> = this.listsTransformerService.formatListOpportunitiesData(response);
+            const groupedOpportunities = this.listsTransformerService.groupOppsByStore(transformedData);
+            return new ListActions.FetchOppsForListSuccess(groupedOpportunities);
+          })
+          .catch((error: Error) => Observable.of(new ListActions.FetchOppsForListFailure(error)));
+      });
+  }
+
+  @Effect({dispatch: false})
+  fetchOppsforListFailure$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.FETCH_OPPS_FOR_LIST_FAILURE)
+      .do((action: ListActions.FetchOppsForListFailure) => {
+        console.error('Opportunities fetch failure:', action.payload);
+      });
+  }
+
+  @Effect()
   fetchListPerformanceVolume$(): Observable<Action> {
     return this.actions$
       .ofType(ListsActionTypes.FETCH_LIST_PERFORMANCE_VOLUME)
@@ -108,6 +135,30 @@ export class ListsEffects {
           return new ListActions.FetchListPerformancePODSuccess(listPerformance);
         })
         .catch((error: Error) => Observable.of(new ListActions.FetchListPerformancePODError(error)));
+      });
+  }
+
+  @Effect()
+  patchList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListActions.PATCH_LIST)
+      .switchMap((action: ListActions.PatchList) => {
+        const convertedPayload = this.listsTransformerService.convertCollaborators(action.payload);
+        return this.listsApiService.updateList(convertedPayload, action.payload.id)
+        .map((response: ListsSummaryDTO) => {
+          const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
+          return new ListActions.PatchListSuccess(transformedData);
+        })
+        .catch((error: Error) => Observable.of(new ListActions.PatchListFailure(error)));
+      });
+  }
+
+  @Effect({dispatch: false})
+  patchListFailure$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListActions.PATCH_LIST_FAILURE)
+      .do((action: ListActions.PatchListFailure) => {
+        console.error('Update List failure:', action.payload);
       });
   }
 }

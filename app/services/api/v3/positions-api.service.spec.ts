@@ -67,23 +67,6 @@ describe('PositionsApiService', () => {
     http.verify();
   });
 
-  describe('getAccountsOrDistributors', () => {
-    it('should call the passed in EntityURI endpoint and return Accounts or Distributors', () => {
-      const expectedEntityDTOResponseMock: EntityDTO[] = [getEntityDTOMock()];
-      const entityURIMock: string = chance.string(chanceStringOptions);
-      const expectedRequestUrl: string = `/v3${entityURIMock}`;
-
-      positionsApiService.getAccountsOrDistributors(entityURIMock).subscribe((response: EntityDTO[]) => {
-        expect(response).toEqual(expectedEntityDTOResponseMock);
-      });
-
-      const req: TestRequest = http.expectOne(expectedRequestUrl);
-      req.flush(expectedEntityDTOResponseMock);
-
-      expect(req.request.method).toBe(ApiRequestType.GET);
-    });
-  });
-
   describe('getAlternateHierarchy', () => {
     it('should call the Positions AlternateHierarchy endpoint and return PeopleResponsibilitiesDTO data for the given'
     + ' PositionId and ContextPositionId', () => {
@@ -345,6 +328,23 @@ describe('PositionsApiService', () => {
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush({}, { status: 404, statusText: chance.string() });
+    });
+  });
+
+  describe('getEntityURIResponsibilities', () => {
+    it('should call the passed in EntityURI endpoint and return a EntityDTO collection associated with those responsibilities', () => {
+      const expectedEntityDTOResponseMock: EntityDTO[] = [getEntityDTOMock()];
+      const entityURIMock: string = chance.string(chanceStringOptions);
+      const expectedRequestUrl: string = `/v3${entityURIMock}`;
+
+      positionsApiService.getEntityURIResponsibilities(entityURIMock).subscribe((response: EntityDTO[]) => {
+        expect(response).toEqual(expectedEntityDTOResponseMock);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedEntityDTOResponseMock);
+
+      expect(req.request.method).toBe(ApiRequestType.GET);
     });
   });
 

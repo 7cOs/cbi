@@ -27,7 +27,8 @@ export enum EntityPeopleType {
   'ON PREMISE VP' = 'ON PREMISE VP',
   'ON PREMISE BU VP' = 'ON PREMISE BU VP',
   'CHANNEL VP' = 'CHANNEL VP',
-  'FIELD MARKETING DIRECTOR' = 'FIELD MARKETING DIRECTOR'
+  'FIELD MARKETING DIRECTOR' = 'FIELD MARKETING DIRECTOR',
+  'STORE' = 'STORE'
 }
 
 export enum EntityType {
@@ -38,10 +39,13 @@ export enum EntityType {
   DistributorGroup = 'DistributorGroup',
   Account = 'Account',
   AccountGroup = 'AccountGroup',
-  SubAccount = 'SubAccount'
+  SubAccount = 'SubAccount',
+  StoreGroup = 'StoreGroup',
+  Store = 'Store'
 }
 
 export enum HierarchyGroupTypeCode {
   accounts = 'account',
-  distributors = 'distributor'
+  distributors = 'distributor',
+  stores = 'store'
 }

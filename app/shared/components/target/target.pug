@@ -17,7 +17,7 @@ div.target-lists
             a(ui-sref="lists") Ok, show me my lists
           ul
             li(ng-repeat="list in type.records | orderBy:'-dateOpportunitiesUpdated' | limitTo:5" ng-class="{'new-share' : list.newShare}").target-list
-              a(ui-sref="target-list-detail({id: list.id})" analytics-event-on="click" category="Target Lists" action="{{target.analyticsActionForType(type.name)}}" label="{{list.id}}")
+              a(ui-sref="list-detail({id: list.id})" analytics-event-on="click" category="Lists" action="{{target.analyticsActionForType(type.name)}}" label="{{list.id}}")
                 div.target-list-row-one.clearfix
                   h3.target-list-name {{list.name}}
                     md-tooltip(ng-if="list.name.length > target.nameLengthForTooltip" md-direction="top") {{list.name}}

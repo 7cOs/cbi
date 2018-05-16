@@ -73,7 +73,7 @@ describe('Responsibilities Effects', () => {
     getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
-    getAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    getEntityURIResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
     getPositionsPerformances(args: any): Observable<(EntityWithPerformance | Error)[]> {
@@ -99,7 +99,7 @@ describe('Responsibilities Effects', () => {
     getAlternateHierarchy(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
-    getAlternateAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    getAlternateEntityURIResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
     getEntityGroupViewType(entityType: EntityType): SalesHierarchyViewType {
@@ -208,15 +208,15 @@ describe('Responsibilities Effects', () => {
         expect(getResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
       });
 
-      it('should call getAccountsDistributors with the right arguments', (done) => {
-        const getAccountsDistributorsSpy = spyOn(responsibilitiesService, 'getAccountsDistributors').and.callThrough();
+      it('should call getEntityURIResponsibilities with the right arguments', (done) => {
+        const getEntityURIResponsibilitiesSpy = spyOn(responsibilitiesService, 'getEntityURIResponsibilities').and.callThrough();
 
         responsibilitiesEffects.fetchResponsibilities$().subscribe(() => {
           done();
         });
 
-        expect(getAccountsDistributorsSpy.calls.count()).toBe(1);
-        expect(getAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
+        expect(getEntityURIResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(getEntityURIResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
       });
 
       it('should call getAlternateHierarchy with the right arguments', (done) => {
@@ -230,15 +230,19 @@ describe('Responsibilities Effects', () => {
         expect(getAlternateHierarchySpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
       });
 
-      it('should call getAlternateAccountsDistributors with the right arguments', (done) => {
-        const getAlternateAccountsDistributorsSpy = spyOn(responsibilitiesService, 'getAlternateAccountsDistributors').and.callThrough();
+      it('should call getAlternateEntityURIResponsibilities with the right arguments', (done) => {
+        const getAlternateEntityURIResponsibilitiesSpy = spyOn(
+          responsibilitiesService,
+          'getAlternateEntityURIResponsibilities'
+        )
+        .and.callThrough();
 
         responsibilitiesEffects.fetchResponsibilities$().subscribe(() => {
           done();
         });
 
-        expect(getAlternateAccountsDistributorsSpy.calls.count()).toBe(1);
-        expect(getAlternateAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
+        expect(getAlternateEntityURIResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(getAlternateEntityURIResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
       });
 
       it('should call getPerformanceForGroupedEntities with the right arguments', (done) => {
@@ -274,9 +278,9 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    describe('when getAccountsDistributors returns an error', () => {
+    describe('when getEntityURIResponsibilities returns an error', () => {
       it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
-        spyOn(responsibilitiesService, 'getAccountsDistributors').and.returnValue(Observable.throw(error));
+        spyOn(responsibilitiesService, 'getEntityURIResponsibilities').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();
@@ -294,9 +298,9 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    describe('when getAlternateAccountsDistributors returns an error', () => {
+    describe('when getAlternateEntityURIResponsibilities returns an error', () => {
       it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
-        spyOn(responsibilitiesService, 'getAlternateAccountsDistributors').and.returnValue(Observable.throw(error));
+        spyOn(responsibilitiesService, 'getAlternateEntityURIResponsibilities').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();
@@ -763,15 +767,15 @@ describe('Responsibilities Effects', () => {
         expect(getResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(alternateResponsibilitiesDataMock);
       });
 
-      it('should call getAccountsDistributors with the right arguments', (done) => {
-        const getAccountsDistributorsSpy = spyOn(responsibilitiesService, 'getAccountsDistributors').and.callThrough();
+      it('should call getEntityURIResponsibilities with the right arguments', (done) => {
+        const getEntityURIResponsibilitiesSpy = spyOn(responsibilitiesService, 'getEntityURIResponsibilities').and.callThrough();
 
         responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe(() => {
           done();
         });
 
-        expect(getAccountsDistributorsSpy.calls.count()).toBe(1);
-        expect(getAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(alternateResponsibilitiesDataMock);
+        expect(getEntityURIResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(getEntityURIResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(alternateResponsibilitiesDataMock);
       });
 
       it('should call checkEmptyResponsibilitiesResponse with the right arguments', (done) => {
@@ -808,9 +812,9 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    describe('when getAccountsDistributors returns an error', () => {
+    describe('when getEntityURIResponsibilities returns an error', () => {
       it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
-        spyOn(responsibilitiesService, 'getAccountsDistributors').and.returnValue(Observable.throw(error));
+        spyOn(responsibilitiesService, 'getEntityURIResponsibilities').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchAlternateHierarchyResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();

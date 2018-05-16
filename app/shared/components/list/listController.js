@@ -1,7 +1,11 @@
 'use strict';
 
+const findIndex = require('lodash').findIndex;
+const OpportunitiesDownloadType = require('../../../enums/opportunities-download-type.enum').OpportunitiesDownloadType;
+const values = require('lodash/values');
+
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, listsApiService, listsTransformerService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -93,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.hasOpportunities = hasOpportunities;
     vm.openDismissModal = openDismissModal;
     vm.openShareModal = openShareModal;
+    vm.opportunityIdsToCopy = opportunityIdsToCopy;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
     vm.pickMemo = pickMemo;
     vm.removeOpportunity = removeOpportunity;
@@ -168,7 +173,7 @@ module.exports = /*  @ngInject */
             vm.targetListService.model.currentList.permissionLevel,
             vm.targetListService.model.currentList.archived
           ),
-          'Download Target List - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
+          'Download List - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
           vm.targetListService.model.currentList.id
         );
       }
@@ -232,17 +237,16 @@ module.exports = /*  @ngInject */
       if (listId && vm.selected.length) {
         loaderService.openLoader(true);
 
-        let opportunityIdsPromise = opportunityIdsToCopy();
-        opportunityIdsPromise.then(opportunityIds => {
-          targetListService.addTargetListOpportunities(listId, opportunityIds).then(() => {
-            updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
-            updateCopiedOpportunities();
-            vm.toggleSelectAllStores(false);
-
-            loaderService.closeLoader();
-
-            toastService.showToast('copied', opportunityIds);
-          }, function(err) {
+        opportunityIdsToCopy().then(opportunityIds => {
+          const formattedOpportunities = opportunityIds.map(opportunityId => { return { opportunityId: opportunityId }; });
+          updateCopiedOpportunities();
+          updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
+          listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
+            .then(result => {
+              vm.toggleSelectAllStores(false);
+              loaderService.closeLoader();
+              toastService.showToast('copied', opportunityIds);
+          }, err => {
             loaderService.closeLoader();
             console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
             getTargetLists();
@@ -329,34 +333,33 @@ module.exports = /*  @ngInject */
 
     function saveNewList(e) {
       vm.buttonDisabled = true;
+      const formattedList = listsTransformerService.formatNewList(vm.newList);
+      listsApiService.createListPromise(formattedList)
+        .then(response => {
+          analyticsService.trackEvent(
+            'Lists - My Lists',
+            'Create List',
+            response.id
+          );
 
-      userService.addTargetList(vm.newList).then(response => {
-        analyticsService.trackEvent(
-          'Target Lists - My Target Lists',
-          'Create Target List',
-          response.id
-        );
+          vm.addToTargetList(response.id);
+          vm.closeModal();
+          vm.buttonDisabled = false;
 
-        vm.addToTargetList(response.id);
-        vm.closeModal();
-        vm.buttonDisabled = false;
+          if (userService.model.targetLists) {
+            userService.model.targetLists.owned[0].collaborators = response.collaborators;
+          }
 
-        return targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
-      })
-      .then(addCollaboratorResponse => {
-        if (userService.model.targetLists) {
-         userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
-        }
-        vm.newList = {
-          name: '',
-          description: '',
-          opportunities: [],
-          collaborators: [],
-          targetListShares: [],
-          collaborateAndInvite: false
-        };
-      })
-      .catch(error => console.error('Error creating target list: ', error));
+          vm.newList = {
+            name: '',
+            description: '',
+            opportunities: [],
+            collaborators: [],
+            targetListShares: [],
+            collaborateAndInvite: false
+          };
+        })
+        .catch(error => console.error('Error creating target list: ', error));
     }
 
     function addCollaborator(e) {
@@ -374,13 +377,6 @@ module.exports = /*  @ngInject */
     function displayBrandIcon(haystack, needle) {
       return haystack.indexOf(needle) !== -1;
     }
-
-    // Check if all items are selected
-    /* not useful when you can uncheck alt j
-    function isChecked() {
-      return vm.selected.length === opportunitiesService.model.opportunities.length;
-    }
-    */
 
     function openShareModal(oId, ev) {
       vm.currentOpportunityId = oId;
@@ -621,7 +617,6 @@ module.exports = /*  @ngInject */
     // Choose single memo from response/memo array based on most recent startDate
     function pickMemo(memos, productId, code) {
       const products = [];
-      console.log(code);
       memos.forEach(function(value, key) {
         if (value.packageID === productId && value.typeCode === code) {
           products.push(value);
@@ -733,7 +728,9 @@ module.exports = /*  @ngInject */
     }
 
     function createCSVData(opportunities) {
-      return opportunities.reduce((opportunityCSVDataArray, opportunity) => {
+      const formattedCSVData = opportunities.reduce((csvData, opportunity, index) => {
+        if (vm.csvDownloadOption === OpportunitiesDownloadType.STORES && csvData.hasOwnProperty(opportunity.store.id)) return csvData;
+
         const opportunityCSVData = {
           storeDistributor: getStoreDistributor(opportunity),
           TDLinx: opportunity.store.id,
@@ -750,7 +747,7 @@ module.exports = /*  @ngInject */
           storeSegmentation: opportunity.store.segmentation
         };
 
-        if (vm.csvDownloadOption !== filtersService.csvDownloadOptions[2].value) {
+        if (vm.csvDownloadOption !== OpportunitiesDownloadType.STORES) {
           opportunityCSVData.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(opportunity));
           opportunityCSVData.productBrand = opportunity.product.brand;
           opportunityCSVData.productSku = opportunity.product.name || 'Any';
@@ -761,14 +758,20 @@ module.exports = /*  @ngInject */
           opportunityCSVData.impactPredicted = opportunity.impactDescription;
         }
 
-        if (vm.csvDownloadOption === filtersService.csvDownloadOptions[0].value) {
+        if (vm.csvDownloadOption === OpportunitiesDownloadType.WITH_RATIONALES) {
           opportunityCSVData.rationale = opportunity.rationale;
         }
 
-        opportunityCSVDataArray.push(opportunityCSVData);
+        if (vm.csvDownloadOption === OpportunitiesDownloadType.STORES) {
+          csvData[opportunity.store.id] = opportunityCSVData;
+        } else {
+          csvData[index] = opportunityCSVData;
+        }
 
-        return opportunityCSVDataArray;
-      }, []);
+        return csvData;
+      }, {});
+
+      return values(formattedCSVData);
     }
 
     function getCSVHeader() {
@@ -788,7 +791,7 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreDistributor(opportunity) {
-      if (filtersService.model.selected.distributor.length > 0) {
+      if (filtersService.model.selected.distributor.length === 1) {
         return filtersService.model.selected.distributor[0].name;
       } else if (opportunity.store.distributors) {
         return opportunity.store.distributors[0];
@@ -802,8 +805,9 @@ module.exports = /*  @ngInject */
      */
     function getTargetLists() {
       if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
-        userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
-          userService.model.targetLists = data;
+        const currentUserEmployeeID = userService.model.currentUser.employeeID;
+        listsApiService.getListsPromise().then((response) => {
+          userService.model.targetLists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
         });
       }
     }
@@ -971,6 +975,10 @@ module.exports = /*  @ngInject */
     function getDistributorCustomerCode(distributorsSalesInfo) {
       return distributorsSalesInfo.reduce((customerCode, salesInfo) => {
         if (salesInfo.primaryFlag === 'Y') customerCode = salesInfo.distributorCustomerCd;
+        if (filtersService.model.selected.distributor.length === 1) {
+          let matchedIndex = getMatchedDistributorToSalesInfo(distributorsSalesInfo);
+          return distributorsSalesInfo[matchedIndex].distributorCustomerCd;
+        }
         return customerCode;
       }, '');
     }
@@ -980,8 +988,19 @@ module.exports = /*  @ngInject */
         if (salesInfo.primaryFlag === 'Y') {
           salesRoute = salesInfo.salespersonName.length ? salesInfo.salespersonName : 'Unknown';
         }
+        if (filtersService.model.selected.distributor.length === 1) {
+          let matchedIndex = getMatchedDistributorToSalesInfo(distributorsSalesInfo);
+          return distributorsSalesInfo[matchedIndex].salespersonName.length ? distributorsSalesInfo[matchedIndex].salespersonName : 'Unknown';
+        }
         return salesRoute;
       }, '');
+    }
+
+    function getMatchedDistributorToSalesInfo(distributorsSalesInfo) {
+      let matchedIndex = findIndex(distributorsSalesInfo, (salesInfoObj) => {
+        return salesInfoObj.distributorCd === filtersService.model.selected.distributor[0].id;
+      });
+      return matchedIndex;
     }
 
     function impactSort (item) {
@@ -1010,13 +1029,13 @@ module.exports = /*  @ngInject */
         if ($state.current.name.includes('opportunities')) {
           analyticsService.trackEvent(
            'Opportunities',
-            `${addAction ? 'Add' : 'Copy'} to Target List`,
+            `${addAction ? 'Add' : 'Copy'} to List`,
             addAction ? targetList.id : vm.targetListService.model.currentList.id
           );
         } else {
           analyticsService.trackEvent(
             targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel, targetListService.model.currentList.archived),
-            `${addAction ? 'Add' : 'Copy'} to Target List`,
+            `${addAction ? 'Add' : 'Copy'} to List`,
             addAction ? targetList.id : vm.targetListService.model.currentList.id
           );
         }

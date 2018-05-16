@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
 
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
 import { MetricTypeValue } from '../../../enums/metric-type.enum';

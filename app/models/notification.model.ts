@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 
 import { NotificationObjectType, NotificationAction, NotificationStatus } from '../enums/notification.enum';
-import { OpportunityType } from '../enums/opportunity.enum';
+import { OpportunityType } from '../enums/list-opportunities/list-opportunity-type.enum';
 
 export interface Notification {
   dateCreated: Moment;
@@ -21,6 +21,22 @@ export interface Notification {
 }
 
 export interface TargetListNotification extends Notification {
+  shortenedObject: {
+    id: string;
+    name: string;
+    valid: boolean;
+  };
+}
+
+export interface ListAddCollaboratorNotification extends Notification {
+  shortenedObject: {
+    id: string;
+    name: string;
+    valid: boolean;
+  };
+}
+
+export interface ListTransferOwnershipNotification extends Notification {
   shortenedObject: {
     id: string;
     name: string;
@@ -66,6 +82,14 @@ export interface StoreNotification extends Notification {
 }
 
 export interface AccountNotification extends Notification {
+  shortenedObject: {
+    id: string;
+    name: string;
+    value: boolean;
+  };
+}
+
+export interface DistributorNotification extends Notification {
   shortenedObject: {
     id: string;
     name: string;
