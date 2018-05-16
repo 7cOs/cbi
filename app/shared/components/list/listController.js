@@ -173,7 +173,7 @@ module.exports = /*  @ngInject */
             vm.targetListService.model.currentList.permissionLevel,
             vm.targetListService.model.currentList.archived
           ),
-          'Download Target List - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
+          'Download List - ' + filtersService.csvDownloadOptions.find(downloadOption => downloadOption.value === vm.csvDownloadOption).label,
           vm.targetListService.model.currentList.id
         );
       }
@@ -337,8 +337,8 @@ module.exports = /*  @ngInject */
       listsApiService.createListPromise(formattedList)
         .then(response => {
           analyticsService.trackEvent(
-            'Target Lists - My Target Lists',
-            'Create Target List',
+            'Lists - My Lists',
+            'Create List',
             response.id
           );
 
@@ -1029,13 +1029,13 @@ module.exports = /*  @ngInject */
         if ($state.current.name.includes('opportunities')) {
           analyticsService.trackEvent(
            'Opportunities',
-            `${addAction ? 'Add' : 'Copy'} to Target List`,
+            `${addAction ? 'Add' : 'Copy'} to List`,
             addAction ? targetList.id : vm.targetListService.model.currentList.id
           );
         } else {
           analyticsService.trackEvent(
             targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel, targetListService.model.currentList.archived),
-            `${addAction ? 'Add' : 'Copy'} to Target List`,
+            `${addAction ? 'Add' : 'Copy'} to List`,
             addAction ? targetList.id : vm.targetListService.model.currentList.id
           );
         }
