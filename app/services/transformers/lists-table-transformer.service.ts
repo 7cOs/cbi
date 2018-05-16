@@ -112,7 +112,7 @@ export class ListsTableTransformerService {
         status: opportunity.status || '-' as OpportunityStatus,
         impact: opportunity.impact,
         current: opportunity.currentDepletions_CYTD || 0,
-        yearAgo: opportunity.yearAgoDepletions_CYTD || 0,
+        yearAgo: this.calculatorService.getYearAgoPercent(opportunity.currentDepletions_CYTD, opportunity.yearAgoDepletions_CYTD),
         depletionDate: opportunity.lastDepletionDate ? moment(opportunity.lastDepletionDate).format('MM/DD/YY') : '-',
         checked: false
       };
