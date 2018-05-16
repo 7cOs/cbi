@@ -15,6 +15,6 @@ export interface ListsSummaryDTO {
   numberOfAccounts: number;
   owner: CollaboratorOwnerDetails;
   survey: SurveyInfo;
-  type: number;
+  type: string;
   updatedOn: string;
 }

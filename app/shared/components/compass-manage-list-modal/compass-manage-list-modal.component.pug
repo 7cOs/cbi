@@ -1,0 +1,32 @@
+div.compass-modal
+    div.compass-modal-header
+      h1.compass-modal-title {{ modalInputs.title }}
+      div.X-modal-btn-container((click)='hideModal(compassManageListModalEvent.Close)')
+        img.X-modal-btn(src="../../../assets/img/icons/thin-x-white.svg")
+    div.compass-modal-body
+      form([formGroup]='listForm')
+        div.modal-input
+          label Name
+          input(formControlName="targetName",
+          *ngIf="modalInputs.listObject.ownerId === modalInputs.currentUser.employeeID")
+        div.modal-input
+          label Description (optional)
+          textarea(formControlName="description",
+          *ngIf="modalInputs.listObject.ownerId === modalInputs.currentUser.employeeID")
+        div.modal-input
+          label Collaborators
+          div.collaborator-list
+            .collaborator.manage-list
+              .align-left(*ngIf="modalInputs.listObject.ownerId === modalInputs.currentUser.employeeID") You
+                .accent Owner
+              .align-left(*ngIf="modalInputs.listObject.ownerId !== modalInputs.currentUser.employeeID") {{modalInputs.listObject.ownerFirstName | titlecase}} {{modalInputs.listObject.ownerLastName | titlecase}}
+            .collaborator.manage-list(*ngFor="let collaborator of collaborators")
+              .align-left {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}}
+                .accent Collaborator
+        div.modal-input
+          label Add Collaborators
+          compass-user-search([parentGroup]='listForm',
+          (addedCollaboratorEvent)="addCollaborator($event)")
+    div.compass-modal-action-bar
+      span.compass-modal-btn((click)='hideModal(compassManageListModalEvent.Decline)') {{ modalInputs.rejectLabel }}
+      button.btn-action((click)='hideModal(compassManageListModalEvent.Accept)') {{ modalInputs.acceptLabel }}

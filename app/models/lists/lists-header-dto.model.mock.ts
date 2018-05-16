@@ -29,7 +29,7 @@ export function getListsSummaryDTOMock(): ListsSummaryDTO {
       sfid: chance.string(),
       name: chance.string()
     },
-    type: chance.floating(),
+    type: chance.string(),
     updatedOn: chance.string()
   };
 }
