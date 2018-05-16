@@ -151,6 +151,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (this.selectedTab === this.performanceTabTitle) {
       console.log(actionButtonProperties.actionType + ' - on performance tab');
       const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
+      let apiCalls: Observable<any>[] = [];
+      checkedStores.forEach((store) => {
+        apiCalls.push(this.listApiService.removeStoreFromList(this.listSummary.id, store.storeSourceCode));
+      });
+      Observable.forkJoin(apiCalls).subscribe((results) => {
+        console.log('output of remove from opps call');
+        console.log(results);
+      });
       console.log(checkedStores);
     }
     if (this.selectedTab === this.opportunitiesTabTitle) {

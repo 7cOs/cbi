@@ -76,7 +76,8 @@ export class ListsTableTransformerService {
         l90VersusYaPercentColumn: storePOD ? this.calculatorService.getYearAgoPercent(storePOD.current, storePOD.yearAgo) : 0,
         lastDepletionDateColumn: storeVolume ? moment(storeVolume.lastSoldDate).format('MM/DD/YY') : '-',
         performanceError: isPerformanceError,
-        checked: false
+        checked: false,
+        storeSourceCode: store.unversionedStoreId
       };
     });
   }
