@@ -39,7 +39,7 @@ export class ListsTableTransformerService {
         storeAddressSubline: this.getFullStoreAddress(store),
         distributorColumn: store.distributor,
         segmentColumn: store.segmentCode,
-        cytdColumn: storeVolume ? this.calculatorService.getYearAgoDelta(storeVolume.current, storeVolume.yearAgo) : 0,
+        cytdColumn: storeVolume ? storeVolume.current : 0,
         cytdVersusYaPercentColumn: storeVolume ? this.calculatorService.getYearAgoPercent(storeVolume.current, storeVolume.yearAgo) : 0,
         opportunitiesColumn: storeOpportunities.length,
         opportunities: this.transformStoreOpportunities(storeOpportunities),
