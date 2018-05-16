@@ -208,14 +208,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         return totalOpps;
       }, []);
       console.log(checkedOpps, 'Opps');
-      this.copyToListModal();
+      this.copyToListModal(checkedOpps, this.selectedTab);
     } else {
       const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
         if (store.checked === true) totalStores.push(store.unversionedStoreId);
         return totalStores;
       }, []);
       console.log(checkedStores, 'perf');
-      this.copyToListModal();
+      this.copyToListModal(checkedStores, this.selectedTab);
     }
   }
 
@@ -318,7 +318,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       && opportunitiesStatus === ActionStatus.Fetched;
   }
 
-  private copyToListModal() {
+  private copyToListModal(checkedEntities: any, tabName: string) {
       this.copyToListModalStringInputs = {
         'title': 'Copy to List',
         'dropdownInputModel': this.dropdownInputModel,
@@ -329,6 +329,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
         console.log('dropdown option selected: ', value.dropdownOptionSelected);
         console.log('accept clicked');
+        if (tabName === this.performanceTabTitle) {
+          // API call to Copy to list (Stores)
+        } else {
+          // API call to Copy to list (Opps)
+        }
       });
   }
 
