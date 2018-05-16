@@ -197,7 +197,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
-    this.showModal(actionButtonProperties.actionType);
   }
 
   public copyToListClick(): void {
