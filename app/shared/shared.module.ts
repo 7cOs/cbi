@@ -16,8 +16,9 @@ import { MatAutocompleteModule,
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { CompassActionButtonComponent } from './components/compass-action-button/compass-action-button.component';
-import { CompassCardComponent }  from './components/compass-card/compass-card.component';
+import { CompassActionModalComponent } from './components/compass-action-modal/compass-action-modal.component';
 import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
+import { CompassCardComponent }  from './components/compass-card/compass-card.component';
 import { CompassManageListModalComponent } from './components/compass-manage-list-modal/compass-manage-list-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
 import { CompassOverlayService } from '../services/compass-overlay.service';
@@ -56,6 +57,7 @@ import { CompassUserSearchComponent } from './components/compass-user-search/com
   exports: [
     CompassActionButtonComponent,
     BeerLoaderComponent,
+    CompassActionModalComponent,
     CompassAlertModalComponent,
     CompassManageListModalComponent,
     CompassRadioComponent,
@@ -81,8 +83,9 @@ import { CompassUserSearchComponent } from './components/compass-user-search/com
   declarations: [
     BeerLoaderComponent,
     CompassActionButtonComponent,
-    CompassCardComponent,
     CompassAlertModalComponent,
+    CompassActionModalComponent,
+    CompassCardComponent,
     CompassManageListModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
@@ -104,6 +107,7 @@ import { CompassUserSearchComponent } from './components/compass-user-search/com
     CompassListClassUtilService
   ],
   entryComponents: [
+    CompassActionModalComponent,
     CompassAlertModalComponent,
     CompassManageListModalComponent,
     CompassTooltipPopupComponent
