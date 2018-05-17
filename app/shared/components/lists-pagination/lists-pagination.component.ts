@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -10,7 +10,7 @@ export const LIST_TABLE_SIZE: number = 20;
   styles: [ require('./lists-pagination.scss') ]
 })
 
-export class ListsPaginationComponent implements OnInit, OnChanges, OnDestroy {
+export class ListsPaginationComponent implements OnChanges, OnDestroy {
   @Input() tableDataSize: number;
   @Input() tabName: string;
   @Input() paginationReset: Subject<Event>;
@@ -24,17 +24,12 @@ export class ListsPaginationComponent implements OnInit, OnChanges, OnDestroy {
   public totalPages: number;
   public pageResetSubscription: Subscription;
 
-  ngOnInit() {
+  ngOnChanges() {
     this.lastPage = this.totalPages = Math.ceil(this.tableDataSize / LIST_TABLE_SIZE) || 0;
     this.pageNumbers = this.getPageNumbers();
     this.pageResetSubscription = this.paginationReset.subscribe(() => {
       this.pageChange(0);
     });
-  }
-
-  ngOnChanges() {
-    this.lastPage = this.totalPages = Math.ceil(this.tableDataSize / LIST_TABLE_SIZE) || 0;
-    this.pageNumbers = this.getPageNumbers();
   }
 
   ngOnDestroy() {

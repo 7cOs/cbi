@@ -21,41 +21,6 @@ describe('ListsPaginationComponent', () => {
     componentInstanceCopy = componentInstance as any;
   });
 
-  describe('ngOnInit', () => {
-
-    beforeEach(() => {
-      componentInstance.tableDataSize = 200;
-    });
-
-    it('should set last page and get pageNumbers', () => {
-      spyOn(componentInstance, 'getPageNumbers');
-      componentInstance.ngOnInit();
-      fixture.detectChanges();
-      expect(componentInstance.totalPages).toBe(10);
-      expect(componentInstance.lastPage).toBe(10);
-      expect(componentInstance.getPageNumbers).toHaveBeenCalled();
-    });
-
-    it('should check if subscription', (done: any) => {
-      componentInstance.ngOnInit();
-      componentInstance.paginationReset.subscribe((value) => {
-        expect(value).toBe(undefined);
-        done();
-      });
-      pageResetSubject.next();
-    });
-
-    it('should check if pageChange function is called', (done: any) => {
-      componentInstance.ngOnInit();
-      spyOn(componentInstance, 'pageChange');
-      componentInstance.paginationReset.subscribe(() => {
-        expect(componentInstance.pageChange).toHaveBeenCalledWith(0);
-        done();
-      });
-      pageResetSubject.next();
-    });
-  });
-
   describe('ngOnChanges', () => {
 
     beforeEach(() => {
@@ -69,6 +34,25 @@ describe('ListsPaginationComponent', () => {
       expect(componentInstance.totalPages).toBe(10);
       expect(componentInstance.lastPage).toBe(10);
       expect(componentInstance.getPageNumbers).toHaveBeenCalled();
+    });
+
+    it('should check if subscription', (done: any) => {
+      componentInstance.ngOnChanges();
+      componentInstance.paginationReset.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      pageResetSubject.next();
+    });
+
+    it('should check if pageChange function is called', (done: any) => {
+      componentInstance.ngOnChanges();
+      spyOn(componentInstance, 'pageChange');
+      componentInstance.paginationReset.subscribe(() => {
+        expect(componentInstance.pageChange).toHaveBeenCalledWith(0);
+        done();
+      });
+      pageResetSubject.next();
     });
   });
 
