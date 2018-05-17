@@ -95,6 +95,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     title: 'OPTIONS',
     stacked: false
   };
+  public totalOppsForList: number;
 
   public downloadBodyHTML: string;
 
@@ -168,19 +169,23 @@ export class ListDetailComponent implements OnInit, OnDestroy {
               this.oppStatusSelected,
               this.opportunitiesTableData
             );
+          this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
       });
   }
 
   downloadActionButtonClicked() {
+    let numStores = 0;
     if (this.selectedTab === this.performanceTabTitle) {
       console.log('Download All - performance tab seclected');
+      numStores = this.performanceTableDataSize;
     } else {
       console.log('Download All - opps tab seclected');
+      numStores = this.opportunitiesTableDataSize;
     }
 
-    this.downloadBodyHTML = 'Body text goes here!';
+    this.downloadBodyHTML = 'Current Selection Contains ' + this.totalOppsForList + ' opportunities across ' + numStores + ' stores';
     this.downloadAllModalStringInputs = {
       'title': 'Download',
       'bodyText': this.downloadBodyHTML,
@@ -321,5 +326,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         expanded: false
       });
     });
+  }
+
+  private getCumulativeOppsForList(oppsData: ListOpportunitiesTableRow[]): number {
+    let cumulativeOppsCount: number = 0;
+    oppsData.map((eachStore: ListOpportunitiesTableRow) => {
+      cumulativeOppsCount += eachStore.opportunities.length;
+    });
+    return cumulativeOppsCount;
   }
 }
