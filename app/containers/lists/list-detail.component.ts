@@ -356,9 +356,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       console.log('dropdown option selected: ', value.dropdownOptionSelected);
       console.log('accept clicked');
       if (tabName === this.performanceTabTitle) {
-        this.store.dispatch(new ListsActions.copyStoresToList({listId: value.dropdownOptionSelected}, checkedEntities));
+        /*this.store.dispatch(new ListsActions.copyStoresToList({listId: value.dropdownOptionSelected}, checkedEntities));*/
       } else {
-        this.store.dispatch(new ListsActions.copyOppsToList({listId: value.dropdownOptionSelected}, checkedEntities));
+        /*this.store.dispatch(new ListsActions.copyOppsToList({listId: value.dropdownOptionSelected}, checkedEntities));*/
       }
     });
   }
