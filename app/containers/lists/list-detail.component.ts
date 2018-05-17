@@ -129,8 +129,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
     private titleService: Title,
-    @Inject('userService') private userService: any,
-    @Inject('toastService') private toastService: any
+    @Inject('userService') private userService: any
   ) { }
 
   ngOnInit() {
