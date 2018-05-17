@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CompassActionModalComponent } from './compass-action-modal.component';
 import { CompassActionModalInputs } from '../../../models/compass-action-modal-inputs.model';
 import { COMPASS_ACTION_MODAL_INPUTS } from './compass-action-modal.tokens';
-import { CompassActionModalEvent } from '../../../enums/compass-action-modal-strings.enum';
+import { CompassActionModalEvent } from '../../../enums/compass-action-modal-event.enum';
 import { CompassRadioComponent } from '../compass-radio/compass-radio.component';
 import { CompassSelectComponent } from '../compass-select/compass-select.component';
 import { MatSelectModule, MatRadioModule } from '@angular/material';
@@ -109,7 +109,7 @@ describe('Compass Action Modal Component', () => {
       expect(titleElement.nativeElement.textContent).toEqual('');
     });
     it('should contain a body element when the injection has a body text', () => {
-      let bodyElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-body'));
+      let bodyElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-body-text'));
       expect(bodyElement.nativeElement.textContent).toEqual(compassModalInputsMock.bodyText);
     });
     it('should contain radio buttons group when the injection has a radioInputModel', () => {

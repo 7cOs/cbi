@@ -118,6 +118,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     title: 'LIST'
   };
 
+  public downloadBodyHTML: string;
+
   private listDetailSubscription: Subscription;
 
   constructor(
@@ -214,7 +216,30 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       }, []);
       console.log(checkedStores, 'perf');
       this.copyToListModal(checkedStores, this.selectedTab);
+
     }
+  }
+
+  downloadActionButtonClicked() {
+    if (this.selectedTab === this.performanceTabTitle) {
+      console.log('Download All - performance tab seclected');
+    } else {
+      console.log('Download All - opps tab seclected');
+    }
+
+    this.downloadBodyHTML = 'Body text goes here!';
+    this.downloadAllModalStringInputs = {
+      'title': 'Download',
+      'bodyText': this.downloadBodyHTML,
+      'radioInputModel': this.radioInputModel,
+      'acceptLabel': 'Download',
+      'rejectLabel': 'Cancel'
+    };
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
+    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+        console.log('radio option selected: ', value.radioOptionSelected);
+        console.log('dropdown option selected: ', value.dropdownOptionSelected);
+    });
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {
@@ -290,6 +315,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.filteredOpportunitiesTableData = this.opportunitiesTableData;
       this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
     }
+    if (tabName === this.opportunitiesTabTitle) {
+      this.performanceTableData = this.getDeselectedPerformanceTableData(this.performanceTableData);
+    }
   }
 
   public handlePaginationReset() {
@@ -317,22 +345,30 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   private copyToListModal(checkedEntities: any, tabName: string) {
-      this.copyToListModalStringInputs = {
-        'title': 'Copy to List',
-        'dropdownInputModel': this.dropdownInputModel,
-        'acceptLabel': 'COPY',
-        'rejectLabel': 'CANCEL'
-      };
-      let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
-      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-        console.log('dropdown option selected: ', value.dropdownOptionSelected);
-        console.log('accept clicked');
-        if (tabName === this.performanceTabTitle) {
-          this.store.dispatch(new ListsActions.copyStoresToList({listId: value.dropdownOptionSelected}, checkedEntities));
-        } else {
-          this.store.dispatch(new ListsActions.copyOppsToList({listId: value.dropdownOptionSelected}, checkedEntities));
-        }
+    this.copyToListModalStringInputs = {
+      'title': 'Copy to List',
+      'dropdownInputModel': this.dropdownInputModel,
+      'acceptLabel': 'COPY',
+      'rejectLabel': 'CANCEL'
+    };
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
+    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+      console.log('dropdown option selected: ', value.dropdownOptionSelected);
+      console.log('accept clicked');
+      if (tabName === this.performanceTabTitle) {
+        this.store.dispatch(new ListsActions.copyStoresToList({listId: value.dropdownOptionSelected}, checkedEntities));
+      } else {
+        this.store.dispatch(new ListsActions.copyOppsToList({listId: value.dropdownOptionSelected}, checkedEntities));
+      }
+    });
+  }
+
+  private getDeselectedPerformanceTableData(performanceTableData: ListPerformanceTableRow[]): ListPerformanceTableRow[] {
+    return performanceTableData.map((tableRow: ListPerformanceTableRow) => {
+      return Object.assign({}, tableRow, {
+        checked: false
       });
+    });
   }
 
   private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {

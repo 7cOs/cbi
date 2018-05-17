@@ -106,7 +106,9 @@ describe('ListsTableTransformerService', () => {
               status: matchedOpportunities[rowIndex].status,
               impact: matchedOpportunities[rowIndex].impact,
               current: matchedOpportunities[rowIndex].currentDepletions_CYTD,
-              yearAgo: matchedOpportunities[rowIndex].yearAgoDepletions_CYTD,
+              yearAgo: calculatorService.getYearAgoPercent(
+                matchedOpportunities[rowIndex].currentDepletions_CYTD,
+                matchedOpportunities[rowIndex].yearAgoDepletions_CYTD),
               depletionDate: moment(matchedOpportunities[rowIndex].lastDepletionDate).format('MM/DD/YY'),
               checked: false
             });

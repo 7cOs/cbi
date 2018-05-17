@@ -35,21 +35,11 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<>();
 
-	/**
-   * @deprecated Please use {@link #createDriver(String) createDriver(String)} and supply a test case name instead
-   */
-  @Deprecated
-  public static WebDriver createDriver() throws MalformedURLException {
-    return createDriver("Automated Test");
-  }
-
   public static WebDriver createDriver(String testName) throws MalformedURLException {
     final WebDriver driver;
 
     final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
-    if (HostType.remote.name().equalsIgnoreCase(driverHost)) {
-      driver = getRemoteWebDriver();
-    } else if (HostType.sauce.name().equalsIgnoreCase(driverHost)) {
+    if (HostType.sauce.name().equalsIgnoreCase(driverHost)) {
       driver = getSauceWebDriver(testName);
     } else {
       driver = getLocalWebDriver();
@@ -150,57 +140,13 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       + testCaseName;
   }
 
-  private static WebDriver getRemoteWebDriver() {
-    final String seleniumHostAddress = PropertiesCache.getInstance().getProperty("selenium.host.address");
-    String[] params = seleniumHostAddress.split(":");
-    Validate.isTrue(
-      params.length == 4,
-      "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
-        + seleniumHostAddress + "\""
-    );
-
-    String remoteHost = params[1];
-    String remotePort = params[2];
-    String driverType = params[3];
-
-    String remoteUrl = "http://" + remoteHost + ":" + remotePort + "/wd/hub";
-
-    DesiredCapabilities cap = null;
-    if (BrowserType.firefox.name().equals(driverType)) {
-      cap = DesiredCapabilities.firefox();
-    } else if (BrowserType.ie.name().equals(driverType)) {
-      cap = DesiredCapabilities.internetExplorer();
-      cap.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-      cap.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
-      cap.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-      cap.setBrowserName("internet explorer");
-    } else if (BrowserType.chrome.name().equals(driverType)) {
-      cap = DesiredCapabilities.chrome();
-    }
-
-    try {
-      webDriver.set(new RemoteWebDriver(new URL(remoteUrl), cap));
-      String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
-      sessionId.set(id);
-      log.info("Targeted Host:" + HostType.remote.name());
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
-    }
-
-    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-    Validate.notNull(webDriver.get(), "Driver could not be found at:" + seleniumHostAddress);
-    return webDriver.get();
-  }
-
   public enum BrowserType {
-    firefox,
     ie,
     chrome
   }
 
   public enum HostType {
     local,
-    remote,
     sauce
   }
 

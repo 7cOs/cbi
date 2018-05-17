@@ -26,6 +26,7 @@ import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.mod
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
+import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 const chance = new Chance();
 
@@ -68,7 +69,7 @@ class ListOpportunitiesTableComponentMock {
 
 class ListsHeaderComponentMock {
   @Input() summaryData: ListsSummary;
-  @Output() manageButtonClicked= new EventEmitter();
+  @Output() manageButtonClicked = new EventEmitter();
   @Output() listsLinkClicked = new EventEmitter();
 }
 
@@ -239,22 +240,22 @@ describe('ListDetailComponent', () => {
 
       expect(storeMock.dispatch.calls.count()).toBe(5);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
-        listId : stateMock.params.id
+        listId: stateMock.params.id
       }));
       expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new ListsActions.FetchHeaderDetails({
-        listId : stateMock.params.id
+        listId: stateMock.params.id
       }));
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new ListsActions.FetchOppsForList({
-        listId : stateMock.params.id
+        listId: stateMock.params.id
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new ListsActions.FetchListPerformanceVolume({
-        listId : stateMock.params.id,
+        listId: stateMock.params.id,
         performanceType: ListPerformanceType.Volume,
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.CYTDBDL
       }));
       expect(storeMock.dispatch.calls.argsFor(4)[0]).toEqual(new ListsActions.FetchListPerformancePOD({
-        listId : stateMock.params.id,
+        listId: stateMock.params.id,
         performanceType: ListPerformanceType.POD,
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL
@@ -264,11 +265,14 @@ describe('ListDetailComponent', () => {
 
   describe('when the Performance tab is clicked', () => {
     let opportunitiesTableData: ListOpportunitiesTableRow[];
+    let performanceTableData: ListPerformanceTableRow[];
 
     beforeEach(() => {
       opportunitiesTableData = getListOpportunitiesTableRowMock(10);
+      performanceTableData = getListPerformanceTableRowMock(10);
 
       componentInstance.opportunitiesTableData = opportunitiesTableData;
+      componentInstance.performanceTableData = performanceTableData;
       fixture.detectChanges();
     });
 
@@ -306,7 +310,48 @@ describe('ListDetailComponent', () => {
     });
   });
 
+  describe('when the Opportunity tab is clicked', () => {
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+    let performanceTableData: ListPerformanceTableRow[];
+
+    beforeEach(() => {
+      opportunitiesTableData = getListOpportunitiesTableRowMock(10);
+      performanceTableData = getListPerformanceTableRowMock(10);
+
+      componentInstance.opportunitiesTableData = opportunitiesTableData;
+      componentInstance.performanceTableData = performanceTableData;
+      fixture.detectChanges();
+    });
+
+    it('should set every performance table row checked fields to false', () => {
+      componentInstance.performanceTableData.forEach((tableRow: ListPerformanceTableRow) => {
+        expect(tableRow.checked).toBe(false);
+      });
+
+      componentInstance.performanceTableData.forEach((tableRow: ListPerformanceTableRow) => {
+        tableRow.checked = true;
+      });
+      fixture.detectChanges();
+
+      fixture.debugElement.queryAll(By.css('.compass-tab'))[1].triggerEventHandler('click', null);
+      fixture.detectChanges();
+
+      componentInstance.performanceTableData.forEach((tableRow: ListPerformanceTableRow) => {
+        expect(tableRow.checked).toBe(false);
+      });
+    });
+  });
+
   describe('Outputs', () => {
+    let performanceTableData: ListPerformanceTableRow[];
+
+    beforeEach(() => {
+      performanceTableData = getListPerformanceTableRowMock(10);
+
+      componentInstance.performanceTableData = performanceTableData;
+      fixture.detectChanges();
+    });
+
     it('should call "next" function click event is received', () => {
       spyOn(componentInstance.paginationReset, 'next');
       componentInstance.handlePaginationReset();

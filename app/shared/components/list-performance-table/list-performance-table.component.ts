@@ -39,6 +39,8 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestr
         : tableData;
       this.sortedTableData = sortedTableData;
       this.numSelectedRows = this.sortedTableData.length;
+      this.isSelectAllChecked = false;
+      this.isIndeterminateChecked = false;
     }
   }
 
