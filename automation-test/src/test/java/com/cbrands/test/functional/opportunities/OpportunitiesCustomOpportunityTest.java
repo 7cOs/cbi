@@ -21,9 +21,9 @@ public class OpportunitiesCustomOpportunityTest extends BaseTestCase {
   public void setUp(Method method) throws MalformedURLException {
     final String testCaseName = method.getAnnotation(Test.class).description();
     final String sauceTitle = String.format("Functional - Opportunities - Custom Opportunity - %s", testCaseName);
-    final OpportunitiesPage opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     this.startUpBrowser(sauceTitle);
-
+    
+    final OpportunitiesPage opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     customOpportunityModal = PageFactory.initElements(driver, CustomOpportunityModal.class);
     opportunitiesPage.goToPage();    
