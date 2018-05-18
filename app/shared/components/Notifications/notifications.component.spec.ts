@@ -23,6 +23,10 @@ describe('NotificationsComponent', () => {
   let fixture: ComponentFixture<NotificationsComponent>;
   let componentInstance: NotificationsComponent;
   let analyticsServiceMock: any;
+  const stateMock = {
+    go: jasmine.createSpy('go'),
+    href: jasmine.createSpy('href')
+  };
 
   beforeEach(() => {
     analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
@@ -38,6 +42,10 @@ describe('NotificationsComponent', () => {
         {
           provide: AnalyticsService,
           useValue: analyticsServiceMock
+        },
+        {
+          provide: '$state',
+          useValue: stateMock
         }
       ]
     });
@@ -131,6 +139,21 @@ describe('NotificationsComponent', () => {
 
       component.notifications = notificationsMock;
       component.clickOn(notificationsMock[0]);
+    }));
+    it('should catch a click on a List notification and forward to the correct list id',
+      inject([ NotificationsComponent ], (component: NotificationsComponent) => {
+      let listNotificationMock = [
+        getListAddCollaboratorNotificationMock()
+      ];
+
+      component.onNotificationClicked.subscribe((notification: Notification) => {
+        expect(stateMock.go).toHaveBeenCalledWith(
+          'list-details',
+          {
+            id: listNotificationMock[0].objectId
+          }
+        );
+      });
     }));
 
     it('should send an analytics event on click',
