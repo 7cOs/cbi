@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
+import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
 import * as ListActions from '../../state/actions/lists.action';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../../models/lists/list-performance-dto.model';
@@ -26,7 +27,7 @@ export class ListsEffects {
     private actions$: Actions,
     private listsApiService: ListsApiService,
     private listsTransformerService: ListsTransformerService,
-    @Inject('ToastService') private toastService: any
+    @Inject('toastService') private toastService: any
   ) { }
 
   @Effect()
@@ -117,6 +118,40 @@ export class ListsEffects {
           return new ListActions.FetchListPerformanceVolumeSuccess(listPerformance);
         })
         .catch((error: Error) => Observable.of(new ListActions.FetchListPerformanceVolumeError(error)));
+      });
+  }
+
+  @Effect()
+  copyStoresToList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.COPY_STORES_TO_LIST)
+      .switchMap((action: ListActions.CopyStoresToList) => {
+        return this.listsApiService.addStoresToList(action.payload.listId, {storeId: action.payload.id})
+          .map(() => {
+            this.toastService.showCopyToListToast(CopyToListToastType.CopyStores);
+            return new ListActions.CopyStoresToListSuccess;
+          })
+          .catch(() => {
+            this.toastService.showCopyToListToast(CopyToListToastType.CopyStoresError);
+            return Observable.of(new ListActions.CopyStoresToListError);
+          });
+      });
+  }
+
+  @Effect()
+  copyOppsToList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.COPY_OPPS_TO_LIST)
+      .switchMap((action: ListActions.CopyOppsToList) => {
+        return this.listsApiService.addOpportunitiesToList(action.payload.listId, {opportunityId: action.payload.id})
+          .map(() => {
+            this.toastService.showCopyToListToast(CopyToListToastType.CopyOpps);
+            return new ListActions.CopyOppsToListSuccess;
+          })
+          .catch(() => {
+            this.toastService.showCopyToListToast(CopyToListToastType.CopyOppsError);
+            return Observable.of(new ListActions.CopyOppsToListError);
+          });
       });
   }
 

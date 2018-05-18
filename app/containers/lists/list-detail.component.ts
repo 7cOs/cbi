@@ -88,6 +88,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public activeTab: string = this.performanceTabTitle;
   public downloadAllModalStringInputs: CompassActionModalInputs;
   public copyToListModalStringInputs: CompassActionModalInputs;
+  public copyToListLoader: boolean;
   public radioInputModel: RadioInputModel = {
     selected: ListsDownloadType.Stores,
     radioOptions: downloadRadioOptions,
@@ -101,15 +102,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       },
       {
         display: 'All',
-        value: OpportunityStatus.all
+        value: '968'
       },
       {
         display: 'Targeted',
-        value: OpportunityStatus.targeted
+        value: '945'
       },
       {
         display: 'Closed',
-          value: OpportunityStatus.closed
+          value: 'abc'
       }];
 
   public dropdownInputModel = {
@@ -197,6 +198,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             );
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
+
+        if (listDetail.copyStatus !== ActionStatus.NotFetched) {
+          this.copyToListLoader = listDetail.copyStatus === ActionStatus.Fetching;
+        }
       });
   }
 
@@ -208,7 +213,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (this.selectedTab === this.opportunitiesTabTitle) {
       const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
         store.opportunities.forEach((opp) => {
-          if (opp.checked === true) totalOpps.push({'opportunityId': opp.id});
+          if (opp.checked === true) totalOpps.push(opp.id);
         });
         return totalOpps;
       }, []);
@@ -216,7 +221,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.copyToListModal(checkedOpps, this.selectedTab);
     } else {
       const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
-        if (store.checked === true) totalStores.push({'storeSourceCode': store.unversionedStoreId});
+        if (store.checked === true) totalStores.push(store.unversionedStoreId);
         return totalStores;
       }, []);
       console.log(checkedStores, 'perf');
@@ -349,7 +354,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       && opportunitiesStatus === ActionStatus.Fetched;
   }
 
-  private copyToListModal(checkedEntities: any, tabName: string) {
+  private copyToListModal(checkedEntities: string[], tabName: string) {
     this.copyToListModalStringInputs = {
       'title': 'Copy to List',
       'dropdownInputModel': this.dropdownInputModel,
@@ -361,9 +366,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       console.log('dropdown option selected: ', value.dropdownOptionSelected);
       console.log('accept clicked');
       if (tabName === this.performanceTabTitle) {
-        /*this.store.dispatch(new ListsActions.copyStoresToList({listId: value.dropdownOptionSelected}, checkedEntities));*/
+        checkedEntities.forEach((store: string) => {
+          this.store.dispatch(new ListsActions.CopyStoresToList({listId: value.dropdownOptionSelected,
+            id: store}));
+        });
       } else {
-        /*this.store.dispatch(new ListsActions.copyOppsToList({listId: value.dropdownOptionSelected}, checkedEntities));*/
+        checkedEntities.forEach((opp: string) => {
+          this.store.dispatch(new ListsActions.CopyOppsToList({listId: value.dropdownOptionSelected,
+            id: opp}));
+        });
       }
     });
   }

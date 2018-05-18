@@ -29,6 +29,11 @@ export interface FetchOppsForListPayload {
   listId: string;
 }
 
+export interface CopyToList {
+  listId: string;
+  id: string;
+}
+
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
 export class FetchStoreDetails implements Action {
   readonly type = FETCH_STORE_DETAILS;
@@ -161,6 +166,34 @@ export class PatchListFailure implements Action {
   constructor(public payload: Error) { }
 }
 
+export class CopyStoresToList implements Action {
+  readonly type = ListsActionTypes.COPY_STORES_TO_LIST;
+
+  constructor(public payload: CopyToList) { }
+}
+
+export class CopyStoresToListSuccess implements Action {
+  readonly type = ListsActionTypes.COPY_STORES_TO_LIST_SUCCESS;
+}
+
+export class CopyStoresToListError implements Action {
+  readonly type = ListsActionTypes.COPY_STORES_TO_LIST_ERROR;
+}
+
+export class CopyOppsToList implements Action {
+  readonly type = ListsActionTypes.COPY_OPPS_TO_LIST;
+
+  constructor(public payload: CopyToList) { }
+}
+
+export class CopyOppsToListSuccess implements Action {
+  readonly type = ListsActionTypes.COPY_OPPS_TO_LIST_SUCCESS;
+}
+
+export class CopyOppsToListError implements Action {
+  readonly type = ListsActionTypes.COPY_OPPS_TO_LIST_ERROR;
+}
+
 export type Action
   = FetchStoreDetails
   | FetchStoreDetailsSuccess
@@ -182,4 +215,10 @@ export type Action
   | FetchListsFailure
   | PatchList
   | PatchListSuccess
-  | PatchListFailure;
+  | PatchListFailure
+  | CopyStoresToList
+  | CopyStoresToListSuccess
+  | CopyStoresToListError
+  | CopyOppsToList
+  | CopyOppsToListSuccess
+  | CopyOppsToListError;

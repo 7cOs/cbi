@@ -5,6 +5,10 @@ module.exports = /*  @ngInject */
 
     var model = {
       archived: false,
+      CopyStoreToList: false,
+      CopyStoreToListError: false,
+      CopyOppsToList: false,
+      CopyOppsToListError: false,
       unarchived: false,
       unarchivedNoAuthor: false,
       deleted: false,
@@ -22,7 +26,8 @@ module.exports = /*  @ngInject */
       model: model,
       showToast: showToast,
       showPerformanceDataErrorToast: showPerformanceDataErrorToast,
-      showOpportunityCountErrorToast: showOpportunityCountErrorToast
+      showOpportunityCountErrorToast: showOpportunityCountErrorToast,
+      showCopyToListToast: showCopyToListToast
     };
 
     const threeSeconds = 3000;
@@ -70,5 +75,13 @@ module.exports = /*  @ngInject */
       $timeout(() => {
         model.opportunityCountError = false;
       }, tenSeconds);
+    }
+
+    function showCopyToListToast(toastType) {
+      model[toastType] = true;
+
+      $timeout(() => {
+        model[toastType] = false;
+    }, tenSeconds);
     }
   };
