@@ -331,4 +331,39 @@ describe('Lists Actions', () => {
       expect(action.payload).toEqual(error);
     });
   });
+
+  describe('CopyStoresToList', () => {
+    let action: ListsActions.CopyStoresToList;
+    let listIdMock: string;
+    let idMock: string;
+    let actionPayloadMock: any;
+
+    beforeEach(() => {
+      listIdMock = idMock = chance.string();
+      actionPayloadMock = {
+        listId: listIdMock,
+        id: idMock
+      };
+      action = new ListsActions.CopyStoresToList(actionPayloadMock);
+    });
+
+    it('should have the correct type and contain the payload', () => {
+      expect(action.type).toBe(ListsActionTypes.COPY_STORES_TO_LIST);
+      expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
+  describe('CopyStoresToListSuccess', () => {
+    it('should have the correct action type', () => {
+      const action = new ListsActions.CopyOppsToListSuccess();
+      expect(action.type).toBe(ListsActionTypes.COPY_STORES_TO_LIST_SUCCESS);
+    });
+  });
+
+  describe('CopyStoresToListFailure', () => {
+    it('should have the correct action type', () => {
+      const action = new ListsActions.CopyOppsToListError();
+      expect(action.type).toBe(ListsActionTypes.COPY_STORES_TO_LIST_ERROR);
+    });
+  });
 });
