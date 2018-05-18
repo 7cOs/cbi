@@ -8,7 +8,6 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { V3List } from '../../models/lists/v3-list.model';
 
 export interface FetchStoreDetailsPayload {
   listId: string;
@@ -29,9 +28,14 @@ export interface FetchOppsForListPayload {
   listId: string;
 }
 
-export interface CopyToList {
+export interface CopyStoresToListPayload {
   listId: string;
   id: string;
+}
+
+export interface CopyOppsToListPayload {
+  listId: string;
+  id: {opportunityId: string}[];
 }
 
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
@@ -169,7 +173,7 @@ export class PatchListFailure implements Action {
 export class CopyStoresToList implements Action {
   readonly type = ListsActionTypes.COPY_STORES_TO_LIST;
 
-  constructor(public payload: CopyToList) { }
+  constructor(public payload: CopyStoresToListPayload) { }
 }
 
 export class CopyStoresToListSuccess implements Action {
@@ -183,7 +187,7 @@ export class CopyStoresToListError implements Action {
 export class CopyOppsToList implements Action {
   readonly type = ListsActionTypes.COPY_OPPS_TO_LIST;
 
-  constructor(public payload: CopyToList) { }
+  constructor(public payload: CopyOppsToListPayload) { }
 }
 
 export class CopyOppsToListSuccess implements Action {

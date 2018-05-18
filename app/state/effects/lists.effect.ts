@@ -126,7 +126,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListsActionTypes.COPY_STORES_TO_LIST)
       .switchMap((action: ListActions.CopyStoresToList) => {
-        return this.listsApiService.addStoresToList(action.payload.listId, {storeId: action.payload.id})
+        return this.listsApiService.addStoresToList(action.payload.listId, {storeSourceCode: action.payload.id})
           .map(() => {
             this.toastService.showCopyToListToast(CopyToListToastType.CopyStores);
             return new ListActions.CopyStoresToListSuccess;
@@ -143,7 +143,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListsActionTypes.COPY_OPPS_TO_LIST)
       .switchMap((action: ListActions.CopyOppsToList) => {
-        return this.listsApiService.addOpportunitiesToList(action.payload.listId, {opportunityId: action.payload.id})
+        return this.listsApiService.addOpportunitiesToList(action.payload.listId, action.payload.id)
           .map(() => {
             this.toastService.showCopyToListToast(CopyToListToastType.CopyOpps);
             return new ListActions.CopyOppsToListSuccess;

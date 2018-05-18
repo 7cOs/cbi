@@ -30,6 +30,8 @@ import { OpportunityStatus } from '../../enums/list-opportunities/list-opportuni
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { User } from '../../models/lists/user.model';
+import { GroupedLists } from '../../models/lists/grouped-lists.model';
+import { V3List } from '../../models/lists/v3-list.model';
 
 interface ListPageClick {
   pageNumber: number;
@@ -58,6 +60,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   paginationReset: Subject<Event> = new Subject();
   sortReset: Subject<Event> = new Subject();
 
+  public allLists: GroupedLists;
   public listSummary: ListsSummary;
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
@@ -95,29 +98,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     title: 'OPTIONS',
     stacked: false
   };
-  public abc =
-      [{
-        display: 'Choose a List',
-        value: 'Choose a List'
-      },
-      {
-        display: 'All',
-        value: '968'
-      },
-      {
-        display: 'Targeted',
-        value: '945'
-      },
-      {
-        display: 'Closed',
-          value: 'abc'
-      }];
 
-  public dropdownInputModel = {
-    selected: this.abc[0].value,
-    dropdownOptions: this.abc,
-    title: 'LIST'
-  };
+  public dropdownInputModel: any;
 
   public downloadBodyHTML: string;
 
@@ -162,6 +144,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
         this.listSummary = listDetail.listSummary.summaryData;
+        this.allLists = listDetail.allLists;
 
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
@@ -210,21 +193,35 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public copyToListClick(): void {
+    const ownedAndSharedList = this.allLists.owned.concat(this.allLists.sharedWithMe);
+    const listDropDownMenu = ownedAndSharedList.map((list: V3List) => {
+      return {
+        display: list.name,
+        value: list.id
+      };
+    });
+
+    listDropDownMenu.unshift({display: 'Choose a List', value: 'Choose a List'});
+
+    this.dropdownInputModel = {
+      selected: listDropDownMenu[0].value,
+      dropdownOptions: listDropDownMenu,
+      title: 'LIST'
+    };
+
     if (this.selectedTab === this.opportunitiesTabTitle) {
       const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
         store.opportunities.forEach((opp) => {
-          if (opp.checked === true) totalOpps.push(opp.id);
+          if (opp.checked === true) totalOpps.push({opportunityId: opp.id});
         });
         return totalOpps;
       }, []);
-      console.log(checkedOpps, 'Opps');
       this.copyToListModal(checkedOpps, this.selectedTab);
     } else {
       const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
         if (store.checked === true) totalStores.push(store.unversionedStoreId);
         return totalStores;
       }, []);
-      console.log(checkedStores, 'perf');
       this.copyToListModal(checkedStores, this.selectedTab);
 
     }
@@ -354,7 +351,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       && opportunitiesStatus === ActionStatus.Fetched;
   }
 
-  private copyToListModal(checkedEntities: string[], tabName: string) {
+  private copyToListModal(checkedEntities: (string | {opportunityId: string})[], tabName: string): void {
     this.copyToListModalStringInputs = {
       'title': 'Copy to List',
       'dropdownInputModel': this.dropdownInputModel,
@@ -363,18 +360,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     };
     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
     this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-      console.log('dropdown option selected: ', value.dropdownOptionSelected);
+      const listId: string = value.dropdownOptionSelected;
       console.log('accept clicked');
       if (tabName === this.performanceTabTitle) {
-        checkedEntities.forEach((store: string) => {
-          this.store.dispatch(new ListsActions.CopyStoresToList({listId: value.dropdownOptionSelected,
-            id: store}));
+        checkedEntities.forEach((storeCode: string) => {
+          this.store.dispatch(new ListsActions.CopyStoresToList({listId: listId, id: storeCode}));
         });
       } else {
-        checkedEntities.forEach((opp: string) => {
-          this.store.dispatch(new ListsActions.CopyOppsToList({listId: value.dropdownOptionSelected,
-            id: opp}));
-        });
+          /*checkedEntities = checkedEntities as {opportunityId: string}[]*/
+          this.store.dispatch(new ListsActions.CopyOppsToList({listId: listId, id: checkedEntities}));
       }
     });
   }
