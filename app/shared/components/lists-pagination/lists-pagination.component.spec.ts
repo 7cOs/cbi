@@ -21,7 +21,7 @@ describe('ListsPaginationComponent', () => {
     componentInstanceCopy = componentInstance as any;
   });
 
-  describe('ngOnInit', () => {
+  describe('ngOnChanges', () => {
 
     beforeEach(() => {
       componentInstance.tableDataSize = 200;
@@ -29,7 +29,7 @@ describe('ListsPaginationComponent', () => {
 
     it('should set last page and get pageNumbers', () => {
       spyOn(componentInstance, 'getPageNumbers');
-      componentInstance.ngOnInit();
+      componentInstance.ngOnChanges();
       fixture.detectChanges();
       expect(componentInstance.totalPages).toBe(10);
       expect(componentInstance.lastPage).toBe(10);
@@ -37,7 +37,7 @@ describe('ListsPaginationComponent', () => {
     });
 
     it('should check if subscription', (done: any) => {
-      componentInstance.ngOnInit();
+      componentInstance.ngOnChanges();
       componentInstance.paginationReset.subscribe((value) => {
         expect(value).toBe(undefined);
         done();
@@ -46,7 +46,7 @@ describe('ListsPaginationComponent', () => {
     });
 
     it('should check if pageChange function is called', (done: any) => {
-      componentInstance.ngOnInit();
+      componentInstance.ngOnChanges();
       spyOn(componentInstance, 'pageChange');
       componentInstance.paginationReset.subscribe(() => {
         expect(componentInstance.pageChange).toHaveBeenCalledWith(0);
