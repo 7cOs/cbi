@@ -13,6 +13,7 @@
       <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesAccountScopeFilterTest" />
       <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesDistributorFilterTest" />
       <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesRetailerFilterTest" />
+      <class name="com.cbrands.test.functional.opportunities.OpportunitiesCustomOpportunityTest" />    
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

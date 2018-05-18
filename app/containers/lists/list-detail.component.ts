@@ -9,9 +9,13 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
+import { CompassActionModalEvent } from '../../enums/compass-action-modal-event.enum';
+import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
@@ -36,6 +40,14 @@ export interface PageChangeData {
   pageStart: number;
   pageEnd: number;
 }
+
+export const downloadRadioOptions: Array<CompassSelectOption> = [{
+  display: 'Stores',
+  value: ListsDownloadType.Stores
+}, {
+  display: 'Stores and Opportunities',
+  value: ListsDownloadType.Opportunities
+}];
 
 @Component({
   selector: 'list-detail',
@@ -75,6 +87,16 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
+  public downloadAllModalStringInputs: CompassActionModalInputs;
+  public compassAlertModalAccept = CompassActionModalEvent.Accept;
+  public radioInputModel: RadioInputModel = {
+    selected: ListsDownloadType.Stores,
+    radioOptions: downloadRadioOptions,
+    title: 'OPTIONS',
+    stacked: false
+  };
+
+  public downloadBodyHTML: string;
 
   private listDetailSubscription: Subscription;
 
@@ -151,8 +173,26 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
-    console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
+  downloadActionButtonClicked() {
+    if (this.selectedTab === this.performanceTabTitle) {
+      console.log('Download All - performance tab seclected');
+    } else {
+      console.log('Download All - opps tab seclected');
+    }
+
+    this.downloadBodyHTML = 'Body text goes here!';
+    this.downloadAllModalStringInputs = {
+      'title': 'Download',
+      'bodyText': this.downloadBodyHTML,
+      'radioInputModel': this.radioInputModel,
+      'acceptLabel': 'Download',
+      'rejectLabel': 'Cancel'
+    };
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
+    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+        console.log('radio option selected: ', value.radioOptionSelected);
+        console.log('dropdown option selected: ', value.dropdownOptionSelected);
+    });
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {
