@@ -42,6 +42,7 @@ class ListPerformanceTableComponentMock {
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
   @Input() sortReset: Event;
+  @Input() paginationResetIn: Event;
   @Output() paginationReset = new EventEmitter();
 }
 
@@ -58,6 +59,7 @@ class ListOpportunitiesTableComponentMock {
   @Input() loadingState: boolean;
   @Input() oppStatusSelected: OpportunityStatus;
   @Input() sortReset: Event;
+  @Input() paginationResetIn: Event;
   @Output() paginationReset = new EventEmitter();
 }
 
@@ -150,6 +152,10 @@ describe('ListDetailComponent', () => {
     }
   };
 
+  const toastServiceMock = {
+    showToast: jasmine.createSpy('showToast')
+  };
+
   const storeMock = {
     select: jasmine.createSpy('select').and.returnValue(Observable.of(listDetailMock)),
     dispatch: jasmine.createSpy('dispatch')
@@ -194,6 +200,10 @@ describe('ListDetailComponent', () => {
         {
           provide: 'userService',
           useValue: userMock
+        },
+        {
+          provide: 'toastService',
+          useValue: toastServiceMock
         }
       ],
       imports: [

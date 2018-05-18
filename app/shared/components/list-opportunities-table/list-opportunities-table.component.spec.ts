@@ -79,6 +79,7 @@ describe('ListOpportunitiesTableComponent', () => {
   const tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
   let opportunitiesTableData: ListOpportunitiesTableRow[];
   const sortResetSubject: Subject<Event> = new Subject<Event>();
+  const paginationResetInSubject: Subject<Event> = new Subject<Event>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -110,6 +111,7 @@ describe('ListOpportunitiesTableComponent', () => {
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
     componentInstance.tableData = opportunitiesTableData;
     componentInstance.sortReset = sortResetSubject;
+    componentInstance.paginationResetIn = paginationResetInSubject;
     componentInstanceCopy = componentInstance as any;
 
     fixture.detectChanges();
@@ -133,6 +135,15 @@ describe('ListOpportunitiesTableComponent', () => {
         done();
       });
       sortResetSubject.next();
+    });
+
+    it('should check if subscription for paginationResetIn', (done: any) => {
+      componentInstance.ngOnInit();
+      componentInstance.paginationResetIn.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      paginationResetInSubject.next();
     });
   });
 
