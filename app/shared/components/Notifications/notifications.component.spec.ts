@@ -142,7 +142,7 @@ describe('NotificationsComponent', () => {
     }));
     it('should catch a click on a List notification and forward to the correct list id',
       inject([ NotificationsComponent ], (component: NotificationsComponent) => {
-      let listNotificationMock = [
+      const listNotificationMock = [
         getListAddCollaboratorNotificationMock()
       ];
 

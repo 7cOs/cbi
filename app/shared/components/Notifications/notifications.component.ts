@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import * as moment from 'moment';
 
 import { AnalyticsService } from '../../../services/analytics.service';
