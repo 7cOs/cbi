@@ -32,6 +32,8 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListOpportunitiesTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
   @Output() paginationReset = new EventEmitter<any>();
+  @Output() onRowChecked = new EventEmitter<number>();
+  @Output() onSelectAllChecked = new EventEmitter<boolean>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
@@ -145,6 +147,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
     row.opportunities.forEach((opportunityRow: ListTableDrawerRow) => {
       opportunityRow.checked = row.checked;
     });
+    this.onRowChecked.emit(numCheckedTrue);
   }
 
   public setCheckboxStates(checkedFalseCount: number, checkedTrueCount: number) {
@@ -192,6 +195,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
         opportunityRow.checked = this.isSelectAllChecked;
       });
     }
+    this.onSelectAllChecked.emit(event.checked);
   }
 
   public getEntityRowClasses(row: ListOpportunitiesTableRow): CssClasses {
@@ -237,10 +241,18 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
       return isEveryOppChecked;
     }, true);
 
+    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+      store.opportunities.forEach((opp) => {
+      if (opp.checked === true) totalOpps.push(opp);
+      });
+      return totalOpps;
+    }, []);
+
     const selectedAllCheckboxState: OpportunitiesTableSelectAllCheckboxState = this.getSelectAllCheckboxState(this.sortedTableData);
 
     this.isSelectAllChecked = selectedAllCheckboxState.isSelectAllChecked;
     this.isIndeterminateChecked = selectedAllCheckboxState.isIndeterminateChecked;
+    this.onRowChecked.emit(checkedOpps.length);
   }
 
   public isOppsTableDataEmpty(): boolean {

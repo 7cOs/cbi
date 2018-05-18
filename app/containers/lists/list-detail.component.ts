@@ -79,6 +79,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
+  public isPerformanceRowSelect: boolean = false;
+  public isOpportunityRowSelect: boolean = false;
+  public isSelectAllPerformanceChecked: boolean = false;
+  public isSelectAllOpportunitiesChecked: boolean = false;
 
   private listDetailSubscription: Subscription;
 
@@ -157,11 +161,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         if (listDetail.listStores.storeStatus === ActionStatus.DeleteSuccess
           && listDetail.listSummary.summaryStatus === ActionStatus.DeleteSuccess) {
           this.handlePaginationReset();
+          this.isPerformanceRowSelect = false;
           this.toastService.showToast('storeRemoved');
         }
 
         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteSuccess) {
           this.handlePaginationReset();
+          this.isOpportunityRowSelect = false;
           this.toastService.showToast('oppRemoved');
         }
       });
@@ -257,6 +263,23 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleListsLinkClick() {
     this.$state.go('lists');
+  }
+
+  public setPerformanceRowSelected(performanceRowTrueCount: number) {
+    performanceRowTrueCount !== 0 ? this.isPerformanceRowSelect = true : this.isPerformanceRowSelect = false;
+    console.log(this.isPerformanceRowSelect);
+  }
+
+  public setSelectAllPerformance(selectAllChecked: boolean) {
+    this.isPerformanceRowSelect = selectAllChecked;
+  }
+
+  public setSelectAllOpportunity(selectAllChecked: boolean) {
+    this.isOpportunityRowSelect = selectAllChecked;
+  }
+
+  public setOpportunityRowSelected(opportunityRowTrueCount: number) {
+    opportunityRowTrueCount !== 0 ? this.isOpportunityRowSelect = true : this.isOpportunityRowSelect = false;
   }
 
   public onTabClicked(tabName: string): void {

@@ -31,7 +31,7 @@ compass-tabs(
         )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",
-          [isDisabled]="false",
+          [isDisabled]="!isPerformanceRowSelect",
           (onActionButtonClicked)="captureActionButtonClicked($event)"
         )
     list-performance-table(
@@ -42,7 +42,9 @@ compass-tabs(
       [pageChangeData]="pageChangeData",
       [sortReset]="sortReset",
       [paginationResetIn]='paginationReset',
-      (paginationReset)="handlePaginationReset()"
+      (paginationReset)="handlePaginationReset()",
+      (onRowChecked)='setPerformanceRowSelected($event)',
+      (onSelectAllChecked)='setSelectAllPerformance($event)'
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
     .list-action-section
@@ -56,7 +58,7 @@ compass-tabs(
       div.button-section
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",
-          [isDisabled]="false",
+          [isDisabled]="!isOpportunityRowSelect || !isSelectAllOpportunityChecked",
           (onActionButtonClicked)="captureActionButtonClicked($event)"
         )
     list-opportunities-table(
@@ -67,7 +69,9 @@ compass-tabs(
       [oppStatusSelected]="oppStatusSelected",
       [sortReset]="sortReset",
       [paginationResetIn]='paginationReset',
-      (paginationReset)="handlePaginationReset()"
+      (paginationReset)="handlePaginationReset()",
+      (onRowChecked)='setOpportunityRowSelected($event)',
+      (onSelectAllChecked)='setSelectAllOpportunity($event)'
     )
 
 lists-pagination(
