@@ -27,6 +27,16 @@ export interface FetchOppsForListPayload {
   listId: string;
 }
 
+export interface RemoveStoreFromListPayload {
+  listId: string;
+  storeSourceCode: string;
+}
+
+export interface RemoveOppFromListPayload {
+  listId: string;
+  oppId: string;
+}
+
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
 export class FetchStoreDetails implements Action {
   readonly type = FETCH_STORE_DETAILS;
@@ -138,6 +148,47 @@ export class PatchListFailure implements Action {
   constructor(public payload: Error) { }
 }
 
+export const DELETE_STORE_FROM_LIST = ListsActionTypes.DELETE_STORE_FROM_LIST;
+export class RemoveStoreFromList implements Action {
+  readonly type = DELETE_STORE_FROM_LIST;
+
+  constructor(public payload: RemoveStoreFromListPayload) { }
+}
+
+export const DELETE_STORE_FROM_LIST_SUCCESS = ListsActionTypes.DELETE_STORE_FROM_LIST_SUCCESS;
+export class RemoveStoreFromListSuccess implements Action {
+  readonly type = DELETE_STORE_FROM_LIST_SUCCESS;
+
+  constructor(public payload: RemoveStoreFromListPayload) { }
+}
+
+export const DELETE_STORE_FROM_LIST_FAILURE = ListsActionTypes.DELETE_STORE_FROM_LIST_FAILURE;
+export class RemoveStoreFromListFailure implements Action {
+  readonly type = DELETE_STORE_FROM_LIST_FAILURE;
+
+  constructor(public payload: Error) { }
+}
+
+export const DELETE_OPP_FROM_LIST = ListsActionTypes.DELETE_OPP_FROM_LIST;
+export class RemoveOppFromList implements Action {
+  readonly type = DELETE_OPP_FROM_LIST;
+
+  constructor(public payload: RemoveOppFromListPayload) { }
+}
+
+export const DELETE_OPP_FROM_LIST_SUCCESS = ListsActionTypes.DELETE_OPP_FROM_LIST_SUCCESS;
+export class RemoveOppFromListSuccess implements Action {
+  readonly type = DELETE_OPP_FROM_LIST_SUCCESS;
+
+  constructor(public payload: any) { }
+}
+
+export const DELETE_OPP_FROM_LIST_FAILURE = ListsActionTypes.DELETE_OPP_FROM_LIST_FAILURE;
+export class RemoveOppFromListFailure implements Action {
+  readonly type = DELETE_OPP_FROM_LIST_FAILURE;
+
+  constructor(public payload: Error) { }
+}
 export type Action
   = FetchStoreDetails
   | FetchStoreDetailsSuccess
@@ -156,4 +207,10 @@ export type Action
   | FetchListPerformancePODError
   | PatchList
   | PatchListSuccess
-  | PatchListFailure;
+  | PatchListFailure
+  | RemoveStoreFromList
+  | RemoveStoreFromListSuccess
+  | RemoveStoreFromListFailure
+  | RemoveOppFromList
+  | RemoveOppFromListSuccess
+  | RemoveOppFromListFailure;

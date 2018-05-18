@@ -244,6 +244,72 @@ export function listsReducer(
         performance: state.performance
       };
 
+      case ListsActions.DELETE_STORE_FROM_LIST:
+      return {
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.Deleting
+        }),
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Deleting
+        }),
+        listOpportunities: state.listOpportunities,
+        performance: state.performance
+      };
+
+      case ListsActions.DELETE_STORE_FROM_LIST_SUCCESS:
+      return {
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.DeleteSuccess
+        }),
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.DeleteSuccess
+        }),
+        listOpportunities: state.listOpportunities,
+        performance: state.performance
+      };
+
+      case ListsActions.DELETE_STORE_FROM_LIST_FAILURE:
+      return {
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.Error
+        }),
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Error
+        }),
+        listOpportunities: state.listOpportunities,
+        performance: state.performance
+      };
+
+      case ListsActions.DELETE_OPP_FROM_LIST:
+      return {
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.Deleting
+        }),
+        performance: state.performance
+      };
+
+      case ListsActions.DELETE_OPP_FROM_LIST_SUCCESS:
+      return {
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.DeleteSuccess
+        }),
+        performance: state.performance
+      };
+
+      case ListsActions.DELETE_OPP_FROM_LIST_FAILURE:
+      return {
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.Error
+        }),
+        performance: state.performance
+      };
+
     default:
       return state;
   }

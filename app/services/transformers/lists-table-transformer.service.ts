@@ -99,7 +99,8 @@ export class ListsTableTransformerService {
       l90VersusYaPercentColumn: this.calculatorService.getYearAgoPercent(podPerformance.current, podPerformance.yearAgo),
       lastDepletionDateColumn: '',
       performanceError: false,
-      checked: false
+      checked: false,
+      storeSourceCode: ''
     };
   }
 

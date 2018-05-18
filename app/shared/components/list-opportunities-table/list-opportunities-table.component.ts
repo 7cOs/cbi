@@ -28,6 +28,7 @@ export interface OpportunitiesTableSelectAllCheckboxState {
 })
 export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDestroy  {
   @Input() sortReset: Subject<Event>;
+  @Input() paginationResetIn: Subject<Event>;
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListOpportunitiesTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
   @Output() paginationReset = new EventEmitter<any>();
@@ -97,6 +98,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
   }];
 
   private sortResetSubscription: Subscription;
+  private paginationResetSubscription: Subscription;
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -104,6 +106,15 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
     this.tableClasses = this.getTableClasses(this.loadingState);
     this.sortResetSubscription = this.sortReset.subscribe(() => {
       this.applySortingCriteria(this.defaultSortCriteria);
+    });
+    this.paginationResetSubscription = this.paginationResetIn.subscribe(() => {
+      this.isSelectAllChecked = false;
+      this.isIndeterminateChecked = false;
+      if (this.sortedTableData) {
+        for (let i = 0; i < this.sortedTableData.length; i++) {
+          this.sortedTableData[i].checked = this.isSelectAllChecked;
+        }
+      }
     });
   }
 

@@ -41,6 +41,7 @@ compass-tabs(
       [tableData]="performanceTableData",
       [pageChangeData]="pageChangeData",
       [sortReset]="sortReset",
+      [paginationResetIn]='paginationReset',
       (paginationReset)="handlePaginationReset()"
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
@@ -65,6 +66,7 @@ compass-tabs(
       [pageChangeData]="pageChangeData",
       [oppStatusSelected]="oppStatusSelected",
       [sortReset]="sortReset",
+      [paginationResetIn]='paginationReset',
       (paginationReset)="handlePaginationReset()"
     )
 

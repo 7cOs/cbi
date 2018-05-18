@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -30,6 +30,7 @@ import { User } from '../../models/lists/user.model';
 import { forEach } from '@uirouter/core';
 import { Observable } from 'rxjs/Observable';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
+import { Action } from 'rxjs/scheduler/Action';
 
 interface ListPageClick {
   pageNumber: number;
@@ -87,8 +88,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private titleService: Title,
     private compassModalService: CompassModalService,
-    private listApiService: ListsApiService
-    @Inject('userService') private userService: any
+    @Inject('userService') private userService: any,
+    @Inject('toastService') private toastService: any
   ) { }
 
   ngOnInit() {
@@ -152,42 +153,50 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             );
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
+
+        if (listDetail.listStores.storeStatus === ActionStatus.DeleteSuccess
+          && listDetail.listSummary.summaryStatus === ActionStatus.DeleteSuccess) {
+          this.handlePaginationReset();
+          this.toastService.showToast('storeRemoved');
+        }
+
+        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteSuccess) {
+          this.handlePaginationReset();
+          this.toastService.showToast('oppRemoved');
+        }
       });
   }
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     if (this.selectedTab === this.performanceTabTitle) {
-      console.log(actionButtonProperties.actionType + ' - on performance tab');
-      const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
-      let apiCalls: Observable<any>[] = [];
-      checkedStores.forEach((store) => {
-        apiCalls.push(this.listApiService.removeStoreFromList(this.listSummary.id, store.storeSourceCode));
-      });
-      Observable.forkJoin(apiCalls).subscribe((results) => {
-        console.log('output of remove from opps call');
-        console.log(results);
-      });
-      console.log(checkedStores);
+      if (actionButtonProperties.actionType === ActionButtonType.Remove) {
+        this.removeSelectedStores();
+      }
     }
     if (this.selectedTab === this.opportunitiesTabTitle) {
-      console.log(actionButtonProperties.actionType + ' - on opp tab');
-      const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
-        store.opportunities.forEach((opp) => {
-         if (opp.checked === true) totalOpps.push(opp);
-        });
-        return totalOpps;
-      }, []);
-      console.log(checkedOpps);
-      let apiCalls: Observable<any>[] = [];
-      checkedOpps.forEach((opp) => {
-        apiCalls.push(this.listApiService.removeOpportunityFromList(this.listSummary.id, opp.id));
-      });
-      Observable.forkJoin(apiCalls).subscribe((results) => {
-        console.log('output of remove from opps call');
-        console.log(results);
-      });
+      if (actionButtonProperties.actionType === ActionButtonType.Remove) {
+        this.removeSelectedOpportunities();
+      }
     }
-    console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
+  }
+
+  removeSelectedOpportunities(): void {
+    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+      store.opportunities.forEach((opp) => {
+      if (opp.checked === true) totalOpps.push(opp);
+      });
+      return totalOpps;
+    }, []);
+    checkedOpps.forEach((opp) => {
+      this.store.dispatch(new ListsActions.RemoveOppFromList({listId: this.listSummary.id, oppId: opp.id}));
+    });
+  }
+
+  removeSelectedStores(): void {
+    const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
+    checkedStores.forEach((store) => {
+      this.store.dispatch(new ListsActions.RemoveStoreFromList({listId: this.listSummary.id, storeSourceCode: store.storeSourceCode}));
+    });
   }
 
   opportunityStatusSelected(statusValue: OpportunityStatus) {
