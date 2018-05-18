@@ -143,7 +143,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListsActionTypes.COPY_OPPS_TO_LIST)
       .switchMap((action: ListActions.CopyOppsToList) => {
-        return this.listsApiService.addOpportunitiesToList(action.payload.listId, action.payload.id)
+        return this.listsApiService.addOpportunitiesToList(action.payload.listId, action.payload.ids)
           .map(() => {
             this.toastService.showCopyToListToast(CopyToListToastType.CopyOpps);
             return new ListActions.CopyOppsToListSuccess;

@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 
-import { FetchListPerformancePayload } from './lists.action';
+import { CopyOppsToListPayload, FetchListPerformancePayload } from './lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
@@ -369,15 +369,14 @@ fdescribe('Lists Actions', () => {
 
   describe('CopyOppsToList', () => {
     let action: ListsActions.CopyOppsToList;
-    let listIdMock: string;
-    let idMock: string;
-    let actionPayloadMock: any;
+    let listIdMock = chance.string();
+    let idMock = [{opportunityId: chance.string()}, {opportunityId: chance.string()}];
+    let actionPayloadMock: CopyOppsToListPayload;
 
     beforeEach(() => {
-      listIdMock = idMock = chance.string();
       actionPayloadMock = {
         listId: listIdMock,
-        id: idMock
+        ids: idMock
       };
       action = new ListsActions.CopyOppsToList(actionPayloadMock);
     });

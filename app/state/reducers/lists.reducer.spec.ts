@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
 import { ActionStatus } from '../../enums/action-status.enum';
-import { CopyToList, FetchListPerformancePayload } from '../actions/lists.action';
+import { CopyOppsToListPayload, CopyStoresToListPayload, FetchListPerformancePayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
@@ -16,13 +16,14 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 const chance = new Chance();
 const listIdMock = chance.string();
 
-describe('Lists Reducer', () => {
+fdescribe('Lists Reducer', () => {
 
   describe('when a FetchStoreDetails action is dispatched', () => {
     it('should update the store details status to Fetching', () => {
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
-        copyStatus: ActionStatus.NotFetched,
+        copyStatus: initialState.copyStatus,
+        allLists: initialState.allLists,
         listStores: {
           storeStatus: ActionStatus.Fetching,
           stores: initialState.listStores.stores
@@ -43,6 +44,7 @@ describe('Lists Reducer', () => {
 
       const expectedState: ListsState = {
         copyStatus: initialState.copyStatus,
+        allLists: initialState.allLists,
         listSummary: initialState.listSummary,
         listStores: {
           storeStatus: ActionStatus.Fetched,
@@ -63,6 +65,7 @@ describe('Lists Reducer', () => {
     it('should should update the store details status to Error', () => {
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listStores: {
           storeStatus: ActionStatus.Error,
@@ -83,6 +86,7 @@ describe('Lists Reducer', () => {
     it('should update the header details status to Fetching', () => {
         const expectedState: ListsState = {
           listStores:  initialState.listStores,
+          allLists: initialState.allLists,
           copyStatus: initialState.copyStatus,
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
@@ -104,6 +108,7 @@ describe('Lists Reducer', () => {
 
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
@@ -124,6 +129,7 @@ describe('Lists Reducer', () => {
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: {
           summaryStatus: ActionStatus.Error,
@@ -150,6 +156,7 @@ describe('Lists Reducer', () => {
       };
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -174,6 +181,7 @@ describe('Lists Reducer', () => {
       const payloadMock: ListPerformance = getListPerformanceMock();
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -198,6 +206,7 @@ describe('Lists Reducer', () => {
       const payloadMock: Error = new Error(chance.string());
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -227,6 +236,7 @@ describe('Lists Reducer', () => {
       };
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -251,6 +261,7 @@ describe('Lists Reducer', () => {
       const payloadMock: ListPerformance = getListPerformanceMock();
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -275,6 +286,7 @@ describe('Lists Reducer', () => {
       const payloadMock: Error = new Error(chance.string());
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -298,6 +310,8 @@ describe('Lists Reducer', () => {
     it('should update the opportunities status to Fetching', () => {
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
+        copyStatus: initialState.copyStatus,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         listOpportunities: {
           opportunitiesStatus: ActionStatus.Fetching,
@@ -318,6 +332,8 @@ describe('Lists Reducer', () => {
 
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
+        allLists: initialState.allLists,
+        copyStatus: initialState.copyStatus,
         listStores: initialState.listStores,
         listOpportunities: {
           opportunitiesStatus: ActionStatus.Fetched,
@@ -337,6 +353,7 @@ describe('Lists Reducer', () => {
     it('should should update the opportunitiesStatus to Error', () => {
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         copyStatus: initialState.copyStatus,
         listOpportunities: {
@@ -357,6 +374,7 @@ describe('Lists Reducer', () => {
     it('should update the list summary details status to Fetching', () => {
         const expectedState: ListsState = {
           listStores:  initialState.listStores,
+          allLists: initialState.allLists,
           copyStatus: initialState.copyStatus,
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
@@ -376,6 +394,7 @@ describe('Lists Reducer', () => {
 
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
+        allLists: initialState.allLists,
         copyStatus: initialState.copyStatus,
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
@@ -397,6 +416,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
         copyStatus: initialState.copyStatus,
+        allLists: initialState.allLists,
         listSummary: {
           summaryStatus: ActionStatus.Error,
           summaryData: initialState.listSummary.summaryData
@@ -415,13 +435,14 @@ describe('Lists Reducer', () => {
   describe('when an CopyStoreToList action is received', () => {
     it('should update the copytStatus state to Fetching', () => {
       let idMock = chance.string();
-      const payloadMock: CopyToList = {
+      const payloadMock: CopyStoresToListPayload = {
         listId: listIdMock,
         id: idMock
       };
 
       const expectedState: ListsState = {
         copyStatus: ActionStatus.Fetching,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -440,6 +461,7 @@ describe('Lists Reducer', () => {
     it('should update the copytStatus state to Fetched', () => {
       const expectedState: ListsState = {
         copyStatus: ActionStatus.Fetched,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -458,6 +480,7 @@ describe('Lists Reducer', () => {
     it('should update the copyStatus state to Error', () => {
       const expectedState: ListsState = {
         copyStatus: ActionStatus.Error,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -474,14 +497,15 @@ describe('Lists Reducer', () => {
 
   describe('when an CopyOppsToList action is received', () => {
     it('should update the copytStatus state to Fetching', () => {
-      let idMock = chance.string();
-      const payloadMock: CopyToList = {
+      let idMock = [{opportunityId: chance.string()}, {opportunityId: chance.string()}] ;
+      const payloadMock: CopyOppsToListPayload = {
         listId: listIdMock,
-        id: idMock
+        ids: idMock
       };
 
       const expectedState: ListsState = {
         copyStatus: ActionStatus.Fetching,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -500,6 +524,7 @@ describe('Lists Reducer', () => {
     it('should update the copytStatus state to Fetched', () => {
       const expectedState: ListsState = {
         copyStatus: ActionStatus.Fetched,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -518,6 +543,7 @@ describe('Lists Reducer', () => {
     it('should update the copyStatus state to Error', () => {
       const expectedState: ListsState = {
         copyStatus: ActionStatus.Error,
+        allLists: initialState.allLists,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,

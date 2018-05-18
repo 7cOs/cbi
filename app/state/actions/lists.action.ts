@@ -35,7 +35,7 @@ export interface CopyStoresToListPayload {
 
 export interface CopyOppsToListPayload {
   listId: string;
-  id: {opportunityId: string}[];
+  ids: {opportunityId: string}[];
 }
 
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;

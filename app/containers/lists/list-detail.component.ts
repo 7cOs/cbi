@@ -367,8 +367,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(new ListsActions.CopyStoresToList({listId: listId, id: storeCode}));
         });
       } else {
-          /*checkedEntities = checkedEntities as {opportunityId: string}[]*/
-          this.store.dispatch(new ListsActions.CopyOppsToList({listId: listId, id: checkedEntities}));
+          const opportunityIds = <{opportunityId: string}[]>checkedEntities;
+          this.store.dispatch(new ListsActions.CopyOppsToList({listId: listId, ids: opportunityIds}));
       }
     });
   }

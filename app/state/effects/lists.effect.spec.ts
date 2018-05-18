@@ -8,7 +8,7 @@ import {
   FetchHeaderDetailsPayload,
   FetchOppsForListPayload,
   FetchListPerformancePayload,
-  FetchStoreDetailsPayload, CopyToList
+  FetchStoreDetailsPayload, CopyStoresToListPayload, CopyOppsToListPayload
 } from '../actions/lists.action';
 import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
@@ -33,11 +33,11 @@ import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.m
 import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
-import {CopyToListToastType} from "../../enums/lists/copy-to-list-toast-type.enum";
+import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
 
 const chance = new Chance();
 
-describe('Lists Effects', () => {
+fdescribe('Lists Effects', () => {
   let testBed: TestBed;
   let listsEffects: ListsEffects;
   let listsApiService: ListsApiService;
@@ -63,10 +63,10 @@ describe('Lists Effects', () => {
   };
 
   const listsApiServiceMock = {
-    addStoresToList(listId: string, stores: {storeId: string}): Observable<object> {
+    addStoresToList(listId: string, stores: {storeSourceCode: string}): Observable<object> {
       return Observable.of({});
     },
-    addOpportunitiesToList(listId: string, stores: {storeId: string}): Observable<object> {
+    addOpportunitiesToList(listId: string, opps: [{opportunityId: string}]): Observable<object> {
       return Observable.of({});
     },
     getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
@@ -230,7 +230,7 @@ describe('Lists Effects', () => {
   });
 
   describe('when an action of type COPY_STORES_TO_LIST is received', () => {
-    let actionPayloadMock: CopyToList;
+    let actionPayloadMock: CopyStoresToListPayload;
 
     beforeEach(() => {
       actionPayloadMock = {
@@ -248,7 +248,7 @@ describe('Lists Effects', () => {
         done();
       });
 
-      expect(listsApiService.addStoresToList).toHaveBeenCalledWith(actionPayloadMock.listId, {storeId: actionPayloadMock.id});
+      expect(listsApiService.addStoresToList).toHaveBeenCalledWith(actionPayloadMock.listId, {storeSourceCode: actionPayloadMock.id});
     });
 
     describe('when the addStoresToList api call is successful', () => {
@@ -277,48 +277,49 @@ describe('Lists Effects', () => {
   });
 
   describe('when an action of type COPY_OPPS_TO_LIST is received', () => {
-    let actionPayloadMock: CopyToList;
+    let actionPayloadMock: CopyOppsToListPayload;
+    let idMock = [{opportunityId: chance.string()}, {opportunityId: chance.string()}] ;
 
     beforeEach(() => {
       actionPayloadMock = {
         listId: chance.string(),
-        id: chance.string()
+        ids: idMock
       };
 
-      actions$.next(new ListActions.CopyStoresToList(actionPayloadMock));
+      actions$.next(new ListActions.CopyOppsToList(actionPayloadMock));
     });
 
-    it('should reach out to the listsApiService and call addStoresToList given the passed in action payload', (done) => {
-      spyOn(listsApiService, 'addStoresToList').and.callThrough();
+    it('should reach out to the listsApiService and call addOpportunitiesToList given the passed in action payload', (done) => {
+      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
 
-      listsEffects.copyStoresToList$().subscribe(() => {
+      listsEffects.copyOppsToList$().subscribe(() => {
         done();
       });
 
-      expect(listsApiService.addStoresToList).toHaveBeenCalledWith(actionPayloadMock.listId, {storeId: actionPayloadMock.id});
+      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalledWith(actionPayloadMock.listId, actionPayloadMock.ids);
     });
 
-    describe('when the addStoresToList api call is successful', () => {
-      it('should show an copyStoresToList success toast and dispatch an copyStoresToListSuccess action', (done) => {
-        listsEffects.copyStoresToList$().subscribe((response: Action) => {
-          expect(response).toEqual(new ListActions.CopyStoresToListSuccess);
+    describe('when the addOpportunitiesToList api call is successful', () => {
+      it('should show an copyOppsToList success toast and dispatch an copyOppsToListSuccess action', (done) => {
+        listsEffects.copyOppsToList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.CopyOppsToListSuccess);
           done();
         });
 
-        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyStores);
+        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyOpps);
       });
     });
 
-    describe('when the addStoresToList api call fails', () => {
-      it('should show an copyStoresToList error toast and dispatch an copyStoresToListError action', (done) => {
-        spyOn(listsApiService, 'addStoresToList').and.returnValue(Observable.throw(errorMock));
+    describe('when the addOpportunitiesToList api call fails', () => {
+      it('should show an copyOppsToList error toast and dispatch an copyOppsToListError action', (done) => {
+        spyOn(listsApiService, 'addOpportunitiesToList').and.returnValue(Observable.throw(errorMock));
 
-        listsEffects.copyStoresToList$().subscribe((response: Action) => {
-          expect(response).toEqual(new ListActions.CopyStoresToListError);
+        listsEffects.copyOppsToList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.CopyOppsToListError);
           done();
         });
 
-        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyStoresError);
+        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyOppsError);
       });
     });
   });
