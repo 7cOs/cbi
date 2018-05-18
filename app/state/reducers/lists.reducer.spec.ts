@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
 import { ActionStatus } from '../../enums/action-status.enum';
-import { FetchListPerformancePayload } from '../actions/lists.action';
+import { CopyToList, FetchListPerformancePayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
@@ -22,6 +22,7 @@ describe('Lists Reducer', () => {
     it('should update the store details status to Fetching', () => {
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
+        copyStatus: ActionStatus.NotFetched,
         listStores: {
           storeStatus: ActionStatus.Fetching,
           stores: initialState.listStores.stores
@@ -41,6 +42,7 @@ describe('Lists Reducer', () => {
       const stores = getStoreListsMock();
 
       const expectedState: ListsState = {
+        copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listStores: {
           storeStatus: ActionStatus.Fetched,
@@ -61,6 +63,7 @@ describe('Lists Reducer', () => {
     it('should should update the store details status to Error', () => {
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
+        copyStatus: initialState.copyStatus,
         listStores: {
           storeStatus: ActionStatus.Error,
           stores: initialState.listStores.stores
@@ -80,6 +83,7 @@ describe('Lists Reducer', () => {
     it('should update the header details status to Fetching', () => {
         const expectedState: ListsState = {
           listStores:  initialState.listStores,
+          copyStatus: initialState.copyStatus,
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
             summaryData: initialState.listSummary.summaryData
@@ -100,6 +104,7 @@ describe('Lists Reducer', () => {
 
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
           summaryData: headersMock
@@ -119,6 +124,7 @@ describe('Lists Reducer', () => {
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: {
           summaryStatus: ActionStatus.Error,
           summaryData: initialState.listSummary.summaryData
@@ -144,6 +150,7 @@ describe('Lists Reducer', () => {
       };
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
         performance: {
@@ -167,6 +174,7 @@ describe('Lists Reducer', () => {
       const payloadMock: ListPerformance = getListPerformanceMock();
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
         performance: {
@@ -190,6 +198,7 @@ describe('Lists Reducer', () => {
       const payloadMock: Error = new Error(chance.string());
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
         performance: {
@@ -218,6 +227,7 @@ describe('Lists Reducer', () => {
       };
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
         performance: {
@@ -241,6 +251,7 @@ describe('Lists Reducer', () => {
       const payloadMock: ListPerformance = getListPerformanceMock();
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
         performance: {
@@ -264,6 +275,7 @@ describe('Lists Reducer', () => {
       const payloadMock: Error = new Error(chance.string());
       const expectedState: ListsState = {
         listStores: initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
         performance: {
@@ -326,6 +338,7 @@ describe('Lists Reducer', () => {
       const expectedState: ListsState = {
         listSummary: initialState.listSummary,
         listStores: initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listOpportunities: {
           opportunitiesStatus: ActionStatus.Error,
           opportunities: initialState.listOpportunities.opportunities
@@ -344,6 +357,7 @@ describe('Lists Reducer', () => {
     it('should update the list summary details status to Fetching', () => {
         const expectedState: ListsState = {
           listStores:  initialState.listStores,
+          copyStatus: initialState.copyStatus,
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
             summaryData: initialState.listSummary.summaryData
@@ -362,6 +376,7 @@ describe('Lists Reducer', () => {
 
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
           summaryData: headersMock
@@ -381,6 +396,7 @@ describe('Lists Reducer', () => {
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
         listStores:  initialState.listStores,
+        copyStatus: initialState.copyStatus,
         listSummary: {
           summaryStatus: ActionStatus.Error,
           summaryData: initialState.listSummary.summaryData
@@ -391,6 +407,126 @@ describe('Lists Reducer', () => {
       const actualState: ListsState = listsReducer(
         initialState,
         new ListsActions.PatchListFailure(new Error()));
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an CopyStoreToList action is received', () => {
+    it('should update the copytStatus state to Fetching', () => {
+      let idMock = chance.string();
+      const payloadMock: CopyToList = {
+        listId: listIdMock,
+        id: idMock
+      };
+
+      const expectedState: ListsState = {
+        copyStatus: ActionStatus.Fetching,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.CopyStoresToList(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an CopyStoreToListSuccess action is received', () => {
+    it('should update the copytStatus state to Fetched', () => {
+      const expectedState: ListsState = {
+        copyStatus: ActionStatus.Fetched,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.CopyStoresToListSuccess()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an CopyStoreToListError action is received', () => {
+    it('should update the copyStatus state to Error', () => {
+      const expectedState: ListsState = {
+        copyStatus: ActionStatus.Error,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.CopyStoresToListError()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an CopyOppsToList action is received', () => {
+    it('should update the copytStatus state to Fetching', () => {
+      let idMock = chance.string();
+      const payloadMock: CopyToList = {
+        listId: listIdMock,
+        id: idMock
+      };
+
+      const expectedState: ListsState = {
+        copyStatus: ActionStatus.Fetching,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.CopyOppsToList(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an CopyOppsToListSuccess action is received', () => {
+    it('should update the copytStatus state to Fetched', () => {
+      const expectedState: ListsState = {
+        copyStatus: ActionStatus.Fetched,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.CopyOppsToListSuccess()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an CopyOppsToListError action is received', () => {
+    it('should update the copyStatus state to Error', () => {
+      const expectedState: ListsState = {
+        copyStatus: ActionStatus.Error,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.CopyOppsToListError()
+      );
 
       expect(actualState).toEqual(expectedState);
     });
