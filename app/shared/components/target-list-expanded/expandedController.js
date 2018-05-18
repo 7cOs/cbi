@@ -19,12 +19,10 @@ module.exports = /*  @ngInject */
     vm.compassModalService = compassModalService;
 
     // Defaults
-    vm.allowDelete = true;
     vm.buttonDisabled = false;
     vm.buttonState = 'named';
     vm.closedOpportunitiesChevron = false;
     vm.collaboratorsChevron = false;
-    vm.deleteError = false;
     vm.depletionsChevron = true;
     vm.lastUpdatedChevron = false;
     vm.listChevron = true;
@@ -222,37 +220,30 @@ module.exports = /*  @ngInject */
     }
 
     function deleteTargetList() {
-      var deleteTargetListPromises = [],
-          selectedItems = vm.selected;
+      var selectedItems = vm.selected;
 
-      checkDelete();
+      const deleteTargetListPromises = selectedItems.map(function (targetList) {
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
+          'Delete List',
+          'Selected List'
+        );
 
-      if (vm.allowDelete) {
-        // get selected target list ids and their promises
-        deleteTargetListPromises = selectedItems.map(function(targetList) {
-          analyticsService.trackEvent(
-            targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
-            'Delete List',
-            'Selected List'
-          );
+        return listsApiService.deleteListPromise(targetList.id);
+      });
 
-          return targetListService.deleteTargetList(targetList.id);
+      $q.all(deleteTargetListPromises).then(function (response) {
+        angular.forEach(selectedItems, function (item, key) {
+          if (item.archived) {
+            userService.model.targetLists.ownedNotArchived--;
+            userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(item), 1);
+          }
+          userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
         });
-
-        // run all delete requests at the same time
-        $q.all(deleteTargetListPromises).then(function(response) {
-          // splice from list arr
-          angular.forEach(selectedItems, function(item, key) {
-            if (item.archived) {
-              userService.model.targetLists.ownedNotArchived--;
-              userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(item), 1);
-            }
-            userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
-          });
-        }).then(vm.selected = []);
-
+      }).then(() => {
+        vm.selected = [];
         toastService.showToast('deleted', selectedItems);
-      }
+      });
     }
 
     function exists(item, list) {
@@ -384,8 +375,6 @@ module.exports = /*  @ngInject */
       targetListService.model.currentList = {};
       userService.model.targetLists = null;
       loaderService.openLoader();
-      vm.allowDelete = true;
-      vm.deleteError = false;
 
       listsApiService.getListsPromise().then((response) =>  {
         loaderService.closeLoader();
@@ -398,27 +387,6 @@ module.exports = /*  @ngInject */
       $timeout(function() {
         vm.userSelectedTab = false;
       }, 0);
-    }
-
-    function checkDelete() {
-      var keepGoing = true;
-
-      vm.selected.forEach(function(item, key) {
-        if (keepGoing) {
-          if (item.collaborators && item.collaborators.length > 1) {
-            vm.allowDelete = false;
-            vm.keepGoing = false;
-            vm.deleteError = true;
-            toastService.showToast('deleteError');
-            $timeout(function() {
-              vm.allowDelete = true;
-              vm.deleteError = false;
-            }, 3500);
-          } else {
-            vm.allowDelete = true;
-          }
-        }
-      });
     }
 
     function showArchiveModal() {

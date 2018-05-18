@@ -71,6 +71,16 @@ export class ListsApiService {
     return this.updateList(list, listsId).toPromise();
   }
 
+  public deleteList(listId: string): Observable<{status: string}> {
+    const url = `v3/lists/${ listId }`;
+    return this.http.delete(url)
+    .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+  }
+
+  public deleteListPromise(listId: string): Promise<{status: string}> {
+    return this.deleteList(listId).toPromise();
+  }
+
   public addOpportunitiesToList(listId: string, opportunities: {opportunityId: string}[]): Observable<ListOpportunityDTO[]> {
     const url = `/v3/lists/${ listId }/opportunities`;
 
