@@ -17,6 +17,7 @@ import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
+import { V3List } from '../../models/lists/v3-list.model';
 
 @Injectable()
 export class ListsEffects {
@@ -136,6 +137,20 @@ export class ListsEffects {
           return new ListActions.FetchListPerformancePODSuccess(listPerformance);
         })
         .catch((error: Error) => Observable.of(new ListActions.FetchListPerformancePODError(error)));
+      });
+  }
+
+  @Effect()
+  fetchLists$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListActions.FETCH_LISTS)
+      .switchMap((action: ListActions.FetchLists) => {
+        return this.listsApiService.getLists()
+          .map((response: V3List[]) => {
+            const groupedLists = this.listsTransformerService.groupLists(response, action.payload.currentUserEmployeeID);
+            return new ListActions.FetchListsSuccess(groupedLists);
+          })
+          .catch((error: Error) => Observable.of(new ListActions.FetchListsFailure(error)));
       });
   }
 

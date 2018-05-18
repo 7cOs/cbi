@@ -133,7 +133,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
-    this.currentUser = this.userService.model.currentUser;
+    this.currentUser = {
+      employeeId: this.userService.model.currentUser.employeeID,
+      firstName: this.userService.model.currentUser.firstName,
+      lastName: this.userService.model.currentUser.lastName
+    };
     this.opportunityStatusOptions = listOpportunityStatusOptions;
     this.oppStatusSelected = OpportunityStatus.all;
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
@@ -151,6 +155,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       beverageType: ListBeverageType.Beer,
       dateRangeCode: DateRangeTimePeriodValue.L90BDL
     }));
+    this.store.dispatch(new ListsActions.FetchLists({currentUserEmployeeID: this.currentUser.employeeId}));
 
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)

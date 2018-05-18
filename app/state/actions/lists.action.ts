@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 
+import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
@@ -7,6 +8,7 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { V3List } from '../../models/lists/v3-list.model';
 
 export interface FetchStoreDetailsPayload {
   listId: string;
@@ -117,6 +119,27 @@ export class FetchListPerformancePODError implements Action {
   constructor(public payload: Error) { }
 }
 
+export const FETCH_LISTS = ListsActionTypes.FETCH_LISTS;
+export class FetchLists implements Action {
+  readonly type = FETCH_LISTS;
+
+  constructor(public payload: {currentUserEmployeeID: string}) { }
+}
+
+export const FETCH_LISTS_SUCCESS = ListsActionTypes.FETCH_LISTS_SUCCESS;
+export class FetchListsSuccess implements Action {
+  readonly type = FETCH_LISTS_SUCCESS;
+
+  constructor(public payload: GroupedLists) { }
+}
+
+export const FETCH_LISTS_FAILURE = ListsActionTypes.FETCH_LISTS_FAILURE;
+export class FetchListsFailure implements Action {
+  readonly type = FETCH_LISTS_FAILURE;
+
+  constructor(public payload: Error) { }
+}
+
 export const PATCH_LIST = ListsActionTypes.PATCH_LIST;
 export class PatchList implements Action {
   readonly type = PATCH_LIST;
@@ -154,6 +177,9 @@ export type Action
   | FetchListPerformancePOD
   | FetchListPerformancePODSuccess
   | FetchListPerformancePODError
+  | FetchLists
+  | FetchListsSuccess
+  | FetchListsFailure
   | PatchList
   | PatchListSuccess
   | PatchListFailure;
