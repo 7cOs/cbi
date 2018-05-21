@@ -230,13 +230,19 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
       if (!opportunityRow.checked) isEveryOppChecked = false;
       return isEveryOppChecked;
     }, true);
-    if (storeRow.checked) this.checkCount++; else this.checkCount--;
+
+    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+      store.opportunities.forEach((opp) => {
+        if (opp.checked === true) totalOpps.push(opp);
+      });
+      return totalOpps;
+    }, []);
 
     const selectedAllCheckboxState: OpportunitiesTableSelectAllCheckboxState = this.getSelectAllCheckboxState(this.sortedTableData);
 
     this.isSelectAllChecked = selectedAllCheckboxState.isSelectAllChecked;
     this.isIndeterminateChecked = selectedAllCheckboxState.isIndeterminateChecked;
-    this.onRowChecked.emit(this.checkCount);
+    this.onRowChecked.emit(checkedOpps.length);
   }
 
   public isOppsTableDataEmpty(): boolean {
