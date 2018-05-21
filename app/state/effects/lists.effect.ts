@@ -1,11 +1,13 @@
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
+import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import * as ListActions from '../../state/actions/lists.action';
+import { ListManageActionToastType } from '../../enums/lists/list-manage-action-toast-type.enum';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../../models/lists/list-performance-dto.model';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
@@ -14,9 +16,9 @@ import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
-import { StoreDetails } from '../../models/lists/lists-store.model';
 import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
+import { StoreDetails } from '../../models/lists/lists-store.model';
 
 @Injectable()
 export class ListsEffects {
@@ -24,7 +26,8 @@ export class ListsEffects {
   constructor(
     private actions$: Actions,
     private listsApiService: ListsApiService,
-    private listsTransformerService: ListsTransformerService
+    private listsTransformerService: ListsTransformerService,
+    @Inject('toastService') private toastService: any
   ) { }
 
   @Effect()
@@ -142,7 +145,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListActions.PATCH_LIST)
       .switchMap((action: ListActions.PatchList) => {
-        const convertedPayload = this.listsTransformerService.convertCollaborators(action.payload);
+        const convertedPayload: FormattedNewList = this.listsTransformerService.convertCollaborators(action.payload);
         return this.listsApiService.updateList(convertedPayload, action.payload.id)
         .map((response: ListsSummaryDTO) => {
           const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
@@ -158,6 +161,66 @@ export class ListsEffects {
       .ofType(ListActions.PATCH_LIST_FAILURE)
       .do((action: ListActions.PatchListFailure) => {
         console.error('Update List failure:', action.payload);
+      });
+  }
+
+  @Effect()
+  archiveList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.ARCHIVE_LIST)
+      .switchMap((action: ListActions.ArchiveList) => {
+        const formattedPayload: FormattedNewList = Object.assign({}, this.listsTransformerService.convertCollaborators(action.payload), {
+          archived: true
+        });
+
+        return this.listsApiService.updateList(formattedPayload, action.payload.id)
+          .map(() => {
+            this.toastService.showListDetailManageActionToast(ListManageActionToastType.Archive);
+            return new ListActions.ArchiveListSuccess;
+          })
+          .catch(() => {
+            this.toastService.showListDetailManageActionToast(ListManageActionToastType.ArchiveError);
+            return Observable.of(new ListActions.ArchiveListError);
+          });
+      });
+  }
+
+  @Effect()
+  deleteList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.DELETE_LIST)
+      .switchMap((action: ListActions.DeleteList) => {
+        return this.listsApiService.deleteList(action.payload)
+          .map(() => {
+            this.toastService.showListDetailManageActionToast(ListManageActionToastType.Delete);
+            return new ListActions.DeleteListSuccess;
+          })
+          .catch(() => {
+            this.toastService.showListDetailManageActionToast(ListManageActionToastType.DeleteError);
+            return Observable.of(new ListActions.DeleteListError);
+          });
+      });
+  }
+
+  @Effect()
+  leaveList$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.LEAVE_LIST)
+      .switchMap((action: ListActions.LeaveList) => {
+        const formattedPayload: FormattedNewList = this.listsTransformerService.getLeaveListPayload(
+          action.payload.currentUserEmployeeId,
+          action.payload.listSummary
+        );
+
+        return this.listsApiService.updateList(formattedPayload, action.payload.listSummary.id)
+          .map(() => {
+            this.toastService.showListDetailManageActionToast(ListManageActionToastType.Leave);
+            return new ListActions.LeaveListSuccess;
+          })
+          .catch(() => {
+            this.toastService.showListDetailManageActionToast(ListManageActionToastType.LeaveError);
+            return Observable.of(new ListActions.LeaveListError);
+          });
       });
   }
 }

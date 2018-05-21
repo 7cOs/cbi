@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Output, Inject } from '@angular/core';
+import { Component, EventEmitter, HostListener, Inject, Input, OnInit, Optional, Output  } from '@angular/core';
 
 import { CompassAlertModalInputs } from '../../../models/compass-alert-modal-inputs.model';
 import { CompassModalOverlayRef } from './compass-alert-modal.overlayref';
@@ -13,15 +13,24 @@ const ESCKEY = 27;
   styles: [require('./compass-alert-modal.component.scss')]
 })
 
-export class CompassAlertModalComponent {
+export class CompassAlertModalComponent implements OnInit {
   @Output() buttonContainerEvent = new EventEmitter<CompassAlertModalEvent>();
+
+  @Input() modalData: CompassAlertModalInputs;
 
   public modalOverlayRef: CompassModalOverlayRef;
   public compassAlertModalEvent = CompassAlertModalEvent;
 
+  private displayData: CompassAlertModalInputs;
+
   constructor(
+    @Optional()
     @Inject(COMPASS_ALERT_MODAL_INPUTS) public modalInputs: CompassAlertModalInputs
   ) { }
+
+  ngOnInit() {
+    this.displayData = this.modalInputs || this.modalData;
+  }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
     if (event.keyCode === ESCKEY) {

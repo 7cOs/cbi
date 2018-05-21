@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListPerformance } from '../../models/lists/list-performance.model';
@@ -25,6 +26,16 @@ export interface FetchListPerformancePayload {
 
 export interface FetchOppsForListPayload {
   listId: string;
+}
+
+export interface UpdateListPayload {
+  listId: string;
+  formattedNewList: FormattedNewList;
+}
+
+export interface LeaveListPayload {
+  currentUserEmployeeId: string;
+  listSummary: ListsSummary;
 }
 
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
@@ -138,6 +149,48 @@ export class PatchListFailure implements Action {
   constructor(public payload: Error) { }
 }
 
+export class ArchiveList implements Action {
+  readonly type = ListsActionTypes.ARCHIVE_LIST;
+
+  constructor(public payload: ListsSummary) { }
+}
+
+export class ArchiveListSuccess implements Action {
+  readonly type = ListsActionTypes.ARCHIVE_LIST_SUCCESS;
+}
+
+export class ArchiveListError implements Action {
+  readonly type = ListsActionTypes.ARCHIVE_LIST_ERROR;
+}
+
+export class DeleteList implements Action {
+  readonly type = ListsActionTypes.DELETE_LIST;
+
+  constructor(public payload: string) { }
+}
+
+export class DeleteListSuccess implements Action {
+  readonly type = ListsActionTypes.DELETE_LIST_SUCCESS;
+}
+
+export class DeleteListError implements Action {
+  readonly type = ListsActionTypes.DELETE_LIST_ERROR;
+}
+
+export class LeaveList implements Action {
+  readonly type = ListsActionTypes.LEAVE_LIST;
+
+  constructor(public payload: LeaveListPayload) { }
+}
+
+export class LeaveListSuccess implements Action {
+  readonly type = ListsActionTypes.LEAVE_LIST_SUCCESS;
+}
+
+export class LeaveListError implements Action {
+  readonly type = ListsActionTypes.LEAVE_LIST_ERROR;
+}
+
 export type Action
   = FetchStoreDetails
   | FetchStoreDetailsSuccess
@@ -156,4 +209,13 @@ export type Action
   | FetchListPerformancePODError
   | PatchList
   | PatchListSuccess
-  | PatchListFailure;
+  | PatchListFailure
+  | ArchiveList
+  | ArchiveListSuccess
+  | ArchiveListError
+  | DeleteList
+  | DeleteListSuccess
+  | DeleteListError
+  | LeaveList
+  | LeaveListSuccess
+  | LeaveListError;

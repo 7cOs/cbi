@@ -72,9 +72,10 @@ export class ListsApiService {
   }
 
   public deleteList(listId: string): Observable<{status: string}> {
-    const url = `v3/lists/${ listId }`;
+    const url = `/v3/lists/${ listId }`;
+
     return this.http.delete(url)
-    .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
   }
 
   public deleteListPromise(listId: string): Promise<{status: string}> {

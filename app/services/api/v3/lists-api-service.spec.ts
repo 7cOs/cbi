@@ -201,15 +201,17 @@ describe('ListsApiService', () => {
   });
 
   describe('deleteList', () => {
-    it('should call the delete endpoint with the correct listId', () => {
-      const expectedRequestUrl: string = `v3/lists/${listIdMock}`;
-      const expectedResponse: any = {};
-      listsApiService.deleteList(listIdMock).subscribe((response: any) => {
-        expect(response).toEqual(expectedResponse);
+    it('should do a DELETE call on the lists endpoint with the given listId', () => {
+      const expectedRequestUrl: string = `/v3/lists/${ listIdMock }`;
+      const expectedResponse: { status: string } = { status: chance.string() };
+
+      listsApiService.deleteList(listIdMock).subscribe((response: { status: string }) => {
+        expect(response).toBe(expectedResponse);
       });
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedResponse);
+
       expect(req.request.method).toBe(ApiRequestType.DELETE);
     });
   });

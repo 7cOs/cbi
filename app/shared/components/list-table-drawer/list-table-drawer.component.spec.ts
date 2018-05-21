@@ -3,6 +3,8 @@ import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCheckboxModule } from '@angular/material';
 
+import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
+import { CompassTooltipService } from '../../../services/compass-tooltip.service';
 import { getListTableDrawerRowMock } from '../../../models/lists/list-table-drawer-row.model.mock';
 import { ListTableDrawerComponent } from './list-table-drawer.component';
 import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
@@ -15,10 +17,23 @@ describe('ListTableDrawerComponent', () => {
   let componentInstance: ListTableDrawerComponent;
   let tableDataMock: ListTableDrawerRow[];
 
+  const compassTooltipServiceMock = {
+    showTooltip: jasmine.createSpy('showTooltip')
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListTableDrawerComponent ],
-      imports: [ MatCheckboxModule ]
+      declarations: [
+        CompassTooltipComponent,
+        ListTableDrawerComponent
+      ],
+      imports: [
+        MatCheckboxModule
+      ],
+      providers: [{
+        provide: CompassTooltipService,
+        useValue: compassTooltipServiceMock
+      }]
     });
 
     fixture = TestBed.createComponent(ListTableDrawerComponent);
