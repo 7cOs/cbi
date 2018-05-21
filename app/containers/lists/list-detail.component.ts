@@ -11,6 +11,7 @@ import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { DropdownInputModel, DropDownMenu } from '../../models/compass-dropdown-input.model';
 import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
@@ -35,17 +36,6 @@ import { V3List } from '../../models/lists/v3-list.model';
 
 interface ListPageClick {
   pageNumber: number;
-}
-
-interface DropDownMenu {
-  display: string;
-  value: string;
-}
-
-interface DropDownInputModel {
-  selected: string;
-  dropdownOptions: DropDownMenu[];
-  title: string;
 }
 
 export interface PageChangeData {
@@ -102,8 +92,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public activeTab: string = this.performanceTabTitle;
   public isPerformanceRowSelect: boolean = false;
   public isOpportunityRowSelect: boolean = false;
-  public isSelectAllPerformanceChecked: boolean = false;
-  public isSelectAllOpportunitiesChecked: boolean = false;
   public downloadAllModalStringInputs: CompassActionModalInputs;
   public copyToListModalStringInputs: CompassActionModalInputs;
   public copyToListLoader: boolean;
@@ -114,7 +102,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     stacked: false
   };
 
-  public dropdownInputModel: DropDownInputModel;
+  public dropdownInputModel: DropdownInputModel;
 
   public downloadBodyHTML: string;
 
