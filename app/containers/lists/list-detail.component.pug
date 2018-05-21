@@ -1,3 +1,5 @@
+beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
+
 lists-header(
   [summaryData]="listSummary",
   (manageButtonClicked)="handleManageButtonClick()",
@@ -41,7 +43,6 @@ compass-tabs(
       [pageChangeData]="pageChangeData",
       [sortReset]="sortReset",
       [paginationResetIn]='paginationReset',
-      [loadingState]='loadingState',
       (paginationReset)="handlePaginationReset()",
       (onRowChecked)='setPerformanceRowSelected($event)',
       (onSelectAllChecked)='setSelectAllPerformance($event)'

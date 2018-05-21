@@ -228,6 +228,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }, []);
     checkedOpps.forEach((opp) => {
       this.store.dispatch(new ListsActions.RemoveOppFromList({listId: this.listSummary.id, oppId: opp.id}));
+      this.loadingState = LoadingState.Loading;
     });
   }
 
@@ -301,7 +302,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public setPerformanceRowSelected(performanceRowTrueCount: number) {
     performanceRowTrueCount !== 0 ? this.isPerformanceRowSelect = true : this.isPerformanceRowSelect = false;
-    console.log(this.isPerformanceRowSelect);
   }
 
   public setSelectAllPerformance(selectAllChecked: boolean) {
@@ -322,6 +322,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.activeTab = tabName;
       this.paginationReset.next();
       this.sortReset.next();
+      this.isPerformanceRowSelect = false;
+      this.isOpportunityRowSelect = false;
     }
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
