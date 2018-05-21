@@ -249,7 +249,7 @@ describe('ListDetailComponent', () => {
       storeMock.dispatch.calls.reset();
       componentInstance.ngOnInit();
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.count()).toBe(6);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
         listId: stateMock.params.id
       }));
@@ -578,7 +578,7 @@ describe('ListDetailComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should filter the checked opportunities and dispatch action for copy to List', () => {
+      it('should filter the checked stores and dispatch action for copy to List', () => {
         storeMock.dispatch.calls.reset();
         componentInstance.copyToListClick();
         componentInstance.selectedTab = componentInstance.performanceTabTitle;
