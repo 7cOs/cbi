@@ -26,7 +26,6 @@ import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.mod
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
-import { getListStorePerformanceArrayMock } from '../../models/lists/list-store-performance.model.mock';
 import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 const chance = new Chance();
