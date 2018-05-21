@@ -557,7 +557,8 @@ describe('ListDetailComponent', () => {
         componentInstance.copyToListClick();
         componentInstance.selectedTab = componentInstance.opportunitiesTabTitle;
 
-        const overLayRef = componentInstance.compassModalService.showActionModalDialog(componentInstance.copyToListModalStringInputs, null);
+        // const overLayRef = componentInstance.compassModalService.showActionModalDialog
+        // (componentInstance.copyToListModalStringInputs, null);
         expect(storeMock.dispatch.calls.count()).toBe(1);
         const idsParam = [{opportunityId: opportunitiesTableData[0].opportunities[0].id}];
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
