@@ -13,7 +13,7 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 
 const chance = new Chance();
 
-fdescribe('Lists Actions', () => {
+describe('Lists Actions', () => {
 
   describe('FetchStoreDetails', () => {
     let action: ListsActions.FetchStoreDetails;

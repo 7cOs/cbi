@@ -89,10 +89,6 @@ export class ListsApiService {
     return this.addOpportunitiesToList(listId, opportunities).toPromise();
   }
 
-  public addStoresToListPromise(listId: string, stores: {storeSourceCode: string}): Promise<ListStoreDTO[]> {
-    return this.addStoresToList(listId, stores).toPromise();
-  }
-
   public getOppsDataForList(
     listId: string
   ): Observable<Array<ListOpportunityDTO>> {

@@ -19,7 +19,6 @@ import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
-import { generateRandomSizedArray } from '../../../models/util.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -79,10 +78,27 @@ describe('ListsApiService', () => {
   describe('addOpportunitiesToList', () => {
     it('should post a list of opportunities to the lists/:id/opportunities endpoint', () => {
       const listId = chance.string();
-      const body = {opportunityId: chance.string()};
+      const body = [{opportunityId: chance.string()}, {opportunityId: chance.string()}];
       const expectedRequestUrl: string = `/v3/lists/${ listId }/opportunities`;
       const expectedResponse: any  = {};
       listsApiService.addOpportunitiesToList(listId, body).subscribe((response: any) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+      expect(req.request.method).toBe(ApiRequestType.POST);
+      expect(req.request.body).toBe(body);
+    });
+  });
+
+  describe('addStoresToList', () => {
+    it('should post a list of stores to the lists/:id/stores endpoint', () => {
+      const listId = chance.string();
+      const body = {storeSourceCode: chance.string()};
+      const expectedRequestUrl: string = `/v3/lists/${ listId }/stores`;
+      const expectedResponse: any  = {};
+      listsApiService.addStoresToList(listId, body).subscribe((response: any) => {
         expect(response).toEqual(expectedResponse);
       });
 

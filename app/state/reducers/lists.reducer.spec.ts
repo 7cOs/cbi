@@ -16,7 +16,7 @@ import { ListPerformance } from '../../models/lists/list-performance.model';
 const chance = new Chance();
 const listIdMock = chance.string();
 
-fdescribe('Lists Reducer', () => {
+describe('Lists Reducer', () => {
 
   describe('when a FetchStoreDetails action is dispatched', () => {
     it('should update the store details status to Fetching', () => {

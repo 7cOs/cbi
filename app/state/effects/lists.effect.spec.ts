@@ -37,7 +37,7 @@ import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.e
 
 const chance = new Chance();
 
-fdescribe('Lists Effects', () => {
+describe('Lists Effects', () => {
   let testBed: TestBed;
   let listsEffects: ListsEffects;
   let listsApiService: ListsApiService;
