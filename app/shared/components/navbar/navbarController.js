@@ -122,6 +122,12 @@ module.exports = /*  @ngInject */
       vm.copyStoreToListError = newWatchValues.CopyStoreToListError;
       vm.copyOppsToList = newWatchValues.CopyOppsToList;
       vm.copyOppsToListError = newWatchValues.CopyOppsToListError;
+      vm.listDetailArchived = newWatchValues.listDetailArchived;
+      vm.listDetailArchivedError = newWatchValues.listDetailArchivedError;
+      vm.listDetailDeleted = newWatchValues.listDetailDeleted;
+      vm.listDetailDeletedError = newWatchValues.listDetailDeletedError;
+      vm.listDetailLeft = newWatchValues.listDetailLeft;
+      vm.listDetailLeftError = newWatchValues.listDetailLeftError;
     }, true);
 
     init();

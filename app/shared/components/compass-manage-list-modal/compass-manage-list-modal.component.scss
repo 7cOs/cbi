@@ -1,11 +1,34 @@
 @import '../../../assets/styles/base/variables';
 
 .compass-modal {
-  width: 400px;
-  height: auto;
   border-radius: 4px;
-  background-color: $white;
   box-shadow: 0 1px 2px 0 $gray-1;
+  height: auto;
+  width: 400px;
+
+  .compass-modal-footer {
+    background-color: $gray-4;
+    border-top: solid 2px $cbi-grey;
+    color: $action-text-blue;
+    font-family: $roboto;
+    padding: 10px;
+
+    span {
+      cursor: pointer;
+    }
+
+    .owner-footer {
+      margin: 10px 25px;
+
+      .delete-list-text {
+        float: right;
+      }
+    }
+
+    .collaborator-footer {
+      margin: 10px 25px;
+    }
+  }
 }
 
 .compass-modal-title {
@@ -27,7 +50,14 @@
 }
 
 .modal-input {
-  padding-bottom: 5px;
+  margin-bottom: 25px;
+
+  .description-text-area {
+    min-height: 65px;
+    max-height: 500px;
+    min-width: 100%;
+    max-width: 100%;
+  }
 }
 
 .X-modal-btn {
@@ -41,6 +71,7 @@
 }
 
 .compass-modal-body {
+  background-color: $gray-4;
   width: 340px;
   padding: 30px;
   font-family: $roboto;
@@ -53,10 +84,23 @@
     font-family: $roboto;
     font-size: 14px;
   }
+
+  .modal-input-label {
+    font-family: $roboto;
+    margin-bottom: 5px;
+
+    .modal-input-label-count {
+      float: right;
+    }
+
+    .count-limit-error {
+      color: $red;
+    }
+  }
 }
 
 .compass-modal-action-bar {
-  padding-top: 40px;
+  background-color: $gray-4;
   padding-left: 110px;
 
   .compass-modal-btn {
@@ -100,15 +144,7 @@
 
 .collaborator-list {
   background-color: $white;
-  display: inline-block;
-  margin-left: -15px;
-  margin-right: -15px;
-  position: relative;
-  width: 100%;
-  padding-left: 15px;
-  overflow-y: scroll;
-  height: auto;
-  min-height: 150px;
+  margin-bottom: 20px;
 
   .collaborator {
     height: 30px;
@@ -116,12 +152,37 @@
     text-align: left;
     border-bottom: dotted $gray-4;
 
+    .collaborator-title {
+      display: inline-block;
+
+      .accent {
+        float: left;
+        font-family: $roboto;
+        margin-left: 25px;
+      }
+
+      .collaborator-text {
+        margin-top: 0;
+      }
+
+      .manage-list-arrow {
+        background-image: url('../../../assets/img/icons/drop-chevron.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        float: right;
+        height: 100%;
+        margin-right: 10px;
+        width: 15px;
+      }
+    }
+
     &.collaborator:last-child {
       border-bottom: none;
     }
 
     &:hover {
       background-color: $light-blue;
+      cursor: pointer;
     }
 
     > div, md-menu {
@@ -134,10 +195,9 @@
     &.manage-list {
       .accent {
         width: 5em;
-        margin-left: 15em;
+        margin-left: 16em;
         margin-top: -15%;
-        font-family: $work-sans;
-        font-weight: 500;
+        font-family: $roboto;
         letter-spacing: 0.01em;
       }
 

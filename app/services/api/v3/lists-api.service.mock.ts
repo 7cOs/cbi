@@ -12,7 +12,9 @@ export const listApiServiceMock = {
   createListPromise: createListPromise,
   addOpportunitiesToListPromise: addOpportunitiesToListPromise,
   updateListPromise: updateListPromise,
-  updateList: updateList
+  updateList: updateList,
+  deleteList: deleteList,
+  deleteListPromise: deleteListPromise
 };
 
 function getLists(): Observable<V3List[]> {
@@ -46,4 +48,12 @@ function createList(...args: any[]): Observable<V3List> {
 
 function createListPromise(...args: any[]): Promise<V3List> {
   return createList().toPromise();
+}
+
+function deleteList(...args: any[]): Observable<any> {
+  return Observable.of({});
+}
+
+function deleteListPromise(...args: any[]): Promise<any> {
+  return deleteList().toPromise();
 }

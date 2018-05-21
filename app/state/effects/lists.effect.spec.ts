@@ -8,32 +8,34 @@ import {
   FetchHeaderDetailsPayload,
   FetchOppsForListPayload,
   FetchListPerformancePayload,
-  FetchStoreDetailsPayload, CopyStoresToListPayload, CopyOppsToListPayload
+  FetchStoreDetailsPayload, LeaveListPayload, CopyStoresToListPayload, CopyOppsToListPayload
 } from '../actions/lists.action';
 import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
+import { getFormattedNewListMock } from '../../models/lists/formatted-new-list.model.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceDTOMock } from '../../models/lists/list-performance-dto.model.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
 import { getListPerformanceTypeMock } from '../../enums/list-performance-type.enum.mock';
-import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
+import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
 import { getOpportunitiesByStoreMock } from '../../models/lists/opportunities-by-store.model.mock';
+import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
 import * as ListActions from '../../state/actions/lists.action';
+import { ListManageActionToastType } from '../../enums/lists/list-manage-action-toast-type.enum';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../../models/lists/list-performance-dto.model';
 import { ListsEffects } from './lists.effect';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
+import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
 import { ListsTransformerService } from '../../services/lists-transformer.service';
 import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
-import { StoreDetails } from '../../models/lists/lists-store.model';
-import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
-import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
-import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
+import { StoreDetails } from '../../models/lists/lists-store.model';
 
 const chance = new Chance();
 
@@ -59,7 +61,8 @@ describe('Lists Effects', () => {
   let formattedListMock: FormattedNewList;
 
   const toastServiceMock = {
-    showCopyToListToast: jasmine.createSpy('showCopyToListToast')
+    showCopyToListToast: jasmine.createSpy('showCopyToListToast'),
+    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast')
   };
 
   const listsApiServiceMock = {
@@ -67,6 +70,9 @@ describe('Lists Effects', () => {
       return Observable.of({});
     },
     addOpportunitiesToList(listId: string, opps: [{opportunityId: string}]): Observable<object> {
+      return Observable.of({});
+    },
+    deleteList(listId: string): Observable<object> {
       return Observable.of({});
     },
     getStoreListDetails(listIdMock: string): Observable<ListStoreDTO[]> {
@@ -99,6 +105,9 @@ describe('Lists Effects', () => {
     formatListOpportunitiesData(oppotunity: Array<ListOpportunityDTO>): Array<ListsOpportunities> {
       return listOpportunities;
     },
+    getLeaveListPayload(employeeId: string, listSummary: ListsSummary): FormattedNewList {
+      return formattedListMock;
+    },
     groupOppsByStore(allOpps: Array<ListsOpportunities>): OpportunitiesByStore {
       return groupedOppsObj;
     },
@@ -123,6 +132,10 @@ describe('Lists Effects', () => {
         {
           provide: ListsTransformerService,
           useValue: listsTransformerServiceMock
+        },
+        {
+          provide: 'toastService',
+          useValue: toastServiceMock
         }
       ]
     });
@@ -137,6 +150,11 @@ describe('Lists Effects', () => {
     errorMock = new Error(chance.string());
     listPerformanceDTOMock = getListPerformanceDTOMock();
     listPerformanceMock = getListPerformanceMock();
+    formattedListMock = getFormattedNewListMock();
+  });
+
+  afterEach(() => {
+    toastServiceMock.showListDetailManageActionToast.calls.reset();
   });
 
   describe('when a FetchStoreDetails actions is received', () => {
@@ -521,6 +539,178 @@ describe('Lists Effects', () => {
           expect(response).toEqual(new ListActions.FetchOppsForListFailure(errorMock));
           done();
         });
+      });
+    });
+  });
+
+  describe('when an action of type ARCHIVE_LIST is recevied', () => {
+    let actionPayloadMock: ListsSummary;
+
+    beforeEach(() => {
+      actionPayloadMock = getListsSummaryMock();
+
+      actions$.next(new ListActions.ArchiveList(actionPayloadMock));
+    });
+
+    it('should reach out to the listsTransformerService and call convertCollaborators with the action payload', (done) => {
+      spyOn(listsTransformerService, 'convertCollaborators');
+
+      listsEffects.archiveList$().subscribe(() => {
+        done();
+      });
+
+      expect(listsTransformerService.convertCollaborators).toHaveBeenCalledWith(actionPayloadMock);
+    });
+
+    it('should reach out to the listsApiService and call updateList with the FormattedNewList having archived set to true and'
+    + ' the list id from the action payload', (done) => {
+      const expectedFormattedList: FormattedNewList = Object.assign({}, formattedListMock, {
+        archived: true
+      });
+
+      spyOn(listsApiService, 'updateList').and.callThrough();
+
+      listsEffects.archiveList$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.updateList).toHaveBeenCalledWith(expectedFormattedList, actionPayloadMock.id);
+    });
+
+    describe('when the updateList api call is successful', () => {
+      it('should show an archive success toast and dispatch an ArchiveListSuccess action', (done) => {
+        listsEffects.archiveList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.ArchiveListSuccess);
+          done();
+        });
+
+        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Archive);
+      });
+    });
+
+    describe('when the updateList api call fails', () => {
+      it('should show an archive error toast and dispatch an ArchiveListError action', (done) => {
+        spyOn(listsApiService, 'updateList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.archiveList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.ArchiveListError);
+          done();
+        });
+
+        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.ArchiveError);
+      });
+    });
+  });
+
+  describe('when an action of type DELETE_LIST is recevied', () => {
+    let actionPayloadMock: string;
+
+    beforeEach(() => {
+      actionPayloadMock = chance.string();
+
+      actions$.next(new ListActions.DeleteList(actionPayloadMock));
+    });
+
+    it('should reach out to the listsApiService and call deleteList with the payload', (done) => {
+      spyOn(listsApiService, 'deleteList').and.callThrough();
+
+      listsEffects.deleteList$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.deleteList).toHaveBeenCalledWith(actionPayloadMock);
+    });
+
+    describe('when the deleteList api call is successful', () => {
+      it('should show a delete success toast and dispatch a DeleteListSuccess action', (done) => {
+        listsEffects.deleteList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.DeleteListSuccess);
+          done();
+        });
+
+        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Delete);
+      });
+    });
+
+    describe('when the deleteList api call fails', () => {
+      it('should show a delete error toast and dispatch an DeleteListError action', (done) => {
+        spyOn(listsApiService, 'deleteList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.deleteList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.DeleteListError);
+          done();
+        });
+
+        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.DeleteError);
+      });
+    });
+  });
+
+  describe('when an action of type LEAVE_LIST is recevied', () => {
+    let actionPayloadMock: LeaveListPayload;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        currentUserEmployeeId: chance.string(),
+        listSummary: getListsSummaryMock()
+      };
+
+      actions$.next(new ListActions.LeaveList(actionPayloadMock));
+    });
+
+    it('should reach out to the listsTransformerService and call getLeaveListPayload with the action payload', (done) => {
+      spyOn(listsTransformerService, 'getLeaveListPayload');
+
+      listsEffects.leaveList$().subscribe(() => {
+        done();
+      });
+
+      expect(listsTransformerService.getLeaveListPayload).toHaveBeenCalledWith(
+        actionPayloadMock.currentUserEmployeeId,
+        actionPayloadMock.listSummary
+      );
+    });
+
+    it('should reach out to the listsApiService and call updateList with the leave list payload and'
+    + ' the list id from the action payload', (done) => {
+      actionPayloadMock.currentUserEmployeeId = actionPayloadMock.listSummary.collaborators[0].employeeId;
+
+      const expectedUpdateListPayload: FormattedNewList = Object.assign({}, formattedListMock, {
+        collaboratorEmployeeIds: formattedListMock.collaboratorEmployeeIds.filter((employeeId: string) => {
+          return employeeId !== actionPayloadMock.currentUserEmployeeId;
+        })
+      });
+
+      spyOn(listsApiService, 'updateList').and.callThrough();
+
+      listsEffects.leaveList$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.updateList).toHaveBeenCalledWith(expectedUpdateListPayload, actionPayloadMock.listSummary.id);
+    });
+
+    describe('when the updateList api call is successful', () => {
+      it('should show a leave list success toast and dispatch an LeaveListSuccess action', (done) => {
+        listsEffects.leaveList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.LeaveListSuccess);
+          done();
+        });
+
+        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
+      });
+    });
+
+    describe('when the updateList api call fails', () => {
+      it('should show a leave list error toast and dispatch a LeaveListError action', (done) => {
+        spyOn(listsApiService, 'updateList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.leaveList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.LeaveListError);
+          done();
+        });
+
+        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.LeaveError);
       });
     });
   });

@@ -1,4 +1,6 @@
 beer-loader.individual-loader(*ngIf="copyToListLoader", [showLoader]="copyToListLoader")
+beer-loader(*ngIf="showManageListLoader", [showLoader]="showManageListLoader")
+
 lists-header(
   [summaryData]="listSummary",
   (manageButtonClicked)="handleManageButtonClick()",

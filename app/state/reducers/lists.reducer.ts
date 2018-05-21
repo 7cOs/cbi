@@ -38,6 +38,7 @@ interface ListPerformanceState {
 export interface ListsState {
   allLists: AllListsState;
   copyStatus: ActionStatus;
+  manageListStatus: ActionStatus;
   listSummary: ListSummaryState;
   listStores: ListStoresState;
   listOpportunities: ListsOpportunitiesState;
@@ -52,6 +53,7 @@ export const initialState: ListsState = {
     status: ActionStatus.NotFetched,
   },
   copyStatus: ActionStatus.NotFetched,
+  manageListStatus: ActionStatus.NotFetched,
   listSummary: {
     summaryStatus: ActionStatus.NotFetched,
     summaryData: {
@@ -97,6 +99,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: ActionStatus.NotFetched,
+        manageListStatus: ActionStatus.NotFetched,
         listSummary:  state.listSummary,
         listStores:  Object.assign({}, state.listStores, {
           storeStatus: ActionStatus.Fetching
@@ -109,6 +112,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listSummary:  state.listSummary,
         listStores:  Object.assign({}, state.listStores, {
           storeStatus: ActionStatus.Fetched,
@@ -122,6 +126,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listSummary:  state.listSummary,
         listStores:  Object.assign({}, state.listStores, {
           storeStatus: ActionStatus.Error
@@ -134,6 +139,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Fetching
@@ -146,6 +152,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Fetched,
@@ -159,6 +166,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Error
@@ -171,6 +179,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  state.listSummary,
         listOpportunities: Object.assign({}, state.listOpportunities, {
@@ -183,6 +192,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  state.listSummary,
         listOpportunities: Object.assign({}, state.listOpportunities, {
@@ -196,6 +206,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  state.listSummary,
         listOpportunities: Object.assign({}, state.listOpportunities, {
@@ -276,6 +287,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Fetching
@@ -288,6 +300,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Fetched,
@@ -301,6 +314,7 @@ export function listsReducer(
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,
+        manageListStatus: state.manageListStatus,
         listStores:  state.listStores,
         listSummary:  Object.assign({}, state.listSummary, {
           summaryStatus: ActionStatus.Error
@@ -325,6 +339,27 @@ export function listsReducer(
     case ListsActionTypes.COPY_OPPS_TO_LIST_ERROR:
       return Object.assign({}, state, {
         copyStatus: ActionStatus.Error
+      });
+
+    case ListsActionTypes.ARCHIVE_LIST:
+    case ListsActionTypes.DELETE_LIST:
+    case ListsActionTypes.LEAVE_LIST:
+      return Object.assign({}, state, {
+        manageListStatus: ActionStatus.Fetching
+      });
+
+    case ListsActionTypes.ARCHIVE_LIST_SUCCESS:
+    case ListsActionTypes.DELETE_LIST_SUCCESS:
+    case ListsActionTypes.LEAVE_LIST_SUCCESS:
+      return Object.assign({}, state, {
+        manageListStatus: ActionStatus.Fetched
+      });
+
+    case ListsActionTypes.ARCHIVE_LIST_ERROR:
+    case ListsActionTypes.DELETE_LIST_ERROR:
+    case ListsActionTypes.LEAVE_LIST_ERROR:
+      return Object.assign({}, state, {
+        manageListStatus: ActionStatus.Error
       });
 
     default:
