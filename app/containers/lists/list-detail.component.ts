@@ -100,6 +100,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
+  public isPerformanceRowSelect: boolean = false;
+  public isOpportunityRowSelect: boolean = false;
+  public isSelectAllPerformanceChecked: boolean = false;
+  public isSelectAllOpportunitiesChecked: boolean = false;
   public downloadAllModalStringInputs: CompassActionModalInputs;
   public copyToListModalStringInputs: CompassActionModalInputs;
   public copyToListLoader: boolean;
@@ -196,6 +200,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         if (listDetail.copyStatus !== ActionStatus.NotFetched) {
           this.copyToListLoader = listDetail.copyStatus === ActionStatus.Fetching;
         }
+
+        if (listDetail.copyStatus === ActionStatus.Fetched || listDetail.copyStatus === ActionStatus.Error) {
+          this.handlePaginationReset();
+          this.isPerformanceRowSelect = false;
+          this.isOpportunityRowSelect = false;
+        }
+
       });
   }
 
@@ -320,11 +331,29 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.$state.go('lists');
   }
 
+  public setPerformanceRowSelected(performanceRowTrueCount: number) {
+    performanceRowTrueCount !== 0 ? this.isPerformanceRowSelect = true : this.isPerformanceRowSelect = false;
+  }
+
+  public setSelectAllPerformance(selectAllChecked: boolean) {
+    this.isPerformanceRowSelect = selectAllChecked;
+  }
+
+  public setSelectAllOpportunity(selectAllChecked: boolean) {
+    this.isOpportunityRowSelect = selectAllChecked;
+  }
+
+  public setOpportunityRowSelected(opportunityRowTrueCount: number) {
+    opportunityRowTrueCount !== 0 ? this.isOpportunityRowSelect = true : this.isOpportunityRowSelect = false;
+  }
+
   public onTabClicked(tabName: string): void {
     this.selectedTab = tabName;
     if (tabName !== this.activeTab) {
       this.activeTab = tabName;
       this.paginationReset.next();
+      this.isPerformanceRowSelect = false;
+      this.isOpportunityRowSelect = false;
       this.sortReset.next();
     }
     if (tabName === this.performanceTabTitle) {
