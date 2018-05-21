@@ -220,7 +220,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     };
 
     if (this.selectedTab === this.opportunitiesTabTitle) {
-      const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+      const checkedOpps: {opportunityId: string}[] = this.opportunitiesTableData.reduce((totalOpps, store) => {
         store.opportunities.forEach((opp) => {
           if (opp.checked === true) totalOpps.push({opportunityId: opp.id});
         });
@@ -228,7 +228,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       }, []);
       this.copyToListModal(checkedOpps, this.selectedTab);
     } else {
-      const checkedStores = this.performanceTableData.reduce((totalStores, store) => {
+      const checkedStores: string[] = this.performanceTableData.reduce((totalStores, store) => {
         if (store.checked === true) totalStores.push(store.unversionedStoreId);
         return totalStores;
       }, []);
