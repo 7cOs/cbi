@@ -88,6 +88,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
   public unversionedStoreId: string;
   public isExpandAll: boolean = false;
   public opportunitiesTableData: Array<ListOpportunitiesTableRow>;
+  public checkCount: number = 0;
 
   private isOpportunityTableExtended: boolean = false;
   private defaultSortCriteria: Array<SortingCriteria>;
@@ -241,18 +242,12 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
       return isEveryOppChecked;
     }, true);
 
-    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
-      store.opportunities.forEach((opp) => {
-      if (opp.checked === true) totalOpps.push(opp);
-      });
-      return totalOpps;
-    }, []);
-
+    if ( storeRow.checked ) this.checkCount++; else this.checkCount--;
     const selectedAllCheckboxState: OpportunitiesTableSelectAllCheckboxState = this.getSelectAllCheckboxState(this.sortedTableData);
 
     this.isSelectAllChecked = selectedAllCheckboxState.isSelectAllChecked;
     this.isIndeterminateChecked = selectedAllCheckboxState.isIndeterminateChecked;
-    this.onRowChecked.emit(checkedOpps.length);
+    this.onRowChecked.emit(this.checkCount);
   }
 
   public isOppsTableDataEmpty(): boolean {

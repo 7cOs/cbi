@@ -4,7 +4,8 @@ export enum ActionStatus {
   Fetched = 'Fetched',
   Error = 'Error',
   Deleting = 'Deleting',
-  DeleteSuccess = 'DeleteSuccess'
+  DeleteSuccess = 'DeleteSuccess',
+  DeleteFailure = 'DeleteFailure'
 }
 
 export interface State {

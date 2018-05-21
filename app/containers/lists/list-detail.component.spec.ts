@@ -26,6 +26,8 @@ import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.mod
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
+import { getListStorePerformanceArrayMock } from '../../models/lists/list-store-performance.model.mock';
+import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 const chance = new Chance();
 
@@ -148,7 +150,8 @@ describe('ListDetailComponent', () => {
       title: chance.string()
     },
     params: {
-      id: chance.string()
+      id: chance.string(),
+      listId: chance.string()
     }
   };
 
@@ -397,6 +400,51 @@ describe('ListDetailComponent', () => {
           expect([OpportunityStatus.targeted, OpportunityStatus.inactive]).toContain(oppRow.status);
         });
       });
+    });
+  });
+
+  describe('[Method] removeSelectedOpportunities', () => {
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+    let testBed: TestBed;
+    let store: Store<AppState>;
+    beforeEach(() => {
+      testBed = getTestBed();
+      store = testBed.get(Store);
+      opportunitiesTableData = getListOpportunitiesTableRowMock(3);
+      opportunitiesTableData[0].opportunities[0].checked = true;
+      componentInstance.opportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+    });
+    it('Should filter out all selected opportunities and call the removal action', () => {
+      storeMock.dispatch.calls.reset();
+      componentInstance.removeSelectedOpportunities();
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new ListsActions.RemoveOppFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
+          oppId: opportunitiesTableData[0].opportunities[0].id}));
+    });
+  });
+  describe('[Method] removeSelectedStores', () => {
+    let performanceTableData: ListPerformanceTableRow[];
+    let testBed: TestBed;
+    let store: Store<AppState>;
+    beforeEach(() => {
+      testBed = getTestBed();
+      store = testBed.get(Store);
+      performanceTableData = getListPerformanceTableRowMock(3);
+      performanceTableData[0].checked = true;
+      componentInstance.performanceTableData = performanceTableData;
+      fixture.detectChanges();
+      const selectorFunction = storeMock.select.calls.argsFor(0)[0];
+      expect(selectorFunction(stateMock)).toBe(stateMock.listsDetails);
+    });
+    it('Should filter out all selected Stores and call the removal action', () => {
+      storeMock.dispatch.calls.reset();
+      componentInstance.removeSelectedStores();
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new ListsActions.RemoveStoreFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
+          storeSourceCode: performanceTableData[0].storeSourceCode }));
     });
   });
 });

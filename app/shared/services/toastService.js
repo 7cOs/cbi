@@ -17,7 +17,9 @@ module.exports = /*  @ngInject */
       reportDeleted: false,
       reportSaved: false,
       storeRemoved: false,
-      oppRemoved: false
+      oppRemoved: false,
+      storeRemovedError: false,
+      oppRemovedError: false
     };
 
     var service = {

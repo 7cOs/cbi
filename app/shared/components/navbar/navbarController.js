@@ -120,6 +120,8 @@ module.exports = /*  @ngInject */
       vm.multipleTargetListsSelected = newWatchValues.multipleTargetListsSelected;
       vm.performanceDataError = newWatchValues.performanceDataError;
       vm.opportunityCountError = newWatchValues.opportunityCountError;
+      vm.storeRemovedError = newWatchValues.storeRemovedError;
+      vm.oppRemovedError = newWatchValues.oppRemovedError;
     }, true);
 
     init();

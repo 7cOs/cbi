@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -8,6 +8,8 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
+import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
+import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
@@ -27,13 +29,7 @@ import { ListPerformanceColumnType } from '../../enums/list-performance-column-t
 import { LoadingState } from '../../enums/loading-state.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { User } from '../../models/lists/user.model';
-import { forEach } from '@uirouter/core';
-import { Observable } from 'rxjs/Observable';
-import { ListsApiService } from '../../services/api/v3/lists-api.service';
-import { Action } from 'rxjs/scheduler/Action';
-import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
 
 interface ListPageClick {
   pageNumber: number;
@@ -86,12 +82,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public isOpportunityRowSelect: boolean = false;
   public isSelectAllPerformanceChecked: boolean = false;
   public isSelectAllOpportunitiesChecked: boolean = false;
-  public  removeStoresModalInputs: CompassAlertModalInputs = {
+  public removeStoresModalInputs: CompassAlertModalInputs = {
     'title': 'Are you sure?',
     'body': 'Removing the stores from a list will remove all store performance and opportunities associated with the stores.',
     'rejectLabel': 'Cancel',
     'acceptLabel': 'Remove'};
-  public  removeOppsModalInputs: CompassAlertModalInputs = {
+  public removeOppsModalInputs: CompassAlertModalInputs = {
     'title': 'Are you sure?',
     'body': 'Removing the opportunities from a list cannont be undone. Store performance will still be available.',
     'rejectLabel': 'Cancel',
@@ -177,12 +173,17 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.handlePaginationReset();
           this.isPerformanceRowSelect = false;
           this.toastService.showToast('storeRemoved');
+        } else if (listDetail.listStores.storeStatus === ActionStatus.DeleteFailure
+          && listDetail.listSummary.summaryStatus === ActionStatus.DeleteFailure) {
+          this.toastService.showToast('storeRemovedFailure');
         }
 
         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteSuccess) {
           this.handlePaginationReset();
           this.isOpportunityRowSelect = false;
           this.toastService.showToast('oppRemoved');
+        } else if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteFailure) {
+          this.toastService.showToast('oppRemovedFailure');
         }
         this.loadingState = LoadingState.Loaded;
       });

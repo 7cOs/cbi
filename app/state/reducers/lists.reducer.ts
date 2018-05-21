@@ -271,10 +271,10 @@ export function listsReducer(
       case ListsActions.DELETE_STORE_FROM_LIST_FAILURE:
       return {
         listStores:  Object.assign({}, state.listStores, {
-          storeStatus: ActionStatus.Error
+          storeStatus: ActionStatus.DeleteFailure
         }),
         listSummary:  Object.assign({}, state.listSummary, {
-          summaryStatus: ActionStatus.Error
+          summaryStatus: ActionStatus.DeleteFailure
         }),
         listOpportunities: state.listOpportunities,
         performance: state.performance
@@ -305,7 +305,7 @@ export function listsReducer(
         listStores:  state.listStores,
         listSummary:  state.listSummary,
         listOpportunities: Object.assign({}, state.listOpportunities, {
-          opportunitiesStatus: ActionStatus.Error
+          opportunitiesStatus: ActionStatus.DeleteFailure
         }),
         performance: state.performance
       };
