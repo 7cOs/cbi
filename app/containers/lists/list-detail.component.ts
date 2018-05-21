@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
@@ -23,6 +24,7 @@ import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.mod
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
+import { LoadingState } from '../../enums/loading-state.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
@@ -31,6 +33,7 @@ import { forEach } from '@uirouter/core';
 import { Observable } from 'rxjs/Observable';
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
 import { Action } from 'rxjs/scheduler/Action';
+import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
 
 interface ListPageClick {
   pageNumber: number;
@@ -83,8 +86,19 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public isOpportunityRowSelect: boolean = false;
   public isSelectAllPerformanceChecked: boolean = false;
   public isSelectAllOpportunitiesChecked: boolean = false;
-
+  public  removeStoresModalInputs: CompassAlertModalInputs = {
+    'title': 'Are you sure?',
+    'body': 'Removing the stores from a list will remove all store performance and opportunities associated with the stores.',
+    'rejectLabel': 'Cancel',
+    'acceptLabel': 'Remove'};
+  public  removeOppsModalInputs: CompassAlertModalInputs = {
+    'title': 'Are you sure?',
+    'body': 'Removing the opportunities from a list cannont be undone. Store performance will still be available.',
+    'rejectLabel': 'Cancel',
+    'acceptLabel': 'Remove'};
+  public loadingStateEnum = LoadingState;
   private listDetailSubscription: Subscription;
+  private loadingState: LoadingState = LoadingState.Loaded;
 
   constructor(
     private listsTableTransformerService: ListsTableTransformerService,
@@ -170,20 +184,39 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.isOpportunityRowSelect = false;
           this.toastService.showToast('oppRemoved');
         }
+        this.loadingState = LoadingState.Loaded;
       });
   }
 
   captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
     if (this.selectedTab === this.performanceTabTitle) {
       if (actionButtonProperties.actionType === ActionButtonType.Remove) {
-        this.removeSelectedStores();
+        this.launchRemoveStoresConfirmation();
       }
     }
     if (this.selectedTab === this.opportunitiesTabTitle) {
       if (actionButtonProperties.actionType === ActionButtonType.Remove) {
-        this.removeSelectedOpportunities();
+        this.launchRemoveOppsConfirmation();
       }
     }
+  }
+
+  launchRemoveStoresConfirmation(): void {
+    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.removeStoresModalInputs, {});
+    compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((value: string) => {
+      if (value === CompassAlertModalEvent.Accept) {
+        this.removeSelectedStores();
+      }
+    });
+  }
+
+  launchRemoveOppsConfirmation(): void {
+    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.removeOppsModalInputs, {});
+    compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((value: string) => {
+      if (value === CompassAlertModalEvent.Accept) {
+        this.removeSelectedOpportunities();
+      }
+    });
   }
 
   removeSelectedOpportunities(): void {
@@ -202,6 +235,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
     checkedStores.forEach((store) => {
       this.store.dispatch(new ListsActions.RemoveStoreFromList({listId: this.listSummary.id, storeSourceCode: store.storeSourceCode}));
+      this.loadingState = LoadingState.Loading;
     });
   }
 

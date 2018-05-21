@@ -3,7 +3,6 @@ lists-header(
   (manageButtonClicked)="handleManageButtonClick()",
   (listsLinkClicked)="handleListsLinkClick()"
 )
-
 compass-tabs(
   (onTabClicked)="onTabClicked($event)"
 )
@@ -42,6 +41,7 @@ compass-tabs(
       [pageChangeData]="pageChangeData",
       [sortReset]="sortReset",
       [paginationResetIn]='paginationReset',
+      [loadingState]='loadingState',
       (paginationReset)="handlePaginationReset()",
       (onRowChecked)='setPerformanceRowSelected($event)',
       (onSelectAllChecked)='setSelectAllPerformance($event)'
@@ -58,7 +58,7 @@ compass-tabs(
       div.button-section
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",
-          [isDisabled]="!isOpportunityRowSelect || !isSelectAllOpportunityChecked",
+          [isDisabled]="!isOpportunityRowSelect",
           (onActionButtonClicked)="captureActionButtonClicked($event)"
         )
     list-opportunities-table(
