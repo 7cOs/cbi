@@ -26,7 +26,7 @@ export class CompassActionModalComponent implements OnInit {
   public dropdownInputModel: DropdownInputModel;
   public radioOptionSelected: string;
   public dropdownOptionSelected: string;
-  public copyButtonDisabled: boolean;
+  public copyButtonDisabled: boolean = true;
 
   constructor(
     @Inject(COMPASS_ACTION_MODAL_INPUTS) public modalInputs: CompassActionModalInputs
@@ -36,8 +36,6 @@ export class CompassActionModalComponent implements OnInit {
     this.radioOptionSelected = ListsDownloadType.Stores;
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
     this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
-    this.copyButtonDisabled = this.dropdownInputModel.selected === 'Choose a List';
-    console.log(this.copyButtonDisabled);
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
@@ -54,6 +52,7 @@ export class CompassActionModalComponent implements OnInit {
 
   public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
+    this.copyButtonDisabled = this.dropdownOptionSelected === 'Choose a List';
   }
 
   public optionsSelected() {
