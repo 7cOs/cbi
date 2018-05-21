@@ -37,6 +37,17 @@ interface ListPageClick {
   pageNumber: number;
 }
 
+interface DropDownMenu {
+  display: string;
+  value: string;
+}
+
+interface DropDownInputModel {
+  selected: string;
+  dropdownOptions: DropDownMenu[];
+  title: string;
+}
+
 export interface PageChangeData {
   pageStart: number;
   pageEnd: number;
@@ -99,7 +110,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     stacked: false
   };
 
-  public dropdownInputModel: any;
+  public dropdownInputModel: DropDownInputModel;
 
   public downloadBodyHTML: string;
 
@@ -194,7 +205,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public copyToListClick(): void {
     const ownedAndSharedList = this.allLists.owned.concat(this.allLists.sharedWithMe);
-    const listDropDownMenu = ownedAndSharedList.map((list: V3List) => {
+    const listDropDownMenu: DropDownMenu[] = ownedAndSharedList.map((list: V3List) => {
       return {
         display: list.name,
         value: list.id
@@ -361,7 +372,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
     this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
       const listId: string = value.dropdownOptionSelected;
-      console.log('accept clicked');
       if (tabName === this.performanceTabTitle) {
         checkedEntities.forEach((storeCode: string) => {
           this.store.dispatch(new ListsActions.CopyStoresToList({listId: listId, id: storeCode}));
