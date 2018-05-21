@@ -92,6 +92,9 @@ describe('ListsTableTransformerService', () => {
             performanceError: false,
             checked: false,
             expanded: false,
+            storeNumber: storeDetailsMock[index].number,
+            storeCity: storeDetailsMock[index].city,
+            storeState: storeDetailsMock[index].state,
             unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
 
@@ -146,6 +149,9 @@ describe('ListsTableTransformerService', () => {
           performanceError: true,
           checked: false,
           expanded: false,
+          storeNumber: storeDetailsMock[0].number,
+          storeCity: storeDetailsMock[0].city,
+          storeState: storeDetailsMock[0].state,
           unversionedStoreId: storeDetailsMock[0].unversionedStoreId
         });
       });
@@ -210,7 +216,11 @@ describe('ListsTableTransformerService', () => {
             ),
             lastDepletionDateColumn: moment(volumeStorePerformanceMock[index].lastSoldDate).format('MM/DD/YY'),
             performanceError: false,
-            checked: false
+            checked: false,
+            storeNumber: storeDetailsMock[index].number,
+            storeCity: storeDetailsMock[index].city,
+            storeState: storeDetailsMock[index].state,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
         });
       });
@@ -239,7 +249,11 @@ describe('ListsTableTransformerService', () => {
             l90VersusYaPercentColumn: 0,
             lastDepletionDateColumn: '-',
             performanceError: true,
-            checked: false
+            checked: false,
+            storeNumber: storeDetailsMock[index].number,
+            storeCity: storeDetailsMock[index].city,
+            storeState: storeDetailsMock[index].state,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
         });
       });
@@ -274,7 +288,11 @@ describe('ListsTableTransformerService', () => {
         l90VersusYaPercentColumn: calculatorService.getYearAgoPercent(podPerformanceMock.current, podPerformanceMock.yearAgo),
         lastDepletionDateColumn: '',
         performanceError: false,
-        checked: false
+        checked: false,
+        storeNumber: '',
+        storeCity: '',
+        storeState: '',
+        unversionedStoreId: ''
       });
     });
   });

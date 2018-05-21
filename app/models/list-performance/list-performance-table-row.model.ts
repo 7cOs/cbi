@@ -12,4 +12,8 @@ export interface ListPerformanceTableRow {
   lastDepletionDateColumn: string;
   performanceError: boolean;
   checked: boolean;
+  storeNumber: string;
+  storeCity: string;
+  storeState: string;
+  unversionedStoreId: string;
 }

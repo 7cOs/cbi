@@ -21,6 +21,9 @@ export function getListOpportunitiesTableRowMock(length: number): ListOpportunit
       performanceError: false,
       checked: false,
       expanded: false,
+      storeNumber: chance.string(),
+      storeCity: chance.string(),
+      storeState: chance.string(),
       unversionedStoreId: chance.string()
     });
   }
