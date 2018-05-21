@@ -38,6 +38,11 @@ export interface LeaveListPayload {
   listSummary: ListsSummary;
 }
 
+export interface CopyOppsToListPayload {
+  listId: string;
+  ids: {opportunityId: string}[];
+}
+
 export const FETCH_STORE_DETAILS = ListsActionTypes.FETCH_STORE_DETAILS;
 export class FetchStoreDetails implements Action {
   readonly type = FETCH_STORE_DETAILS;

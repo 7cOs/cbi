@@ -17,7 +17,8 @@
 
     span(ng-switch-when="false")
       md-menu(md-offset="0 45" ng-if="list.showAddToTargetList")
-        button.btn-action(aria-label="Add to List" ng-click="$mdOpenMenu($event)") Add to List
+        //- button.btn-action(aria-label="Add to List" ng-click="$mdOpenMenu($event)") Add to List
+        button.btn-action(aria-label="Add to List" ng-click="list.openAddToListModal()") Add to List
         md-menu-content.target-list-menu
           md-menu-item(ng-click="list.createNewList($event)")
             p Create New List
