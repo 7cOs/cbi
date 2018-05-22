@@ -119,7 +119,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public downloadBodyHTML: string;
 
   private listDetailSubscription: Subscription;
-  private loadingState: LoadingState = LoadingState.Loaded;
 
   constructor(
     private compassModalService: CompassModalService,

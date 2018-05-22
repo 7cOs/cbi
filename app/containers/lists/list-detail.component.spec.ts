@@ -544,8 +544,6 @@ describe('ListDetailComponent', () => {
   });
   describe('[Method] removeSelectedOpportunities', () => {
     let opportunitiesTableData: ListOpportunitiesTableRow[];
-    let testBed: TestBed;
-    let store: Store<AppState>;
     beforeEach(() => {
       testBed = getTestBed();
       store = testBed.get(Store);
@@ -565,8 +563,6 @@ describe('ListDetailComponent', () => {
   });
   describe('[Method] removeSelectedStores', () => {
     let performanceTableData: ListPerformanceTableRow[];
-    let testBed: TestBed;
-    let store: Store<AppState>;
     beforeEach(() => {
       testBed = getTestBed();
       store = testBed.get(Store);

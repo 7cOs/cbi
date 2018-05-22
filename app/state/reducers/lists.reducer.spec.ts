@@ -12,13 +12,12 @@ import { getStoreListsMock } from '../../models/lists/lists-store.model.mock';
 import { initialState, listsReducer, ListsState } from './lists.reducer';
 import * as ListsActions from '../actions/lists.action';
 import { ListPerformance } from '../../models/lists/list-performance.model';
-import { Action } from 'rxjs/scheduler/Action';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 
 const chance = new Chance();
 const listIdMock = chance.string();
+const oppIdMock = chance.string();
 const storeSourceCode = chance.string();
-const oppId = chance.string();
 
 describe('Lists Reducer', () => {
 
@@ -602,13 +601,12 @@ describe('Lists Reducer', () => {
         };
 
         const actualState = listsReducer(initialState, new ListsActions.RemoveStoreFromList(
-          {listId: this.listIdMock, storeSourceCode: this.storeSourceCode}));
+          {listId: listIdMock, storeSourceCode: storeSourceCode}));
 
         expect(actualState).toEqual(expectedState);
       });
 
     it('should update the list stores and list summary to DeleteSuccess on success', () => {
-      const headersMock = getListsSummaryMock();
 
       const expectedState: ListsState = {
         listStores: {
@@ -626,7 +624,7 @@ describe('Lists Reducer', () => {
 
       const actualState = listsReducer(
         initialState,
-        new ListsActions.RemoveStoreFromListSuccess({listId: this.listIdMock, storeSourceCode: this.storeSourceCode})
+        new ListsActions.RemoveStoreFromListSuccess({listId: listIdMock, storeSourceCode: storeSourceCode})
       );
 
       expect(actualState).toEqual(expectedState);
@@ -669,7 +667,7 @@ describe('Lists Reducer', () => {
         };
 
         const actualState = listsReducer(initialState, new ListsActions.RemoveOppFromList(
-          {listId: this.listIdMock, oppId: this.oppId}));
+          {listId: listIdMock, oppId: oppIdMock}));
 
         expect(actualState).toEqual(expectedState);
       });
@@ -689,7 +687,7 @@ describe('Lists Reducer', () => {
 
       const actualState = listsReducer(
         initialState,
-        new ListsActions.RemoveOppFromListSuccess({listId: this.listIdMock, oppId: this.oppId})
+        new ListsActions.RemoveOppFromListSuccess({listId: listIdMock, oppId: oppIdMock})
       );
 
       expect(actualState).toEqual(expectedState);
