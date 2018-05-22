@@ -3,10 +3,12 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
 
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
@@ -76,7 +78,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableData: ListPerformanceTableRow[];
   public opportunitiesTableDataSize: number;
   public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
-  public compassModalOverlayRef: CompassManageListModalOverlayRef;
   public currentUser: User;
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
@@ -233,13 +234,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         });
         return totalOpps;
       }, []);
-      this.copyToListModal(checkedOpps, this.selectedTab);
+      this.copyToListModal(checkedOpps);
     } else {
       const checkedStores: string[] = this.performanceTableData.reduce((totalStores, store) => {
         if (store.checked === true) totalStores.push(store.unversionedStoreId);
         return totalStores;
       }, []);
-      this.copyToListModal(checkedStores, this.selectedTab);
+      this.copyToListModal(checkedStores);
 
     }
   }
@@ -395,6 +396,18 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (manageListStatus === ActionStatus.Fetched) this.$state.go('lists');
   }
 
+  public handleCopyModalEvent (value: CompassActionModalOutputs, checkedEntities: (string | {opportunityId: string})[]) {
+    const listId: string = value.dropdownOptionSelected;
+    if (this.selectedTab === this.performanceTabTitle) {
+      checkedEntities.forEach((storeCode: string) => {
+        this.store.dispatch(new ListsActions.CopyStoresToList({listId: listId, id: storeCode}));
+      });
+    } else {
+      const opportunityIds = <{opportunityId: string}[]>checkedEntities;
+      this.store.dispatch(new ListsActions.CopyOppsToList({listId: listId, ids: opportunityIds}));
+    }
+  }
+
   private isListPerformanceFetched(
     storeStatus: ActionStatus,
     volumePerformanceStatus: ActionStatus,
@@ -415,7 +428,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       && opportunitiesStatus === ActionStatus.Fetched;
   }
 
-  private copyToListModal(checkedEntities: (string | {opportunityId: string})[], tabName: string): void {
+  private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
     this.copyToListModalStringInputs = {
       'title': 'Copy to List',
       'dropdownInputModel': this.dropdownInputModel,
@@ -423,16 +436,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       'rejectLabel': 'CANCEL'
     };
     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
-    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-      const listId: string = value.dropdownOptionSelected;
-      if (tabName === this.performanceTabTitle) {
-        checkedEntities.forEach((storeCode: string) => {
-          this.store.dispatch(new ListsActions.CopyStoresToList({listId: listId, id: storeCode}));
-        });
-      } else {
-          const opportunityIds = <{opportunityId: string}[]>checkedEntities;
-          this.store.dispatch(new ListsActions.CopyOppsToList({listId: listId, ids: opportunityIds}));
-      }
+    const subscription = Observable.fromPromise(
+      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
+    );
+    subscription.subscribe((value: any) => {
+      this.handleCopyModalEvent(value, checkedEntities);
     });
   }
 

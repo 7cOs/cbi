@@ -10,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
+import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput }from '../../models/compass-manage-list-modal-output.model';
 import { CompassSelectComponent } from '../../shared/components/compass-select/compass-select.component';
@@ -543,50 +544,61 @@ describe('ListDetailComponent', () => {
 
     describe('Copy Opportunities To Lists', () => {
       let opportunitiesTableData: ListOpportunitiesTableRow[];
+      let modalOutputMock: CompassActionModalOutputs, checkedEntitiesMock: {opportunityId: string}[];
       beforeEach(() => {
-        testBed = getTestBed();
-        store = testBed.get(Store);
+        modalOutputMock = {
+          radioOptionSelected: chance.string(),
+          dropdownOptionSelected: chance.string()
+        };
         opportunitiesTableData = getListOpportunitiesTableRowMock(3);
         opportunitiesTableData[0].opportunities[0].checked = true;
         componentInstance.opportunitiesTableData = opportunitiesTableData;
+        checkedEntitiesMock = [{opportunityId: opportunitiesTableData[0].opportunities[0].id}];
+        componentInstance.selectedTab = componentInstance.opportunitiesTabTitle;
         fixture.detectChanges();
       });
 
       it('should filter the checked opportunities and dispatch action for copy to List', () => {
         storeMock.dispatch.calls.reset();
-        componentInstance.copyToListClick();
-        componentInstance.selectedTab = componentInstance.opportunitiesTabTitle;
+        componentInstance.handleCopyModalEvent(modalOutputMock, checkedEntitiesMock);
 
-        // const overLayRef = componentInstance.compassModalService.showActionModalDialog
-        // (componentInstance.copyToListModalStringInputs, null);
         expect(storeMock.dispatch.calls.count()).toBe(1);
-        const idsParam = [{opportunityId: opportunitiesTableData[0].opportunities[0].id}];
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-          new ListsActions.CopyOppsToList({listId: stateMock.listsDetails.listSummary.summaryData.id,
-            ids: idsParam}));
+          new ListsActions.CopyOppsToList({listId: modalOutputMock.dropdownOptionSelected,
+            ids: checkedEntitiesMock}));
       });
     });
 
     describe('Copy Stores To Lists', () => {
       let performanceTableData: ListPerformanceTableRow[];
+      let modalOutputMock: CompassActionModalOutputs, checkedEntitiesMock: string[];
       beforeEach(() => {
+        modalOutputMock = {
+          radioOptionSelected: chance.string(),
+          dropdownOptionSelected: chance.string()
+        };
         testBed = getTestBed();
         store = testBed.get(Store);
         performanceTableData = getListPerformanceTableRowMock(3);
         performanceTableData[0].checked = true;
+        performanceTableData[1].checked = true;
         componentInstance.performanceTableData = performanceTableData;
+        checkedEntitiesMock = [performanceTableData[0].unversionedStoreId, performanceTableData[1].unversionedStoreId];
+        componentInstance.selectedTab = componentInstance.performanceTabTitle;
         fixture.detectChanges();
       });
 
       it('should filter the checked stores and dispatch action for copy to List', () => {
         storeMock.dispatch.calls.reset();
-        componentInstance.copyToListClick();
-        componentInstance.selectedTab = componentInstance.performanceTabTitle;
+        componentInstance.handleCopyModalEvent(modalOutputMock, checkedEntitiesMock);
 
-        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-          new ListsActions.CopyStoresToList({listId: stateMock.listsDetails.listSummary.summaryData.id,
+          new ListsActions.CopyStoresToList({listId: modalOutputMock.dropdownOptionSelected,
             id: performanceTableData[0].unversionedStoreId}));
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+          new ListsActions.CopyStoresToList({listId: modalOutputMock.dropdownOptionSelected,
+            id: performanceTableData[1].unversionedStoreId}));
       });
     });
   });
