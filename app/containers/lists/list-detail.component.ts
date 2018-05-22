@@ -17,7 +17,7 @@ import { CompassSelectOption } from '../../models/compass-select-component.model
 import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DropdownInputModel, DropDownMenu } from '../../models/compass-dropdown-input.model';
-import { RadioInputModel } from '../../models/compass-radio-input.model';
+import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
@@ -33,9 +33,9 @@ import { ListsTableTransformerService } from '../../services/transformers/lists-
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
+import { RadioInputModel } from '../../models/compass-radio-input.model';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { User } from '../../models/lists/user.model';
-import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import { V3List } from '../../models/lists/v3-list.model';
 
 interface ListPageClick {
@@ -206,12 +206,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
-    console.log([actionButtonProperties.actionType,  '- Action Button is clicked'].join(' '));
-  }
-
   public copyToListClick(): void {
-    const ownedAndSharedList = this.allLists.owned.concat(this.allLists.sharedWithMe);
+    const ownedAndSharedList: V3List[] = this.allLists.owned.concat(this.allLists.sharedWithMe);
     const listDropDownMenu: DropDownMenu[] = ownedAndSharedList.map((list: V3List) => {
       return {
         display: list.name,

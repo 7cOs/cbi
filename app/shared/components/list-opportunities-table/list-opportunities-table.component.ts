@@ -87,7 +87,6 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
   public unversionedStoreId: string;
   public isExpandAll: boolean = false;
   public opportunitiesTableData: Array<ListOpportunitiesTableRow>;
-  public checkCount: number = 0;
 
   private isOpportunityTableExtended: boolean = false;
   private defaultSortCriteria: Array<SortingCriteria>;

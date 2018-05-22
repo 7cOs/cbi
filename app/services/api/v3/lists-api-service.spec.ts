@@ -12,6 +12,7 @@ import { getStoreListsDTOMock } from '../../../models/lists/lists-store-dto.mode
 import { getListPerformanceTypeMock } from '../../../enums/list-performance-type.enum.mock';
 import { getListOpportunitiesDTOMock } from '../../../models/lists/lists-opportunities-dto.model.mock';
 import { getFormattedNewList } from '../../../models/lists/lists.model.mock';
+import { generateRandomSizedArray } from '../../../models/util.model';
 import { ListsApiService } from './lists-api.service';
 import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
 import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
@@ -78,7 +79,7 @@ describe('ListsApiService', () => {
   describe('addOpportunitiesToList', () => {
     it('should post a list of opportunities to the lists/:id/opportunities endpoint', () => {
       const listId = chance.string();
-      const body = [{opportunityId: chance.string()}, {opportunityId: chance.string()}];
+      const body = generateRandomSizedArray(1, 20).map(() => { return {opportunityId: chance.string()}; });
       const expectedRequestUrl: string = `/v3/lists/${ listId }/opportunities`;
       const expectedResponse: any  = {};
       listsApiService.addOpportunitiesToList(listId, body).subscribe((response: any) => {

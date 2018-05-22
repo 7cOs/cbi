@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 
-import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
+import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListPerformance } from '../../models/lists/list-performance.model';
@@ -36,7 +36,7 @@ export interface CopyStoresToListPayload {
 
 export interface CopyOppsToListPayload {
   listId: string;
-  ids: { opportunityId: string }[];
+  ids: {opportunityId: string}[];
 }
 
 export interface UpdateListPayload {

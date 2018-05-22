@@ -540,7 +540,7 @@ describe('ListDetailComponent', () => {
     });
   });
 
-  describe('when CopyToList button is clicked', () => {
+  describe('CopyToLists', () => {
 
     describe('Copy Opportunities To Lists', () => {
       let opportunitiesTableData: ListOpportunitiesTableRow[];
@@ -558,7 +558,7 @@ describe('ListDetailComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should filter the checked opportunities and dispatch action for copy to List', () => {
+      it('should filter the checked opportunities and dispatch action for copy to List when handleCopyModalEvent is called', () => {
         storeMock.dispatch.calls.reset();
         componentInstance.handleCopyModalEvent(modalOutputMock, checkedEntitiesMock);
 
@@ -580,15 +580,15 @@ describe('ListDetailComponent', () => {
         testBed = getTestBed();
         store = testBed.get(Store);
         performanceTableData = getListPerformanceTableRowMock(3);
-        performanceTableData[0].checked = true;
-        performanceTableData[1].checked = true;
+        performanceTableData[0].checked = performanceTableData[1].checked = true;
+
         componentInstance.performanceTableData = performanceTableData;
         checkedEntitiesMock = [performanceTableData[0].unversionedStoreId, performanceTableData[1].unversionedStoreId];
         componentInstance.selectedTab = componentInstance.performanceTabTitle;
         fixture.detectChanges();
       });
 
-      it('should filter the checked stores and dispatch action for copy to List', () => {
+      it('should filter the checked stores and dispatch action for copy to List when handleCopyModalEvent is called', () => {
         storeMock.dispatch.calls.reset();
         componentInstance.handleCopyModalEvent(modalOutputMock, checkedEntitiesMock);
 
