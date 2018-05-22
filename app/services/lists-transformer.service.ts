@@ -114,7 +114,8 @@ export class ListsTransformerService {
       archived: list.archived,
       collaboratorType: CollaboratorType.CollaborateAndInvite,
       collaboratorEmployeeIds: list.collaborators.map((user: User) => user.employeeId),
-      category: ListCategory.Beer
+      category: ListCategory.Beer,
+      ownerEmployeeId: list.ownerId
     };
   }
 

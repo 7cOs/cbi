@@ -7,10 +7,10 @@ export interface FormattedNewList {
   collaboratorType: CollaboratorType;
   name: string;
   type: ListType;
+  description: string;
+  archived: boolean;
+  collaboratorEmployeeIds: string[];
 
-  description?: string;
   ownerEmployeeId?: string;
   surveySfid?: any;
-  archived?: boolean;
-  collaboratorEmployeeIds?: string[];
 }
