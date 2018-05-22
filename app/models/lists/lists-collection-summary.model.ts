@@ -5,6 +5,7 @@ export interface ListsCollectionSummary {
   owned: V2List[];
   ownedNotArchivedTargetLists: V2List[];
   sharedWithMe: V2List[];
+  ownedAndSharedWithMe: V2List[];
 
   ownedArchived: number;
   ownedNotArchived: number;

@@ -1,7 +1,9 @@
 import * as Chance from 'chance';
+
+import { getCollaboratorOwnerDetailsArrayMock } from './collaborator-owner-details.model.mock';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 
-let chance = new Chance();
+const chance = new Chance();
 
 export function getListsSummaryMock(): ListsSummary {
   return {
@@ -14,7 +16,7 @@ export function getListsSummaryMock(): ListsSummary {
     name: chance.string(),
     ownerFirstName : chance.string(),
     ownerLastName : chance.string(),
-    collaborators: [],
+    collaborators: getCollaboratorOwnerDetailsArrayMock(),
     ownerId: chance.string(),
     type: chance.string(),
     collaboratorType: chance.string(),

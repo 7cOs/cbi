@@ -1,10 +1,14 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
+import { sample } from 'lodash';
 
+import { CollaboratorType } from '../enums/lists/collaborator-type.enum';
 import { getListOpportunitiesDTOMock } from '../models/lists/lists-opportunities-dto.model.mock';
 import { getListOpportunityMock } from '../models/lists/lists-opportunities.model.mock';
 import { getListPerformanceDTOMock } from '../models/lists/list-performance-dto.model.mock';
 import { getListsSummaryDTOMock } from '../models/lists/lists-header-dto.model.mock';
+import { getListsSummaryMock } from '../models/lists/lists-header.model.mock';
 import { getStoreListsDTOMock } from '../models/lists/lists-store-dto.model.mock';
+import { ListCategory } from '../enums/lists/list-category.enum';
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
 import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.model';
 import { ListPerformance } from '../models/lists/list-performance.model';
@@ -15,7 +19,10 @@ import { ListStorePerformance } from '../models/lists/list-store-performance.mod
 import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
 import { ListsTransformerService } from './lists-transformer.service';
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
+import { ListType } from '../enums/lists/list-type.enum';
+import { FormattedNewList } from '../models/lists/formatted-new-list.model';
 import { StoreDetails } from '../models/lists/lists-store.model';
+import { User } from '../models/lists/user.model';
 
 describe('Service: ListsTransformerService', () => {
   let listsTransformerService: ListsTransformerService;
@@ -158,6 +165,30 @@ describe('Service: ListsTransformerService', () => {
         yearAgo: listPerformanceDTOMock.yearAgo,
         yearAgoSimple: listPerformanceDTOMock.yearAgoSimple,
         storePerformance: expectedListStorePerformanceCollection
+      });
+    });
+  });
+
+  describe('getLeaveListPayload', () => {
+    it('should return a FormattedNewList given an employeeId and ListSummary with the employeeId filtered'
+    + ' out of the collaboratorEmployeeIds array', () => {
+      const listSummaryMock: ListsSummary = getListsSummaryMock();
+      const employeeIdMock: string = sample(listSummaryMock.collaborators).employeeId;
+
+      const actualLeaveListPayload: FormattedNewList = listsTransformerService.getLeaveListPayload(employeeIdMock, listSummaryMock);
+      const expectedCollaboratorIds: string[] = listSummaryMock.collaborators
+        .map((user: User) => user.employeeId)
+        .filter((employeeId: string) => employeeId !== employeeIdMock);
+
+      expect(actualLeaveListPayload).toEqual({
+        description: listSummaryMock.description,
+        name: listSummaryMock.name,
+        type: ListType.TargetList,
+        archived: listSummaryMock.archived,
+        collaboratorType: CollaboratorType.CollaborateAndInvite,
+        collaboratorEmployeeIds: expectedCollaboratorIds,
+        category: ListCategory.Beer,
+        ownerEmployeeId: listSummaryMock.ownerId
       });
     });
   });

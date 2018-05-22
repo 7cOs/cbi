@@ -10,9 +10,12 @@ import { Title } from '@angular/platform-browser';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
+import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
+import { CompassManageListModalOutput }from '../../models/compass-manage-list-modal-output.model';
 import { CompassSelectComponent } from '../../shared/components/compass-select/compass-select.component';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { getListOpportunitiesTableRowMock } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
+import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent, PageChangeData } from './list-detail.component';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
@@ -34,7 +37,6 @@ const chance = new Chance();
   selector: 'list-performance-table',
   template: ''
 })
-
 class ListPerformanceTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListPerformanceTableRow>;
@@ -50,7 +52,6 @@ class ListPerformanceTableComponentMock {
   selector: 'list-opportunities-table',
   template: ''
 })
-
 class ListOpportunitiesTableComponentMock {
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<ListOpportunitiesTableRow>;
@@ -66,7 +67,6 @@ class ListOpportunitiesTableComponentMock {
   selector: 'lists-header',
   template: ''
 })
-
 class ListsHeaderComponentMock {
   @Input() summaryData: ListsSummary;
   @Output() manageButtonClicked = new EventEmitter();
@@ -77,7 +77,6 @@ class ListsHeaderComponentMock {
   selector: 'lists-pagination',
   template: ''
 })
-
 class ListsPaginationComponentMock {
   @Input() tableDataSize: number;
   @Input() tabName: string;
@@ -97,9 +96,14 @@ class ListPerformanceSummaryComponentMock {
 }
 
 describe('ListDetailComponent', () => {
+  let testBed: TestBed;
+  let store: Store<AppState>;
+  let $state: any;
   let fixture: ComponentFixture<ListDetailComponent>;
   let componentInstance: ListDetailComponent;
+
   let listDetailMock: ListsState = {
+    manageListStatus: ActionStatus.NotFetched,
     listSummary: {
       summaryStatus: ActionStatus.NotFetched,
       summaryData: {
@@ -148,7 +152,8 @@ describe('ListDetailComponent', () => {
     },
     params: {
       id: chance.string()
-    }
+    },
+    go: jasmine.createSpy('go')
   };
 
   const storeMock = {
@@ -159,8 +164,8 @@ describe('ListDetailComponent', () => {
   const userMock = {
     model: {
       currentUser: {
-        positionId: chance.toString(),
-        employeeID: chance.toString(),
+        positionId: chance.string(),
+        employeeId: chance.string(),
         firstName: chance.string(),
         lastName: chance.string()
       }
@@ -202,22 +207,21 @@ describe('ListDetailComponent', () => {
       ]
     });
 
+    testBed = getTestBed();
+    store = testBed.get(Store);
+    $state = testBed.get('$state');
     fixture = TestBed.createComponent(ListDetailComponent);
     componentInstance = fixture.componentInstance;
-    fixture.detectChanges();
 
     listsSubject.next(listDetailMock);
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    stateMock.go.calls.reset();
   });
 
   describe('ListDetailComponent initialization', () => {
-    let testBed: TestBed;
-    let store: Store<AppState>;
-
-    beforeEach(() => {
-      testBed = getTestBed();
-      store = testBed.get(Store);
-    });
-
     it('should call setTitle', () => {
       expect(titleMock.setTitle).toHaveBeenCalledWith(stateMock.current.title);
     });
@@ -432,6 +436,99 @@ describe('ListDetailComponent', () => {
           expect([OpportunityStatus.targeted, OpportunityStatus.inactive]).toContain(oppRow.status);
         });
       });
+    });
+  });
+
+  describe('handleManageModalEvent', () => {
+    let manageModalOutputMock: CompassManageListModalOutput;
+
+    beforeEach(() => {
+      manageModalOutputMock = {
+        type: CompassManageListModalEvent.Save,
+        listSummary: getListsSummaryMock()
+      };
+
+      storeMock.dispatch.calls.reset();
+    });
+
+    afterEach(() => {
+      storeMock.dispatch.calls.reset();
+    });
+
+    it('should dispatch a PatchList action with the listSummary data when the CompassManageListModalEvent type is Save', () => {
+      manageModalOutputMock.type = CompassManageListModalEvent.Save;
+
+      componentInstance.handleManageModalEvent(manageModalOutputMock);
+
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.PatchList(manageModalOutputMock.listSummary));
+    });
+
+    it('should dispatch a DeleteList action with the list id when the CompassManageListModalEvent type is Delete', () => {
+      manageModalOutputMock.type = CompassManageListModalEvent.Delete;
+
+      componentInstance.handleManageModalEvent(manageModalOutputMock);
+
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.DeleteList(manageModalOutputMock.listSummary.id));
+    });
+
+    it('should dispatch a ArchiveList action with the listSummary data when the CompassManageListModalEvent type is Archive', () => {
+      manageModalOutputMock.type = CompassManageListModalEvent.Archive;
+
+      componentInstance.handleManageModalEvent(manageModalOutputMock);
+
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.ArchiveList(manageModalOutputMock.listSummary));
+    });
+
+    it('should dispatch a LeaveList action with the listSummary data and id of the current user when the'
+    + ' CompassManageListModalEvent type is Leave', () => {
+      manageModalOutputMock.type = CompassManageListModalEvent.Leave;
+
+      componentInstance.handleManageModalEvent(manageModalOutputMock);
+
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.LeaveList({
+        currentUserEmployeeId: componentInstance.currentUser.employeeId,
+        listSummary: manageModalOutputMock.listSummary
+      }));
+    });
+  });
+
+  describe('handleManageListStatus', () => {
+
+    beforeEach(() => {
+      componentInstance.showManageListLoader = false;
+    });
+
+    it('should set the component`s showManageListLoader variable to false when the passed in ActionStatus is NotFetched', () => {
+      expect(componentInstance.showManageListLoader).toBe(false);
+      componentInstance.handleManageListStatus(ActionStatus.NotFetched);
+      expect(componentInstance.showManageListLoader).toBe(false);
+    });
+
+    it('should set the component`s showManageListLoader variable to true when the passed in ActionStatus is Fetching', () => {
+      expect(componentInstance.showManageListLoader).toBe(false);
+      componentInstance.handleManageListStatus(ActionStatus.Fetching);
+      expect(componentInstance.showManageListLoader).toBe(true);
+    });
+
+    it('should set the component`s showManageListLoader variable to false when the passed in ActionStatus is Fetched', () => {
+      expect(componentInstance.showManageListLoader).toBe(false);
+      componentInstance.handleManageListStatus(ActionStatus.Fetched);
+      expect(componentInstance.showManageListLoader).toBe(false);
+    });
+
+    it('should change the state to the lists page when the passed in ActionStatus is Fetched', () => {
+      componentInstance.handleManageListStatus(ActionStatus.NotFetched);
+      expect($state.go).not.toHaveBeenCalled();
+
+      componentInstance.handleManageListStatus(ActionStatus.Fetching);
+      expect($state.go).not.toHaveBeenCalled();
+
+      componentInstance.handleManageListStatus(ActionStatus.Fetched);
+      expect($state.go).toHaveBeenCalledWith('lists');
     });
   });
 });

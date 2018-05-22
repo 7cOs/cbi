@@ -15,14 +15,21 @@ module.exports = /*  @ngInject */
       performanceDataError: false,
       opportunityCountError: false,
       reportDeleted: false,
-      reportSaved: false
+      reportSaved: false,
+      listDetailArchived: false,
+      listDetailArchivedError: false,
+      listDetailDeleted: false,
+      listDetailDeletedError: false,
+      listDetailLeft: false,
+      listDetailLeftError: false
     };
 
     var service = {
       model: model,
       showToast: showToast,
       showPerformanceDataErrorToast: showPerformanceDataErrorToast,
-      showOpportunityCountErrorToast: showOpportunityCountErrorToast
+      showOpportunityCountErrorToast: showOpportunityCountErrorToast,
+      showListDetailManageActionToast: showListDetailManageActionToast
     };
 
     const threeSeconds = 3000;
@@ -70,5 +77,13 @@ module.exports = /*  @ngInject */
       $timeout(() => {
         model.opportunityCountError = false;
       }, tenSeconds);
+    }
+
+    function showListDetailManageActionToast(toastType) {
+      model[toastType] = true;
+
+      $timeout(() => {
+        model[toastType] = false;
+      }, threeSeconds);
     }
   };

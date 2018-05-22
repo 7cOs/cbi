@@ -119,7 +119,7 @@ div.expanded-target-lists
             div.target-list-element(column="12"
                                     ui-sref="list-detail({id: list.id})"
                                     analytics-event-on="click"
-                                    category="Opportunities"
+                                    category="Lists - Shared With Me"
                                     action="View List"
                                     label="{{list.id}}")
               div(row)
@@ -133,7 +133,7 @@ div.expanded-target-lists
                       li(ng-class="{'long-collaborators': list.collaborators.length > 4}" ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'").member {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
                 h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                 h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
-                h4(column="1") {{list.opportunities | number}}
+                h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
               div(row).creator
                 h5(ng-if="list.targetListAuthor" column="3").accent.left {{list.targetListAuthor}}
               div(row)
@@ -191,7 +191,7 @@ div.expanded-target-lists
                       li(ng-class="{'long-collaborators': list.collaborators.length > 4}" ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'").member {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
                 h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                 h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
-                h4(column="1") {{list.opportunities | number}}
+                h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
               div(row).creator
               h5(column="3" ng-if="list.targetListAuthor === 'current user'").accent.left &nbsp;
               h5(column="3" ng-if="list.targetListAuthor !== 'current user'").accent.left {{list.targetListAuthor}}

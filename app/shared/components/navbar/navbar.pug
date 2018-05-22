@@ -6,10 +6,16 @@
 .toast-header.success(ng-show="nb.reportDeleted") Report Successfully Deleted
 .toast-header.success(ng-show="nb.reportSaved") Report Successfully Saved
 .toast-header.success(ng-show="nb.copied") <span>{{nb.multipleTargetListsSelected ? 'Opportunities' : 'Opportunity'}}</span> added to list!
+.toast-header.success(ng-show="nb.listDetailArchived") List successfully archived.
+.toast-header.success(ng-show="nb.listDetailDeleted") List successfully deleted.
+.toast-header.success(ng-show="nb.listDetailLeft") List has been left successfully.
 .toast-header(ng-show="nb.deleteError") Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.
 .toast-header(ng-show="nb.performanceDataError") An error occurred while loading performance data. Some data may be incomplete.
 .toast-header(ng-show="nb.opportunityCountError") An error occurred while loading opportunity count data. Some data may be incomplete.
 .toast-header(ng-show="nb.reportSavedError") An error occured while saving the report. Please try again.
+.toast-header(ng-show="nb.listDetailArchivedError") An error occured while archiving the list. Please try again.
+.toast-header(ng-show="nb.listDetailDeletedError") An error occured while deleting the list. Please try again.
+.toast-header(ng-show="nb.listDetailLeftError") An error occured while leaving the list. Please try again.
 
 div.outer-nav-wrapper
   div.inner-nav-wrapper(container)

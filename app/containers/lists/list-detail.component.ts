@@ -7,6 +7,9 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
+import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
+import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
 import { CompassActionModalEvent } from '../../enums/compass-action-modal-event.enum';
@@ -16,20 +19,19 @@ import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
-import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
+import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
+import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
-import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
-import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
-import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { User } from '../../models/lists/user.model';
 
 interface ListPageClick {
@@ -87,6 +89,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
+  public showManageListLoader: boolean = false;
   public downloadAllModalStringInputs: CompassActionModalInputs;
   public compassAlertModalAccept = CompassActionModalEvent.Accept;
   public radioInputModel: RadioInputModel = {
@@ -95,25 +98,29 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     title: 'OPTIONS',
     stacked: false
   };
-
   public downloadBodyHTML: string;
 
   private listDetailSubscription: Subscription;
 
   constructor(
+    private compassModalService: CompassModalService,
     private listsTableTransformerService: ListsTableTransformerService,
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
     private titleService: Title,
-    private compassModalService: CompassModalService,
     @Inject('userService') private userService: any
   ) { }
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
-    this.currentUser = this.userService.model.currentUser;
+    this.currentUser = {
+      employeeId: this.userService.model.currentUser.employeeID,
+      firstName: this.userService.model.currentUser.firstName,
+      lastName: this.userService.model.currentUser.lastName
+    };
     this.opportunityStatusOptions = listOpportunityStatusOptions;
     this.oppStatusSelected = OpportunityStatus.all;
+
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchOppsForList({listId: this.$state.params.id}));
@@ -169,6 +176,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
               this.opportunitiesTableData
             );
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
+        }
+
+        if (listDetail.manageListStatus !== ActionStatus.NotFetched) {
+          this.handleManageListStatus(listDetail.manageListStatus);
         }
       });
   }
@@ -239,15 +250,16 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public handleManageButtonClick() {
-    this.compassModalOverlayRef = this.compassModalService.showManageListModalDialog(
-      { title: 'Manage List',
-        acceptLabel: 'Save',
-        rejectLabel: 'close',
-        currentUser: this.currentUser,
-        listObject: this.listSummary
-      }, {});
-    this.compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((payload: ListsSummary) => {
-      this.store.dispatch(new ListsActions.PatchList(payload));
+    const manageModalRef: CompassManageListModalOverlayRef = this.compassModalService.showManageListModalDialog({
+      title: 'Manage List',
+      acceptLabel: 'Save',
+      rejectLabel: 'CANCEL',
+      currentUser: this.currentUser,
+      listObject: this.listSummary
+    }, {});
+
+    manageModalRef.modalInstance.buttonContainerEvent.subscribe((manageModalData: CompassManageListModalOutput) => {
+      this.handleManageModalEvent(manageModalData);
     });
   }
 
@@ -275,6 +287,34 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handlePaginationReset() {
     this.paginationReset.next();
+  }
+
+  public handleManageModalEvent(manageModalData: CompassManageListModalOutput): void {
+    switch (manageModalData.type) {
+      case CompassManageListModalEvent.Save:
+        this.store.dispatch(new ListsActions.PatchList(manageModalData.listSummary));
+        break;
+      case CompassManageListModalEvent.Delete:
+        this.store.dispatch(new ListsActions.DeleteList(manageModalData.listSummary.id));
+        break;
+      case CompassManageListModalEvent.Archive:
+        this.store.dispatch(new ListsActions.ArchiveList(manageModalData.listSummary));
+        break;
+      case CompassManageListModalEvent.Leave:
+        this.store.dispatch(new ListsActions.LeaveList({
+          currentUserEmployeeId: this.currentUser.employeeId,
+          listSummary: manageModalData.listSummary
+        }));
+        break;
+      default:
+        throw new Error(`[handleManageModalEvent]: CompassManageListModalEvent of ${ manageModalData.type } is not supported`);
+    }
+  }
+
+  public handleManageListStatus(manageListStatus: ActionStatus): void {
+    this.showManageListLoader = manageListStatus === ActionStatus.Fetching;
+
+    if (manageListStatus === ActionStatus.Fetched) this.$state.go('lists');
   }
 
   private isListPerformanceFetched(
