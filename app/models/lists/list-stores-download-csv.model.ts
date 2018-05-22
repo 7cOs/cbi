@@ -6,6 +6,6 @@ export interface ListStoresDownloadCSV {
   city: string;
   state: string;
   cytdVolume: number;
-  cytdVsYaPercentage: number;
+  cytdVsYaPercentage: string;
   segmentCode: string;
 }

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { ListsApiService } from '../../services/api/v3/lists-api.service';
@@ -35,6 +35,9 @@ import { ListsPaginationComponent } from '../../shared/components/lists-paginati
     ListTableDrawerComponent
   ],
   providers: [
+    DatePipe,
+    DecimalPipe,
+    UpperCasePipe,
     ListsApiService,
     ListsTableTransformerService,
     ListsTransformerService

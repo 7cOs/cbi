@@ -1,4 +1,7 @@
+import * as moment from 'moment';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { DatePipe, DecimalPipe, UpperCasePipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -34,8 +37,10 @@ import { User } from '../../models/lists/user.model';
 import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
 import { ListStoresDownloadCSV } from '../../models/lists/list-stores-download-csv.model';
 import { ListOpportunitiesDownloadCSV } from '../../models/lists/list-opportunties-download-csv.model';
-import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
+import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
+import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
+import { OpportunitiesDownloadType } from '../../enums/opportunities-download-type.enum';
 
 interface ListPageClick {
   pageNumber: number;
@@ -53,6 +58,8 @@ export const downloadRadioOptions: Array<CompassSelectOption> = [{
   display: 'Opportunities',
   value: ListsDownloadType.Opportunities
 }];
+
+export const SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL: string = 'ANY';
 
 @Component({
   selector: 'list-detail',
@@ -113,7 +120,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private titleService: Title,
     private compassModalService: CompassModalService,
-    @Inject('userService') private userService: any
+    @Inject('userService') private userService: any,
+    private numberPipe: DecimalPipe,
+    private upperCasePipe: UpperCasePipe,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -156,7 +166,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.performance.pod.storePerformance
           );
-          console.log('stores from ngrx store', listDetail.listStores.stores);
           this.performanceTableDataSize = this.performanceTableData.length;
         }
 
@@ -176,7 +185,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
               this.oppStatusSelected,
               this.opportunitiesTableData
             );
-          console.log(this.filteredOpportunitiesTableData);
           this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
@@ -186,10 +194,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   downloadActionButtonClicked() {
     let numStores = 0;
     if (this.selectedTab === this.performanceTabTitle) {
-      console.log('Download All - performance tab seclected');
       numStores = this.performanceTableDataSize;
     } else {
-      console.log('Download All - opps tab seclected');
       numStores = this.opportunitiesTableDataSize;
     }
 
@@ -203,10 +209,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     };
     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
     this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-        console.log('radio option selected: ', value.radioOptionSelected);
-        console.log('dropdown option selected: ', value.dropdownOptionSelected);
         const csvDownloadData = this.modalDownloadClicked(value);
-        console.log('Download Data', csvDownloadData);
+        this.generateCSVForDownload(value, csvDownloadData);
     });
   }
 
@@ -218,6 +222,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         this.opportunitiesTableData
       );
     this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
+    this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
     this.paginationReset.next();
   }
 
@@ -360,12 +365,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           csvData.push({
             distributor: store.distributorColumn,
             storeName: store.storeColumn,
-            storeNumber: store.storeNumber,
+            storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
             address: store.storeAddressSubline,
             city: store.storeCity,
             state: store.storeState,
-            cytdVolume: store.cytdColumn,
-            cytdVsYaPercentage: store.cytdVersusYaPercentColumn,
+            cytdVolume: Math.round(store.cytdColumn),
+            cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
             segmentCode: store.segmentColumn
           });
           return csvData;
@@ -378,12 +383,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             csvData.push({
               distributor: store.distributorColumn,
               storeName: store.storeColumn,
-              storeNumber: store.storeNumber,
+              storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
               address: store.storeAddressSubline,
               city: store.storeCity,
               state: store.storeState,
-              cytdVolume: store.cytdColumn,
-              cytdVsYaPercentage: store.cytdVersusYaPercentColumn,
+              cytdVolume: Math.round(store.cytdColumn),
+              cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
               segmentCode: store.segmentColumn,
               productBrand: '',
               productSku: '',
@@ -392,27 +397,76 @@ export class ListDetailComponent implements OnInit, OnDestroy {
               opportunityImpact: ''
             });
           } else {
-            oppsForStore.forEach((opportunity: ListsOpportunities) => {
+            const filteredOpportunities = (opportunityRows: ListsOpportunities[]): ListsOpportunities[] => {
+              return opportunityRows.filter((opp: ListsOpportunities) => {
+                return this.oppStatusSelected === OpportunityStatus.targeted ?
+                  opp.status === OpportunityStatus.targeted
+                  || opp.status === OpportunityStatus.inactive : opp.status === OpportunityStatus.closed;
+              });
+            };
+            const oppsForCSV: ListsOpportunities[] = this.oppStatusSelected === OpportunityStatus.all
+              ? oppsForStore
+              : filteredOpportunities(oppsForStore);
+            oppsForCSV.forEach((opportunity: ListsOpportunities) => {
               csvData.push({
                 distributor: store.distributorColumn,
                 storeName: store.storeColumn,
-                storeNumber: store.storeNumber,
+                storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
                 address: store.storeAddressSubline,
                 city: store.storeCity,
                 state: store.storeState,
-                cytdVolume: store.cytdColumn,
-                cytdVsYaPercentage: store.cytdVersusYaPercentColumn,
+                cytdVolume: Math.round(store.cytdColumn),
+                cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
                 segmentCode: store.segmentColumn,
                 productBrand: opportunity.brandDescription,
-                productSku: opportunity.skuDescription,
-                opportunityStatus: opportunity.status,
-                opportunityType: opportunity.type,
-                opportunityImpact: opportunity.impact
+                productSku: opportunity.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opportunity.skuDescription,
+                opportunityStatus: this.upperCasePipe.transform(opportunity.status) || '',
+                opportunityType: OpportunityTypeLabel[opportunity.type] || opportunity.type,
+                opportunityImpact: this.upperCasePipe.transform(opportunity.impact) || ''
               });
             });
           }
           return csvData;
       }, []);
     }
+  }
+
+  private generateCSVForDownload(
+    value: CompassActionModalOutputs,
+    csvDownloadData: Array<ListStoresDownloadCSV | ListOpportunitiesDownloadCSV>) {
+      const storesHeader = [
+        'Distributor',
+        'Store Name',
+        'Store Number',
+        'Address',
+        'City',
+        'State',
+        'CYTD Volume',
+        'vs YA %',
+        'Segment'
+      ];
+      let oppsHeader = [...storesHeader];
+      oppsHeader.push.apply(oppsHeader, [
+        'Product Brand',
+        'Product Sku',
+        'Opportunity Status',
+        'Opportunity Type',
+        'Opportunity Predicted Impact'
+      ]);
+      const csvHeaders = value.radioOptionSelected === ListsDownloadType.Stores ? storesHeader : oppsHeader;
+      const csvTitle = value.radioOptionSelected === ListsDownloadType.Stores
+        ? `${moment().format('YYYY-MM-DD')}${ListsDownloadType.Stores}`
+        : `${moment().format('YYYY-MM-DD')}${ListsDownloadType.Opportunities}`;
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        noDownload: false,
+        headers: csvHeaders
+      };
+      const csvObj = new Angular5Csv(csvDownloadData, csvTitle, options);
   }
 }
