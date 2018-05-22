@@ -55,6 +55,19 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static WebDriver getLocalWebDriver() {
+    final ChromeDriver chromeDriver = getLocalChromeDriver();
+    webDriver.set(chromeDriver);
+
+    Validate.notNull(
+      webDriver.get(),
+      "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
+        "/n Have you downloaded the correct driver into your local target directory?"
+    );
+
+    return webDriver.get();
+  }
+
+  private static ChromeDriver getLocalChromeDriver() {
     System.setProperty("webdriver.chrome.driver", formatDriverNameWithOSExtension("chromedriver"));
 
     final boolean isSilentMode = Boolean.parseBoolean(
@@ -67,15 +80,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     }
 
 
-    webDriver.set(new ChromeDriver(options));
-
-    Validate.notNull(
-      webDriver.get(),
-      "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
-        "/n Have you downloaded the correct driver into your local target directory?"
-    );
-
-    return webDriver.get();
+    return new ChromeDriver(options);
   }
 
   private static String formatDriverNameWithOSExtension(String driverFileName) {
