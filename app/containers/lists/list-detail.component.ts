@@ -56,7 +56,7 @@ export const downloadRadioOptions: Array<CompassSelectOption> = [{
   display: 'Stores Only',
   value: ListsDownloadType.Stores
 }, {
-  display: 'Opportunities',
+  display: 'Stores and Opportunities',
   value: ListsDownloadType.Opportunities
 }];
 
