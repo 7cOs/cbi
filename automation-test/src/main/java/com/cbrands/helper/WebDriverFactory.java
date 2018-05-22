@@ -28,9 +28,6 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
-  private static final String SAUCELABS_URI_FORMAT = "http://%s:%s@ondemand.saucelabs.com:%d/wd/hub";
-  private static final int DEFAULT_SAUCE_PORT = 80;
-
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<>();
@@ -40,7 +37,15 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
     final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
     if (HostType.sauce.name().equalsIgnoreCase(driverHost)) {
-      driver = getSauceWebDriver(testName);
+      final RemoteWebDriver remoteSauceDriver = SauceDriverFactory.getRemoteSauceDriver(testName);
+      webDriver.set(remoteSauceDriver);
+
+      sessionId.set(((RemoteWebDriver) webDriver.get()).getSessionId().toString());
+      log.info("Targeted Host:" + HostType.sauce.name());
+      log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
+      Validate.notNull(webDriver.get(), "Remote driver could not be found for SauceLabs");
+
+      driver = webDriver.get();
     } else {
       driver = getLocalWebDriver();
     }
@@ -51,18 +56,20 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static WebDriver getLocalWebDriver() {
     final String osName = System.getProperty("os.name").toLowerCase();
     final boolean isSilentMode = Boolean.parseBoolean(
-        PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
+      PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
     final ChromeOptions options = new ChromeOptions();
     options.addArguments("--start-maximized");
     options.addArguments("--disable-infobars");
-    if(isSilentMode) { options.addArguments("headless"); }
+    if (isSilentMode) {
+      options.addArguments("headless");
+    }
 
-    if(!osName.startsWith("windows")) {
+    if (!osName.startsWith("windows")) {
       System.setProperty("webdriver.chrome.driver", "chromedriver");
       webDriver.set(new ChromeDriver(options));
     } else {
       System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-      webDriver.set(new ChromeDriver(options));      
+      webDriver.set(new ChromeDriver(options));
     }
 
     Validate.notNull(
@@ -74,70 +81,64 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     return webDriver.get();
   }
 
-  private static WebDriver getSauceWebDriver(String testName) throws MalformedURLException {
-    webDriver.set(getRemoteSauceDriver(testName));
+  private static class SauceDriverFactory {
+    private static final String SAUCELABS_URI_FORMAT = "http://%s:%s@ondemand.saucelabs.com:%d/wd/hub";
+    private static final int DEFAULT_SAUCE_PORT = 80;
 
-    sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId().toString());
-    log.info("Targeted Host:" + HostType.sauce.name());
-    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-    Validate.notNull(webDriver.get(), "Remote driver could not be found for SauceLabs");
+    private static RemoteWebDriver getRemoteSauceDriver(String testName) throws MalformedURLException {
+      final URL remoteAddress = buildSauceURI();
+      final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
 
-    return webDriver.get();
-  }
-
-  private static RemoteWebDriver getRemoteSauceDriver(String testName) throws MalformedURLException {
-    final URL remoteAddress = buildSauceURI();
-    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(testName, System.getProperty("browser"));
-
-    return new RemoteWebDriver(remoteAddress, capabilities);
-  }
-
-  private static URL buildSauceURI() throws MalformedURLException {
-    final String username = PropertiesCache.getInstance().getProperty("sauce.userName");
-    final String accessKey = PropertiesCache.getInstance().getProperty("sauce.accessKey");
-
-    return new URL(String.format(SAUCELABS_URI_FORMAT, username, accessKey, DEFAULT_SAUCE_PORT));
-  }
-
-  private static DesiredCapabilities getSauceCapabilitiesByBrowser(String testName, String driverType) {
-    final DesiredCapabilities capabilities;
-
-    if (BrowserType.chrome.name().equals(driverType)) {
-      capabilities = getSauceCapabilitiesForChrome(testName);
-    } else {
-      capabilities = getSauceCapabilitiesForIE(testName);
+      return new RemoteWebDriver(remoteAddress, capabilities);
     }
 
-    return capabilities;
-  }
+    private static URL buildSauceURI() throws MalformedURLException {
+      final String username = PropertiesCache.getInstance().getProperty("sauce.userName");
+      final String accessKey = PropertiesCache.getInstance().getProperty("sauce.accessKey");
 
-  private static DesiredCapabilities getSauceCapabilitiesForIE(String testName) {
-    final DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+      return new URL(String.format(SAUCELABS_URI_FORMAT, username, accessKey, DEFAULT_SAUCE_PORT));
+    }
 
-    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
-    capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-    capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
-    capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
-    capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+    private static DesiredCapabilities getSauceCapabilitiesByBrowser(String testName, String driverType) {
+      final DesiredCapabilities capabilities;
 
-    capabilities.setCapability("name", getTestRunName(testName, BrowserType.ie.name()));
+      if (BrowserType.chrome.name().equals(driverType)) {
+        capabilities = getSauceCapabilitiesForChrome(testName);
+      } else {
+        capabilities = getSauceCapabilitiesForIE(testName);
+      }
 
-    return capabilities;
-  }
+      return capabilities;
+    }
 
-  private static DesiredCapabilities getSauceCapabilitiesForChrome(String testName) {
-    final DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+    private static DesiredCapabilities getSauceCapabilitiesForIE(String testName) {
+      final DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
 
-    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
-    capabilities.setCapability("name", getTestRunName(testName, BrowserType.chrome.name()));
+      capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+      capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+      capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
+      capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
+      capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
 
-    return capabilities;
-  }
+      capabilities.setCapability("name", getTestRunName(testName, BrowserType.ie.name()));
 
-  private static String getTestRunName(String testCaseName, String browserName) {
-    return browserName.toUpperCase() + " - "
-      + PropertiesCache.getInstance().getProperty("origin")  + " - "
-      + testCaseName;
+      return capabilities;
+    }
+
+    private static DesiredCapabilities getSauceCapabilitiesForChrome(String testName) {
+      final DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+
+      capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+      capabilities.setCapability("name", getTestRunName(testName, BrowserType.chrome.name()));
+
+      return capabilities;
+    }
+
+    private static String getTestRunName(String testCaseName, String browserName) {
+      return browserName.toUpperCase() + " - "
+        + PropertiesCache.getInstance().getProperty("origin")  + " - "
+        + testCaseName;
+    }
   }
 
   public enum BrowserType {
@@ -148,10 +149,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   public enum HostType {
     local,
     sauce
-  }
-
-  public static WebDriver getWebDriver() {
-    return webDriver.get();
   }
 
   public static SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(PropertiesCache
