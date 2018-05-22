@@ -37,6 +37,7 @@
         font-family: $roboto;
         font-size: 14px;
         border-bottom: 2px solid $table-border-gray;
+        border-left: 1px solid $table-border-gray;
 
         td:not(.checkbox-column) {
           background-color: $light-blue-4;
@@ -80,6 +81,16 @@
         .type-column {
           color: $cancel-blue;
           cursor: pointer;
+        }
+
+        .status-column {
+
+          .tooltip-icon {
+            height: 15px;
+            margin-left: 5px;
+            vertical-align: bottom;
+            width: 15px;
+          }
         }
 
         .impact-column {

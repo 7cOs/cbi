@@ -9,23 +9,29 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
 import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
+import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
+import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
+import { CompassActionModalEvent } from '../../enums/compass-action-modal-event.enum';
+import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
-import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
+import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
+import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
+import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
-import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsState } from '../../state/reducers/lists.reducer';
-import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
+import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
-import { ListPerformanceColumnType } from '../../enums/list-performance-column-types.enum';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -39,6 +45,14 @@ export interface PageChangeData {
   pageStart: number;
   pageEnd: number;
 }
+
+export const downloadRadioOptions: Array<CompassSelectOption> = [{
+  display: 'Stores',
+  value: ListsDownloadType.Stores
+}, {
+  display: 'Stores and Opportunities',
+  value: ListsDownloadType.Opportunities
+}];
 
 @Component({
   selector: 'list-detail',
@@ -93,24 +107,40 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     'rejectLabel': 'Cancel',
     'acceptLabel': 'Remove'};
   public loadingStateEnum = LoadingState;
+  public showManageListLoader: boolean = false;
+  public downloadAllModalStringInputs: CompassActionModalInputs;
+  public compassAlertModalAccept = CompassActionModalEvent.Accept;
+  public radioInputModel: RadioInputModel = {
+    selected: ListsDownloadType.Stores,
+    radioOptions: downloadRadioOptions,
+    title: 'OPTIONS',
+    stacked: false
+  };
+  public downloadBodyHTML: string;
+
   private listDetailSubscription: Subscription;
   private loadingState: LoadingState = LoadingState.Loaded;
 
   constructor(
+    private compassModalService: CompassModalService,
     private listsTableTransformerService: ListsTableTransformerService,
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
     private titleService: Title,
-    private compassModalService: CompassModalService,
     @Inject('userService') private userService: any,
     @Inject('toastService') private toastService: any
   ) { }
 
   ngOnInit() {
     this.titleService.setTitle(this.$state.current.title);
-    this.currentUser = this.userService.model.currentUser;
+    this.currentUser = {
+      employeeId: this.userService.model.currentUser.employeeID,
+      firstName: this.userService.model.currentUser.firstName,
+      lastName: this.userService.model.currentUser.lastName
+    };
     this.opportunityStatusOptions = listOpportunityStatusOptions;
     this.oppStatusSelected = OpportunityStatus.all;
+
     this.store.dispatch(new ListsActions.FetchStoreDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchHeaderDetails({listId: this.$state.params.id}));
     this.store.dispatch(new ListsActions.FetchOppsForList({listId: this.$state.params.id}));
@@ -167,38 +197,39 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             );
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
-
+        if (listDetail.manageListStatus !== ActionStatus.NotFetched) {
+          this.handleManageListStatus(listDetail.manageListStatus);
+        }
         if (listDetail.listStores.storeStatus === ActionStatus.DeleteSuccess
           && listDetail.listSummary.summaryStatus === ActionStatus.DeleteSuccess) {
           this.handlePaginationReset();
           this.isPerformanceRowSelect = false;
           this.toastService.showToast('storeRemoved');
+          this.showManageListLoader = false;
         } else if (listDetail.listStores.storeStatus === ActionStatus.DeleteFailure
           && listDetail.listSummary.summaryStatus === ActionStatus.DeleteFailure) {
           this.toastService.showToast('storeRemovedFailure');
+          this.showManageListLoader = false;
         }
 
         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteSuccess) {
           this.handlePaginationReset();
           this.isOpportunityRowSelect = false;
           this.toastService.showToast('oppRemoved');
+          this.showManageListLoader = false;
         } else if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteFailure) {
           this.toastService.showToast('oppRemovedFailure');
+          this.showManageListLoader = false;
         }
-        this.loadingState = LoadingState.Loaded;
       });
   }
 
-  captureActionButtonClicked(actionButtonProperties: {actionType: string}): void {
+  captureRemoveButtonClicked() {
     if (this.selectedTab === this.performanceTabTitle) {
-      if (actionButtonProperties.actionType === ActionButtonType.Remove) {
-        this.launchRemoveStoresConfirmation();
-      }
+      this.launchRemoveStoresConfirmation();
     }
     if (this.selectedTab === this.opportunitiesTabTitle) {
-      if (actionButtonProperties.actionType === ActionButtonType.Remove) {
-        this.launchRemoveOppsConfirmation();
-      }
+      this.launchRemoveOppsConfirmation();
     }
   }
 
@@ -208,6 +239,27 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       if (value === CompassAlertModalEvent.Accept) {
         this.removeSelectedStores();
       }
+    });
+  }
+   downloadActionButtonClicked() {
+    if (this.selectedTab === this.performanceTabTitle) {
+      console.log('Download All - performance tab seclected');
+    } else {
+      console.log('Download All - opps tab seclected');
+    }
+
+    this.downloadBodyHTML = 'Body text goes here!';
+    this.downloadAllModalStringInputs = {
+      'title': 'Download',
+      'bodyText': this.downloadBodyHTML,
+      'radioInputModel': this.radioInputModel,
+      'acceptLabel': 'Download',
+      'rejectLabel': 'Cancel'
+    };
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
+    this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
+        console.log('radio option selected: ', value.radioOptionSelected);
+        console.log('dropdown option selected: ', value.dropdownOptionSelected);
     });
   }
 
@@ -229,7 +281,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }, []);
     checkedOpps.forEach((opp) => {
       this.store.dispatch(new ListsActions.RemoveOppFromList({listId: this.listSummary.id, oppId: opp.id}));
-      this.loadingState = LoadingState.Loading;
+      this.showManageListLoader = true;
     });
   }
 
@@ -237,7 +289,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
     checkedStores.forEach((store) => {
       this.store.dispatch(new ListsActions.RemoveStoreFromList({listId: this.listSummary.id, storeSourceCode: store.storeSourceCode}));
-      this.loadingState = LoadingState.Loading;
+      this.showManageListLoader = true;
     });
   }
 
@@ -285,15 +337,16 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public handleManageButtonClick() {
-    this.compassModalOverlayRef = this.compassModalService.showManageListModalDialog(
-      { title: 'Manage List',
-        acceptLabel: 'Save',
-        rejectLabel: 'close',
-        currentUser: this.currentUser,
-        listObject: this.listSummary
-      }, {});
-    this.compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((payload: ListsSummary) => {
-      this.store.dispatch(new ListsActions.PatchList(payload));
+    const manageModalRef: CompassManageListModalOverlayRef = this.compassModalService.showManageListModalDialog({
+      title: 'Manage List',
+      acceptLabel: 'Save',
+      rejectLabel: 'CANCEL',
+      currentUser: this.currentUser,
+      listObject: this.listSummary
+    }, {});
+
+    manageModalRef.modalInstance.buttonContainerEvent.subscribe((manageModalData: CompassManageListModalOutput) => {
+      this.handleManageModalEvent(manageModalData);
     });
   }
 
@@ -332,10 +385,41 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.filteredOpportunitiesTableData = this.opportunitiesTableData;
       this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
     }
+    if (tabName === this.opportunitiesTabTitle) {
+      this.performanceTableData = this.getDeselectedPerformanceTableData(this.performanceTableData);
+    }
   }
 
   public handlePaginationReset() {
     this.paginationReset.next();
+  }
+
+  public handleManageModalEvent(manageModalData: CompassManageListModalOutput): void {
+    switch (manageModalData.type) {
+      case CompassManageListModalEvent.Save:
+        this.store.dispatch(new ListsActions.PatchList(manageModalData.listSummary));
+        break;
+      case CompassManageListModalEvent.Delete:
+        this.store.dispatch(new ListsActions.DeleteList(manageModalData.listSummary.id));
+        break;
+      case CompassManageListModalEvent.Archive:
+        this.store.dispatch(new ListsActions.ArchiveList(manageModalData.listSummary));
+        break;
+      case CompassManageListModalEvent.Leave:
+        this.store.dispatch(new ListsActions.LeaveList({
+          currentUserEmployeeId: this.currentUser.employeeId,
+          listSummary: manageModalData.listSummary
+        }));
+        break;
+      default:
+        throw new Error(`[handleManageModalEvent]: CompassManageListModalEvent of ${ manageModalData.type } is not supported`);
+    }
+  }
+
+  public handleManageListStatus(manageListStatus: ActionStatus): void {
+    this.showManageListLoader = manageListStatus === ActionStatus.Fetching;
+
+    if (manageListStatus === ActionStatus.Fetched) this.$state.go('lists');
   }
 
   private isListPerformanceFetched(
@@ -356,6 +440,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && opportunitiesStatus === ActionStatus.Fetched;
+  }
+
+  private getDeselectedPerformanceTableData(performanceTableData: ListPerformanceTableRow[]): ListPerformanceTableRow[] {
+    return performanceTableData.map((tableRow: ListPerformanceTableRow) => {
+      return Object.assign({}, tableRow, {
+        checked: false
+      });
+    });
   }
 
   private getDeselectedOpportunitiesTableData(opportunitiesTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {

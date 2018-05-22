@@ -1,6 +1,7 @@
 export enum ActionButtonType {
     AddToList = 'Add To List',
-    Download = 'Download',
+    Download = 'Download All',
     Manage = 'Manage',
-    Remove = 'Remove'
+    Remove = 'Remove',
+    CopyToList = 'Copy To List'
 }

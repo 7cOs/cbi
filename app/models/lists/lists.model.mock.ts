@@ -122,6 +122,7 @@ export function getListsCollectionSummaryMock(): ListsCollectionSummary {
     owned: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
     ownedNotArchivedTargetLists: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
     sharedWithMe: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
+    ownedAndSharedWithMe: generateRandomSizedArray(1, 5).map(() => getV2ListMock()),
     sharedArchivedCount: chance.natural(),
     sharedNotArchivedCount: chance.natural(),
     ownedArchived: chance.natural(),

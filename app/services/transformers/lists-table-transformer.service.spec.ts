@@ -79,10 +79,7 @@ describe('ListsTableTransformerService', () => {
             storeAddressSubline: getExpectedStoreAddress(storeDetailsMock[index]),
             distributorColumn: storeDetailsMock[index].distributor,
             segmentColumn: storeDetailsMock[index].segmentCode,
-            cytdColumn: calculatorService.getYearAgoDelta(
-              volumeStorePerformanceMock[index].current,
-              volumeStorePerformanceMock[index].yearAgo
-            ),
+            cytdColumn: volumeStorePerformanceMock[index].current,
             cytdVersusYaPercentColumn: calculatorService.getYearAgoPercent(
               volumeStorePerformanceMock[index].current,
               volumeStorePerformanceMock[index].yearAgo
@@ -106,7 +103,9 @@ describe('ListsTableTransformerService', () => {
               status: matchedOpportunities[rowIndex].status,
               impact: matchedOpportunities[rowIndex].impact,
               current: matchedOpportunities[rowIndex].currentDepletions_CYTD,
-              yearAgo: matchedOpportunities[rowIndex].yearAgoDepletions_CYTD,
+              yearAgo: calculatorService.getYearAgoPercent(
+                matchedOpportunities[rowIndex].currentDepletions_CYTD,
+                matchedOpportunities[rowIndex].yearAgoDepletions_CYTD),
               depletionDate: moment(matchedOpportunities[rowIndex].lastDepletionDate).format('MM/DD/YY'),
               checked: false
             });

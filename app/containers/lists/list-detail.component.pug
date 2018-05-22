@@ -1,4 +1,4 @@
-beer-loader.individual-loader(*ngIf="loadingState===loadingStateEnum.Loading", [showLoader]="loadingState===loadingStateEnum.Loading")
+beer-loader(*ngIf="showManageListLoader", [showLoader]="showManageListLoader")
 
 lists-header(
   [summaryData]="listSummary",
@@ -20,20 +20,14 @@ compass-tabs(
         [distributionsVsYA]="performanceTableTotal?.l90VersusYaPercentColumn"
       )
       div.button-section
-        compass-action-button(
-          [actionLabel]="actionButtonType.AddToList",
-          [isDisabled]="true",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
-        )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Download",
-          [isDisabled]="false",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
+          (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",
           [isDisabled]="!isPerformanceRowSelect",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
+          (onActionButtonClicked)="captureRemoveButtonClicked()"
         )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
@@ -57,10 +51,14 @@ compass-tabs(
           (onOptionSelected)="opportunityStatusSelected($event)"
         )
       div.button-section
+        compass-action-button(
+            [actionLabel]="actionButtonType.Download",
+            (onActionButtonClicked)="downloadActionButtonClicked($event)"
+        )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",
           [isDisabled]="!isOpportunityRowSelect",
-          (onActionButtonClicked)="captureActionButtonClicked($event)"
+          (onActionButtonClicked)="captureRemoveButtonClicked()"
         )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",

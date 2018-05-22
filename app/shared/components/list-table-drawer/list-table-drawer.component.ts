@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { OpportunityImpact } from '../../../enums/list-opportunities/list-opportunity-impact.enum';
 import { opportunityImpactSortWeight } from '../../../models/opportunity-impact-sort-weight.model';
+import { OpportunityStatus } from '../../../enums/list-opportunities/list-opportunity-status.enum';
 
 @Component({
   selector: 'list-table-drawer',
@@ -19,7 +20,15 @@ export class ListTableDrawerComponent {
   }
 
   public opportunityImpact: any = OpportunityImpact;
+  public opportunityStatus: any = OpportunityStatus;
   public sortedTableData: ListTableDrawerRow[];
+  public closedStatusTooltip = {
+    title: 'Inactive Status',
+    text: [
+      'This opportunity recommendation is no longer supported by data analytics (see Compass user guide for more details).',
+      'Consider removing this opportunity from your list to ensure your list stays actionable and relevant.'
+    ]
+  };
 
   public checkboxClicked(isChecked: boolean, index: number): void {
     this.sortedTableData[index].checked = isChecked;

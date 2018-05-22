@@ -20,8 +20,6 @@ describe('Service: CalculatorService', () => {
     }));
 
     beforeEach(() => {
-      total = chance.natural({min: 1, max: Number.MAX_SAFE_INTEGER});
-      totalYearAgo = chance.natural({min: 1, max: Number.MAX_SAFE_INTEGER});
       spyOn(calculatorService, 'getYearAgoPercent').and.callThrough();
     });
 
@@ -33,14 +31,25 @@ describe('Service: CalculatorService', () => {
     });
 
     it('should return 100 when total is not 0 and totalYearAgo are 0', () => {
+      total = 100;
       totalYearAgo = 0;
       const yearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
       expect(yearAgoPercent).toEqual(100);
     });
 
     it('should return the calculated YA% when total and totalYearAgo are 0', () => {
+      total = 50;
+      totalYearAgo = 100;
       const yearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
-      const expectedYearAgoPercent = (((total / totalYearAgo) - 1) * 100);
+      const expectedYearAgoPercent = -50;
+      expect(yearAgoPercent).toEqual(expectedYearAgoPercent);
+    });
+
+    it('should return 0 when the result calulated is a negative decimal that rounds down to 0', () => {
+      total = 10;
+      totalYearAgo = 10.0040;
+      const yearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
+      const expectedYearAgoPercent = -0;
       expect(yearAgoPercent).toEqual(expectedYearAgoPercent);
     });
   });

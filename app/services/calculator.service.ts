@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { round } from 'lodash';
 
 @Injectable()
 export class CalculatorService {
@@ -25,6 +26,6 @@ export class CalculatorService {
       ? 0
       : totalYearAgo === 0
         ? 100
-        : (((total / totalYearAgo) - 1) * 100);
+        : round((((total / totalYearAgo) - 1) * 100), 1);
   }
 }

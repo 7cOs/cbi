@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
 import { ActionStatus } from '../../enums/action-status.enum';
-import { FetchListPerformancePayload } from '../actions/lists.action';
+import { FetchListPerformancePayload, LeaveListPayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
@@ -13,6 +13,7 @@ import { initialState, listsReducer, ListsState } from './lists.reducer';
 import * as ListsActions from '../actions/lists.action';
 import { ListPerformance } from '../../models/lists/list-performance.model';
 import { Action } from 'rxjs/scheduler/Action';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 
 const chance = new Chance();
 const listIdMock = chance.string();
@@ -22,8 +23,9 @@ const oppId = chance.string();
 describe('Lists Reducer', () => {
 
   describe('when a FetchStoreDetails action is dispatched', () => {
-    it('should update the store details status to Fetching', () => {
+    it('should update the store details status to Fetching and reset the manageListStatus to NotFetched', () => {
       const expectedState: ListsState = {
+        manageListStatus: ActionStatus.NotFetched,
         listSummary: initialState.listSummary,
         listStores: {
           storeStatus: ActionStatus.Fetching,
@@ -44,6 +46,7 @@ describe('Lists Reducer', () => {
       const stores = getStoreListsMock();
 
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listSummary: initialState.listSummary,
         listStores: {
           storeStatus: ActionStatus.Fetched,
@@ -63,6 +66,7 @@ describe('Lists Reducer', () => {
 
     it('should should update the store details status to Error', () => {
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listSummary: initialState.listSummary,
         listStores: {
           storeStatus: ActionStatus.Error,
@@ -82,6 +86,7 @@ describe('Lists Reducer', () => {
   describe('when a FetchHeaderDetails action is dispatched', () => {
     it('should update the header details status to Fetching', () => {
         const expectedState: ListsState = {
+          manageListStatus: initialState.manageListStatus,
           listStores:  initialState.listStores,
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
@@ -102,6 +107,7 @@ describe('Lists Reducer', () => {
       const headersMock = getListsSummaryMock();
 
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores:  initialState.listStores,
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
@@ -121,6 +127,7 @@ describe('Lists Reducer', () => {
 
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores:  initialState.listStores,
         listSummary: {
           summaryStatus: ActionStatus.Error,
@@ -146,6 +153,7 @@ describe('Lists Reducer', () => {
         dateRangeCode: getDateRangeTimePeriodValueMock()
       };
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -169,6 +177,7 @@ describe('Lists Reducer', () => {
     it('should set the performance volumeStatus to Fetched and the performance volume to the payload', () => {
       const payloadMock: ListPerformance = getListPerformanceMock();
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -192,6 +201,7 @@ describe('Lists Reducer', () => {
     it('should set the performance volumeStatus to Error', () => {
       const payloadMock: Error = new Error(chance.string());
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -220,6 +230,7 @@ describe('Lists Reducer', () => {
         dateRangeCode: getDateRangeTimePeriodValueMock()
       };
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -243,6 +254,7 @@ describe('Lists Reducer', () => {
     it('should set the performance podStatus to Fetched and the performance pod to the payload', () => {
       const payloadMock: ListPerformance = getListPerformanceMock();
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -266,6 +278,7 @@ describe('Lists Reducer', () => {
     it('should set the performance podStatus to Error', () => {
       const payloadMock: Error = new Error(chance.string());
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores: initialState.listStores,
         listSummary: initialState.listSummary,
         listOpportunities: initialState.listOpportunities,
@@ -288,6 +301,7 @@ describe('Lists Reducer', () => {
   describe('when a FetchOppsForList action is dispatched', () => {
     it('should update the opportunities status to Fetching', () => {
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listSummary: initialState.listSummary,
         listStores: initialState.listStores,
         listOpportunities: {
@@ -308,6 +322,7 @@ describe('Lists Reducer', () => {
       const opportunities = getListOpportunitiesMock();
 
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listSummary: initialState.listSummary,
         listStores: initialState.listStores,
         listOpportunities: {
@@ -327,6 +342,7 @@ describe('Lists Reducer', () => {
 
     it('should should update the opportunitiesStatus to Error', () => {
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listSummary: initialState.listSummary,
         listStores: initialState.listStores,
         listOpportunities: {
@@ -346,6 +362,7 @@ describe('Lists Reducer', () => {
   describe('when a PatchList action is dispatched', () => {
     it('should update the list summary details status to Fetching', () => {
         const expectedState: ListsState = {
+          manageListStatus: initialState.manageListStatus,
           listStores:  initialState.listStores,
           listSummary: {
             summaryStatus: ActionStatus.Fetching,
@@ -364,6 +381,7 @@ describe('Lists Reducer', () => {
       const headersMock = getListsSummaryMock();
 
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores:  initialState.listStores,
         listSummary: {
           summaryStatus: ActionStatus.Fetched,
@@ -383,6 +401,7 @@ describe('Lists Reducer', () => {
 
     it('should should update the headers status to Error', () => {
       const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
         listStores:  initialState.listStores,
         listSummary: {
           summaryStatus: ActionStatus.Error,
@@ -399,7 +418,173 @@ describe('Lists Reducer', () => {
     });
   });
 
-  describe('when a RemoveStoreFromList action is dispatched', () => {
+  describe('when an ArchiveList action is received', () => {
+    it('should update the manageListStatus state to Fetching', () => {
+      const payloadMock: ListsSummary = getListsSummaryMock();
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Fetching,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.ArchiveList(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an ArchiveListSuccess action is received', () => {
+    it('should update the manageListStatus state to Fetched', () => {
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Fetched,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.ArchiveListSuccess()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an ArchiveListError action is received', () => {
+    it('should update the manageListStatus state to Error', () => {
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Error,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.ArchiveListError()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an DeleteList action is received', () => {
+    it('should update the manageListStatus state to Fetching', () => {
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Fetching,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.DeleteList(chance.string())
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an DeleteListSuccess action is received', () => {
+    it('should update the manageListStatus state to Fetched', () => {
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Fetched,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.DeleteListSuccess()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an DeleteListError action is received', () => {
+    it('should update the manageListStatus state to Error', () => {
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Error,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.DeleteListError()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an LeaveList action is received', () => {
+    it('should update the manageListStatus state to Fetching', () => {
+      const payloadMock: LeaveListPayload = {
+        currentUserEmployeeId: chance.string(),
+        listSummary: getListsSummaryMock()
+      };
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Fetching,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.LeaveList(payloadMock)
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an LeaveListSuccess action is received', () => {
+    it('should update the manageListStatus state to Fetched', () => {
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Fetched,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.LeaveListSuccess()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when an LeaveListError action is received', () => {
+    it('should update the manageListStatus state to Error', () => {
+      const expectedState: ListsState = {
+        manageListStatus: ActionStatus.Error,
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.LeaveListError()
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+   describe('when a RemoveStoreFromList action is dispatched', () => {
 
     it('should update the list stores and list summary details status to Deleting', () => {
         const expectedState: ListsState = {
@@ -412,6 +597,7 @@ describe('Lists Reducer', () => {
             summaryData: initialState.listSummary.summaryData
           },
           listOpportunities: initialState.listOpportunities,
+          manageListStatus: initialState.manageListStatus,
           performance: initialState.performance
         };
 
@@ -434,6 +620,7 @@ describe('Lists Reducer', () => {
           summaryData: initialState.listSummary.summaryData
         },
         listOpportunities: initialState.listOpportunities,
+        manageListStatus: initialState.manageListStatus,
         performance: initialState.performance
       };
 
@@ -456,6 +643,7 @@ describe('Lists Reducer', () => {
           summaryData: initialState.listSummary.summaryData
         },
         listOpportunities: initialState.listOpportunities,
+        manageListStatus: initialState.manageListStatus,
         performance: initialState.performance
       };
       const actualState: ListsState = listsReducer(
@@ -476,6 +664,7 @@ describe('Lists Reducer', () => {
             opportunities: initialState.listOpportunities.opportunities,
             opportunitiesStatus: ActionStatus.Deleting
           },
+          manageListStatus: initialState.manageListStatus,
           performance: initialState.performance
         };
 
@@ -494,6 +683,7 @@ describe('Lists Reducer', () => {
           opportunities: initialState.listOpportunities.opportunities,
           opportunitiesStatus: ActionStatus.DeleteSuccess
         },
+        manageListStatus: initialState.manageListStatus,
         performance: initialState.performance
       };
 
@@ -513,6 +703,7 @@ describe('Lists Reducer', () => {
           opportunities: initialState.listOpportunities.opportunities,
           opportunitiesStatus: ActionStatus.DeleteFailure
         },
+        manageListStatus: initialState.manageListStatus,
         performance: initialState.performance
       };
       const actualState: ListsState = listsReducer(
