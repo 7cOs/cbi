@@ -37,27 +37,28 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
     final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
     if (HostType.sauce.name().equalsIgnoreCase(driverHost)) {
-      final RemoteWebDriver remoteSauceDriver = SauceDriverFactory.getRemoteDriver(testName);
-      webDriver.set(remoteSauceDriver);
-
-      sessionId.set(((RemoteWebDriver) webDriver.get()).getSessionId().toString());
       log.info("Targeted Host:" + HostType.sauce.name());
-      log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-      Validate.notNull(webDriver.get(), "Remote driver could not be found for SauceLabs");
 
-      driver = webDriver.get();
+      final RemoteWebDriver remoteSauceDriver = SauceDriverFactory.getRemoteDriver(testName);
+      Validate.notNull(remoteSauceDriver, "Remote driver could not be found for SauceLabs");
+
+      final String id = remoteSauceDriver.getSessionId().toString();
+      log.info("Connected to Selenium Server. Session ID: " + id);
+      sessionId.set(id);
+
+      driver = remoteSauceDriver;
     } else {
       final ChromeDriver chromeDriver = LocalDriverFactory.getChromeDriver();
-      webDriver.set(chromeDriver);
 
       Validate.notNull(
-        webDriver.get(),
+        chromeDriver,
         "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
           "/n Have you downloaded the correct driver into your local target directory?"
       );
 
-      driver = webDriver.get();
+      driver = chromeDriver;
     }
+    webDriver.set(driver);
 
     return driver;
   }
