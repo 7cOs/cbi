@@ -230,8 +230,9 @@ module.exports = /*  @ngInject */
               .then(result => {
                 vm.toggleSelectAllStores(false);
                 loaderService.closeLoader();
-                toastService.showToast('Added', selectedStoreIds);
+                toastService.showToast('added');
               }, err => {
+                toastService.showToast('addedError');
                 loaderService.closeLoader();
                 console.log('Error adding these ids: ', selectedStoreIds, ' Responded with error: ', err);
                 getTargetLists();
@@ -331,12 +332,13 @@ module.exports = /*  @ngInject */
             .then(result => {
               vm.toggleSelectAllStores(false);
               loaderService.closeLoader();
-              toastService.showToast('copied', opportunityIds);
-          }, err => {
-            loaderService.closeLoader();
-            console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
-            getTargetLists();
-          });
+              toastService.showToast('added');
+            }, err => {
+              loaderService.closeLoader();
+              toastService.showToast('addedError');
+              console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+              getTargetLists();
+            });
         });
       }
     }
@@ -1111,20 +1113,11 @@ module.exports = /*  @ngInject */
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : vm.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
-        // This logic is shared across multiple views so we have to detect where we are to fire the correct GA event.
-        if ($state.current.name.includes('opportunities')) {
-          analyticsService.trackEvent(
-           'Opportunities',
-            `${addAction ? 'Add' : 'Copy'} to List`,
-            addAction ? targetList.id : vm.targetListService.model.currentList.id
-          );
-        } else {
-          analyticsService.trackEvent(
-            targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel, targetListService.model.currentList.archived),
-            `${addAction ? 'Add' : 'Copy'} to List`,
-            addAction ? targetList.id : vm.targetListService.model.currentList.id
-          );
-        }
+        analyticsService.trackEvent(
+          'Opportunities',
+          `${addAction ? 'Add' : 'Copy'} to List`,
+          addAction ? targetList.id : vm.targetListService.model.currentList.id
+        );
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);
