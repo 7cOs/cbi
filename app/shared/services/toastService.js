@@ -33,8 +33,7 @@ module.exports = /*  @ngInject */
       showToast: showToast,
       showPerformanceDataErrorToast: showPerformanceDataErrorToast,
       showOpportunityCountErrorToast: showOpportunityCountErrorToast,
-      showCopyToListToast: showCopyToListToast,
-      showListDetailManageActionToast: showListDetailManageActionToast
+      showListDetailToast: showListDetailToast
     };
 
     const threeSeconds = 3000;
@@ -84,19 +83,12 @@ module.exports = /*  @ngInject */
       }, tenSeconds);
     }
 
-    function showCopyToListToast(toastType) {
+    function showListDetailToast(toastType) {
       model[toastType] = true;
 
       $timeout(() => {
         model[toastType] = false;
 
-      }, threeSeconds);
-    }
-    function showListDetailManageActionToast(toastType) {
-      model[toastType] = true;
-
-      $timeout(() => {
-        model[toastType] = false;
       }, threeSeconds);
     }
   };

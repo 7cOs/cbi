@@ -129,11 +129,11 @@ export class ListsEffects {
       .switchMap((action: ListActions.CopyStoresToList) => {
         return this.listsApiService.addStoresToList(action.payload.listId, {storeSourceCode: action.payload.id})
           .map(() => {
-            this.toastService.showCopyToListToast(CopyToListToastType.CopyStores);
+            this.toastService.showListDetailToast(CopyToListToastType.CopyStores);
             return new ListActions.CopyStoresToListSuccess;
           })
           .catch(() => {
-            this.toastService.showCopyToListToast(CopyToListToastType.CopyStoresError);
+            this.toastService.showListDetailToast(CopyToListToastType.CopyStoresError);
             return Observable.of(new ListActions.CopyStoresToListError);
           });
       });
@@ -146,11 +146,11 @@ export class ListsEffects {
       .switchMap((action: ListActions.CopyOppsToList) => {
         return this.listsApiService.addOpportunitiesToList(action.payload.listId, action.payload.ids)
           .map(() => {
-            this.toastService.showCopyToListToast(CopyToListToastType.CopyOpps);
+            this.toastService.showListDetailToast(CopyToListToastType.CopyOpps);
             return new ListActions.CopyOppsToListSuccess;
           })
           .catch(() => {
-            this.toastService.showCopyToListToast(CopyToListToastType.CopyOppsError);
+            this.toastService.showListDetailToast(CopyToListToastType.CopyOppsError);
             return Observable.of(new ListActions.CopyOppsToListError);
           });
       });
@@ -225,11 +225,11 @@ export class ListsEffects {
 
         return this.listsApiService.updateList(formattedPayload, action.payload.id)
           .map(() => {
-            this.toastService.showListDetailManageActionToast(ListManageActionToastType.Archive);
+            this.toastService.showListDetailToast(ListManageActionToastType.Archive);
             return new ListActions.ArchiveListSuccess;
           })
           .catch(() => {
-            this.toastService.showListDetailManageActionToast(ListManageActionToastType.ArchiveError);
+            this.toastService.showListDetailToast(ListManageActionToastType.ArchiveError);
             return Observable.of(new ListActions.ArchiveListError);
           });
       });
@@ -242,11 +242,11 @@ export class ListsEffects {
       .switchMap((action: ListActions.DeleteList) => {
         return this.listsApiService.deleteList(action.payload)
           .map(() => {
-            this.toastService.showListDetailManageActionToast(ListManageActionToastType.Delete);
+            this.toastService.showListDetailToast(ListManageActionToastType.Delete);
             return new ListActions.DeleteListSuccess;
           })
           .catch(() => {
-            this.toastService.showListDetailManageActionToast(ListManageActionToastType.DeleteError);
+            this.toastService.showListDetailToast(ListManageActionToastType.DeleteError);
             return Observable.of(new ListActions.DeleteListError);
           });
       });
@@ -264,11 +264,11 @@ export class ListsEffects {
 
         return this.listsApiService.updateList(formattedPayload, action.payload.listSummary.id)
           .map(() => {
-            this.toastService.showListDetailManageActionToast(ListManageActionToastType.Leave);
+            this.toastService.showListDetailToast(ListManageActionToastType.Leave);
             return new ListActions.LeaveListSuccess;
           })
           .catch(() => {
-            this.toastService.showListDetailManageActionToast(ListManageActionToastType.LeaveError);
+            this.toastService.showListDetailToast(ListManageActionToastType.LeaveError);
             return Observable.of(new ListActions.LeaveListError);
           });
       });

@@ -49,7 +49,7 @@ describe('Lists Effects', () => {
   let listHeaderMock: ListsSummaryDTO;
   let storeListMock: ListStoreDTO[];
   let headerDetailMock: ListsSummary;
-  let storesData: Array<StoreDetails> = getStoreListsMock();
+  let storesData: Array<StoreDetails> = getStoreListsMock();``
   let listOpportunities: Array<ListsOpportunities> = getListOpportunitiesMock();
   let groupedOppsObj: OpportunitiesByStore = getOpportunitiesByStoreMock();
   let listOpportunitiesDTOMock: ListOpportunityDTO[];
@@ -59,8 +59,7 @@ describe('Lists Effects', () => {
   let formattedListMock: FormattedNewList;
 
   const toastServiceMock = {
-    showCopyToListToast: jasmine.createSpy('showCopyToListToast'),
-    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast')
+    showListDetailToast: jasmine.createSpy('showListDetailToast'),
   };
 
   const listsApiServiceMock = {
@@ -152,7 +151,7 @@ describe('Lists Effects', () => {
   });
 
   afterEach(() => {
-    toastServiceMock.showListDetailManageActionToast.calls.reset();
+    toastServiceMock.showListDetailToast.calls.reset();
   });
 
   describe('when a FetchStoreDetails actions is received', () => {
@@ -167,7 +166,7 @@ describe('Lists Effects', () => {
     });
 
     afterEach(() => {
-      toastServiceMock.showCopyToListToast.calls.reset();
+      toastServiceMock.showListDetailToast.calls.reset();
     });
 
     describe('when everything returns successfully', () => {
@@ -274,7 +273,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyStores);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyStores);
       });
     });
 
@@ -287,7 +286,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyStoresError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyStoresError);
       });
     });
   });
@@ -322,7 +321,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyOpps);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyOpps);
       });
     });
 
@@ -335,7 +334,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showCopyToListToast).toHaveBeenCalledWith(CopyToListToastType.CopyOppsError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyOppsError);
       });
     });
   });
@@ -582,7 +581,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Archive);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Archive);
       });
     });
 
@@ -595,7 +594,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.ArchiveError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.ArchiveError);
       });
     });
   });
@@ -626,7 +625,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Delete);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Delete);
       });
     });
 
@@ -639,7 +638,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.DeleteError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.DeleteError);
       });
     });
   });
@@ -695,7 +694,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
       });
     });
 
@@ -708,7 +707,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.LeaveError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.LeaveError);
       });
     });
   });
