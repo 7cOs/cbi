@@ -19,8 +19,8 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../../models/lists/lists-opportunities-dto.model';
 import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
-import { V3List } from '../../models/lists/v3-list.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { V3List } from '../../models/lists/v3-list.model';
 
 @Injectable()
 export class ListsEffects {

@@ -4,13 +4,12 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 
-import {
-  FetchHeaderDetailsPayload,
-  FetchOppsForListPayload,
-  FetchListPerformancePayload,
-  FetchStoreDetailsPayload, LeaveListPayload, CopyStoresToListPayload, CopyOppsToListPayload
-} from '../actions/lists.action';
+import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
 import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
+import { FetchHeaderDetailsPayload,
+         FetchOppsForListPayload,
+         FetchListPerformancePayload,
+         FetchStoreDetailsPayload, LeaveListPayload, CopyStoresToListPayload, CopyOppsToListPayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getFormattedNewListMock } from '../../models/lists/formatted-new-list.model.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
@@ -34,7 +33,6 @@ import { ListStoreDTO } from '../../models/lists/lists-store-dto.model';
 import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
-import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 const chance = new Chance();

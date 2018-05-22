@@ -638,7 +638,7 @@ describe('Lists Reducer', () => {
 
   describe('when an CopyStoreToList action is received', () => {
     it('should update the copytStatus state to Fetching', () => {
-      let idMock = chance.string();
+      const idMock = chance.string();
       const payloadMock: CopyStoresToListPayload = {
         listId: listIdMock,
         id: idMock
@@ -704,7 +704,7 @@ describe('Lists Reducer', () => {
 
   describe('when an CopyOppsToList action is received', () => {
     it('should update the copytStatus state to Fetching', () => {
-      let idMock = [{opportunityId: chance.string()}, {opportunityId: chance.string()}] ;
+      const idMock = [{opportunityId: chance.string()}, {opportunityId: chance.string()}] ;
       const payloadMock: CopyOppsToListPayload = {
         listId: listIdMock,
         ids: idMock
