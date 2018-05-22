@@ -404,6 +404,22 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
+    this.copyToListModalStringInputs = {
+      'title': 'Copy to List',
+      'dropdownInputModel': this.dropdownInputModel,
+      'acceptLabel': 'COPY',
+      'rejectLabel': 'CANCEL'
+    };
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
+    const copyModalSubscription = Observable.fromPromise(
+      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
+    );
+    copyModalSubscription.subscribe((value: CompassActionModalOutputs) => {
+      this.handleCopyModalEvent(value, checkedEntities);
+    });
+  }
+
   private isListPerformanceFetched(
     storeStatus: ActionStatus,
     volumePerformanceStatus: ActionStatus,
@@ -422,22 +438,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     return storeStatus === ActionStatus.Fetched
       && volumePerformanceStatus === ActionStatus.Fetched
       && opportunitiesStatus === ActionStatus.Fetched;
-  }
-
-  private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
-    this.copyToListModalStringInputs = {
-      'title': 'Copy to List',
-      'dropdownInputModel': this.dropdownInputModel,
-      'acceptLabel': 'COPY',
-      'rejectLabel': 'CANCEL'
-    };
-    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
-    const subscription = Observable.fromPromise(
-      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
-    );
-    subscription.subscribe((value: any) => {
-      this.handleCopyModalEvent(value, checkedEntities);
-    });
   }
 
   private getDeselectedPerformanceTableData(performanceTableData: ListPerformanceTableRow[]): ListPerformanceTableRow[] {
