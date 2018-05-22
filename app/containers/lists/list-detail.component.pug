@@ -22,6 +22,7 @@ compass-tabs(
       )
       div.button-section
         compass-action-button.action-button-spacing(
+          [isDisabled]="!isPerformanceTabDataFetched",
           [actionLabel]="actionButtonType.Download",
           (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
@@ -45,8 +46,9 @@ compass-tabs(
         )
       div.button-section
         compass-action-button.action-button-spacing(
-            [actionLabel]="actionButtonType.Download",
-            (onActionButtonClicked)="downloadActionButtonClicked($event)"
+          [isDisabled]="!isOppsTabDataFetched",
+          [actionLabel]="actionButtonType.Download",
+          (onActionButtonClicked)="downloadActionButtonClicked($event)"
           )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",

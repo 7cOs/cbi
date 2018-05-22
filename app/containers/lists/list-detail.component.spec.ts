@@ -2,6 +2,7 @@ import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { DecimalPipe, UpperCasePipe } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
@@ -10,26 +11,32 @@ import { Title } from '@angular/platform-browser';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
+import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput }from '../../models/compass-manage-list-modal-output.model';
 import { CompassSelectComponent } from '../../shared/components/compass-select/compass-select.component';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { getListOpportunitiesTableRowMock } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
+import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
+import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent, PageChangeData } from './list-detail.component';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import * as ListsActions from '../../state/actions/lists.action';
+import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListStoresDownloadCSV } from '../../models/lists/list-stores-download-csv.model';
+import { ListOpportunitiesDownloadCSV } from '../../models/lists/list-opportunities-download-csv.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
+import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
-import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 const chance = new Chance();
 
@@ -184,6 +191,8 @@ describe('ListDetailComponent', () => {
       ],
       providers: [
         CalculatorService,
+        DecimalPipe,
+        UpperCasePipe,
         ListsTableTransformerService,
         {
           provide: Title,
@@ -493,6 +502,98 @@ describe('ListDetailComponent', () => {
         currentUserEmployeeId: componentInstance.currentUser.employeeId,
         listSummary: manageModalOutputMock.listSummary
       }));
+    });
+  });
+
+  describe('[Method] modalDownloadClicked', () => {
+    let actionModalDownloadOutputMock: CompassActionModalOutputs;
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+    let performanceTableData: ListPerformanceTableRow[];
+    const storesOnlyDownloadColumns = 9;
+    const oppsDownloadColumns = 14;
+    let groupedOppsByStoreMock: OpportunitiesByStore = {};
+
+    beforeEach(() => {
+      opportunitiesTableData = getListOpportunitiesTableRowMock(10);
+      performanceTableData = getListPerformanceTableRowMock(10);
+
+      opportunitiesTableData.forEach((storeRow: ListOpportunitiesTableRow) => {
+        groupedOppsByStoreMock[storeRow.unversionedStoreId] = getListOpportunitiesMock();
+      });
+    });
+
+    it('should only have store related columns for Download when StoreOnly is selected', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListsDownloadType.Stores,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Performance';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      expect(returnedValue.length).toEqual(performanceTableData.length);
+      returnedValue.forEach((storeRow: ListStoresDownloadCSV) => {
+        expect(Object.keys(storeRow).length).toEqual(storesOnlyDownloadColumns);
+      });
+    });
+
+    it('should have both stores and opps related columns for Download when Opportunities are selected', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListsDownloadType.Opportunities,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Opportunities';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+
+      componentInstance.groupedOppsByStore = groupedOppsByStoreMock;
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      returnedValue.forEach((storeRow: ListOpportunitiesDownloadCSV) => {
+        expect(Object.keys(storeRow).length).toEqual(oppsDownloadColumns);
+      });
+    });
+
+    it('should have only closed status records for Download when filter selected is closed', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListsDownloadType.Opportunities,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Opportunities';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      componentInstance.oppStatusSelected = OpportunityStatus.closed;
+      fixture.detectChanges();
+
+      componentInstance.groupedOppsByStore = groupedOppsByStoreMock;
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      returnedValue.forEach((storeRow: ListOpportunitiesDownloadCSV) => {
+        expect(storeRow.opportunityStatus.toLowerCase()).toEqual(OpportunityStatus.closed);
+      });
+    });
+
+    it('should have only targeted and inactive status records for Download when filter selected is targeted', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListsDownloadType.Opportunities,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Opportunities';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      componentInstance.oppStatusSelected = OpportunityStatus.targeted;
+      fixture.detectChanges();
+
+      componentInstance.groupedOppsByStore = groupedOppsByStoreMock;
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      returnedValue.forEach((storeRow: ListOpportunitiesDownloadCSV) => {
+        expect([OpportunityStatus.targeted, OpportunityStatus.inactive]).toMatch(storeRow.opportunityStatus.toLowerCase());
+      });
     });
   });
 
