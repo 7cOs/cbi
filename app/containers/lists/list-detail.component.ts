@@ -202,7 +202,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  downloadActionButtonClicked() {
+  downloadActionButtonClicked(): void {
     let numStores = 0;
     if (this.selectedTab === this.performanceTabTitle) {
       numStores = this.performanceTableDataSize;
@@ -226,7 +226,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  opportunityStatusSelected(statusValue: OpportunityStatus) {
+  opportunityStatusSelected(statusValue: OpportunityStatus): void {
     this.oppStatusSelected = statusValue;
     this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
       this.opportunitiesTableData : this.filterOpportunitiesByStatus(
@@ -264,14 +264,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription.unsubscribe();
   }
 
-  public handlePageClick(event: ListPageClick) {
+  public handlePageClick(event: ListPageClick): void {
     const pageNumber = event.pageNumber;
     let pageStart = ((pageNumber - 1 ) * LIST_TABLE_SIZE);
     let pageEnd = (pageNumber * LIST_TABLE_SIZE) ;
     this.pageChangeData = {pageStart: pageStart, pageEnd: pageEnd};
   }
 
-  public handleManageButtonClick() {
+  public handleManageButtonClick(): void {
     const manageModalRef: CompassManageListModalOverlayRef = this.compassModalService.showManageListModalDialog({
       title: 'Manage List',
       acceptLabel: 'Save',
@@ -308,7 +308,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handlePaginationReset() {
+  public handlePaginationReset(): void {
     this.paginationReset.next();
   }
 
@@ -476,7 +476,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   private generateCSVForDownload(
     value: CompassActionModalOutputs,
-    csvDownloadData: Array<ListStoresDownloadCSV | ListOpportunitiesDownloadCSV>) {
+    csvDownloadData: Array<ListStoresDownloadCSV | ListOpportunitiesDownloadCSV>): void {
       const storesHeader = [
         'Distributor',
         'Store Name',
