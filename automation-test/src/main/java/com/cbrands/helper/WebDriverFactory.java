@@ -32,6 +32,20 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<>();
 
+  public static SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(PropertiesCache
+    .getInstance()
+    .getProperty("sauce.userName"), PropertiesCache.getInstance().getProperty("sauce.accessKey"));
+
+  @Override
+  public SauceOnDemandAuthentication getAuthentication() {
+    return authentication;
+  }
+
+  @Override
+  public String getSessionId() {
+    return sessionId.get();
+  }
+
   public static WebDriver createDriver(String testName) throws MalformedURLException {
     final WebDriver driver;
 
@@ -179,17 +193,4 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     sauce
   }
 
-  public static SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(PropertiesCache
-    .getInstance()
-    .getProperty("sauce.userName"), PropertiesCache.getInstance().getProperty("sauce.accessKey"));
-
-  @Override
-  public SauceOnDemandAuthentication getAuthentication() {
-    return authentication;
-  }
-
-  @Override
-  public String getSessionId() {
-    return sessionId.get();
-  }
 }
