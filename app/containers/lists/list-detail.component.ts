@@ -9,6 +9,7 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
+import { CompassActionModalEvent } from '../../enums/compass-action-modal-event.enum';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
@@ -406,8 +407,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.copyToListModalStringInputs = {
       'title': 'Copy to List',
       'dropdownInputModel': this.dropdownInputModel,
-      'acceptLabel': 'COPY',
-      'rejectLabel': 'CANCEL'
+      'acceptLabel': CompassActionModalEvent.Copy,
+      'rejectLabel': CompassActionModalEvent.Cancel
     };
     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
     const copyModalSubscription = Observable.fromPromise(
