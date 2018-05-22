@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 
-import { FetchListPerformancePayload } from './lists.action';
+import { FetchListPerformancePayload, LeaveListPayload } from './lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
@@ -10,6 +10,7 @@ import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock'
 import * as ListsActions from './lists.action';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
 import { ListPerformance } from '../../models/lists/list-performance.model';
+import { ListsSummary } from '../../models/lists/lists-header.model';
 
 const chance = new Chance();
 
@@ -329,6 +330,87 @@ describe('Lists Actions', () => {
 
     it('should contain the mock payload', () => {
       expect(action.payload).toEqual(error);
+    });
+  });
+
+  describe('ArchiveList', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: ListsSummary = getListsSummaryMock();
+      const action = new ListsActions.ArchiveList(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.ARCHIVE_LIST);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('ArchiveListSuccess', () => {
+    it('should have the correct action type', () => {
+      const action = new ListsActions.ArchiveListSuccess();
+
+      expect(action.type).toBe(ListsActionTypes.ARCHIVE_LIST_SUCCESS);
+    });
+  });
+
+  describe('ArchiveListError', () => {
+    it('should have the correct action type', () => {
+      const action = new ListsActions.ArchiveListError();
+
+      expect(action.type).toBe(ListsActionTypes.ARCHIVE_LIST_ERROR);
+    });
+  });
+
+  describe('DeleteList', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: string = chance.string();
+      const action = new ListsActions.DeleteList(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.DELETE_LIST);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('DeleteListSuccess', () => {
+    it('should have the correct action type', () => {
+      const action = new ListsActions.DeleteListSuccess();
+
+      expect(action.type).toBe(ListsActionTypes.DELETE_LIST_SUCCESS);
+    });
+  });
+
+  describe('DeleteListError', () => {
+    it('should have the correct action type', () => {
+      const action = new ListsActions.DeleteListError();
+
+      expect(action.type).toBe(ListsActionTypes.DELETE_LIST_ERROR);
+    });
+  });
+
+  describe('LeaveList', () => {
+    it('should have the correct action type and contain its payload', () => {
+      const payloadMock: LeaveListPayload = {
+        currentUserEmployeeId: chance.string(),
+        listSummary: getListsSummaryMock()
+      };
+      const action = new ListsActions.LeaveList(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.LEAVE_LIST);
+      expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('LeaveListSuccess', () => {
+    it('should be the correct action type', () => {
+      const action = new ListsActions.LeaveListSuccess();
+
+      expect(action.type).toBe(ListsActionTypes.LEAVE_LIST_SUCCESS);
+    });
+  });
+
+  describe('LeaveListError', () => {
+    it('should be the correct action type', () => {
+      const action = new ListsActions.LeaveListError();
+
+      expect(action.type).toBe(ListsActionTypes.LEAVE_LIST_ERROR);
     });
   });
 });

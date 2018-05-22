@@ -79,10 +79,7 @@ describe('ListsTableTransformerService', () => {
             storeAddressSubline: getExpectedStoreAddress(storeDetailsMock[index]),
             distributorColumn: storeDetailsMock[index].distributor,
             segmentColumn: storeDetailsMock[index].segmentCode,
-            cytdColumn: calculatorService.getYearAgoDelta(
-              volumeStorePerformanceMock[index].current,
-              volumeStorePerformanceMock[index].yearAgo
-            ),
+            cytdColumn: volumeStorePerformanceMock[index].current,
             cytdVersusYaPercentColumn: calculatorService.getYearAgoPercent(
               volumeStorePerformanceMock[index].current,
               volumeStorePerformanceMock[index].yearAgo

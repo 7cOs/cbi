@@ -5,8 +5,6 @@ import { CollaboratorType } from '../enums/lists/collaborator-type.enum';
 import { ListCategory } from '../enums/lists/list-category.enum';
 import { ListPerformance } from '../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
-import { ListType } from '../enums/lists/list-type.enum';
-
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
 import { ListsCollectionSummary } from '../models/lists/lists-collection-summary.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
@@ -15,6 +13,7 @@ import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.mode
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
 import { ListStorePerformance } from '../models/lists/list-store-performance.model';
 import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
+import { ListType } from '../enums/lists/list-type.enum';
 import { OpportunitiesByStore } from '../models/lists/opportunities-by-store.model';
 import { OpportunityImpact } from '../enums/list-opportunities/list-opportunity-impact.enum';
 import { OpportunityStatus } from '../enums/list-opportunities/list-opportunity-status.enum';
@@ -48,12 +47,14 @@ export class ListsTransformerService {
     const archivedV2Lists: V2List[] = archivedLists.map((list: V3List) => this.transformV3ToV2(list));
     const sharedWithMeV2Lists: V2List[] = sharedWithMeLists.map((list: V3List) => this.transformV3ToV2(list));
     const ownedNotArchivedV2Lists: V2List[] = ownedNotArchivedLists.map((list: V3List) => this.transformV3ToV2(list, true));
+    const ownedAndSharedWithMeV2Lists: V2List[] = ownedV2Lists.concat(sharedWithMeV2Lists);
 
     return {
       owned: ownedV2Lists,
       archived: archivedV2Lists,
       ownedNotArchivedTargetLists: ownedNotArchivedV2Lists,
       sharedWithMe: sharedWithMeV2Lists,
+      ownedAndSharedWithMe: ownedAndSharedWithMeV2Lists,
       sharedArchivedCount: sharedArchivedListsCount,
       sharedNotArchivedCount: sharedNotArchivedListsCount,
       ownedNotArchived: ownedNotArchivedListsCount,
@@ -94,6 +95,18 @@ export class ListsTransformerService {
       collaboratorEmployeeIds: list.collaborators.map((user: User) => user.employeeId),
       category: ListCategory.Beer
     };
+  }
+
+  public getLeaveListPayload(employeeId: string, listSummary: ListsSummary): FormattedNewList {
+    const convertedPayload: FormattedNewList = Object.assign({}, this.convertCollaborators(listSummary), {
+      ownerEmployeeId: listSummary.ownerId
+    });
+
+    convertedPayload.collaboratorEmployeeIds = convertedPayload.collaboratorEmployeeIds.filter((collaboratorId: string) => {
+      return collaboratorId !== employeeId;
+    });
+
+    return convertedPayload;
   }
 
   public transformV3ToV2(list: V3List, isOwnedList: boolean = false): V2List {

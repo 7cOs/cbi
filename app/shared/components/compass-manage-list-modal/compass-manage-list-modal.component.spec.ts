@@ -1,14 +1,19 @@
+import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { CompassActionButtonComponent } from '../compass-action-button/compass-action-button.component';
+import { CompassAlertModalComponent } from '../compass-alert-modal/compass-alert-modal.component';
 import { CompassManageListModalComponent } from './compass-manage-list-modal.component';
+import { CompassManageListModalEvent } from '../../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
+import { CompassManageListModalOutput } from '../../../models/compass-manage-list-modal-output.model';
 import { COMPASS_MANAGE_LIST_MODAL_INPUTS } from './compass-manage-list-modal.tokens';
 import { CompassModalService } from '../../../services/compass-modal.service';
 import { CompassUserSearchComponent } from '../compass-user-search/compass-user-search.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { getListsSummaryMock } from '../../../models/lists/lists-header.model.mock';
 
 const chance = new Chance();
 
@@ -39,6 +44,8 @@ describe('Compass Manage Modal List Component', () => {
         ReactiveFormsModule
       ],
       declarations: [
+        CompassActionButtonComponent,
+        CompassAlertModalComponent,
         CompassManageListModalComponent,
         CompassUserSearchComponent
       ],
@@ -60,22 +67,7 @@ describe('Compass Manage Modal List Component', () => {
       title: chance.string(),
       acceptLabel: chance.string(),
       rejectLabel: chance.string(),
-      listObject: {
-        archived: false,
-        description: chance.string(),
-        id: chance.string(),
-        name: chance.string(),
-        closedOpportunities: null,
-        totalOpportunities: null,
-        numberOfAccounts: null,
-        ownerFirstName: chance.string(),
-        ownerLastName: chance.string(),
-        collaborators: [],
-        ownerId: chance.string(),
-        collaboratorType: null,
-        category: null,
-        type: null
-      },
+      listObject: getListsSummaryMock(),
       currentUser: {
         firstName: chance.string(),
         lastName: chance.string(),
@@ -103,29 +95,86 @@ describe('Compass Manage Modal List Component', () => {
       expect(titleElement.nativeElement.textContent).toEqual('');
     });
 
-    it('should contain a cancel button element when the injection has a cancel button string', () => {
+    it('should contain a cancel button element containing the reject label text', () => {
       const buttonElement: DebugElement = fixture.debugElement.query(By.css('.compass-modal-btn'));
 
       expect(buttonElement.nativeElement.textContent).toEqual(compassModalInputsMock.rejectLabel);
     });
 
-    it('should contain an accept button element when the injection has an accept button string', () => {
-      const buttonElement: DebugElement = fixture.debugElement.query(By.css('.btn-action'));
+    it('should contain an accept button element containing the accept label text', () => {
+      const buttonElement: DebugElement = fixture.debugElement.query(By.css('compass-action-button'));
 
       expect(buttonElement.nativeElement.textContent).toEqual(compassModalInputsMock.acceptLabel);
     });
   });
 
   describe('Compass Manage List Modal Outputs', () => {
-    it('should output an accept message when the accept button is clicked', (done) => {
-      const buttonElement: DebugElement = fixture.debugElement.query(By.css('.btn-action'));
+    it('should output an CompassManageListModalOutput object when the save button is clicked', (done) => {
+      const buttonElement: DebugElement = fixture.debugElement.query(By.css('compass-action-button'));
+      const expectedOutputObject: CompassManageListModalOutput = {
+        listSummary: compassModalInputsMock.listObject,
+        type: CompassManageListModalEvent.Save
+      };
 
-      componentInstance.buttonContainerEvent.subscribe((value: object) => {
-        expect(value).toEqual(compassModalInputsMock.listObject);
+      componentInstance.buttonContainerEvent.subscribe((value: CompassManageListModalOutput) => {
+        expect(value).toEqual(expectedOutputObject);
         done();
       });
 
       buttonElement.nativeElement.click();
+    });
+  });
+
+  describe('visible input fields on the manage modal based on list ownership', () => {
+    describe('when the current user is also the owner of the list', () => {
+
+      beforeEach(() => {
+        componentInstance.modalInputs.currentUser.employeeId = componentInstance.modalInputs.listObject.ownerId;
+        componentInstance.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should contain an input field to change the name of the list', () => {
+        const nameInputElement: DebugElement = fixture.debugElement.query(By.css('.modal-input-name'));
+
+        expect(nameInputElement).not.toBe(null);
+      });
+
+      it('should contain an input field to change the description of the list', () => {
+        const descriptionInputElement: DebugElement = fixture.debugElement.query(By.css('.modal-input-description'));
+
+        expect(descriptionInputElement).not.toBe(null);
+      });
+
+      it('should contain an owner footer and not a collaborator footer', () => {
+        const ownerFooterElement: DebugElement = fixture.debugElement.query(By.css('.owner-footer'));
+        const collaboratorFooterElement: DebugElement = fixture.debugElement.query(By.css('.collaborator-footer'));
+
+        expect(ownerFooterElement).not.toBe(null);
+        expect(collaboratorFooterElement).toBe(null);
+      });
+    });
+
+    describe('when the current user is not the owner of the list', () => {
+      it('should not contain an input field to change the name of the list', () => {
+        const nameInputElement: DebugElement = fixture.debugElement.query(By.css('.modal-input-name'));
+
+        expect(nameInputElement).toBe(null);
+      });
+
+      it('should not contain an input field to change the description of the list', () => {
+        const descriptionInputElement: DebugElement = fixture.debugElement.query(By.css('.modal-input-description'));
+
+        expect(descriptionInputElement).toBe(null);
+      });
+
+      it('should contain a collaborator footer and not a owner footer', () => {
+        const ownerFooterElement: DebugElement = fixture.debugElement.query(By.css('.owner-footer'));
+        const collaboratorFooterElement: DebugElement = fixture.debugElement.query(By.css('.collaborator-footer'));
+
+        expect(ownerFooterElement).toBe(null);
+        expect(collaboratorFooterElement).not.toBe(null);
+      });
     });
   });
 });

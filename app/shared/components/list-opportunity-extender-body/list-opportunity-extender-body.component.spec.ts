@@ -21,6 +21,7 @@ describe('Team Performance Opportunities Extender Body', () => {
   let unversionedStoreIdMock: string;
 
   let listDetailMock: ListsState = {
+    manageListStatus: ActionStatus.NotFetched,
     listSummary: {
       summaryStatus: ActionStatus.NotFetched,
       summaryData: {

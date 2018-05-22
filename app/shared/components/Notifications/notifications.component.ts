@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import * as moment from 'moment';
 
 import { AnalyticsService } from '../../../services/analytics.service';
 import { Notification } from '../../../models/notification.model';
-import { NotificationStatus } from '../../../enums/notification.enum';
+import { NotificationStatus, NotificationObjectType } from '../../../enums/notification.enum';
 
 @Component({
   selector: 'notifications',
@@ -40,7 +40,8 @@ export class NotificationsComponent {
   };
 
   constructor(
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    @Inject('$state') private $state: any
   ) { }
 
   clickOn(notification: Notification) {
@@ -60,6 +61,7 @@ export class NotificationsComponent {
     );
 
     this.onNotificationClicked.emit(notification);
+    if (notification.objectType === NotificationObjectType.LIST) this.$state.go('list-detail', {'id': notification.objectId});
   }
 
   notificationClasses(notification: Notification) {
