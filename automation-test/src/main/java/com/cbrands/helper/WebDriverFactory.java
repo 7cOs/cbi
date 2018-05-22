@@ -28,6 +28,7 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
+  private static final String WINDOWS_FILE_EXTENSION_FORMAT = "%s.exe";
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<>();
@@ -54,7 +55,8 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static WebDriver getLocalWebDriver() {
-    final String osName = System.getProperty("os.name").toLowerCase();
+    System.setProperty("webdriver.chrome.driver", formatDriverNameWithOSExtension("chromedriver"));
+
     final boolean isSilentMode = Boolean.parseBoolean(
       PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
     final ChromeOptions options = new ChromeOptions();
@@ -64,13 +66,8 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       options.addArguments("headless");
     }
 
-    if (!osName.startsWith("windows")) {
-      System.setProperty("webdriver.chrome.driver", "chromedriver");
-      webDriver.set(new ChromeDriver(options));
-    } else {
-      System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-      webDriver.set(new ChromeDriver(options));
-    }
+
+    webDriver.set(new ChromeDriver(options));
 
     Validate.notNull(
       webDriver.get(),
@@ -79,6 +76,19 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     );
 
     return webDriver.get();
+  }
+
+  private static String formatDriverNameWithOSExtension(String driverFileName) {
+    final String chromedriverFile;
+
+    final String osName = System.getProperty("os.name").toLowerCase();
+    if (!osName.startsWith("windows")) {
+      chromedriverFile = driverFileName;
+    } else {
+      chromedriverFile = String.format(WINDOWS_FILE_EXTENSION_FORMAT, driverFileName);
+    }
+
+    return chromedriverFile;
   }
 
   private static class SauceDriverFactory {
