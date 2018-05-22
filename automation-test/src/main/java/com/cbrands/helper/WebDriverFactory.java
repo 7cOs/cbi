@@ -48,23 +48,19 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
       driver = webDriver.get();
     } else {
-      driver = getLocalWebDriver();
+      final ChromeDriver chromeDriver = getLocalChromeDriver();
+      webDriver.set(chromeDriver);
+
+      Validate.notNull(
+        webDriver.get(),
+        "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
+          "/n Have you downloaded the correct driver into your local target directory?"
+      );
+
+      driver = webDriver.get();
     }
 
     return driver;
-  }
-
-  private static WebDriver getLocalWebDriver() {
-    final ChromeDriver chromeDriver = getLocalChromeDriver();
-    webDriver.set(chromeDriver);
-
-    Validate.notNull(
-      webDriver.get(),
-      "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
-        "/n Have you downloaded the correct driver into your local target directory?"
-    );
-
-    return webDriver.get();
   }
 
   private static ChromeDriver getLocalChromeDriver() {
