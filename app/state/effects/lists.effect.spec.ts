@@ -49,7 +49,7 @@ describe('Lists Effects', () => {
   let listHeaderMock: ListsSummaryDTO;
   let storeListMock: ListStoreDTO[];
   let headerDetailMock: ListsSummary;
-  let storesData: Array<StoreDetails> = getStoreListsMock();``
+  let storesData: Array<StoreDetails> = getStoreListsMock();
   let listOpportunities: Array<ListsOpportunities> = getListOpportunitiesMock();
   let groupedOppsObj: OpportunitiesByStore = getOpportunitiesByStoreMock();
   let listOpportunitiesDTOMock: ListOpportunityDTO[];
