@@ -214,7 +214,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         value: list.id
       };
     });
-
     listDropDownMenu.unshift({display: 'Choose a List', value: 'Choose a List'});
 
     this.dropdownInputModel = {
@@ -237,7 +236,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         return totalStores;
       }, []);
       this.copyToListModal(checkedStores);
-
     }
   }
 
