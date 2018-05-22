@@ -405,10 +405,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
     this.copyToListModalStringInputs = {
-      'title': 'Copy to List',
-      'dropdownInputModel': this.dropdownInputModel,
-      'acceptLabel': CompassActionModalEvent.Copy,
-      'rejectLabel': CompassActionModalEvent.Cancel
+      title: 'Copy to List',
+      dropdownInputModel: this.dropdownInputModel,
+      acceptLabel: CompassActionModalEvent.Copy,
+      rejectLabel: CompassActionModalEvent.Cancel
     };
     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
     const copyModalSubscription = Observable.fromPromise(
