@@ -28,7 +28,6 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
-  private static final String WINDOWS_FILE_EXTENSION_FORMAT = "%s.exe";
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<>();
@@ -48,7 +47,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
       driver = webDriver.get();
     } else {
-      final ChromeDriver chromeDriver = getLocalChromeDriver();
+      final ChromeDriver chromeDriver = LocalDriverFactory.getLocalChromeDriver();
       webDriver.set(chromeDriver);
 
       Validate.notNull(
@@ -63,33 +62,37 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     return driver;
   }
 
-  private static ChromeDriver getLocalChromeDriver() {
-    System.setProperty("webdriver.chrome.driver", formatDriverNameWithOSExtension("chromedriver"));
+  private static class LocalDriverFactory {
+    private static final String WINDOWS_FILE_EXTENSION_FORMAT = "%s.exe";
 
-    final boolean isSilentMode = Boolean.parseBoolean(
-      PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
-    final ChromeOptions options = new ChromeOptions();
-    options.addArguments("--start-maximized");
-    options.addArguments("--disable-infobars");
-    if (isSilentMode) {
-      options.addArguments("headless");
+    private static ChromeDriver getLocalChromeDriver() {
+      System.setProperty("webdriver.chrome.driver", formatDriverNameWithOSExtension("chromedriver"));
+
+      final boolean isSilentMode = Boolean.parseBoolean(
+        PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
+      final ChromeOptions options = new ChromeOptions();
+      options.addArguments("--start-maximized");
+      options.addArguments("--disable-infobars");
+      if (isSilentMode) {
+        options.addArguments("headless");
+      }
+
+
+      return new ChromeDriver(options);
     }
 
+    private static String formatDriverNameWithOSExtension(String driverFileName) {
+      final String chromedriverFile;
 
-    return new ChromeDriver(options);
-  }
+      final String osName = System.getProperty("os.name").toLowerCase();
+      if (!osName.startsWith("windows")) {
+        chromedriverFile = driverFileName;
+      } else {
+        chromedriverFile = String.format(WINDOWS_FILE_EXTENSION_FORMAT, driverFileName);
+      }
 
-  private static String formatDriverNameWithOSExtension(String driverFileName) {
-    final String chromedriverFile;
-
-    final String osName = System.getProperty("os.name").toLowerCase();
-    if (!osName.startsWith("windows")) {
-      chromedriverFile = driverFileName;
-    } else {
-      chromedriverFile = String.format(WINDOWS_FILE_EXTENSION_FORMAT, driverFileName);
+      return chromedriverFile;
     }
-
-    return chromedriverFile;
   }
 
   private static class SauceDriverFactory {
