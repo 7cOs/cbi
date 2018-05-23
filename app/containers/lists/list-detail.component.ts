@@ -18,7 +18,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
-import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
+import { ListSelectionType } from '../../enums/lists/list-selection-type.enum';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
@@ -45,10 +45,10 @@ export interface PageChangeData {
 
 export const downloadRadioOptions: Array<CompassSelectOption> = [{
   display: 'Stores',
-  value: ListsDownloadType.Stores
+  value: ListSelectionType.Stores
 }, {
   display: 'Stores and Opportunities',
-  value: ListsDownloadType.Opportunities
+  value: ListSelectionType.Opportunities
 }];
 
 @Component({
@@ -93,7 +93,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public downloadAllModalStringInputs: CompassActionModalInputs;
   public compassAlertModalAccept = CompassActionModalEvent.Accept;
   public radioInputModel: RadioInputModel = {
-    selected: ListsDownloadType.Stores,
+    selected: ListSelectionType.Stores,
     radioOptions: downloadRadioOptions,
     title: 'OPTIONS',
     stacked: false

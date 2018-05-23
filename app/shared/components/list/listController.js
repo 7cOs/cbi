@@ -1,9 +1,11 @@
 'use strict';
-const uniqBy = require('lodash').uniqBy;
 
 const findIndex = require('lodash').findIndex;
-const OpportunitiesDownloadType = require('../../../enums/opportunities-download-type.enum').OpportunitiesDownloadType;
+const uniqBy = require('lodash').uniqBy;
 const values = require('lodash/values');
+
+const OpportunitiesDownloadType = require('../../../enums/opportunities-download-type.enum').OpportunitiesDownloadType;
+const ListSelectionType = require('../../../enums/lists/list-selection-type.enum').ListSelectionType;
 
 module.exports = /*  @ngInject */
   function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, listsApiService, listsTransformerService, toastService, compassModalService) {
@@ -164,12 +166,30 @@ module.exports = /*  @ngInject */
     });
 
     function launchAddToListModal() {
+      const allActiveLists = userService.model.targetLists.ownedAndSharedWithMe;
+      const dropdownMenuDefault = [
+        {
+          display: 'Choose a List',
+          value: 'Choose a List'
+        }
+      ];
+
+      const listDropdownMenu = dropdownMenuDefault
+        .concat(allActiveLists
+        .map(list => {
+          return {
+            display: list.name,
+            value: list.id
+          };
+        })
+      );
+
       const radioOptions = [{
-        display: 'Stores',
-        value: 'Stores'
+        display: ListSelectionType.Stores,
+        value: ListSelectionType.Stores
       }, {
-        display: 'Stores and Opportunities',
-        value: 'Stores and Opportunities'
+        display: ListSelectionType.Opportunities,
+        value: ListSelectionType.Opportunities
       }];
 
       const radioInputModel = {
@@ -178,26 +198,6 @@ module.exports = /*  @ngInject */
         title: 'OPTIONS',
         stacked: false
       };
-
-      const dropdownMenuDefault = [
-        {
-          display: 'Choose a List',
-          value: 'Choose a List'
-        }
-      ];
-
-      const allActiveLists = userService.model.targetLists.ownedAndSharedWithMe;
-
-      const listDropdownMenu = dropdownMenuDefault
-        .concat(allActiveLists
-        .map(list => {
-          console.log(list);
-          return {
-            display: list.name,
-            value: list.id
-          };
-        })
-      );
 
       const dropdownInputModel = {
         selected: listDropdownMenu[0].value,
@@ -217,30 +217,12 @@ module.exports = /*  @ngInject */
       let compassModalOverlayRef = compassModalService.showActionModalDialog(addToListInputs, null);
       compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
         const listId = value.dropdownOptionSelected;
-        console.log('radio option selected: ', value.radioOptionSelected);
-        console.log('dropdown option selected: ', value.dropdownOptionSelected);
         switch (value.radioOptionSelected) {
-          case 'Stores':
-            const selectedStoreIds = uniqBy(vm.selected.map(opportunity => opportunity.store.id));
-            const addStoreToListPromises = selectedStoreIds.map(storeId => {
-              return listsApiService.addStoresToListPromise(listId, { storeSourceCode: storeId });
-            });
-            $q.all(addStoreToListPromises)
-              .then(result => {
-                vm.toggleSelectAllStores(false);
-                loaderService.closeLoader();
-                toastService.showToast('added');
-              }, err => {
-                loaderService.closeLoader();
-                toastService.showToast('addedError');
-                console.log('Error adding these ids: ', selectedStoreIds, ' Responded with error: ', err);
-                getTargetLists();
-              });
-
+          case ListSelectionType.Stores:
+            addStoresToList(listId);
             break;
-          case 'Stores and Opportunities':
+          case ListSelectionType.Opportunities:
           default:
-            console.log('stores and opportunities');
             const selectedList = allActiveLists.find(list => list.id === listId);
             handleAddToTargetList(null, selectedList, null, true);
         }
@@ -1244,5 +1226,23 @@ module.exports = /*  @ngInject */
       return this.isAllOpportunitiesSelected
         ? this.filtersService.model.appliedFilter.pagination.totalOpportunities
         : selected.length;
+    }
+
+    function addStoresToList(listId) {
+      const selectedStoreIds = uniqBy(vm.selected.map(opportunity => opportunity.store.id));
+      const addStoreToListPromises = selectedStoreIds.map(storeId => {
+        return listsApiService.addStoresToListPromise(listId, { storeSourceCode: storeId });
+      });
+      $q.all(addStoreToListPromises)
+        .then(result => {
+          vm.toggleSelectAllStores(false);
+          loaderService.closeLoader();
+          toastService.showToast('added');
+        }, err => {
+          loaderService.closeLoader();
+          toastService.showToast('addedError');
+          console.log('Error adding these ids: ', selectedStoreIds, ' Responded with error: ', err);
+          getTargetLists();
+        });
     }
   };

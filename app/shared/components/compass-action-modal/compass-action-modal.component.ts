@@ -6,10 +6,9 @@ import { CompassActionModalOverlayRef } from './compass-action-modal.overlayref'
 import { COMPASS_ACTION_MODAL_INPUTS } from '../../components/compass-action-modal/compass-action-modal.tokens';
 import { CompassActionModalEvent } from '../../../enums/compass-action-modal-event.enum';
 import { DropdownInputModel } from '../../../models/compass-dropdown-input.model';
-import { ListsDownloadType } from '../../../enums/lists/list-download-type.enum';
+import { ListSelectionType } from '../../../enums/lists/list-selection-type.enum';
 import { RadioInputModel } from '../../../models/compass-radio-input.model';
 
-// just for example - remove this when working with real data
 import { listOpportunityStatusOptions } from '../../../models/list-opportunities/list-opportunity-status-options.model';
 
 const ESCKEY = 27;
@@ -35,7 +34,7 @@ export class CompassActionModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.radioOptionSelected = ListsDownloadType.Stores;
+    this.radioOptionSelected = ListSelectionType.Stores;
     this.dropdownOptionSelected = 'All';
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
     this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
