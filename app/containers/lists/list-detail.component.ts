@@ -353,6 +353,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         (csvData: Array<ListStoresDownloadCSV>, store: ListPerformanceTableRow) => {
           csvData.push({
             distributor: store.distributorColumn,
+            distributorCustomerCode: store.distributorCustomerCode,
+            distributorSalesperson: store.distributorSalesperson,
             storeName: store.storeColumn,
             storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
             address: store.storeAddressSubline,
@@ -371,6 +373,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           if (!oppsForStore) {
             csvData.push({
               distributor: store.distributorColumn,
+              distributorCustomerCode: store.distributorCustomerCode,
+              distributorSalesperson: store.distributorSalesperson,
               storeName: store.storeColumn,
               storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
               address: store.storeAddressSubline,
@@ -399,6 +403,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             oppsForCSV.forEach((opportunity: ListsOpportunities) => {
               csvData.push({
                 distributor: store.distributorColumn,
+                distributorCustomerCode: store.distributorCustomerCode,
+                distributorSalesperson: store.distributorSalesperson,
                 storeName: store.storeColumn,
                 storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
                 address: store.storeAddressSubline,
@@ -479,6 +485,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     csvDownloadData: Array<ListStoresDownloadCSV | ListOpportunitiesDownloadCSV>): void {
       const storesHeader = [
         'Distributor',
+        'Distributor Customer Code',
+        'Distributor Sales Route (Primary)',
         'Store Name',
         'Store Number',
         'Address',

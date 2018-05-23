@@ -1,5 +1,7 @@
 export interface ListStoresDownloadCSV {
   distributor: string;
+  distributorCustomerCode: string;
+  distributorSalesperson: string;
   storeName: string;
   storeNumber: string;
   address: string;

@@ -25,7 +25,9 @@ export function getListPerformanceTableRowMock(length: number) {
       storeNumber: chance.string(),
       storeCity: chance.string(),
       storeState: chance.string(),
-      unversionedStoreId: chance.string()
+      unversionedStoreId: chance.string(),
+      distributorCustomerCode: chance.string(),
+      distributorSalesperson: chance.string()
     });
   }
 

@@ -16,4 +16,6 @@ export interface ListPerformanceTableRow {
   storeCity: string;
   storeState: string;
   unversionedStoreId: string;
+  distributorCustomerCode: string;
+  distributorSalesperson: string;
 }

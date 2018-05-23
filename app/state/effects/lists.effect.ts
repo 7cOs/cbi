@@ -37,6 +37,7 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchStoreDetails) => {
         return this.listsApiService.getStoreListDetails(action.payload.listId)
           .map((response: Array<ListStoreDTO>) => {
+            console.log(response);
             const transformedData: Array<StoreDetails> = this.listsTransformerService.formatStoresData(response);
             return new ListActions.FetchStoreDetailsSuccess(transformedData);
           })
@@ -83,6 +84,7 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchOppsForList) => {
         return this.listsApiService.getOppsDataForList(action.payload.listId)
           .map((response: Array<ListOpportunityDTO>) => {
+            console.log(response);
             const transformedData: Array<ListsOpportunities> = this.listsTransformerService.formatListOpportunitiesData(response);
             const groupedOpportunities = this.listsTransformerService.groupOppsByStore(transformedData);
             return new ListActions.FetchOppsForListSuccess(groupedOpportunities);

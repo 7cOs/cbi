@@ -70,7 +70,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           opportunitiesByStoreMock
         );
-
+        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
         tableRows.forEach((row: ListOpportunitiesTableRow, index: number) => {
           const matchedOpportunities: ListsOpportunities[] = opportunitiesByStoreMock[storeDetailsMock[index].unversionedStoreId];
 
@@ -92,7 +92,9 @@ describe('ListsTableTransformerService', () => {
             storeNumber: storeDetailsMock[index].number,
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
-            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
+            distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
           });
 
           row.opportunities.forEach((opportunityRow: ListTableDrawerRow, rowIndex: number) => {
@@ -132,7 +134,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           opportunitiesByStoreMock
         );
-
+        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
         expect(tableRows.length).toBe(1);
         expect(tableRows[0]).toEqual({
           storeColumn: storeDetailsMock[0].name,
@@ -149,7 +151,9 @@ describe('ListsTableTransformerService', () => {
           storeNumber: storeDetailsMock[0].number,
           storeCity: storeDetailsMock[0].city,
           storeState: storeDetailsMock[0].state,
-          unversionedStoreId: storeDetailsMock[0].unversionedStoreId
+          unversionedStoreId: storeDetailsMock[0].unversionedStoreId,
+          distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
+          distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
         });
       });
     });
@@ -186,7 +190,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           podStorePerformanceMock
         );
-
+        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
         tableRows.forEach((row: ListPerformanceTableRow, index: number) => {
           expect(row).toEqual({
             storeColumn: storeDetailsMock[index].name,
@@ -217,7 +221,9 @@ describe('ListsTableTransformerService', () => {
             storeNumber: storeDetailsMock[index].number,
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
-            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
+            distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
           });
         });
       });
@@ -231,7 +237,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           podStorePerformanceMock
         );
-
+        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
         tableRows.forEach((row: ListPerformanceTableRow, index: number) => {
           expect(row).toEqual({
             storeColumn: storeDetailsMock[index].name,
@@ -250,7 +256,9 @@ describe('ListsTableTransformerService', () => {
             storeNumber: storeDetailsMock[index].number,
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
-            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
+            distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
           });
         });
       });
@@ -289,7 +297,9 @@ describe('ListsTableTransformerService', () => {
         storeNumber: '',
         storeCity: '',
         storeState: '',
-        unversionedStoreId: ''
+        unversionedStoreId: '',
+        distributorCustomerCode: '',
+        distributorSalesperson: ''
       });
     });
   });

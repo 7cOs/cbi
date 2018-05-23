@@ -509,8 +509,8 @@ describe('ListDetailComponent', () => {
     let actionModalDownloadOutputMock: CompassActionModalOutputs;
     let opportunitiesTableData: ListOpportunitiesTableRow[];
     let performanceTableData: ListPerformanceTableRow[];
-    const storesOnlyDownloadColumns = 9;
-    const oppsDownloadColumns = 14;
+    const storesOnlyDownloadColumns = 11;
+    const oppsDownloadColumns = 16;
     let groupedOppsByStoreMock: OpportunitiesByStore = {};
 
     beforeEach(() => {
