@@ -116,6 +116,8 @@ module.exports = /*  @ngInject */
       vm.reportDeleted = newWatchValues.reportDeleted;
       vm.reportSaved = newWatchValues.reportSaved;
       vm.reportSavedError = newWatchValues.reportSavedError;
+      vm.storeRemoved = newWatchValues.storeRemoved;
+      vm.oppRemoved = newWatchValues.oppRemoved;
       vm.multipleTargetListsSelected = newWatchValues.multipleTargetListsSelected;
       vm.performanceDataError = newWatchValues.performanceDataError;
       vm.opportunityCountError = newWatchValues.opportunityCountError;
@@ -125,6 +127,8 @@ module.exports = /*  @ngInject */
       vm.listDetailDeletedError = newWatchValues.listDetailDeletedError;
       vm.listDetailLeft = newWatchValues.listDetailLeft;
       vm.listDetailLeftError = newWatchValues.listDetailLeftError;
+      vm.storeRemovedError = newWatchValues.storeRemovedError;
+      vm.oppRemovedError = newWatchValues.oppRemovedError;
     }, true);
 
     init();

@@ -38,6 +38,7 @@ describe('ListPerformanceTableComponent', () => {
   let tableHeaderRow: Array<string> = ['Col1', 'Col2', 'Col3', 'Col4', 'Col5', 'Col6'];
   let componentInstanceCopy: any;
   const sortResetSubject: Subject<Event> = new Subject<Event>();
+  const paginationResetInSubject: Subject<Event> = new Subject<Event>();
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [MatCheckboxModule],
@@ -57,6 +58,7 @@ describe('ListPerformanceTableComponent', () => {
     componentInstance.tableHeaderRow = tableHeaderRow;
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
     componentInstance.sortReset = sortResetSubject;
+    componentInstance.paginationReset = paginationResetInSubject;
     componentInstanceCopy = componentInstance as any;
   });
 
@@ -68,6 +70,15 @@ describe('ListPerformanceTableComponent', () => {
         done();
       });
       sortResetSubject.next();
+    });
+
+    it('should check if subscription for paginationResetIn', (done: any) => {
+      componentInstance.ngOnInit();
+      componentInstance.paginationReset.subscribe((value) => {
+        expect(value).toBe(undefined);
+        done();
+      });
+      paginationResetInSubject.next();
     });
 
     it('should check if sortReset function is called', (done: any) => {

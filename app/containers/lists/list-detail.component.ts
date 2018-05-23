@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
@@ -19,6 +20,7 @@ import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListSelectionType } from '../../enums/lists/list-selection-type.enum';
+import * as ListDetailModalStrings from '../lists/list-detail-modal-strings.const';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
@@ -30,6 +32,7 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
+import { LoadingState } from '../../enums/loading-state.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { User } from '../../models/lists/user.model';
@@ -89,6 +92,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }];
   public selectedTab: string = this.performanceTabTitle;
   public activeTab: string = this.performanceTabTitle;
+  public isPerformanceRowSelect: boolean = false;
+  public isOpportunityRowSelect: boolean = false;
+  public isSelectAllPerformanceChecked: boolean = false;
+  public isSelectAllOpportunitiesChecked: boolean = false;
+  public removeStoresModalInputs = ListDetailModalStrings.REMOVE_STORE_MODAL_CONFIG;
+  public removeOppsModalInputs = ListDetailModalStrings.REMOVE_OPPS_MODAL_CONFIG;
+  public loadingStateEnum = LoadingState;
   public showManageListLoader: boolean = false;
   public downloadAllModalStringInputs: CompassActionModalInputs;
   public compassAlertModalAccept = CompassActionModalEvent.Accept;
@@ -177,14 +187,50 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             );
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
         }
-
         if (listDetail.manageListStatus !== ActionStatus.NotFetched) {
           this.handleManageListStatus(listDetail.manageListStatus);
+        }
+        if (listDetail.listStores.storeStatus === ActionStatus.DeleteSuccess
+          && listDetail.listSummary.summaryStatus === ActionStatus.DeleteSuccess) {
+          this.resetOnOpportunityOrStoreRemoval();
+        } else if (listDetail.listStores.storeStatus === ActionStatus.DeleteFailure
+          && listDetail.listSummary.summaryStatus === ActionStatus.DeleteFailure) {
+          this.showManageListLoader = false;
+        }
+
+        if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteSuccess) {
+          this.resetOnOpportunityOrStoreRemoval();
+        } else if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteFailure) {
+          this.showManageListLoader = false;
         }
       });
   }
 
-  downloadActionButtonClicked() {
+  resetOnOpportunityOrStoreRemoval(): void {
+    this.handlePaginationReset();
+    this.isOpportunityRowSelect = false;
+    this.isPerformanceRowSelect = false;
+    this.showManageListLoader = false;
+  }
+
+  captureRemoveButtonClicked(): void {
+    if (this.selectedTab === this.performanceTabTitle) {
+      this.launchRemoveStoresConfirmation();
+    }
+    if (this.selectedTab === this.opportunitiesTabTitle) {
+      this.launchRemoveOppsConfirmation();
+    }
+  }
+
+  launchRemoveStoresConfirmation(): void {
+    const compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.removeStoresModalInputs, {});
+    compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((value: string) => {
+      if (value === CompassAlertModalEvent.Accept) {
+        this.removeSelectedStores();
+      }
+    });
+  }
+   downloadActionButtonClicked(): void {
     if (this.selectedTab === this.performanceTabTitle) {
       console.log('Download All - performance tab seclected');
     } else {
@@ -206,7 +252,37 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  opportunityStatusSelected(statusValue: OpportunityStatus) {
+  launchRemoveOppsConfirmation(): void {
+    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.removeOppsModalInputs, {});
+    compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((value: string) => {
+      if (value === CompassAlertModalEvent.Accept) {
+        this.removeSelectedOpportunities();
+      }
+    });
+  }
+
+  removeSelectedOpportunities(): void {
+    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps: ListTableDrawerRow[], store: ListOpportunitiesTableRow) => {
+      store.opportunities.forEach((opp) => {
+      if (opp.checked === true) totalOpps.push(opp);
+      });
+      return totalOpps;
+    }, []);
+    checkedOpps.forEach((opp: ListTableDrawerRow) => {
+      this.store.dispatch(new ListsActions.RemoveOppFromList({listId: this.listSummary.id, oppId: opp.id}));
+      this.showManageListLoader = true;
+    });
+  }
+
+  removeSelectedStores(): void {
+    const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
+    checkedStores.forEach((store) => {
+      this.store.dispatch(new ListsActions.RemoveStoreFromList({listId: this.listSummary.id, storeSourceCode: store.unversionedStoreId}));
+      this.showManageListLoader = true;
+    });
+  }
+
+  opportunityStatusSelected(statusValue: OpportunityStatus): void {
     this.oppStatusSelected = statusValue;
     this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
       this.opportunitiesTableData : this.filterOpportunitiesByStatus(
@@ -242,14 +318,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription.unsubscribe();
   }
 
-  public handlePageClick(event: ListPageClick) {
+  public handlePageClick(event: ListPageClick): void {
     const pageNumber = event.pageNumber;
     let pageStart = ((pageNumber - 1 ) * LIST_TABLE_SIZE);
     let pageEnd = (pageNumber * LIST_TABLE_SIZE) ;
     this.pageChangeData = {pageStart: pageStart, pageEnd: pageEnd};
   }
 
-  public handleManageButtonClick() {
+  public handleManageButtonClick(): void {
     const manageModalRef: CompassManageListModalOverlayRef = this.compassModalService.showManageListModalDialog({
       title: 'Manage List',
       acceptLabel: 'Save',
@@ -263,8 +339,24 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  public handleListsLinkClick() {
+  public handleListsLinkClick(): void {
     this.$state.go('lists');
+  }
+
+  public setPerformanceRowSelected(performanceRowTrueCount: number): void {
+    this.isPerformanceRowSelect = performanceRowTrueCount !== 0;
+  }
+
+  public setSelectAllPerformance(selectAllChecked: boolean): void {
+    this.isPerformanceRowSelect = selectAllChecked;
+  }
+
+  public setSelectAllOpportunity(selectAllChecked: boolean): void {
+    this.isOpportunityRowSelect = selectAllChecked;
+  }
+
+  public setOpportunityRowSelected(opportunityRowTrueCount: number): void {
+    this.isOpportunityRowSelect = opportunityRowTrueCount !== 0;
   }
 
   public onTabClicked(tabName: string): void {
@@ -273,6 +365,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.activeTab = tabName;
       this.paginationReset.next();
       this.sortReset.next();
+      this.isPerformanceRowSelect = false;
+      this.isOpportunityRowSelect = false;
     }
     if (tabName === this.performanceTabTitle) {
       this.opportunitiesTableData = this.getDeselectedOpportunitiesTableData(this.opportunitiesTableData);
@@ -285,7 +379,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handlePaginationReset() {
+  public handlePaginationReset(): void {
     this.paginationReset.next();
   }
 

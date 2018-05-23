@@ -167,7 +167,6 @@ module.exports = /*  @ngInject */
 
     function launchAddToListModal(selectedOpportunities, allActiveLists) {
       opportunitiesToCopy(selectedOpportunities).then((opportunities) => {
-        debugger;
         const selectedStoreIds = uniqBy(opportunities.map(opportunity => opportunity.store.id));
         const numberOfSelectedOpportunities = opportunities.length;
         const numberOfSelectedStores = selectedStoreIds.length;
