@@ -47,34 +47,33 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   public static WebDriver createDriver(String testName) throws MalformedURLException {
-    final WebDriver driver;
+    final HostType targetHost = HostType.getTargetHost();
+    log.info("Targeted Host:" + targetHost.name());
+    if (HostType.sauce.equals(targetHost)) {
+      final RemoteWebDriver remoteSauceDriver;
+      if (BrowserType.chrome.equals(BrowserType.getCurrentBrowser())) {
+        remoteSauceDriver = SauceDriverFactory.getRemoteDriverForChrome(testName);
+      } else {
+        remoteSauceDriver = SauceDriverFactory.getRemoteDriverForIE(testName);
+      }
 
-    final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
-    if (HostType.sauce.name().equalsIgnoreCase(driverHost)) {
-      log.info("Targeted Host:" + HostType.sauce.name());
-
-      final RemoteWebDriver remoteSauceDriver = SauceDriverFactory.getRemoteDriver(testName);
-      Validate.notNull(remoteSauceDriver, "Remote driver could not be found for SauceLabs");
+      Validate.notNull(remoteSauceDriver, "Remote driver could not be found for SauceLabs.");
 
       final String id = remoteSauceDriver.getSessionId().toString();
       log.info("Connected to Selenium Server. Session ID: " + id);
       sessionId.set(id);
 
-      driver = remoteSauceDriver;
+      webDriver.set(remoteSauceDriver);
     } else {
       final ChromeDriver chromeDriver = LocalDriverFactory.getChromeDriver();
-
       Validate.notNull(
         chromeDriver,
-        "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
-          "/n Have you downloaded the correct driver into your local target directory?"
+        "Local driver for " + BrowserType.chrome.name() + "could not be found."
       );
-
-      driver = chromeDriver;
+      webDriver.set(chromeDriver);
     }
-    webDriver.set(driver);
 
-    return driver;
+    return webDriver.get();
   }
 
   private static class LocalDriverFactory {
@@ -115,14 +114,20 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     private static final int DEFAULT_SAUCE_PORT = 80;
     private static final String TEST_RUN_TITLE_FORMAT = "%s - %s - %s";
 
-    private static RemoteWebDriver getRemoteDriver(String testName) throws MalformedURLException {
+    private static RemoteWebDriver getRemoteDriverForChrome(String testName) throws MalformedURLException {
       final URL remoteAddress = buildSauceURI();
 
-      final BrowserType currentBrowserType = BrowserType.getCurrentBrowser();
-      final DesiredCapabilities capabilities = getDesiredCapabilities(
-        currentBrowserType,
-        formatTestRunName(testName, currentBrowserType)
-      );
+      final DesiredCapabilities capabilities = getCapabilitiesForChrome();
+      capabilities.setCapability("name", formatTestRunName(testName, "CHROME"));
+
+      return new RemoteWebDriver(remoteAddress, capabilities);
+    }
+
+    private static RemoteWebDriver getRemoteDriverForIE(String testName) throws MalformedURLException {
+      final URL remoteAddress = buildSauceURI();
+
+      final DesiredCapabilities capabilities = getCapabilitiesForIE();
+      capabilities.setCapability("name", formatTestRunName(testName, "IE"));
 
       return new RemoteWebDriver(remoteAddress, capabilities);
     }
@@ -134,26 +139,13 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       return new URL(String.format(SAUCELABS_URI_FORMAT, username, accessKey, DEFAULT_SAUCE_PORT));
     }
 
-    private static String formatTestRunName(String testName, BrowserType currentBrowserType) {
+    private static String formatTestRunName(String testName, String targetBrowser) {
       return String.format(
         TEST_RUN_TITLE_FORMAT,
-        currentBrowserType.name().toUpperCase(),
+        targetBrowser,
         PropertiesCache.getInstance().getProperty("origin"),
         testName
       );
-    }
-
-    private static DesiredCapabilities getDesiredCapabilities(BrowserType currentBrowserType, String testRunName) {
-      final DesiredCapabilities capabilities;
-
-      if (BrowserType.chrome.equals(currentBrowserType)) {
-        capabilities = getCapabilitiesForChrome();
-      } else {
-        capabilities = getCapabilitiesForIE();
-      }
-      capabilities.setCapability("name", testRunName);
-
-      return capabilities;
     }
 
     private static DesiredCapabilities getCapabilitiesForIE() {
@@ -190,7 +182,13 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
   public enum HostType {
     local,
-    sauce
+    sauce;
+
+    public static HostType getTargetHost() {
+      final String property = PropertiesCache.getInstance().getProperty("driver.host");
+
+      return null != property ? valueOf(property) : local;
+    }
   }
 
 }
