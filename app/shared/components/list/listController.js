@@ -218,7 +218,6 @@ module.exports = /*  @ngInject */
 
       let compassModalOverlayRef = compassModalService.showActionModalDialog(addToListInputs, null);
       compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
-        debugger;
         const listId = value.dropdownOptionSelected;
         switch (value.radioOptionSelected) {
           case ListSelectionType.Stores:

@@ -9,8 +9,6 @@ import { DropdownInputModel } from '../../../models/compass-dropdown-input.model
 import { ListSelectionType } from '../../../enums/lists/list-selection-type.enum';
 import { RadioInputModel } from '../../../models/compass-radio-input.model';
 
-import { listOpportunityStatusOptions } from '../../../models/list-opportunities/list-opportunity-status-options.model';
-
 const ESCKEY = 27;
 
 @Component({
