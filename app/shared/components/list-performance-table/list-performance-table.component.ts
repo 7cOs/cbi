@@ -19,10 +19,11 @@ import { Subject } from 'rxjs/Subject';
   styles: [ require('./list-performance-table.component.scss') ]
 })
 export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestroy  {
+  @Input() paginationReset: Subject<Event>;
   @Input() sortReset: Subject<Event>;
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
-  @Output() paginationReset = new EventEmitter<any>();
+  @Output() onPaginationReset = new EventEmitter<any>();
   @Output() onRowChecked = new EventEmitter<number>();
   @Output() onSelectAllChecked = new EventEmitter<boolean>();
 
@@ -78,6 +79,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestr
   }];
 
   private sortResetSubscription: Subscription;
+  private paginationResetSubscription: Subscription;
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -85,6 +87,17 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestr
     this.tableClasses = this.getTableClasses(this.loadingState);
     this.sortResetSubscription = this.sortReset.subscribe(() => {
       this.applySortingCriteria(this.defaultSortCriteria);
+    });
+
+    this.paginationResetSubscription = this.paginationReset.subscribe(() => {
+      this.isSelectAllChecked = false;
+      this.isIndeterminateChecked = false;
+      this.numSelectedRows = this.isSelectAllChecked ? this.sortedTableData.length : 0;
+      if (this.sortedTableData) {
+        for (let i = 0; i < this.sortedTableData.length; i++) {
+          this.sortedTableData[i].checked = this.isSelectAllChecked;
+        }
+      }
     });
   }
 
@@ -204,6 +217,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestr
       const sortedData: Array<ListPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
-    this.paginationReset.emit();
+    this.onPaginationReset.emit();
   }
 }

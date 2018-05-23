@@ -25,7 +25,11 @@ module.exports = /*  @ngInject */
       listDetailDeleted: false,
       listDetailDeletedError: false,
       listDetailLeft: false,
-      listDetailLeftError: false
+      listDetailLeftError: false,
+      storeRemoved: false,
+      oppRemoved: false,
+      storeRemovedError: false,
+      oppRemovedError: false
     };
 
     var service = {

@@ -46,7 +46,8 @@ class ListPerformanceTableComponentMock {
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
   @Input() sortReset: Event;
-  @Output() paginationReset = new EventEmitter();
+  @Input() paginationReset: Event;
+  @Output() onPaginationReset = new EventEmitter();
 }
 
 @Component({
@@ -61,7 +62,8 @@ class ListOpportunitiesTableComponentMock {
   @Input() loadingState: boolean;
   @Input() oppStatusSelected: OpportunityStatus;
   @Input() sortReset: Event;
-  @Output() paginationReset = new EventEmitter();
+  @Input() paginationReset: Event;
+  @Output() onPaginationReset = new EventEmitter();
 }
 
 @Component({
@@ -159,9 +161,14 @@ describe('ListDetailComponent', () => {
       title: chance.string()
     },
     params: {
-      id: chance.string()
+      id: chance.string(),
+      listId: chance.string()
     },
     go: jasmine.createSpy('go')
+  };
+
+  const toastServiceMock = {
+    showToast: jasmine.createSpy('showToast')
   };
 
   const storeMock = {
@@ -208,6 +215,10 @@ describe('ListDetailComponent', () => {
         {
           provide: 'userService',
           useValue: userMock
+        },
+        {
+          provide: 'toastService',
+          useValue: toastServiceMock
         }
       ],
       imports: [
@@ -548,7 +559,7 @@ describe('ListDetailComponent', () => {
 
     describe('Copy Opportunities To Lists', () => {
       let opportunitiesTableData: ListOpportunitiesTableRow[];
-      let modalOutputMock: CompassActionModalOutputs, checkedEntitiesMock: {opportunityId: string}[];
+      let modalOutputMock: CompassActionModalOutputs, checkedEntitiesMock: { opportunityId: string }[];
       beforeEach(() => {
         modalOutputMock = {
           radioOptionSelected: chance.string(),
@@ -568,8 +579,10 @@ describe('ListDetailComponent', () => {
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-          new ListsActions.CopyOppsToList({listId: modalOutputMock.dropdownOptionSelected,
-            ids: checkedEntitiesMock}));
+          new ListsActions.CopyOppsToList({
+            listId: modalOutputMock.dropdownOptionSelected,
+            ids: checkedEntitiesMock
+          }));
       });
     });
 
@@ -598,12 +611,55 @@ describe('ListDetailComponent', () => {
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
-          new ListsActions.CopyStoresToList({listId: modalOutputMock.dropdownOptionSelected,
-            id: performanceTableData[0].unversionedStoreId}));
+          new ListsActions.CopyStoresToList({
+            listId: modalOutputMock.dropdownOptionSelected,
+            id: performanceTableData[0].unversionedStoreId
+          }));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
-          new ListsActions.CopyStoresToList({listId: modalOutputMock.dropdownOptionSelected,
-            id: performanceTableData[1].unversionedStoreId}));
+          new ListsActions.CopyStoresToList({
+            listId: modalOutputMock.dropdownOptionSelected,
+            id: performanceTableData[1].unversionedStoreId
+          }));
       });
+    });
+
+  });
+
+  describe('[Method] removeSelectedOpportunities', () => {
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+    beforeEach(() => {
+      opportunitiesTableData = getListOpportunitiesTableRowMock(3);
+      opportunitiesTableData[0].opportunities[0].checked = true;
+      componentInstance.opportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+    });
+    it('Should filter out all selected opportunities and call the removal action', () => {
+      storeMock.dispatch.calls.reset();
+      componentInstance.removeSelectedOpportunities();
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new ListsActions.RemoveOppFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
+          oppId: opportunitiesTableData[0].opportunities[0].id}));
+    });
+  });
+
+  describe('[Method] removeSelectedStores', () => {
+    let performanceTableData: ListPerformanceTableRow[];
+    beforeEach(() => {
+      performanceTableData = getListPerformanceTableRowMock(3);
+      performanceTableData[0].checked = true;
+      componentInstance.performanceTableData = performanceTableData;
+      fixture.detectChanges();
+      const selectorFunction = storeMock.select.calls.argsFor(0)[0];
+      expect(selectorFunction(stateMock)).toBe(stateMock.listsDetails);
+    });
+    it('Should filter out all selected Stores and call the removal action', () => {
+      storeMock.dispatch.calls.reset();
+      componentInstance.removeSelectedStores();
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new ListsActions.RemoveStoreFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
+          storeSourceCode: performanceTableData[0].unversionedStoreId }));
     });
   });
 });

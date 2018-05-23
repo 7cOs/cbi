@@ -100,7 +100,7 @@ export class ListsTableTransformerService {
       lastDepletionDateColumn: '',
       performanceError: false,
       checked: false,
-      unversionedStoreId: '',
+      unversionedStoreId: ''
     };
   }
 

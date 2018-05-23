@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 
-import { CopyOppsToListPayload, FetchListPerformancePayload, LeaveListPayload } from './lists.action';
+import { CopyOppsToListPayload, FetchListPerformancePayload, LeaveListPayload, RemoveStoreFromListPayload } from './lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
@@ -354,6 +354,32 @@ describe('Lists Actions', () => {
     });
   });
 
+  describe('RemoveStoreFromList', () => {
+    let action: ListsActions.RemoveStoreFromList;
+    let listIdMock: string;
+    let sourceStoreCodeMock: string;
+    let actionPayloadMock: RemoveStoreFromListPayload;
+
+    beforeEach(() => {
+      listIdMock = chance.string();
+      sourceStoreCodeMock = chance.string();
+      actionPayloadMock = {
+        listId: listIdMock,
+        storeSourceCode: sourceStoreCodeMock
+      };
+      action = new ListsActions.RemoveStoreFromList(actionPayloadMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(ListsActions.DELETE_STORE_FROM_LIST).toBe(ListsActionTypes.DELETE_STORE_FROM_LIST);
+      expect(action.type).toBe(ListsActions.DELETE_STORE_FROM_LIST);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
   describe('CopyStoresToListSuccess', () => {
     it('should have the correct action type', () => {
       const action = new ListsActions.CopyStoresToListSuccess();
@@ -388,6 +414,72 @@ describe('Lists Actions', () => {
     });
   });
 
+  describe('RemoveFromStoreListSuccess', () => {
+    let action: ListsActions.RemoveStoreFromListSuccess;
+    let mockSuccessActionPayload: any;
+
+    beforeEach(() => {
+      mockSuccessActionPayload = {};
+
+      action = new ListsActions.RemoveStoreFromListSuccess(mockSuccessActionPayload);
+    });
+
+    it('should have the correct type', () => {
+      expect(ListsActions.DELETE_STORE_FROM_LIST_SUCCESS)
+        .toBe(ListsActionTypes.DELETE_STORE_FROM_LIST_SUCCESS);
+      expect(action.type).toBe(ListsActions.DELETE_STORE_FROM_LIST_SUCCESS);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(mockSuccessActionPayload);
+    });
+  });
+
+  describe('RemoveFromStoreListFailure', () => {
+    const error: Error = new Error(chance.string());
+    let action: ListsActions.RemoveStoreFromListFailure;
+
+    beforeEach(() => {
+      action = new ListsActions.RemoveStoreFromListFailure(error);
+    });
+
+    it('should have the correct type', () => {
+      expect(ListsActions.DELETE_STORE_FROM_LIST_FAILURE)
+        .toBe(ListsActionTypes.DELETE_STORE_FROM_LIST_FAILURE);
+      expect(action.type).toBe(ListsActions.DELETE_STORE_FROM_LIST_FAILURE);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(error);
+    });
+  });
+
+  describe('RemoveOppFromList', () => {
+    let action: ListsActions.RemoveOppFromList;
+    let listIdMock: string;
+    let oppIdMock: string;
+    let actionPayloadMock: ListsActions.RemoveOppFromListPayload;
+
+    beforeEach(() => {
+      listIdMock = chance.string();
+      oppIdMock = chance.string();
+      actionPayloadMock = {
+        listId: listIdMock,
+        oppId: oppIdMock
+      };
+      action = new ListsActions.RemoveOppFromList(actionPayloadMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(ListsActions.DELETE_OPP_FROM_LIST).toBe(ListsActionTypes.DELETE_OPP_FROM_LIST);
+      expect(action.type).toBe(ListsActions.DELETE_OPP_FROM_LIST);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(actionPayloadMock);
+    });
+  });
+
   describe('CopyOppsToListSuccess', () => {
     it('should have the correct action type', () => {
       const action = new ListsActions.CopyOppsToListSuccess();
@@ -399,6 +491,46 @@ describe('Lists Actions', () => {
     it('should have the correct action type', () => {
       const action = new ListsActions.CopyOppsToListError();
       expect(action.type).toBe(ListsActionTypes.COPY_OPPS_TO_LIST_ERROR);
+    });
+  });
+
+  describe('RemoveFromStoreListSuccess', () => {
+    let action: ListsActions.RemoveOppFromListSuccess;
+    let mockSuccessActionPayload: any;
+
+    beforeEach(() => {
+      mockSuccessActionPayload = {};
+
+      action = new ListsActions.RemoveOppFromListSuccess(mockSuccessActionPayload);
+    });
+
+    it('should have the correct type', () => {
+      expect(ListsActions.DELETE_OPP_FROM_LIST_SUCCESS)
+        .toBe(ListsActionTypes.DELETE_OPP_FROM_LIST_SUCCESS);
+      expect(action.type).toBe(ListsActions.DELETE_OPP_FROM_LIST_SUCCESS);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(mockSuccessActionPayload);
+    });
+  });
+
+  describe('RemoveFromStoreListFailure', () => {
+    const error: Error = new Error(chance.string());
+    let action: ListsActions.RemoveOppFromListFailure;
+
+    beforeEach(() => {
+      action = new ListsActions.RemoveOppFromListFailure(error);
+    });
+
+    it('should have the correct type', () => {
+      expect(ListsActions.DELETE_OPP_FROM_LIST_FAILURE)
+        .toBe(ListsActionTypes.DELETE_OPP_FROM_LIST_FAILURE);
+      expect(action.type).toBe(ListsActions.DELETE_OPP_FROM_LIST_FAILURE);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(error);
     });
   });
 

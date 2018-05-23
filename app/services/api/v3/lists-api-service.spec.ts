@@ -27,6 +27,8 @@ describe('ListsApiService', () => {
   let listsApiService: ListsApiService;
 
   let listIdMock: string;
+  let unversionedStoreIdMock: string;
+  let oppIdMock: string;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,6 +41,8 @@ describe('ListsApiService', () => {
     listsApiService = testBed.get(ListsApiService);
 
     listIdMock = chance.string(chanceStringOptions);
+    unversionedStoreIdMock = chance.string(chanceStringOptions);
+    oppIdMock = chance.string(chanceStringOptions);
   });
 
   afterEach(() => {
@@ -225,6 +229,40 @@ describe('ListsApiService', () => {
       listsApiService.deleteList(listIdMock).subscribe((response: { status: string }) => {
         expect(response).toBe(expectedResponse);
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+
+      expect(req.request.method).toBe(ApiRequestType.DELETE);
+    });
+  });
+
+  describe('removeStoreFromList', () => {
+    it('should do a DELETE call on the lists endpoint with the given listId and store code', () => {
+      const expectedRequestUrl: string = `/v3/lists/${ listIdMock }/stores/${ unversionedStoreIdMock }`;
+      const expectedResponse: { status: number } = { status: chance.integer() };
+
+      listsApiService.removeStoreFromList(listIdMock, unversionedStoreIdMock)
+        .subscribe((response: { status: number }) => {
+          expect(response).toBe(expectedResponse);
+        });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+
+      expect(req.request.method).toBe(ApiRequestType.DELETE);
+    });
+  });
+
+  describe('removeOppFromList', () => {
+    it('should do a DELETE call on the lists endpoint with the given listId and opportunityId', () => {
+      const expectedRequestUrl: string = `/v3/lists/${ listIdMock }/opportunities/${ oppIdMock  }`;
+      const expectedResponse: { status: number } = { status: chance.integer() };
+
+      listsApiService.removeOpportunityFromList(listIdMock, oppIdMock)
+        .subscribe((response: { status: number }) => {
+          expect(response).toBe(expectedResponse);
+        });
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedResponse);

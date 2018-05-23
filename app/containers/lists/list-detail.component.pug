@@ -5,7 +5,6 @@ lists-header(
   (manageButtonClicked)="handleManageButtonClick()",
   (listsLinkClicked)="handleListsLinkClick()"
 )
-
 compass-tabs(
   (onTabClicked)="onTabClicked($event)"
 )
@@ -30,6 +29,11 @@ compass-tabs(
           [actionLabel]="actionButtonType.Download",
           (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Remove",
+          [isDisabled]="!isPerformanceRowSelect",
+          (onActionButtonClicked)="captureRemoveButtonClicked()"
+        )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
       [sortingCriteria]="performanceSortingCriteria",
@@ -37,7 +41,8 @@ compass-tabs(
       [tableData]="performanceTableData",
       [pageChangeData]="pageChangeData",
       [sortReset]="sortReset",
-      (paginationReset)="handlePaginationReset()",
+      [paginationReset]='paginationReset',
+      (onPaginationReset)="handlePaginationReset()",
       (onRowChecked)='setPerformanceRowSelected($event)',
       (onSelectAllChecked)='setSelectAllPerformance($event)'
     )
@@ -57,9 +62,14 @@ compass-tabs(
         (onActionButtonClicked)="copyToListClick()"
         )
         compass-action-button.action-button-spacing(
-            [actionLabel]="actionButtonType.Download",
-            (onActionButtonClicked)="downloadActionButtonClicked($event)"
-          )
+        [actionLabel]="actionButtonType.Download",
+        (onActionButtonClicked)="downloadActionButtonClicked($event)"
+        )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Remove",
+          [isDisabled]="!isOpportunityRowSelect",
+          (onActionButtonClicked)="captureRemoveButtonClicked()"
+        )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [sortingCriteria]="opportunitiesSortingCriteria",
@@ -67,7 +77,8 @@ compass-tabs(
       [pageChangeData]="pageChangeData",
       [oppStatusSelected]="oppStatusSelected",
       [sortReset]="sortReset",
-      (paginationReset)="handlePaginationReset()",
+      [paginationReset]='paginationReset',
+      (onPaginationReset)="handlePaginationReset()",
       (onRowChecked)='setOpportunityRowSelected($event)',
       (onSelectAllChecked)='setSelectAllOpportunity($event)'
     )

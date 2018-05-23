@@ -57,9 +57,13 @@ describe('Lists Effects', () => {
   let listPerformanceMock: ListPerformance;
   let patchListPayloadMock: ListsSummaryDTO;
   let formattedListMock: FormattedNewList;
+  let removeStoreFromListMock: ListActions.RemoveStoreFromListPayload;
+  let removeOppFromListMock: ListActions.RemoveOppFromListPayload;
 
   const toastServiceMock = {
     showListDetailToast: jasmine.createSpy('showListDetailToast'),
+    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast'),
+    showToast: jasmine.createSpy('showToast')
   };
 
   const listsApiServiceMock = {
@@ -86,6 +90,12 @@ describe('Lists Effects', () => {
     },
     updateList(formattedMock: FormattedNewList, listId: string): Observable<ListsSummaryDTO> {
       return Observable.of(patchListPayloadMock);
+    },
+    removeStoreFromList(listId: string, storeSourceCode: string): Observable<any> {
+      return Observable.of(removeStoreFromListMock);
+    },
+    removeOpportunityFromList(listId: string, oppId: string): Observable<any> {
+      return Observable.of(removeOppFromListMock);
     }
   };
 
@@ -534,6 +544,87 @@ describe('Lists Effects', () => {
 
         listsEffects.fetchOppsforList$().subscribe((response) => {
           expect(response).toEqual(new ListActions.FetchOppsForListFailure(errorMock));
+          done();
+        });
+      });
+    });
+  });
+  describe('when a removeStoreFromList actions is received', () => {
+    let actionListPayloadMock: ListActions.RemoveStoreFromListPayload = {
+      listId: chance.string(),
+      storeSourceCode: chance.string()
+    };
+    beforeEach(() => {
+      actions$.next(new ListActions.RemoveStoreFromList(actionListPayloadMock));
+    });
+
+    describe('when everything returns successfully', () => {
+      it('should call removeStoreFromList from the ListsService given the passed in action payload', (done) => {
+        const updateListSpy = spyOn(listsApiService, 'removeStoreFromList').and.returnValue(Observable.of(actionListPayloadMock));
+        listsEffects.removeStoreFromList$().subscribe(() => {
+          done();
+        });
+        expect(updateListSpy.calls.count()).toBe(1);
+        expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.storeSourceCode);
+        expect(toastService.showToast).toHaveBeenCalledWith('storeRemoved');
+      });
+
+      it('should dispatch a removeStoreFromListSuccess action with the returned transformed data', (done) => {
+        listsEffects.removeStoreFromList$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.RemoveStoreFromListSuccess(actionListPayloadMock));
+          done();
+        });
+      });
+    });
+
+    describe('when an error is returned from removeStoreFromListSuccess', () => {
+      it('should dispatch a RemoveStoreFromListFailure action with the error', (done) => {
+        spyOn(listsApiService, 'removeStoreFromList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.removeStoreFromList$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.RemoveStoreFromListFailure(errorMock));
+          expect(toastService.showToast).toHaveBeenCalledWith('storeRemovedFailure');
+          done();
+        });
+      });
+    });
+  });
+  describe('when a removeOppFromList actions is received', () => {
+    let actionListPayloadMock: ListActions.RemoveOppFromListPayload = {
+      listId: chance.string(),
+      oppId: chance.string()
+    };
+    beforeEach(() => {
+      actions$.next(new ListActions.RemoveOppFromList(actionListPayloadMock));
+    });
+
+    describe('when everything returns successfully', () => {
+      it('should call removeOpportunityFromList from the ListsService given the passed in action payload', (done) => {
+        const updateListSpy = spyOn(listsApiService, 'removeOpportunityFromList').and.returnValue(Observable.of(actionListPayloadMock));
+        listsEffects.removeOppFromList$().subscribe(() => {
+          done();
+        });
+        expect(updateListSpy.calls.count()).toBe(1);
+        expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.oppId);
+        expect(toastService.showToast).toHaveBeenCalledWith('oppRemoved');
+
+      });
+
+      it('should dispatch a removeOppFromListSuccess action with the returned transformed data', (done) => {
+        listsEffects.removeOppFromList$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.RemoveOppFromListSuccess(actionListPayloadMock));
+          done();
+        });
+      });
+    });
+
+    describe('when an error is returned from removeOppFromListSuccess', () => {
+      it('should dispatch a RemoveOppFromListFailure action with the error', (done) => {
+        spyOn(listsApiService, 'removeOpportunityFromList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.removeOppFromList$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.RemoveOppFromListFailure(errorMock));
+          expect(toastService.showToast).toHaveBeenCalledWith('oppRemovedFailure');
           done();
         });
       });

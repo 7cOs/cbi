@@ -28,9 +28,10 @@ export interface OpportunitiesTableSelectAllCheckboxState {
 })
 export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDestroy  {
   @Input() sortReset: Subject<Event>;
+  @Input() paginationReset: Subject<Event>;
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListOpportunitiesTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
-  @Output() paginationReset = new EventEmitter<any>();
+  @Output() onPaginationReset = new EventEmitter<any>();
   @Output() onRowChecked = new EventEmitter<number>();
   @Output() onSelectAllChecked = new EventEmitter<boolean>();
 
@@ -99,6 +100,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
   }];
 
   private sortResetSubscription: Subscription;
+  private paginationResetSubscription: Subscription;
 
   constructor (private calculatorService: CalculatorService) { }
 
@@ -107,11 +109,23 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
     this.sortResetSubscription = this.sortReset.subscribe(() => {
       this.applySortingCriteria(this.defaultSortCriteria);
     });
+    this.paginationResetSubscription = this.paginationReset.subscribe(() => {
+      this.isSelectAllChecked = false;
+      this.isIndeterminateChecked = false;
+      if (this.sortedTableData) {
+        this.sortedTableData.forEach((row) => {
+          row.checked = this.isSelectAllChecked;
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
     if (this.sortResetSubscription) {
       this.sortResetSubscription.unsubscribe();
+    }
+    if (this.paginationResetSubscription) {
+      this.paginationResetSubscription.unsubscribe();
     }
   }
 
@@ -232,7 +246,7 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
 
     const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
       store.opportunities.forEach((opp) => {
-        if (opp.checked === true) totalOpps.push(opp);
+      if (opp.checked === true) totalOpps.push(opp);
       });
       return totalOpps;
     }, []);
@@ -295,6 +309,6 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
       const sortedData: Array<ListOpportunitiesTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
-    this.paginationReset.emit();
+    this.onPaginationReset.emit();
   }
 }

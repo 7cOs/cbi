@@ -362,6 +362,90 @@ export function listsReducer(
         manageListStatus: ActionStatus.Error
       });
 
+    case ListsActions.DELETE_STORE_FROM_LIST:
+      return {
+        allLists: state.allLists,
+        copyStatus: state.copyStatus,
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.Deleting
+        }),
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.Deleting
+        }),
+        listOpportunities: state.listOpportunities,
+        manageListStatus: state.manageListStatus,
+        performance: state.performance
+      };
+
+    case ListsActions.DELETE_STORE_FROM_LIST_SUCCESS:
+      return {
+        allLists: state.allLists,
+        copyStatus: state.copyStatus,
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.DeleteSuccess
+        }),
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.DeleteSuccess
+        }),
+        listOpportunities: state.listOpportunities,
+        manageListStatus: state.manageListStatus,
+        performance: state.performance
+      };
+
+    case ListsActions.DELETE_STORE_FROM_LIST_FAILURE:
+      return {
+        allLists: state.allLists,
+        copyStatus: state.copyStatus,
+        listStores:  Object.assign({}, state.listStores, {
+          storeStatus: ActionStatus.DeleteFailure
+        }),
+        listSummary:  Object.assign({}, state.listSummary, {
+          summaryStatus: ActionStatus.DeleteFailure
+        }),
+        listOpportunities: state.listOpportunities,
+        manageListStatus: state.manageListStatus,
+        performance: state.performance
+      };
+
+    case ListsActions.DELETE_OPP_FROM_LIST:
+      return {
+        allLists: state.allLists,
+        copyStatus: state.copyStatus,
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.Deleting
+        }),
+        manageListStatus: state.manageListStatus,
+        performance: state.performance
+      };
+
+    case ListsActions.DELETE_OPP_FROM_LIST_SUCCESS:
+      return {
+        allLists: state.allLists,
+        copyStatus: state.copyStatus,
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.DeleteSuccess
+        }),
+        manageListStatus: state.manageListStatus,
+        performance: state.performance
+      };
+
+    case ListsActions.DELETE_OPP_FROM_LIST_FAILURE:
+      return {
+        allLists: state.allLists,
+        copyStatus: state.copyStatus,
+        listStores:  state.listStores,
+        listSummary:  state.listSummary,
+        listOpportunities: Object.assign({}, state.listOpportunities, {
+          opportunitiesStatus: ActionStatus.DeleteFailure
+        }),
+        manageListStatus: state.manageListStatus,
+        performance: state.performance
+      };
+
     default:
       return state;
   }
