@@ -98,7 +98,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public isOpportunityRowSelect: boolean = false;
   public showManageListLoader: boolean = false;
   public downloadAllModalStringInputs: CompassActionModalInputs;
-  public copyToListModalStringInputs: CompassActionModalInputs;
   public copyToListLoader: boolean;
   public radioInputModel: RadioInputModel = {
     selected: ListsDownloadType.Stores,
@@ -404,13 +403,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
-    this.copyToListModalStringInputs = {
+    const copyToListModalStringInputs: CompassActionModalInputs = {
       title: 'Copy to List',
       dropdownInputModel: this.dropdownInputModel,
       acceptLabel: CompassActionModalEvent.Copy,
       rejectLabel: CompassActionModalEvent.Cancel
     };
-    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.copyToListModalStringInputs, null);
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(copyToListModalStringInputs, null);
     const copyModalSubscription = Observable.fromPromise(
       this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
     );
