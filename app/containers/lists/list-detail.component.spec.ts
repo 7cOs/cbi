@@ -545,8 +545,6 @@ describe('ListDetailComponent', () => {
   describe('[Method] removeSelectedOpportunities', () => {
     let opportunitiesTableData: ListOpportunitiesTableRow[];
     beforeEach(() => {
-      testBed = getTestBed();
-      store = testBed.get(Store);
       opportunitiesTableData = getListOpportunitiesTableRowMock(3);
       opportunitiesTableData[0].opportunities[0].checked = true;
       componentInstance.opportunitiesTableData = opportunitiesTableData;
@@ -564,8 +562,6 @@ describe('ListDetailComponent', () => {
   describe('[Method] removeSelectedStores', () => {
     let performanceTableData: ListPerformanceTableRow[];
     beforeEach(() => {
-      testBed = getTestBed();
-      store = testBed.get(Store);
       performanceTableData = getListPerformanceTableRowMock(3);
       performanceTableData[0].checked = true;
       componentInstance.performanceTableData = performanceTableData;

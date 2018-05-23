@@ -193,22 +193,25 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         }
         if (listDetail.listStores.storeStatus === ActionStatus.DeleteSuccess
           && listDetail.listSummary.summaryStatus === ActionStatus.DeleteSuccess) {
-          this.handlePaginationReset();
-          this.isPerformanceRowSelect = false;
-          this.showManageListLoader = false;
+          this.resetOnOpportunityOrStoreRemoval();
         } else if (listDetail.listStores.storeStatus === ActionStatus.DeleteFailure
           && listDetail.listSummary.summaryStatus === ActionStatus.DeleteFailure) {
           this.showManageListLoader = false;
         }
 
         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteSuccess) {
-          this.handlePaginationReset();
-          this.isOpportunityRowSelect = false;
-          this.showManageListLoader = false;
+          this.resetOnOpportunityOrStoreRemoval();
         } else if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteFailure) {
           this.showManageListLoader = false;
         }
       });
+  }
+
+  resetOnOpportunityOrStoreRemoval(): void {
+    this.handlePaginationReset();
+    this.isOpportunityRowSelect = false;
+    this.isPerformanceRowSelect = false;
+    this.showManageListLoader = false;
   }
 
   captureRemoveButtonClicked(): void {
@@ -221,7 +224,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   launchRemoveStoresConfirmation(): void {
-    let compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.removeStoresModalInputs, {});
+    const compassModalOverlayRef = this.compassModalService.showAlertModalDialog(this.removeStoresModalInputs, {});
     compassModalOverlayRef.modalInstance.buttonContainerEvent.subscribe((value: string) => {
       if (value === CompassAlertModalEvent.Accept) {
         this.removeSelectedStores();
