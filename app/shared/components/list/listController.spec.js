@@ -1,5 +1,6 @@
 import * as Chance from 'chance';
 import { getV3ListMock } from '../../../models/lists/lists.model.mock';
+import { generateRandomSizedArray } from '../../../models/util.model';
 
 const ListSelectionType = require('../../../enums/lists/list-selection-type.enum').ListSelectionType;
 const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
@@ -29,7 +30,12 @@ describe('Unit: list controller', function() {
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
       $provide.value('compassModalService', {
-        showActionModalDialog: jasmine.createSpy('showActionModalDialog')
+        showActionModalDialog: jasmine.createSpy('showActionModalDialog').and.returnValue({modalInstance: null}),
+        modalActionBtnContainerEvent: jasmine.createSpy('modalActionBtnContainerEvent').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve();
+          return defer.promise;
+        })
       });
     });
 
@@ -1666,21 +1672,7 @@ describe('Unit: list controller', function() {
               },
               id: listId,
               name: chance.string()
-            }],
-            ownedAndSharedWithMe: [{
-              opportunitiesSummary: {
-                opportunitiesCount: 300
-              },
-              id: 'fakeID',
-              name: chance.string()
-            }, {
-              opportunitiesSummary: {
-                opportunitiesCount: chance.string()
-              },
-              id: listId,
-              name: chance.string()
             }]
-
           }
         }
       };
@@ -1850,49 +1842,124 @@ describe('Unit: list controller', function() {
       listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
     });
 
-    fdescribe('add to list modal', () => {
-      it('should send the proper inputs to compassModalService#showActionModalDialog', () => {
-        // spyOn(compassModalService, 'showActionModalDialog').and.callFake(() => {});
-        ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
+    describe('add to list modal', () => {
+      let allActiveLists;
 
-        const expectedRadioOptions = [{
-          display: ListSelectionType.Stores,
-          value: ListSelectionType.Stores
-        }, {
-          display: ListSelectionType.Opportunities,
-          value: ListSelectionType.Opportunities
-        }];
+      beforeEach(() => {
+        allActiveLists = [
+          {
+            opportunitiesSummary: {
+              opportunitiesCount: 300
+            },
+            id: chance.string(),
+            name: chance.string()
+          }, {
+            opportunitiesSummary: {
+              opportunitiesCount: chance.string()
+            },
+            id: chance.string(),
+            name: chance.string()
+          }
+        ];
+      });
+      describe('when user launches the Add to List modal', () => {
+        it('sends the proper inputs to compassModalService#showActionModalDialog', () => {
 
-        const expectedDropdownMenu = [{
-          display: 'Choose a List',
-          value: 'Choose a List'
-        }, {
-          display: ctrl.userService.model.targetLists.ownedAndSharedWithMe[0].name,
-          value: ctrl.userService.model.targetLists.ownedAndSharedWithMe[0].id
-        }, {
-          display: ctrl.userService.model.targetLists.ownedAndSharedWithMe[1].name,
-          value: ctrl.userService.model.targetLists.ownedAndSharedWithMe[1].id
-        }];
+          const expectedRadioOptions = [{
+            display: ListSelectionType.Stores,
+            value: ListSelectionType.Stores
+          }, {
+            display: ListSelectionType.Opportunities,
+            value: ListSelectionType.Opportunities
+          }];
 
-        const expectedInputs = {
-          title: 'Add to List',
-          bodyText: '2 opportunities selected across 1 store',
-          radioInputModel: {
-            radioOptions: expectedRadioOptions,
-            selected: expectedRadioOptions[0].value,
-            title: 'OPTIONS',
-            stacked: false
-          },
-          dropdownInputMode: {
-            selected: expectedDropdownMenu[0].value,
-            dropdownOptions: expectedDropdownMenu,
-            title: 'List'
-          },
-          acceptLabel: 'Add to List',
-          rejectLabel: 'Cancel'
-        };
-        ctrl.launchAddToListModal();
-        expect(compassModalService.showActionModalDialog).toHaveBeenCalledWith(expectedInputs);
+          const expectedDropdownMenu = [{
+            display: 'Choose a List',
+            value: 'Choose a List'
+          }, {
+            display: allActiveLists[0].name,
+            value: allActiveLists[0].id
+          }, {
+            display: allActiveLists[1].name,
+            value: allActiveLists[1].id
+          }];
+
+          const expectedInputs = {
+            title: 'Add to List',
+            bodyText: '1 opportunity selected across 1 store',
+            radioInputModel: {
+              radioOptions: expectedRadioOptions,
+              selected: expectedRadioOptions[0].value,
+              title: 'OPTIONS',
+              stacked: false
+            },
+            dropdownInputModel: {
+              selected: expectedDropdownMenu[0].value,
+              dropdownOptions: expectedDropdownMenu,
+              title: 'LIST'
+            },
+            acceptLabel: 'Add to List',
+            rejectLabel: 'Cancel'
+          };
+
+          const selected = [angular.copy(opportunitiesService.model.opportunities[0].groupedOpportunities[0])];
+
+          ctrl.launchAddToListModal(selected, allActiveLists);
+          expect(compassModalService.showActionModalDialog.calls.argsFor(0)).toEqual([expectedInputs, null]);
+        });
+      });
+
+      describe('when the user selects Stores and a list to add to in the modal', () => {
+        it('should call the listsApiService#addStoreToListPromise with the storeSourceCode for each unique store', () => {
+          compassModalService.modalActionBtnContainerEvent.and.callFake(() => {
+            const modalEventResponse = {
+              radioOptionSelected: ListSelectionType.Stores,
+              dropdownOptionSelected: allActiveLists[0].id
+            };
+            const defer = q.defer();
+            defer.resolve(modalEventResponse);
+            return defer.promise;
+          });
+          spyOn(listsApiService, 'addStoresToListPromise');
+          const selected = generateRandomSizedArray(1, 5).map(() => {
+            return { store: { id: chance.string() } };
+          });
+          ctrl.launchAddToListModal(selected, allActiveLists);
+          scope.$apply();
+          selected.forEach(selection => {
+            expect(listsApiService.addStoresToListPromise).toHaveBeenCalledWith(allActiveLists[0].id, {storeSourceCode: selection.store.id});
+          });
+        });
+      });
+
+      describe('when the user selects Stores and Opportunities and a list to add to in the modal', () => {
+        it('should call the listsApiService#addOpportunitiesToListPromise with a collection of all selected opportunities', () => {
+          compassModalService.modalActionBtnContainerEvent.and.callFake(() => {
+            const modalEventResponse = {
+              radioOptionSelected: ListSelectionType.Opportunities,
+              dropdownOptionSelected: allActiveLists[0].id
+            };
+            const defer = q.defer();
+            defer.resolve(modalEventResponse);
+            return defer.promise;
+          });
+          spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+            const defer = q.defer();
+            defer.resolve();
+            return defer.promise;
+          });
+          const selected = generateRandomSizedArray(1, 5).map(() => {
+            return { id: chance.string(), store: { id: chance.string() } };
+          });
+          const expectedOpportunityIds = selected.map((opportunity) => {
+            return {
+              opportunityId: opportunity.id
+            };
+          });
+          ctrl.launchAddToListModal(selected, allActiveLists);
+          scope.$apply();
+          expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalledWith(allActiveLists[0].id, expectedOpportunityIds);
+        });
       });
     });
 
