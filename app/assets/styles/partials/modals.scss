@@ -822,3 +822,12 @@ md-dialog {
     }
   }
 }
+
+.modal-body-inner-title {
+  font-family: $rajdhani;
+  font-size: 0.7rem;
+  font-weight: $semibold;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}

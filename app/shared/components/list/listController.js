@@ -207,9 +207,11 @@ module.exports = /*  @ngInject */
         title: 'LIST'
       };
 
+      const modalBody = `<div class='modal-body-inner-title'>CURRENT SELECTION</div><b>${numberOfSelectedOpportunities} ${numberOfSelectedOpportunities === 1 ? 'opportunity' : 'opportunities'}</b> selected across ${numberOfSelectedStores} ${numberOfSelectedStores === 1 ? 'store' : 'stores'}`;
+
       const addToListInputs = {
         title: 'Add to List',
-        bodyText: `${numberOfSelectedOpportunities} ${numberOfSelectedOpportunities === 1 ? 'opportunity' : 'opportunities'} selected across ${numberOfSelectedStores} ${numberOfSelectedStores === 1 ? 'store' : 'stores'}`,
+        bodyText: modalBody,
         radioInputModel: radioInputModel,
         dropdownInputModel: dropdownInputModel,
         acceptLabel: 'Add to List',

@@ -1884,9 +1884,11 @@ describe('Unit: list controller', function() {
             value: allActiveLists[1].id
           }];
 
+          const expectedBodyText = '<div class=\'modal-body-inner-title\'>CURRENT SELECTION</div><b>1 opportunity</b> selected across 1 store';
+
           const expectedInputs = {
             title: 'Add to List',
-            bodyText: '1 opportunity selected across 1 store',
+            bodyText: expectedBodyText,
             radioInputModel: {
               radioOptions: expectedRadioOptions,
               selected: expectedRadioOptions[0].value,
