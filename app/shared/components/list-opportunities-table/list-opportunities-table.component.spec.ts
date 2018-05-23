@@ -111,7 +111,7 @@ describe('ListOpportunitiesTableComponent', () => {
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
     componentInstance.tableData = opportunitiesTableData;
     componentInstance.sortReset = sortResetSubject;
-    componentInstance.paginationResetIn = paginationResetInSubject;
+    componentInstance.paginationReset = paginationResetInSubject;
     componentInstanceCopy = componentInstance as any;
 
     fixture.detectChanges();
@@ -139,7 +139,7 @@ describe('ListOpportunitiesTableComponent', () => {
 
     it('should check if subscription for paginationResetIn', (done: any) => {
       componentInstance.ngOnInit();
-      componentInstance.paginationResetIn.subscribe((value) => {
+      componentInstance.paginationReset.subscribe((value) => {
         expect(value).toBe(undefined);
         done();
       });

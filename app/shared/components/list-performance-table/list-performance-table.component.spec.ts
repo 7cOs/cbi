@@ -58,7 +58,7 @@ describe('ListPerformanceTableComponent', () => {
     componentInstance.tableHeaderRow = tableHeaderRow;
     componentInstance.sortingCriteria = getSortingCriteriaMock(1);
     componentInstance.sortReset = sortResetSubject;
-    componentInstance.paginationResetIn = paginationResetInSubject;
+    componentInstance.paginationReset = paginationResetInSubject;
     componentInstanceCopy = componentInstance as any;
   });
 
@@ -74,7 +74,7 @@ describe('ListPerformanceTableComponent', () => {
 
     it('should check if subscription for paginationResetIn', (done: any) => {
       componentInstance.ngOnInit();
-      componentInstance.paginationResetIn.subscribe((value) => {
+      componentInstance.paginationReset.subscribe((value) => {
         expect(value).toBe(undefined);
         done();
       });

@@ -19,11 +19,11 @@ import { Subject } from 'rxjs/Subject';
   styles: [ require('./list-performance-table.component.scss') ]
 })
 export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestroy  {
-  @Input() paginationResetIn: Subject<Event>;
+  @Input() paginationReset: Subject<Event>;
   @Input() sortReset: Subject<Event>;
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
-  @Output() paginationReset = new EventEmitter<any>();
+  @Output() onPaginationReset = new EventEmitter<any>();
   @Output() onRowChecked = new EventEmitter<number>();
   @Output() onSelectAllChecked = new EventEmitter<boolean>();
 
@@ -89,7 +89,7 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestr
       this.applySortingCriteria(this.defaultSortCriteria);
     });
 
-    this.paginationResetSubscription = this.paginationResetIn.subscribe(() => {
+    this.paginationResetSubscription = this.paginationReset.subscribe(() => {
       this.isSelectAllChecked = false;
       this.isIndeterminateChecked = false;
       this.numSelectedRows = this.isSelectAllChecked ? this.sortedTableData.length : 0;
@@ -217,6 +217,6 @@ export class ListPerformanceTableComponent implements OnInit, OnChanges, OnDestr
       const sortedData: Array<ListPerformanceTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
-    this.paginationReset.emit();
+    this.onPaginationReset.emit();
   }
 }

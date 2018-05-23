@@ -28,10 +28,10 @@ export interface OpportunitiesTableSelectAllCheckboxState {
 })
 export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDestroy  {
   @Input() sortReset: Subject<Event>;
-  @Input() paginationResetIn: Subject<Event>;
+  @Input() paginationReset: Subject<Event>;
   @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: ListOpportunitiesTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
-  @Output() paginationReset = new EventEmitter<any>();
+  @Output() onPaginationReset = new EventEmitter<any>();
   @Output() onRowChecked = new EventEmitter<number>();
   @Output() onSelectAllChecked = new EventEmitter<boolean>();
 
@@ -109,13 +109,13 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
     this.sortResetSubscription = this.sortReset.subscribe(() => {
       this.applySortingCriteria(this.defaultSortCriteria);
     });
-    this.paginationResetSubscription = this.paginationResetIn.subscribe(() => {
+    this.paginationResetSubscription = this.paginationReset.subscribe(() => {
       this.isSelectAllChecked = false;
       this.isIndeterminateChecked = false;
       if (this.sortedTableData) {
-        for (let i = 0; i < this.sortedTableData.length; i++) {
-          this.sortedTableData[i].checked = this.isSelectAllChecked;
-        }
+        this.sortedTableData.forEach((row) => {
+          row.checked = this.isSelectAllChecked;
+        });
       }
     });
   }
@@ -309,6 +309,6 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
       const sortedData: Array<ListOpportunitiesTableRow> = this.sortedTableData.sort(this.sortingFunction);
       this.sortedTableData = sortedData;
     }
-    this.paginationReset.emit();
+    this.onPaginationReset.emit();
   }
 }

@@ -204,10 +204,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteSuccess) {
           this.handlePaginationReset();
           this.isOpportunityRowSelect = false;
-          this.toastService.showToast('oppRemoved');
           this.showManageListLoader = false;
         } else if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteFailure) {
-          this.toastService.showToast('oppRemovedFailure');
           this.showManageListLoader = false;
         }
       });

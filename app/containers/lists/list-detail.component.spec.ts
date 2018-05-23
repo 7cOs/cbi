@@ -45,8 +45,8 @@ class ListPerformanceTableComponentMock {
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
   @Input() sortReset: Event;
-  @Input() paginationResetIn: Event;
-  @Output() paginationReset = new EventEmitter();
+  @Input() paginationReset: Event;
+  @Output() onPaginationReset = new EventEmitter();
 }
 
 @Component({
@@ -61,8 +61,8 @@ class ListOpportunitiesTableComponentMock {
   @Input() loadingState: boolean;
   @Input() oppStatusSelected: OpportunityStatus;
   @Input() sortReset: Event;
-  @Input() paginationResetIn: Event;
-  @Output() paginationReset = new EventEmitter();
+  @Input() paginationReset: Event;
+  @Output() onPaginationReset = new EventEmitter();
 }
 
 @Component({

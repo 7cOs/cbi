@@ -36,8 +36,8 @@ compass-tabs(
       [tableData]="performanceTableData",
       [pageChangeData]="pageChangeData",
       [sortReset]="sortReset",
-      [paginationResetIn]='paginationReset',
-      (paginationReset)="handlePaginationReset()",
+      [paginationReset]='paginationReset',
+      (onPaginationReset)="handlePaginationReset()",
       (onRowChecked)='setPerformanceRowSelected($event)',
       (onSelectAllChecked)='setSelectAllPerformance($event)'
     )
@@ -67,8 +67,8 @@ compass-tabs(
       [pageChangeData]="pageChangeData",
       [oppStatusSelected]="oppStatusSelected",
       [sortReset]="sortReset",
-      [paginationResetIn]='paginationReset',
-      (paginationReset)="handlePaginationReset()",
+      [paginationReset]='paginationReset',
+      (onPaginationReset)="handlePaginationReset()",
       (onRowChecked)='setOpportunityRowSelected($event)',
       (onSelectAllChecked)='setSelectAllOpportunity($event)'
     )
