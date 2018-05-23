@@ -1677,9 +1677,9 @@ describe('Unit: list controller', function() {
         }
       };
 
-      spyOn(ctrl, 'opportunityIdsToCopy').and.callFake(() => {
+      spyOn(ctrl, 'opportunitiesToCopy').and.callFake(() => {
         const defer = q.defer();
-        defer.resolve([chance.string(), chance.string()]);
+        defer.resolve([{id: chance.string(), store: {id: chance.string}}, {id: chance.string(), store: {id: chance.string}}]);
         return defer.promise;
       });
 
@@ -1862,8 +1862,18 @@ describe('Unit: list controller', function() {
           }
         ];
       });
+
       describe('when user launches the Add to List modal', () => {
         it('sends the proper inputs to compassModalService#showActionModalDialog', () => {
+          compassModalService.modalActionBtnContainerEvent.and.callFake(() => {
+            const modalEventResponse = {
+              radioOptionSelected: ListSelectionType.Stores,
+              dropdownOptionSelected: allActiveLists[0].id
+            };
+            const defer = q.defer();
+            defer.resolve(modalEventResponse);
+            return defer.promise;
+          });
 
           const expectedRadioOptions = [{
             display: ListSelectionType.Stores,
@@ -1907,6 +1917,7 @@ describe('Unit: list controller', function() {
           const selected = [angular.copy(opportunitiesService.model.opportunities[0].groupedOpportunities[0])];
 
           ctrl.launchAddToListModal(selected, allActiveLists);
+          scope.$apply();
           expect(compassModalService.showActionModalDialog.calls.argsFor(0)).toEqual([expectedInputs, null]);
         });
       });

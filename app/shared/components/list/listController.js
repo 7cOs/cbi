@@ -101,7 +101,7 @@ module.exports = /*  @ngInject */
     vm.openDismissModal = openDismissModal;
     vm.launchAddToListModal = launchAddToListModal;
     vm.openShareModal = openShareModal;
-    vm.opportunityIdsToCopy = opportunityIdsToCopy;
+    vm.opportunitiesToCopy = opportunitiesToCopy;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
     vm.pickMemo = pickMemo;
     vm.removeOpportunity = removeOpportunity;
@@ -166,69 +166,72 @@ module.exports = /*  @ngInject */
     });
 
     function launchAddToListModal(selectedOpportunities, allActiveLists) {
-      const selectedStoreIds = uniqBy(selectedOpportunities.map(opportunity => opportunity.store.id));
-      const numberOfSelectedOpportunities = selectedOpportunities.length;
-      const numberOfSelectedStores = selectedStoreIds.length;
-      const dropdownMenuDefault = [
-        {
-          display: 'Choose a List',
-          value: 'Choose a List'
-        }
-      ];
+      opportunitiesToCopy(selectedOpportunities).then((opportunities) => {
+        debugger;
+        const selectedStoreIds = uniqBy(opportunities.map(opportunity => opportunity.store.id));
+        const numberOfSelectedOpportunities = opportunities.length;
+        const numberOfSelectedStores = selectedStoreIds.length;
+        const dropdownMenuDefault = [
+          {
+            display: 'Choose a List',
+            value: 'Choose a List'
+          }
+        ];
 
-      const listDropdownMenu = dropdownMenuDefault
-        .concat(allActiveLists
-          .map(list => {
-            return {
-              display: list.name,
-              value: list.id
-            };
-        })
-      );
+        const listDropdownMenu = dropdownMenuDefault
+          .concat(allActiveLists
+            .map(list => {
+              return {
+                display: list.name,
+                value: list.id
+              };
+          })
+        );
 
-      const radioOptions = [{
-        display: ListSelectionType.Stores,
-        value: ListSelectionType.Stores
-      }, {
-        display: ListSelectionType.Opportunities,
-        value: ListSelectionType.Opportunities
-      }];
+        const radioOptions = [{
+          display: ListSelectionType.Stores,
+          value: ListSelectionType.Stores
+        }, {
+          display: ListSelectionType.Opportunities,
+          value: ListSelectionType.Opportunities
+        }];
 
-      const radioInputModel = {
-        selected: radioOptions[0].value,
-        radioOptions: radioOptions,
-        title: 'OPTIONS',
-        stacked: false
-      };
+        const radioInputModel = {
+          selected: radioOptions[0].value,
+          radioOptions: radioOptions,
+          title: 'OPTIONS',
+          stacked: false
+        };
 
-      const dropdownInputModel = {
-        selected: listDropdownMenu[0].value,
-        dropdownOptions: listDropdownMenu,
-        title: 'LIST'
-      };
+        const dropdownInputModel = {
+          selected: listDropdownMenu[0].value,
+          dropdownOptions: listDropdownMenu,
+          title: 'LIST'
+        };
 
-      const modalBody = `<div class='modal-body-inner-title'>CURRENT SELECTION</div><b>${numberOfSelectedOpportunities} ${numberOfSelectedOpportunities === 1 ? 'opportunity' : 'opportunities'}</b> selected across ${numberOfSelectedStores} ${numberOfSelectedStores === 1 ? 'store' : 'stores'}`;
+        const modalBody = `<div class='modal-body-inner-title'>CURRENT SELECTION</div><b>${numberOfSelectedOpportunities} ${numberOfSelectedOpportunities === 1 ? 'opportunity' : 'opportunities'}</b> selected across ${numberOfSelectedStores} ${numberOfSelectedStores === 1 ? 'store' : 'stores'}`;
 
-      const addToListInputs = {
-        title: 'Add to List',
-        bodyText: modalBody,
-        radioInputModel: radioInputModel,
-        dropdownInputModel: dropdownInputModel,
-        acceptLabel: 'Add to List',
-        rejectLabel: 'Cancel'
-      };
+        const addToListInputs = {
+          title: 'Add to List',
+          bodyText: modalBody,
+          radioInputModel: radioInputModel,
+          dropdownInputModel: dropdownInputModel,
+          acceptLabel: 'Add to List',
+          rejectLabel: 'Cancel'
+        };
 
-      let compassModalOverlayRef = compassModalService.showActionModalDialog(addToListInputs, null);
-      compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
-        const listId = value.dropdownOptionSelected;
-        switch (value.radioOptionSelected) {
-          case ListSelectionType.Stores:
-            addStoresToList(listId, selectedStoreIds);
-            break;
-          case ListSelectionType.Opportunities:
-          default:
-            addOpportunitiesToList(listId, selectedOpportunities);
-        }
+        let compassModalOverlayRef = compassModalService.showActionModalDialog(addToListInputs, null);
+        compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
+          const listId = value.dropdownOptionSelected;
+          switch (value.radioOptionSelected) {
+            case ListSelectionType.Stores:
+              addStoresToList(listId, selectedStoreIds);
+              break;
+            case ListSelectionType.Opportunities:
+            default:
+              addOpportunitiesToList(listId, opportunities);
+          }
+        });
       });
     };
 
@@ -236,21 +239,20 @@ module.exports = /*  @ngInject */
       if (listId && selectedOpportunities.length) {
         loaderService.openLoader(true);
 
-        opportunityIdsToCopy(selectedOpportunities).then(opportunityIds => {
-          const formattedOpportunities = opportunityIds.map(opportunityId => { return { opportunityId: opportunityId }; });
+        opportunitiesToCopy(selectedOpportunities).then(opportunities => {
+          const formattedOpportunities = opportunities.map(opportunity => { return { opportunityId: opportunity.id }; });
           updateCopiedOpportunities();
-          updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
+          updateTargetListOpportunityCountByListID(listId, opportunities.length);
           listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
             .then(result => {
               vm.toggleSelectAllStores(false);
               loaderService.closeLoader();
               toastService.showToast('added');
-          }, err => {
-            loaderService.closeLoader();
-            console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
-            toastService.showToast('addedError');
-            getTargetLists();
-          });
+            }, () => {
+              loaderService.closeLoader();
+              toastService.showToast('addedError');
+              getTargetLists();
+            });
         });
       }
     }
@@ -322,8 +324,9 @@ module.exports = /*  @ngInject */
       return new Date();
     }
 
-    // TODO Update view and model and show success or error message
+    // TODO: REMOVE this funciton and corresponding specs; no longer used
     /**
+     * @deprecated
      * This function adds the selected opportunities to target list
      * @param {string} listId Guid of the target list
      */
@@ -331,10 +334,10 @@ module.exports = /*  @ngInject */
       if (listId && vm.selected.length) {
         loaderService.openLoader(true);
 
-        opportunityIdsToCopy().then(opportunityIds => {
-          const formattedOpportunities = opportunityIds.map(opportunityId => { return { opportunityId: opportunityId }; });
+        opportunitiesToCopy().then(opportunities => {
+          const formattedOpportunities = opportunities.map(opportunity => { return { opportunityId: opportunity.id }; });
           updateCopiedOpportunities();
-          updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
+          updateTargetListOpportunityCountByListID(listId, opportunities.length);
           listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
             .then(result => {
               vm.toggleSelectAllStores(false);
@@ -342,7 +345,7 @@ module.exports = /*  @ngInject */
               toastService.showToast('added');
           }, err => {
             loaderService.closeLoader();
-            console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+            console.log('Error adding these ids: ', opportunities.map(opp => opp.id), ' Responded with error: ', err);
             toastService.showToast('addedError');
             getTargetLists();
           });
@@ -350,7 +353,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function opportunityIdsToCopy(selectedOpportunities) {
+    function opportunitiesToCopy(selectedOpportunities) {
       const opportunities = selectedOpportunities || vm.selected;
       const opportunityIdsPromise = $q.defer();
 
@@ -359,11 +362,10 @@ module.exports = /*  @ngInject */
           ? targetListService.getTargetListOpportunities(vm.targetListService.model.currentList.id)
           : opportunitiesService.getOpportunities(true);
 
-          getIdsPromise.then(opportunities => opportunityIdsPromise.resolve(opportunities.map(opportunity => opportunity.id)));
+          getIdsPromise.then(opportunities => opportunityIdsPromise.resolve(opportunities));
 
       } else {
-        const opportunityIds = opportunities.map(opportunity => opportunity.id);
-        opportunityIdsPromise.resolve(opportunityIds);
+        opportunityIdsPromise.resolve(opportunities);
       }
 
       return opportunityIdsPromise.promise;
