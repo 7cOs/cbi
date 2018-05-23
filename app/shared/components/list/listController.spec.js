@@ -27,6 +27,7 @@ describe('Unit: list controller', function() {
       $provide.value('analyticsService', analyticsService);
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
+      $provide.value('compassModalService', {});
     });
 
     spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
@@ -2309,7 +2310,7 @@ describe('Unit: list controller', function() {
       });
     });
 
-    describe('When we are on the opportunities page and we add the target list', () => {
+    describe('When we are on the opportunities page and we add to the list', () => {
       const destTargetListMock = {
         opportunitiesSummary: {
           opportunitiesCount: 300

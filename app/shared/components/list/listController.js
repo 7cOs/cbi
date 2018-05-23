@@ -1,7 +1,7 @@
 'use strict';
 
-const findIndex = require('lodash').findIndex;
-const uniqBy = require('lodash').uniqBy;
+const findIndex = require('lodash/findIndex');
+const uniqBy = require('lodash/uniqBy');
 const values = require('lodash/values');
 
 const OpportunitiesDownloadType = require('../../../enums/opportunities-download-type.enum').OpportunitiesDownloadType;
@@ -1094,11 +1094,20 @@ module.exports = /*  @ngInject */
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : vm.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
+        // This logic is shared across multiple views so we have to detect where we are to fire the correct GA event.
+        if ($state.current.name.includes('opportunities')) {
+          analyticsService.trackEvent(
+           'Opportunities',
+            `${addAction ? 'Add' : 'Copy'} to List`,
+            addAction ? targetList.id : vm.targetListService.model.currentList.id
+          );
+        } else {
           analyticsService.trackEvent(
             targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel, targetListService.model.currentList.archived),
             `${addAction ? 'Add' : 'Copy'} to List`,
             addAction ? targetList.id : vm.targetListService.model.currentList.id
           );
+        }
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);
