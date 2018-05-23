@@ -117,7 +117,7 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
           const listPermissionLevel = userService.model.currentUser.employeeID === item.owner.employeeId ? 'author' : '';
           analyticsService.trackEvent(
-            targetListService.getAnalyticsCategory(listPermissionLevel, item.archived),
+            targetListService.getAnalyticsCategory(listPermissionLevel, false),
             'Archive List',
             'Selected List'
           );
@@ -164,7 +164,7 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchivedTargetLists.unshift(listItem);
           const listPermissionLevel = userService.model.currentUser.employeeID === listItem.owner.employeeId ? 'author' : '';
           analyticsService.trackEvent(
-            targetListService.getAnalyticsCategory(listPermissionLevel, listItem.archived),
+            targetListService.getAnalyticsCategory(listPermissionLevel, true),
             'Unarchive List',
             'Selected List'
           );

@@ -71,7 +71,10 @@ export function getFormattedNewList(): FormattedNewList {
     category: ListCategory.Beer,
     collaboratorType: CollaboratorType.CollaborateAndInvite,
     name: chance.string(),
-    type: ListType.TargetList
+    type: ListType.TargetList,
+    description: chance.string(),
+    archived: false,
+    collaboratorEmployeeIds: generateRandomSizedArray().map(() => chance.string())
   };
 }
 
