@@ -47,9 +47,9 @@ public class WebDriverManager implements SauceOnDemandSessionIdProvider, SauceOn
       final RemoteWebDriver remoteSauceDriver;
 
       if (BrowserType.chrome.equals(BrowserType.getCurrentBrowser())) {
-        remoteSauceDriver = SauceDriverFactory.getRemoteDriverForChrome(formatSauceTestRunName(testName, "CHROME"));
+        remoteSauceDriver = SauceDriverFactory.getRemoteDriverForChrome(formatSauceTestRunName(testName, BrowserType.chrome.name()));
       } else {
-        remoteSauceDriver = SauceDriverFactory.getRemoteDriverForIE(formatSauceTestRunName(testName, "IE"));
+        remoteSauceDriver = SauceDriverFactory.getRemoteDriverForIE(formatSauceTestRunName(testName, BrowserType.ie.name()));
       }
 
       Validate.notNull(remoteSauceDriver, "Remote driver could not be found for SauceLabs.");
