@@ -1,13 +1,14 @@
 import * as Chance from 'chance';
 import { getV3ListMock } from '../../../models/lists/lists.model.mock';
 
+const ListSelectionType = require('../../../enums/lists/list-selection-type.enum').ListSelectionType;
 const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
 const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
 
 const chance = new Chance();
 
 describe('Unit: list controller', function() {
-  let scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService, $state, listsApiService, listsTransformerService;
+  let scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService, $state, listsApiService, listsTransformerService, compassModalService;
   let bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
@@ -27,7 +28,9 @@ describe('Unit: list controller', function() {
       $provide.value('analyticsService', analyticsService);
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
-      $provide.value('compassModalService', {});
+      $provide.value('compassModalService', {
+        showActionModalDialog: jasmine.createSpy('showActionModalDialog')
+      });
     });
 
     spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
@@ -36,7 +39,7 @@ describe('Unit: list controller', function() {
       return defer.promise;
     });
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _listsApiService_, _listsTransformerService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _listsApiService_, _listsTransformerService_, _compassModalService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
@@ -54,6 +57,7 @@ describe('Unit: list controller', function() {
       userService = _userService_;
       listsApiService = _listsApiService_;
       listsTransformerService = _listsTransformerService_;
+      compassModalService = _compassModalService_;
 
       userService.model.currentUser.employeeID = 1;
 
@@ -1654,13 +1658,29 @@ describe('Unit: list controller', function() {
               opportunitiesSummary: {
                 opportunitiesCount: 300
               },
-              id: 'fakeID'
+              id: 'fakeID',
+              name: chance.string()
             }, {
               opportunitiesSummary: {
                 opportunitiesCount: chance.string()
               },
-              id: listId
+              id: listId,
+              name: chance.string()
+            }],
+            ownedAndSharedWithMe: [{
+              opportunitiesSummary: {
+                opportunitiesCount: 300
+              },
+              id: 'fakeID',
+              name: chance.string()
+            }, {
+              opportunitiesSummary: {
+                opportunitiesCount: chance.string()
+              },
+              id: listId,
+              name: chance.string()
             }]
+
           }
         }
       };
@@ -1828,6 +1848,52 @@ describe('Unit: list controller', function() {
     afterEach(function() {
       ctrl.selected = [];
       listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
+    });
+
+    fdescribe('add to list modal', () => {
+      it('should send the proper inputs to compassModalService#showActionModalDialog', () => {
+        // spyOn(compassModalService, 'showActionModalDialog').and.callFake(() => {});
+        ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
+
+        const expectedRadioOptions = [{
+          display: ListSelectionType.Stores,
+          value: ListSelectionType.Stores
+        }, {
+          display: ListSelectionType.Opportunities,
+          value: ListSelectionType.Opportunities
+        }];
+
+        const expectedDropdownMenu = [{
+          display: 'Choose a List',
+          value: 'Choose a List'
+        }, {
+          display: ctrl.userService.model.targetLists.ownedAndSharedWithMe[0].name,
+          value: ctrl.userService.model.targetLists.ownedAndSharedWithMe[0].id
+        }, {
+          display: ctrl.userService.model.targetLists.ownedAndSharedWithMe[1].name,
+          value: ctrl.userService.model.targetLists.ownedAndSharedWithMe[1].id
+        }];
+
+        const expectedInputs = {
+          title: 'Add to List',
+          bodyText: '2 opportunities selected across 1 store',
+          radioInputModel: {
+            radioOptions: expectedRadioOptions,
+            selected: expectedRadioOptions[0].value,
+            title: 'OPTIONS',
+            stacked: false
+          },
+          dropdownInputMode: {
+            selected: expectedDropdownMenu[0].value,
+            dropdownOptions: expectedDropdownMenu,
+            title: 'List'
+          },
+          acceptLabel: 'Add to List',
+          rejectLabel: 'Cancel'
+        };
+        ctrl.launchAddToListModal();
+        expect(compassModalService.showActionModalDialog).toHaveBeenCalledWith(expectedInputs);
+      });
     });
 
     it('should add opportunities to list', () => {

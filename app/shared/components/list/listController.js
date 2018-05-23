@@ -166,6 +166,8 @@ module.exports = /*  @ngInject */
     });
 
     function launchAddToListModal() {
+      const selectedStoreIds = uniqBy(vm.selected.map(opportunity => opportunity.store.id));
+      const numberOfSelectedStores = selectedStoreIds.length;
       const allActiveLists = userService.model.targetLists.ownedAndSharedWithMe;
       const dropdownMenuDefault = [
         {
@@ -207,7 +209,7 @@ module.exports = /*  @ngInject */
 
       const addToListInputs = {
         title: 'Add to List',
-        bodyText: 'this is the body text',
+        bodyText: `${vm.selected.length} opportunities selected across ${numberOfSelectedStores} ${numberOfSelectedStores > 1 ? 'stores' : 'store'}`,
         radioInputModel: radioInputModel,
         dropdownInputModel: dropdownInputModel,
         acceptLabel: 'Add to List',
