@@ -1,33 +1,21 @@
 package com.cbrands.helper;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import com.cbrands.helper.driver.factory.LocalDriverFactory;
 import com.cbrands.helper.driver.factory.SauceDriverFactory;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.annotations.Listeners;
-
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.testng.SauceOnDemandAuthenticationProvider;
 import com.saucelabs.testng.SauceOnDemandTestListener;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.annotations.Listeners;
 
-/**
- * A factory for creating WebDriver objects.
- *
- * @author Kazi Hossain, Edie Liao
- */
+import java.net.MalformedURLException;
+
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
   private static final String TEST_RUN_TITLE_FORMAT = "%s - %s - %s";
