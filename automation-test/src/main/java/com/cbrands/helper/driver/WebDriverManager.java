@@ -1,5 +1,6 @@
-package com.cbrands.helper;
+package com.cbrands.helper.driver;
 
+import com.cbrands.helper.PropertiesCache;
 import com.cbrands.helper.driver.factory.LocalDriverFactory;
 import com.cbrands.helper.driver.factory.SauceDriverFactory;
 import com.saucelabs.common.SauceOnDemandAuthentication;
@@ -17,11 +18,11 @@ import org.testng.annotations.Listeners;
 import java.net.MalformedURLException;
 
 @Listeners({SauceOnDemandTestListener.class})
-public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
+public class WebDriverManager implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
   private static final String TEST_RUN_TITLE_FORMAT = "%s - %s - %s";
   private static final String TEST_TRIGGER_ORIGIN_NAME = PropertiesCache.getInstance().getProperty("origin");
 
-  private static Log log = LogFactory.getLog(WebDriverFactory.class);
+  private static Log log = LogFactory.getLog(WebDriverManager.class);
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<>();
 
