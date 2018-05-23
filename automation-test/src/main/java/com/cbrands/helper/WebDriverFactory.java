@@ -3,6 +3,7 @@ package com.cbrands.helper;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.cbrands.helper.driver.factory.LocalDriverFactory;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -87,39 +88,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       TEST_TRIGGER_ORIGIN_NAME,
       testName
     );
-  }
-
-  public static class LocalDriverFactory {
-    private static final String WINDOWS_FILE_EXTENSION_FORMAT = "%s.exe";
-
-    public static ChromeDriver getChromeDriver() {
-      System.setProperty("webdriver.chrome.driver", formatDriverNameWithOSExtension("chromedriver"));
-
-      final ChromeOptions options = new ChromeOptions();
-      options.addArguments("--start-maximized");
-      options.addArguments("--disable-infobars");
-
-      final boolean isSilentMode = Boolean.parseBoolean(
-        PropertiesCache.getInstance().getProperty("driver.isSilentMode"));
-      if (isSilentMode) {
-        options.addArguments("headless");
-      }
-
-      return new ChromeDriver(options);
-    }
-
-    private static String formatDriverNameWithOSExtension(String driverFileName) {
-      final String chromedriverFile;
-
-      final String osName = System.getProperty("os.name").toLowerCase();
-      if (!osName.startsWith("windows")) {
-        chromedriverFile = driverFileName;
-      } else {
-        chromedriverFile = String.format(WINDOWS_FILE_EXTENSION_FORMAT, driverFileName);
-      }
-
-      return chromedriverFile;
-    }
   }
 
   public static class SauceDriverFactory {
