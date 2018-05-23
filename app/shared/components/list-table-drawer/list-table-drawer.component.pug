@@ -36,9 +36,9 @@
         td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
         td.status-column(colspan=1) {{ opportunity.status | titlecase }}
           compass-tooltip(
-            *ngIf="opportunity.status === opportunityStatus.closed",
-            [title]="closedStatusTooltip.title",
-            [text]="closedStatusTooltip.text"
+            *ngIf="opportunity.status === opportunityStatus.inactive",
+            [title]="inactiveStatusTooltip.title",
+            [text]="inactiveStatusTooltip.text"
           )
             img.tooltip-icon(src="../../../assets/img/icons/help-circle.svg")
         td.impact-column.centered(colspan=1, [ngSwitch]="opportunity.impact")
