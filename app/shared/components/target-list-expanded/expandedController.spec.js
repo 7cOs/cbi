@@ -466,10 +466,9 @@ describe('Unit: expanded target list controller', function() {
         spyOn(listsApiService, 'deleteListPromise').and.callFake(() => {});
       });
 
-      it('calls analyticsService.trackEvent and deletes list', function() {
+      it('deletes a list', function() {
         ctrl.selected = singleCollaborator;
         ctrl.deleteTargetList();
-        expect(analyticsService.trackEvent).toHaveBeenCalled();
         expect(listsApiService.deleteListPromise).toHaveBeenCalled();
       });
 
