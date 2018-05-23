@@ -248,6 +248,7 @@ describe('ListDetailComponent', () => {
 
     it('should dispatch actions for fetching stores, list headers, opportunities and list performance data', () => {
       storeMock.dispatch.calls.reset();
+      componentInstance.currentUser.employeeId = userMock.model.currentUser.employeeId;
       componentInstance.ngOnInit();
 
       expect(storeMock.dispatch.calls.count()).toBe(6);
@@ -271,6 +272,9 @@ describe('ListDetailComponent', () => {
         performanceType: ListPerformanceType.POD,
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL
+      }));
+      expect(storeMock.dispatch.calls.argsFor(5)[0]).toEqual(new ListsActions.FetchLists({
+        currentUserEmployeeID: componentInstance.currentUser.employeeId
       }));
     });
   });
