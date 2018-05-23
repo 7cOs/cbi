@@ -112,7 +112,9 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static class SauceDriverFactory {
     private static final String SAUCELABS_URI_FORMAT = "http://%s:%s@ondemand.saucelabs.com:%d/wd/hub";
     private static final int DEFAULT_SAUCE_PORT = 80;
+
     private static final String TEST_RUN_TITLE_FORMAT = "%s - %s - %s";
+    private static final String TEST_TRIGGER_ORIGIN = PropertiesCache.getInstance().getProperty("origin");
 
     private static RemoteWebDriver getRemoteDriverForChrome(String testName) throws MalformedURLException {
       final URL remoteAddress = buildSauceURI();
@@ -143,7 +145,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       return String.format(
         TEST_RUN_TITLE_FORMAT,
         targetBrowser,
-        PropertiesCache.getInstance().getProperty("origin"),
+        TEST_TRIGGER_ORIGIN,
         testName
       );
     }
