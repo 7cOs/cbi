@@ -119,13 +119,13 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public removeStoreFromList(listId: string, storeSource: string): Observable<any> {
+  public removeStoreFromList(listId: string, storeSource: string): Observable<{status: number}> {
     const url = `v3/lists/${ listId }/stores/${ storeSource }`;
     return this.http.delete(url)
     .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
   }
 
-  public removeOpportunityFromList(listId: string, opportunityId: string): Observable<any> {
+  public removeOpportunityFromList(listId: string, opportunityId: string): Observable<{status: number}> {
     const url = `v3/lists/${ listId }/opportunities/${ opportunityId  }`;
     return this.http.delete(url)
     .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(HttpErrorResponse));
