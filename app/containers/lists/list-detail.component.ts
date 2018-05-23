@@ -418,8 +418,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (tabName !== this.activeTab) {
       this.activeTab = tabName;
       this.paginationReset.next();
-      this.isPerformanceRowSelect = false;
-      this.isOpportunityRowSelect = false;
       this.sortReset.next();
       this.isPerformanceRowSelect = false;
       this.isOpportunityRowSelect = false;
