@@ -97,7 +97,7 @@ module.exports = /*  @ngInject */
     vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
     vm.hasOpportunities = hasOpportunities;
     vm.openDismissModal = openDismissModal;
-    vm.openAddToListModal = openAddToListModal;
+    vm.launchAddToListModal = launchAddToListModal;
     vm.openShareModal = openShareModal;
     vm.opportunityIdsToCopy = opportunityIdsToCopy;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
@@ -163,7 +163,7 @@ module.exports = /*  @ngInject */
       vm.showSubMenu = false;
     });
 
-    function openAddToListModal() {
+    function launchAddToListModal() {
       const radioOptions = [{
         display: 'Stores',
         value: 'Stores'
@@ -186,8 +186,7 @@ module.exports = /*  @ngInject */
         }
       ];
 
-      const allActiveLists = userService.model.targetLists.ownedNotArchivedTargetLists
-         .concat(userService.model.targetLists.sharedWithMe);
+      const allActiveLists = userService.model.targetLists.ownedAndSharedWithMe;
 
       const listDropdownMenu = dropdownMenuDefault
         .concat(allActiveLists
@@ -232,8 +231,8 @@ module.exports = /*  @ngInject */
                 loaderService.closeLoader();
                 toastService.showToast('added');
               }, err => {
-                toastService.showToast('addedError');
                 loaderService.closeLoader();
+                toastService.showToast('addedError');
                 console.log('Error adding these ids: ', selectedStoreIds, ' Responded with error: ', err);
                 getTargetLists();
               });
@@ -333,12 +332,12 @@ module.exports = /*  @ngInject */
               vm.toggleSelectAllStores(false);
               loaderService.closeLoader();
               toastService.showToast('added');
-            }, err => {
-              loaderService.closeLoader();
-              toastService.showToast('addedError');
-              console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
-              getTargetLists();
-            });
+          }, err => {
+            loaderService.closeLoader();
+            console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+            toastService.showToast('addedError');
+            getTargetLists();
+          });
         });
       }
     }
@@ -1113,11 +1112,11 @@ module.exports = /*  @ngInject */
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : vm.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
-        analyticsService.trackEvent(
-          'Opportunities',
-          `${addAction ? 'Add' : 'Copy'} to List`,
-          addAction ? targetList.id : vm.targetListService.model.currentList.id
-        );
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel, targetListService.model.currentList.archived),
+            `${addAction ? 'Add' : 'Copy'} to List`,
+            addAction ? targetList.id : vm.targetListService.model.currentList.id
+          );
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);

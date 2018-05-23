@@ -3,6 +3,7 @@
 .toast-header(ng-show="nb.unarchivedNoAuthor") We couldn't unarchive some of the lists selected because you're not the owner of the list<span ng-if="nb.multipleTargetListsSelected">s</span>
 .toast-header.success(ng-show="nb.deleted") List<span ng-if="nb.multipleTargetListsSelected">s</span> Successfully Deleted
 .toast-header.success(ng-show="nb.added") Successfully Added
+.toast-header(ng-show="nb.addedError") An error occurred while adding to the list.  Please try again.
 .toast-header.success(ng-show="nb.reportDeleted") Report Successfully Deleted
 .toast-header.success(ng-show="nb.reportSaved") Report Successfully Saved
 .toast-header.success(ng-show="nb.copied") <span>{{nb.multipleTargetListsSelected ? 'Opportunities' : 'Opportunity'}}</span> added to list!
