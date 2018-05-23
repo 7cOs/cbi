@@ -183,7 +183,7 @@ export class ListsTransformerService {
       state : store.state,
       distributor: store.primaryBeerDistributor.name,
       segmentCode: store.segmentCode,
-      beerDistributors: store.beerDistributors ? store.beerDistributors : []
+      beerDistributors: store.beerDistributors
     };
     return storeData;
   }

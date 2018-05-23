@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 import { StoreDetails } from './lists-store.model';
 import { generateRandomSizedArray } from '../util.model';
-import { getBeerDistributorsMock, getBeerDistributorsArrayMock } from './beer-distributors.model.mock';
+import { getBeerDistributorsArrayMock } from './beer-distributors.model.mock';
 
 let chance = new Chance();
 

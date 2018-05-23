@@ -173,7 +173,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.pod.storePerformance
           );
           this.performanceTableDataSize = this.performanceTableData.length;
-          if (!this.performanceTableDataSize) this.isPerformanceTabDataFetched = false; else this.isPerformanceTabDataFetched = true;
+          this.isPerformanceTabDataFetched = !!this.performanceTableDataSize;
         }
 
         if (this.isListOpportunitiesFetched(
@@ -194,7 +194,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             );
           this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
-          if (!this.opportunitiesTableDataSize) this.isOppsTabDataFetched = false; else this.isOppsTabDataFetched = true;
+          this.isOppsTabDataFetched = !!this.opportunitiesTableDataSize;
         }
         if (listDetail.manageListStatus !== ActionStatus.NotFetched) {
           this.handleManageListStatus(listDetail.manageListStatus);
@@ -234,7 +234,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         this.opportunitiesTableData
       );
     this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
-    if (!this.opportunitiesTableDataSize) this.isOppsTabDataFetched = false; else this.isOppsTabDataFetched = true;
+    this.isOppsTabDataFetched = !!this.opportunitiesTableDataSize;
     this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
     this.paginationReset.next();
   }

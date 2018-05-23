@@ -48,6 +48,9 @@ describe('ListsTableTransformerService', () => {
     beforeEach(() => {
       storeDetailsMock = getStoreListsMock();
       volumeStorePerformanceMock = Array(storeDetailsMock.length).fill(getListStorePerformanceMock());
+      storeDetailsMock.forEach((store: StoreDetails) => {
+        store.beerDistributors[0].isPrimary = true;
+      });
     });
 
     describe('when stores have Volume performance data and Opportunities', () => {
@@ -70,7 +73,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           opportunitiesByStoreMock
         );
-        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
+
         tableRows.forEach((row: ListOpportunitiesTableRow, index: number) => {
           const matchedOpportunities: ListsOpportunities[] = opportunitiesByStoreMock[storeDetailsMock[index].unversionedStoreId];
 
@@ -93,8 +96,8 @@ describe('ListsTableTransformerService', () => {
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
             unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
-            distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
-            distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
+            distributorCustomerCode: storeDetailsMock[index].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[index].beerDistributors[0].salespersonName
           });
 
           row.opportunities.forEach((opportunityRow: ListTableDrawerRow, rowIndex: number) => {
@@ -125,6 +128,9 @@ describe('ListsTableTransformerService', () => {
         opportunitiesByStoreMock = {
           [storeDetailsMock[0].unversionedStoreId]: getListOpportunitiesMock()
         };
+        storeDetailsMock.forEach((store: StoreDetails) => {
+          store.beerDistributors[0].isPrimary = true;
+        });
       });
 
       it('should return a ListOpportunitiesTableRow only if a store has opportunities and `0` values for performance fields, `-`'
@@ -134,7 +140,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           opportunitiesByStoreMock
         );
-        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
+
         expect(tableRows.length).toBe(1);
         expect(tableRows[0]).toEqual({
           storeColumn: storeDetailsMock[0].name,
@@ -168,6 +174,9 @@ describe('ListsTableTransformerService', () => {
       storeDetailsMock = getStoreListsMock();
       volumeStorePerformanceMock = Array(storeDetailsMock.length).fill(getListStorePerformanceMock());
       podStorePerformanceMock = Array(storeDetailsMock.length).fill(getListStorePerformanceMock());
+      storeDetailsMock.forEach((store: StoreDetails) => {
+        store.beerDistributors[0].isPrimary = true;
+      });
     });
 
     describe('when each store has Volume and POD performance data', () => {
@@ -190,7 +199,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           podStorePerformanceMock
         );
-        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
+
         tableRows.forEach((row: ListPerformanceTableRow, index: number) => {
           expect(row).toEqual({
             storeColumn: storeDetailsMock[index].name,
@@ -222,8 +231,8 @@ describe('ListsTableTransformerService', () => {
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
             unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
-            distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
-            distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
+            distributorCustomerCode: storeDetailsMock[index].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[index].beerDistributors[0].salespersonName
           });
         });
       });
@@ -237,7 +246,7 @@ describe('ListsTableTransformerService', () => {
           volumeStorePerformanceMock,
           podStorePerformanceMock
         );
-        storeDetailsMock[0].beerDistributors[0].isPrimary = true;
+
         tableRows.forEach((row: ListPerformanceTableRow, index: number) => {
           expect(row).toEqual({
             storeColumn: storeDetailsMock[index].name,
@@ -257,8 +266,8 @@ describe('ListsTableTransformerService', () => {
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
             unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
-            distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
-            distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
+            distributorCustomerCode: storeDetailsMock[index].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[index].beerDistributors[0].salespersonName
           });
         });
       });
