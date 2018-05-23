@@ -22,7 +22,7 @@ export function getListPerformanceTableRowMock(length: number) {
       lastDepletionDateColumn: depDate.toString(),
       performanceError: false,
       checked: false,
-      storeSourceCode: chance.string()
+      unversionedStoreId: chance.string()
     });
   }
 

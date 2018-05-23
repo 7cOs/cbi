@@ -124,6 +124,9 @@ export class ListOpportunitiesTableComponent implements OnInit, OnChanges, OnDes
     if (this.sortResetSubscription) {
       this.sortResetSubscription.unsubscribe();
     }
+    if (this.paginationResetSubscription) {
+      this.paginationResetSubscription.unsubscribe();
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges) {

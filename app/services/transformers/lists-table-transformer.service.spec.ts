@@ -208,7 +208,7 @@ describe('ListsTableTransformerService', () => {
             lastDepletionDateColumn: moment(volumeStorePerformanceMock[index].lastSoldDate).format('MM/DD/YY'),
             performanceError: false,
             checked: false,
-            storeSourceCode: storeDetailsMock[index].unversionedStoreId
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
         });
       });
@@ -238,7 +238,7 @@ describe('ListsTableTransformerService', () => {
             lastDepletionDateColumn: '-',
             performanceError: true,
             checked: false,
-            storeSourceCode: storeDetailsMock[index].unversionedStoreId
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
         });
       });
@@ -274,7 +274,7 @@ describe('ListsTableTransformerService', () => {
         lastDepletionDateColumn: '',
         performanceError: false,
         checked: false,
-        storeSourceCode: ''
+        unversionedStoreId: ''
       });
     });
   });

@@ -8,7 +8,6 @@ import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
-import { CompassAlertModalInputs } from '../../models/compass-alert-modal-inputs.model';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
@@ -20,6 +19,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { RadioInputModel } from '../../models/compass-radio-input.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import * as ListDetailModalStrings from '../lists/list-detail-modal-strings.const';
 import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
@@ -96,16 +96,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public isOpportunityRowSelect: boolean = false;
   public isSelectAllPerformanceChecked: boolean = false;
   public isSelectAllOpportunitiesChecked: boolean = false;
-  public removeStoresModalInputs: CompassAlertModalInputs = {
-    'title': 'Are you sure?',
-    'body': 'Removing the stores from a list will remove all store performance and opportunities associated with the stores.',
-    'rejectLabel': 'Cancel',
-    'acceptLabel': 'Remove'};
-  public removeOppsModalInputs: CompassAlertModalInputs = {
-    'title': 'Are you sure?',
-    'body': 'Removing the opportunities from a list cannont be undone. Store performance will still be available.',
-    'rejectLabel': 'Cancel',
-    'acceptLabel': 'Remove'};
+  public removeStoresModalInputs = ListDetailModalStrings.REMOVE_STORE_MODAL_CONFIG;
+  public removeOppsModalInputs = ListDetailModalStrings.REMOVE_OPPS_MODAL_CONFIG;
   public loadingStateEnum = LoadingState;
   public showManageListLoader: boolean = false;
   public downloadAllModalStringInputs: CompassActionModalInputs;
@@ -203,11 +195,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           && listDetail.listSummary.summaryStatus === ActionStatus.DeleteSuccess) {
           this.handlePaginationReset();
           this.isPerformanceRowSelect = false;
-          this.toastService.showToast('storeRemoved');
           this.showManageListLoader = false;
         } else if (listDetail.listStores.storeStatus === ActionStatus.DeleteFailure
           && listDetail.listSummary.summaryStatus === ActionStatus.DeleteFailure) {
-          this.toastService.showToast('storeRemovedFailure');
           this.showManageListLoader = false;
         }
 
@@ -223,7 +213,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  captureRemoveButtonClicked() {
+  captureRemoveButtonClicked(): void {
     if (this.selectedTab === this.performanceTabTitle) {
       this.launchRemoveStoresConfirmation();
     }
@@ -240,7 +230,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       }
     });
   }
-   downloadActionButtonClicked() {
+   downloadActionButtonClicked(): void {
     if (this.selectedTab === this.performanceTabTitle) {
       console.log('Download All - performance tab seclected');
     } else {
@@ -272,13 +262,13 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   removeSelectedOpportunities(): void {
-    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps, store) => {
+    const checkedOpps = this.opportunitiesTableData.reduce((totalOpps: ListTableDrawerRow[], store: ListOpportunitiesTableRow) => {
       store.opportunities.forEach((opp) => {
       if (opp.checked === true) totalOpps.push(opp);
       });
       return totalOpps;
     }, []);
-    checkedOpps.forEach((opp) => {
+    checkedOpps.forEach((opp: ListTableDrawerRow) => {
       this.store.dispatch(new ListsActions.RemoveOppFromList({listId: this.listSummary.id, oppId: opp.id}));
       this.showManageListLoader = true;
     });
@@ -287,12 +277,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   removeSelectedStores(): void {
     const checkedStores = this.performanceTableData.filter((store) => { return store.checked === true; });
     checkedStores.forEach((store) => {
-      this.store.dispatch(new ListsActions.RemoveStoreFromList({listId: this.listSummary.id, storeSourceCode: store.storeSourceCode}));
+      this.store.dispatch(new ListsActions.RemoveStoreFromList({listId: this.listSummary.id, storeSourceCode: store.unversionedStoreId}));
       this.showManageListLoader = true;
     });
   }
 
-  opportunityStatusSelected(statusValue: OpportunityStatus) {
+  opportunityStatusSelected(statusValue: OpportunityStatus): void {
     this.oppStatusSelected = statusValue;
     this.filteredOpportunitiesTableData = this.oppStatusSelected === OpportunityStatus.all ?
       this.opportunitiesTableData : this.filterOpportunitiesByStatus(
@@ -328,14 +318,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.listDetailSubscription.unsubscribe();
   }
 
-  public handlePageClick(event: ListPageClick) {
+  public handlePageClick(event: ListPageClick): void {
     const pageNumber = event.pageNumber;
     let pageStart = ((pageNumber - 1 ) * LIST_TABLE_SIZE);
     let pageEnd = (pageNumber * LIST_TABLE_SIZE) ;
     this.pageChangeData = {pageStart: pageStart, pageEnd: pageEnd};
   }
 
-  public handleManageButtonClick() {
+  public handleManageButtonClick(): void {
     const manageModalRef: CompassManageListModalOverlayRef = this.compassModalService.showManageListModalDialog({
       title: 'Manage List',
       acceptLabel: 'Save',
@@ -349,24 +339,24 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  public handleListsLinkClick() {
+  public handleListsLinkClick(): void {
     this.$state.go('lists');
   }
 
-  public setPerformanceRowSelected(performanceRowTrueCount: number) {
-    performanceRowTrueCount !== 0 ? this.isPerformanceRowSelect = true : this.isPerformanceRowSelect = false;
+  public setPerformanceRowSelected(performanceRowTrueCount: number): void {
+    this.isPerformanceRowSelect = performanceRowTrueCount !== 0;
   }
 
-  public setSelectAllPerformance(selectAllChecked: boolean) {
+  public setSelectAllPerformance(selectAllChecked: boolean): void {
     this.isPerformanceRowSelect = selectAllChecked;
   }
 
-  public setSelectAllOpportunity(selectAllChecked: boolean) {
+  public setSelectAllOpportunity(selectAllChecked: boolean): void {
     this.isOpportunityRowSelect = selectAllChecked;
   }
 
-  public setOpportunityRowSelected(opportunityRowTrueCount: number) {
-    opportunityRowTrueCount !== 0 ? this.isOpportunityRowSelect = true : this.isOpportunityRowSelect = false;
+  public setOpportunityRowSelected(opportunityRowTrueCount: number): void {
+    this.isOpportunityRowSelect = opportunityRowTrueCount !== 0;
   }
 
   public onTabClicked(tabName: string): void {
@@ -389,7 +379,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handlePaginationReset() {
+  public handlePaginationReset(): void {
     this.paginationReset.next();
   }
 

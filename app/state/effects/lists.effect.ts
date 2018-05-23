@@ -234,9 +234,13 @@ export class ListsEffects {
       .switchMap((action: ListActions.RemoveStoreFromList) => {
         return this.listsApiService.removeStoreFromList(action.payload.listId, action.payload.storeSourceCode)
         .map((response: any) => {
+          this.toastService.showToast('storeRemoved');
           return new ListActions.RemoveStoreFromListSuccess(action.payload);
         })
-        .catch((error: Error) => Observable.of(new ListActions.RemoveStoreFromListFailure(error)));
+        .catch((error: Error) => {
+          this.toastService.showToast('storeRemovedFailure');
+          return Observable.of(new ListActions.RemoveStoreFromListFailure(error));
+        });
       });
   }
 
@@ -257,7 +261,9 @@ export class ListsEffects {
             dateRangeCode: DateRangeTimePeriodValue.CYTDBDL}),
           new ListActions.FetchStoreDetails({listId: action.payload.listId})
         ])
-        .catch((error: Error) => Observable.of(new ListActions.RemoveStoreFromListFailure(error)));
+        .catch((error: Error) => {
+          return Observable.of(new ListActions.RemoveStoreFromListFailure(error));
+        });
       });
   }
 
@@ -277,9 +283,13 @@ export class ListsEffects {
       .switchMap((action: ListActions.RemoveOppFromList) => {
         return this.listsApiService.removeOpportunityFromList(action.payload.listId, action.payload.oppId)
         .map((response: any) => {
+          this.toastService.showToast('oppRemoved');
           return new ListActions.RemoveOppFromListSuccess(action.payload);
         })
-        .catch((error: Error) => Observable.of(new ListActions.RemoveOppFromListFailure(error)));
+        .catch((error: Error) => {
+          this.toastService.showToast('oppRemovedFailure');
+         return Observable.of(new ListActions.RemoveOppFromListFailure(error));
+        });
       });
   }
 

@@ -61,7 +61,8 @@ describe('Lists Effects', () => {
   let removeOppFromListMock: ListActions.RemoveOppFromListPayload;
 
   const toastServiceMock = {
-    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast')
+    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast'),
+    showToast: jasmine.createSpy('showToast')
   };
 
   const listsApiServiceMock = {
@@ -455,6 +456,7 @@ describe('Lists Effects', () => {
         });
         expect(updateListSpy.calls.count()).toBe(1);
         expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.storeSourceCode);
+        expect(toastService.showToast).toHaveBeenCalledWith('storeRemoved');
       });
 
       it('should dispatch a removeStoreFromListSuccess action with the returned transformed data', (done) => {
@@ -471,6 +473,7 @@ describe('Lists Effects', () => {
 
         listsEffects.removeStoreFromList$().subscribe((response) => {
           expect(response).toEqual(new ListActions.RemoveStoreFromListFailure(errorMock));
+          expect(toastService.showToast).toHaveBeenCalledWith('storeRemovedFailure');
           done();
         });
       });
@@ -493,6 +496,8 @@ describe('Lists Effects', () => {
         });
         expect(updateListSpy.calls.count()).toBe(1);
         expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.oppId);
+        expect(toastService.showToast).toHaveBeenCalledWith('oppRemoved');
+
       });
 
       it('should dispatch a removeOppFromListSuccess action with the returned transformed data', (done) => {
@@ -509,6 +514,7 @@ describe('Lists Effects', () => {
 
         listsEffects.removeOppFromList$().subscribe((response) => {
           expect(response).toEqual(new ListActions.RemoveOppFromListFailure(errorMock));
+          expect(toastService.showToast).toHaveBeenCalledWith('oppRemovedFailure');
           done();
         });
       });

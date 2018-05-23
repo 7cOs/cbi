@@ -77,7 +77,7 @@ export class ListsTableTransformerService {
         lastDepletionDateColumn: storeVolume ? moment(storeVolume.lastSoldDate).format('MM/DD/YY') : '-',
         performanceError: isPerformanceError,
         checked: false,
-        storeSourceCode: store.unversionedStoreId
+        unversionedStoreId: store.unversionedStoreId
       };
     });
   }
@@ -100,7 +100,7 @@ export class ListsTableTransformerService {
       lastDepletionDateColumn: '',
       performanceError: false,
       checked: false,
-      storeSourceCode: ''
+      unversionedStoreId: ''
     };
   }
 

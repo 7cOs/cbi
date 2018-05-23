@@ -579,7 +579,7 @@ describe('ListDetailComponent', () => {
       expect(storeMock.dispatch.calls.count()).toBe(1);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
         new ListsActions.RemoveStoreFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
-          storeSourceCode: performanceTableData[0].storeSourceCode }));
+          storeSourceCode: performanceTableData[0].unversionedStoreId }));
     });
   });
 });
