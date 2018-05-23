@@ -207,7 +207,8 @@ describe('ListsTableTransformerService', () => {
             ),
             lastDepletionDateColumn: moment(volumeStorePerformanceMock[index].lastSoldDate).format('MM/DD/YY'),
             performanceError: false,
-            checked: false
+            checked: false,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
         });
       });
@@ -236,7 +237,8 @@ describe('ListsTableTransformerService', () => {
             l90VersusYaPercentColumn: 0,
             lastDepletionDateColumn: '-',
             performanceError: true,
-            checked: false
+            checked: false,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
           });
         });
       });
@@ -271,7 +273,8 @@ describe('ListsTableTransformerService', () => {
         l90VersusYaPercentColumn: calculatorService.getYearAgoPercent(podPerformanceMock.current, podPerformanceMock.yearAgo),
         lastDepletionDateColumn: '',
         performanceError: false,
-        checked: false
+        checked: false,
+        unversionedStoreId: ''
       });
     });
   });
