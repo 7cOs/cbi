@@ -20,20 +20,19 @@ const ESCKEY = 27;
 export class CompassActionModalComponent implements OnInit {
   @Output() buttonContainerEvent = new EventEmitter<CompassActionModalOutputs>();
 
-  public modalOverlayRef: CompassActionModalOverlayRef;
   public compassActionModalEvent = CompassActionModalEvent;
-  public radioInputModel: RadioInputModel;
   public dropdownInputModel: DropdownInputModel;
-  public radioOptionSelected: string;
   public dropdownOptionSelected: string;
+  public isAcceptEnabled: boolean = false;
+  public modalOverlayRef: CompassActionModalOverlayRef;
+  public radioInputModel: RadioInputModel;
+  public radioOptionSelected: string;
 
   constructor(
     @Inject(COMPASS_ACTION_MODAL_INPUTS) public modalInputs: CompassActionModalInputs
   ) { }
 
   ngOnInit() {
-    this.radioOptionSelected = ListSelectionType.Stores;
-    this.dropdownOptionSelected = 'All';
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
     this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
   }
@@ -52,6 +51,7 @@ export class CompassActionModalComponent implements OnInit {
 
   public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
+    this.isAcceptEnabled = this.getIsAcceptEnabled();
   }
 
   public optionsSelected() {
@@ -66,5 +66,11 @@ export class CompassActionModalComponent implements OnInit {
     if (this.modalOverlayRef) {
       this.modalOverlayRef.closeModal();
     }
+  }
+
+  private getIsAcceptEnabled(): boolean {
+    return this.dropdownInputModel
+      && this.dropdownInputModel.dropdownOptions.length
+      && this.dropdownOptionSelected !== this.dropdownInputModel.dropdownOptions[0].value;
   }
 }

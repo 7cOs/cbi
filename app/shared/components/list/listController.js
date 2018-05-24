@@ -234,28 +234,6 @@ module.exports = /*  @ngInject */
       });
     };
 
-    function addOpportunitiesToList(listId, selectedOpportunities) {
-      if (listId && selectedOpportunities.length) {
-        loaderService.openLoader(true);
-
-        opportunitiesToCopy(selectedOpportunities).then(opportunities => {
-          const formattedOpportunities = opportunities.map(opportunity => { return { opportunityId: opportunity.id }; });
-          updateCopiedOpportunities();
-          updateTargetListOpportunityCountByListID(listId, opportunities.length);
-          listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
-            .then(result => {
-              vm.toggleSelectAllStores(false);
-              loaderService.closeLoader();
-              toastService.showToast('added');
-            }, () => {
-              loaderService.closeLoader();
-              toastService.showToast('addedError');
-              getTargetLists();
-            });
-        });
-      }
-    }
-
     function sendDownloadEvent() {
       if (vm.pageName === 'opportunities') {
         analyticsService.trackEvent(
@@ -1270,15 +1248,38 @@ module.exports = /*  @ngInject */
         return listsApiService.addStoresToListPromise(listId, { storeSourceCode: storeId });
       });
       $q.all(addStoreToListPromises)
-        .then(result => {
+        .then(() => {
+          toastService.showToast('added');
+        }, () => {
+          toastService.showToast('addedError');
+        })
+        .finally(() => {
           vm.toggleSelectAllStores(false);
           loaderService.closeLoader();
-          toastService.showToast('added');
-        }, err => {
-          loaderService.closeLoader();
-          toastService.showToast('addedError');
-          console.log('Error adding these ids: ', selectedStoreIds, ' Responded with error: ', err);
-          getTargetLists();
+          vm.getTargetLists();
         });
+    }
+
+    function addOpportunitiesToList(listId, selectedOpportunities) {
+      if (listId && selectedOpportunities.length) {
+        loaderService.openLoader(true);
+
+        opportunitiesToCopy(selectedOpportunities).then(opportunities => {
+          const formattedOpportunities = opportunities.map(opportunity => { return { opportunityId: opportunity.id }; });
+          updateCopiedOpportunities();
+          updateTargetListOpportunityCountByListID(listId, opportunities.length);
+          listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
+            .then(() => {
+              toastService.showToast('added');
+            }, () => {
+              toastService.showToast('addedError');
+            })
+            .finally(() => {
+              vm.toggleSelectAllStores(false);
+              loaderService.closeLoader();
+              vm.getTargetLists();
+            });
+        });
+      }
     }
   };
