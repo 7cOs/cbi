@@ -19,10 +19,14 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   @Input() opportunitySelected: string;
   @Input() unversionedStoreId: string;
 
-  public opportunityDetails: ListsOpportunities;
+  public opportunityDetails?: ListsOpportunities;
   public opportunityType: OpportunityTypeLabel | OpportunityType;
   public allOpps: OpportunitiesByStore;
   public skuDescription: string;
+
+  public featureTypeCode: string;
+  public itemAuthorizationCode: string;
+
   private listDetailSubscription: Subscription;
 
   constructor(private store: Store<AppState>) {
@@ -34,6 +38,8 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
       .subscribe((listDetail: ListsState)  => {
           this.allOpps = listDetail.listOpportunities.opportunities;
       });
+     this.featureTypeCode = 'asds';
+     this.itemAuthorizationCode = 'asdf';
   }
 
   ngOnChanges() {
@@ -41,6 +47,7 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   }
 
   setExtenderBodyFields(allOpps: OpportunitiesByStore) {
+    console.log(allOpps);
     if (allOpps) {
       this.opportunityDetails = allOpps[this.unversionedStoreId] ?
                                   allOpps[this.unversionedStoreId].find((el: ListsOpportunities) => {
@@ -49,6 +56,8 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
       if (this.opportunityDetails) {
         this.opportunityType =  OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type;
         this.skuDescription =  this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
+
+        // delete these - just for testing
       }
     }
   }

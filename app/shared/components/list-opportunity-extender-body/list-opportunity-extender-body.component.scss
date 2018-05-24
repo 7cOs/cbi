@@ -4,6 +4,7 @@
   display: inline-block;
   overflow-x: hidden;
   overflow-y: auto;
+  width: 100%;
 }
 
 .opportunity-detail-row {
@@ -21,9 +22,21 @@
   padding-right: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.opportunity-row-with-two-columns {
+  display: inline-table;
+  width:   100%;
+  padding: 20px;
+  border-top:  solid 1px $border-gray;
+  font-family: $roboto;
+  font-size: 14px;
+  padding-left: 25px;
 
   .right {
     float: right;
+    text-align: right;
+    padding-right: 60px;
   }
 
   .left {

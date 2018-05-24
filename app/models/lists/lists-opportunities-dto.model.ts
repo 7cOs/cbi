@@ -1,6 +1,8 @@
 import { OpportunityImpact } from '../../enums/list-opportunities/list-opportunity-impact.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityType } from '../../enums/list-opportunities/list-opportunity-type.enum';
+import { OpportunityFeatureType } from './lists-opportunities-feature-type.model';
+import { OpportunityItemAuthorization } from './lists-opportunities-item-authorization.model';
 
 export interface ListOpportunityDTO {
     brandCode: string;
@@ -19,4 +21,22 @@ export interface ListOpportunityDTO {
     type: OpportunityType;
     yearAgoDepletions_CYTD: number;
     isSimpleDistributionOpportunity: boolean;
+    featureTypeCode: string;
+    featureTypeDescription: string;
+    featurePeriodBeginDate: string;
+    featurePeriodEndDate: string;
+    featureResetBeginDate: string;
+    featureResetEndDate: string;
+    featurePrice: string;
+    featureIsOnMenu: string;
+    featureNotes: string;
+    itemAuthorizationCode: string;
+    itemAuthorizationDescription: string;
+    itemAuthorizationPeriodBeginDate: string;
+    itemAuthorizationPeriodEndDate: string;
+    itemAuthorizationResetBeginDate: string;
+    itemAuthorizationResetEndDate: string;
+    itemAuthorizationPrice: string;
+    itemAuthorizationIsOnMenu: string;
+    itemAuthorizationNotes: string;
 }

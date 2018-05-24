@@ -1,42 +1,49 @@
 .inline
   .opportunity-detail-row
-    p <b>Brand: </b> {{ opportunityDetails ? opportunityDetails.brandDescription : '' }}
+    p <b>Brand: </b> {{ opportunityDetails?.brandDescription }}
   .opportunity-detail-row
     p
       b Sku/Package:
-      |  {{ opportunityDetails ? skuDescription : ''}}
+      |  {{ opportunityDetails ? skuDescription : '' }}
   .opportunity-detail-row
-    p <b>Opportunity Type: </b> {{ opportunityDetails ? opportunityType : '' }}
+    p <b>Opportunity Type: </b> {{ opportunityDetails ? opportunityType : ''}}
   .opportunity-detail-row
-    p <b>Opportunity Rationale: </b> {{ opportunityDetails ? opportunityDetails.rationale : '' }}
-  //- .opportunity-detail-row
-  //-   p <b>Brand Mandate</b>
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Start date: </b>11/14/18
-  //-   p
-  //-     span.right <b>Start End: </b> None
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Reset date: </b>11/14/18
-  //-   p
-  //-     span.right <b>Reset End: </b> None
-  //- .opportunity-detail-row
-  //-   p <b>Additional Notes: </b> N/A
-  //- .opportunity-detail-row
-  //-   p <b>Every Day Low Price (Off Premsie) </b>
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Start date: </b>11/14/18
-  //-   p
-  //-     span.right <b>Start End: </b> None
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Price: </b> $11.99
-  //-   p
-  //-     span.right
-  //-       b On Menu/Display?:
-  //-       |  Y
-  //- .opportunity-detail-row
-  //-   p <b>Additional Notes: </b> When long text like these occurs then the row automatically sizes to fit the content in the middle. If it is even longer like this, then the extender will become auto scrollable
+    p <b>Opportunity Rationale: </b> {{ opportunityDetails?.rationale }}
+  .opportunity-detail-row(*ngIf="featureTypeCode")
+    p <b> {{ featureTypeCode }}</b>
+  .opportunity-row-with-two-columns(*ngIf="featureTypeCode")
+    .left
+      <b>Start date: </b> {{ featureTypeCode }}
+    .right
+      <b>Start End: </b> {{ !!(opportunityDetails?.featureType.featurePeriodEndDate) ? opportunityDetails?.featureType.featurePeriodEndDate : 'None' }}
+  .opportunity-row-with-two-columns(*ngIf="featureTypeCode")
+    .left
+        <b>Reset date: </b> {{ featureTypeCode }}
+    .right
+          <b>Reset End: </b> {{ !!(opportunityDetails?.featureType.featurePeriodEndDate) ? opportunityDetails?.featureType.featurePeriodEndDate : 'None' }}
+  .opportunity-row-with-two-columns(*ngIf="featureTypeCode")
+    .left
+        <b>Price: </b> {{ featureTypeCode }}
+    .right
+        b On Menu/Display?:
+        |  {{ opportunityDetails?.featureType.featureIsOnMenu  }}
+  .opportunity-detail-row(*ngIf="featureTypeCode")
+    p <b>Additional Notes: </b> {{ featureTypeCode }}
+  .opportunity-detail-row(*ngIf="itemAuthorizationCode")
+    p <b>{{ itemAuthorizationCode }} </b>
+  .opportunity-row-with-two-columns(*ngIf="itemAuthorizationCode")
+    .left
+      <b>Start date: </b>{{ itemAuthorizationCode }}
+    .right
+      <b>Start End: </b> {{ !!(opportunityDetails?.itemAuthorization.itemAuthorizationPeriodEndDate) ? opportunityDetails.itemAuthorization.itemAuthorizationPeriodEndDate : 'None'  }}
+  .opportunity-row-with-two-columns(*ngIf="itemAuthorizationCode")
+    .left <b>Reset date: </b> {{ itemAuthorizationCode  }}
+    .right <b>Reset End: </b> {{ !!(opportunityDetails?.itemAuthorization.itemAuthorizationPeriodEndDate) ? opportunityDetails.itemAuthorization.itemAuthorizationPeriodEndDate : 'None' }}
+  .opportunity-row-with-two-columns(*ngIf="itemAuthorizationCode")
+    .left <b>Price: </b> {{ itemAuthorizationCode }}
+    .right
+        b On Menu/Display?:
+        |  {{ opportunityDetails ? opportunityDetails.itemAuthorization.itemAuthorizationIsOnMenu : 'N'  }}
+  .opportunity-detail-row(*ngIf="itemAuthorizationCode")
+    p <b>Additional Notes: </b> {{ itemAuthorizationCode }}
 
