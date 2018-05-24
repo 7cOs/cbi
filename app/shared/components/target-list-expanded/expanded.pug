@@ -81,7 +81,7 @@ div.expanded-target-lists
                 h5(column="3").accent.left &nbsp;
               div(row)
                 div(column="12")
-                  md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
+                  md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
 
     //- Shared With Me
     div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'shared', left: expanded.selectedTab > 1, right: expanded.selectedTab < 1, 'no-transition': !expanded.userSelectedTab}")
@@ -137,7 +137,7 @@ div.expanded-target-lists
               div(row).creator
                 h5(ng-if="list.targetListAuthor" column="3").accent.left {{list.targetListAuthor}}
               div(row)
-                md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
+                md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
 
     //- Archived
     div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'archived', right: expanded.selectedTab < 2, 'no-transition': !expanded.userSelectedTab}")
@@ -195,4 +195,4 @@ div.expanded-target-lists
               div(row).creator
               h5(column="3" ng-if="list.targetListAuthor === 'current user'").accent.left &nbsp;
               h5(column="3" ng-if="list.targetListAuthor !== 'current user'").accent.left {{list.targetListAuthor}}
-              md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")
+              md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")

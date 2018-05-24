@@ -12,6 +12,7 @@ import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { BeerDistributors } from '../../models/lists/beer-distributors.model';
 
 export const PERFORMANCE_TOTAL_ROW_NAME: string = 'Total';
 export const SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL: string = 'ANY';
@@ -33,6 +34,7 @@ export class ListsTableTransformerService {
 
       const storeVolume: ListStorePerformance = this.getStorePerformance(store.unversionedStoreId, volumePerformance);
       const storeOpportunities: ListsOpportunities[] = opportunities[store.unversionedStoreId];
+      const primaryDistributorIndex = this.getPrimaryDistributorIndex(store.beerDistributors);
 
       opportunityRows.push({
         storeColumn: store.name,
@@ -46,7 +48,12 @@ export class ListsTableTransformerService {
         performanceError: !storeVolume,
         checked: false,
         expanded: false,
-        unversionedStoreId: store.unversionedStoreId
+        storeNumber: store.number,
+        storeCity: store.city,
+        storeState: store.state,
+        unversionedStoreId: store.unversionedStoreId,
+        distributorCustomerCode: store.beerDistributors[primaryDistributorIndex].distributorCustomerCode,
+        distributorSalesperson: store.beerDistributors[primaryDistributorIndex].salespersonName,
       });
 
       return opportunityRows;
@@ -62,6 +69,7 @@ export class ListsTableTransformerService {
       const storeVolume: ListStorePerformance = this.getStorePerformance(store.unversionedStoreId, volumePerformance);
       const storePOD: ListStorePerformance = this.getStorePerformance(store.unversionedStoreId, podPerformance);
       const isPerformanceError: boolean = !storeVolume || !storePOD;
+      const primaryDistributorIndex = this.getPrimaryDistributorIndex(store.beerDistributors);
 
       return {
         storeColumn: store.name,
@@ -77,7 +85,12 @@ export class ListsTableTransformerService {
         lastDepletionDateColumn: storeVolume ? moment(storeVolume.lastSoldDate).format('MM/DD/YY') : '-',
         performanceError: isPerformanceError,
         checked: false,
-        unversionedStoreId: store.unversionedStoreId
+        storeNumber: store.number,
+        storeCity: store.city,
+        storeState: store.state,
+        unversionedStoreId: store.unversionedStoreId,
+        distributorCustomerCode: store.beerDistributors[primaryDistributorIndex].distributorCustomerCode,
+        distributorSalesperson: store.beerDistributors[primaryDistributorIndex].salespersonName,
       };
     });
   }
@@ -100,11 +113,16 @@ export class ListsTableTransformerService {
       lastDepletionDateColumn: '',
       performanceError: false,
       checked: false,
-      unversionedStoreId: ''
+      storeNumber: '',
+      storeCity: '',
+      storeState: '',
+      unversionedStoreId: '',
+      distributorCustomerCode: '',
+      distributorSalesperson: ''
     };
   }
 
-  private transformStoreOpportunities(opportunities: ListsOpportunities[]): ListTableDrawerRow[] {
+  public transformStoreOpportunities(opportunities: ListsOpportunities[]): ListTableDrawerRow[] {
     return opportunities.map((opportunity: ListsOpportunities) => {
       return {
         id: opportunity.id,
@@ -127,5 +145,9 @@ export class ListsTableTransformerService {
 
   private getStorePerformance(unversionedStoreId: string, storePerformance: ListStorePerformance[]): ListStorePerformance {
     return storePerformance.find((performance: ListStorePerformance) => performance.unversionedStoreId === unversionedStoreId);
+  }
+
+  private getPrimaryDistributorIndex(beerDistributors: BeerDistributors[]): number {
+    return beerDistributors.findIndex((primaryBeerDistributor: BeerDistributors) => primaryBeerDistributor.isPrimary === true);
   }
 }

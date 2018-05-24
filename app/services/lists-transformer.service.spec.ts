@@ -56,7 +56,8 @@ describe('Service: ListsTransformerService', () => {
           premiseType: storesDTOMock[i].premiseType,
           state: storesDTOMock[i].state,
           segmentCode: storesDTOMock[i].segmentCode,
-          distributor: storesDTOMock[i].primaryBeerDistributor.name
+          distributor: storesDTOMock[i].primaryBeerDistributor.name,
+          beerDistributors: storesDTOMock[i].beerDistributors
         });
       });
     });

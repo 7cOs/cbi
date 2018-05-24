@@ -42,6 +42,7 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchStoreDetails) => {
         return this.listsApiService.getStoreListDetails(action.payload.listId)
           .map((response: Array<ListStoreDTO>) => {
+            console.log(response);
             const transformedData: Array<StoreDetails> = this.listsTransformerService.formatStoresData(response);
             return new ListActions.FetchStoreDetailsSuccess(transformedData);
           })

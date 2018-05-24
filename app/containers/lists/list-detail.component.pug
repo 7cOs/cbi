@@ -26,6 +26,7 @@ compass-tabs(
           (onActionButtonClicked)="copyToListClick()"
         )
         compass-action-button.action-button-spacing(
+          [isDisabled]="!isPerformanceTabDataFetched",
           [actionLabel]="actionButtonType.Download",
           (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
@@ -62,6 +63,7 @@ compass-tabs(
           (onActionButtonClicked)="copyToListClick()"
         )
         compass-action-button.action-button-spacing(
+          [isDisabled]="!isOppsTabDataFetched",
           [actionLabel]="actionButtonType.Download",
           (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )

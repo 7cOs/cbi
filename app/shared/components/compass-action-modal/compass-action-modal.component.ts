@@ -22,10 +22,10 @@ export class CompassActionModalComponent implements OnInit {
 
   public modalOverlayRef: CompassActionModalOverlayRef;
   public compassActionModalEvent = CompassActionModalEvent;
+  public dropdownOptionSelected: string;
   public radioInputModel: RadioInputModel;
   public dropdownInputModel: DropdownInputModel;
   public radioOptionSelected: string;
-  public dropdownOptionSelected: string;
   public isCopyButtonEnabled: boolean = false;
 
   constructor(

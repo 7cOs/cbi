@@ -1,4 +1,4 @@
 export enum ListsDownloadType {
-  Stores = 'Stores',
+  Stores = 'Stores Only',
   Opportunities = 'Stores and Opportunities'
 }
