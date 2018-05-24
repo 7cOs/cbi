@@ -6,7 +6,6 @@ import { CompassActionModalOverlayRef } from './compass-action-modal.overlayref'
 import { COMPASS_ACTION_MODAL_INPUTS } from '../../components/compass-action-modal/compass-action-modal.tokens';
 import { CompassActionModalEvent } from '../../../enums/compass-action-modal-event.enum';
 import { DropdownInputModel } from '../../../models/compass-dropdown-input.model';
-import { ListSelectionType } from '../../../enums/lists/list-selection-type.enum';
 import { RadioInputModel } from '../../../models/compass-radio-input.model';
 
 const ESCKEY = 27;
