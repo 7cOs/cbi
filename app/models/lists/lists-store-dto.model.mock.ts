@@ -1,6 +1,7 @@
 import * as Chance from 'chance';
 import { ListStoreDTO } from './lists-store-dto.model';
 import { generateRandomSizedArray } from '../util.model';
+import { getBeerDistributorsArrayMock } from './beer-distributors.model.mock';
 
 let chance = new Chance();
 
@@ -37,6 +38,7 @@ export function getStoreDTOMock(): ListStoreDTO {
     tdlinxSubChannelCode: chance.string(),
     tdlinxSubChannelDescription: chance.string(),
     warehouseChainFlag: chance.bool(),
-    wineUnsoldAccount: chance.bool()
+    wineUnsoldAccount: chance.bool(),
+    beerDistributors: getBeerDistributorsArrayMock()
   };
 }

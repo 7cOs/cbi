@@ -1,4 +1,7 @@
+import * as moment from 'moment';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { DecimalPipe, UpperCasePipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -7,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
 import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
@@ -30,12 +34,17 @@ import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
+import { ListStoresDownloadCSV } from '../../models/lists/list-stores-download-csv.model';
+import { ListOpportunitiesDownloadCSV } from '../../models/lists/list-opportunities-download-csv.model';
+import { ListsOpportunities } from '../../models/lists/lists-opportunities.model';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { User } from '../../models/lists/user.model';
+import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
+import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
 
 interface ListPageClick {
   pageNumber: number;
@@ -47,12 +56,14 @@ export interface PageChangeData {
 }
 
 export const downloadRadioOptions: Array<CompassSelectOption> = [{
-  display: 'Stores',
+  display: 'Stores Only',
   value: ListsDownloadType.Stores
 }, {
   display: 'Stores and Opportunities',
   value: ListsDownloadType.Opportunities
 }];
+
+export const SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL: string = 'ANY';
 
 @Component({
   selector: 'list-detail',
@@ -108,7 +119,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     title: 'OPTIONS',
     stacked: false
   };
+  public totalOppsForList: number;
+  public isOppsTabDataFetched: boolean = false;
+  public isPerformanceTabDataFetched: boolean = false;
   public downloadBodyHTML: string;
+  public groupedOppsByStore: OpportunitiesByStore;
 
   private listDetailSubscription: Subscription;
 
@@ -118,6 +133,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     @Inject('$state') private $state: any,
     private store: Store<AppState>,
     private titleService: Title,
+    private numberPipe: DecimalPipe,
+    private upperCasePipe: UpperCasePipe,
     @Inject('userService') private userService: any
   ) { }
 
@@ -151,7 +168,6 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
         this.listSummary = listDetail.listSummary.summaryData;
-
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
           listDetail.performance.volumeStatus,
@@ -166,8 +182,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             listDetail.performance.volume.storePerformance,
             listDetail.performance.pod.storePerformance
           );
-
           this.performanceTableDataSize = this.performanceTableData.length;
+          this.isPerformanceTabDataFetched = !!this.performanceTableDataSize;
         }
 
         if (this.isListOpportunitiesFetched(
@@ -175,6 +191,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           listDetail.performance.volumeStatus,
           listDetail.listOpportunities.opportunitiesStatus
         )) {
+          this.groupedOppsByStore = listDetail.listOpportunities.opportunities;
           this.opportunitiesTableData = this.listsTableTransformerService.transformOpportunitiesCollection(
             listDetail.listStores.stores,
             listDetail.performance.volume.storePerformance,
@@ -185,7 +202,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
               this.oppStatusSelected,
               this.opportunitiesTableData
             );
+          this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
+          this.isOppsTabDataFetched = !!this.opportunitiesTableDataSize;
         }
         if (listDetail.manageListStatus !== ActionStatus.NotFetched) {
           this.handleManageListStatus(listDetail.manageListStatus);
@@ -231,13 +250,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     });
   }
    downloadActionButtonClicked(): void {
+    let numStores = 0;
     if (this.selectedTab === this.performanceTabTitle) {
-      console.log('Download All - performance tab seclected');
+      numStores = this.performanceTableDataSize;
     } else {
-      console.log('Download All - opps tab seclected');
+      numStores = this.opportunitiesTableDataSize;
     }
 
-    this.downloadBodyHTML = 'Body text goes here!';
+    this.downloadBodyHTML = '<b> CURRENT DOWNLOAD CONTAINS </b> <br/> <br/> <b>' +
+      this.totalOppsForList + ' opportunities </b> across ' + numStores + ' stores </div>';
     this.downloadAllModalStringInputs = {
       'title': 'Download',
       'bodyText': this.downloadBodyHTML,
@@ -247,8 +268,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     };
     let compassModalOverlayRef = this.compassModalService.showActionModalDialog(this.downloadAllModalStringInputs, null);
     this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value: any) => {
-        console.log('radio option selected: ', value.radioOptionSelected);
-        console.log('dropdown option selected: ', value.dropdownOptionSelected);
+        const csvDownloadData = this.modalDownloadClicked(value);
+        this.generateCSVForDownload(value, csvDownloadData);
     });
   }
 
@@ -290,6 +311,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         this.opportunitiesTableData
       );
     this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
+    this.isOppsTabDataFetched = !!this.opportunitiesTableDataSize;
+    this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
     this.paginationReset.next();
   }
 
@@ -373,6 +396,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.oppStatusSelected = listOpportunityStatusOptions.find(status => status.value === OpportunityStatus.all).value;
       this.filteredOpportunitiesTableData = this.opportunitiesTableData;
       this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
+      this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
     }
     if (tabName === this.opportunitiesTabTitle) {
       this.performanceTableData = this.getDeselectedPerformanceTableData(this.performanceTableData);
@@ -409,6 +433,46 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.showManageListLoader = manageListStatus === ActionStatus.Fetching;
 
     if (manageListStatus === ActionStatus.Fetched) this.$state.go('lists');
+  }
+
+  public modalDownloadClicked(value: CompassActionModalOutputs): Array<ListStoresDownloadCSV | ListOpportunitiesDownloadCSV> {
+    let exportData: Array<ListPerformanceTableRow | ListOpportunitiesTableRow>;
+    if (this.selectedTab === this.performanceTabTitle) {
+      exportData = this.performanceTableData;
+    } else {
+      exportData = this.filteredOpportunitiesTableData;
+    }
+
+    if (value.radioOptionSelected === ListsDownloadType.Stores) {
+      return exportData.reduce(
+        (csvData: Array<ListStoresDownloadCSV>, store: ListPerformanceTableRow) => {
+          csvData = this.pushStoresDataToCSV(store, csvData);
+          return csvData;
+      }, []);
+    } else {
+      return exportData.reduce(
+        (csvData: Array<ListOpportunitiesDownloadCSV>, store: ListOpportunitiesTableRow) => {
+          const oppsForStore: ListsOpportunities[] = this.groupedOppsByStore[store.unversionedStoreId];
+          if (!oppsForStore) {
+            csvData = this.pushOpportunitiesDataToCSV(store, csvData);
+          } else {
+            const filteredOpportunities = (opportunityRows: ListsOpportunities[]): ListsOpportunities[] => {
+              return opportunityRows.filter((opp: ListsOpportunities) => {
+                return this.oppStatusSelected === OpportunityStatus.targeted ?
+                  opp.status === OpportunityStatus.targeted
+                  || opp.status === OpportunityStatus.inactive : opp.status === OpportunityStatus.closed;
+              });
+            };
+            const oppsForCSV: ListsOpportunities[] = this.oppStatusSelected === OpportunityStatus.all
+              ? oppsForStore
+              : filteredOpportunities(oppsForStore);
+            oppsForCSV.forEach((opportunity: ListsOpportunities) => {
+              csvData = this.pushOpportunitiesDataToCSV(store, csvData, opportunity);
+            });
+          }
+          return csvData;
+      }, []);
+    }
   }
 
   private isListPerformanceFetched(
@@ -455,5 +519,109 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         expanded: false
       });
     });
+  }
+
+  private pushOpportunitiesDataToCSV(
+    store: ListOpportunitiesTableRow,
+    csvData: Array<ListOpportunitiesDownloadCSV>,
+    opps?: ListsOpportunities
+  ) {
+    csvData.push({
+      distributor: store.distributorColumn,
+      distributorCustomerCode: store.distributorCustomerCode,
+      distributorSalesperson: store.distributorSalesperson,
+      storeName: store.storeColumn,
+      storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
+      address: store.storeAddressSubline,
+      city: store.storeCity,
+      state: store.storeState,
+      cytdVolume: Math.round(store.cytdColumn),
+      cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
+      segmentCode: store.segmentColumn,
+      productBrand: opps ? opps.brandDescription : '',
+      productSku: opps
+        ? opps.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opps.skuDescription
+        : '',
+      opportunityStatus: opps
+        ? this.upperCasePipe.transform(opps.status) || ''
+        : '',
+      opportunityType: opps
+        ? OpportunityTypeLabel[opps.type] || opps.type
+        : '',
+      opportunityImpact: opps
+        ? this.upperCasePipe.transform(opps.impact) || ''
+        : '',
+    });
+    return csvData;
+  }
+
+  private pushStoresDataToCSV(
+    store: ListPerformanceTableRow,
+    csvData: Array<ListStoresDownloadCSV>
+  ) {
+    csvData.push({
+      distributor: store.distributorColumn,
+      distributorCustomerCode: store.distributorCustomerCode,
+      distributorSalesperson: store.distributorSalesperson,
+      storeName: store.storeColumn,
+      storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
+      address: store.storeAddressSubline,
+      city: store.storeCity,
+      state: store.storeState,
+      cytdVolume: Math.round(store.cytdColumn),
+      cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
+      segmentCode: store.segmentColumn,
+    });
+    return csvData;
+  }
+
+  private getCumulativeOppsForList(oppsData: ListOpportunitiesTableRow[]): number {
+    let cumulativeOppsCount: number = 0;
+    oppsData.map((eachStore: ListOpportunitiesTableRow) => {
+      cumulativeOppsCount += eachStore.opportunities.length;
+    });
+    return cumulativeOppsCount;
+  }
+
+  private generateCSVForDownload(
+    value: CompassActionModalOutputs,
+    csvDownloadData: Array<ListStoresDownloadCSV | ListOpportunitiesDownloadCSV>): void {
+      const storesHeader = [
+        'Distributor',
+        'Distributor Customer Code',
+        'Distributor Sales Route (Primary)',
+        'Store Name',
+        'Store Number',
+        'Address',
+        'City',
+        'State',
+        'CYTD Volume',
+        'vs YA %',
+        'Segment'
+      ];
+      let oppsHeader = [...storesHeader];
+      oppsHeader.push.apply(oppsHeader, [
+        'Product Brand',
+        'Product Sku',
+        'Opportunity Status',
+        'Opportunity Type',
+        'Opportunity Predicted Impact'
+      ]);
+      const csvHeaders = value.radioOptionSelected === ListsDownloadType.Stores ? storesHeader : oppsHeader;
+      const csvTitle = value.radioOptionSelected === ListsDownloadType.Stores
+        ? `${moment().format('YYYY-MM-DD')}${ListsDownloadType.Stores}`
+        : `${moment().format('YYYY-MM-DD')}${ListsDownloadType.Opportunities}`;
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        noDownload: false,
+        headers: csvHeaders
+      };
+      const csvObj = new Angular5Csv(csvDownloadData, csvTitle, options);
+      csvObj.fileName = csvTitle;
   }
 }
