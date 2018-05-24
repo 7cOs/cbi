@@ -67,6 +67,7 @@
     "angular-moment": "~1.0.1",
     "angular-nvd3": "1.0.9",
     "angular-sanitize": "1.5.11",
+    "angular5-csv": "^0.2.10",
     "autoprefixer": "^6.7.6",
     "awesome-typescript-loader": "3.2.3",
     "body-parser": "~1.17.0",
