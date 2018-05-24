@@ -411,6 +411,7 @@ describe('Unit: expanded target list controller', function() {
               'closedOpportunitiesCount': 0,
               'totalClosedDepletions': 0
             },
+            'owner': { 'employeeId': 1234 },
             'createdAt': '2016-11-03 21:27:12.564',
             'permissionLevel': 'author',
             'dateOpportunitiesUpdated': null,
@@ -441,6 +442,7 @@ describe('Unit: expanded target list controller', function() {
               'closedOpportunitiesCount': 0,
               'totalClosedDepletions': 0
             },
+            'owner': { 'employeeId': 1234 },
             'createdAt': '2016-11-03 20:59:07.411',
             'permissionLevel': 'author',
             'dateOpportunitiesUpdated': null,
@@ -468,8 +470,20 @@ describe('Unit: expanded target list controller', function() {
 
       it('deletes a list', function() {
         ctrl.selected = singleCollaborator;
+        userService.model.targetLists = {
+          archived: [{
+            archived: true,
+            collaborators: [],
+            id: '1234',
+            owner: { employeeId: 1234 }
+           }],
+          ownedArchived: 10,
+          ownedNotArchived: 60,
+          ownedNotArchivedTargetLists: []};
         ctrl.deleteTargetList();
+        scope.$apply();
         expect(listsApiService.deleteListPromise).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).toHaveBeenCalled();
       });
 
       it('should return proper authors for each target list', function() {
