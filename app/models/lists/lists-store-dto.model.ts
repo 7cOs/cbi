@@ -1,4 +1,5 @@
 import { PrimaryDistributor } from './primary-distributor.model';
+import { BeerDistributors } from './beer-distributors.model';
 
 export interface ListStoreDTO {
   address: string;
@@ -26,4 +27,5 @@ export interface ListStoreDTO {
   tdlinxSubChannelDescription: string;
   warehouseChainFlag: boolean;
   wineUnsoldAccount: boolean;
+  beerDistributors: BeerDistributors[];
 }
