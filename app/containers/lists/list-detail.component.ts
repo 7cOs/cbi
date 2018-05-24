@@ -244,7 +244,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     };
 
     if (this.selectedTab === this.opportunitiesTabTitle) {
-      const checkedOpps: {opportunityId: string}[] = this.opportunitiesTableData.reduce((totalOpps, store: ListOpportunitiesTableRow) => {
+      const checkedOpps: {opportunityId: string}[] = this.opportunitiesTableData.reduce(
+        (totalOpps: {opportunityId: string}[], store: ListOpportunitiesTableRow) => {
         store.opportunities.forEach((opp) => {
           if (opp.checked === true) totalOpps.push({opportunityId: opp.id});
         });
@@ -252,7 +253,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       }, []);
       this.copyToListModal(checkedOpps);
     } else {
-      const checkedStores: string[] = this.performanceTableData.reduce((totalStores, store: ListPerformanceTableRow) => {
+      const checkedStores: string[] = this.performanceTableData.reduce(
+        (totalStores: string[], store: ListPerformanceTableRow) => {
         if (store.checked === true) totalStores.push(store.unversionedStoreId);
         return totalStores;
       }, []);
