@@ -57,13 +57,13 @@ compass-tabs(
         )
       div.button-section
         compass-action-button(
-        [actionLabel]="actionButtonType.CopyToList",
-        [isDisabled]="!isOpportunityRowSelect",
-        (onActionButtonClicked)="copyToListClick()"
+          [actionLabel]="actionButtonType.CopyToList",
+          [isDisabled]="!isOpportunityRowSelect",
+          (onActionButtonClicked)="copyToListClick()"
         )
         compass-action-button.action-button-spacing(
-        [actionLabel]="actionButtonType.Download",
-        (onActionButtonClicked)="downloadActionButtonClicked($event)"
+          [actionLabel]="actionButtonType.Download",
+          (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
         compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",

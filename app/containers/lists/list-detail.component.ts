@@ -114,7 +114,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     stacked: false
   };
 
-  public dropdownInputModel: DropdownInputModel;
+  public copyDropdownInputModel: DropdownInputModel;
   public downloadBodyHTML: string;
 
   private listDetailSubscription: Subscription;
@@ -237,7 +237,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     });
     listDropDownMenu.unshift({display: 'Choose a List', value: 'Choose a List'});
 
-    this.dropdownInputModel = {
+    this.copyDropdownInputModel = {
       selected: listDropDownMenu[0].value,
       dropdownOptions: listDropDownMenu,
       title: 'LIST'
@@ -480,7 +480,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
     const copyToListModalStringInputs: CompassActionModalInputs = {
       title: 'Copy to List',
-      dropdownInputModel: this.dropdownInputModel,
+      dropdownInputModel: this.copyDropdownInputModel,
       acceptLabel: CompassActionModalEvent.Copy,
       rejectLabel: CompassActionModalEvent.Cancel
     };
