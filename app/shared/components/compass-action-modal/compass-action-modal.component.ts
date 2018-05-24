@@ -26,7 +26,7 @@ export class CompassActionModalComponent implements OnInit {
   public dropdownInputModel: DropdownInputModel;
   public radioOptionSelected: string;
   public dropdownOptionSelected: string;
-  public isCopyButtonEnabled: boolean = true;
+  public isCopyButtonEnabled: boolean = false;
 
   constructor(
     @Inject(COMPASS_ACTION_MODAL_INPUTS) public modalInputs: CompassActionModalInputs
