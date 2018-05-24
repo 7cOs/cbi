@@ -446,19 +446,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (value.radioOptionSelected === ListsDownloadType.Stores) {
       return exportData.reduce(
         (csvData: Array<ListStoresDownloadCSV>, store: ListPerformanceTableRow) => {
-          csvData.push({
-            distributor: store.distributorColumn,
-            distributorCustomerCode: store.distributorCustomerCode,
-            distributorSalesperson: store.distributorSalesperson,
-            storeName: store.storeColumn,
-            storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
-            address: store.storeAddressSubline,
-            city: store.storeCity,
-            state: store.storeState,
-            cytdVolume: Math.round(store.cytdColumn),
-            cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
-            segmentCode: store.segmentColumn
-          });
+          csvData = this.pushStoresDataToCSV(store, csvData);
           return csvData;
       }, []);
     } else {
@@ -466,24 +454,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         (csvData: Array<ListOpportunitiesDownloadCSV>, store: ListOpportunitiesTableRow) => {
           const oppsForStore: ListsOpportunities[] = this.groupedOppsByStore[store.unversionedStoreId];
           if (!oppsForStore) {
-            csvData.push({
-              distributor: store.distributorColumn,
-              distributorCustomerCode: store.distributorCustomerCode,
-              distributorSalesperson: store.distributorSalesperson,
-              storeName: store.storeColumn,
-              storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
-              address: store.storeAddressSubline,
-              city: store.storeCity,
-              state: store.storeState,
-              cytdVolume: Math.round(store.cytdColumn),
-              cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
-              segmentCode: store.segmentColumn,
-              productBrand: '',
-              productSku: '',
-              opportunityStatus: '',
-              opportunityType: '',
-              opportunityImpact: ''
-            });
+            csvData = this.pushOpportunitiesDataToCSV(store, csvData);
           } else {
             const filteredOpportunities = (opportunityRows: ListsOpportunities[]): ListsOpportunities[] => {
               return opportunityRows.filter((opp: ListsOpportunities) => {
@@ -496,24 +467,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
               ? oppsForStore
               : filteredOpportunities(oppsForStore);
             oppsForCSV.forEach((opportunity: ListsOpportunities) => {
-              csvData.push({
-                distributor: store.distributorColumn,
-                distributorCustomerCode: store.distributorCustomerCode,
-                distributorSalesperson: store.distributorSalesperson,
-                storeName: store.storeColumn,
-                storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
-                address: store.storeAddressSubline,
-                city: store.storeCity,
-                state: store.storeState,
-                cytdVolume: Math.round(store.cytdColumn),
-                cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
-                segmentCode: store.segmentColumn,
-                productBrand: opportunity.brandDescription,
-                productSku: opportunity.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opportunity.skuDescription,
-                opportunityStatus: this.upperCasePipe.transform(opportunity.status) || '',
-                opportunityType: OpportunityTypeLabel[opportunity.type] || opportunity.type,
-                opportunityImpact: this.upperCasePipe.transform(opportunity.impact) || ''
-              });
+              csvData = this.pushOpportunitiesDataToCSV(store, csvData, opportunity);
             });
           }
           return csvData;
@@ -565,6 +519,60 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         expanded: false
       });
     });
+  }
+
+  private pushOpportunitiesDataToCSV(
+    store: ListOpportunitiesTableRow,
+    csvData: Array<ListOpportunitiesDownloadCSV>,
+    opps?: ListsOpportunities
+  ) {
+    csvData.push({
+      distributor: store.distributorColumn,
+      distributorCustomerCode: store.distributorCustomerCode,
+      distributorSalesperson: store.distributorSalesperson,
+      storeName: store.storeColumn,
+      storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
+      address: store.storeAddressSubline,
+      city: store.storeCity,
+      state: store.storeState,
+      cytdVolume: Math.round(store.cytdColumn),
+      cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
+      segmentCode: store.segmentColumn,
+      productBrand: opps ? opps.brandDescription : '',
+      productSku: opps
+        ? opps.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opps.skuDescription
+        : '',
+      opportunityStatus: opps
+        ? this.upperCasePipe.transform(opps.status) || ''
+        : '',
+      opportunityType: opps
+        ? OpportunityTypeLabel[opps.type] || opps.type
+        : '',
+      opportunityImpact: opps
+        ? this.upperCasePipe.transform(opps.impact) || ''
+        : '',
+    });
+    return csvData;
+  }
+
+  private pushStoresDataToCSV(
+    store: ListPerformanceTableRow,
+    csvData: Array<ListStoresDownloadCSV>
+  ) {
+    csvData.push({
+      distributor: store.distributorColumn,
+      distributorCustomerCode: store.distributorCustomerCode,
+      distributorSalesperson: store.distributorSalesperson,
+      storeName: store.storeColumn,
+      storeNumber: store.storeNumber === 'UNKNOWN' ? '' : store.storeNumber,
+      address: store.storeAddressSubline,
+      city: store.storeCity,
+      state: store.storeState,
+      cytdVolume: Math.round(store.cytdColumn),
+      cytdVsYaPercentage: `${this.numberPipe.transform(store.cytdVersusYaPercentColumn, '1.1-1')}%`,
+      segmentCode: store.segmentColumn,
+    });
+    return csvData;
   }
 
   private getCumulativeOppsForList(oppsData: ListOpportunitiesTableRow[]): number {

@@ -87,7 +87,6 @@ export class ListsEffects {
       .switchMap((action: ListActions.FetchOppsForList) => {
         return this.listsApiService.getOppsDataForList(action.payload.listId)
           .map((response: Array<ListOpportunityDTO>) => {
-            console.log(response);
             const transformedData: Array<ListsOpportunities> = this.listsTransformerService.formatListOpportunitiesData(response);
             const groupedOpportunities = this.listsTransformerService.groupOppsByStore(transformedData);
             return new ListActions.FetchOppsForListSuccess(groupedOpportunities);
