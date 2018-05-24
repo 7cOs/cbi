@@ -12,6 +12,7 @@ td.left-col.link(colspan=1, (click)="tableCellClicked()")
     div.left-col-text-content
       div.description-line-0.store-name
         span {{ rowData.storeColumn | titlecase }}
+        span(*ngIf="rowData.storeNumber") &nbsp;&#35;{{ rowData.storeNumber }}
       div.description-line-1
         span.description-line-1 {{rowData.storeAddressSubline}}
 
