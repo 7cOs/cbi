@@ -16,6 +16,8 @@ import { ListsSummary } from '../../models/lists/lists-header.model';
 
 const chance = new Chance();
 const listIdMock = chance.string();
+const oppIdMock = chance.string();
+const storeSourceCode = chance.string();
 
 describe('Lists Reducer', () => {
 
@@ -577,6 +579,134 @@ describe('Lists Reducer', () => {
         initialState,
         new ListsActions.LeaveListError()
       );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+   describe('when a RemoveStoreFromList action is dispatched', () => {
+
+    it('should update the list stores and list summary details status to Deleting', () => {
+        const expectedState: ListsState = {
+          listStores: {
+            stores: initialState.listStores.stores,
+            storeStatus: ActionStatus.Deleting
+          },
+          listSummary: {
+            summaryStatus: ActionStatus.Deleting,
+            summaryData: initialState.listSummary.summaryData
+          },
+          listOpportunities: initialState.listOpportunities,
+          manageListStatus: initialState.manageListStatus,
+          performance: initialState.performance
+        };
+
+        const actualState = listsReducer(initialState, new ListsActions.RemoveStoreFromList(
+          {listId: listIdMock, storeSourceCode: storeSourceCode}));
+
+        expect(actualState).toEqual(expectedState);
+      });
+
+    it('should update the list stores and list summary to DeleteSuccess on success', () => {
+
+      const expectedState: ListsState = {
+        listStores: {
+          stores: initialState.listStores.stores,
+          storeStatus: ActionStatus.DeleteSuccess
+        },
+        listSummary: {
+          summaryStatus: ActionStatus.DeleteSuccess,
+          summaryData: initialState.listSummary.summaryData
+        },
+        listOpportunities: initialState.listOpportunities,
+        manageListStatus: initialState.manageListStatus,
+        performance: initialState.performance
+      };
+
+      const actualState = listsReducer(
+        initialState,
+        new ListsActions.RemoveStoreFromListSuccess({listId: listIdMock, storeSourceCode: storeSourceCode})
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+
+    it('should should update the list stores and summary status to Error', () => {
+      const expectedState: ListsState = {
+        listStores: {
+          stores: initialState.listStores.stores,
+          storeStatus: ActionStatus.DeleteFailure
+        },
+        listSummary: {
+          summaryStatus: ActionStatus.DeleteFailure,
+          summaryData: initialState.listSummary.summaryData
+        },
+        listOpportunities: initialState.listOpportunities,
+        manageListStatus: initialState.manageListStatus,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.RemoveStoreFromListFailure(new Error()));
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a RemoveOppFromList action is dispatched', () => {
+
+    it('should update the list opportunities status to Deleting', () => {
+        const expectedState: ListsState = {
+          listStores: initialState.listStores,
+          listSummary: initialState.listSummary,
+          listOpportunities: {
+            opportunities: initialState.listOpportunities.opportunities,
+            opportunitiesStatus: ActionStatus.Deleting
+          },
+          manageListStatus: initialState.manageListStatus,
+          performance: initialState.performance
+        };
+
+        const actualState = listsReducer(initialState, new ListsActions.RemoveOppFromList(
+          {listId: listIdMock, oppId: oppIdMock}));
+
+        expect(actualState).toEqual(expectedState);
+      });
+
+    it('should update the list opportunities status to DeleteSuccess on success', () => {
+
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: {
+          opportunities: initialState.listOpportunities.opportunities,
+          opportunitiesStatus: ActionStatus.DeleteSuccess
+        },
+        manageListStatus: initialState.manageListStatus,
+        performance: initialState.performance
+      };
+
+      const actualState = listsReducer(
+        initialState,
+        new ListsActions.RemoveOppFromListSuccess({listId: listIdMock, oppId: oppIdMock})
+      );
+
+      expect(actualState).toEqual(expectedState);
+    });
+
+    it('should should update the headers status to Error', () => {
+      const expectedState: ListsState = {
+        listStores: initialState.listStores,
+        listSummary: initialState.listSummary,
+        listOpportunities: {
+          opportunities: initialState.listOpportunities.opportunities,
+          opportunitiesStatus: ActionStatus.DeleteFailure
+        },
+        manageListStatus: initialState.manageListStatus,
+        performance: initialState.performance
+      };
+      const actualState: ListsState = listsReducer(
+        initialState,
+        new ListsActions.RemoveOppFromListFailure(new Error()));
 
       expect(actualState).toEqual(expectedState);
     });
