@@ -1,4 +1,4 @@
 export enum ListSelectionType {
-  Stores = 'Stores',
+  Stores = 'Stores Only',
   Opportunities = 'Stores and Opportunities'
 }

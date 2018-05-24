@@ -183,7 +183,8 @@ export class ListsTransformerService {
       premiseType: store.premiseType,
       state : store.state,
       distributor: store.primaryBeerDistributor.name,
-      segmentCode: store.segmentCode
+      segmentCode: store.segmentCode,
+      beerDistributors: store.beerDistributors
     };
     return storeData;
   }
