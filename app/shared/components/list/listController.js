@@ -166,6 +166,7 @@ module.exports = /*  @ngInject */
     });
 
     function launchAddToListModal(selectedOpportunities, allActiveLists) {
+      const sortedActiveLists = sortAndFilterActiveLists(allActiveLists);
       opportunitiesToCopy(selectedOpportunities).then((opportunities) => {
         const selectedStoreIds = uniqBy(opportunities.map(opportunity => opportunity.store.id));
         const numberOfSelectedOpportunities = opportunities.length;
@@ -178,7 +179,7 @@ module.exports = /*  @ngInject */
         ];
 
         const listDropdownMenu = dropdownMenuDefault
-          .concat(allActiveLists
+          .concat(sortedActiveLists
             .map(list => {
               return {
                 display: list.name,
@@ -1281,5 +1282,19 @@ module.exports = /*  @ngInject */
             vm.getTargetLists();
           });
       }
+    }
+
+    function sortAndFilterActiveLists(lists) {
+      return lists
+        .filter((list) => !list.deleted)
+        .sort(sortListsByRecentlyUpdated);
+    }
+
+    function sortListsByRecentlyUpdated(listA, listB) {
+      return listA.dateOpportunitiesUpdated < listB.dateOpportunitiesUpdated
+        ? 1
+        : listA.dateOpportunitiesUpdated > listB.dateOpportunitiesUpdated
+          ? -1
+          : 0;
     }
   };
