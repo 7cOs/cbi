@@ -991,69 +991,84 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('[list.saveNewList] method', function() {
-    beforeEach(function() {
-      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
-        const defer = q.defer();
-        defer.resolve(getV3ListMock);
-        return defer.promise;
-      });
-      spyOn(ctrl, 'closeModal').and.callThrough();
+  describe('save new list functionality', () => {
+    let listSelectionType;
+    let listOptions;
 
-      ctrl.newList = {
-        name: 'List',
-        description: 'List description',
-        opportunities: [],
-        collaborators: [],
-        targetListShares: [],
-        collaborateAndInvite: false
+    beforeEach(() => {
+      listSelectionType = chance.bool() ? ListSelectionType.Stores : ListSelectionType.Opportunities;
+      listOptions = {
+        listSelectionType: listSelectionType,
+        selectedStoreIds: [],
+        opportunities: []
       };
     });
 
-    it('should call the listsApiService to create a list', function() {
-      ctrl.saveNewList(ctrl.newList);
-      expect(listsApiService.createListPromise).toHaveBeenCalled();
-    });
-  });
+    describe('[list.saveNewList] method', function() {
 
-  describe('list.saveNewList GA Event', () => {
-    const createListResponseMockId = chance.string();
-    const createListResponseMock = {id: createListResponseMockId};
+      beforeEach(function() {
+        spyOn(listsApiService, 'createListPromise').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve(getV3ListMock);
+          return defer.promise;
+        });
+        spyOn(ctrl, 'closeModal').and.callThrough();
 
-    it('should log a GA event on create target list success', () => {
-      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
-        const defer = q.defer();
-        defer.resolve(createListResponseMock);
-        return defer.promise;
+        ctrl.newList = {
+          name: 'List',
+          description: 'List description',
+          opportunities: [],
+          collaborators: [],
+          targetListShares: [],
+          collaborateAndInvite: false
+        };
       });
-      spyOn(analyticsService, 'trackEvent');
 
-      ctrl.saveNewList();
-      scope.$apply();
-
-      expect(listsApiService.createListPromise).toHaveBeenCalled();
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        'Lists - My Lists',
-        'Create List',
-        createListResponseMockId
-      );
+      it('should call the listsApiService to create a list', function() {
+        ctrl.saveNewList(ctrl.newList, listOptions);
+        expect(listsApiService.createListPromise).toHaveBeenCalled();
+      });
     });
 
-    it('should NOT log a GA event on listsApiService.createList error', () => {
-      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
-        const defer = q.defer();
-        defer.reject();
-        return defer.promise;
+    describe('list.saveNewList GA Event', () => {
+      const createListResponseMockId = chance.string();
+      const createListResponseMock = {id: createListResponseMockId};
+
+      it('should log a GA event on create target list success', () => {
+        spyOn(listsApiService, 'createListPromise').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve(createListResponseMock);
+          return defer.promise;
+        });
+        spyOn(analyticsService, 'trackEvent');
+
+        ctrl.saveNewList(null, listOptions);
+        scope.$apply();
+
+        expect(listsApiService.createListPromise).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Lists - My Lists',
+          'Create List',
+          createListResponseMockId
+        );
       });
-      spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
-      spyOn(console, 'error');
 
-      ctrl.saveNewList();
-      scope.$apply();
+      it('should NOT log a GA event on listsApiService.createList error', () => {
+        spyOn(listsApiService, 'createListPromise').and.callFake(() => {
+          const defer = q.defer();
+          defer.reject();
+          return defer.promise;
+        });
+        spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
+        spyOn(console, 'error');
 
-      expect(listsApiService.createListPromise).toHaveBeenCalled();
-      expect(analyticsService.trackEvent).not.toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalled();
+        ctrl.saveNewList();
+        scope.$apply();
+
+        expect(listsApiService.createListPromise).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).not.toHaveBeenCalled();
+        expect(console.error).toHaveBeenCalled();
+      });
     });
   });
 
@@ -1886,6 +1901,9 @@ describe('Unit: list controller', function() {
           const expectedDropdownMenu = [{
             display: 'Choose a List',
             value: 'Choose a List'
+          }, {
+            display: 'Create New List',
+            value: 'Create New List'
           }, {
             display: allActiveLists[0].name,
             value: allActiveLists[0].id

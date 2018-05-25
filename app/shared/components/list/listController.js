@@ -171,10 +171,17 @@ module.exports = /*  @ngInject */
         const selectedStoreIds = uniqBy(opportunities.map(opportunity => opportunity.store.id));
         const numberOfSelectedOpportunities = opportunities.length;
         const numberOfSelectedStores = selectedStoreIds.length;
+
+        const CHOOSE_A_LIST = 'Choose a List';
+        const CREATE_NEW_LIST = 'Create New List';
+
         const dropdownMenuDefault = [
           {
-            display: 'Choose a List',
-            value: 'Choose a List'
+            display: CHOOSE_A_LIST,
+            value: CHOOSE_A_LIST
+          },
+          { display: CREATE_NEW_LIST,
+            value: CREATE_NEW_LIST
           }
         ];
 
@@ -222,14 +229,18 @@ module.exports = /*  @ngInject */
 
         let compassModalOverlayRef = compassModalService.showActionModalDialog(addToListInputs, null);
         compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance).then((value) => {
-          const listId = value.dropdownOptionSelected;
-          switch (value.radioOptionSelected) {
-            case ListSelectionType.Stores:
-              addStoresToList(listId, selectedStoreIds);
-              break;
-            case ListSelectionType.Opportunities:
-            default:
-              addOpportunitiesToList(listId, opportunities);
+          debugger;
+          const listSelectionType = value.radioOptionSelected;
+          const listOptions = {
+            listSelectionType: listSelectionType,
+            selectedStoreIds: selectedStoreIds,
+            opportunities: opportunities
+          };
+          if (value.dropdownOptionSelected === CREATE_NEW_LIST) {
+            createNewList(null, listOptions);
+          } else {
+            const listId = value.dropdownOptionSelected;
+            addToList(listId, listOptions);
           }
         });
       });
@@ -386,12 +397,19 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function createNewList(e) {
+    function createNewList(e, listOptions) {
       const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
         scope: $scope.$new(),
+        locals: {
+          listOptions: listOptions
+        },
+        controller: ['listOptions', function(listOptions) {
+          this.listOptions = listOptions;
+        }],
+        controllerAs: 'createNewListModal',
         targetEvent: e,
         template: require('./create-target-list-modal.pug')
       });
@@ -407,7 +425,7 @@ module.exports = /*  @ngInject */
       $mdDialog.hide();
     }
 
-    function saveNewList(e) {
+    function saveNewList(e, listOptions) {
       vm.buttonDisabled = true;
       const formattedList = listsTransformerService.formatNewList(vm.newList);
       listsApiService.createListPromise(formattedList)
@@ -418,7 +436,7 @@ module.exports = /*  @ngInject */
             response.id
           );
 
-          vm.addToTargetList(response.id);
+          addToList(response.id, listOptions);
           vm.closeModal();
           vm.buttonDisabled = false;
 
@@ -1242,6 +1260,19 @@ module.exports = /*  @ngInject */
       return this.isAllOpportunitiesSelected
         ? this.filtersService.model.appliedFilter.pagination.totalOpportunities
         : selected.length;
+    }
+
+    function addToList(listId, listOptions) {
+      debugger;
+      const { listSelectionType, selectedStoreIds, opportunities } = listOptions;
+      switch (listSelectionType) {
+        case ListSelectionType.Stores:
+          addStoresToList(listId, selectedStoreIds);
+          break;
+        case ListSelectionType.Opportunities:
+        default:
+          addOpportunitiesToList(listId, opportunities);
+      }
     }
 
     function addStoresToList(listId, selectedStoreIds) {
