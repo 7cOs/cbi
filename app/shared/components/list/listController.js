@@ -898,12 +898,10 @@ module.exports = /*  @ngInject */
      * Initializes the target lists for the user
      */
     function getTargetLists() {
-      if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
-        const currentUserEmployeeID = userService.model.currentUser.employeeID;
-        listsApiService.getListsPromise().then((response) => {
-          userService.model.targetLists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
-        });
-      }
+      const currentUserEmployeeID = userService.model.currentUser.employeeID;
+      listsApiService.getListsPromise().then((response) => {
+        userService.model.targetLists = listsTransformerService.getV2ListsSummary(response, currentUserEmployeeID);
+      });
     }
 
     /**
