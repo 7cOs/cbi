@@ -34,6 +34,12 @@ export class CompassActionModalComponent implements OnInit {
   ngOnInit() {
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
     this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
+    if (this.radioInputModel) {
+      this.radioOptionSelected = this.radioInputModel.selected;
+    }
+    if (this.dropdownInputModel) {
+      this.dropdownOptionSelected = this.dropdownInputModel.selected;
+    }
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
