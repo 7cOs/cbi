@@ -140,7 +140,7 @@ export class ListsTableTransformerService {
   }
 
   private getFullStoreAddress(store: StoreDetails): string {
-    return `${ store.address } ${ store.city } ${ store.state } ${ store.postalCode }`;
+    return `${ store.address } ${ store.city } ${ store.state }, ${ store.postalCode.slice(0, 5) }`;
   }
 
   private getStorePerformance(unversionedStoreId: string, storePerformance: ListStorePerformance[]): ListStorePerformance {
