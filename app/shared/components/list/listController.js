@@ -1250,10 +1250,11 @@ module.exports = /*  @ngInject */
       $q.all(addStoreToListPromises)
         .then(() => {
           toastService.showToast('added');
+          vm.toggleSelectAllStores(false);
+          loaderService.closeLoader();
+          vm.getTargetLists();
         }, () => {
           toastService.showToast('addedError');
-        })
-        .finally(() => {
           vm.toggleSelectAllStores(false);
           loaderService.closeLoader();
           vm.getTargetLists();
@@ -1264,22 +1265,21 @@ module.exports = /*  @ngInject */
       if (listId && selectedOpportunities.length) {
         loaderService.openLoader(true);
 
-        opportunitiesToCopy(selectedOpportunities).then(opportunities => {
-          const formattedOpportunities = opportunities.map(opportunity => { return { opportunityId: opportunity.id }; });
-          updateCopiedOpportunities();
-          updateTargetListOpportunityCountByListID(listId, opportunities.length);
-          listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
-            .then(() => {
-              toastService.showToast('added');
-            }, () => {
-              toastService.showToast('addedError');
-            })
-            .finally(() => {
-              vm.toggleSelectAllStores(false);
-              loaderService.closeLoader();
-              vm.getTargetLists();
-            });
-        });
+        const formattedOpportunities = selectedOpportunities.map(opportunity => { return { opportunityId: opportunity.id }; });
+        updateCopiedOpportunities();
+        updateTargetListOpportunityCountByListID(listId, selectedOpportunities.length);
+        listsApiService.addOpportunitiesToListPromise(listId, formattedOpportunities)
+          .then(() => {
+            toastService.showToast('added');
+            vm.toggleSelectAllStores(false);
+            loaderService.closeLoader();
+            vm.getTargetLists();
+          }, () => {
+            toastService.showToast('addedError');
+            vm.toggleSelectAllStores(false);
+            loaderService.closeLoader();
+            vm.getTargetLists();
+          });
       }
     }
   };
