@@ -14,7 +14,9 @@ export const listApiServiceMock = {
   updateListPromise: updateListPromise,
   updateList: updateList,
   deleteList: deleteList,
-  deleteListPromise: deleteListPromise
+  deleteListPromise: deleteListPromise,
+  addStoresToList: addStoresToList,
+  addStoresToListPromise: addStoresToListPromise
 };
 
 function getLists(): Observable<V3List[]> {
@@ -56,4 +58,12 @@ function deleteList(...args: any[]): Observable<any> {
 
 function deleteListPromise(...args: any[]): Promise<any> {
   return deleteList().toPromise();
+}
+
+function addStoresToList(...args: any[]): Observable<any> {
+  return Observable.of({});
+}
+
+function addStoresToListPromise(...args: any[]): Promise<any> {
+  return addStoresToList().toPromise();
 }

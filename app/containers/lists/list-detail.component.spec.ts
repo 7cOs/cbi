@@ -26,7 +26,7 @@ import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import * as ListsActions from '../../state/actions/lists.action';
-import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
+import { ListSelectionType } from '../../enums/lists/list-selection-type.enum';
 import { ListsState } from '../../state/reducers/lists.reducer';
 import { ListStoresDownloadCSV } from '../../models/lists/list-stores-download-csv.model';
 import { ListOpportunitiesDownloadCSV } from '../../models/lists/list-opportunities-download-csv.model';
@@ -535,7 +535,7 @@ describe('ListDetailComponent', () => {
 
     it('should only have store related columns for Download when StoreOnly is selected', () => {
       actionModalDownloadOutputMock = {
-        radioOptionSelected: ListsDownloadType.Stores,
+        radioOptionSelected: ListSelectionType.Stores,
         dropdownOptionSelected: null
       };
       componentInstance.selectedTab = 'Performance';
@@ -553,7 +553,7 @@ describe('ListDetailComponent', () => {
 
     it('should have both stores and opps related columns for Download when Opportunities are selected', () => {
       actionModalDownloadOutputMock = {
-        radioOptionSelected: ListsDownloadType.Opportunities,
+        radioOptionSelected: ListSelectionType.Opportunities,
         dropdownOptionSelected: null
       };
       componentInstance.selectedTab = 'Opportunities';
@@ -571,7 +571,7 @@ describe('ListDetailComponent', () => {
 
     it('should have only closed status records for Download when filter selected is closed', () => {
       actionModalDownloadOutputMock = {
-        radioOptionSelected: ListsDownloadType.Opportunities,
+        radioOptionSelected: ListSelectionType.Opportunities,
         dropdownOptionSelected: null
       };
       componentInstance.selectedTab = 'Opportunities';
@@ -590,7 +590,7 @@ describe('ListDetailComponent', () => {
 
     it('should have only targeted and inactive status records for Download when filter selected is targeted', () => {
       actionModalDownloadOutputMock = {
-        radioOptionSelected: ListsDownloadType.Opportunities,
+        radioOptionSelected: ListSelectionType.Opportunities,
         dropdownOptionSelected: null
       };
       componentInstance.selectedTab = 'Opportunities';

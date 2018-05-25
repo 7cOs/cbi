@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
       deleted: false,
       copied: false,
       added: false,
+      addedError: false,
       deleteError: false,
       multipleTargetListsSelected: false,
       performanceDataError: false,

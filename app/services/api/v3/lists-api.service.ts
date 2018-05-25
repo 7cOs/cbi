@@ -82,6 +82,17 @@ export class ListsApiService {
     return this.deleteList(listId).toPromise();
   }
 
+  public addStoresToList(listId: string, stores: {storeSourceCode: string}): Observable<ListStoreDTO[]> {
+    const url = `/v3/lists/${ listId }/stores`;
+
+    return this.http.post(url, stores)
+      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
+  }
+
+  public addStoresToListPromise(listId: string, stores: {storeSourceCode: string}): Promise<ListStoreDTO[]> {
+    return this.addStoresToList(listId, stores).toPromise();
+  }
+
   public addOpportunitiesToList(listId: string, opportunities: {opportunityId: string}[]): Observable<ListOpportunityDTO[]> {
     const url = `/v3/lists/${ listId }/opportunities`;
 
