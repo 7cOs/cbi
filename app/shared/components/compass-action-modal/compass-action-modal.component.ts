@@ -41,6 +41,7 @@ export class CompassActionModalComponent implements OnInit {
     if (this.dropdownInputModel) {
       this.dropdownOptionSelected = this.dropdownInputModel.selected;
     }
+    this.isAcceptEnabled = this.getActionButtonEnabled();
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
@@ -57,7 +58,7 @@ export class CompassActionModalComponent implements OnInit {
 
   public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
-    this.isCopyButtonEnabled = this.isAcceptEnabled = this.getActionButtonEnabled();
+    this.isAcceptEnabled = this.getActionButtonEnabled();
   }
 
   public optionsSelected() {
@@ -75,8 +76,12 @@ export class CompassActionModalComponent implements OnInit {
   }
 
   private getActionButtonEnabled(): boolean {
-    return this.dropdownInputModel
-      && this.dropdownInputModel.dropdownOptions.length
-      && this.dropdownOptionSelected !== this.dropdownInputModel.dropdownOptions[0].value;
+    return ( this.radioInputModel
+        && this.radioOptionSelected
+        && !this.dropdownInputModel )
+      ||
+        ( this.dropdownInputModel
+        && this.dropdownInputModel.dropdownOptions.length
+        && this.dropdownOptionSelected !== this.dropdownInputModel.dropdownOptions[0].value);
   }
 }

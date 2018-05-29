@@ -1260,7 +1260,9 @@ module.exports = /*  @ngInject */
     }
 
     function addToList(listId, listOptions) {
-      const { listSelectionType, selectedStoreIds, opportunities } = listOptions;
+      const listSelectionType = listOptions.listSelectionType;
+      const selectedStoreIds = listOptions.selectedStoreIds;
+      const opportunities  = listOptions.opportunities;
       switch (listSelectionType) {
         case ListSelectionType.Stores:
           addStoresToList(listId, selectedStoreIds);
