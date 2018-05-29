@@ -1,13 +1,15 @@
 import * as Chance from 'chance';
 import { getV3ListMock } from '../../../models/lists/lists.model.mock';
+import { generateRandomSizedArray } from '../../../models/util.model';
 
+const ListSelectionType = require('../../../enums/lists/list-selection-type.enum').ListSelectionType;
 const listsApiServiceMock = require('../../../services/api/v3/lists-api.service.mock').listApiServiceMock;
 const listsTransformerServiceMock = require('../../../services/lists-transformer.service.mock').listsTransformerServiceMock;
 
 const chance = new Chance();
 
 describe('Unit: list controller', function() {
-  let scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService, $state, listsApiService, listsTransformerService;
+  let scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService, $state, listsApiService, listsTransformerService, compassModalService;
   let bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
@@ -27,6 +29,14 @@ describe('Unit: list controller', function() {
       $provide.value('analyticsService', analyticsService);
       $provide.value('listsApiService', listsApiService);
       $provide.value('listsTransformerService', listsTransformerService);
+      $provide.value('compassModalService', {
+        showActionModalDialog: jasmine.createSpy('showActionModalDialog').and.returnValue({modalInstance: null}),
+        modalActionBtnContainerEvent: jasmine.createSpy('modalActionBtnContainerEvent').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve();
+          return defer.promise;
+        })
+      });
     });
 
     spyOn(listsApiService, 'getListsPromise').and.callFake(() => {
@@ -35,7 +45,7 @@ describe('Unit: list controller', function() {
       return defer.promise;
     });
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _listsApiService_, _listsTransformerService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _$state_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _listsApiService_, _listsTransformerService_, _compassModalService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
@@ -53,6 +63,7 @@ describe('Unit: list controller', function() {
       userService = _userService_;
       listsApiService = _listsApiService_;
       listsTransformerService = _listsTransformerService_;
+      compassModalService = _compassModalService_;
 
       userService.model.currentUser.employeeID = 1;
 
@@ -980,69 +991,84 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('[list.saveNewList] method', function() {
-    beforeEach(function() {
-      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
-        const defer = q.defer();
-        defer.resolve(getV3ListMock);
-        return defer.promise;
-      });
-      spyOn(ctrl, 'closeModal').and.callThrough();
+  describe('save new list functionality', () => {
+    let listSelectionType;
+    let listOptions;
 
-      ctrl.newList = {
-        name: 'List',
-        description: 'List description',
-        opportunities: [],
-        collaborators: [],
-        targetListShares: [],
-        collaborateAndInvite: false
+    beforeEach(() => {
+      listSelectionType = chance.bool() ? ListSelectionType.Stores : ListSelectionType.Opportunities;
+      listOptions = {
+        listSelectionType: listSelectionType,
+        selectedStoreIds: [],
+        opportunities: []
       };
     });
 
-    it('should call the listsApiService to create a list', function() {
-      ctrl.saveNewList(ctrl.newList);
-      expect(listsApiService.createListPromise).toHaveBeenCalled();
-    });
-  });
+    describe('[list.saveNewList] method', function() {
 
-  describe('list.saveNewList GA Event', () => {
-    const createListResponseMockId = chance.string();
-    const createListResponseMock = {id: createListResponseMockId};
+      beforeEach(function() {
+        spyOn(listsApiService, 'createListPromise').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve(getV3ListMock);
+          return defer.promise;
+        });
+        spyOn(ctrl, 'closeModal').and.callThrough();
 
-    it('should log a GA event on create target list success', () => {
-      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
-        const defer = q.defer();
-        defer.resolve(createListResponseMock);
-        return defer.promise;
+        ctrl.newList = {
+          name: 'List',
+          description: 'List description',
+          opportunities: [],
+          collaborators: [],
+          targetListShares: [],
+          collaborateAndInvite: false
+        };
       });
-      spyOn(analyticsService, 'trackEvent');
 
-      ctrl.saveNewList();
-      scope.$apply();
-
-      expect(listsApiService.createListPromise).toHaveBeenCalled();
-      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
-        'Lists - My Lists',
-        'Create List',
-        createListResponseMockId
-      );
+      it('should call the listsApiService to create a list', function() {
+        ctrl.saveNewList(ctrl.newList, listOptions);
+        expect(listsApiService.createListPromise).toHaveBeenCalled();
+      });
     });
 
-    it('should NOT log a GA event on listsApiService.createList error', () => {
-      spyOn(listsApiService, 'createListPromise').and.callFake(() => {
-        const defer = q.defer();
-        defer.reject();
-        return defer.promise;
+    describe('list.saveNewList GA Event', () => {
+      const createListResponseMockId = chance.string();
+      const createListResponseMock = {id: createListResponseMockId};
+
+      it('should log a GA event on create target list success', () => {
+        spyOn(listsApiService, 'createListPromise').and.callFake(() => {
+          const defer = q.defer();
+          defer.resolve(createListResponseMock);
+          return defer.promise;
+        });
+        spyOn(analyticsService, 'trackEvent');
+
+        ctrl.saveNewList(null, listOptions);
+        scope.$apply();
+
+        expect(listsApiService.createListPromise).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Lists - My Lists',
+          'Create List',
+          createListResponseMockId
+        );
       });
-      spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
-      spyOn(console, 'error');
 
-      ctrl.saveNewList();
-      scope.$apply();
+      it('should NOT log a GA event on listsApiService.createList error', () => {
+        spyOn(listsApiService, 'createListPromise').and.callFake(() => {
+          const defer = q.defer();
+          defer.reject();
+          return defer.promise;
+        });
+        spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
+        spyOn(console, 'error');
 
-      expect(listsApiService.createListPromise).toHaveBeenCalled();
-      expect(analyticsService.trackEvent).not.toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalled();
+        ctrl.saveNewList();
+        scope.$apply();
+
+        expect(listsApiService.createListPromise).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).not.toHaveBeenCalled();
+        expect(console.error).toHaveBeenCalled();
+      });
     });
   });
 
@@ -1653,20 +1679,22 @@ describe('Unit: list controller', function() {
               opportunitiesSummary: {
                 opportunitiesCount: 300
               },
-              id: 'fakeID'
+              id: 'fakeID',
+              name: chance.string()
             }, {
               opportunitiesSummary: {
                 opportunitiesCount: chance.string()
               },
-              id: listId
+              id: listId,
+              name: chance.string()
             }]
           }
         }
       };
 
-      spyOn(ctrl, 'opportunityIdsToCopy').and.callFake(() => {
+      spyOn(ctrl, 'opportunitiesToCopy').and.callFake(() => {
         const defer = q.defer();
-        defer.resolve([chance.string(), chance.string()]);
+        defer.resolve([{id: chance.string(), store: {id: chance.string}}, {id: chance.string(), store: {id: chance.string}}]);
         return defer.promise;
       });
 
@@ -1827,6 +1855,276 @@ describe('Unit: list controller', function() {
     afterEach(function() {
       ctrl.selected = [];
       listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
+    });
+
+    describe('add to list modal', () => {
+      let allActiveLists;
+
+      beforeEach(() => {
+        allActiveLists = [
+          {
+            opportunitiesSummary: {
+              opportunitiesCount: 300
+            },
+            id: chance.string(),
+            name: chance.string()
+          }, {
+            opportunitiesSummary: {
+              opportunitiesCount: chance.string()
+            },
+            id: chance.string(),
+            name: chance.string()
+          }
+        ];
+      });
+
+      describe('when user launches the Add to List modal', () => {
+        it('should send the proper inputs to compassModalService#showActionModalDialog', () => {
+          compassModalService.modalActionBtnContainerEvent.and.callFake(() => {
+            const modalEventResponse = {
+              radioOptionSelected: ListSelectionType.Stores,
+              dropdownOptionSelected: allActiveLists[0].id
+            };
+            const defer = q.defer();
+            defer.resolve(modalEventResponse);
+            return defer.promise;
+          });
+
+          const expectedRadioOptions = [{
+            display: ListSelectionType.Stores,
+            value: ListSelectionType.Stores
+          }, {
+            display: ListSelectionType.Opportunities,
+            value: ListSelectionType.Opportunities
+          }];
+
+          const expectedDropdownMenu = [{
+            display: 'Choose a List',
+            value: 'Choose a List'
+          }, {
+            display: 'Create New List',
+            value: 'Create New List'
+          }, {
+            display: allActiveLists[0].name,
+            value: allActiveLists[0].id
+          }, {
+            display: allActiveLists[1].name,
+            value: allActiveLists[1].id
+          }];
+
+          const expectedBodyText = '<div class=\'modal-body-inner-title\'>CURRENT SELECTION</div><b>1 opportunity</b> selected across 1 store';
+
+          const expectedInputs = {
+            title: 'Add to List',
+            bodyText: expectedBodyText,
+            radioInputModel: {
+              radioOptions: expectedRadioOptions,
+              selected: expectedRadioOptions[0].value,
+              title: 'OPTIONS',
+              stacked: false
+            },
+            dropdownInputModel: {
+              selected: expectedDropdownMenu[0].value,
+              dropdownOptions: expectedDropdownMenu,
+              title: 'LIST'
+            },
+            acceptLabel: 'Add to List',
+            rejectLabel: 'Cancel'
+          };
+
+          const selected = [angular.copy(opportunitiesService.model.opportunities[0].groupedOpportunities[0])];
+
+          ctrl.launchAddToListModal(selected, allActiveLists);
+          scope.$apply();
+          expect(compassModalService.showActionModalDialog.calls.argsFor(0)).toEqual([expectedInputs, null]);
+        });
+      });
+
+      describe('when the user selects STORES and a list to add to in the add-to-list modal', () => {
+        let selected;
+
+        beforeEach(() => {
+          compassModalService.modalActionBtnContainerEvent.and.callFake(() => {
+            const modalEventResponse = {
+              radioOptionSelected: ListSelectionType.Stores,
+              dropdownOptionSelected: allActiveLists[0].id
+            };
+            const defer = q.defer();
+            defer.resolve(modalEventResponse);
+            return defer.promise;
+          });
+          spyOn(listsApiService, 'addStoresToListPromise');
+          selected = generateRandomSizedArray(1, 5).map(() => {
+            return { store: { id: chance.string() } };
+          });
+          spyOn(ctrl, 'toggleSelectAllStores');
+          spyOn(loaderService, 'closeLoader');
+          spyOn(toastService, 'showToast');
+          spyOn(ctrl, 'getTargetLists');
+        });
+
+        it('should call the listsApiService#addStoreToListPromise with the storeSourceCode for each unique store', () => {
+          ctrl.launchAddToListModal(selected, allActiveLists);
+          scope.$apply();
+          selected.forEach(selection => {
+            expect(listsApiService.addStoresToListPromise).toHaveBeenCalledWith(allActiveLists[0].id, {storeSourceCode: selection.store.id});
+          });
+        });
+
+        describe('when calls to listApiService#addStoreToListPromise return successfully', () => {
+          beforeEach(() => {
+            listsApiService.addStoresToListPromise.and.callFake(() => {
+              const defer = q.defer();
+              defer.resolve();
+              return defer.promise;
+            });
+            ctrl.launchAddToListModal(selected, allActiveLists);
+            scope.$apply();
+          });
+
+          it('should call toggleSelectAllStores', () => {
+            expect(ctrl.toggleSelectAllStores).toHaveBeenCalledWith(false);
+          });
+
+          it('should close the loader', () => {
+            expect(loaderService.closeLoader).toHaveBeenCalled();
+          });
+
+          it('should call toastService#showToast to show the added toast', () => {
+            expect(toastService.showToast).toHaveBeenCalledWith('added');
+          });
+
+          it('should call getTargetLists to refetch the users lists', () => {
+            expect(ctrl.getTargetLists).toHaveBeenCalled();
+          });
+        });
+
+        describe('when calls to listApiService#addStoreToListPromise returns with an error', () => {
+          beforeEach(() => {
+            listsApiService.addStoresToListPromise.and.callFake(() => {
+              const defer = q.defer();
+              defer.reject();
+              return defer.promise;
+            });
+            ctrl.launchAddToListModal(selected, allActiveLists);
+            scope.$apply();
+          });
+
+          it('should call toggleSelectAllStores', () => {
+            expect(ctrl.toggleSelectAllStores).toHaveBeenCalledWith(false);
+          });
+
+          it('should close the loader', () => {
+            expect(loaderService.closeLoader).toHaveBeenCalled();
+          });
+
+          it('should call toastService#showToast to show the addedError toast', () => {
+            expect(toastService.showToast).toHaveBeenCalledWith('addedError');
+          });
+
+          it('should call getTargetLists to refetch the users lists', () => {
+            expect(ctrl.getTargetLists).toHaveBeenCalled();
+          });
+        });
+      });
+
+      describe('when the user selects STORES AND OPPORTUNITIES and a list to add to in the add-to-list modal', () => {
+        let selected;
+
+        beforeEach(() => {
+          spyOn(listsApiService, 'addOpportunitiesToListPromise').and.callFake(() => {
+            const defer = q.defer();
+            defer.resolve();
+            return defer.promise;
+          });
+          spyOn(ctrl, 'toggleSelectAllStores');
+          spyOn(loaderService, 'closeLoader');
+          spyOn(toastService, 'showToast');
+          spyOn(ctrl, 'getTargetLists');
+
+          compassModalService.modalActionBtnContainerEvent.and.callFake(() => {
+            const modalEventResponse = {
+              radioOptionSelected: ListSelectionType.Opportunities,
+              dropdownOptionSelected: allActiveLists[0].id
+            };
+            const defer = q.defer();
+            defer.resolve(modalEventResponse);
+            return defer.promise;
+          });
+
+          selected = generateRandomSizedArray(1, 5).map(() => {
+            return { id: chance.string(), store: { id: chance.string() } };
+          });
+        });
+
+        it('should call the listsApiService#addOpportunitiesToListPromise with a collection of all selected opportunities', () => {
+          const expectedOpportunityIds = selected.map((opportunity) => {
+            return {
+              opportunityId: opportunity.id
+            };
+          });
+
+          ctrl.launchAddToListModal(selected, allActiveLists);
+          scope.$apply();
+          expect(listsApiService.addOpportunitiesToListPromise).toHaveBeenCalledWith(allActiveLists[0].id, expectedOpportunityIds);
+        });
+
+        describe('when calls to listApiService#addOpportunitiesToListPromise return successfully', () => {
+          beforeEach(() => {
+            listsApiService.addOpportunitiesToListPromise.and.callFake(() => {
+              const defer = q.defer();
+              defer.resolve();
+              return defer.promise;
+            });
+            ctrl.launchAddToListModal(selected, allActiveLists);
+            scope.$apply();
+          });
+
+          it('should call toggleSelectAllStores', () => {
+            expect(ctrl.toggleSelectAllStores).toHaveBeenCalledWith(false);
+          });
+
+          it('should close the loader', () => {
+            expect(loaderService.closeLoader).toHaveBeenCalled();
+          });
+
+          it('should call toastService#showToast to show the added toast', () => {
+            expect(toastService.showToast).toHaveBeenCalledWith('added');
+          });
+
+          it('should call getTargetLists to refetch the users lists', () => {
+            expect(ctrl.getTargetLists).toHaveBeenCalled();
+          });
+        });
+
+        describe('when calls to listApiService#addOpportunitiesToListPromise returns with an error', () => {
+          beforeEach(() => {
+            listsApiService.addOpportunitiesToListPromise.and.callFake(() => {
+              const defer = q.defer();
+              defer.reject();
+              return defer.promise;
+            });
+            ctrl.launchAddToListModal(selected, allActiveLists);
+            scope.$apply();
+          });
+
+          it('should call toggleSelectAllStores', () => {
+            expect(ctrl.toggleSelectAllStores).toHaveBeenCalledWith(false);
+          });
+
+          it('should close the loader', () => {
+            expect(loaderService.closeLoader).toHaveBeenCalled();
+          });
+
+          it('should call toastService#showToast to show the addedError toast', () => {
+            expect(toastService.showToast).toHaveBeenCalledWith('addedError');
+          });
+
+          it('should call getTargetLists to refetch the users lists', () => {
+            expect(ctrl.getTargetLists).toHaveBeenCalled();
+          });
+        });
+      });
     });
 
     it('should add opportunities to list', () => {
@@ -2309,7 +2607,7 @@ describe('Unit: list controller', function() {
       });
     });
 
-    describe('When we are on the opportunities page and we add the target list', () => {
+    describe('When we are on the opportunities page and we add to the list', () => {
       const destTargetListMock = {
         opportunitiesSummary: {
           opportunitiesCount: 300

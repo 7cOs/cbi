@@ -6,7 +6,6 @@ import { CompassActionModalOverlayRef } from './compass-action-modal.overlayref'
 import { COMPASS_ACTION_MODAL_INPUTS } from '../../components/compass-action-modal/compass-action-modal.tokens';
 import { CompassActionModalEvent } from '../../../enums/compass-action-modal-event.enum';
 import { DropdownInputModel } from '../../../models/compass-dropdown-input.model';
-import { ListsDownloadType } from '../../../enums/lists/list-download-type.enum';
 import { RadioInputModel } from '../../../models/compass-radio-input.model';
 
 const ESCKEY = 27;
@@ -20,11 +19,12 @@ const ESCKEY = 27;
 export class CompassActionModalComponent implements OnInit {
   @Output() buttonContainerEvent = new EventEmitter<CompassActionModalOutputs>();
 
-  public modalOverlayRef: CompassActionModalOverlayRef;
   public compassActionModalEvent = CompassActionModalEvent;
-  public dropdownOptionSelected: string;
-  public radioInputModel: RadioInputModel;
   public dropdownInputModel: DropdownInputModel;
+  public dropdownOptionSelected: string;
+  public isAcceptEnabled: boolean = false;
+  public modalOverlayRef: CompassActionModalOverlayRef;
+  public radioInputModel: RadioInputModel;
   public radioOptionSelected: string;
   public isCopyButtonEnabled: boolean = false;
 
@@ -33,9 +33,14 @@ export class CompassActionModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.radioOptionSelected = ListsDownloadType.Stores;
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
     this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
+    if (this.radioInputModel) {
+      this.radioOptionSelected = this.radioInputModel.selected;
+    }
+    if (this.dropdownInputModel) {
+      this.dropdownOptionSelected = this.dropdownInputModel.selected;
+    }
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
@@ -52,7 +57,7 @@ export class CompassActionModalComponent implements OnInit {
 
   public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
-    this.isCopyButtonEnabled = this.getIsCopyButtonEnabled();
+    this.isCopyButtonEnabled = this.isAcceptEnabled = this.getActionButtonEnabled();
   }
 
   public optionsSelected() {
@@ -69,7 +74,7 @@ export class CompassActionModalComponent implements OnInit {
     }
   }
 
-  private getIsCopyButtonEnabled(): boolean {
+  private getActionButtonEnabled(): boolean {
     return this.dropdownInputModel
       && this.dropdownInputModel.dropdownOptions.length
       && this.dropdownOptionSelected !== this.dropdownInputModel.dropdownOptions[0].value;

@@ -25,8 +25,8 @@ import { DropdownInputModel, DropDownMenu } from '../../models/compass-dropdown-
 import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
+import { ListSelectionType } from '../../enums/lists/list-selection-type.enum';
 import * as ListDetailModalStrings from '../lists/list-detail-modal-strings.const';
-import { ListsDownloadType } from '../../enums/lists/list-download-type.enum';
 import { ListOpportunitiesColumnType } from '../../enums/list-opportunities-column-types.enum';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { listOpportunityStatusOptions } from '../../models/list-opportunities/list-opportunity-status-options.model';
@@ -61,10 +61,10 @@ export interface PageChangeData {
 
 export const downloadRadioOptions: Array<CompassSelectOption> = [{
   display: 'Stores Only',
-  value: ListsDownloadType.Stores
+  value: ListSelectionType.Stores
 }, {
   display: 'Stores and Opportunities',
-  value: ListsDownloadType.Opportunities
+  value: ListSelectionType.Opportunities
 }];
 
 export const SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL: string = 'ANY';
@@ -118,7 +118,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public downloadAllModalStringInputs: CompassActionModalInputs;
   public copyToListLoader: boolean;
   public radioInputModel: RadioInputModel = {
-    selected: ListsDownloadType.Stores,
+    selected: ListSelectionType.Stores,
     radioOptions: downloadRadioOptions,
     title: 'OPTIONS',
     stacked: false
@@ -511,7 +511,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       exportData = this.filteredOpportunitiesTableData;
     }
 
-    if (value.radioOptionSelected === ListsDownloadType.Stores) {
+    if (value.radioOptionSelected === ListSelectionType.Stores) {
       return exportData.reduce(
         (csvData: Array<ListStoresDownloadCSV>, store: ListPerformanceTableRow) => {
           csvData = this.pushStoresDataToCSV(store, csvData);
@@ -691,10 +691,10 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         'Opportunity Type',
         'Opportunity Predicted Impact'
       ]);
-      const csvHeaders = value.radioOptionSelected === ListsDownloadType.Stores ? storesHeader : oppsHeader;
-      const csvTitle = value.radioOptionSelected === ListsDownloadType.Stores
-        ? `${moment().format('YYYY-MM-DD')}${ListsDownloadType.Stores}`
-        : `${moment().format('YYYY-MM-DD')}${ListsDownloadType.Opportunities}`;
+      const csvHeaders = value.radioOptionSelected === ListSelectionType.Stores ? storesHeader : oppsHeader;
+      const csvTitle = value.radioOptionSelected === ListSelectionType.Stores
+        ? `${moment().format('YYYY-MM-DD')}${ListSelectionType.Stores}`
+        : `${moment().format('YYYY-MM-DD')}${ListSelectionType.Opportunities}`;
       const options = {
         fieldSeparator: ',',
         quoteStrings: '"',
