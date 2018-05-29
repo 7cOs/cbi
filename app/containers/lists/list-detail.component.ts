@@ -6,21 +6,23 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
 
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
+import { CompassActionModalEvent } from '../../enums/compass-action-modal-event.enum';
 import { CompassAlertModalEvent } from '../../enums/compass-alert-modal-strings.enum';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput } from '../../models/compass-manage-list-modal-output.model';
 import { CompassManageListModalOverlayRef } from '../../shared/components/compass-manage-list-modal/compass-manage-list-modal.overlayref';
 import { CompassModalService } from '../../services/compass-modal.service';
 import { CompassSelectOption } from '../../models/compass-select-component.model';
-import { CompassActionModalEvent } from '../../enums/compass-action-modal-event.enum';
 import { CompassActionModalInputs } from '../../models/compass-action-modal-inputs.model';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { RadioInputModel } from '../../models/compass-radio-input.model';
+import { DropdownInputModel, DropDownMenu } from '../../models/compass-dropdown-input.model';
+import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import * as ListsActions from '../../state/actions//lists.action';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListSelectionType } from '../../enums/lists/list-selection-type.enum';
@@ -41,10 +43,12 @@ import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.mod
 import { LIST_TABLE_SIZE } from '../../shared/components/lists-pagination/lists-pagination.component';
 import { LoadingState } from '../../enums/loading-state.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
-import { SortingCriteria } from '../../models/sorting-criteria.model';
-import { User } from '../../models/lists/user.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { OpportunityTypeLabel } from '../../enums/list-opportunities/list-opportunity-type-label.enum';
+import { RadioInputModel } from '../../models/compass-radio-input.model';
+import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { User } from '../../models/lists/user.model';
+import { V3List } from '../../models/lists/v3-list.model';
 
 interface ListPageClick {
   pageNumber: number;
@@ -75,6 +79,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   paginationReset: Subject<Event> = new Subject();
   sortReset: Subject<Event> = new Subject();
 
+  public allLists: GroupedLists;
   public listSummary: ListsSummary;
   public performanceTabTitle: string = 'Performance';
   public opportunitiesTabTitle: string = 'Opportunities';
@@ -86,8 +91,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
   public opportunitiesTableDataSize: number;
-  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
-  public compassModalOverlayRef: CompassManageListModalOverlayRef;
+  public opportunitiesTableHeader: string[] = ['Stores', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
   public currentUser: User;
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
@@ -112,13 +116,15 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public loadingStateEnum = LoadingState;
   public showManageListLoader: boolean = false;
   public downloadAllModalStringInputs: CompassActionModalInputs;
-  public compassAlertModalAccept = CompassActionModalEvent.Accept;
+  public copyToListLoader: boolean;
   public radioInputModel: RadioInputModel = {
     selected: ListSelectionType.Stores,
     radioOptions: downloadRadioOptions,
     title: 'OPTIONS',
     stacked: false
   };
+
+  public copyDropdownInputModel: DropdownInputModel;
   public totalOppsForList: number;
   public isOppsTabDataFetched: boolean = false;
   public isPerformanceTabDataFetched: boolean = false;
@@ -163,11 +169,14 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       beverageType: ListBeverageType.Beer,
       dateRangeCode: DateRangeTimePeriodValue.L90BDL
     }));
+    this.store.dispatch(new ListsActions.FetchLists({currentUserEmployeeID: this.currentUser.employeeId}));
 
     this.listDetailSubscription = this.store
       .select(state => state.listsDetails)
       .subscribe((listDetail: ListsState)  => {
         this.listSummary = listDetail.listSummary.summaryData;
+        this.allLists = listDetail.allLists;
+
         if (this.isListPerformanceFetched(
           listDetail.listStores.storeStatus,
           listDetail.performance.volumeStatus,
@@ -206,6 +215,17 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
           this.isOppsTabDataFetched = !!this.opportunitiesTableDataSize;
         }
+
+        if (listDetail.copyStatus !== ActionStatus.NotFetched) {
+          this.copyToListLoader = listDetail.copyStatus === ActionStatus.Fetching;
+        }
+
+        if (listDetail.copyStatus === ActionStatus.Fetched || listDetail.copyStatus === ActionStatus.Error) {
+          this.handlePaginationReset();
+          this.isPerformanceRowSelect = false;
+          this.isOpportunityRowSelect = false;
+        }
+
         if (listDetail.manageListStatus !== ActionStatus.NotFetched) {
           this.handleManageListStatus(listDetail.manageListStatus);
         }
@@ -222,7 +242,43 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         } else if (listDetail.listOpportunities.opportunitiesStatus === ActionStatus.DeleteFailure) {
           this.showManageListLoader = false;
         }
+
       });
+  }
+
+  public copyToListClick(): void {
+    const ownedAndSharedList: V3List[] = this.allLists.owned.concat(this.allLists.sharedWithMe);
+    const listDropDownMenu: DropDownMenu[] = ownedAndSharedList.map((list: V3List) => {
+      return {
+        display: list.name,
+        value: list.id
+      };
+    });
+    listDropDownMenu.unshift({display: 'Choose a List', value: 'Choose a List'});
+
+    this.copyDropdownInputModel = {
+      selected: listDropDownMenu[0].value,
+      dropdownOptions: listDropDownMenu,
+      title: 'LIST'
+    };
+
+    if (this.selectedTab === this.opportunitiesTabTitle) {
+      const checkedOpps: {opportunityId: string}[] = this.opportunitiesTableData.reduce(
+        (totalOpps: {opportunityId: string}[], store: ListOpportunitiesTableRow) => {
+        store.opportunities.forEach((opp) => {
+          if (opp.checked === true) totalOpps.push({opportunityId: opp.id});
+        });
+        return totalOpps;
+      }, []);
+      this.copyToListModal(checkedOpps);
+    } else {
+      const checkedStores: string[] = this.performanceTableData.reduce(
+        (totalStores: string[], store: ListPerformanceTableRow) => {
+        if (store.checked === true) totalStores.push(store.unversionedStoreId);
+        return totalStores;
+      }, []);
+      this.copyToListModal(checkedStores);
+    }
   }
 
   resetOnOpportunityOrStoreRemoval(): void {
@@ -435,6 +491,18 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     if (manageListStatus === ActionStatus.Fetched) this.$state.go('lists');
   }
 
+  public handleCopyModalEvent (value: CompassActionModalOutputs, checkedEntities: (string | {opportunityId: string})[]) {
+    const listId: string = value.dropdownOptionSelected;
+    if (this.selectedTab === this.performanceTabTitle) {
+      checkedEntities.forEach((storeCode: string) => {
+        this.store.dispatch(new ListsActions.CopyStoresToList({listId: listId, id: storeCode}));
+      });
+    } else {
+      const opportunityIds = <{opportunityId: string}[]>checkedEntities;
+      this.store.dispatch(new ListsActions.CopyOppsToList({listId: listId, ids: opportunityIds}));
+    }
+  }
+
   public modalDownloadClicked(value: CompassActionModalOutputs): Array<ListStoresDownloadCSV | ListOpportunitiesDownloadCSV> {
     let exportData: Array<ListPerformanceTableRow | ListOpportunitiesTableRow>;
     if (this.selectedTab === this.performanceTabTitle) {
@@ -448,7 +516,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         (csvData: Array<ListStoresDownloadCSV>, store: ListPerformanceTableRow) => {
           csvData = this.pushStoresDataToCSV(store, csvData);
           return csvData;
-      }, []);
+        }, []);
     } else {
       return exportData.reduce(
         (csvData: Array<ListOpportunitiesDownloadCSV>, store: ListOpportunitiesTableRow) => {
@@ -471,8 +539,24 @@ export class ListDetailComponent implements OnInit, OnDestroy {
             });
           }
           return csvData;
-      }, []);
+        }, []);
     }
+  }
+
+  private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
+    const copyToListModalStringInputs: CompassActionModalInputs = {
+      title: 'Copy to List',
+      dropdownInputModel: this.copyDropdownInputModel,
+      acceptLabel: CompassActionModalEvent.Copy,
+      rejectLabel: CompassActionModalEvent.Cancel
+    };
+    let compassModalOverlayRef = this.compassModalService.showActionModalDialog(copyToListModalStringInputs, null);
+    const copyModalSubscription = Observable.fromPromise(
+      this.compassModalService.modalActionBtnContainerEvent(compassModalOverlayRef.modalInstance)
+    );
+    copyModalSubscription.subscribe((value: CompassActionModalOutputs) => {
+      this.handleCopyModalEvent(value, checkedEntities);
+    });
   }
 
   private isListPerformanceFetched(

@@ -1,5 +1,7 @@
 export enum CompassActionModalEvent {
   Accept = 'Accept',
   Decline = 'Decline',
-  Close = 'Close'
+  Close = 'Close',
+  Copy = 'COPY',
+  Cancel = 'CANCEL'
 }

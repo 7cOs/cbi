@@ -26,6 +26,7 @@ export class CompassActionModalComponent implements OnInit {
   public modalOverlayRef: CompassActionModalOverlayRef;
   public radioInputModel: RadioInputModel;
   public radioOptionSelected: string;
+  public isCopyButtonEnabled: boolean = false;
 
   constructor(
     @Inject(COMPASS_ACTION_MODAL_INPUTS) public modalInputs: CompassActionModalInputs
@@ -56,7 +57,7 @@ export class CompassActionModalComponent implements OnInit {
 
   public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
-    this.isAcceptEnabled = this.getIsAcceptEnabled();
+    this.isAcceptEnabled = this.getActionButtonEnabled();
   }
 
   public optionsSelected() {
@@ -73,7 +74,7 @@ export class CompassActionModalComponent implements OnInit {
     }
   }
 
-  private getIsAcceptEnabled(): boolean {
+  private getActionButtonEnabled(): boolean {
     return this.dropdownInputModel
       && this.dropdownInputModel.dropdownOptions.length
       && this.dropdownOptionSelected !== this.dropdownInputModel.dropdownOptions[0].value;
