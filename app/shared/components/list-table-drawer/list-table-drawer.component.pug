@@ -2,39 +2,33 @@
   table.list-table-drawer
     thead.list-table-drawer-header
       tr.list-table-drawer-header-row
-        th(colspan=1)
-        th(colspan=1)
-          .table-drawer-header-text.brand-header-text BRAND
-        th(colspan=1)
-          .table-drawer-header-text SKU/PACKAGE
-        th(colspan=1)
-          .table-drawer-header-text TYPE
-        th(colspan=1)
-          .table-drawer-header-text STATUS
-        th(colspan=1)
-          .table-drawer-header-text.centered IMPACT
-        th(colspan=2)
-          .table-drawer-header-text.centered DEPLETIONS
-        th(colspan=2)
-          .table-drawer-header-text.centered LAST DEPLETION
-        th(colspan=1)
+        th
+        th.table-drawer-header-text.brand-header-text BRAND
+        th.table-drawer-header-text SKU/PACKAGE
+        th.table-drawer-header-text TYPE
+        th.table-drawer-header-text STATUS
+        th.table-drawer-header-text.centered IMPACT
+        th.table-drawer-header-text.centered(colspan=2) DEPLETIONS
+        th.table-drawer-header-text.centered LAST DEPLETION
+        th
+        th
     tbody.list-table-drawer-body
       tr.list-table-drawer-row(*ngFor="let opportunity of sortedTableData, let index = index")
-        td.checkbox-column(colspan=1)
+        td.checkbox-column
           mat-checkbox(
             [checked]="opportunity.checked",
             [disableRipple]="true",
             (change)="checkboxClicked($event.checked, index)"
           )
-        td.brand-column(colspan=1)
+        td.brand-column
           .brand-container
             //- TODO: Update Mandate Markup Here Once We Get Data Back
             //- .brand-mandate(*ngIf="opportunity.mandate")
             //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
-        td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
-        td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
-        td.status-column(colspan=1) {{ opportunity.status | titlecase }}
+        td.sku-package-column {{ opportunity.skuPackage }}
+        td.type-column((click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
+        td.status-column {{ opportunity.status | titlecase }}
           compass-tooltip(
             *ngIf="opportunity.status === opportunityStatus.inactive",
             [title]="inactiveStatusTooltip.title",
@@ -45,9 +39,8 @@
           img.impact-image(*ngSwitchCase="opportunityImpact.high", src="../../../assets/img/icons/impact-high-small.svg")
           img.impact-image(*ngSwitchCase="opportunityImpact.medium", src="../../../assets/img/icons/impact-medium-small.svg")
           img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low-small.svg")
-        td.current-column.centered(colspan=1) {{ opportunity.current | number:'1.0-0' }}
+        td.current-column.centered {{ opportunity.current | number:'1.0-0' }}
         td.year-ago-column.centered(
-          colspan=1,
           [ngClass]="{ 'positive': opportunity.yearAgo > 0, 'negative': opportunity.yearAgo < 0 }"
         ) {{ opportunity.yearAgo | number:'1.1-1' }}%
         td.depletion-date-column.centered(colspan=2) {{ opportunity.depletionDate }}
