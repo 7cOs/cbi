@@ -16,8 +16,6 @@ div.modal.create-target-list
       div.collaborator-list
         p You <span class="accent">Owner</span><span class="break">&nbsp;</span>
         .collaborator(ng-repeat="collaborator in list.newList.collaborators") {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}} <span class="accent">Collaborator</span><span class="break">&nbsp;</span>
-    div.modal-input
-      md-checkbox.allow-invites(ng-model="list.newList.collaborateAndInvite" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
 
-    button.btn-action(ng-click="list.saveNewList($event)" ng-disabled="list.targetListService.isSaveNewListDisabled(list.newList.name, list.buttonDisabled, list.targetListService.moreThanMaxCharsNewList, list.newList.description.length, list.targetListService.maxChars)") Save
+    button.btn-action(ng-click="list.saveNewList($event, createNewListModal.listOptions)" ng-disabled="list.targetListService.isSaveNewListDisabled(list.newList.name, list.buttonDisabled, list.targetListService.moreThanMaxCharsNewList, list.newList.description.length, list.targetListService.maxChars)") Save
     p.cancel.accent(ng-click="list.closeCreateTargetListModal()") X Cancel

@@ -22,6 +22,13 @@ describe('Team Performance Opportunities Extender Body', () => {
 
   let listDetailMock: ListsState = {
     manageListStatus: ActionStatus.NotFetched,
+    copyStatus: ActionStatus.NotFetched,
+    allLists: {
+      status: ActionStatus.NotFetched,
+      owned: [],
+      sharedWithMe: [],
+      archived: []
+    },
     listSummary: {
       summaryStatus: ActionStatus.NotFetched,
       summaryData: {

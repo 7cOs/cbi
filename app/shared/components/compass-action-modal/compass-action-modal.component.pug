@@ -23,4 +23,6 @@ div.compass-modal
       )
     div.compass-modal-action-bar
       span.compass-modal-btn((click)='hideModal(compassActionModalEvent.Decline)') {{ modalInputs.rejectLabel }}
-      button.btn-action((click)='hideModal(compassActionModalEvent.Accept)') {{ modalInputs.acceptLabel }}
+      button.btn-action((click)='hideModal(compassActionModalEvent.Accept)', [disabled]="!isCopyButtonEnabled") {{ modalInputs.acceptLabel }}
+      button.btn-action((click)='hideModal(compassActionModalEvent.Accept)', [disabled]='!isAcceptEnabled') {{ modalInputs.acceptLabel }}
+
