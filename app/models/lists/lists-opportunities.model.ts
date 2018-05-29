@@ -8,6 +8,7 @@ export interface ListsOpportunities {
   brandDescription: string;
   skuDescription: string;
   type: OpportunityType;
+  subType: string;
   status: OpportunityStatus;
   impact: OpportunityImpact;
   currentDepletions_CYTD: number;

@@ -33,7 +33,7 @@
             //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
-        td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
+        td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunityTypeConversion(opportunity) }}
         td.status-column(colspan=1) {{ opportunity.status | titlecase }}
           compass-tooltip(
             *ngIf="opportunity.status === opportunityStatus.inactive",

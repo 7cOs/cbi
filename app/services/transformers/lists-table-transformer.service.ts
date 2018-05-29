@@ -129,6 +129,7 @@ export class ListsTableTransformerService {
         brand: opportunity.brandDescription,
         skuPackage: opportunity.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opportunity.skuDescription,
         type: OpportunityTypeLabel[opportunity.type] || opportunity.type,
+        subType: opportunity.subType,
         status: opportunity.status || '-' as OpportunityStatus,
         impact: opportunity.impact,
         current: opportunity.currentDepletions_CYTD || 0,

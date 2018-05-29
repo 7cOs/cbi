@@ -6,6 +6,7 @@ import { ListsOpportunities } from './lists-opportunities.model';
 import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-opportunity-impact.enum.mock';
 import { getOpportunityStatusMock } from '../../enums/list-opportunities/list-opportunity-status.enum.mock';
 import { getOpportunityTypeMock } from '../../enums/list-opportunities/list-opportunity-type.enum.mock';
+import { getOpportunitySubTypeValueMock } from '../../enums/list-opportunities/list-opportunity-type-label.enum.mock';
 
 const chance = new Chance();
 
@@ -20,6 +21,7 @@ export function getListOpportunityMock(): ListsOpportunities {
     brandDescription: chance.string(),
     skuDescription: chance.string(),
     type: getOpportunityTypeMock(),
+    subType: getOpportunitySubTypeValueMock(),
     status: getOpportunityStatusMock(),
     impact: getOpportunityImpactMock(),
     currentDepletions_CYTD: chance.natural(),

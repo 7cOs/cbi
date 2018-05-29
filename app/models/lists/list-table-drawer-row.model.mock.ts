@@ -5,6 +5,7 @@ import { generateRandomSizedArray } from '../util.model';
 import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-opportunity-impact.enum.mock';
 import { getOpportunityStatusMock } from '../../enums/list-opportunities/list-opportunity-status.enum.mock';
 import { getOpportunityTypeLabelMock } from '../../enums/list-opportunities/list-opportunity-type-label.enum.mock';
+import { getOpportunitySubTypeValueMock } from '../../enums/list-opportunities/list-opportunity-type-label.enum.mock';
 import { ListTableDrawerRow } from './list-table-drawer-row.model';
 
 const chance = new Chance();
@@ -15,6 +16,7 @@ export function getListTableDrawerRowMock(): ListTableDrawerRow {
     brand: chance.string(),
     skuPackage: chance.string(),
     type: getOpportunityTypeLabelMock(),
+    subType: getOpportunitySubTypeValueMock(),
     status: getOpportunityStatusMock(),
     impact: getOpportunityImpactMock(),
     current: chance.floating(),

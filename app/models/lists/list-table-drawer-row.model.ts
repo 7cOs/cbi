@@ -8,6 +8,7 @@ export interface ListTableDrawerRow {
   brand: string;
   skuPackage: string;
   type: OpportunityTypeLabel | OpportunityType;
+  subType: string;
   status: OpportunityStatus;
   impact: OpportunityImpact;
   current: number;
