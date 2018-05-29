@@ -28,9 +28,17 @@
           )
         td.brand-column(colspan=1)
           .brand-container
-            //- TODO: Update Mandate Markup Here Once We Get Data Back
-            //- .brand-mandate(*ngIf="opportunity.mandate")
-            //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
+            .brand-mandate(*ngIf="opportunity.featureType.featureTypeCode && opportunity.itemAuthorization.itemAuthorizationCode")
+              img.mandate-image(src="../../../assets/img/icons/status-both.svg")
+            .brand-mandate(*ngIf="opportunity.featureType.featureTypeCode")
+              img.mandate-image(src="../../../assets/img/icons/status-featured.svg")
+            .brand-mandate(*ngIf="opportunity.itemAuthorization.itemAuthorizationCode")
+              img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
+            //- img([ngClass]="{
+            //-   'flag-both': opportunity.featureType.featureTypeCode && opportunity.itemAuthorization.itemAuthorizationCode,
+            //-   'flag-yellow': opportunity.featureType.featureTypeCode,
+            //-   'flag-green': opportunity.itemAuthorization.itemAuthorizationCode
+            //- }")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
         td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}

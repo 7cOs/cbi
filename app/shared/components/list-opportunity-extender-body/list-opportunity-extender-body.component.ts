@@ -59,6 +59,7 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
 
         // delete these - just for testing
       }
+      console.log(this.opportunityDetails);
     }
   }
 
