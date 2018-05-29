@@ -158,3 +158,18 @@
     opacity: 0.5;
   }
 }
+
+.no-data-cover {
+  text-align: center;
+
+  .no-data-container {
+    margin-top: 80px;
+
+    .no-data-cover-message {
+      color: $gray-2;
+      font-family: $roboto;
+      font-size: 17px;
+      line-height: 1.38;
+    }
+  }
+}
