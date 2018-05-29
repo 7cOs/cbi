@@ -140,3 +140,17 @@
     }
   }
 }
+
+:host-context(.ie) {
+
+  .list-table-drawer-row {
+
+    .checkbox-column {
+      width: 4.9%!important;
+    }
+
+    .current-column {
+      width: 7.5%!important;
+    }
+  }
+}
