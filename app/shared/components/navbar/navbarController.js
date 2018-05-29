@@ -110,6 +110,7 @@ module.exports = /*  @ngInject */
       vm.unarchivedNoAuthor = newWatchValues.unarchivedNoAuthor;
       vm.deleted = newWatchValues.deleted;
       vm.added = newWatchValues.added;
+      vm.addedError = newWatchValues.addedError;
       vm.copied = newWatchValues.copied;
       vm.deleteError = newWatchValues.deleteError;
       vm.reportDeleted = newWatchValues.reportDeleted;
