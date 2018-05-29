@@ -57,7 +57,7 @@ export class CompassActionModalComponent implements OnInit {
 
   public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
-    this.isCopyButtonEnabled = this.isAcceptEnabled = this.getActionButtonEnabled();
+    this.isAcceptEnabled = this.getActionButtonEnabled();
   }
 
   public optionsSelected() {
