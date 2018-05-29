@@ -100,13 +100,6 @@ export class ListsApiService {
       .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
   }
 
-  public addStoresToList(listId: string, stores: {storeSourceCode: string}): Observable<ListStoreDTO[]> {
-    const url = `/v3/lists/${ listId }/stores`;
-
-    return this.http.post(url, stores)
-      .catch((httpErrorResponse: HttpErrorResponse) => Observable.throw(httpErrorResponse));
-  }
-
   public addOpportunitiesToListPromise(listId: string, opportunities: {opportunityId: string}[]): Promise<ListOpportunityDTO[]> {
     return this.addOpportunitiesToList(listId, opportunities).toPromise();
   }
