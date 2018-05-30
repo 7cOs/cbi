@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
+import { GroupedLists } from '../../models/lists/grouped-lists.model';
 import { ListsActionTypes } from '../../enums/list-action-type.enum';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListPerformance } from '../../models/lists/list-performance.model';
@@ -26,6 +27,16 @@ export interface FetchListPerformancePayload {
 
 export interface FetchOppsForListPayload {
   listId: string;
+}
+
+export interface CopyStoresToListPayload {
+  listId: string;
+  id: string;
+}
+
+export interface CopyOppsToListPayload {
+  listId: string;
+  ids: {opportunityId: string}[];
 }
 
 export interface UpdateListPayload {
@@ -138,6 +149,27 @@ export class FetchListPerformancePODError implements Action {
   constructor(public payload: Error) { }
 }
 
+export const FETCH_LISTS = ListsActionTypes.FETCH_LISTS;
+export class FetchLists implements Action {
+  readonly type = FETCH_LISTS;
+
+  constructor(public payload: {currentUserEmployeeID: string}) { }
+}
+
+export const FETCH_LISTS_SUCCESS = ListsActionTypes.FETCH_LISTS_SUCCESS;
+export class FetchListsSuccess implements Action {
+  readonly type = FETCH_LISTS_SUCCESS;
+
+  constructor(public payload: GroupedLists) { }
+}
+
+export const FETCH_LISTS_FAILURE = ListsActionTypes.FETCH_LISTS_FAILURE;
+export class FetchListsFailure implements Action {
+  readonly type = FETCH_LISTS_FAILURE;
+
+  constructor(public payload: Error) { }
+}
+
 export const PATCH_LIST = ListsActionTypes.PATCH_LIST;
 export class PatchList implements Action {
   readonly type = PATCH_LIST;
@@ -157,6 +189,34 @@ export class PatchListFailure implements Action {
   readonly type = PATCH_LIST_FAILURE;
 
   constructor(public payload: Error) { }
+}
+
+export class CopyStoresToList implements Action {
+  readonly type = ListsActionTypes.COPY_STORES_TO_LIST;
+
+  constructor(public payload: CopyStoresToListPayload) { }
+}
+
+export class CopyStoresToListSuccess implements Action {
+  readonly type = ListsActionTypes.COPY_STORES_TO_LIST_SUCCESS;
+}
+
+export class CopyStoresToListError implements Action {
+  readonly type = ListsActionTypes.COPY_STORES_TO_LIST_ERROR;
+}
+
+export class CopyOppsToList implements Action {
+  readonly type = ListsActionTypes.COPY_OPPS_TO_LIST;
+
+  constructor(public payload: CopyOppsToListPayload) { }
+}
+
+export class CopyOppsToListSuccess implements Action {
+  readonly type = ListsActionTypes.COPY_OPPS_TO_LIST_SUCCESS;
+}
+
+export class CopyOppsToListError implements Action {
+  readonly type = ListsActionTypes.COPY_OPPS_TO_LIST_ERROR;
 }
 
 export class ArchiveList implements Action {
@@ -259,9 +319,18 @@ export type Action
   | FetchListPerformancePOD
   | FetchListPerformancePODSuccess
   | FetchListPerformancePODError
+  | FetchLists
+  | FetchListsSuccess
+  | FetchListsFailure
   | PatchList
   | PatchListSuccess
   | PatchListFailure
+  | CopyStoresToList
+  | CopyStoresToListSuccess
+  | CopyStoresToListError
+  | CopyOppsToList
+  | CopyOppsToListSuccess
+  | CopyOppsToListError
   | ArchiveList
   | ArchiveListSuccess
   | ArchiveListError

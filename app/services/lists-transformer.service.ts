@@ -2,10 +2,13 @@ import { includes } from 'lodash';
 import { Injectable } from '@angular/core';
 
 import { CollaboratorType } from '../enums/lists/collaborator-type.enum';
+import { FormattedNewList } from '../models/lists/formatted-new-list.model';
+import { GroupedLists } from '../models/lists/grouped-lists.model';
 import { ListCategory } from '../enums/lists/list-category.enum';
 import { ListPerformance } from '../models/lists/list-performance.model';
 import { ListPerformanceDTO } from '../models/lists/list-performance-dto.model';
 import { ListStoreDTO } from '../models/lists/lists-store-dto.model';
+import { ListType } from '../enums/lists/list-type.enum';
 import { ListsCollectionSummary } from '../models/lists/lists-collection-summary.model';
 import { ListsSummary } from '../models/lists/lists-header.model';
 import { ListsSummaryDTO } from '../models/lists/lists-header-dto.model';
@@ -13,7 +16,6 @@ import { ListOpportunityDTO } from '../models/lists/lists-opportunities-dto.mode
 import { ListsOpportunities } from '../models/lists/lists-opportunities.model';
 import { ListStorePerformance } from '../models/lists/list-store-performance.model';
 import { ListStorePerformanceDTO } from '../models/lists/list-store-performance-dto.model';
-import { ListType } from '../enums/lists/list-type.enum';
 import { OpportunitiesByStore } from '../models/lists/opportunities-by-store.model';
 import { OpportunityImpact } from '../enums/list-opportunities/list-opportunity-impact.enum';
 import { OpportunityStatus } from '../enums/list-opportunities/list-opportunity-status.enum';
@@ -22,13 +24,10 @@ import { StoreDetails } from '../models/lists/lists-store.model';
 import { V3List } from '../models/lists/v3-list.model';
 import { V2List } from '../models/lists/v2-list.model';
 import { UnformattedNewList } from '../models/lists/unformatted-new-list.model';
-import { FormattedNewList } from '../models/lists/formatted-new-list.model';
 import { User } from '../models/lists/user.model';
 
 @Injectable()
 export class ListsTransformerService {
-
-  constructor() { }
 
   public getV2ListsSummary(v3Lists: V3List[], currentUserEmployeeID: string): ListsCollectionSummary {
     const ownedLists: V3List[] = v3Lists.filter((list: V3List) => list.owner.employeeId === currentUserEmployeeID);
@@ -59,6 +58,28 @@ export class ListsTransformerService {
       sharedNotArchivedCount: sharedNotArchivedListsCount,
       ownedNotArchived: ownedNotArchivedListsCount,
       ownedArchived: ownedArchivedListsCount
+    };
+  }
+
+  public groupLists(lists: V3List[], currentUserEmployeeID: string): GroupedLists {
+    const owned: V3List[] = lists.filter((list: V3List) => {
+      return list.owner.employeeId === currentUserEmployeeID
+        && !list.archived;
+    });
+
+    const sharedWithMe: V3List[] = lists.filter((list: V3List) => {
+      return list.owner.employeeId !== currentUserEmployeeID
+        && !list.archived;
+    });
+
+    const archived: V3List[] = lists.filter((list: V3List) => {
+      return list.archived;
+    });
+
+    return {
+      owned: owned,
+      sharedWithMe: sharedWithMe,
+      archived: archived
     };
   }
 

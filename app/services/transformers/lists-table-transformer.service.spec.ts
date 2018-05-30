@@ -19,7 +19,7 @@ import { SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL, PERFORMANCE_TOTAL_ROW_NAME } from
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 const getExpectedStoreAddress = (store: StoreDetails): string => {
-  return `${ store.address } ${ store.city } ${ store.state } ${ store.postalCode }`;
+  return `${ store.address } ${ store.city } ${ store.state }, ${ store.postalCode.slice(0, 5) }`;
 };
 
 describe('ListsTableTransformerService', () => {
