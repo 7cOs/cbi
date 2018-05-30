@@ -32,11 +32,19 @@ div.compass-modal(*ngIf="!isAlertModalOpen")
             .align-left(*ngIf="currentUserIsListOwner") You
               .accent Owner
             .align-left(*ngIf="!currentUserIsListOwner") {{modalInputs.listObject.ownerFirstName | titlecase}} {{modalInputs.listObject.ownerLastName | titlecase}}
-          .collaborator.manage-list(*ngFor="let collaborator of collaborators")
-            .align-left {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}}
+              .accent Owner
+          .collaborator.manage-list(
+            *ngFor="let collaborator of collaborators",
+            compassDropdown,
+            [compassDropdownData]="collaboratorDropdownData",
+            [compassDropdownDisabled]="collaborator.employeeId === currentUserEmployeeId",
+            (onCompassDropdownClicked)="collaboratorDropdownClicked($event, collaborator)"
+          )
+            .align-left(*ngIf="collaborator.employeeId === currentUserEmployeeId") You
+            .align-left(*ngIf="collaborator.employeeId !== currentUserEmployeeId") {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}}
             .collaborator-title
               .accent.collaborator-text Collaborator
-              .manage-list-arrow
+              .manage-list-arrow(*ngIf="collaborator.employeeId !== currentUserEmployeeId")
 
       div.modal-input.modal-input-add-collaborators
         label.modal-input-label Add Collaborators

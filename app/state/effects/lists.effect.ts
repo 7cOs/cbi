@@ -204,10 +204,15 @@ export class ListsEffects {
         return this.listsApiService.updateList(convertedPayload, action.payload.id)
         .map((response: ListsSummaryDTO) => {
           const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
+          this.toastService.showListDetailToast(ListManageActionToastType.Edit);
           this.analyticsService.trackEvent('Lists - My Lists', 'Edit List Properties', action.payload.id.toString());
+
           return new ListActions.PatchListSuccess(transformedData);
         })
-        .catch((error: Error) => Observable.of(new ListActions.PatchListFailure(error)));
+        .catch((error: Error) => {
+          this.toastService.showListDetailToast(ListManageActionToastType.EditError);
+          return Observable.of(new ListActions.PatchListFailure(error));
+        });
       });
   }
 
@@ -284,6 +289,28 @@ export class ListsEffects {
   }
 
   @Effect()
+  transferListOwnership$(): Observable<Action> {
+    return this.actions$
+      .ofType(ListsActionTypes.TRANSFER_LIST_OWNERSHIP)
+      .switchMap((action: ListActions.TransferListOwnership) => {
+        const list: FormattedNewList = Object.assign({}, this.listsTransformerService.convertCollaborators(action.payload.listSummary), {
+          ownerEmployeeId: action.payload.newOwnerEmployeeId
+        });
+
+        return this.listsApiService.updateList(list, action.payload.listSummary.id)
+          .map((response: ListsSummaryDTO) => {
+            const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
+            this.toastService.showListDetailToast(ListManageActionToastType.TransferOwnership);
+
+            return new ListActions.PatchListSuccess(transformedData);
+          })
+          .catch((error: Error) => {
+            this.toastService.showListDetailToast(ListManageActionToastType.TransferOwnershipError);
+            return Observable.of(new ListActions.PatchListFailure(error));
+          });
+      });
+  }
+
   removeStoreFromList$(): Observable<Action> {
     return this.actions$
       .ofType(ListActions.DELETE_STORE_FROM_LIST)

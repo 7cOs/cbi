@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CompassActionButtonComponent } from '../compass-action-button/compass-action-button.component';
 import { CompassAlertModalComponent } from '../compass-alert-modal/compass-alert-modal.component';
+import { CompassDropdownDirective } from '../../../directives/compass-dropdown.directive';
+import { CompassDropdownService } from '../../../services/compass-dropdown.service';
 import { CompassManageListModalComponent } from './compass-manage-list-modal.component';
 import { CompassManageListModalEvent } from '../../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalInputs } from '../../../models/compass-manage-list-modal-inputs.model';
@@ -33,8 +35,9 @@ const searchServiceMock = {
 describe('Compass Manage Modal List Component', () => {
   let fixture: ComponentFixture<CompassManageListModalComponent>;
   let componentInstance: CompassManageListModalComponent;
-  let compassModalService: CompassModalService;
 
+  let compassModalServiceMock: CompassModalService;
+  let compassDropdownServiceMock: CompassDropdownService;
   let compassModalInputsMock: CompassManageListModalInputs;
 
   beforeEach(() => {
@@ -46,6 +49,7 @@ describe('Compass Manage Modal List Component', () => {
       declarations: [
         CompassActionButtonComponent,
         CompassAlertModalComponent,
+        CompassDropdownDirective,
         CompassManageListModalComponent,
         CompassUserSearchComponent
       ],
@@ -55,10 +59,13 @@ describe('Compass Manage Modal List Component', () => {
           userValue: compassModalInputsMock
         }, {
           provide: CompassModalService,
-          useValue: compassModalService
+          useValue: compassModalServiceMock
         }, {
           provide: 'searchService',
           useValue: searchServiceMock
+        }, {
+          provide: CompassDropdownService,
+          useValue: compassDropdownServiceMock
         }
       ]
     });
@@ -113,7 +120,8 @@ describe('Compass Manage Modal List Component', () => {
       const buttonElement: DebugElement = fixture.debugElement.query(By.css('compass-action-button'));
       const expectedOutputObject: CompassManageListModalOutput = {
         listSummary: compassModalInputsMock.listObject,
-        type: CompassManageListModalEvent.Save
+        type: CompassManageListModalEvent.Save,
+        selectedEmployeeId: ''
       };
 
       componentInstance.buttonContainerEvent.subscribe((value: CompassManageListModalOutput) => {

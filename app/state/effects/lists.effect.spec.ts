@@ -4,12 +4,16 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 
-import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
-import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
-import { FetchHeaderDetailsPayload,
+import { CopyOppsToListPayload,
+         CopyStoresToListPayload,
+         FetchHeaderDetailsPayload,
          FetchOppsForListPayload,
          FetchListPerformancePayload,
-         FetchStoreDetailsPayload, LeaveListPayload, CopyStoresToListPayload, CopyOppsToListPayload } from '../actions/lists.action';
+         FetchStoreDetailsPayload,
+         LeaveListPayload,
+         TransferOwnershipPayload } from '../actions/lists.action';
+import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
+import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getFormattedNewListMock } from '../../models/lists/formatted-new-list.model.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
@@ -63,7 +67,6 @@ describe('Lists Effects', () => {
 
   const toastServiceMock = {
     showListDetailToast: jasmine.createSpy('showListDetailToast'),
-    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast'),
     showToast: jasmine.createSpy('showToast')
   };
   const analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
@@ -494,6 +497,7 @@ describe('Lists Effects', () => {
         expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
           'Lists - My Lists', 'Edit List Properties', actionListPayloadMock.id
         );
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Edit);
       });
 
       it('should dispatch a patchListSuccess action with the returned transformed data', (done) => {
@@ -512,6 +516,8 @@ describe('Lists Effects', () => {
           expect(response).toEqual(new ListActions.PatchListFailure(errorMock));
           done();
         });
+
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.EditError);
       });
     });
   });
@@ -820,6 +826,79 @@ describe('Lists Effects', () => {
         });
 
         expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.LeaveError);
+      });
+    });
+  });
+
+  describe('when an action of type TRANSFER_LIST_OWNERSHIP is recevied', () => {
+    let actionPayloadMock: TransferOwnershipPayload;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        newOwnerEmployeeId: chance.string(),
+        listSummary: getListsSummaryMock()
+      };
+
+      actions$.next(new ListActions.TransferListOwnership(actionPayloadMock));
+    });
+
+    it('should reach out to the listsTransformerService and call convertCollaborators with the listSummary payload', (done) => {
+      spyOn(listsTransformerService, 'convertCollaborators');
+
+      listsEffects.transferListOwnership$().subscribe(() => {
+        done();
+      });
+
+      expect(listsTransformerService.convertCollaborators).toHaveBeenCalledWith(actionPayloadMock.listSummary);
+    });
+
+    it('should reach out to the listsApiService and call updateList with the transfer ownership payload and'
+    + ' the list id from the action payload', (done) => {
+      const expectedFormattedList = Object.assign({}, formattedListMock, {
+        ownerEmployeeId: actionPayloadMock.newOwnerEmployeeId
+      });
+
+      spyOn(listsApiService, 'updateList').and.callThrough();
+
+      listsEffects.transferListOwnership$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.updateList).toHaveBeenCalledWith(expectedFormattedList, actionPayloadMock.listSummary.id);
+    });
+
+    describe('when the updateList api call is successful', () => {
+      it('should reach out to the listsTransformerService and call formatListsSummaryData with the new list data returned'
+      + 'from the updateList API call', (done) => {
+        spyOn(listsTransformerService, 'formatListsSummaryData');
+
+        listsEffects.transferListOwnership$().subscribe(() => {
+          done();
+        });
+
+        expect(listsTransformerService.formatListsSummaryData).toHaveBeenCalledWith(patchListPayloadMock);
+      });
+
+      it('should show a transfer ownership success toast and dispatch a PatchListSuccess action', (done) => {
+        listsEffects.transferListOwnership$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.PatchListSuccess(headerDetailMock));
+          done();
+        });
+
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.TransferOwnership);
+      });
+    });
+
+    describe('when the updateList api call fails', () => {
+      it('should show a transfer ownership error toast and dispatch a PatchListFailure action', (done) => {
+        spyOn(listsApiService, 'updateList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.transferListOwnership$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.PatchListFailure(errorMock));
+          done();
+        });
+
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.TransferOwnershipError);
       });
     });
   });

@@ -48,7 +48,7 @@ export class ListsTableTransformerService {
         performanceError: !storeVolume,
         checked: false,
         expanded: false,
-        storeNumber: store.number,
+        storeNumber: this.getFormattedStoreNumber(store),
         storeCity: store.city,
         storeState: store.state,
         unversionedStoreId: store.unversionedStoreId,
@@ -85,7 +85,7 @@ export class ListsTableTransformerService {
         lastDepletionDateColumn: storeVolume ? moment(storeVolume.lastSoldDate).format('MM/DD/YY') : '-',
         performanceError: isPerformanceError,
         checked: false,
-        storeNumber: store.number,
+        storeNumber: this.getFormattedStoreNumber(store),
         storeCity: store.city,
         storeState: store.state,
         unversionedStoreId: store.unversionedStoreId,
@@ -149,5 +149,9 @@ export class ListsTableTransformerService {
 
   private getPrimaryDistributorIndex(beerDistributors: BeerDistributors[]): number {
     return beerDistributors.findIndex((primaryBeerDistributor: BeerDistributors) => primaryBeerDistributor.isPrimary === true);
+  }
+
+  private getFormattedStoreNumber(store: StoreDetails): string {
+    return store.number === 'UNKNOWN' ? '' : `#${ store.number}`;
   }
 }
