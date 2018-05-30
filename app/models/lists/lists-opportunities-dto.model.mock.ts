@@ -30,6 +30,24 @@ export function getListOpportunityDTOMock(): ListOpportunityDTO {
     subBrandDescription: chance.string(),
     type: getOpportunityTypeMock(),
     yearAgoDepletions_CYTD: chance.natural(),
-    isSimpleDistributionOpportunity: chance.bool()
+    isSimpleDistributionOpportunity: chance.bool(),
+    featureTypeCode: chance.string(),
+    featureTypeDescription: chance.string(),
+    featurePeriodBeginDate: chance.string(),
+    featurePeriodEndDate: chance.string(),
+    featureResetBeginDate: chance.string(),
+    featureResetEndDate: chance.string(),
+    featurePrice: chance.string(),
+    featureIsOnMenu: chance.string(),
+    featureNotes: chance.string(),
+    itemAuthorizationCode: chance.string(),
+    itemAuthorizationDescription: chance.string(),
+    itemAuthorizationPeriodBeginDate: chance.string(),
+    itemAuthorizationPeriodEndDate: chance.string(),
+    itemAuthorizationResetBeginDate: chance.string(),
+    itemAuthorizationResetEndDate: chance.string(),
+    itemAuthorizationPrice: chance.string(),
+    itemAuthorizationIsOnMenu: chance.string(),
+    itemAuthorizationNotes: chance.string()
   };
 }
