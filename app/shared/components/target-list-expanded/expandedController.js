@@ -166,7 +166,7 @@ module.exports = /*  @ngInject */
           analyticsService.trackEvent(
             targetListService.getAnalyticsCategory(listPermissionLevel, true),
             'Unarchive List',
-            'Selected List'
+            listItem.id
           );
         });
         loaderService.closeLoader();

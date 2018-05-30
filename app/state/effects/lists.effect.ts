@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
+import { AnalyticsService } from '../../services/analytics.service';
 import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
 import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import * as ListActions from '../../state/actions/lists.action';
@@ -32,7 +33,8 @@ export class ListsEffects {
     private actions$: Actions,
     private listsApiService: ListsApiService,
     private listsTransformerService: ListsTransformerService,
-    @Inject('toastService') private toastService: any
+    @Inject('toastService') private toastService: any,
+    private analyticsService: AnalyticsService
   ) { }
 
   @Effect()
@@ -203,6 +205,7 @@ export class ListsEffects {
         return this.listsApiService.updateList(convertedPayload, action.payload.id)
         .map((response: ListsSummaryDTO) => {
           const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
+          this.analyticsService.trackEvent('Lists - My Lists', 'Edit List Properties', action.payload.id.toString());
           return new ListActions.PatchListSuccess(transformedData);
         })
         .catch((error: Error) => Observable.of(new ListActions.PatchListFailure(error)));
@@ -230,6 +233,7 @@ export class ListsEffects {
         return this.listsApiService.updateList(formattedPayload, action.payload.id)
           .map(() => {
             this.toastService.showListDetailToast(ListManageActionToastType.Archive);
+            this.analyticsService.trackEvent('Lists - My Lists', 'Archive List', action.payload.id.toString());
             return new ListActions.ArchiveListSuccess;
           })
           .catch(() => {
@@ -247,6 +251,7 @@ export class ListsEffects {
         return this.listsApiService.deleteList(action.payload)
           .map(() => {
             this.toastService.showListDetailToast(ListManageActionToastType.Delete);
+            this.analyticsService.trackEvent('Lists - My Lists', 'Delete List', action.payload);
             return new ListActions.DeleteListSuccess;
           })
           .catch(() => {
@@ -269,6 +274,7 @@ export class ListsEffects {
         return this.listsApiService.updateList(formattedPayload, action.payload.listSummary.id)
           .map(() => {
             this.toastService.showListDetailToast(ListManageActionToastType.Leave);
+            this.analyticsService.trackEvent('Lists - Shared With Me', 'Leave List', action.payload.listSummary.id.toString());
             return new ListActions.LeaveListSuccess;
           })
           .catch(() => {
@@ -349,6 +355,7 @@ export class ListsEffects {
     return this.actions$
       .ofType(ListActions.DELETE_OPP_FROM_LIST_SUCCESS)
       .switchMap((action: ListActions.RemoveOppFromListSuccess) => {
+        this.analyticsService.trackEvent('Lists - My Lists', 'Remove From List', action.payload.listId.toString());
         return Observable.from([
           new ListActions.FetchHeaderDetails({listId: action.payload.listId}),
           new ListActions.FetchListPerformancePOD({ listId: action.payload.listId,

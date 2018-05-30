@@ -34,6 +34,7 @@ import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { AnalyticsService } from '../../services/analytics.service';
 
 const chance = new Chance();
 
@@ -65,6 +66,7 @@ describe('Lists Effects', () => {
     showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast'),
     showToast: jasmine.createSpy('showToast')
   };
+  const analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
 
   const listsApiServiceMock = {
     addStoresToList(listId: string, stores: {storeSourceCode: string}): Observable<object> {
@@ -143,6 +145,10 @@ describe('Lists Effects', () => {
         {
           provide: 'toastService',
           useValue: toastServiceMock
+        },
+        {
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
         }
       ]
     });
