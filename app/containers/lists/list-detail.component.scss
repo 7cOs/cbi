@@ -21,3 +21,12 @@
     margin-bottom: 10px;
   }
 }
+
+.line-separator {
+  margin-left: 10px;
+  height: 36px;
+  border: solid 1px $line-separator-gray;
+  position: relative;
+  display: inline-block;
+  top: 13px;
+}

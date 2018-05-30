@@ -26,14 +26,15 @@ compass-tabs(
           (onActionButtonClicked)="copyToListClick()"
         )
         compass-action-button.action-button-spacing(
-          [isDisabled]="!isPerformanceTabDataFetched",
-          [actionLabel]="actionButtonType.Download",
-          (onActionButtonClicked)="downloadActionButtonClicked($event)"
-        )
-        compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",
           [isDisabled]="!isPerformanceRowSelect",
           (onActionButtonClicked)="captureRemoveButtonClicked()"
+        )
+        .line-separator
+        compass-action-button.action-button-spacing(
+          [isDisabled]="!isPerformanceTabDataFetched",
+          [actionLabel]="actionButtonType.Download",
+          (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
@@ -63,14 +64,15 @@ compass-tabs(
           (onActionButtonClicked)="copyToListClick()"
         )
         compass-action-button.action-button-spacing(
-          [isDisabled]="!isOppsTabDataFetched",
-          [actionLabel]="actionButtonType.Download",
-          (onActionButtonClicked)="downloadActionButtonClicked($event)"
-        )
-        compass-action-button.action-button-spacing(
           [actionLabel]="actionButtonType.Remove",
           [isDisabled]="!isOpportunityRowSelect",
           (onActionButtonClicked)="captureRemoveButtonClicked()"
+        )
+        .line-separator
+        compass-action-button.action-button-spacing(
+          [isDisabled]="!isOppsTabDataFetched",
+          [actionLabel]="actionButtonType.Download",
+          (onActionButtonClicked)="downloadActionButtonClicked($event)"
         )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
