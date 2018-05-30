@@ -22,10 +22,18 @@ export class CalculatorService {
   }
 
   public getYearAgoPercent(total: number, totalYearAgo: number): number {
-    return (total === 0 && totalYearAgo === 0)
-      ? 0
-      : totalYearAgo === 0
-        ? 100
-        : round((((total / totalYearAgo) - 1) * 100), 1);
+    if (!this.isValueNullOrUndefined(total) && !this.isValueNullOrUndefined(totalYearAgo)) {
+      return (total === 0 && totalYearAgo === 0)
+        ? 0
+        : totalYearAgo === 0
+          ? 100
+          : round((((total / totalYearAgo) - 1) * 100), 1);
+    } else {
+      return 0;
+    }
+  }
+
+  private isValueNullOrUndefined(value: number): boolean {
+    return value === undefined || value === null;
   }
 }

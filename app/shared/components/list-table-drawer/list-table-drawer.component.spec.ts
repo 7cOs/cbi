@@ -3,6 +3,8 @@ import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCheckboxModule } from '@angular/material';
 
+import { CompassDropdownDirective } from '../../../directives/compass-dropdown.directive';
+import { CompassDropdownService } from '../../../services/compass-dropdown.service';
 import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
 import { CompassTooltipService } from '../../../services/compass-tooltip.service';
 import { getListTableDrawerRowMock } from '../../../models/lists/list-table-drawer-row.model.mock';
@@ -15,8 +17,9 @@ const chance = new Chance();
 describe('ListTableDrawerComponent', () => {
   let fixture: ComponentFixture<ListTableDrawerComponent>;
   let componentInstance: ListTableDrawerComponent;
-  let tableDataMock: ListTableDrawerRow[];
 
+  let tableDataMock: ListTableDrawerRow[];
+  let compassDropdownServiceMock: CompassDropdownService;
   const compassTooltipServiceMock = {
     showTooltip: jasmine.createSpy('showTooltip')
   };
@@ -24,6 +27,7 @@ describe('ListTableDrawerComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
+        CompassDropdownDirective,
         CompassTooltipComponent,
         ListTableDrawerComponent
       ],
@@ -33,6 +37,9 @@ describe('ListTableDrawerComponent', () => {
       providers: [{
         provide: CompassTooltipService,
         useValue: compassTooltipServiceMock
+      }, {
+        provide: CompassDropdownService,
+        useValue: compassDropdownServiceMock
       }]
     });
 

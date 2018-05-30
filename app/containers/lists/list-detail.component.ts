@@ -2,11 +2,11 @@ import * as moment from 'moment';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe, UpperCasePipe } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/takeUntil';
 
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
@@ -131,7 +131,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public downloadBodyHTML: string;
   public groupedOppsByStore: OpportunitiesByStore;
 
-  private listDetailSubscription: Subscription;
+  private ngUnsubscribe: Subject<Event> = new Subject();
 
   constructor(
     private compassModalService: CompassModalService,
@@ -171,8 +171,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }));
     this.store.dispatch(new ListsActions.FetchLists({currentUserEmployeeID: this.currentUser.employeeId}));
 
-    this.listDetailSubscription = this.store
+    this.store
       .select(state => state.listsDetails)
+      .takeUntil(this.ngUnsubscribe)
       .subscribe((listDetail: ListsState)  => {
         this.listSummary = listDetail.listSummary.summaryData;
         this.allLists = listDetail.allLists;
@@ -394,7 +395,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.listDetailSubscription.unsubscribe();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   public handlePageClick(event: ListPageClick): void {
@@ -413,9 +415,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       listObject: this.listSummary
     }, {});
 
-    manageModalRef.modalInstance.buttonContainerEvent.subscribe((manageModalData: CompassManageListModalOutput) => {
-      this.handleManageModalEvent(manageModalData);
-    });
+    manageModalRef.modalInstance.buttonContainerEvent
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((manageModalData: CompassManageListModalOutput) => {
+        this.handleManageModalEvent(manageModalData);
+      });
   }
 
   public handleListsLinkClick(): void {
@@ -477,6 +481,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       case CompassManageListModalEvent.Leave:
         this.store.dispatch(new ListsActions.LeaveList({
           currentUserEmployeeId: this.currentUser.employeeId,
+          listSummary: manageModalData.listSummary
+        }));
+        break;
+      case CompassManageListModalEvent.Transfer_Ownership:
+        this.store.dispatch(new ListsActions.TransferListOwnership({
+          newOwnerEmployeeId: manageModalData.selectedEmployeeId,
           listSummary: manageModalData.listSummary
         }));
         break;

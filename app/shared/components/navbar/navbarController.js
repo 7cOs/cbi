@@ -131,6 +131,10 @@ module.exports = /*  @ngInject */
       vm.listDetailDeletedError = newWatchValues.listDetailDeletedError;
       vm.listDetailLeft = newWatchValues.listDetailLeft;
       vm.listDetailLeftError = newWatchValues.listDetailLeftError;
+      vm.listDetailEdited = newWatchValues.listDetailEdited;
+      vm.listDetailEditedError = newWatchValues.listDetailEditedError;
+      vm.listDetailTransferOwnership = newWatchValues.listDetailTransferOwnership;
+      vm.listDetailTransferOwnershipError = newWatchValues.listDetailTransferOwnershipError;
       vm.storeRemovedError = newWatchValues.storeRemovedError;
       vm.oppRemovedError = newWatchValues.oppRemovedError;
     }, true);

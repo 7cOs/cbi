@@ -4,4 +4,5 @@ import { ListsSummary } from './lists/lists-header.model';
 export interface CompassManageListModalOutput {
   listSummary: ListsSummary;
   type: CompassManageListModalEvent;
+  selectedEmployeeId: string;
 }
