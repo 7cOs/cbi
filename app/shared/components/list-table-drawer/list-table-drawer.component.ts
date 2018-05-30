@@ -58,6 +58,19 @@ export class ListTableDrawerComponent {
     } else {
       return opportunityRow.type;
     }
+
+  public getFlagClass(opportunityRow: ListTableDrawerRow): string {
+    return opportunityRow.featureType.featureTypeCode && opportunityRow.itemAuthorization.itemAuthorizationCode
+      ? 'flag-both'
+      : opportunityRow.featureType.featureTypeCode
+        ? 'flag-featured'
+        : opportunityRow.itemAuthorization.itemAuthorizationCode
+          ? 'flag-mandatory'
+          : '';
+  }
+
+  public onCompassDropdownClicked(dropdownValue: string, opportunity: ListTableDrawerRow): void {
+    console.log('onCompassDropdownClicked: ', dropdownValue, opportunity);
   }
 
   private sortTableData(row1: ListTableDrawerRow, row2: ListTableDrawerRow): number {

@@ -20,4 +20,22 @@ export interface ListOpportunityDTO {
     type: OpportunityType;
     yearAgoDepletions_CYTD: number;
     isSimpleDistributionOpportunity: boolean;
+    featureTypeCode: string;
+    featureTypeDescription: string;
+    featurePeriodBeginDate: string;
+    featurePeriodEndDate: string;
+    featureResetBeginDate: string;
+    featureResetEndDate: string;
+    featurePrice: string;
+    featureIsOnMenu: string;
+    featureNotes: string;
+    itemAuthorizationCode: string;
+    itemAuthorizationDescription: string;
+    itemAuthorizationPeriodBeginDate: string;
+    itemAuthorizationPeriodEndDate: string;
+    itemAuthorizationResetBeginDate: string;
+    itemAuthorizationResetEndDate: string;
+    itemAuthorizationPrice: string;
+    itemAuthorizationIsOnMenu: string;
+    itemAuthorizationNotes: string;
 }

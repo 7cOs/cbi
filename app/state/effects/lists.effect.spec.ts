@@ -38,6 +38,7 @@ import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
+import { AnalyticsService } from '../../services/analytics.service';
 
 const chance = new Chance();
 
@@ -68,6 +69,7 @@ describe('Lists Effects', () => {
     showListDetailToast: jasmine.createSpy('showListDetailToast'),
     showToast: jasmine.createSpy('showToast')
   };
+  const analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
 
   const listsApiServiceMock = {
     addStoresToList(listId: string, stores: {storeSourceCode: string}): Observable<object> {
@@ -146,6 +148,10 @@ describe('Lists Effects', () => {
         {
           provide: 'toastService',
           useValue: toastServiceMock
+        },
+        {
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
         }
       ]
     });
@@ -488,6 +494,9 @@ describe('Lists Effects', () => {
         });
         expect(updateListSpy.calls.count()).toBe(1);
         expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.id);
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Lists - My Lists', 'Edit List Properties', actionListPayloadMock.id
+        );
         expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Edit);
       });
 
@@ -654,6 +663,9 @@ describe('Lists Effects', () => {
       });
 
       expect(listsTransformerService.convertCollaborators).toHaveBeenCalledWith(actionPayloadMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - My Lists', 'Archive List', actionPayloadMock.id
+      );
     });
 
     it('should reach out to the listsApiService and call updateList with the FormattedNewList having archived set to true and'
@@ -713,6 +725,9 @@ describe('Lists Effects', () => {
       });
 
       expect(listsApiService.deleteList).toHaveBeenCalledWith(actionPayloadMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - My Lists', 'Delete List', actionPayloadMock
+      );
     });
 
     describe('when the deleteList api call is successful', () => {
@@ -763,6 +778,9 @@ describe('Lists Effects', () => {
         actionPayloadMock.currentUserEmployeeId,
         actionPayloadMock.listSummary
       );
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'Leave List', actionPayloadMock.listSummary.id
+      );
     });
 
     it('should reach out to the listsApiService and call updateList with the leave list payload and'
@@ -782,6 +800,7 @@ describe('Lists Effects', () => {
       });
 
       expect(listsApiService.updateList).toHaveBeenCalledWith(expectedUpdateListPayload, actionPayloadMock.listSummary.id);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledTimes(9);
     });
 
     describe('when the updateList api call is successful', () => {
@@ -792,6 +811,8 @@ describe('Lists Effects', () => {
         });
 
         expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledTimes(10);
+
       });
     });
 

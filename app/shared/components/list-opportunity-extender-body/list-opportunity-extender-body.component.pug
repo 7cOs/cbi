@@ -1,42 +1,53 @@
 .inline
   .opportunity-detail-row
-    p <b>Brand: </b> {{ opportunityDetails ? opportunityDetails.brandDescription : '' }}
+    p <b>Brand: </b> {{ opportunityDetails?.brandDescription }}
   .opportunity-detail-row
     p
       b Sku/Package:
-      |  {{ opportunityDetails ? skuDescription : ''}}
+      |  {{ opportunityDetails ? skuDescription : '' }}
   .opportunity-detail-row
-    p <b>Opportunity Type: </b> {{ opportunityDetails ? opportunityType : '' }}
+    p <b>Opportunity Type: </b> {{ opportunityDetails ? opportunityType : ''}}
   .opportunity-detail-row
-    p <b>Opportunity Rationale: </b> {{ opportunityDetails ? opportunityDetails.rationale : '' }}
-  //- .opportunity-detail-row
-  //-   p <b>Brand Mandate</b>
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Start date: </b>11/14/18
-  //-   p
-  //-     span.right <b>Start End: </b> None
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Reset date: </b>11/14/18
-  //-   p
-  //-     span.right <b>Reset End: </b> None
-  //- .opportunity-detail-row
-  //-   p <b>Additional Notes: </b> N/A
-  //- .opportunity-detail-row
-  //-   p <b>Every Day Low Price (Off Premsie) </b>
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Start date: </b>11/14/18
-  //-   p
-  //-     span.right <b>Start End: </b> None
-  //- .opportunity-detail-row
-  //-   p
-  //-     span.left <b>Price: </b> $11.99
-  //-   p
-  //-     span.right
-  //-       b On Menu/Display?:
-  //-       |  Y
-  //- .opportunity-detail-row
-  //-   p <b>Additional Notes: </b> When long text like these occurs then the row automatically sizes to fit the content in the middle. If it is even longer like this, then the extender will become auto scrollable
+    p <b>Opportunity Rationale: </b> {{ opportunityDetails?.rationale }}
+  .opportunity-detail-row(*ngIf="opportunityDetails?.featureType.featureTypeCode")
+    .brand-mandate(*ngIf="opportunityDetails?.featureType.featureTypeCode")
+      img.mandate-image(src="../../../assets/img/icons/status-featured.svg")
+    p <b> {{ opportunityDetails?.featureType.featureTypeDescription }}</b>
+  .opportunity-row-with-two-columns(*ngIf="opportunityDetails?.featureType.featurePeriodBeginDate")
+    p.left
+      <b>Start date: </b> {{ opportunityDetails?.featureType.featurePeriodBeginDate }}
+    p.right
+      <b>Start End: </b> {{ !!(opportunityDetails?.featureType.featurePeriodEndDate) ? opportunityDetails?.featureType.featurePeriodEndDate : 'None' }}
+  .opportunity-row-with-two-columns(*ngIf="opportunityDetails?.featureType.featureResetBeginDate")
+    p.left
+        <b>Reset date: </b> {{ opportunityDetails?.featureType.featureResetBeginDate }}
+    p.right
+          <b>Reset End: </b> {{ !!(opportunityDetails?.featureType.featureResetEndDate) ? opportunityDetails?.featureType.featureResetEndDate : 'None' }}
+  .opportunity-row-with-two-columns(*ngIf="opportunityDetails?.featureType.featurePrice")
+    p.left
+        <b>Price: </b> ${{ opportunityDetails?.featureType.featurePrice }}
+    p.right
+        b On Menu/Display?:
+        |  {{ !!(opportunityDetails?.featureType.featureIsOnMenu) ? opportunityDetails?.featureType.featureIsOnMenu : 'N' }}
+  .opportunity-detail-row(*ngIf="opportunityDetails?.featureType.featureNotes")
+    p <b>Additional Notes: </b> {{ opportunityDetails?.featureType.featureNotes }}
+  .opportunity-detail-row(*ngIf="opportunityDetails?.itemAuthorization.itemAuthorizationCode")
+    .brand-mandate(*ngIf="opportunityDetails?.itemAuthorization.itemAuthorizationCode")
+      img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
+    p <b>{{ opportunityDetails?.itemAuthorization.itemAuthorizationDescription }} </b>
+  .opportunity-row-with-two-columns(*ngIf="opportunityDetails?.itemAuthorization.itemAuthorizationPeriodBeginDate")
+    p.left
+      <b>Start date: </b>{{ opportunityDetails?.itemAuthorization.itemAuthorizationPeriodBeginDate }}
+    p.right
+      <b>Start End: </b> {{ !!(opportunityDetails?.itemAuthorization.itemAuthorizationPeriodEndDate) ? opportunityDetails.itemAuthorization.itemAuthorizationPeriodEndDate : 'None'  }}
+  .opportunity-row-with-two-columns(*ngIf="opportunityDetails?.itemAuthorization.itemAuthorizationResetBeginDate")
+    p.left <b>Reset date: </b> {{ opportunityDetails?.itemAuthorization.itemAuthorizationResetBeginDate  }}
+    p.right <b>Reset End: </b> {{ !!(opportunityDetails?.itemAuthorization.itemAuthorizationResetEndDate) ? opportunityDetails.itemAuthorization.itemAuthorizationResetEndDate : 'None' }}
+  .opportunity-row-with-two-columns(*ngIf="opportunityDetails?.itemAuthorization.itemAuthorizationPrice")
+    p.left <b>Price: </b> {{ opportunityDetails?.itemAuthorization.itemAuthorizationPrice }}
+    p.right
+        b On Menu/Display?:
+        |  {{ !!(opportunityDetails?.itemAuthorization.itemAuthorizationIsOnMenu) ? opportunityDetails?.itemAuthorization.itemAuthorizationIsOnMenu : 'N' }}
+  .opportunity-detail-row(*ngIf="opportunityDetails?.itemAuthorization.itemAuthorizationNotes")
+    p <b>Additional Notes: </b> {{ opportunityDetails?.itemAuthorization.itemAuthorizationNotes }}
 

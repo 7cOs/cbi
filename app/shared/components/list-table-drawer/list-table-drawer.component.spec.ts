@@ -89,6 +89,28 @@ describe('ListTableDrawerComponent', () => {
     });
   });
 
+  describe('[Method] getFlagClass', () => {
+    beforeEach(() => {
+      tableDataMock[1].itemAuthorization.itemAuthorizationCode = null;
+      tableDataMock[2].featureType.featureTypeCode = null;
+    });
+
+    it('should return flag-both as string to show flags when featureType and item authorization are applicable', () => {
+      const returnValue: string = componentInstance.getFlagClass(tableDataMock[0]);
+      expect(returnValue).toEqual('flag-both');
+    });
+
+    it('should return flag-featured as string to show flags when only featureType is applicable', () => {
+      const returnValue: string = componentInstance.getFlagClass(tableDataMock[1]);
+      expect(returnValue).toEqual('flag-featured');
+    });
+
+    it('should return flag-mandatory as string to show flags when only item authorization is applicable', () => {
+      const returnValue: string = componentInstance.getFlagClass(tableDataMock[2]);
+      expect(returnValue).toEqual('flag-mandatory');
+    });
+  });
+
   describe('output events', () => {
 
     describe('when the mat-checkbox outputs a change event and calls checkboxClicked', () => {

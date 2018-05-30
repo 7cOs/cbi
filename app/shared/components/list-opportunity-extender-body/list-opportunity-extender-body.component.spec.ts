@@ -1,4 +1,5 @@
 import * as Chance from 'chance';
+import { By } from '@angular/platform-browser';
 import {  ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -12,6 +13,9 @@ import { ListsState } from '../../../state/reducers/lists.reducer';
 import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { OpportunitiesByStore } from '../../../models/lists/opportunities-by-store.model';
 import { ListsOpportunities } from '../../../models/lists/lists-opportunities.model';
+import { DebugElement } from '@angular/core';
+import { getListOpportunityFeatureTypeMock } from '../../../models/lists/lists-opportunities-feature-type.model.mock';
+import { getListOpportunityItemAuthorizationMock } from '../../../models/lists/lists-opportunities-item-authorization.model.mock';
 
 const chance = new Chance();
 describe('Team Performance Opportunities Extender Body', () => {
@@ -159,6 +163,37 @@ describe('Team Performance Opportunities Extender Body', () => {
       const subTypeMock = expectedType(opportunityDetailsMock.type);
       expect(componentInstance.opportunityDetails).toBe(opportunityDetailsMock);
       expect(expectedType(componentInstance.opportunityType)).toBe(subTypeMock);
+    });
+  });
+
+  describe('Should display flags and fields as calculated', () => {
+    let allOppsMock: OpportunitiesByStore;
+    beforeEach(() => {
+      allOppsMock = stateMock.listsDetails.listOpportunities.opportunities;
+      const storeMockId = Object.keys(allOppsMock)[0];
+      componentInstance.unversionedStoreId = storeMockId;
+      componentInstance.opportunitySelected = allOppsMock[storeMockId][0].id;
+      fixture.detectChanges();
+    });
+
+    it('Should not display any flag if both feature and item authorization is not applicable to an Opportunity', () => {
+      allOppsMock[componentInstance.unversionedStoreId][0].featureType.featureTypeCode = null;
+      allOppsMock[componentInstance.unversionedStoreId][0].itemAuthorization.itemAuthorizationCode = null;
+      fixture.detectChanges();
+
+      const imageElement = fixture.debugElement.query(By.css('.mandate-image'));
+
+      expect(imageElement).toBe(null);
+    });
+
+    it('Should display both flags if both feature and item authorization is applicable to an Opportunity', () => {
+      const expectedNumber = 2;
+      allOppsMock[componentInstance.unversionedStoreId][0].featureType = getListOpportunityFeatureTypeMock();
+      allOppsMock[componentInstance.unversionedStoreId][0].itemAuthorization = getListOpportunityItemAuthorizationMock();
+      componentInstance.ngOnChanges();
+      fixture.detectChanges();
+      const imageElement: DebugElement[] = fixture.debugElement.queryAll(By.css('.mandate-image'));
+      expect(imageElement.length).toEqual(expectedNumber);
     });
   });
 });
