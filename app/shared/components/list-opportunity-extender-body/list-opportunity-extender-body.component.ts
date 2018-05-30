@@ -19,7 +19,7 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   @Input() opportunitySelected: string;
   @Input() unversionedStoreId: string;
 
-  public opportunityDetails?: ListsOpportunities;
+  public opportunityDetails: ListsOpportunities;
   public opportunityType: OpportunityTypeLabel | OpportunityType;
   public allOpps: OpportunitiesByStore;
   public skuDescription: string;
