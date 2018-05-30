@@ -476,7 +476,8 @@ describe('ListDetailComponent', () => {
     beforeEach(() => {
       manageModalOutputMock = {
         type: CompassManageListModalEvent.Save,
-        listSummary: getListsSummaryMock()
+        listSummary: getListsSummaryMock(),
+        selectedEmployeeId: chance.string()
       };
 
       storeMock.dispatch.calls.reset();
@@ -522,6 +523,19 @@ describe('ListDetailComponent', () => {
       expect(storeMock.dispatch.calls.count()).toBe(1);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.LeaveList({
         currentUserEmployeeId: componentInstance.currentUser.employeeId,
+        listSummary: manageModalOutputMock.listSummary
+      }));
+    });
+
+    it('should dispatch a TransferListOwnership action with the listSummary data and id of the selected collaborator when the'
+    + ' CompassManageListModalEvent type is Transfer_Ownership', () => {
+      manageModalOutputMock.type = CompassManageListModalEvent.Transfer_Ownership;
+
+      componentInstance.handleManageModalEvent(manageModalOutputMock);
+
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.TransferListOwnership({
+        newOwnerEmployeeId: manageModalOutputMock.selectedEmployeeId,
         listSummary: manageModalOutputMock.listSummary
       }));
     });

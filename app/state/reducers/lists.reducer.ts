@@ -284,6 +284,7 @@ export function listsReducer(
       });
 
     case ListsActions.PATCH_LIST:
+    case ListsActionTypes.TRANSFER_LIST_OWNERSHIP:
       return {
         allLists: state.allLists,
         copyStatus: state.copyStatus,

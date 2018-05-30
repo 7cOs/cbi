@@ -49,6 +49,11 @@ export interface LeaveListPayload {
   listSummary: ListsSummary;
 }
 
+export interface TransferOwnershipPayload {
+  newOwnerEmployeeId: string;
+  listSummary: ListsSummary;
+}
+
 export interface RemoveStoreFromListPayload {
   listId: string;
   storeSourceCode: string;
@@ -261,6 +266,12 @@ export class LeaveListError implements Action {
   readonly type = ListsActionTypes.LEAVE_LIST_ERROR;
 }
 
+export class TransferListOwnership implements Action {
+  readonly type = ListsActionTypes.TRANSFER_LIST_OWNERSHIP;
+
+  constructor(public payload: TransferOwnershipPayload) { }
+}
+
 export const DELETE_STORE_FROM_LIST = ListsActionTypes.DELETE_STORE_FROM_LIST;
 export class RemoveStoreFromList implements Action {
   readonly type = DELETE_STORE_FROM_LIST;
@@ -345,4 +356,5 @@ export type Action
   | RemoveOppFromListFailure
   | LeaveList
   | LeaveListSuccess
-  | LeaveListError;
+  | LeaveListError
+  | TransferListOwnership;

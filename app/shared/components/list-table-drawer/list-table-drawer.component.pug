@@ -44,5 +44,12 @@
           [ngClass]="{ 'positive': opportunity.yearAgo > 0, 'negative': opportunity.yearAgo < 0 }"
         ) {{ opportunity.yearAgo | number:'1.1-1' }}%
         td.depletion-date-column.centered(colspan=2) {{ opportunity.depletionDate }}
-        td.button-column.centered(colspan=1, (click)="actionButtonClicked(opportunity)")
+        //- Remove [compassDropdownDisabled] input when post MVP work begins on this.
+        td.button-column.centered(
+          colspan=1,
+          compassDropdown,
+          [compassDropdownData]="compassDropdownData",
+          [compassDropdownDisabled]="true",
+          (onCompassDropdownClicked)="onCompassDropdownClicked($event, opportunity)"
+        )
           img.action-button(src="../../../assets/img/icons/more.svg")
