@@ -2,7 +2,7 @@ package com.cbrands.test;
 
 import com.cbrands.helper.PropertiesCache;
 import com.cbrands.helper.SeleniumUtils;
-import com.cbrands.helper.WebDriverFactory;
+import com.cbrands.helper.driver.WebDriverManager;
 import com.cbrands.listener.SeleniumSnapshotRule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +26,7 @@ public abstract class BaseTestCase {
   protected void startUpBrowser(String testName) throws MalformedURLException {
     log.info("\n Browser opening...");
 
-    driver = WebDriverFactory.createDriver(testName);
+    driver = WebDriverManager.createDriver(testName);
     driver.get(webAppBaseUrl);
     driver.manage().window().maximize();
     SeleniumUtils.setDriver(driver);

@@ -413,14 +413,14 @@ describe('ListOpportunitiesTableComponent', () => {
         expect(tableRow.expanded).toBe(false);
       });
 
-      fixture.debugElement.query(By.css('.expand-all-column')).nativeElement.click();
+      fixture.debugElement.query(By.css('.expand-column')).nativeElement.click();
       fixture.detectChanges();
 
       opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {
         expect(tableRow.expanded).toBe(true);
       });
 
-      fixture.debugElement.query(By.css('.expand-all-column')).nativeElement.click();
+      fixture.debugElement.query(By.css('.expand-column')).nativeElement.click();
       fixture.detectChanges();
 
       opportunitiesTableData.forEach((tableRow: ListOpportunitiesTableRow) => {

@@ -92,7 +92,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public performanceTableTotal: ListPerformanceTableRow;
   public performanceTableData: ListPerformanceTableRow[];
   public opportunitiesTableDataSize: number;
-  public opportunitiesTableHeader: string[] = ['Store', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
+  public opportunitiesTableHeader: string[] = ['Stores', 'Distributor', 'Segment', 'Depletions', ' Opportunities', 'Last Depletion'];
   public currentUser: User;
   public opportunitiesTableData: ListOpportunitiesTableRow[];
   public performanceTableDataSize: number;
