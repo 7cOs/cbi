@@ -22,6 +22,10 @@ const getExpectedStoreAddress = (store: StoreDetails): string => {
   return `${ store.address } ${ store.city } ${ store.state }, ${ store.postalCode.slice(0, 5) }`;
 };
 
+const getExpectedStoreNumber = (store: StoreDetails): string => {
+  return store.number === 'UNKNOWN' ? '' : `#${ store.number}`;
+};
+
 describe('ListsTableTransformerService', () => {
   let testBed: TestBed;
   let listsTableTransformerService: ListsTableTransformerService;
@@ -92,7 +96,7 @@ describe('ListsTableTransformerService', () => {
             performanceError: false,
             checked: false,
             expanded: false,
-            storeNumber: storeDetailsMock[index].number,
+            storeNumber: getExpectedStoreNumber(storeDetailsMock[index]),
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
             unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
@@ -155,7 +159,7 @@ describe('ListsTableTransformerService', () => {
           performanceError: true,
           checked: false,
           expanded: false,
-          storeNumber: storeDetailsMock[0].number,
+          storeNumber: getExpectedStoreNumber(storeDetailsMock[0]),
           storeCity: storeDetailsMock[0].city,
           storeState: storeDetailsMock[0].state,
           unversionedStoreId: storeDetailsMock[0].unversionedStoreId,
@@ -228,7 +232,7 @@ describe('ListsTableTransformerService', () => {
             lastDepletionDateColumn: moment(volumeStorePerformanceMock[index].lastSoldDate).format('MM/DD/YY'),
             performanceError: false,
             checked: false,
-            storeNumber: storeDetailsMock[index].number,
+            storeNumber: getExpectedStoreNumber(storeDetailsMock[index]),
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
             unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
@@ -263,7 +267,7 @@ describe('ListsTableTransformerService', () => {
             lastDepletionDateColumn: '-',
             performanceError: true,
             checked: false,
-            storeNumber: storeDetailsMock[index].number,
+            storeNumber: getExpectedStoreNumber(storeDetailsMock[index]),
             storeCity: storeDetailsMock[index].city,
             storeState: storeDetailsMock[index].state,
             unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
