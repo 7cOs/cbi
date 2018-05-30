@@ -1,0 +1,18 @@
+@import '../../../assets/styles/base/variables';
+
+.compass-dropdown-component {
+  background-color: $white;
+  box-shadow: 0 0 10px $gray-2;
+
+  .compass-dropdown-option {
+    color: $gray-1;
+    font-family: $roboto;
+    font-size: 14px;
+    padding: 20px 110px 20px 20px;
+
+    &:hover {
+      background-color: $gray-4;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,6 +1,10 @@
 import * as Chance from 'chance';
 
-import { CopyOppsToListPayload, FetchListPerformancePayload, LeaveListPayload, RemoveStoreFromListPayload } from './lists.action';
+import { CopyOppsToListPayload,
+         FetchListPerformancePayload,
+         LeaveListPayload,
+         RemoveStoreFromListPayload,
+         TransferOwnershipPayload } from './lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListPerformanceMock } from '../../models/lists/list-performance.model.mock';
@@ -611,6 +615,19 @@ describe('Lists Actions', () => {
     it('should be the correct action type', () => {
       const action = new ListsActions.LeaveListError();
       expect(action.type).toBe(ListsActionTypes.LEAVE_LIST_ERROR);
+    });
+  });
+
+  describe('TransferListOwnership', () => {
+    it('should be the correct action type and contain its payload', () => {
+      const payloadMock: TransferOwnershipPayload = {
+        newOwnerEmployeeId: chance.string(),
+        listSummary: getListsSummaryMock()
+      };
+      const action = new ListsActions.TransferListOwnership(payloadMock);
+
+      expect(action.type).toBe(ListsActionTypes.TRANSFER_LIST_OWNERSHIP);
+      expect(action.payload).toEqual(payloadMock);
     });
   });
 });
