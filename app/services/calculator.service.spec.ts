@@ -19,10 +19,6 @@ describe('Service: CalculatorService', () => {
         calculatorService = _calculatorService;
     }));
 
-    beforeEach(() => {
-      spyOn(calculatorService, 'getYearAgoPercent').and.callThrough();
-    });
-
     it('should return 0 when total and totalYearAgo are 0', () => {
       total = 0;
       totalYearAgo = 0;
@@ -51,6 +47,46 @@ describe('Service: CalculatorService', () => {
       const yearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
       const expectedYearAgoPercent = -0;
       expect(yearAgoPercent).toEqual(expectedYearAgoPercent);
+    });
+
+    it('should retun 0 when either the passed in total or totalYearAgo values are null', () => {
+      total = null;
+      totalYearAgo = chance.floating();
+      let actualYearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
+
+      expect(actualYearAgoPercent).toBe(0);
+
+      total = chance.integer();
+      totalYearAgo = null;
+      actualYearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
+
+      expect(actualYearAgoPercent).toBe(0);
+
+      total = null;
+      totalYearAgo = null;
+      actualYearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
+
+      expect(actualYearAgoPercent).toBe(0);
+    });
+
+    it('should retun 0 when either the passed in total or totalYearAgo values are undefined', () => {
+      total = undefined;
+      totalYearAgo = chance.floating();
+      let actualYearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
+
+      expect(actualYearAgoPercent).toBe(0);
+
+      total = chance.integer();
+      totalYearAgo = undefined;
+      actualYearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
+
+      expect(actualYearAgoPercent).toBe(0);
+
+      total = undefined;
+      totalYearAgo = undefined;
+      actualYearAgoPercent = calculatorService.getYearAgoPercent(total, totalYearAgo);
+
+      expect(actualYearAgoPercent).toBe(0);
     });
   });
 });
