@@ -6,6 +6,8 @@ import { ListsOpportunities } from './lists-opportunities.model';
 import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-opportunity-impact.enum.mock';
 import { getOpportunityStatusMock } from '../../enums/list-opportunities/list-opportunity-status.enum.mock';
 import { getOpportunityTypeMock } from '../../enums/list-opportunities/list-opportunity-type.enum.mock';
+import { getListOpportunityFeatureTypeMock } from './lists-opportunities-feature-type.model.mock';
+import { getListOpportunityItemAuthorizationMock } from './lists-opportunities-item-authorization.model.mock';
 
 const chance = new Chance();
 
@@ -27,6 +29,8 @@ export function getListOpportunityMock(): ListsOpportunities {
     lastDepletionDate: moment().format('YYYYMMDD'),
     unversionedStoreId: chance.string(),
     isSimpleDistribution: chance.bool(),
-    rationale: chance.string()
+    rationale: chance.string(),
+    featureType: getListOpportunityFeatureTypeMock(),
+    itemAuthorization: getListOpportunityItemAuthorizationMock()
   };
 }

@@ -22,9 +22,10 @@
           )
         td.brand-column
           .brand-container
-            //- TODO: Update Mandate Markup Here Once We Get Data Back
-            //- .brand-mandate(*ngIf="opportunity.mandate")
-            //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
+            .brand-mandate([ngSwitch]="getFlagClass(opportunity)")
+              img.flag-image(*ngSwitchCase="'flag-both'", src="../../../assets/img/icons/status-both.svg")
+              img.flag-image(*ngSwitchCase="'flag-featured'", src="../../../assets/img/icons/status-featured.svg")
+              img.flag-image(*ngSwitchCase="'flag-mandatory'", src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column {{ opportunity.skuPackage }}
         td.type-column((click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
