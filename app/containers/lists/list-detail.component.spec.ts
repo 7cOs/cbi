@@ -2,6 +2,7 @@ import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { DecimalPipe, UpperCasePipe } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
@@ -10,26 +11,32 @@ import { Title } from '@angular/platform-browser';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { CalculatorService } from '../../services/calculator.service';
+import { CompassActionModalOutputs } from '../../models/compass-action-modal-outputs.model';
 import { CompassManageListModalEvent } from '../../enums/compass-manage-list-modal-event.enum';
 import { CompassManageListModalOutput }from '../../models/compass-manage-list-modal-output.model';
 import { CompassSelectComponent } from '../../shared/components/compass-select/compass-select.component';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { getListOpportunitiesTableRowMock } from '../../models/list-opportunities/list-opportunities-table-row.model.mock';
+import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 import { getListsSummaryMock } from '../../models/lists/lists-header.model.mock';
+import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
 import { ListBeverageType } from '../../enums/list-beverage-type.enum';
 import { ListDetailComponent, PageChangeData } from './list-detail.component';
 import { ListOpportunitiesTableRow } from '../../models/list-opportunities/list-opportunities-table-row.model';
 import { ListPerformanceTableRow } from '../../models/list-performance/list-performance-table-row.model';
 import { ListPerformanceType } from '../../enums/list-performance-type.enum';
 import * as ListsActions from '../../state/actions/lists.action';
+import { ListSelectionType } from '../../enums/lists/list-selection-type.enum';
 import { ListsState } from '../../state/reducers/lists.reducer';
+import { ListStoresDownloadCSV } from '../../models/lists/list-stores-download-csv.model';
+import { ListOpportunitiesDownloadCSV } from '../../models/lists/list-opportunities-download-csv.model';
 import { ListsTableTransformerService } from '../../services/transformers/lists-table-transformer.service';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { ListTableDrawerRow } from '../../models/lists/list-table-drawer-row.model';
+import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
-import { getListPerformanceTableRowMock } from '../../models/list-performance/list-performance-table-row.model.mock';
 
 const chance = new Chance();
 
@@ -45,7 +52,8 @@ class ListPerformanceTableComponentMock {
   @Input() totalRow: ListPerformanceTableRow;
   @Input() loadingState: boolean;
   @Input() sortReset: Event;
-  @Output() paginationReset = new EventEmitter();
+  @Input() paginationReset: Event;
+  @Output() onPaginationReset = new EventEmitter();
 }
 
 @Component({
@@ -60,7 +68,8 @@ class ListOpportunitiesTableComponentMock {
   @Input() loadingState: boolean;
   @Input() oppStatusSelected: OpportunityStatus;
   @Input() sortReset: Event;
-  @Output() paginationReset = new EventEmitter();
+  @Input() paginationReset: Event;
+  @Output() onPaginationReset = new EventEmitter();
 }
 
 @Component({
@@ -104,6 +113,13 @@ describe('ListDetailComponent', () => {
 
   let listDetailMock: ListsState = {
     manageListStatus: ActionStatus.NotFetched,
+    copyStatus: ActionStatus.NotFetched,
+    allLists: {
+      status: ActionStatus.NotFetched,
+      owned: [],
+      sharedWithMe: [],
+      archived: []
+    },
     listSummary: {
       summaryStatus: ActionStatus.NotFetched,
       summaryData: {
@@ -151,9 +167,14 @@ describe('ListDetailComponent', () => {
       title: chance.string()
     },
     params: {
-      id: chance.string()
+      id: chance.string(),
+      listId: chance.string()
     },
     go: jasmine.createSpy('go')
+  };
+
+  const toastServiceMock = {
+    showToast: jasmine.createSpy('showToast')
   };
 
   const storeMock = {
@@ -184,6 +205,8 @@ describe('ListDetailComponent', () => {
       ],
       providers: [
         CalculatorService,
+        DecimalPipe,
+        UpperCasePipe,
         ListsTableTransformerService,
         {
           provide: Title,
@@ -200,6 +223,10 @@ describe('ListDetailComponent', () => {
         {
           provide: 'userService',
           useValue: userMock
+        },
+        {
+          provide: 'toastService',
+          useValue: toastServiceMock
         }
       ],
       imports: [
@@ -240,9 +267,10 @@ describe('ListDetailComponent', () => {
 
     it('should dispatch actions for fetching stores, list headers, opportunities and list performance data', () => {
       storeMock.dispatch.calls.reset();
+      componentInstance.currentUser.employeeId = userMock.model.currentUser.employeeId;
       componentInstance.ngOnInit();
 
-      expect(storeMock.dispatch.calls.count()).toBe(5);
+      expect(storeMock.dispatch.calls.count()).toBe(6);
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new ListsActions.FetchStoreDetails({
         listId: stateMock.params.id
       }));
@@ -263,6 +291,9 @@ describe('ListDetailComponent', () => {
         performanceType: ListPerformanceType.POD,
         beverageType: ListBeverageType.Beer,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL
+      }));
+      expect(storeMock.dispatch.calls.argsFor(5)[0]).toEqual(new ListsActions.FetchLists({
+        currentUserEmployeeID: componentInstance.currentUser.employeeId
       }));
     });
   });
@@ -496,6 +527,98 @@ describe('ListDetailComponent', () => {
     });
   });
 
+  describe('[Method] modalDownloadClicked', () => {
+    let actionModalDownloadOutputMock: CompassActionModalOutputs;
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+    let performanceTableData: ListPerformanceTableRow[];
+    const storesOnlyDownloadColumns = 11;
+    const oppsDownloadColumns = 16;
+    let groupedOppsByStoreMock: OpportunitiesByStore = {};
+
+    beforeEach(() => {
+      opportunitiesTableData = getListOpportunitiesTableRowMock(10);
+      performanceTableData = getListPerformanceTableRowMock(10);
+
+      opportunitiesTableData.forEach((storeRow: ListOpportunitiesTableRow) => {
+        groupedOppsByStoreMock[storeRow.unversionedStoreId] = getListOpportunitiesMock();
+      });
+    });
+
+    it('should only have store related columns for Download when StoreOnly is selected', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListSelectionType.Stores,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Performance';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      expect(returnedValue.length).toEqual(performanceTableData.length);
+      returnedValue.forEach((storeRow: ListStoresDownloadCSV) => {
+        expect(Object.keys(storeRow).length).toEqual(storesOnlyDownloadColumns);
+      });
+    });
+
+    it('should have both stores and opps related columns for Download when Opportunities are selected', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListSelectionType.Opportunities,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Opportunities';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+
+      componentInstance.groupedOppsByStore = groupedOppsByStoreMock;
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      returnedValue.forEach((storeRow: ListOpportunitiesDownloadCSV) => {
+        expect(Object.keys(storeRow).length).toEqual(oppsDownloadColumns);
+      });
+    });
+
+    it('should have only closed status records for Download when filter selected is closed', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListSelectionType.Opportunities,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Opportunities';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      componentInstance.oppStatusSelected = OpportunityStatus.closed;
+      fixture.detectChanges();
+
+      componentInstance.groupedOppsByStore = groupedOppsByStoreMock;
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      returnedValue.forEach((storeRow: ListOpportunitiesDownloadCSV) => {
+        expect(storeRow.opportunityStatus.toLowerCase()).toEqual(OpportunityStatus.closed);
+      });
+    });
+
+    it('should have only targeted and inactive status records for Download when filter selected is targeted', () => {
+      actionModalDownloadOutputMock = {
+        radioOptionSelected: ListSelectionType.Opportunities,
+        dropdownOptionSelected: null
+      };
+      componentInstance.selectedTab = 'Opportunities';
+      componentInstance.performanceTableData = performanceTableData;
+      componentInstance.filteredOpportunitiesTableData = opportunitiesTableData;
+      componentInstance.oppStatusSelected = OpportunityStatus.targeted;
+      fixture.detectChanges();
+
+      componentInstance.groupedOppsByStore = groupedOppsByStoreMock;
+      const returnedValue = componentInstance.modalDownloadClicked(actionModalDownloadOutputMock);
+      expect(returnedValue).not.toBe(undefined);
+      returnedValue.forEach((storeRow: ListOpportunitiesDownloadCSV) => {
+        expect([OpportunityStatus.targeted, OpportunityStatus.inactive]).toMatch(storeRow.opportunityStatus.toLowerCase());
+      });
+    });
+  });
+
   describe('handleManageListStatus', () => {
 
     beforeEach(() => {
@@ -529,6 +652,114 @@ describe('ListDetailComponent', () => {
 
       componentInstance.handleManageListStatus(ActionStatus.Fetched);
       expect($state.go).toHaveBeenCalledWith('lists');
+    });
+  });
+
+  describe('CopyToLists', () => {
+
+    describe('Copy Opportunities To Lists', () => {
+      let opportunitiesTableData: ListOpportunitiesTableRow[];
+      let modalOutputMock: CompassActionModalOutputs, checkedEntitiesMock: { opportunityId: string }[];
+      beforeEach(() => {
+        modalOutputMock = {
+          radioOptionSelected: chance.string(),
+          dropdownOptionSelected: chance.string()
+        };
+        opportunitiesTableData = getListOpportunitiesTableRowMock(3);
+        opportunitiesTableData[0].opportunities[0].checked = true;
+        componentInstance.opportunitiesTableData = opportunitiesTableData;
+        checkedEntitiesMock = [{opportunityId: opportunitiesTableData[0].opportunities[0].id}];
+        componentInstance.selectedTab = componentInstance.opportunitiesTabTitle;
+        fixture.detectChanges();
+      });
+
+      it('should filter the checked opportunities and dispatch action for copy to List when handleCopyModalEvent is called', () => {
+        storeMock.dispatch.calls.reset();
+        componentInstance.handleCopyModalEvent(modalOutputMock, checkedEntitiesMock);
+
+        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new ListsActions.CopyOppsToList({
+            listId: modalOutputMock.dropdownOptionSelected,
+            ids: checkedEntitiesMock
+          }));
+      });
+    });
+
+    describe('Copy Stores To Lists', () => {
+      let performanceTableData: ListPerformanceTableRow[];
+      let modalOutputMock: CompassActionModalOutputs, checkedEntitiesMock: string[];
+      beforeEach(() => {
+        modalOutputMock = {
+          radioOptionSelected: chance.string(),
+          dropdownOptionSelected: chance.string()
+        };
+        testBed = getTestBed();
+        store = testBed.get(Store);
+        performanceTableData = getListPerformanceTableRowMock(3);
+        performanceTableData[0].checked = performanceTableData[1].checked = true;
+
+        componentInstance.performanceTableData = performanceTableData;
+        checkedEntitiesMock = [performanceTableData[0].unversionedStoreId, performanceTableData[1].unversionedStoreId];
+        componentInstance.selectedTab = componentInstance.performanceTabTitle;
+        fixture.detectChanges();
+      });
+
+      it('should filter the checked stores and dispatch action for copy to List when handleCopyModalEvent is called', () => {
+        storeMock.dispatch.calls.reset();
+        componentInstance.handleCopyModalEvent(modalOutputMock, checkedEntitiesMock);
+
+        expect(storeMock.dispatch.calls.count()).toBe(2);
+        expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+          new ListsActions.CopyStoresToList({
+            listId: modalOutputMock.dropdownOptionSelected,
+            id: performanceTableData[0].unversionedStoreId
+          }));
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(
+          new ListsActions.CopyStoresToList({
+            listId: modalOutputMock.dropdownOptionSelected,
+            id: performanceTableData[1].unversionedStoreId
+          }));
+      });
+    });
+
+  });
+
+  describe('[Method] removeSelectedOpportunities', () => {
+    let opportunitiesTableData: ListOpportunitiesTableRow[];
+    beforeEach(() => {
+      opportunitiesTableData = getListOpportunitiesTableRowMock(3);
+      opportunitiesTableData[0].opportunities[0].checked = true;
+      componentInstance.opportunitiesTableData = opportunitiesTableData;
+      fixture.detectChanges();
+    });
+    it('Should filter out all selected opportunities and call the removal action', () => {
+      storeMock.dispatch.calls.reset();
+      componentInstance.removeSelectedOpportunities();
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new ListsActions.RemoveOppFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
+          oppId: opportunitiesTableData[0].opportunities[0].id}));
+    });
+  });
+
+  describe('[Method] removeSelectedStores', () => {
+    let performanceTableData: ListPerformanceTableRow[];
+    beforeEach(() => {
+      performanceTableData = getListPerformanceTableRowMock(3);
+      performanceTableData[0].checked = true;
+      componentInstance.performanceTableData = performanceTableData;
+      fixture.detectChanges();
+      const selectorFunction = storeMock.select.calls.argsFor(0)[0];
+      expect(selectorFunction(stateMock)).toBe(stateMock.listsDetails);
+    });
+    it('Should filter out all selected Stores and call the removal action', () => {
+      storeMock.dispatch.calls.reset();
+      componentInstance.removeSelectedStores();
+      expect(storeMock.dispatch.calls.count()).toBe(1);
+      expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
+        new ListsActions.RemoveStoreFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
+          storeSourceCode: performanceTableData[0].unversionedStoreId }));
     });
   });
 });

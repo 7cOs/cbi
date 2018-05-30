@@ -12,6 +12,7 @@ import { getStoreListsDTOMock } from '../../../models/lists/lists-store-dto.mode
 import { getListPerformanceTypeMock } from '../../../enums/list-performance-type.enum.mock';
 import { getListOpportunitiesDTOMock } from '../../../models/lists/lists-opportunities-dto.model.mock';
 import { getFormattedNewList } from '../../../models/lists/lists.model.mock';
+import { generateRandomSizedArray } from '../../../models/util.model';
 import { ListsApiService } from './lists-api.service';
 import { ListBeverageType } from '../../../enums/list-beverage-type.enum';
 import { ListPerformanceDTO } from '../../../models/lists/list-performance-dto.model';
@@ -19,7 +20,6 @@ import { ListStoreDTO } from '../../../models/lists/lists-store-dto.model';
 import { ListPerformanceType } from '../../../enums/list-performance-type.enum';
 import { ListsSummaryDTO } from '../../../models/lists/lists-header-dto.model';
 import { ListOpportunityDTO } from '../../../models/lists/lists-opportunities-dto.model';
-import { generateRandomSizedArray } from '../../../models/util.model';
 
 describe('ListsApiService', () => {
   let testBed: TestBed;
@@ -27,6 +27,8 @@ describe('ListsApiService', () => {
   let listsApiService: ListsApiService;
 
   let listIdMock: string;
+  let unversionedStoreIdMock: string;
+  let oppIdMock: string;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,6 +41,8 @@ describe('ListsApiService', () => {
     listsApiService = testBed.get(ListsApiService);
 
     listIdMock = chance.string(chanceStringOptions);
+    unversionedStoreIdMock = chance.string(chanceStringOptions);
+    oppIdMock = chance.string(chanceStringOptions);
   });
 
   afterEach(() => {
@@ -79,10 +83,27 @@ describe('ListsApiService', () => {
   describe('addOpportunitiesToList', () => {
     it('should post a list of opportunities to the lists/:id/opportunities endpoint', () => {
       const listId = chance.string();
-      const body = generateRandomSizedArray(1, 1000).map(() => { return {opportunityId: chance.string()}; });
+      const body = generateRandomSizedArray(1, 20).map(() => { return {opportunityId: chance.string()}; });
       const expectedRequestUrl: string = `/v3/lists/${ listId }/opportunities`;
       const expectedResponse: any  = {};
       listsApiService.addOpportunitiesToList(listId, body).subscribe((response: any) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+      expect(req.request.method).toBe(ApiRequestType.POST);
+      expect(req.request.body).toBe(body);
+    });
+  });
+
+  describe('addStoresToList', () => {
+    it('should post a list of stores to the lists/:id/stores endpoint', () => {
+      const listId = chance.string();
+      const body = {storeSourceCode: chance.string()};
+      const expectedRequestUrl: string = `/v3/lists/${ listId }/stores`;
+      const expectedResponse: any  = {};
+      listsApiService.addStoresToList(listId, body).subscribe((response: any) => {
         expect(response).toEqual(expectedResponse);
       });
 
@@ -208,6 +229,40 @@ describe('ListsApiService', () => {
       listsApiService.deleteList(listIdMock).subscribe((response: { status: string }) => {
         expect(response).toBe(expectedResponse);
       });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+
+      expect(req.request.method).toBe(ApiRequestType.DELETE);
+    });
+  });
+
+  describe('removeStoreFromList', () => {
+    it('should do a DELETE call on the lists endpoint with the given listId and store code', () => {
+      const expectedRequestUrl: string = `/v3/lists/${ listIdMock }/stores/${ unversionedStoreIdMock }`;
+      const expectedResponse: { status: number } = { status: chance.integer() };
+
+      listsApiService.removeStoreFromList(listIdMock, unversionedStoreIdMock)
+        .subscribe((response: { status: number }) => {
+          expect(response).toBe(expectedResponse);
+        });
+
+      const req: TestRequest = http.expectOne(expectedRequestUrl);
+      req.flush(expectedResponse);
+
+      expect(req.request.method).toBe(ApiRequestType.DELETE);
+    });
+  });
+
+  describe('removeOppFromList', () => {
+    it('should do a DELETE call on the lists endpoint with the given listId and opportunityId', () => {
+      const expectedRequestUrl: string = `/v3/lists/${ listIdMock }/opportunities/${ oppIdMock  }`;
+      const expectedResponse: { status: number } = { status: chance.integer() };
+
+      listsApiService.removeOpportunityFromList(listIdMock, oppIdMock)
+        .subscribe((response: { status: number }) => {
+          expect(response).toBe(expectedResponse);
+        });
 
       const req: TestRequest = http.expectOne(expectedRequestUrl);
       req.flush(expectedResponse);

@@ -19,7 +19,7 @@ import { SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL, PERFORMANCE_TOTAL_ROW_NAME } from
 import { StoreDetails } from '../../models/lists/lists-store.model';
 
 const getExpectedStoreAddress = (store: StoreDetails): string => {
-  return `${ store.address } ${ store.city } ${ store.state } ${ store.postalCode }`;
+  return `${ store.address } ${ store.city } ${ store.state }, ${ store.postalCode.slice(0, 5) }`;
 };
 
 describe('ListsTableTransformerService', () => {
@@ -48,6 +48,9 @@ describe('ListsTableTransformerService', () => {
     beforeEach(() => {
       storeDetailsMock = getStoreListsMock();
       volumeStorePerformanceMock = Array(storeDetailsMock.length).fill(getListStorePerformanceMock());
+      storeDetailsMock.forEach((store: StoreDetails) => {
+        store.beerDistributors[0].isPrimary = true;
+      });
     });
 
     describe('when stores have Volume performance data and Opportunities', () => {
@@ -89,7 +92,12 @@ describe('ListsTableTransformerService', () => {
             performanceError: false,
             checked: false,
             expanded: false,
-            unversionedStoreId: storeDetailsMock[index].unversionedStoreId
+            storeNumber: storeDetailsMock[index].number,
+            storeCity: storeDetailsMock[index].city,
+            storeState: storeDetailsMock[index].state,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
+            distributorCustomerCode: storeDetailsMock[index].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[index].beerDistributors[0].salespersonName
           });
 
           row.opportunities.forEach((opportunityRow: ListTableDrawerRow, rowIndex: number) => {
@@ -122,6 +130,9 @@ describe('ListsTableTransformerService', () => {
         opportunitiesByStoreMock = {
           [storeDetailsMock[0].unversionedStoreId]: getListOpportunitiesMock()
         };
+        storeDetailsMock.forEach((store: StoreDetails) => {
+          store.beerDistributors[0].isPrimary = true;
+        });
       });
 
       it('should return a ListOpportunitiesTableRow only if a store has opportunities and `0` values for performance fields, `-`'
@@ -145,7 +156,12 @@ describe('ListsTableTransformerService', () => {
           performanceError: true,
           checked: false,
           expanded: false,
-          unversionedStoreId: storeDetailsMock[0].unversionedStoreId
+          storeNumber: storeDetailsMock[0].number,
+          storeCity: storeDetailsMock[0].city,
+          storeState: storeDetailsMock[0].state,
+          unversionedStoreId: storeDetailsMock[0].unversionedStoreId,
+          distributorCustomerCode: storeDetailsMock[0].beerDistributors[0].distributorCustomerCode,
+          distributorSalesperson: storeDetailsMock[0].beerDistributors[0].salespersonName
         });
       });
     });
@@ -160,6 +176,9 @@ describe('ListsTableTransformerService', () => {
       storeDetailsMock = getStoreListsMock();
       volumeStorePerformanceMock = Array(storeDetailsMock.length).fill(getListStorePerformanceMock());
       podStorePerformanceMock = Array(storeDetailsMock.length).fill(getListStorePerformanceMock());
+      storeDetailsMock.forEach((store: StoreDetails) => {
+        store.beerDistributors[0].isPrimary = true;
+      });
     });
 
     describe('when each store has Volume and POD performance data', () => {
@@ -209,7 +228,13 @@ describe('ListsTableTransformerService', () => {
             ),
             lastDepletionDateColumn: moment(volumeStorePerformanceMock[index].lastSoldDate).format('MM/DD/YY'),
             performanceError: false,
-            checked: false
+            checked: false,
+            storeNumber: storeDetailsMock[index].number,
+            storeCity: storeDetailsMock[index].city,
+            storeState: storeDetailsMock[index].state,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
+            distributorCustomerCode: storeDetailsMock[index].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[index].beerDistributors[0].salespersonName
           });
         });
       });
@@ -238,7 +263,13 @@ describe('ListsTableTransformerService', () => {
             l90VersusYaPercentColumn: 0,
             lastDepletionDateColumn: '-',
             performanceError: true,
-            checked: false
+            checked: false,
+            storeNumber: storeDetailsMock[index].number,
+            storeCity: storeDetailsMock[index].city,
+            storeState: storeDetailsMock[index].state,
+            unversionedStoreId: storeDetailsMock[index].unversionedStoreId,
+            distributorCustomerCode: storeDetailsMock[index].beerDistributors[0].distributorCustomerCode,
+            distributorSalesperson: storeDetailsMock[index].beerDistributors[0].salespersonName
           });
         });
       });
@@ -273,7 +304,13 @@ describe('ListsTableTransformerService', () => {
         l90VersusYaPercentColumn: calculatorService.getYearAgoPercent(podPerformanceMock.current, podPerformanceMock.yearAgo),
         lastDepletionDateColumn: '',
         performanceError: false,
-        checked: false
+        checked: false,
+        storeNumber: '',
+        storeCity: '',
+        storeState: '',
+        unversionedStoreId: '',
+        distributorCustomerCode: '',
+        distributorSalesperson: ''
       });
     });
   });

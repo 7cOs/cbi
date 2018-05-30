@@ -22,7 +22,7 @@ export class ListTableDrawerComponent {
   public opportunityImpact: any = OpportunityImpact;
   public opportunityStatus: any = OpportunityStatus;
   public sortedTableData: ListTableDrawerRow[];
-  public closedStatusTooltip = {
+  public inactiveStatusTooltip = {
     title: 'Inactive Status',
     text: [
       'This opportunity recommendation is no longer supported by data analytics (see Compass user guide for more details).',

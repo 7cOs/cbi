@@ -1,11 +1,10 @@
-beer-loader(*ngIf="showManageListLoader", [showLoader]="showManageListLoader")
+beer-loader(*ngIf="copyToListLoader || showManageListLoader", [showLoader]="copyToListLoader || showManageListLoader")
 
 lists-header(
   [summaryData]="listSummary",
   (manageButtonClicked)="handleManageButtonClick()",
   (listsLinkClicked)="handleListsLinkClick()"
 )
-
 compass-tabs(
   (onTabClicked)="onTabClicked($event)"
 )
@@ -21,9 +20,20 @@ compass-tabs(
         [distributionsVsYA]="performanceTableTotal?.l90VersusYaPercentColumn"
       )
       div.button-section
+        compass-action-button(
+          [actionLabel]="actionButtonType.CopyToList",
+          [isDisabled]="!isPerformanceRowSelect",
+          (onActionButtonClicked)="copyToListClick()"
+        )
         compass-action-button.action-button-spacing(
+          [isDisabled]="!isPerformanceTabDataFetched",
           [actionLabel]="actionButtonType.Download",
           (onActionButtonClicked)="downloadActionButtonClicked($event)"
+        )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Remove",
+          [isDisabled]="!isPerformanceRowSelect",
+          (onActionButtonClicked)="captureRemoveButtonClicked()"
         )
     list-performance-table(
       [tableHeaderRow]="performanceTableHeader",
@@ -32,10 +42,13 @@ compass-tabs(
       [tableData]="performanceTableData",
       [pageChangeData]="pageChangeData",
       [sortReset]="sortReset",
-      (paginationReset)="handlePaginationReset()"
+      [paginationReset]='paginationReset',
+      (onPaginationReset)="handlePaginationReset()",
+      (onRowChecked)='setPerformanceRowSelected($event)',
+      (onSelectAllChecked)='setSelectAllPerformance($event)'
     )
   compass-tab([tabTitle]='opportunitiesTabTitle')
-    .list-action-section
+    section.list-action-section
       .opps-dropdown
         compass-select(
           [model]="oppStatusSelected",
@@ -44,10 +57,21 @@ compass-tabs(
           (onOptionSelected)="opportunityStatusSelected($event)"
         )
       div.button-section
+        compass-action-button(
+          [actionLabel]="actionButtonType.CopyToList",
+          [isDisabled]="!isOpportunityRowSelect",
+          (onActionButtonClicked)="copyToListClick()"
+        )
         compass-action-button.action-button-spacing(
-            [actionLabel]="actionButtonType.Download",
-            (onActionButtonClicked)="downloadActionButtonClicked($event)"
-          )
+          [isDisabled]="!isOppsTabDataFetched",
+          [actionLabel]="actionButtonType.Download",
+          (onActionButtonClicked)="downloadActionButtonClicked($event)"
+        )
+        compass-action-button.action-button-spacing(
+          [actionLabel]="actionButtonType.Remove",
+          [isDisabled]="!isOpportunityRowSelect",
+          (onActionButtonClicked)="captureRemoveButtonClicked()"
+        )
     list-opportunities-table(
       [tableHeaderRow]="opportunitiesTableHeader",
       [sortingCriteria]="opportunitiesSortingCriteria",
@@ -55,7 +79,10 @@ compass-tabs(
       [pageChangeData]="pageChangeData",
       [oppStatusSelected]="oppStatusSelected",
       [sortReset]="sortReset",
-      (paginationReset)="handlePaginationReset()"
+      [paginationReset]='paginationReset',
+      (onPaginationReset)="handlePaginationReset()",
+      (onRowChecked)='setOpportunityRowSelected($event)',
+      (onSelectAllChecked)='setSelectAllOpportunity($event)'
     )
 
 lists-pagination(

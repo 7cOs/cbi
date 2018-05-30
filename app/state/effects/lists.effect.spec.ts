@@ -4,12 +4,12 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 
+import { CopyToListToastType } from '../../enums/lists/copy-to-list-toast-type.enum';
+import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
 import { FetchHeaderDetailsPayload,
          FetchOppsForListPayload,
          FetchListPerformancePayload,
-         FetchStoreDetailsPayload,
-         LeaveListPayload } from '../actions/lists.action';
-import { FormattedNewList } from '../../models/lists/formatted-new-list.model';
+         FetchStoreDetailsPayload, LeaveListPayload, CopyStoresToListPayload, CopyOppsToListPayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getFormattedNewListMock } from '../../models/lists/formatted-new-list.model.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
@@ -57,12 +57,22 @@ describe('Lists Effects', () => {
   let listPerformanceMock: ListPerformance;
   let patchListPayloadMock: ListsSummaryDTO;
   let formattedListMock: FormattedNewList;
+  let removeStoreFromListMock: ListActions.RemoveStoreFromListPayload;
+  let removeOppFromListMock: ListActions.RemoveOppFromListPayload;
 
   const toastServiceMock = {
-    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast')
+    showListDetailToast: jasmine.createSpy('showListDetailToast'),
+    showListDetailManageActionToast: jasmine.createSpy('showListDetailManageActionToast'),
+    showToast: jasmine.createSpy('showToast')
   };
 
   const listsApiServiceMock = {
+    addStoresToList(listId: string, stores: {storeSourceCode: string}): Observable<object> {
+      return Observable.of({});
+    },
+    addOpportunitiesToList(listId: string, opps: [{opportunityId: string}]): Observable<object> {
+      return Observable.of({});
+    },
     deleteList(listId: string): Observable<object> {
       return Observable.of({});
     },
@@ -80,6 +90,12 @@ describe('Lists Effects', () => {
     },
     updateList(formattedMock: FormattedNewList, listId: string): Observable<ListsSummaryDTO> {
       return Observable.of(patchListPayloadMock);
+    },
+    removeStoreFromList(listId: string, storeSourceCode: string): Observable<any> {
+      return Observable.of(removeStoreFromListMock);
+    },
+    removeOpportunityFromList(listId: string, oppId: string): Observable<any> {
+      return Observable.of(removeOppFromListMock);
     }
   };
 
@@ -117,6 +133,10 @@ describe('Lists Effects', () => {
           useValue: listsApiServiceMock
         },
         {
+          provide: 'toastService',
+          useValue: toastServiceMock
+        },
+        {
           provide: ListsTransformerService,
           useValue: listsTransformerServiceMock
         },
@@ -141,7 +161,7 @@ describe('Lists Effects', () => {
   });
 
   afterEach(() => {
-    toastServiceMock.showListDetailManageActionToast.calls.reset();
+    toastServiceMock.showListDetailToast.calls.reset();
   });
 
   describe('when a FetchStoreDetails actions is received', () => {
@@ -153,6 +173,10 @@ describe('Lists Effects', () => {
       };
 
       actions$.next(new ListActions.FetchStoreDetails(actionPayloadMock));
+    });
+
+    afterEach(() => {
+      toastServiceMock.showListDetailToast.calls.reset();
     });
 
     describe('when everything returns successfully', () => {
@@ -226,6 +250,101 @@ describe('Lists Effects', () => {
           expect(response).toEqual(new ListActions.FetchHeaderDetailsFailure(errorMock));
           done();
         });
+      });
+    });
+  });
+
+  describe('when an action of type COPY_STORES_TO_LIST is received', () => {
+    let actionPayloadMock: CopyStoresToListPayload;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        listId: chance.string(),
+        id: chance.string()
+      };
+
+      actions$.next(new ListActions.CopyStoresToList(actionPayloadMock));
+    });
+
+    it('should reach out to the listsApiService and call addStoresToList given the passed in action payload', (done) => {
+      spyOn(listsApiService, 'addStoresToList').and.callThrough();
+
+      listsEffects.copyStoresToList$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.addStoresToList).toHaveBeenCalledWith(actionPayloadMock.listId, {storeSourceCode: actionPayloadMock.id});
+    });
+
+    describe('when the addStoresToList api call is successful', () => {
+      it('should show an copyStoresToList success toast and dispatch an copyStoresToListSuccess action', (done) => {
+        listsEffects.copyStoresToList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.CopyStoresToListSuccess);
+          done();
+        });
+
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyStores);
+      });
+    });
+
+    describe('when the addStoresToList api call fails', () => {
+      it('should show an copyStoresToList error toast and dispatch an copyStoresToListError action', (done) => {
+        spyOn(listsApiService, 'addStoresToList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.copyStoresToList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.CopyStoresToListError);
+          done();
+        });
+
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyStoresError);
+      });
+    });
+  });
+
+  describe('when an action of type COPY_OPPS_TO_LIST is received', () => {
+    let actionPayloadMock: CopyOppsToListPayload;
+    let idMock = [{opportunityId: chance.string()}, {opportunityId: chance.string()}] ;
+
+    beforeEach(() => {
+      actionPayloadMock = {
+        listId: chance.string(),
+        ids: idMock
+      };
+
+      actions$.next(new ListActions.CopyOppsToList(actionPayloadMock));
+    });
+
+    it('should reach out to the listsApiService and call addOpportunitiesToList given the passed in action payload', (done) => {
+      spyOn(listsApiService, 'addOpportunitiesToList').and.callThrough();
+
+      listsEffects.copyOppsToList$().subscribe(() => {
+        done();
+      });
+
+      expect(listsApiService.addOpportunitiesToList).toHaveBeenCalledWith(actionPayloadMock.listId, actionPayloadMock.ids);
+    });
+
+    describe('when the addOpportunitiesToList api call is successful', () => {
+      it('should show an copyOppsToList success toast and dispatch an copyOppsToListSuccess action', (done) => {
+        listsEffects.copyOppsToList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.CopyOppsToListSuccess);
+          done();
+        });
+
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyOpps);
+      });
+    });
+
+    describe('when the addOpportunitiesToList api call fails', () => {
+      it('should show an copyOppsToList error toast and dispatch an copyOppsToListError action', (done) => {
+        spyOn(listsApiService, 'addOpportunitiesToList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.copyOppsToList$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.CopyOppsToListError);
+          done();
+        });
+
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(CopyToListToastType.CopyOppsError);
       });
     });
   });
@@ -430,6 +549,87 @@ describe('Lists Effects', () => {
       });
     });
   });
+  describe('when a removeStoreFromList actions is received', () => {
+    let actionListPayloadMock: ListActions.RemoveStoreFromListPayload = {
+      listId: chance.string(),
+      storeSourceCode: chance.string()
+    };
+    beforeEach(() => {
+      actions$.next(new ListActions.RemoveStoreFromList(actionListPayloadMock));
+    });
+
+    describe('when everything returns successfully', () => {
+      it('should call removeStoreFromList from the ListsService given the passed in action payload', (done) => {
+        const updateListSpy = spyOn(listsApiService, 'removeStoreFromList').and.returnValue(Observable.of(actionListPayloadMock));
+        listsEffects.removeStoreFromList$().subscribe(() => {
+          done();
+        });
+        expect(updateListSpy.calls.count()).toBe(1);
+        expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.storeSourceCode);
+        expect(toastService.showToast).toHaveBeenCalledWith('storeRemoved');
+      });
+
+      it('should dispatch a removeStoreFromListSuccess action with the returned transformed data', (done) => {
+        listsEffects.removeStoreFromList$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.RemoveStoreFromListSuccess(actionListPayloadMock));
+          done();
+        });
+      });
+    });
+
+    describe('when an error is returned from removeStoreFromListSuccess', () => {
+      it('should dispatch a RemoveStoreFromListFailure action with the error', (done) => {
+        spyOn(listsApiService, 'removeStoreFromList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.removeStoreFromList$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.RemoveStoreFromListFailure(errorMock));
+          expect(toastService.showToast).toHaveBeenCalledWith('storeRemovedFailure');
+          done();
+        });
+      });
+    });
+  });
+  describe('when a removeOppFromList actions is received', () => {
+    let actionListPayloadMock: ListActions.RemoveOppFromListPayload = {
+      listId: chance.string(),
+      oppId: chance.string()
+    };
+    beforeEach(() => {
+      actions$.next(new ListActions.RemoveOppFromList(actionListPayloadMock));
+    });
+
+    describe('when everything returns successfully', () => {
+      it('should call removeOpportunityFromList from the ListsService given the passed in action payload', (done) => {
+        const updateListSpy = spyOn(listsApiService, 'removeOpportunityFromList').and.returnValue(Observable.of(actionListPayloadMock));
+        listsEffects.removeOppFromList$().subscribe(() => {
+          done();
+        });
+        expect(updateListSpy.calls.count()).toBe(1);
+        expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.oppId);
+        expect(toastService.showToast).toHaveBeenCalledWith('oppRemoved');
+
+      });
+
+      it('should dispatch a removeOppFromListSuccess action with the returned transformed data', (done) => {
+        listsEffects.removeOppFromList$().subscribe((action: Action) => {
+          expect(action).toEqual(new ListActions.RemoveOppFromListSuccess(actionListPayloadMock));
+          done();
+        });
+      });
+    });
+
+    describe('when an error is returned from removeOppFromListSuccess', () => {
+      it('should dispatch a RemoveOppFromListFailure action with the error', (done) => {
+        spyOn(listsApiService, 'removeOpportunityFromList').and.returnValue(Observable.throw(errorMock));
+
+        listsEffects.removeOppFromList$().subscribe((response) => {
+          expect(response).toEqual(new ListActions.RemoveOppFromListFailure(errorMock));
+          expect(toastService.showToast).toHaveBeenCalledWith('oppRemovedFailure');
+          done();
+        });
+      });
+    });
+  });
 
   describe('when an action of type ARCHIVE_LIST is recevied', () => {
     let actionPayloadMock: ListsSummary;
@@ -472,7 +672,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Archive);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Archive);
       });
     });
 
@@ -485,7 +685,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.ArchiveError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.ArchiveError);
       });
     });
   });
@@ -516,7 +716,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Delete);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Delete);
       });
     });
 
@@ -529,7 +729,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.DeleteError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.DeleteError);
       });
     });
   });
@@ -585,7 +785,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
       });
     });
 
@@ -598,7 +798,7 @@ describe('Lists Effects', () => {
           done();
         });
 
-        expect(toastService.showListDetailManageActionToast).toHaveBeenCalledWith(ListManageActionToastType.LeaveError);
+        expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.LeaveError);
       });
     });
   });

@@ -6,11 +6,7 @@ import { CompassActionModalOverlayRef } from './compass-action-modal.overlayref'
 import { COMPASS_ACTION_MODAL_INPUTS } from '../../components/compass-action-modal/compass-action-modal.tokens';
 import { CompassActionModalEvent } from '../../../enums/compass-action-modal-event.enum';
 import { DropdownInputModel } from '../../../models/compass-dropdown-input.model';
-import { ListsDownloadType } from '../../../enums/lists/list-download-type.enum';
 import { RadioInputModel } from '../../../models/compass-radio-input.model';
-
-// just for example - remove this when working with real data
-import { listOpportunityStatusOptions } from '../../../models/list-opportunities/list-opportunity-status-options.model';
 
 const ESCKEY = 27;
 
@@ -23,29 +19,29 @@ const ESCKEY = 27;
 export class CompassActionModalComponent implements OnInit {
   @Output() buttonContainerEvent = new EventEmitter<CompassActionModalOutputs>();
 
-  public modalOverlayRef: CompassActionModalOverlayRef;
   public compassActionModalEvent = CompassActionModalEvent;
-  public radioInputModel: RadioInputModel;
   public dropdownInputModel: DropdownInputModel;
-  public radioOptionSelected: string;
   public dropdownOptionSelected: string;
+  public isAcceptEnabled: boolean = false;
+  public modalOverlayRef: CompassActionModalOverlayRef;
+  public radioInputModel: RadioInputModel;
+  public radioOptionSelected: string;
+  public isCopyButtonEnabled: boolean = false;
 
   constructor(
     @Inject(COMPASS_ACTION_MODAL_INPUTS) public modalInputs: CompassActionModalInputs
   ) { }
 
   ngOnInit() {
-    this.radioOptionSelected = ListsDownloadType.Stores;
-    this.dropdownOptionSelected = 'All';
     this.radioInputModel = this.modalInputs.radioInputModel ? this.modalInputs.radioInputModel : null;
-    // this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
-
-    // just for example - remove all this logic and uncomment the above line when sending real data
-    this.dropdownInputModel = {
-      selected: 'All',
-      dropdownOptions: listOpportunityStatusOptions,
-      title: 'List'
-    };
+    this.dropdownInputModel = this.modalInputs.dropdownInputModel ? this.modalInputs.dropdownInputModel : null;
+    if (this.radioInputModel) {
+      this.radioOptionSelected = this.radioInputModel.selected;
+    }
+    if (this.dropdownInputModel) {
+      this.dropdownOptionSelected = this.dropdownInputModel.selected;
+    }
+    this.isAcceptEnabled = this.getActionButtonEnabled();
   }
 
   @HostListener('document:keydown', ['$event']) public handleKeydown(event: KeyboardEvent) {
@@ -62,6 +58,7 @@ export class CompassActionModalComponent implements OnInit {
 
   public onDropdownSelected(optionSelected: string): void {
     this.dropdownOptionSelected = optionSelected;
+    this.isAcceptEnabled = this.getActionButtonEnabled();
   }
 
   public optionsSelected() {
@@ -76,5 +73,15 @@ export class CompassActionModalComponent implements OnInit {
     if (this.modalOverlayRef) {
       this.modalOverlayRef.closeModal();
     }
+  }
+
+  private getActionButtonEnabled(): boolean {
+    return ( this.radioInputModel
+        && this.radioOptionSelected
+        && !this.dropdownInputModel )
+      ||
+        ( this.dropdownInputModel
+        && this.dropdownInputModel.dropdownOptions.length
+        && this.dropdownOptionSelected !== this.dropdownInputModel.dropdownOptions[0].value);
   }
 }
