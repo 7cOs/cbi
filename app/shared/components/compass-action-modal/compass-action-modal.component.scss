@@ -103,5 +103,11 @@
     width: 115px;
     border-radius: 5px;
     border-bottom: none;
+
+    &[disabled] {
+      color: $gray-8;
+      background-color: $gray-10;
+      border-bottom: 4px solid $gray-11;
+    }
   }
 }

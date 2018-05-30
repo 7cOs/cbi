@@ -223,11 +223,6 @@ module.exports = /*  @ngInject */
       var selectedItems = vm.selected;
 
       const deleteTargetListPromises = selectedItems.map(function (targetList) {
-        analyticsService.trackEvent(
-          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
-          'Delete List',
-          'Selected List'
-        );
 
         return listsApiService.deleteListPromise(targetList.id);
       });
@@ -239,6 +234,12 @@ module.exports = /*  @ngInject */
             userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(item), 1);
           }
           userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
+          const listPermissionLevel = userService.model.currentUser.employeeID === item.owner.employeeId ? 'author' : '';
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(listPermissionLevel, item.archived),
+            'Delete List',
+            'Selected List'
+          );
         });
       }).then(() => {
         vm.selected = [];
