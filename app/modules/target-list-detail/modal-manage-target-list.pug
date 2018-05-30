@@ -40,8 +40,6 @@ div.modal.target-list-modal
               a.chevron-down
             md-menu-content.collaborator-options
               md-menu-item(ng-click="tld.removeCollaborator([pending.employee.employeeId])") Remove
-    div(ng-hide="tld.targetListService.model.currentList.permissionLevel !== 'author'").modal-input.clearfix
-      md-checkbox(ng-model="tld.targetListService.model.currentList.collaboratorPermissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changePermissionClick()") Allow Collaborators to invite others
     div(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate' || tld.closeButton").modal-input
       label(ng-if="tld.targetListService.model.currentList.permissionLevel === 'author'") Add Collaborators
       label(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'") Add Recipient

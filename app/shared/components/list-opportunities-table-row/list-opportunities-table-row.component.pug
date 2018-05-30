@@ -1,4 +1,4 @@
-td.checkbox-col(colspan=1)
+td.checkbox-col
   mat-checkbox(
     *ngIf="rowData.storeColumn != 'Total'",
     aria-label="Select Store",
@@ -7,34 +7,24 @@ td.checkbox-col(colspan=1)
     (change)="toggleChecked($event)"
   )
 
-td.left-col.link(colspan=1, (click)="tableCellClicked()")
-  div.left-col-content
-    div.left-col-text-content
-      div.description-line-0.store-name
-        span {{ rowData.storeColumn | titlecase }}
+td.store-column((click)="tableCellClicked()")
+  .store-name {{ rowData.storeColumn | titlecase}}
         span &nbsp;{{ rowData.storeNumber }}
-      div.description-line-1
-        span.description-line-1 {{rowData.storeAddressSubline}}
+  .store-address {{ rowData.storeAddressSubline }}
 
-td.left-col.link(colspan=1, (click)="tableCellClicked()")
-  div.left-col-content
-    div.left-col-text-content
-      div.description-line-0
-        span.description-line-0 {{rowData.distributorColumn}}
+td.distributor-column((click)="tableCellClicked()") {{ rowData.distributorColumn }}
 
-td.segment-col.link(colspan=1, (click)="tableCellClicked()")
-  div.left-col-content
-    div.left-col-text-content
-      div.description-line-0
-        span {{rowData.segmentColumn}}
+td.segment-col((click)="tableCellClicked()") {{ rowData.segmentColumn }}
 
-td.center-col.table-font.link(colspan=1, (click)="tableCellClicked()") {{rowData.cytdColumn | number:'1.0-0'}}
+td.depletions-cytd-col((click)="tableCellClicked()") {{rowData.cytdColumn | number:'1.0-0'}}
 
-td.center-col.link(colspan=1, (click)="tableCellClicked()")
-  span.table-font([ngClass]="getTrendClass(rowData.cytdVersusYaPercentColumn)") {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
+td.depletions-vsya-col(
+  [ngClass]="getTrendClass(rowData.cytdVersusYaPercentColumn)",
+  (click)="tableCellClicked()"
+) {{rowData.cytdVersusYaPercentColumn | number:'1.1-1'}}%
 
-td.right-col.table-font.link(colspan=1, (click)="tableCellClicked()") {{rowData.opportunitiesColumn | number}}
+td.opportunities-col((click)="tableCellClicked()") {{rowData.opportunitiesColumn | number}}
 
-td.expand-col.link(colspan=1, (click)="tableCellClicked()")
+td.expand-column((click)="tableCellClicked()")
   img.expand-icon(*ngIf="rowData.expanded", src="../../../assets/img/icons/minus.svg")
   img.expand-icon(*ngIf="!rowData.expanded", src="../../../assets/img/icons/add-expand-collapse.svg")
