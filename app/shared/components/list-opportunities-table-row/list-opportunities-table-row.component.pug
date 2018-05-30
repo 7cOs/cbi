@@ -9,7 +9,7 @@ td.checkbox-col
 
 td.store-column((click)="tableCellClicked()")
   .store-name {{ rowData.storeColumn | titlecase}}
-    span(*ngIf="rowData.storeNumber") &nbsp;&#35;{{ rowData.storeNumber }}
+        span &nbsp;{{ rowData.storeNumber }}
   .store-address {{ rowData.storeAddressSubline }}
 
 td.distributor-column((click)="tableCellClicked()") {{ rowData.distributorColumn }}
