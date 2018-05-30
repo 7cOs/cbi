@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { CompassDropdownData } from '../../../models/compass-dropdown-data.model';
 import { FormatOpportunitiesTypePipe } from '../../../pipes/formatOpportunitiesType.pipe';
 import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { OpportunityImpact } from '../../../enums/list-opportunities/list-opportunity-impact.enum';
@@ -29,6 +30,12 @@ export class ListTableDrawerComponent {
     text: [
       'This opportunity recommendation is no longer supported by data analytics (see Compass user guide for more details).',
       'Consider removing this opportunity from your list to ensure your list stays actionable and relevant.'
+    ]
+  };
+  public compassDropdownData: CompassDropdownData = {
+    data: [
+      { display: 'Send To', value: 'SEND'},
+      { display: 'Dismiss', value: 'DISMISS' }
     ]
   };
 

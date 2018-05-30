@@ -1,7 +1,11 @@
 import * as Chance from 'chance';
 
 import { ActionStatus } from '../../enums/action-status.enum';
-import { CopyOppsToListPayload, CopyStoresToListPayload, FetchListPerformancePayload, LeaveListPayload } from '../actions/lists.action';
+import { CopyOppsToListPayload,
+         CopyStoresToListPayload,
+         FetchListPerformancePayload,
+         LeaveListPayload,
+         TransferOwnershipPayload } from '../actions/lists.action';
 import { getDateRangeTimePeriodValueMock } from '../../enums/date-range-time-period.enum.mock';
 import { getListBeverageTypeMock } from '../../enums/list-beverage-type.enum.mock';
 import { getListOpportunitiesMock } from '../../models/lists/lists-opportunities.model.mock';
@@ -633,6 +637,30 @@ describe('Lists Reducer', () => {
         initialState,
         new ListsActions.LeaveListError()
       );
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('when a TransferListOwnership action is received', () => {
+    it('should update the listSummary summaryStatus to an ActionStatus of Fetching', () => {
+      const actionPayloadMock: TransferOwnershipPayload = {
+        newOwnerEmployeeId: chance.string(),
+        listSummary: getListsSummaryMock()
+      };
+      const expectedState: ListsState = {
+        manageListStatus: initialState.manageListStatus,
+        listStores:  initialState.listStores,
+        copyStatus: initialState.copyStatus,
+        allLists: initialState.allLists,
+        listSummary: {
+          summaryStatus: ActionStatus.Fetching,
+          summaryData: initialState.listSummary.summaryData
+        },
+        listOpportunities: initialState.listOpportunities,
+        performance: initialState.performance
+      };
+      const actualState = listsReducer(initialState, new ListsActions.TransferListOwnership(actionPayloadMock));
 
       expect(actualState).toEqual(expectedState);
     });

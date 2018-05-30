@@ -1,0 +1,7 @@
+.compass-dropdown-component(
+  [style.width]="dropdownStyles?.width"
+)
+  .compass-dropdown-option(
+    *ngFor="let dropdownItem of dropdownItems",
+    (click)="dropdownItemClicked(dropdownItem.value)"
+  ) {{ dropdownItem.display }}

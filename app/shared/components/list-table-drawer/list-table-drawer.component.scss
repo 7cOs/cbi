@@ -1,5 +1,15 @@
 @import '../../../assets/styles/base/variables';
 
+$checkbox-column-width: 5%;
+$ie-11-checkbox-column-width: 4.9%;
+$brand-column-width: 15%;
+$sku-package-column-width: 20%;
+$depletions-current-column-width: 7.6%;
+$ie-11-depletions-current-column-width: 7.5%;
+$depletions-year-ago-column-width: 7.5%;
+$depletions-data-column-width: 15%;
+$action-button-column-width: 5%;
+
 .list-table-drawer-component {
 
   .list-table-drawer {
@@ -49,7 +59,7 @@
           padding-bottom: 15px;
           padding-left: 17px;
           padding-top: 15px;
-          width: 5%;
+          width: $checkbox-column-width;
 
           /deep/.mat-checkbox-frame {
             border-color: $cancel-blue;
@@ -59,7 +69,7 @@
         .brand-column {
           padding-left: 10px;
           padding-top: 0;
-          width: 15%;
+          width: $brand-column-width;
 
           .brand-container {
             display: inline-block;
@@ -82,7 +92,7 @@
         }
 
         .sku-package-column {
-          width: 20%;
+          width: $sku-package-column-width;
         }
 
         .type-column {
@@ -110,22 +120,22 @@
 
         .current-column {
           border-left: 1px solid $table-border-gray;
-          width: 7.6%;
+          width: $depletions-current-column-width;
         }
 
         .year-ago-column {
           border-right: 1px solid $table-border-gray;
-          width: 7.5%;
+          width: $depletions-year-ago-column-width;
         }
 
         .depletion-date-column {
           border-right: 1px solid $table-border-gray;
-          width: 15%;
+          width: $depletions-data-column-width;
         }
 
         .button-column {
           cursor: pointer;
-          width: 5%;
+          width: $action-button-column-width;
 
           .action-button {
             width: 20px;
@@ -146,11 +156,11 @@
   .list-table-drawer-row {
 
     .checkbox-column {
-      width: 4.9%!important;
+      width: $ie-11-checkbox-column-width!important;
     }
 
     .current-column {
-      width: 7.5%!important;
+      width: $ie-11-depletions-current-column-width!important;
     }
   }
 }
