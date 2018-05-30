@@ -37,6 +37,7 @@ import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { SharedModule } from '../../shared/shared.module';
 import { SortingCriteria } from '../../models/my-performance-table-sorting-criteria.model';
+import { AnalyticsService } from '../../services/analytics.service';
 
 const chance = new Chance();
 
@@ -193,6 +194,8 @@ describe('ListDetailComponent', () => {
     }
   };
 
+  const analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -227,6 +230,10 @@ describe('ListDetailComponent', () => {
         {
           provide: 'toastService',
           useValue: toastServiceMock
+        },
+        {
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
         }
       ],
       imports: [
@@ -402,6 +409,8 @@ describe('ListDetailComponent', () => {
       expect(componentInstance.activeTab).toBe('Opportunities');
       expect(componentInstance.paginationReset.next).toHaveBeenCalled();
       expect(componentInstance.sortReset.next).toHaveBeenCalled();
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'View Opportunities', componentInstance.listSummary.id);
     });
   });
 
@@ -774,6 +783,40 @@ describe('ListDetailComponent', () => {
       expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(
         new ListsActions.RemoveStoreFromList({listId: stateMock.listsDetails.listSummary.summaryData.id,
           storeSourceCode: performanceTableData[0].unversionedStoreId }));
+    });
+  });
+
+  describe('[Method] fireTabSelectedGAEvent', () => {
+    it('Should call track event with opportunity tab title and list id', () => {
+      componentInstance.fireTabSelectedGAEvent(componentInstance.opportunitiesTabTitle);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'View Opportunities', componentInstance.listSummary.id);
+    });
+    it('Should call track event with performance tab title and list id', () => {
+      componentInstance.fireTabSelectedGAEvent(componentInstance.performanceTabTitle);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'View Performance', componentInstance.listSummary.id);
+    });
+  });
+
+  describe('[Method] fireOpportunityStatusGAEvent', () => {
+    const oppStats = chance.string();
+    it('Should call track event with opportunity filtered', () => {
+      componentInstance.fireOpportunityStatusGAEvent(oppStats);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'Filter Opportunities', oppStats);
+    });
+  });
+  describe('[Method] fireDownloadCSVGAEvent', () => {
+    it('Should call track event with download stores', () => {
+      componentInstance.fireDownloadCSVGAEvent(ListSelectionType.Stores);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'Download Stores', 'Opportunities Result Set');
+    });
+    it('Should call track event with download stores and opps', () => {
+      componentInstance.fireDownloadCSVGAEvent(ListSelectionType.Opportunities);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'Download Stores and Opportunities', 'Opportunities Result Set');
     });
   });
 });
