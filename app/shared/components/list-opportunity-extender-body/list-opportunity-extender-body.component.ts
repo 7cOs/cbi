@@ -47,7 +47,6 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   }
 
   setExtenderBodyFields(allOpps: OpportunitiesByStore) {
-    console.log(allOpps);
     if (allOpps) {
       this.opportunityDetails = allOpps[this.unversionedStoreId] ?
                                   allOpps[this.unversionedStoreId].find((el: ListsOpportunities) => {
@@ -59,7 +58,6 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
 
         // delete these - just for testing
       }
-      console.log(this.opportunityDetails);
     }
   }
 

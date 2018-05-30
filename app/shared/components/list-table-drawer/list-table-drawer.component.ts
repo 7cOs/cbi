@@ -43,6 +43,16 @@ export class ListTableDrawerComponent {
     console.log('ACTION BUTTON CLICKED', opportunityRow);
   }
 
+  public getFlagClass(opportunity: ListTableDrawerRow): string {
+    return opportunity.featureType.featureTypeCode && opportunity.itemAuthorization.itemAuthorizationCode
+      ? 'flag-both'
+      : opportunity.featureType.featureTypeCode
+        ? 'flag-featured'
+        : opportunity.itemAuthorization.itemAuthorizationCode
+          ? 'flag-mandatory'
+          : '';
+  }
+
   private sortTableData(row1: ListTableDrawerRow, row2: ListTableDrawerRow): number {
     if (row1.impact === row2.impact) {
       return row1.brand.localeCompare(row2.brand);

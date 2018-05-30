@@ -57,38 +57,3 @@
     width: 25px;
   }
 }
-
-
-.flag-both,
-.flag-green,
-.flag-yellow {
-  &:before {
-    background-position: 0 0;
-    background-repeat: no-repeat;
-    background-size: 30%;
-    content: '';
-    height: 45px;
-    position: absolute;
-    width: (100% / 12);
-    top: 0;
-    left: 2%;
-  }
-}
-
-.flag-both {
-  &:before {
-    background-image: url('../../../assets/img/icons/status-both.svg');
-  }
-}
-
-.flag-green {
-  &:before {
-    background-image: url('../../../assets/img/icons/status-featured.svg');
-  }
-}
-
-.flag-yellow {
-  &:before {
-    background-image: url('../../../assets/img/icons/status-mandatory.svg');
-  }
-}

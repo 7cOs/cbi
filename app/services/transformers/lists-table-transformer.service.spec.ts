@@ -107,7 +107,9 @@ describe('ListsTableTransformerService', () => {
                 matchedOpportunities[rowIndex].currentDepletions_CYTD,
                 matchedOpportunities[rowIndex].yearAgoDepletions_CYTD),
               depletionDate: moment(matchedOpportunities[rowIndex].lastDepletionDate).format('MM/DD/YY'),
-              checked: false
+              checked: false,
+              featureType: matchedOpportunities[rowIndex].featureType,
+              itemAuthorization: matchedOpportunities[rowIndex].itemAuthorization
             });
           });
         });

@@ -28,17 +28,10 @@
           )
         td.brand-column(colspan=1)
           .brand-container
-            .brand-mandate(*ngIf="opportunity.featureType.featureTypeCode && opportunity.itemAuthorization.itemAuthorizationCode")
-              img.mandate-image(src="../../../assets/img/icons/status-both.svg")
-            .brand-mandate(*ngIf="opportunity.featureType.featureTypeCode")
-              img.mandate-image(src="../../../assets/img/icons/status-featured.svg")
-            .brand-mandate(*ngIf="opportunity.itemAuthorization.itemAuthorizationCode")
-              img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
-            //- img([ngClass]="{
-            //-   'flag-both': opportunity.featureType.featureTypeCode && opportunity.itemAuthorization.itemAuthorizationCode,
-            //-   'flag-yellow': opportunity.featureType.featureTypeCode,
-            //-   'flag-green': opportunity.itemAuthorization.itemAuthorizationCode
-            //- }")
+            .brand-mandate([ngSwitch]="getFlagClass(opportunity)")
+              img.flag-image(*ngSwitchCase="'flag-both'", src="../../../assets/img/icons/status-both.svg")
+              img.flag-image(*ngSwitchCase="'flag-featured'", src="../../../assets/img/icons/status-featured.svg")
+              img.flag-image(*ngSwitchCase="'flag-mandatory'", src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column(colspan=1) {{ opportunity.skuPackage }}
         td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
