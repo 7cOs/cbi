@@ -491,6 +491,9 @@ describe('Lists Effects', () => {
         });
         expect(updateListSpy.calls.count()).toBe(1);
         expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.id);
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+          'Lists - My Lists', 'Edit List Properties', actionListPayloadMock.id
+        );
       });
 
       it('should dispatch a patchListSuccess action with the returned transformed data', (done) => {
@@ -654,6 +657,9 @@ describe('Lists Effects', () => {
       });
 
       expect(listsTransformerService.convertCollaborators).toHaveBeenCalledWith(actionPayloadMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - My Lists', 'Archive List', actionPayloadMock.id
+      );
     });
 
     it('should reach out to the listsApiService and call updateList with the FormattedNewList having archived set to true and'
@@ -713,6 +719,9 @@ describe('Lists Effects', () => {
       });
 
       expect(listsApiService.deleteList).toHaveBeenCalledWith(actionPayloadMock);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - My Lists', 'Delete List', actionPayloadMock
+      );
     });
 
     describe('when the deleteList api call is successful', () => {
@@ -763,6 +772,9 @@ describe('Lists Effects', () => {
         actionPayloadMock.currentUserEmployeeId,
         actionPayloadMock.listSummary
       );
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Lists - Shared With Me', 'Leave List', actionPayloadMock.listSummary.id
+      );
     });
 
     it('should reach out to the listsApiService and call updateList with the leave list payload and'
@@ -782,6 +794,7 @@ describe('Lists Effects', () => {
       });
 
       expect(listsApiService.updateList).toHaveBeenCalledWith(expectedUpdateListPayload, actionPayloadMock.listSummary.id);
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledTimes(9);
     });
 
     describe('when the updateList api call is successful', () => {
@@ -792,6 +805,8 @@ describe('Lists Effects', () => {
         });
 
         expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
+        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledTimes(10);
+
       });
     });
 
