@@ -50,6 +50,16 @@ export class ListTableDrawerComponent {
     console.log('ACTION BUTTON CLICKED', opportunityRow);
   }
 
+  public getFlagClass(opportunityRow: ListTableDrawerRow): string {
+    return opportunityRow.featureType.featureTypeCode && opportunityRow.itemAuthorization.itemAuthorizationCode
+      ? 'flag-both'
+      : opportunityRow.featureType.featureTypeCode
+        ? 'flag-featured'
+        : opportunityRow.itemAuthorization.itemAuthorizationCode
+          ? 'flag-mandatory'
+          : '';
+  }
+
   public onCompassDropdownClicked(dropdownValue: string, opportunity: ListTableDrawerRow): void {
     console.log('onCompassDropdownClicked: ', dropdownValue, opportunity);
   }

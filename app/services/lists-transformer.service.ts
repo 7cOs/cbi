@@ -230,7 +230,29 @@ export class ListsTransformerService {
       status: OpportunityStatus[listOpportunity.status] || listOpportunity.status,
       impact: OpportunityImpact[listOpportunity.impact] || listOpportunity.impact,
       isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity,
-      rationale: listOpportunity.rationale
+      rationale: listOpportunity.rationale,
+      featureType: {
+        featureTypeCode: listOpportunity.featureTypeCode,
+        featureTypeDescription: listOpportunity.featureTypeDescription,
+        featurePeriodBeginDate: listOpportunity.featurePeriodBeginDate,
+        featurePeriodEndDate: listOpportunity.featurePeriodEndDate,
+        featureResetBeginDate: listOpportunity.featureResetBeginDate,
+        featureResetEndDate: listOpportunity.featureResetEndDate,
+        featurePrice: listOpportunity.featurePrice,
+        featureIsOnMenu: listOpportunity.featureIsOnMenu,
+        featureNotes: listOpportunity.featureNotes
+      },
+      itemAuthorization: {
+        itemAuthorizationCode: listOpportunity.itemAuthorizationCode,
+        itemAuthorizationDescription: listOpportunity.itemAuthorizationDescription,
+        itemAuthorizationPeriodBeginDate: listOpportunity.itemAuthorizationPeriodBeginDate,
+        itemAuthorizationPeriodEndDate: listOpportunity.itemAuthorizationPeriodEndDate,
+        itemAuthorizationResetBeginDate: listOpportunity.itemAuthorizationResetBeginDate,
+        itemAuthorizationResetEndDate: listOpportunity.itemAuthorizationResetEndDate,
+        itemAuthorizationPrice: listOpportunity.itemAuthorizationPrice,
+        itemAuthorizationIsOnMenu: listOpportunity.itemAuthorizationIsOnMenu,
+        itemAuthorizationNotes: listOpportunity.itemAuthorizationNotes
+      }
     };
   }
 

@@ -134,7 +134,9 @@ export class ListsTableTransformerService {
         current: opportunity.currentDepletions_CYTD || 0,
         yearAgo: this.calculatorService.getYearAgoPercent(opportunity.currentDepletions_CYTD, opportunity.yearAgoDepletions_CYTD),
         depletionDate: opportunity.lastDepletionDate ? moment(opportunity.lastDepletionDate).format('MM/DD/YY') : '-',
-        checked: false
+        checked: false,
+        featureType: opportunity.featureType,
+        itemAuthorization: opportunity.itemAuthorization
       };
     });
   }

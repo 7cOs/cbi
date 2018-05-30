@@ -23,6 +23,10 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   public opportunityType: OpportunityTypeLabel | OpportunityType;
   public allOpps: OpportunitiesByStore;
   public skuDescription: string;
+
+  public featureTypeCode: string;
+  public itemAuthorizationCode: string;
+
   private listDetailSubscription: Subscription;
 
   constructor(private store: Store<AppState>) {

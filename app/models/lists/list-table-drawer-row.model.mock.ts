@@ -6,6 +6,8 @@ import { getOpportunityImpactMock } from '../../enums/list-opportunities/list-op
 import { getOpportunityStatusMock } from '../../enums/list-opportunities/list-opportunity-status.enum.mock';
 import { getOpportunityTypeLabelMock } from '../../enums/list-opportunities/list-opportunity-type-label.enum.mock';
 import { ListTableDrawerRow } from './list-table-drawer-row.model';
+import { getListOpportunityFeatureTypeMock } from './lists-opportunities-feature-type.model.mock';
+import { getListOpportunityItemAuthorizationMock } from './lists-opportunities-item-authorization.model.mock';
 
 const chance = new Chance();
 
@@ -20,7 +22,9 @@ export function getListTableDrawerRowMock(): ListTableDrawerRow {
     current: chance.floating(),
     yearAgo: chance.floating(),
     depletionDate: moment().format('MMDDYY'),
-    checked: false
+    checked: false,
+    featureType: getListOpportunityFeatureTypeMock(),
+    itemAuthorization: getListOpportunityItemAuthorizationMock()
   };
 }
 
