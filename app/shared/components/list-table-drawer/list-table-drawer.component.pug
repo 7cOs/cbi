@@ -41,7 +41,7 @@
           img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low-small.svg")
         td.current-column.centered {{ opportunity.current | number:'1.0-0' }}
         td.year-ago-column.centered(
-          [ngClass]="{ 'positive': opportunity.yearAgo > 0, 'negative': opportunity.yearAgo < 0 }"
+          [ngClass]="{ 'positive': opportunity.yearAgo >= 0, 'negative': opportunity.yearAgo < 0 }"
         ) {{ opportunity.yearAgo | number:'1.1-1' }}%
         td.depletion-date-column.centered(colspan=2) {{ opportunity.depletionDate }}
         //- Remove [compassDropdownDisabled] input when post MVP work begins on this.
