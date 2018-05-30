@@ -43,12 +43,12 @@ export class ListTableDrawerComponent {
     console.log('ACTION BUTTON CLICKED', opportunityRow);
   }
 
-  public getFlagClass(opportunity: ListTableDrawerRow): string {
-    return opportunity.featureType.featureTypeCode && opportunity.itemAuthorization.itemAuthorizationCode
+  public getFlagClass(opportunityRow: ListTableDrawerRow): string {
+    return opportunityRow.featureType.featureTypeCode && opportunityRow.itemAuthorization.itemAuthorizationCode
       ? 'flag-both'
-      : opportunity.featureType.featureTypeCode
+      : opportunityRow.featureType.featureTypeCode
         ? 'flag-featured'
-        : opportunity.itemAuthorization.itemAuthorizationCode
+        : opportunityRow.itemAuthorization.itemAuthorizationCode
           ? 'flag-mandatory'
           : '';
   }

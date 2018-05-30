@@ -31,6 +31,6 @@ export function getListOpportunityMock(): ListsOpportunities {
     isSimpleDistribution: chance.bool(),
     rationale: chance.string(),
     featureType: getListOpportunityFeatureTypeMock(),
-  itemAuthorization: getListOpportunityItemAuthorizationMock()
+    itemAuthorization: getListOpportunityItemAuthorizationMock()
   };
 }

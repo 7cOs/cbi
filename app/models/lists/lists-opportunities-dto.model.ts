@@ -1,8 +1,6 @@
 import { OpportunityImpact } from '../../enums/list-opportunities/list-opportunity-impact.enum';
 import { OpportunityStatus } from '../../enums/list-opportunities/list-opportunity-status.enum';
 import { OpportunityType } from '../../enums/list-opportunities/list-opportunity-type.enum';
-import { OpportunityFeatureType } from './lists-opportunities-feature-type.model';
-import { OpportunityItemAuthorization } from './lists-opportunities-item-authorization.model';
 
 export interface ListOpportunityDTO {
     brandCode: string;

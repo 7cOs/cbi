@@ -38,8 +38,6 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
       .subscribe((listDetail: ListsState)  => {
           this.allOpps = listDetail.listOpportunities.opportunities;
       });
-     this.featureTypeCode = 'asds';
-     this.itemAuthorizationCode = 'asdf';
   }
 
   ngOnChanges() {
@@ -52,11 +50,10 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
                                   allOpps[this.unversionedStoreId].find((el: ListsOpportunities) => {
                                     return el.id === this.opportunitySelected;
                                   }) : null;
+      console.log(this.opportunityDetails);
       if (this.opportunityDetails) {
         this.opportunityType =  OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type;
         this.skuDescription =  this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
-
-        // delete these - just for testing
       }
     }
   }
