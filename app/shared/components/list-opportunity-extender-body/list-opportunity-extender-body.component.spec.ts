@@ -10,7 +10,6 @@ import { AppState } from '../../../state/reducers/root.reducer';
 import { getOpportunitiesByStoreMock } from '../../../models/lists/opportunities-by-store.model.mock';
 import { ListOpportunityExtenderBodyComponent } from './list-opportunity-extender-body.component';
 import { ListsState } from '../../../state/reducers/lists.reducer';
-import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { OpportunitiesByStore } from '../../../models/lists/opportunities-by-store.model';
 import { ListsOpportunities } from '../../../models/lists/lists-opportunities.model';
 import { DebugElement } from '@angular/core';
