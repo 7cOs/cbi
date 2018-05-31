@@ -58,6 +58,7 @@ export class ListTableDrawerComponent {
     } else {
       return opportunityRow.type;
     }
+  }
 
   public getFlagClass(opportunityRow: ListTableDrawerRow): string {
     return opportunityRow.featureType.featureTypeCode && opportunityRow.itemAuthorization.itemAuthorizationCode
