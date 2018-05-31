@@ -244,6 +244,9 @@ module.exports = /*  @ngInject */
       }).then(() => {
         vm.selected = [];
         toastService.showToast('deleted', selectedItems);
+      }).catch(() => {
+        vm.selected = [];
+        toastService.showToast('deletedArchivedListError');
       });
     }
 

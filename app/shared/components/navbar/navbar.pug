@@ -15,7 +15,7 @@
 .toast-header.success(ng-show="nb.listDetailLeft") List has been left successfully.
 .toast-header.success(ng-show="nb.listDetailEdited") List has been successfully updated.
 .toast-header.success(ng-show="nb.listDetailTransferOwnership") List ownership has been successfully transferred.
-.toast-header(ng-show="nb.unarchivedNoAuthor") We couldn't unarchive some of the lists selected because you're not the owner of the list<span ng-if="nb.multipleTargetListsSelected">s</span>
+.toast-header(ng-show="nb.unarchivedNoAuthor") Sorry, you cannot unarchive a list that has been shared with you.
 .toast-header(ng-show="nb.copyStoreToListError") An error occurred while copying the stores to the list. Please try again.
 .toast-header(ng-show="nb.copyOppsToListError") An error occurred while copying opportunities to the list. Please try again.
 .toast-header(ng-show="nb.deleteError") Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.
@@ -29,6 +29,7 @@
 .toast-header(ng-show="nb.listDetailLeftError") An error occured while leaving the list. Please try again.
 .toast-header(ng-show="nb.listDetailEditedError") An error occured while trying to update the list. Please try again.
 .toast-header(ng-show="nb.listDetailTransferOwnershipError") There was an error transferring the ownership of this list. Please try again.
+.toast-header(ng-show="nb.deletedArchivedListError") Sorry, you cannot delete a list that has been shared with you.
 
 div.outer-nav-wrapper
   div.inner-nav-wrapper(container)

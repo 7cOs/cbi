@@ -30,7 +30,8 @@ module.exports = /*  @ngInject */
       storeRemoved: false,
       oppRemoved: false,
       storeRemovedError: false,
-      oppRemovedError: false
+      oppRemovedError: false,
+      deletedArchivedListError: false
     };
 
     var service = {

@@ -137,6 +137,7 @@ module.exports = /*  @ngInject */
       vm.listDetailTransferOwnershipError = newWatchValues.listDetailTransferOwnershipError;
       vm.storeRemovedError = newWatchValues.storeRemovedError;
       vm.oppRemovedError = newWatchValues.oppRemovedError;
+      vm.deletedArchivedListError = newWatchValues.deletedArchivedListError;
     }, true);
 
     init();
