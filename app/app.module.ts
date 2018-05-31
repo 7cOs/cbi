@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, forwardRef } from '@angular/core';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
@@ -10,6 +10,7 @@ import { AnalyticsEventDirective } from './directives/analytics-event.directive'
 import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
 import { CalculatorService } from './services/calculator.service';
+import { CompassHttpInterceptorService } from './services/compass-http-interceptor.service';
 import { DateRangeApiService } from './services/api/v3/date-range-api.service';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
@@ -76,7 +77,12 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     DateRangeService,
     DateRangeTransformerService,
     GoogleAnalyticsTrackerService,
-    OpportunitiesSearchHandoffService
+    OpportunitiesSearchHandoffService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CompassHttpInterceptorService,
+      multi: true
+    }
   ]
 })
 export class AppModule {
