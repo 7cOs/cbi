@@ -247,8 +247,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   public copyToListClick(): void {
-    const ownedAndSharedList: V3List[] = this.allLists.owned.concat(this.allLists.sharedWithMe);
-    const listDropDownMenu: DropDownMenu[] = ownedAndSharedList.map((list: V3List) => {
+    const ownedAndSharedLists: V3List[] = this.allLists.owned.concat(this.allLists.sharedWithMe);
+    const sortedActiveOwnedAndSharedLists: V3List[] = this.sortAndFilterActiveLists(ownedAndSharedLists);
+    const listDropDownMenu: DropDownMenu[] = sortedActiveOwnedAndSharedLists.map((list: V3List) => {
       return {
         display: list.name,
         value: list.id
@@ -707,5 +708,19 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       };
       const csvObj = new Angular5Csv(csvDownloadData, csvTitle, options);
       csvObj.fileName = csvTitle;
+  }
+
+  private sortAndFilterActiveLists(lists: V3List[]) {
+    const sortByUpdatedOn = (listA: V3List, listB: V3List): number => {
+      return listA.updatedOn < listB.updatedOn
+        ? 1
+        : listA.updatedOn > listB.updatedOn
+          ? -1
+          : 0;
+    };
+
+    return lists
+      .filter((list: V3List) => !list.deleted && !list.archived)
+      .sort(sortByUpdatedOn);
   }
 }

@@ -1315,7 +1315,7 @@ module.exports = /*  @ngInject */
 
     function sortAndFilterActiveLists(lists) {
       return lists
-        .filter((list) => !list.deleted)
+        .filter((list) => !list.deleted && !list.archived)
         .sort(sortListsByRecentlyUpdated);
     }
 
