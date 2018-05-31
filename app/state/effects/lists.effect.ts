@@ -301,6 +301,7 @@ export class ListsEffects {
           .map((response: ListsSummaryDTO) => {
             const transformedData: ListsSummary = this.listsTransformerService.formatListsSummaryData(response);
             this.toastService.showListDetailToast(ListManageActionToastType.TransferOwnership);
+            this.analyticsService.trackEvent('Lists - My Lists', 'Transfer Ownership', `${ action.payload.listSummary.id }`);
 
             return new ListActions.PatchListSuccess(transformedData);
           })

@@ -4,6 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 
+import { AnalyticsService } from '../../services/analytics.service';
 import { CopyOppsToListPayload,
          CopyStoresToListPayload,
          FetchHeaderDetailsPayload,
@@ -38,16 +39,16 @@ import { ListsSummaryDTO } from '../../models/lists/lists-header-dto.model';
 import { ListsSummary } from '../../models/lists/lists-header.model';
 import { OpportunitiesByStore } from '../../models/lists/opportunities-by-store.model';
 import { StoreDetails } from '../../models/lists/lists-store.model';
-import { AnalyticsService } from '../../services/analytics.service';
 
 const chance = new Chance();
 
 describe('Lists Effects', () => {
   let testBed: TestBed;
   let listsEffects: ListsEffects;
+  let actions$: Subject<ListActions.Action>;
   let listsApiService: ListsApiService;
   let toastService: any;
-  let actions$: Subject<ListActions.Action>;
+  let analyticsService: any;
 
   let errorMock: Error;
   let listsTransformerService: ListsTransformerService;
@@ -69,7 +70,9 @@ describe('Lists Effects', () => {
     showListDetailToast: jasmine.createSpy('showListDetailToast'),
     showToast: jasmine.createSpy('showToast')
   };
-  const analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
+  const analyticsServiceMock = {
+    trackEvent: jasmine.createSpy('trackEvent')
+  };
 
   const listsApiServiceMock = {
     addStoresToList(listId: string, stores: {storeSourceCode: string}): Observable<object> {
@@ -146,10 +149,6 @@ describe('Lists Effects', () => {
           useValue: listsTransformerServiceMock
         },
         {
-          provide: 'toastService',
-          useValue: toastServiceMock
-        },
-        {
           provide: AnalyticsService,
           useValue: analyticsServiceMock
         }
@@ -158,10 +157,11 @@ describe('Lists Effects', () => {
 
     testBed = getTestBed();
     listsEffects = testBed.get(ListsEffects);
+    actions$ = new ReplaySubject(1);
     listsApiService = testBed.get(ListsApiService);
     toastService = testBed.get('toastService');
+    analyticsService = testBed.get(AnalyticsService);
     listsTransformerService = testBed.get(ListsTransformerService);
-    actions$ = new ReplaySubject(1);
 
     errorMock = new Error(chance.string());
     listPerformanceDTOMock = getListPerformanceDTOMock();
@@ -170,7 +170,8 @@ describe('Lists Effects', () => {
   });
 
   afterEach(() => {
-    toastServiceMock.showListDetailToast.calls.reset();
+    analyticsService.trackEvent.calls.reset();
+    toastService.showListDetailToast.calls.reset();
   });
 
   describe('when a FetchStoreDetails actions is received', () => {
@@ -182,10 +183,6 @@ describe('Lists Effects', () => {
       };
 
       actions$.next(new ListActions.FetchStoreDetails(actionPayloadMock));
-    });
-
-    afterEach(() => {
-      toastServiceMock.showListDetailToast.calls.reset();
     });
 
     describe('when everything returns successfully', () => {
@@ -494,7 +491,7 @@ describe('Lists Effects', () => {
         });
         expect(updateListSpy.calls.count()).toBe(1);
         expect(updateListSpy.calls.argsFor(0)[1]).toEqual(actionListPayloadMock.id);
-        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
           'Lists - My Lists', 'Edit List Properties', actionListPayloadMock.id
         );
         expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Edit);
@@ -663,7 +660,7 @@ describe('Lists Effects', () => {
       });
 
       expect(listsTransformerService.convertCollaborators).toHaveBeenCalledWith(actionPayloadMock);
-      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
         'Lists - My Lists', 'Archive List', actionPayloadMock.id
       );
     });
@@ -725,7 +722,7 @@ describe('Lists Effects', () => {
       });
 
       expect(listsApiService.deleteList).toHaveBeenCalledWith(actionPayloadMock);
-      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
         'Lists - My Lists', 'Delete List', actionPayloadMock
       );
     });
@@ -778,9 +775,6 @@ describe('Lists Effects', () => {
         actionPayloadMock.currentUserEmployeeId,
         actionPayloadMock.listSummary
       );
-      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
-        'Lists - Shared With Me', 'Leave List', actionPayloadMock.listSummary.id
-      );
     });
 
     it('should reach out to the listsApiService and call updateList with the leave list payload and'
@@ -800,19 +794,20 @@ describe('Lists Effects', () => {
       });
 
       expect(listsApiService.updateList).toHaveBeenCalledWith(expectedUpdateListPayload, actionPayloadMock.listSummary.id);
-      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledTimes(9);
     });
 
     describe('when the updateList api call is successful', () => {
-      it('should show a leave list success toast and dispatch an LeaveListSuccess action', (done) => {
+      it('should show a leave list success toast, log a leave list GA event, and dispatch an LeaveListSuccess action', (done) => {
         listsEffects.leaveList$().subscribe((response: Action) => {
           expect(response).toEqual(new ListActions.LeaveListSuccess);
           done();
         });
 
         expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.Leave);
-        expect(analyticsServiceMock.trackEvent).toHaveBeenCalledTimes(10);
-
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Lists - Shared With Me', 'Leave List',
+          actionPayloadMock.listSummary.id
+        );
       });
     });
 
@@ -886,6 +881,19 @@ describe('Lists Effects', () => {
         });
 
         expect(toastService.showListDetailToast).toHaveBeenCalledWith(ListManageActionToastType.TransferOwnership);
+      });
+
+      it('should reach out to the analyticsService and call trackEvent with the list id', (done) => {
+        listsEffects.transferListOwnership$().subscribe((response: Action) => {
+          expect(response).toEqual(new ListActions.PatchListSuccess(headerDetailMock));
+          done();
+        });
+
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+          'Lists - My Lists',
+          'Transfer Ownership',
+          `${ actionPayloadMock.listSummary.id }`
+        );
       });
     });
 
