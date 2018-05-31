@@ -34,6 +34,7 @@ export class ListsTransformerService {
     const archivedLists: V3List[] = v3Lists.filter((list: V3List) => list.archived);
     const sharedWithMeLists: V3List[] = v3Lists.filter((list: V3List) => list.owner.employeeId !== currentUserEmployeeID);
     const ownedNotArchivedLists: V3List[] = ownedLists.filter((ownedList: V3List) => !includes(archivedLists, ownedList));
+    const sharedWithMeNotArchivedLists: V3List[] = sharedWithMeLists.filter((ownedList: V3List) => !includes(archivedLists, ownedList));
 
     const ownedArchivedListsCount: number = ownedLists.filter((ownedList: V3List) => !includes(archivedLists, ownedList)).length;
     const ownedNotArchivedListsCount: number = ownedNotArchivedLists.length;
@@ -46,7 +47,8 @@ export class ListsTransformerService {
     const archivedV2Lists: V2List[] = archivedLists.map((list: V3List) => this.transformV3ToV2(list));
     const sharedWithMeV2Lists: V2List[] = sharedWithMeLists.map((list: V3List) => this.transformV3ToV2(list));
     const ownedNotArchivedV2Lists: V2List[] = ownedNotArchivedLists.map((list: V3List) => this.transformV3ToV2(list, true));
-    const ownedAndSharedWithMeV2Lists: V2List[] = ownedV2Lists.concat(sharedWithMeV2Lists);
+    const sharedWithMeNotArchivedV2Lists: V2List[] = sharedWithMeNotArchivedLists.map((list: V3List) => this.transformV3ToV2(list, false));
+    const ownedAndSharedWithMeV2Lists: V2List[] = ownedNotArchivedV2Lists.concat(sharedWithMeNotArchivedV2Lists);
 
     return {
       owned: ownedV2Lists,
