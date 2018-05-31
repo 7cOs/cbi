@@ -7,7 +7,7 @@ import { ListsOpportunities } from '../../../models/lists/lists-opportunities.mo
 import { ListsState } from '../../../state/reducers/lists.reducer';
 import { OpportunitiesByStore } from '../../../models/lists/opportunities-by-store.model';
 import { OpportunityType } from '../../../enums/list-opportunities/list-opportunity-type.enum';
-import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
+import { FormatOpportunitiesTypePipe } from '../../../pipes/formatOpportunitiesType.pipe';
 
 @Component({
   selector: 'list-opportunity-extender-body',
@@ -20,9 +20,13 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
   @Input() unversionedStoreId: string;
 
   public opportunityDetails: ListsOpportunities;
-  public opportunityType: OpportunityTypeLabel | OpportunityType;
+  public opportunityType: string;
   public allOpps: OpportunitiesByStore;
   public skuDescription: string;
+
+  public featureTypeCode: string;
+  public itemAuthorizationCode: string;
+
   private listDetailSubscription: Subscription;
 
   constructor(private store: Store<AppState>) {
@@ -47,9 +51,17 @@ export class ListOpportunityExtenderBodyComponent implements OnDestroy, OnChange
                                     return el.id === this.opportunitySelected;
                                   }) : null;
       if (this.opportunityDetails) {
-        this.opportunityType =  OpportunityTypeLabel[this.opportunityDetails.type] || this.opportunityDetails.type;
+        this.opportunityType =  this.opportunityTypeConversion(this.opportunityDetails);
         this.skuDescription =  this.opportunityDetails.isSimpleDistribution ? 'ANY' : this.opportunityDetails.skuDescription;
       }
+    }
+  }
+
+  opportunityTypeConversion(opportunityRow: ListsOpportunities): string {
+    if (opportunityRow.type === OpportunityType.MANUAL) {
+      return new FormatOpportunitiesTypePipe().transform(opportunityRow.subType);
+    } else {
+      return opportunityRow.type;
     }
   }
 

@@ -17,7 +17,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CompassActionButtonComponent } from './components/compass-action-button/compass-action-button.component';
 import { CompassActionModalComponent } from './components/compass-action-modal/compass-action-modal.component';
 import { CompassAlertModalComponent } from './components/compass-alert-modal/compass-alert-modal.component';
-import { CompassCardComponent } from './components/compass-card/compass-card.component';
+import { CompassCardComponent }  from './components/compass-card/compass-card.component';
+import { CompassDropdownComponent } from './components/compass-dropdown/compass-dropdown.component';
+import { CompassDropdownDirective } from '../directives/compass-dropdown.directive';
+import { CompassDropdownService } from '../services/compass-dropdown.service';
 import { CompassListClassUtilService } from '../services/compass-list-class-util.service';
 import { CompassManageListModalComponent } from './components/compass-manage-list-modal/compass-manage-list-modal.component';
 import { CompassModalService } from '../services/compass-modal.service';
@@ -58,6 +61,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     BeerLoaderComponent,
     CompassActionModalComponent,
     CompassAlertModalComponent,
+    CompassDropdownComponent,
+    CompassDropdownDirective,
     CompassManageListModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
@@ -87,6 +92,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CompassActionModalComponent,
     CompassActionModalComponent,
     CompassCardComponent,
+    CompassDropdownComponent,
+    CompassDropdownDirective,
     CompassManageListModalComponent,
     CompassRadioComponent,
     CompassSelectComponent,
@@ -102,6 +109,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CompassUserSearchComponent
   ],
   providers: [
+    CompassDropdownService,
     CompassModalService,
     CompassOverlayService,
     CompassTooltipService,
@@ -110,6 +118,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   entryComponents: [
     CompassActionModalComponent,
     CompassAlertModalComponent,
+    CompassDropdownComponent,
     CompassManageListModalComponent,
     CompassTooltipPopupComponent
   ]

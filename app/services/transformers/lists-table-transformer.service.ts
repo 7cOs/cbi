@@ -48,7 +48,7 @@ export class ListsTableTransformerService {
         performanceError: !storeVolume,
         checked: false,
         expanded: false,
-        storeNumber: store.number,
+        storeNumber: this.getFormattedStoreNumber(store),
         storeCity: store.city,
         storeState: store.state,
         unversionedStoreId: store.unversionedStoreId,
@@ -85,7 +85,7 @@ export class ListsTableTransformerService {
         lastDepletionDateColumn: storeVolume ? moment(storeVolume.lastSoldDate).format('MM/DD/YY') : '-',
         performanceError: isPerformanceError,
         checked: false,
-        storeNumber: store.number,
+        storeNumber: this.getFormattedStoreNumber(store),
         storeCity: store.city,
         storeState: store.state,
         unversionedStoreId: store.unversionedStoreId,
@@ -129,12 +129,15 @@ export class ListsTableTransformerService {
         brand: opportunity.brandDescription,
         skuPackage: opportunity.isSimpleDistribution ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL : opportunity.skuDescription,
         type: OpportunityTypeLabel[opportunity.type] || opportunity.type,
+        subType: opportunity.subType || '',
         status: opportunity.status || '-' as OpportunityStatus,
         impact: opportunity.impact,
         current: opportunity.currentDepletions_CYTD || 0,
         yearAgo: this.calculatorService.getYearAgoPercent(opportunity.currentDepletions_CYTD, opportunity.yearAgoDepletions_CYTD),
         depletionDate: opportunity.lastDepletionDate ? moment(opportunity.lastDepletionDate).format('MM/DD/YY') : '-',
-        checked: false
+        checked: false,
+        featureType: opportunity.featureType,
+        itemAuthorization: opportunity.itemAuthorization
       };
     });
   }
@@ -149,5 +152,9 @@ export class ListsTableTransformerService {
 
   private getPrimaryDistributorIndex(beerDistributors: BeerDistributors[]): number {
     return beerDistributors.findIndex((primaryBeerDistributor: BeerDistributors) => primaryBeerDistributor.isPrimary === true);
+  }
+
+  private getFormattedStoreNumber(store: StoreDetails): string {
+    return store.number === 'UNKNOWN' ? '' : `#${ store.number}`;
   }
 }

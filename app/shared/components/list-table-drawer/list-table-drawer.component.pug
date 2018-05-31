@@ -22,12 +22,13 @@
           )
         td.brand-column
           .brand-container
-            //- TODO: Update Mandate Markup Here Once We Get Data Back
-            //- .brand-mandate(*ngIf="opportunity.mandate")
-            //-   img.mandate-image(src="../../../assets/img/icons/status-mandatory.svg")
+            .brand-mandate([ngSwitch]="getFlagClass(opportunity)")
+              img.flag-image(*ngSwitchCase="'flag-both'", src="../../../assets/img/icons/status-both.svg")
+              img.flag-image(*ngSwitchCase="'flag-featured'", src="../../../assets/img/icons/status-featured.svg")
+              img.flag-image(*ngSwitchCase="'flag-mandatory'", src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column {{ opportunity.skuPackage }}
-        td.type-column((click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
+        td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunityTypeConversion(opportunity) }}
         td.status-column {{ opportunity.status | titlecase }}
           compass-tooltip(
             *ngIf="opportunity.status === opportunityStatus.inactive",
@@ -41,8 +42,15 @@
           img.impact-image(*ngSwitchCase="opportunityImpact.low", src="../../../assets/img/icons/impact-low-small.svg")
         td.current-column.centered {{ opportunity.current | number:'1.0-0' }}
         td.year-ago-column.centered(
-          [ngClass]="{ 'positive': opportunity.yearAgo > 0, 'negative': opportunity.yearAgo < 0 }"
+          [ngClass]="{ 'positive': opportunity.yearAgo >= 0, 'negative': opportunity.yearAgo < 0 }"
         ) {{ opportunity.yearAgo | number:'1.1-1' }}%
         td.depletion-date-column.centered(colspan=2) {{ opportunity.depletionDate }}
-        td.button-column.centered(colspan=1, (click)="actionButtonClicked(opportunity)")
+        //- Remove [compassDropdownDisabled] input when post MVP work begins on this.
+        td.button-column.centered(
+          colspan=1,
+          compassDropdown,
+          [compassDropdownData]="compassDropdownData",
+          [compassDropdownDisabled]="true",
+          (onCompassDropdownClicked)="onCompassDropdownClicked($event, opportunity)"
+        )
           img.action-button(src="../../../assets/img/icons/more.svg")

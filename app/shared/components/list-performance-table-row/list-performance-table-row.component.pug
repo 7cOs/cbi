@@ -10,7 +10,7 @@ td.left-col(colspan=1)
     div.left-col-text-content
       div.description-line-0
         span {{ rowData.storeColumn | titlecase }}
-        span(*ngIf="rowData.storeNumber") &nbsp;&#35;{{ rowData.storeNumber }}
+        span &nbsp;{{ rowData.storeNumber }}
       div.description-line-1
         span.description-line-1 {{rowData.storeAddressSubline}}
 td.left-col(colspan=1)

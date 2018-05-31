@@ -3,5 +3,6 @@ export enum CompassManageListModalEvent {
   Cancel = 'cancel',
   Delete = 'delete',
   Leave = 'leave',
-  Save = 'save'
+  Save = 'save',
+  Transfer_Ownership = 'transfer_ownership'
 }

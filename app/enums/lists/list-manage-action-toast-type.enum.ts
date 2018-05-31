@@ -3,6 +3,10 @@ export enum ListManageActionToastType {
   ArchiveError = 'listDetailArchivedError',
   Delete = 'listDetailDeleted',
   DeleteError = 'listDetailDeletedError',
+  Edit = 'listDetailEdited',
+  EditError = 'listDetailEditError',
   Leave = 'listDetailLeft',
-  LeaveError = 'listDetailLeftError'
+  LeaveError = 'listDetailLeftError',
+  TransferOwnership = 'listDetailTransferOwnership',
+  TransferOwnershipError = 'listDetailTransferOwnershipError'
 }

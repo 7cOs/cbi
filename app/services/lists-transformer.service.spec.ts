@@ -77,6 +77,7 @@ describe('Service: ListsTransformerService', () => {
           brandDescription: listsOpportunitiesDTOMock[i].brandDescription,
           skuDescription: listsOpportunitiesDTOMock[i].skuDescription,
           type: listsOpportunitiesDTOMock[i].type,
+          subType: listsOpportunitiesDTOMock[i].subType,
           status: listsOpportunitiesDTOMock[i].status,
           impact: listsOpportunitiesDTOMock[i].impact,
           currentDepletions_CYTD: listsOpportunitiesDTOMock[i].currentDepletions_CYTD,
@@ -84,7 +85,29 @@ describe('Service: ListsTransformerService', () => {
           lastDepletionDate: listsOpportunitiesDTOMock[i].lastDepletionDate,
           unversionedStoreId: listsOpportunitiesDTOMock[i].storeSourceCode,
           isSimpleDistribution: listsOpportunitiesDTOMock[i].isSimpleDistributionOpportunity,
-          rationale: listsOpportunitiesDTOMock[i].rationale
+          rationale: listsOpportunitiesDTOMock[i].rationale,
+          featureType: {
+            featureTypeCode: listsOpportunitiesDTOMock[i].featureTypeCode,
+            featureTypeDescription: listsOpportunitiesDTOMock[i].featureTypeDescription,
+            featurePeriodBeginDate: listsOpportunitiesDTOMock[i].featurePeriodBeginDate,
+            featurePeriodEndDate: listsOpportunitiesDTOMock[i].featurePeriodEndDate,
+            featureResetBeginDate: listsOpportunitiesDTOMock[i].featureResetBeginDate,
+            featureResetEndDate: listsOpportunitiesDTOMock[i].featureResetEndDate,
+            featurePrice: listsOpportunitiesDTOMock[i].featurePrice,
+            featureIsOnMenu: listsOpportunitiesDTOMock[i].featureIsOnMenu,
+            featureNotes: listsOpportunitiesDTOMock[i].featureNotes
+          },
+          itemAuthorization: {
+            itemAuthorizationCode: listsOpportunitiesDTOMock[i].itemAuthorizationCode,
+            itemAuthorizationDescription: listsOpportunitiesDTOMock[i].itemAuthorizationDescription,
+            itemAuthorizationPeriodBeginDate: listsOpportunitiesDTOMock[i].itemAuthorizationPeriodBeginDate,
+            itemAuthorizationPeriodEndDate: listsOpportunitiesDTOMock[i].itemAuthorizationPeriodEndDate,
+            itemAuthorizationResetBeginDate: listsOpportunitiesDTOMock[i].itemAuthorizationResetBeginDate,
+            itemAuthorizationResetEndDate: listsOpportunitiesDTOMock[i].itemAuthorizationResetEndDate,
+            itemAuthorizationPrice: listsOpportunitiesDTOMock[i].itemAuthorizationPrice,
+            itemAuthorizationIsOnMenu: listsOpportunitiesDTOMock[i].itemAuthorizationIsOnMenu,
+            itemAuthorizationNotes: listsOpportunitiesDTOMock[i].itemAuthorizationNotes
+          }
         });
       });
     });

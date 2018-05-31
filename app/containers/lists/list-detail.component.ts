@@ -2,11 +2,11 @@ import * as moment from 'moment';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe, UpperCasePipe } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { Title } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/takeUntil';
 
 import { ActionButtonType } from '../../enums/action-button-type.enum';
 import { ActionStatus } from '../../enums/action-status.enum';
@@ -49,6 +49,7 @@ import { RadioInputModel } from '../../models/compass-radio-input.model';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { User } from '../../models/lists/user.model';
 import { V3List } from '../../models/lists/v3-list.model';
+import { AnalyticsService } from '../../services/analytics.service';
 
 interface ListPageClick {
   pageNumber: number;
@@ -130,8 +131,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   public isPerformanceTabDataFetched: boolean = false;
   public downloadBodyHTML: string;
   public groupedOppsByStore: OpportunitiesByStore;
+  public destinationListIdForCopyAction: string;
 
-  private listDetailSubscription: Subscription;
+  private ngUnsubscribe: Subject<Event> = new Subject();
 
   constructor(
     private compassModalService: CompassModalService,
@@ -141,7 +143,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private numberPipe: DecimalPipe,
     private upperCasePipe: UpperCasePipe,
-    @Inject('userService') private userService: any
+    @Inject('userService') private userService: any,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
@@ -171,8 +174,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     }));
     this.store.dispatch(new ListsActions.FetchLists({currentUserEmployeeID: this.currentUser.employeeId}));
 
-    this.listDetailSubscription = this.store
+    this.store
       .select(state => state.listsDetails)
+      .takeUntil(this.ngUnsubscribe)
       .subscribe((listDetail: ListsState)  => {
         this.listSummary = listDetail.listSummary.summaryData;
         this.allLists = listDetail.allLists;
@@ -224,6 +228,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           this.handlePaginationReset();
           this.isPerformanceRowSelect = false;
           this.isOpportunityRowSelect = false;
+          this.copyListAnalyticsFiring(listDetail);
         }
 
         if (listDetail.manageListStatus !== ActionStatus.NotFetched) {
@@ -246,6 +251,17 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  public copyListAnalyticsFiring(listDetail: ListsState): void {
+    if ( listDetail.copyStatus === ActionStatus.Fetched ) {
+      const listPermissionLevel = this.currentUser.employeeId === listDetail.listSummary.summaryData.ownerId ?
+        'Lists - My Lists' : 'Lists - Shared With Me';
+      this.analyticsService.trackEvent(
+        listPermissionLevel,
+        'Copy To List',
+        `Source:${listDetail.listSummary.summaryData.id},Target${this.destinationListIdForCopyAction}`
+      );
+    }
+  }
   public copyToListClick(): void {
     const ownedAndSharedLists: V3List[] = this.allLists.owned.concat(this.allLists.sharedWithMe);
     const sortedActiveOwnedAndSharedLists: V3List[] = this.sortAndFilterActiveLists(ownedAndSharedLists);
@@ -371,6 +387,9 @@ export class ListDetailComponent implements OnInit, OnDestroy {
     this.isOppsTabDataFetched = !!this.opportunitiesTableDataSize;
     this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
     this.paginationReset.next();
+    if (this.oppStatusSelected !== OpportunityStatus.all) {
+      this.fireOpportunityStatusGAEvent(this.oppStatusSelected);
+    }
   }
 
   filterOpportunitiesByStatus(status: OpportunityStatus, oppsTableData: ListOpportunitiesTableRow[]): ListOpportunitiesTableRow[] {
@@ -395,7 +414,8 @@ export class ListDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.listDetailSubscription.unsubscribe();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   public handlePageClick(event: ListPageClick): void {
@@ -414,9 +434,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       listObject: this.listSummary
     }, {});
 
-    manageModalRef.modalInstance.buttonContainerEvent.subscribe((manageModalData: CompassManageListModalOutput) => {
-      this.handleManageModalEvent(manageModalData);
-    });
+    manageModalRef.modalInstance.buttonContainerEvent
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((manageModalData: CompassManageListModalOutput) => {
+        this.handleManageModalEvent(manageModalData);
+      });
   }
 
   public handleListsLinkClick(): void {
@@ -454,9 +476,11 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       this.filteredOpportunitiesTableData = this.opportunitiesTableData;
       this.opportunitiesTableDataSize = this.filteredOpportunitiesTableData.length;
       this.totalOppsForList = this.getCumulativeOppsForList(this.filteredOpportunitiesTableData);
+      this.fireTabSelectedGAEvent(this.performanceTabTitle);
     }
     if (tabName === this.opportunitiesTabTitle) {
       this.performanceTableData = this.getDeselectedPerformanceTableData(this.performanceTableData);
+      this.fireTabSelectedGAEvent(this.opportunitiesTabTitle);
     }
   }
 
@@ -481,6 +505,12 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           listSummary: manageModalData.listSummary
         }));
         break;
+      case CompassManageListModalEvent.Transfer_Ownership:
+        this.store.dispatch(new ListsActions.TransferListOwnership({
+          newOwnerEmployeeId: manageModalData.selectedEmployeeId,
+          listSummary: manageModalData.listSummary
+        }));
+        break;
       default:
         throw new Error(`[handleManageModalEvent]: CompassManageListModalEvent of ${ manageModalData.type } is not supported`);
     }
@@ -494,6 +524,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
 
   public handleCopyModalEvent (value: CompassActionModalOutputs, checkedEntities: (string | {opportunityId: string})[]) {
     const listId: string = value.dropdownOptionSelected;
+    this.destinationListIdForCopyAction = listId;
     if (this.selectedTab === this.performanceTabTitle) {
       checkedEntities.forEach((storeCode: string) => {
         this.store.dispatch(new ListsActions.CopyStoresToList({listId: listId, id: storeCode}));
@@ -542,6 +573,43 @@ export class ListDetailComponent implements OnInit, OnDestroy {
           return csvData;
         }, []);
     }
+  }
+
+  public fireTabSelectedGAEvent(tabName: string): void {
+    let eventAction: string;
+    if (tabName === this.opportunitiesTabTitle) {
+      eventAction = 'View Opportunities';
+    } else {
+      eventAction = 'View Performance';
+    }
+    this.analyticsService.trackEvent(this.getAnalyticsCategory(), eventAction, this.listSummary.id);
+  }
+
+  public fireOpportunityStatusGAEvent(selectedStatus: string): void {
+    this.analyticsService.trackEvent(this.getAnalyticsCategory(), 'Filter Opportunities', selectedStatus);
+  }
+
+  public fireDownloadCSVGAEvent(selectedOption: string): void {
+    const storesOrOpps: string = selectedOption === ListSelectionType.Stores ? 'Download Stores' : 'Download Stores and Opportunities';
+      this.analyticsService.trackEvent(
+        this.getAnalyticsCategory(),
+        storesOrOpps,
+        'Opportunities Result Set'
+      );
+  }
+
+  public getAnalyticsCategory(): string {
+    let eventCategory: string;
+    if (this.currentUser.employeeId === this.listSummary.ownerId ) {
+      eventCategory = 'Lists - My Lists';
+    } else {
+      eventCategory = 'Lists - Shared With Me';
+    }
+
+    if (this.listSummary.archived === true) {
+      eventCategory = 'Lists - Archived lists';
+    }
+    return eventCategory;
   }
 
   private copyToListModal(checkedEntities: (string | {opportunityId: string})[]): void {
@@ -708,6 +776,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
       };
       const csvObj = new Angular5Csv(csvDownloadData, csvTitle, options);
       csvObj.fileName = csvTitle;
+      this.fireDownloadCSVGAEvent(value.radioOptionSelected);
   }
 
   private sortAndFilterActiveLists(lists: V3List[]) {

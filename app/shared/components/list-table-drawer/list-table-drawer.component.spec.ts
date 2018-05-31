@@ -3,6 +3,8 @@ import * as Chance from 'chance';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCheckboxModule } from '@angular/material';
 
+import { CompassDropdownDirective } from '../../../directives/compass-dropdown.directive';
+import { CompassDropdownService } from '../../../services/compass-dropdown.service';
 import { CompassTooltipComponent } from '../compass-tooltip/compass-tooltip.component';
 import { CompassTooltipService } from '../../../services/compass-tooltip.service';
 import { getListTableDrawerRowMock } from '../../../models/lists/list-table-drawer-row.model.mock';
@@ -15,8 +17,9 @@ const chance = new Chance();
 describe('ListTableDrawerComponent', () => {
   let fixture: ComponentFixture<ListTableDrawerComponent>;
   let componentInstance: ListTableDrawerComponent;
-  let tableDataMock: ListTableDrawerRow[];
 
+  let tableDataMock: ListTableDrawerRow[];
+  let compassDropdownServiceMock: CompassDropdownService;
   const compassTooltipServiceMock = {
     showTooltip: jasmine.createSpy('showTooltip')
   };
@@ -24,6 +27,7 @@ describe('ListTableDrawerComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
+        CompassDropdownDirective,
         CompassTooltipComponent,
         ListTableDrawerComponent
       ],
@@ -33,6 +37,9 @@ describe('ListTableDrawerComponent', () => {
       providers: [{
         provide: CompassTooltipService,
         useValue: compassTooltipServiceMock
+      }, {
+        provide: CompassDropdownService,
+        useValue: compassDropdownServiceMock
       }]
     });
 
@@ -79,6 +86,28 @@ describe('ListTableDrawerComponent', () => {
       expect(componentInstance.sortedTableData[0].brand).toBe(brandOneMock);
       expect(componentInstance.sortedTableData[1].brand).toBe(brandTwoMock);
       expect(componentInstance.sortedTableData[2].brand).toBe(brandThreeMock);
+    });
+  });
+
+  describe('[Method] getFlagClass', () => {
+    beforeEach(() => {
+      tableDataMock[1].itemAuthorization.itemAuthorizationCode = null;
+      tableDataMock[2].featureType.featureTypeCode = null;
+    });
+
+    it('should return flag-both as string to show flags when featureType and item authorization are applicable', () => {
+      const returnValue: string = componentInstance.getFlagClass(tableDataMock[0]);
+      expect(returnValue).toEqual('flag-both');
+    });
+
+    it('should return flag-featured as string to show flags when only featureType is applicable', () => {
+      const returnValue: string = componentInstance.getFlagClass(tableDataMock[1]);
+      expect(returnValue).toEqual('flag-featured');
+    });
+
+    it('should return flag-mandatory as string to show flags when only item authorization is applicable', () => {
+      const returnValue: string = componentInstance.getFlagClass(tableDataMock[2]);
+      expect(returnValue).toEqual('flag-mandatory');
     });
   });
 

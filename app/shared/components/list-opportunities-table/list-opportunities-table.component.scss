@@ -1,10 +1,20 @@
 @import '../../../assets/styles/base/variables';
 
+$list-opportunities-table-width: 1130px;
+$checkbox-column-width: 5%;
+$store-column-width: 30%;
+$distributor-column-width: 20%;
+$segment-column-width: 10%;
+$depletions-cytd-column-width: 7.5%;
+$depletions-vsya-column-width: 7.5%;
+$opportunities-column-width: 15%;
+$expand-column-width: 5%;
+
 .tables-container {
 
   .list-opportunities-table {
     border-collapse: collapse;
-    width: 1130px;
+    width: $list-opportunities-table-width;
 
     .top-header {
 
@@ -54,7 +64,7 @@
       border-left: 1px solid $table-border-gray;
       border-right: 2px solid $table-border-gray;
       padding: 0;
-      width: 5%;
+      width: $checkbox-column-width;
 
       /deep/.mat-checkbox-frame {
         border-color: $cancel-blue;
@@ -64,48 +74,49 @@
     /deep/.store-column {
       padding-left: 10px;
       text-align: left;
-      width: 30%;
+      width: $store-column-width;
     }
 
     /deep/.distributor-column {
       text-align: left;
-      width: 20%;
+      width: $distributor-column-width;
     }
 
     /deep/.segment-col {
-      width: 10%;
+      width: $segment-column-width;
     }
 
     /deep/.depletions-col {
       border-left: 1px solid $table-border-gray;
       border-right: 1px solid $table-border-gray;
       background-color: $gray-4;
-      width: 15%;
     }
 
     /deep/.depletions-cytd-col {
       background-color: $gray-4;
       border-left: 1px solid $table-border-gray;
       text-align: center;
+      width: $depletions-cytd-column-width;
     }
 
     /deep/.depletions-vsya-col {
       background-color: $gray-4;
       border-right: 1px solid $table-border-gray;
       text-align: center;
+      width: $depletions-vsya-column-width;
     }
 
     /deep/.opportunities-col {
       background-color: $gray-4;
       border-right: 1px solid $table-border-gray;
       text-align: center;
-      width: 15%;
+      width: $opportunities-column-width;
     }
 
     /deep/.expand-column {
       border-right: 1px solid $table-border-gray;
       text-align: center;
-      width: 5%;
+      width: $expand-column-width;
     }
   }
 
