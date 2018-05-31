@@ -28,7 +28,7 @@
               img.flag-image(*ngSwitchCase="'flag-mandatory'", src="../../../assets/img/icons/status-mandatory.svg")
             .brand-text {{ opportunity.brand }}
         td.sku-package-column {{ opportunity.skuPackage }}
-        td.type-column((click)="opportunityTypeClicked(opportunity)") {{ opportunity.type }}
+        td.type-column(colspan=1, (click)="opportunityTypeClicked(opportunity)") {{ opportunityTypeConversion(opportunity) }}
         td.status-column {{ opportunity.status | titlecase }}
           compass-tooltip(
             *ngIf="opportunity.status === opportunityStatus.inactive",

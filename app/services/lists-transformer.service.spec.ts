@@ -77,6 +77,7 @@ describe('Service: ListsTransformerService', () => {
           brandDescription: listsOpportunitiesDTOMock[i].brandDescription,
           skuDescription: listsOpportunitiesDTOMock[i].skuDescription,
           type: listsOpportunitiesDTOMock[i].type,
+          subType: listsOpportunitiesDTOMock[i].subType,
           status: listsOpportunitiesDTOMock[i].status,
           impact: listsOpportunitiesDTOMock[i].impact,
           currentDepletions_CYTD: listsOpportunitiesDTOMock[i].currentDepletions_CYTD,

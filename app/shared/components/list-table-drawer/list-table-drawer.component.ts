@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { CompassDropdownData } from '../../../models/compass-dropdown-data.model';
+import { FormatOpportunitiesTypePipe } from '../../../pipes/formatOpportunitiesType.pipe';
 import { ListTableDrawerRow } from '../../../models/lists/list-table-drawer-row.model';
 import { OpportunityImpact } from '../../../enums/list-opportunities/list-opportunity-impact.enum';
 import { opportunityImpactSortWeight } from '../../../models/opportunity-impact-sort-weight.model';
 import { OpportunityStatus } from '../../../enums/list-opportunities/list-opportunity-status.enum';
+import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
 
 @Component({
   selector: 'list-table-drawer',
@@ -48,6 +50,14 @@ export class ListTableDrawerComponent {
 
   public actionButtonClicked(opportunityRow: ListTableDrawerRow): void {
     console.log('ACTION BUTTON CLICKED', opportunityRow);
+  }
+
+  public opportunityTypeConversion(opportunityRow: ListTableDrawerRow): string {
+    if (opportunityRow.type === OpportunityTypeLabel.MANUAL) {
+      return new FormatOpportunitiesTypePipe().transform(opportunityRow.subType);
+    } else {
+      return opportunityRow.type;
+    }
   }
 
   public getFlagClass(opportunityRow: ListTableDrawerRow): string {

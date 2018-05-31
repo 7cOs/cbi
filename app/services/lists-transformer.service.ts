@@ -227,6 +227,7 @@ export class ListsTransformerService {
       lastDepletionDate: listOpportunity.lastDepletionDate,
       unversionedStoreId: listOpportunity.storeSourceCode,
       type: OpportunityType[listOpportunity.type] || listOpportunity.type,
+      subType: listOpportunity.subType,
       status: OpportunityStatus[listOpportunity.status] || listOpportunity.status,
       impact: OpportunityImpact[listOpportunity.impact] || listOpportunity.impact,
       isSimpleDistribution: listOpportunity.isSimpleDistributionOpportunity,

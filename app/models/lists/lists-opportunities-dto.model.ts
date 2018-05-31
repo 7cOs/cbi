@@ -16,6 +16,7 @@ export interface ListOpportunityDTO {
     storeSourceCode: string;
     subBrandCode: string;
     subBrandDescription: string;
+    subType: string;
     type: OpportunityType;
     yearAgoDepletions_CYTD: number;
     isSimpleDistributionOpportunity: boolean;

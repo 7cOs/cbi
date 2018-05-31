@@ -112,6 +112,7 @@ describe('ListsTableTransformerService', () => {
                 ? SIMPLE_OPPORTUNITY_SKU_PACKAGE_LABEL
                 : matchedOpportunities[rowIndex].skuDescription,
               type: OpportunityTypeLabel[matchedOpportunities[rowIndex].type],
+              subType: matchedOpportunities[rowIndex].subType,
               status: matchedOpportunities[rowIndex].status,
               impact: matchedOpportunities[rowIndex].impact,
               current: matchedOpportunities[rowIndex].currentDepletions_CYTD,

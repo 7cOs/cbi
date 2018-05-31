@@ -10,7 +10,6 @@ import { AppState } from '../../../state/reducers/root.reducer';
 import { getOpportunitiesByStoreMock } from '../../../models/lists/opportunities-by-store.model.mock';
 import { ListOpportunityExtenderBodyComponent } from './list-opportunity-extender-body.component';
 import { ListsState } from '../../../state/reducers/lists.reducer';
-import { OpportunityTypeLabel } from '../../../enums/list-opportunities/list-opportunity-type-label.enum';
 import { OpportunitiesByStore } from '../../../models/lists/opportunities-by-store.model';
 import { ListsOpportunities } from '../../../models/lists/lists-opportunities.model';
 import { DebugElement } from '@angular/core';
@@ -23,6 +22,19 @@ describe('Team Performance Opportunities Extender Body', () => {
   let componentInstance: ListOpportunityExtenderBodyComponent;
   let opportunitySelectedMock: string;
   let unversionedStoreIdMock: string;
+  const expectedType = (rawType: string): string => {
+    const opportunityTypeDescriptionsMock = {
+      'Mixed': 'Custom',
+      'ND001': 'New Distribution',
+      'ND_001': 'New Distribution',
+      'AT_RISK': 'At Risk',
+      'NON_BUY': 'Non-Buy',
+      'NEW_PLACEMENT_NO_REBUY': 'New Placement No Rebuy',
+      'NEW_PLACEMENT_QUALITY': 'New Placement Quality',
+      'LOW_VELOCITY': 'Low Velocity'
+    };
+    return opportunityTypeDescriptionsMock[rawType] || rawType;
+  };
 
   let listDetailMock: ListsState = {
     manageListStatus: ActionStatus.NotFetched,
@@ -143,14 +155,13 @@ describe('Team Performance Opportunities Extender Body', () => {
     it('Should pass in fields correctly from opportunities object', () => {
       const oppsGroupedByStore: OpportunitiesByStore = getOpportunitiesByStoreMock();
       const opportunityDetailsMock: ListsOpportunities = oppsGroupedByStore[Object.keys(oppsGroupedByStore)[0]][0];
-
       componentInstance.unversionedStoreId = Object.keys(oppsGroupedByStore)[0];
       componentInstance.opportunitySelected = opportunityDetailsMock.id;
       componentInstance.setExtenderBodyFields(oppsGroupedByStore);
       fixture.detectChanges();
-
+      const subTypeMock = expectedType(opportunityDetailsMock.type);
       expect(componentInstance.opportunityDetails).toBe(opportunityDetailsMock);
-      expect(componentInstance.opportunityType).toBe(OpportunityTypeLabel[opportunityDetailsMock.type]);
+      expect(expectedType(componentInstance.opportunityType)).toBe(subTypeMock);
     });
   });
 

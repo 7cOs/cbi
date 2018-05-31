@@ -10,7 +10,7 @@ export const REMOVE_STORE_MODAL_CONFIG: CompassAlertModalInputs = {
 
 export const REMOVE_OPPS_MODAL_CONFIG: CompassAlertModalInputs = {
   'title': 'Are you sure?',
-  'body': 'Removing the opportunities from a list cannont be undone. Store performance will still be available.',
+  'body': 'Removing the opportunities from a list cannot be undone. Store performance will still be available.',
   'rejectLabel': 'Cancel',
   'acceptLabel': 'Remove'
 };
