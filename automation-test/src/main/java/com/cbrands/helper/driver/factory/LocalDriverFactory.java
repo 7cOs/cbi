@@ -3,6 +3,9 @@ package com.cbrands.helper.driver.factory;
 import com.cbrands.helper.PropertiesCache;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class LocalDriverFactory {
   private static final String WINDOWS_FILE_EXTENSION_FORMAT = "%s.exe";
@@ -21,6 +24,17 @@ public class LocalDriverFactory {
     }
 
     return new ChromeDriver(options);
+  }
+
+  public static InternetExplorerDriver getInternetExplorerDriver() {
+    System.setProperty("webdriver.ie.driver", "ieDriverServer.exe");
+
+    InternetExplorerOptions options = new InternetExplorerOptions();
+    options.ignoreZoomSettings();
+    options.introduceFlakinessByIgnoringSecurityDomains();
+    options.destructivelyEnsureCleanSession();
+
+    return new InternetExplorerDriver(options);
   }
 
   private static String formatDriverNameWithOSExtension(String driverFileName) {

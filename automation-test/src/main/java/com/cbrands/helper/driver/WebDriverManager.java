@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.Listeners;
 
@@ -60,12 +61,23 @@ public class WebDriverManager implements SauceOnDemandSessionIdProvider, SauceOn
 
       webDriver.set(remoteSauceDriver);
     } else {
-      final ChromeDriver chromeDriver = LocalDriverFactory.getChromeDriver();
-      Validate.notNull(
-        chromeDriver,
-        "Local driver for " + BrowserType.chrome.name() + "could not be found."
-      );
-      webDriver.set(chromeDriver);
+      final String driverName = PropertiesCache.getInstance().getProperty("driver.name");
+      final WebDriver driver;
+      if(driverName.equals("chrome")) {
+        driver = LocalDriverFactory.getChromeDriver();
+        Validate.notNull(
+          driver,
+          "Local driver for " + BrowserType.chrome.name() + "could not be found."
+        );
+        webDriver.set(driver);
+      } else if(driverName.equals("ie")) {
+        driver = LocalDriverFactory.getInternetExplorerDriver();
+        Validate.notNull(
+            driver,
+            "Local driver for " + BrowserType.ie.name() + "could not be found."
+          );
+        webDriver.set(driver);
+      }
     }
 
     return webDriver.get();
