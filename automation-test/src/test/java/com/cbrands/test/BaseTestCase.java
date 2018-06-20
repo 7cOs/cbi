@@ -6,6 +6,7 @@ import com.cbrands.helper.driver.WebDriverManager;
 import com.cbrands.listener.SeleniumSnapshotRule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 
@@ -15,6 +16,12 @@ import java.net.MalformedURLException;
 public abstract class BaseTestCase {
   protected static WebDriver driver;
   protected static String webAppBaseUrl;
+
+  /**
+	 * Process jse
+	 * @author sdk
+  */
+  public static JavascriptExecutor jse = null;
 
   protected Log log = LogFactory.getLog(BaseTestCase.class);
 
@@ -32,6 +39,12 @@ public abstract class BaseTestCase {
     SeleniumUtils.setDriver(driver);
     SeleniumUtils.setStopAtShutdown();
 
+    /**
+     * Instantiate jse process
+     * @author sdk
+     */
+    jse = (JavascriptExecutor) driver;
+
     log.info("Browser opened.\n");
   }
 
@@ -40,5 +53,4 @@ public abstract class BaseTestCase {
     driver.quit();
     log.info("Browser closed.\n");
   }
-
 }

@@ -7,14 +7,21 @@ import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.opportunities.OpportunitiesPage;
 import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import static com.cbrands.helper.SeleniumUtils.findElement;
+
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.util.List;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private static final int MAX_SAVED_REPORT_LIMIT = 10;
@@ -29,10 +36,19 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     final String sauceTitle = String.format("Functional - Opportunities - Saved Reports Test - %s", testCaseName);
     this.startUpBrowser(sauceTitle);
 
-    homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
+    // homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
+    
+    // - sdk - //
+    homePage = PageFactory.initElements(driver, LoginPage.class).login(TestUser.ACTOR4);
+    
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
-    opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
+    // opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
+    
+    // - sdk - //
+    // expediteAllSavedReportsDeletion();
+    expediteSavedReportsCreate();
+    
     Assert.assertTrue(
         opportunitiesPage.dismissStrayBackdropElement(),
         "Error resetting focus to element"
@@ -410,5 +426,77 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
    */
   public String generateNewEditedReportName(String existingReportName) {
     return "EDITED " + existingReportName;
+  }
+
+  
+  
+  /**
+   * Expedite saved report(s) creation
+   * @author sdk
+   */
+  public void expediteSavedReportsCreate() {
+	  final int MAX_REPORTS = 10;
+	  int totalReports = MAX_REPORTS- getTotalSavedReports();
+	  for(int i = 0; i <= totalReports; i++) {
+		  final String reportName = String.format("Test Max Limit - Report #%s - %s", i, 
+				  new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date()));
+		  System.out.println( reportName );
+		  // - Enter/search Distributor - //
+		  // WebElement distField = findElement(By.xpath("//label[text()='Distributor']/..//input"));
+		  // BaseTestCase.jse.executeScript("arguments[0].value='"+distributorData()[0][0]+"';", distField);
+		  enterSearchDistributor(distributorData()[0][0].toString());
+
+		  // - Seek/click 'Search' icon - //
+		  BaseTestCase.jse.executeScript("arguments[0].value='"+distributorData()[0][0]+"';", distField);
+	  }
+  }
+  
+  public void enterSearchDistributor(String name) {
+	  WebElement distField = findElement(By.xpath("//label[text()='Distributor']/..//input"));
+	  BaseTestCase.jse.executeScript("arguments[0].value='"+name+"';", distField);
+	  distField.sendKeys(""); // Ensure 'Search' icon is displayed
+  }
+  
+  /**
+   * Expedite saved report(s) deletions
+   * @author sdk
+   */
+  public void expediteAllSavedReportsDeletion() {
+	  int totalReports = getTotalSavedReports();
+	  
+	  for(int i=0; i<totalReports; i++) {
+		  WebElement btn = driver.findElement(By.xpath("//*[@class='saved-reports-edit-icon']"));
+		  // - Click edit report button - //
+		  BaseTestCase.jse.executeScript("arguments[0].click();", btn);
+		  // - Click 'Delete Report' button
+		  BaseTestCase.jse.executeScript("arguments[0].click();", 
+				  findElement(By.xpath("//*[text()='Delete Report']")));
+		  // - Display list of saved reports options - //
+		  displaySavedReportsOptions(); 
+	  }
+  }
+  
+  public int getTotalSavedReports() {
+	// - Display list of saved reports options - //
+	  displaySavedReportsOptions(); 
+	  
+	  // - Gather list of  saved reports - //
+	  String xp = "//md-option[contains(@class, 'saved-filter-option')]";
+	  List<WebElement> ls = driver.findElements(By.xpath(xp));
+	  //- Peek - //
+	  if( ls.size() == 1 && ls.get(ls.size()-1).getText().equals("No saved reports")) {
+		  return 0;
+	  }
+
+	  return ls.size();
+  }
+  
+  public WebElement displaySavedReportsOptions() {
+	  // - Display Saved Report options - //
+	  String xp = "//*[@class='saved-filter-select']//md-select";
+	  WebElement dropdown = findElement(By.xpath(xp));
+	  BaseTestCase.jse.executeScript("arguments[0].click();", dropdown);
+
+	  return dropdown;
   }
 }

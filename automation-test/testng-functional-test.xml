@@ -6,14 +6,22 @@
   </listeners>
   <test name="Functional Test">
     <classes>
+      <!--
       <class name="com.cbrands.test.functional.login.LoginTest" />
       <class name="com.cbrands.test.functional.accountDashboard.AccountDashboardDistributorFilterTest" />
       <class name="com.cbrands.test.functional.accountDashboard.AccountDashboardViewOpportunitiesTest" />
-      <class name="com.cbrands.test.functional.opportunities.OpportunitiesSavedReportsTest" />
+      <class name="com.cbrands.test.functional.opportunities.OpportunitiesSavedReportsTest" /> 
       <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesAccountScopeFilterTest" />
       <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesDistributorFilterTest" />
       <class name="com.cbrands.test.functional.opportunities.filters.OpportunitiesRetailerFilterTest" />
-      <class name="com.cbrands.test.functional.opportunities.OpportunitiesCustomOpportunityTest" />    
+      <class name="com.cbrands.test.functional.opportunities.OpportunitiesCustomOpportunityTest" />
+      -->
+	 <class name="com.cbrands.test.functional.opportunities.OpportunitiesSavedReportsTest">
+	 	<methods>
+	 		<include name="enableSavedReport" />
+	 		<include name="createAfterMaxLimit" />
+	 	</methods>
+	 </class>   
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
