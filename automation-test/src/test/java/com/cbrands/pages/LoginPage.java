@@ -1,6 +1,8 @@
 package com.cbrands.pages;
 
 import com.cbrands.TestUser;
+import com.cbrands.test.BaseTestCase;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
@@ -71,5 +73,30 @@ public class LoginPage extends TestNGBasePage {
     submitButton.click();
     return PageFactory.initElements(driver, HomePage.class);
   }
+  
+  /**
+   * Login using jse Process 
+   * @author sdk
+   */
+  public HomePage login(TestUser testUser) {
+	    this.goToPage();
+	    final String args = "arguments[0].value='%s'";
+	    
+	    WebElement[] fs = {usernameField, passwordField};
+	    for( WebElement f :  fs ) {
+	    	BaseTestCase.jse.executeScript(
+	    			f.getAttribute("id").equals("username") ? 
+	    			String.format(args, testUser.userName()) :
+	    			String.format(args, testUser.password()), 
+	    		f);
+	    }
+	    BaseTestCase.jse.executeScript("arguments[0].click();", submitButton);
+	    
+	    HomePage landingPage = PageFactory.initElements(driver, HomePage.class);
+	    log.info("User: " + testUser.userName() + " login submitted");
+	    Assert.assertTrue(landingPage.isLoaded(), "Failed to log in user: " + testUser.userName());
+	    log.info("Logged in successfully as: " + testUser.userName());
 
+	    return landingPage;
+	  }
 }

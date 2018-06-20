@@ -63,7 +63,7 @@ public class WebDriverManager implements SauceOnDemandSessionIdProvider, SauceOn
     } else {
       final String driverName = PropertiesCache.getInstance().getProperty("driver.name");
       final WebDriver driver;
-      if(driverName.equals("chrome")) {
+      if(driverName.equals("ch")) {
         driver = LocalDriverFactory.getChromeDriver();
         Validate.notNull(
           driver,
