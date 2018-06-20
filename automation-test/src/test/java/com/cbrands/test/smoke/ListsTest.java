@@ -17,8 +17,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.util.Properties;
 
 public class ListsTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
@@ -30,7 +35,7 @@ public class ListsTest extends BaseTestCase {
   public static final int WAIT = 35;
 
   @BeforeMethod
-  public void setUp(Method method) throws MalformedURLException {
+  public void setUp(Method method) throws FileNotFoundException, IOException {
     this.startUpBrowser(String.format("Smoke - Lists Test - %s", method.getAnnotation(Test.class).description()));
 
     // PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
@@ -41,7 +46,6 @@ public class ListsTest extends BaseTestCase {
     jse = (JavascriptExecutor)driver;
     loginAs(TestUser.ACTOR4);
     goToListsPage();
-    
   }
 
   @AfterMethod
@@ -80,13 +84,16 @@ public class ListsTest extends BaseTestCase {
     return new Object[][]{{"Smoke Test " + current_time_stamp, "test"}};
   }
 
-
   // - SDK - //
   public void goToListsPage() {
-    clickItem(waitUntilElementAvailable(
-        PropertiesCache.getInstance().getProperty("listsPageTab")));
+    // clickItem(waitUntilElementAvailable(getPageItem("listsPageTab")));
+    click( "Lists" );
   }
-  
+
+  public String getPageItem(String key) {
+	  return PropertiesCache.getInstance().getProperty(key);
+  }
+
   @Test(dataProvider = "listData", description = "Create a new List")
   public void _createList(String listName, String listDescription) throws InterruptedException {
     clickItem(waitUntilElementAvailable("//*[@label='Lists']", 1));
@@ -109,7 +116,7 @@ public class ListsTest extends BaseTestCase {
         "Failure creating list: " + listName);
   }
 
-  @Test(dependsOnMethods = "_createList", dataProvider = "listData", description = "Delete List")
+  // @Test(dependsOnMethods = "_createList", dataProvider = "listData", description = "Delete List")
   public void _deleteList(String listName, String listDescription) {
     listsPage = listsPage
       .selectCheckboxByListName(listName)
@@ -124,27 +131,24 @@ public class ListsTest extends BaseTestCase {
     String xp = "//button[contains(text(),'Select All')]";
   }
 
-  public void enterData(String item, String datum) {
-    jse.executeScript("arguments[0].value='"+datum+"'");
+  public void enter(String data, String xpath) throws FileNotFoundException, IOException { 
+    jse.executeScript("arguments[0].value='"+getTestData(data)+"'", waitUntilElementAvailable(xpath) );
   }
 
   public void clickItem(WebElement item) {
     jse.executeScript("arguments[0].click();", item);
   }
 
-  public void clickItem(String item) {
+  public void click(String item) {
     jse.executeScript("arguments[0].click();", 
-        waitUntilElementAvailable(item, 5));
+    		waitUntilElementAvailable(PropertiesCache.getInstance().getProperty(item), 5));
   }
 
-  public void loginAs(TestUser testUser) {
-   jse.executeScript("arguments[0].value='"+testUser.userName()+"'", 
-        driver.findElement(By.xpath("//*[@id='username']")));
-   jse.executeScript("arguments[0].value='"+testUser.password()+"'", 
-       driver.findElement(By.xpath("//*[@id='password']")));
-   jse.executeScript("arguments[0].click();", 
-       driver.findElement(By.xpath("//button[@type='submit']")));
-   
+  public void loginAs(TestUser testUser) throws FileNotFoundException, IOException {
+   enter("login.actor4.user", PropertiesCache.getInstance().getProperty("username"));
+   enter("login.actor4.pswd", PropertiesCache.getInstance().getProperty("password"));
+   click("loginBtn");
+  
    waitUntilPageLoadComplete();
   }
 
@@ -176,5 +180,12 @@ public class ListsTest extends BaseTestCase {
     WebElement fm = waitUntilElementAvailable(xp);
     return (WebElement)jse.executeScript("return arguments[0];", 
         fm.findElement(By.xpath("//button[text()='"+label+"']")));
-  }  
+  }
+
+  public String getTestData(String name) throws FileNotFoundException, IOException {
+	  final Properties props = new Properties();
+	  InputStream in = this.getClass().getClassLoader().getResourceAsStream("data.properties");
+	  props.load(in);
+	  return props.getProperty(name);
+  }
 }

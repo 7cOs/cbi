@@ -27,8 +27,8 @@ public class LocalDriverFactory {
   }
 
   public static InternetExplorerDriver getInternetExplorerDriver() {
-    System.setProperty("webdriver.ie.driver", "ieDriverServer.exe");
-
+    // System.setProperty("webdriver.ie.driver", "ieDriverServer.exe");
+	System.setProperty("webdriver.ie.driver", "ie.exe");
     InternetExplorerOptions options = new InternetExplorerOptions();
     options.ignoreZoomSettings();
     options.introduceFlakinessByIgnoringSecurityDomains();
