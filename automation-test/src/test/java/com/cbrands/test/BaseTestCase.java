@@ -17,12 +17,6 @@ public abstract class BaseTestCase {
   protected static WebDriver driver;
   protected static String webAppBaseUrl;
 
-  /**
-	 * Process jse
-	 * @author sdk
-  */
-  public static JavascriptExecutor jse = null;
-
   protected Log log = LogFactory.getLog(BaseTestCase.class);
 
   @BeforeSuite
@@ -38,12 +32,6 @@ public abstract class BaseTestCase {
     driver.manage().window().maximize();
     SeleniumUtils.setDriver(driver);
     SeleniumUtils.setStopAtShutdown();
-
-    /**
-     * Instantiate jse process
-     * @author sdk
-     */
-    jse = (JavascriptExecutor) driver;
 
     log.info("Browser opened.\n");
   }

@@ -9,6 +9,8 @@ import com.cbrands.pages.opportunities.SavedReportModal;
 import com.cbrands.test.BaseTestCase;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
@@ -29,6 +31,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   private HomePage homePage;
   private OpportunitiesPage opportunitiesPage;
+  public JavascriptExecutor jse; /** - sdk - */
 
   @BeforeMethod
   public void setUp(Method method) throws MalformedURLException {
@@ -38,14 +41,18 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
     // homePage = PageFactory.initElements(driver, LoginPage.class).loginAs(TestUser.ACTOR4);
     
-    // - sdk - //
+    /** - sdk - */
     homePage = PageFactory.initElements(driver, LoginPage.class).login(TestUser.ACTOR4);
     
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();
     // opportunitiesPage = opportunitiesPage.clickSavedReportsDropdown().clearAllSavedReports();
     
-    // - sdk - //
+    /**
+    * Instantiate jse process
+    * @author sdk
+    */
+    jse = (JavascriptExecutor) driver;
     // expediteAllSavedReportsDeletion();
     expediteSavedReportsCreate();
     
@@ -428,33 +435,31 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     return "EDITED " + existingReportName;
   }
 
-  
-  
   /**
    * Expedite saved report(s) creation
    * @author sdk
    */
   public void expediteSavedReportsCreate() {
-	  final int MAX_REPORTS = 10;
-	  int totalReports = MAX_REPORTS- getTotalSavedReports();
-	  for(int i = 0; i <= totalReports; i++) {
+	  final int maxReports = 10;
+	  int totalReports = maxReports - getTotalSavedReports();
+	  for(int i = 1; i <= totalReports; i++) {
 		  final String reportName = String.format("Test Max Limit - Report #%s - %s", i, 
 				  new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date()));
 		  System.out.println( reportName );
 		  // - Enter/search Distributor - //
-		  // WebElement distField = findElement(By.xpath("//label[text()='Distributor']/..//input"));
-		  // BaseTestCase.jse.executeScript("arguments[0].value='"+distributorData()[0][0]+"';", distField);
 		  enterSearchDistributor(distributorData()[0][0].toString());
-
-		  // - Seek/click 'Search' icon - //
-		  BaseTestCase.jse.executeScript("arguments[0].value='"+distributorData()[0][0]+"';", distField);
+		  // - Click Apply Filters - //
+		  // - Proceed with remaining transactions... - //
 	  }
   }
   
   public void enterSearchDistributor(String name) {
-	  WebElement distField = findElement(By.xpath("//label[text()='Distributor']/..//input"));
-	  BaseTestCase.jse.executeScript("arguments[0].value='"+name+"';", distField);
-	  distField.sendKeys(""); // Ensure 'Search' icon is displayed
+	  WebElement field = findElement(By.xpath("//label[text()='Distributor']/..//input"));
+	  jse.executeScript("arguments[0].value='"+name+"';", field);
+	  field.sendKeys(Keys.SPACE); // Ensures 'Search' icon is displayed - //
+	  field.sendKeys(Keys.ENTER); // - Display distributor matches and 'Search' icon - //
+	  WebElement ico = findElement(By.xpath("//inline-search[@type='distributor']//*[@class='results']//li"));
+	  jse.executeScript("arguments[0].click();", ico);
   }
   
   /**
@@ -467,9 +472,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 	  for(int i=0; i<totalReports; i++) {
 		  WebElement btn = driver.findElement(By.xpath("//*[@class='saved-reports-edit-icon']"));
 		  // - Click edit report button - //
-		  BaseTestCase.jse.executeScript("arguments[0].click();", btn);
+		  jse.executeScript("arguments[0].click();", btn);
 		  // - Click 'Delete Report' button
-		  BaseTestCase.jse.executeScript("arguments[0].click();", 
+		  jse.executeScript("arguments[0].click();", 
 				  findElement(By.xpath("//*[text()='Delete Report']")));
 		  // - Display list of saved reports options - //
 		  displaySavedReportsOptions(); 
@@ -495,7 +500,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 	  // - Display Saved Report options - //
 	  String xp = "//*[@class='saved-filter-select']//md-select";
 	  WebElement dropdown = findElement(By.xpath(xp));
-	  BaseTestCase.jse.executeScript("arguments[0].click();", dropdown);
+	  jse.executeScript("arguments[0].click();", dropdown);
 
 	  return dropdown;
   }

@@ -5,6 +5,7 @@ import com.cbrands.test.BaseTestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -80,17 +81,19 @@ public class LoginPage extends TestNGBasePage {
    */
   public HomePage login(TestUser testUser) {
 	    this.goToPage();
+	  	final JavascriptExecutor jse =  (JavascriptExecutor) driver; 
+	  	
 	    final String args = "arguments[0].value='%s'";
 	    
 	    WebElement[] fs = {usernameField, passwordField};
 	    for( WebElement f :  fs ) {
-	    	BaseTestCase.jse.executeScript(
+	    	jse.executeScript(
 	    			f.getAttribute("id").equals("username") ? 
 	    			String.format(args, testUser.userName()) :
 	    			String.format(args, testUser.password()), 
 	    		f);
 	    }
-	    BaseTestCase.jse.executeScript("arguments[0].click();", submitButton);
+	    jse.executeScript("arguments[0].click();", submitButton);
 	    
 	    HomePage landingPage = PageFactory.initElements(driver, HomePage.class);
 	    log.info("User: " + testUser.userName() + " login submitted");
