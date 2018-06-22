@@ -13,6 +13,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -24,6 +26,7 @@ import static com.cbrands.helper.SeleniumUtils.findElement;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class OpportunitiesSavedReportsTest extends BaseTestCase {
   private static final int MAX_SAVED_REPORT_LIMIT = 10;
@@ -443,14 +446,61 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 	  final int maxReports = 10;
 	  int totalReports = maxReports - getTotalSavedReports();
 	  for(int i = 1; i <= totalReports; i++) {
-		  final String reportName = String.format("Test Max Limit - Report #%s - %s", i, 
-				  new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date()));
-		  System.out.println( reportName );
 		  // - Enter/search Distributor - //
 		  enterSearchDistributor(distributorData()[0][0].toString());
 		  // - Click Apply Filters - //
-		  // - Proceed with remaining transactions... - //
+		  jse.executeScript("arguments[0].click();", 
+				  findElement(By.xpath("//button[text()='Apply Filters']")));
+		  // - Deterministic pause - //
+		  determisticPauseFor("//div[contains(@class, 'loader-wrap')]");
+		  // - Expedite - //
+		  createSavedReport(String.format("Test Create Saved Report #%s - %s", i, 
+				  new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date())));
 	  }
+  }
+
+  public void launchSavedReportModal() {
+	  // - Launch Save Report modal - //
+	  try {
+		  _wait(1);
+		  jse.executeScript("arguments[0].click();", 
+			  findElement(By.xpath("//a[text()='Save Report']")));
+	  } catch( Exception x ) {
+		  x.printStackTrace();
+	  }
+  }
+  
+  public void createSavedReport(String reportName) {
+	  System.out.println( "Creating " + reportName + "...");
+	  
+	  // - Enter Saved report name - //
+	  WebElement field = findElement(By.xpath("//*[text()='Name']/..//input"));
+	  jse.executeScript("arguments[0].value='"+reportName+"'", field);
+	  field.sendKeys(Keys.SPACE);
+	  field.sendKeys(Keys.BACK_SPACE);
+	  
+	  // - Click Save report button - //
+	  jse.executeScript("arguments[0].click();", 
+			  findElement(By.xpath("//button[text()='Save Report']")));
+	  
+	  // - Deterministic pause - //
+	  determisticPauseFor("//*[text()='Report Successfully Saved' "
+		  		+ "and not(contains(@class, 'ng-hide'))]");
+	  
+	  System.out.println( reportName + " created!!");
+  }
+
+  public static void determisticPauseFor(String xp) {
+	  try{
+		  driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+		  if( driver.findElements(By.xpath( xp )).size() != 0) {
+			  determisticPauseFor(xp);
+		  }
+	  }catch( Exception x ) {
+		  x.printStackTrace();
+	  }
+	  // - Re-calibrate - // 
+	  driver.manage().timeouts().implicitlyWait(25, TimeUnit.SECONDS);
   }
   
   public void enterSearchDistributor(String name) {
@@ -479,6 +529,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 		  // - Display list of saved reports options - //
 		  displaySavedReportsOptions(); 
 	  }
+	  
+	  opportunitiesPage.dismissStrayBackdropElement();
   }
   
   public int getTotalSavedReports() {
@@ -490,9 +542,10 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 	  List<WebElement> ls = driver.findElements(By.xpath(xp));
 	  //- Peek - //
 	  if( ls.size() == 1 && ls.get(ls.size()-1).getText().equals("No saved reports")) {
+		  opportunitiesPage.dismissStrayBackdropElement();
 		  return 0;
 	  }
-
+	  opportunitiesPage.dismissStrayBackdropElement();
 	  return ls.size();
   }
   
@@ -503,5 +556,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 	  jse.executeScript("arguments[0].click();", dropdown);
 
 	  return dropdown;
+  }
+
+  public void _wait( int ss ) {
+	  driver.manage().timeouts().implicitlyWait(ss, TimeUnit.SECONDS);
   }
 }
