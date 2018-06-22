@@ -12,6 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -56,7 +57,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
     * @author sdk
     */
     jse = (JavascriptExecutor) driver;
-    // expediteAllSavedReportsDeletion();
+    expediteAllSavedReportsDeletion();
     expediteSavedReportsCreate();
     
     Assert.assertTrue(
@@ -454,7 +455,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 		  // - Deterministic pause - //
 		  determisticPauseFor("//div[contains(@class, 'loader-wrap')]");
 		  // - Expedite - //
-		  createSavedReport(String.format("Test Create Saved Report #%s - %s", i, 
+		  createSavedReport(String.format("Test Create Saved Report #%s - %s", (i+1), 
 				  new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date())));
 	  }
   }
@@ -462,7 +463,7 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public void launchSavedReportModal() {
 	  // - Launch Save Report modal - //
 	  try {
-		  _wait(1);
+		  _wait( 5 );
 		  jse.executeScript("arguments[0].click();", 
 			  findElement(By.xpath("//a[text()='Save Report']")));
 	  } catch( Exception x ) {
@@ -473,10 +474,12 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public void createSavedReport(String reportName) {
 	  System.out.println( "Creating " + reportName + "...");
 	  
+	  launchSavedReportModal();
+	  
 	  // - Enter Saved report name - //
 	  WebElement field = findElement(By.xpath("//*[text()='Name']/..//input"));
 	  jse.executeScript("arguments[0].value='"+reportName+"'", field);
-	  field.sendKeys(Keys.SPACE);
+	  // field.sendKeys(Keys.SPACE);
 	  field.sendKeys(Keys.BACK_SPACE);
 	  
 	  // - Click Save report button - //
@@ -506,7 +509,8 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
   public void enterSearchDistributor(String name) {
 	  WebElement field = findElement(By.xpath("//label[text()='Distributor']/..//input"));
 	  jse.executeScript("arguments[0].value='"+name+"';", field);
-	  field.sendKeys(Keys.SPACE); // Ensures 'Search' icon is displayed - //
+	  // field.sendKeys(Keys.SPACE); // - Ensures 'Search' icon is displayed - //
+	  field.sendKeys(Keys.BACK_SPACE);
 	  field.sendKeys(Keys.ENTER); // - Display distributor matches and 'Search' icon - //
 	  WebElement ico = findElement(By.xpath("//inline-search[@type='distributor']//*[@class='results']//li"));
 	  jse.executeScript("arguments[0].click();", ico);
@@ -518,6 +522,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
    */
   public void expediteAllSavedReportsDeletion() {
 	  int totalReports = getTotalSavedReports();
+	  if( totalReports == 0 ) { return; };
+	  
+	  displaySavedReportsOptions(); 
 	  
 	  for(int i=0; i<totalReports; i++) {
 		  WebElement btn = driver.findElement(By.xpath("//*[@class='saved-reports-edit-icon']"));
@@ -526,11 +533,14 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 		  // - Click 'Delete Report' button
 		  jse.executeScript("arguments[0].click();", 
 				  findElement(By.xpath("//*[text()='Delete Report']")));
+		  try {
+			  Thread.sleep(1575);
+		  } catch(Exception x) { }
 		  // - Display list of saved reports options - //
 		  displaySavedReportsOptions(); 
 	  }
 	  
-	  opportunitiesPage.dismissStrayBackdropElement();
+	  resetFocus();
   }
   
   public int getTotalSavedReports() {
@@ -542,16 +552,16 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 	  List<WebElement> ls = driver.findElements(By.xpath(xp));
 	  //- Peek - //
 	  if( ls.size() == 1 && ls.get(ls.size()-1).getText().equals("No saved reports")) {
-		  opportunitiesPage.dismissStrayBackdropElement();
+		  resetFocus();
 		  return 0;
 	  }
-	  opportunitiesPage.dismissStrayBackdropElement();
+	  resetFocus();
 	  return ls.size();
   }
   
   public WebElement displaySavedReportsOptions() {
 	  // - Display Saved Report options - //
-	  String xp = "//*[@class='saved-filter-select']//md-select";
+	  String xp = "//*[@class='dropdown']//*[@class='md-select-icon']";
 	  WebElement dropdown = findElement(By.xpath(xp));
 	  jse.executeScript("arguments[0].click();", dropdown);
 
@@ -560,5 +570,9 @@ public class OpportunitiesSavedReportsTest extends BaseTestCase {
 
   public void _wait( int ss ) {
 	  driver.manage().timeouts().implicitlyWait(ss, TimeUnit.SECONDS);
+  }
+  
+  public static void resetFocus() {
+	  findElement(By.xpath("//body")).click();
   }
 }

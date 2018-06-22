@@ -4,9 +4,9 @@ package com.cbrands;
  * Test users for automated testing. Only valid users currently used in the ATs should be in this enum.
  */
 public enum TestUser {
-  ACTOR4("chris.williams@cbrands.com", "Corona.2016", "Chris", "Williams", UserRole.NonCorporate),
-  // ACTOR4("john.utter@cbrands.com", "Corona.2016", "Chris", "Williams", UserRole.NonCorporate),
- //  ACTOR4("hema.khilnani@cbrands.com", "Corona.2017", "Hema", "Khilnani", UserRole.Corporate),
+  // ACTOR4("chris.williams@cbrands.com", "Corona.2016", "Chris", "Williams", UserRole.NonCorporate),
+  ACTOR4("john.utter@cbrands.com", "Corona.2016", "Chris", "Williams", UserRole.NonCorporate),
+  //  ACTOR4("hema.khilnani@cbrands.com", "Corona.2017", "Hema", "Khilnani", UserRole.Corporate),
   NOTES_ACTOR("chelsea.hoff@cbrands.com", "Corona.2016", "Chelsea", "Hoff", UserRole.NonCorporate),
   CORPORATE_ACTOR("andrew.levy@cbrands.com", "Corona.2016", "Andrew", "Levy", UserRole.Corporate);
 
